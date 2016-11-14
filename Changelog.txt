@@ -1,0 +1,205 @@
+v2.2.6 (2016-Mar-31)
+--------------------
+* Added the arrival bound burstiness reduction of the MMB & DFT 2016 paper
+   "Improving Cross-Traffic Bounds in Feed-Forward Networks - There is a Job for Everyone".
+  It can be switched on in the analysis configuration by setting the flag ab_consider_tfa_nodeBacklog to true.
+* Apache Commons Math version updated to 3.6.1.
+
+v2.2.5 (2015-Sep-29)
+--------------------
+* Fixed deconvolution for delivering too optimistic results for some combinations of multi token buckets and multi rate latencies. Remember: The DiscoDNC is only tested for token-bucket arrivals and rate-latency service. Any other offering will is best effort. Please report encountered bugs.  
+* Curves: Creating a curve with specified segments count: All but the first segment will be leftopen.
+* Changed constructor visibility in NumDouble from protected to public.
+* Demo4: Removed unused server and link.
+
+v2.2.4 (2015-Aug-15)
+--------------------
+* ArrivalCurve: Performance improvement computing an arrival curve's burst.
+* Network: Increased robustness against potential null pointers.
+* JavaDocs cleanup: Existing documentation can now be compiled without any warnings or errors.
+* Curve.java: Unified function names: {create,initialize}BurstDelay renamed to {create,initialize}DelayedInfiniteBurst.
+* Curve.java: Reduced code duplication.
+* Curves: Deprecated unused functions for later removal and easier maintenance.
+* Ant build script to generate the DiscoDNC library.
+* Minor cleanups, better variable naming and other improvements.
+
+v2.2.3 (2015-Jul-11)
+--------------------
+* Removal of the arrival bounding with the output arrival curve (PbooArrivalBound_Output_PerHop). Besides being deprecated since v2.0.0, it was broken by now.
+* The rejoining flows fix has been improved.
+* AnalysisResults classes used for internal storage of results have been moved into Analysis.java.
+* Analysis.java now offers convenient static methods to start an analysis that return an object of the respective analysis.
+* Minor improvements to comments.
+* Functional Test Documentation: Layout bug in FeedForward.pdf fixed.
+
+v2.2.2 (2015-Jul-02)
+--------------------
+* Bugfix: Arrival bounding of flows at the servers they rejoin the flow of interest was fixed. 
+* NumDouble: Improved stability by catching double rounding error preventing a subtraction to result in exactly 0.
+* PmooAnalysis: Improved checking the stability constraint and returning a null service curve if violated. Thanks to Paul Nikolaus for pointing out potential problems with the previous version.
+* Convolution: Added a shortcut for the case that at least one of the service curves to convolve is zero.
+* Curve.getTBBurst() now correctly handles rate functions.
+* Network: Stability improvements.
+* Demos: Code cleanups and simplifications.
+* Functional tests: FeedForward test documentation was updated to version 2.0beta.
+
+v2.2.1 (2015-Jun-15)
+--------------------
+* Bugfix: Deconvolution with the zero delay, infinite burst-service curve (delta_0) always yielded delta_0 as result. Thanks to Fabien Geyer for discovering this bug. 
+* Added functions de-/convolving sets of curves.
+* Improved saving of large networks (see unikl.disco.tests.output.TestNetwork):
+ - Functions creating serves, links and flows have been split up to be smaller than 65536 bytes.
+ - Remaining problem for large networks: Constant pool (i.e., total amount of servers, links, flows) exceeding 65536 entries results in a failure.
+* Minor clean ups and efficiency improvements.
+
+v2.2.0 (2015-May-15)
+--------------------
+* This is the first version checked with Coverity Scan (incl. FindBugs). We fixed all the uncovered performance issues and now pass the checks with 0 defects.
+* Reworked the Num classes in order to allow switching the number representation with a flag in CalculatorConfig (see below): 
+ - Num is now an abstract class that coordinates creation of and calls to the right number representation.
+* CalculatorConfig: New flag NUM_CLASS to set the internal number representation:
+ - Replaces previous need to copy the respective classes content of Num.
+ - Be careful: Switching the number representation while the calculator is running will result in casting exceptions!
+* Package structure: All number related classes have been moved to unikl.disco.numbers.
+* Num_Fraction:
+ - Adapted structure to Num_double, i.e., it now holds a Fraction object instead of extending Fraction. 
+ - Check for special value representation (infinity, NaN) is now done once at creation time instead of on demand before every operation.
+ - Rewrote some operators to use Fraction's functionality more.
+* Functional tests now run with both number classes each.
+* unikl.disco.network.*: Reworked the to*String methods to remove dependency on the static calculator configuration.
+* Dependencies:
+ - Java 8 is now strictly required: We call static hash code functionality on Double, Boolean, and maybe others.
+ - Apache Commons Math:
+    - Update of bundled version to 3.5.
+ 	- It is not a hard dependency anymore.
+ - hamcrest-core 1.3 was updated to java-hamcrest 2.0.0.0.
+* Bugfix in PmooArrivalBound's shortcut for cross-traffic tandems of a single hop (not spotted by functional tests).
+* Bugfix in Network's createPath for single hop paths.
+* Bugfix for per-flow arrival boundings restoring tightness of results (correctness was not compromised).
+* Various performance and stability improvements.
+
+v2.1.1 (2015-Mar-23)
+--------------------
+* Network:
+ - Version in SaveAs output changed to 2.1.
+ - Added numLinks() and numFlows().
+ - Added a copy() function returning a deep copy.
+* Analysis classes:
+ - getServerAlphasMapString() returns readable version of the map.
+ - TbRl specific de-/convolution setting is now taken into account correctly.
+ - Rework to use a results object internally.
+* Arrival bounding:
+ - In case of no left-over service, a zero delay infinite burst arrival curve will be returned instead of raising an exception.
+ - Improved sanity checks.
+ - TbRl specific de-/convolution setting is now taken into account correctly.
+ - Sub-classes of ArrivalBound do not call its static functions anymore.
+* Deconvolution: Removed unused functions.
+* Functional tests: Test names now include the test configuration, i.e., the output of FunctionalTestConfig's toString().
+* Dependencies: Apache Commons Math as now a hard dependency.
+* Obsolete class unikl.disco.nc.Configuration was removed.
+* Various minor improvements.
+
+v2.1.0 (2015-Feb-25)
+--------------------
+* Notable API break (non-exhaustive list)
+ - performAnalysisOnPath, performEnd2EndAnalysis -> performAnalysis (path determined by input parameters)
+ - createBurstDelay -> createDelayedInfiniteBurst, createZeroDelayBurst -> createZeroDelayInfiniteBurst
+* INFOCOM 2015 SensorNC paper results 
+ - Efficient PMOO cross-traffic arrival bounds in sink trees with token bucket arrivals and rate-latency service curves.
+* Configuring the calculator has been reworked
+ - AnalysisConfig holds all parameters relevant to an analysis and its arrival bounding. It is instantiated and handed to the analysis.
+ - CalculatorConfig holds static flags for enabling internal checks during the computation etc.
+ - FunctionalTestConfig extends AnalysisConfig by additional parameters tested.
+* New class for almost concave maximum service curves (MaxServiceCurve).
+* Network: Improved saving of big networks. Previously the output easily exceeded Java's 64KB method size limit.
+ - SaveAs and toString now produce different outputs: reusable code and simple string representation.
+ - The code output of SaveAs now produces distinct methods for adding servers, links, and flows to the network.
+ - toString methods of network components was also improved.
+ - Added a test package with three simple classes for the new saving code.
+* Curve: Removed unused methods.
+* Functional Tests:
+ - Removed maximum service curve. Neither is it included in the documentation not did it have any influence.
+ - Removed tests including deprecated PbooArrivalBound_Output_PerHop.
+ - Streamlined tests and remove code duplication.
+ - Increased test coverage to include BacklogBound.derivePmooSinkTreeTbRl where applicable.
+ - Total amount of tests is now at 21120.
+* SeparateFlowAnalysis, PmooAnalysis: The end-to-end service curve now be computed for a given aggregate of flows.
+* Various minor improvements.
+ 
+v2.0.4 (2015-Jan-30)
+--------------------
+* Server: Replaced boolean-based multiplexing definition with an enum.
+* LeftOverService, bounds: Fixed derivations with zero delay, infinite burst service curves. 
+* Functional tests:
+ - Improved the structure.
+ - Extended tests to consider both multiplexing settings, globally defined and server locally defined.
+* Configuration: defaultArrivalBoundMethods() now correctly sets the arrival_bounding to PBOO_CONCATENATION instead of PBOO_PER_HOP.
+* Streamlined sanity checks in LeftOverSerice's fifoMux(...) and Deconvolution's deconvolve(...).
+* Demos: Extended output to match the more comprehensive one or the functional tests.
+* JavaDocs
+ - Added documentation to Network and Path about their interpretation and the behavior of analyses using them.
+ - Minor clarifications in other parts.
+* Test documentation: Fixed layout of Tree.pdf such that everything is visible again.
+* Updated bundled libraries:
+ - Apache Commons Math version updated to 3.4.1.
+ - JUnit version 4.12.
+
+v2.0.3 (2014-Dec-30)
+--------------------
+* Curve, LinearSegment: Moved static methods working on linear segments from Curve to LinearSegment.
+* Num, Num_double, Functional tests:
+ - Account for rounding errors when using the double based number representation.
+ - Functional tests now also succeed with the double number representation.
+ - Changed the default number representation to doubles. 
+* Functional tests:
+ - Make console output optional.
+ - Minor code rework, unified variable naming.
+* ArrivalBound:
+ - Improvements to make the class static.
+ - Reduced overhead in case there's only a single arrival bounding method configured.
+* Network:
+ - Add missing addServer method with signature ( String alias, ServiceCurve service_curve, boolean arbitrary_mux, boolean use_gamma, boolean use_extra_gamma ).
+ - Reduced amount of internal copies of parameters.
+* PMOO-AB, PBOO_Concat-AB, PBOO_PerHop-AB: Throw Exception if there's no service left during arrival bounding.
+* PMOO-AB: Shortcut for PMOO left-over service curve derivation if the path only consists of a single server.
+* PBOO-OutputBound-AB, Configuration, Tests: Pushed deprecation of PbooArrivalBound_Output_PerHop by moving its rec/iter-configuration option from Configuration to the class itself.
+* Test documentation:
+ - Update naming scheme to match latest publications (prev. nomenclature).
+ - Documentation files contain a version number and possibly a changelog and acknowledgements.
+ - Started adapting PMOO's T^{l.o.} computation to be closer to the code (only in FeedForward as of now).
+ - Minor fixes in the single server documentation.
+* Apache Commons Math: Updated bundled version to 3.4.
+
+v2.0.2 (2014-Nov-19)
+--------------------
+* New feature: Network configurations can now be saved in a format that allows for reuse: 
+ - Curves, LinearSegment, Num: Added constructors parsing a string representation of curves.
+ - Curves, Num_double: Reduced code duplication.
+ - Path: Changed visibility of constructor Path( Server single_hop ) to public (see comment there for reasoning).
+ - Network: Improved creation of paths from lists of servers or links, saving functionality.
+* Arrival bounds: Removed duplicate local variables.
+* Functional tests:
+ - Extended functional tests to check for unexpected exceptions.
+ - Moved remaining static configuration options to FunctionalTests to reduce code duplication.
+* Curve: Improved decomposition of curves into rate latencies or token buckets for PMOO.
+* ServiceCurve: Removed effectively dead sanity check.
+* Minor improvements of the documentation and naming of internal variables. 
+
+v2.0.1 (2014-Oct-16)
+--------------------
+* Bugfix in ArrivalBound. Removed bad sanity checks always resulting in false.
+* Server, Flow: Removed internal ID from string output.
+* Flow: Removed unnecessary throws declaration from getServersOnPath(), string representation does not convert alias to lower case anymore.
+* Path: Cleaned up usage of LinkedList instead of List, removed “throws Exception” from constructors.
+* Network: Reworked toString to produce pseudo-code close to the creation of a network, renamed parameter in getFlowsPerServer and getFlowsPerSubPath to use application-agnostic vocabulary.
+* LinearSegment, curves: Added toString() method to LinearSegment and call it from when converting curves to strings rather than using internal conversion code, reduced code duplication across the toString() methods.
+* Curve: Added a patch to the shiftRight-method to handle rounding errors with the double-based number representation that can lead to violating the f(0)=0 requirement.
+* Configuration: Consistent naming (defaultArrivalBoundCalculations -> defaultArrivalBoundMethods), Changed default arrival boding method from PBOO_PER_HOP to PBOO_CONCATENATION.
+* Demos: Made sure all intermediate results will be printed with information about which server they belong to (TFA, SFA), renamed instances of the analyses to match functional tests (sf -> sfa and tf -> tfa).
+* Functional tests: Completed combinations of code paths that can be tested and reduced code duplication while doing so. The number of functional tests increased from 1800 to 8200.
+* Apache Commons Math: Updated bundled version to 3.3.
+* Minor improvements of the documentation and naming of internal variables.
+
+v2.0.0 (2014-Oct-02)
+--------------------
+Please see http://disco.cs.uni-kl.de/index.php/88-projects/169-discodnc-20-dev
