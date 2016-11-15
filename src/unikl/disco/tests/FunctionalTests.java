@@ -151,35 +151,24 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		single_abs.add( single_2 );
 		single_abs.add( single_3 );
 		
+		Set<NumClass> nums =  new HashSet<NumClass>();
+		nums.add( NumClass.DOUBLE );
+		nums.add( NumClass.SINGLE );
+		nums.add( NumClass.FRACTION );
+		
 		// Parameter configurations for single arrival bounding tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, global mux def, number class to use
+		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
 		for( Set<ArrivalBoundMethod> single_ab : single_abs ) {
-			result.add( new FunctionalTestConfig( single_ab, false, false, false, false, NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, false, true,  NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  NumClass.DOUBLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  NumClass.DOUBLE ) ) ;
-
-			result.add( new FunctionalTestConfig( single_ab, false, false, false, false, NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, false, true,  NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  NumClass.SINGLE ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  NumClass.SINGLE ) ) ;
-			
-			result.add( new FunctionalTestConfig( single_ab, false, false, false, false, NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, false, true,  NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  NumClass.FRACTION ) ) ;
-			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  NumClass.FRACTION ) ) ;
+			for( NumClass num : nums ) {
+				result.add( new FunctionalTestConfig( single_ab, false, false, false, false, num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, false, false, true,  num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  num ) ) ;
+				result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  num ) ) ;
+			}
 		}
 		
 		
@@ -202,58 +191,26 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		pair_abs.add( pair_3 );
 
 		// Parameter configurations for "pairs of arrival boundings"-tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, global mux def, number class to use
+		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
 		for( Set<ArrivalBoundMethod> pair_ab : pair_abs ) {
-			result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  NumClass.DOUBLE ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  NumClass.DOUBLE ) );
-
-//			result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  NumClass.SINGLE ) );
-//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  NumClass.SINGLE ) );
-			
-			result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  NumClass.FRACTION ) );
-			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  NumClass.FRACTION ) );
+			for( NumClass num : nums ) {
+				result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  num ) );
+				result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  num ) );
+			}
 		}
 		
 		
@@ -264,57 +221,25 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		triplet.add( ArrivalBoundMethod.PMOO );
 		
 		// Parameter configurations for "triplets of arrival boundings"-tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, global mux def, number class to use
-		result.add( new FunctionalTestConfig( triplet, false, false, false, false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, false, false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  false, false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  false, false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, false, true,  false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, true,  false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  true,  false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, false, false, true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, false, true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  false, true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, false, true,  true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  NumClass.DOUBLE ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  NumClass.DOUBLE ) );
-
-//		result.add( new FunctionalTestConfig( triplet, false, false, false, false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  false, false, false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, true,  false, false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  true,  false, false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, false, true,  false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  false, true,  false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, true,  true,  false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, false, false, true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  false, false, true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, true,  false, true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, false, true,  true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  NumClass.SINGLE ) );
-//		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  NumClass.SINGLE ) );
-		
-		result.add( new FunctionalTestConfig( triplet, false, false, false, false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, false, false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  false, false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  false, false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, false, true,  false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, true,  false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  true,  false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, false, false, true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, false, true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  false, true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, false, true,  true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  NumClass.FRACTION ) );
-		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  NumClass.FRACTION ) );
+		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
+		for( NumClass num : nums ) {
+			result.add( new FunctionalTestConfig( triplet, false, false, false, false, num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  false, false, false, num ) );
+			result.add( new FunctionalTestConfig( triplet, false, true,  false, false, num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  true,  false, false, num ) );
+			result.add( new FunctionalTestConfig( triplet, false, false, true,  false, num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  false, true,  false, num ) );
+			result.add( new FunctionalTestConfig( triplet, false, true,  true,  false, num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, num ) );
+			result.add( new FunctionalTestConfig( triplet, false, false, false, true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  false, false, true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, false, true,  false, true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, false, false, true,  true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  num ) );
+			result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  num ) );
+		}
 		
 		return result;
 	}
