@@ -111,7 +111,7 @@ public class Convolution {
 		// Remove latencies, act analog to the convolution of two arrival curves, and the sum of the two latencies.
 		ArrivalCurve ac_intermediate = convolve( new ArrivalCurve( max_service_curve_1.removeLatency() ), new ArrivalCurve( max_service_curve_2.removeLatency() ) );
 		MaxServiceCurve result = new MaxServiceCurve( ac_intermediate );
-		result.shiftRight( Num.add( latency_msc_1, latency_msc_2 ) );
+		result.shiftRight( NumFactory.add( latency_msc_1, latency_msc_2 ) );
 		result.beautify();
 
 		return result;
@@ -197,7 +197,7 @@ public class Convolution {
 		ServiceCurve result = new ServiceCurve();
 		
 		Num x = NumFactory.createZero();
-		Num y = Num.add( service_curve_1.f( NumFactory.getZero() ), service_curve_2.f( NumFactory.getZero() ) );
+		Num y = NumFactory.add( service_curve_1.f( NumFactory.getZero() ), service_curve_2.f( NumFactory.getZero() ) );
 		Num grad = NumFactory.createZero();
 		LinearSegment s = new LinearSegment( x, y, grad, false );
 		result.addSegment(s);
@@ -205,7 +205,7 @@ public class Convolution {
 		int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
 		int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
 		if (i1 > 0 || i2 > 0) {
-			y = Num.add( service_curve_1.fLimitRight( NumFactory.getZero() ), service_curve_2.fLimitRight( NumFactory.getZero() ) );
+			y = NumFactory.add( service_curve_1.fLimitRight( NumFactory.getZero() ), service_curve_2.fLimitRight( NumFactory.getZero() ) );
 			grad = NumFactory.createZero();
 			s = new LinearSegment( x, y, grad, true );
 			

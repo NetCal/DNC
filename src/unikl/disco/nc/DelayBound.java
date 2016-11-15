@@ -81,16 +81,16 @@ public class DelayBound {
 
 			Num delay = service_curve.f_inv( ip_y, true );
 			delay.sub( arrival_curve.f_inv( ip_y, false ) );
-			result = Num.max( result, delay );
+			result = NumFactory.max( result, delay );
 		}
 		for( int i = 0; i < service_curve.getSegmentCount(); i++ ) {
 			Num ip_y = service_curve.getSegment( i ).getY();
 
 			Num delay = service_curve.f_inv( ip_y, true );
 			delay.sub( arrival_curve.f_inv( ip_y, false ) );
-			result = Num.max( result, delay );
+			result = NumFactory.max( result, delay );
 		}
 		
-		return Num.max( NumFactory.getZero(), result );
+		return NumFactory.max( NumFactory.getZero(), result );
 	}
 }

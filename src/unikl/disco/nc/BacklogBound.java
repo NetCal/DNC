@@ -78,8 +78,8 @@ public class BacklogBound {
 		for( int i = 0; i < xcoords.size(); i++ ) {
 			Num ip_x = ( (Num) xcoords.get( i ) );
 
-			Num backlog = Num.sub( arrival_curve.f( ip_x ), service_curve.f( ip_x ) );
-			result = Num.max( result, backlog );
+			Num backlog = NumFactory.sub( arrival_curve.f( ip_x ), service_curve.f( ip_x ) );
+			result = NumFactory.max( result, backlog );
 		}
 		return result;
 	}

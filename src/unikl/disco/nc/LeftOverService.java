@@ -36,6 +36,7 @@ import unikl.disco.curves.Curve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.numbers.Num;
+import unikl.disco.numbers.NumFactory;
 
 /**
  * 
@@ -102,7 +103,7 @@ public final class LeftOverService {
 			
 			if ( arrival_curve.getGradientLimitRight( x_alpha ).le( service_curve.getGradientLimitRight( x_beta ) ) ) {
 				
-				Num theta = Num.sub( x_beta, x_alpha );
+				Num theta = NumFactory.sub( x_beta, x_alpha );
 				ServiceCurve beta_fifo = ServiceCurve.boundAtXAxis(
 											ServiceCurve.min( 
 												ServiceCurve.sub( service_curve, ArrivalCurve.shiftRight( arrival_curve, theta ) ), 

@@ -362,12 +362,12 @@ public class PmooAnalysis extends Analysis {
 			}
 
 			// Compute left-over rate; update min
-			Num Ri = Num.sub( current_rl.getSustainedRate(), sum_r );
+			Num Ri = NumFactory.sub( current_rl.getSustainedRate(), sum_r );
 			if ( Ri.le( NumFactory.getZero() ) )
 			{
 				return ServiceCurve.createNullService();
 			}
-			R = Num.min( R, Ri );
+			R = NumFactory.min( R, Ri );
 
 			// Remove all outgoing flows from the set of present flows
 			Set<Flow> leaving_flows = new HashSet<Flow>();

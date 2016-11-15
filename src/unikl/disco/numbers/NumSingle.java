@@ -30,54 +30,54 @@ package unikl.disco.numbers;
 import unikl.disco.numbers.NumFactory.SpecialValue;
 
 /**
- * Wrapper class around double;
+ * Wrapper class around float;
  *
  * @author Steffen Bondorf
  *
  */
-public class NumDouble implements Num {
+public class NumSingle implements Num {
 	private boolean isNaN, isPosInfty, isNegInfty;
 	
-	private double value = 0.0;
+	private float value = 0.0f;
 	
-	private static final double EPSILON = Double.parseDouble("5E-10");
+	private static final float EPSILON = 0.00016f; // Maximum rounding error observed in the functional tests
 
 	public static final Num POSITIVE_INFINITY = createPositiveInfinity();
 	public static final Num NEGATIVE_INFINITY = createNegativeInfinity();
 	public static final Num NaN = createNaN();
 	public static final Num ZERO = createZero();
 	
-	private NumDouble() {}
+	private NumSingle() {}
 	
-	protected NumDouble( double value ) {
-		this.value = value;
+	protected NumSingle( double value ) {
+		this.value = new Float( value ).floatValue();
 		checkInftyNaN();
 	}
 	
-	protected NumDouble( String num_str ) throws Exception {
+	protected NumSingle( String num_str ) throws Exception {
 		if( num_str.equals( "Infinity" ) ) {
-			value = Double.POSITIVE_INFINITY;
+			value = Float.POSITIVE_INFINITY;
 		} else {
-			value = NumFactory.parse( num_str ).doubleValue();
+			value = new Float(NumFactory.parse( num_str ).doubleValue());
 			checkInftyNaN();
 		}
 	}
 	
-	protected NumDouble( int num ) {
-		value = (double)num;
+	protected NumSingle( int num ) {
+		value = (float)num;
 		checkInftyNaN();
 	}
 	
-	protected NumDouble( int num, int den ) {
-		value = ((double)num) / ((double)den);
+	protected NumSingle( int num, int den ) {
+		value = ((float)num) / ((float)den);
 		checkInftyNaN();
 	}
 	
-	protected NumDouble( NumDouble num ) {
+	protected NumSingle( NumSingle num ) {
 		value = num.value;
 	}
 
-	protected NumDouble( SpecialValue indicator ) {
+	protected NumSingle( SpecialValue indicator ) {
 		switch (indicator) {
 			case POSITIVE_INFINITY:
 				instantiatePositiveInfinity();
@@ -107,20 +107,20 @@ public class NumDouble implements Num {
 	}
 	
 	private void checkInftyNaN() {
-		// See Java documentation on parsing Doubles. There are rounding errors up to Math.ulp(Double.MAX_VALUE)/2.
-		if( value >= Double.MAX_VALUE ){
+		// See Java documentation on parsing Floats. There are rounding errors up to Math.ulp(Float.MAX_VALUE)/2.
+		if( value >= Float.MAX_VALUE ){
 			isNaN = false;
 			isPosInfty = true;
 			isNegInfty = false;
 			return;
 		}
-		if ( Math.abs( value - Double.NEGATIVE_INFINITY ) < EPSILON ) {
+		if ( Math.abs( value - Float.NEGATIVE_INFINITY ) < EPSILON ) {
 			isNaN = false;
 			isPosInfty = false;
 			isNegInfty = true;
 			return;
 		}
-		if( Double.isNaN( value ) ){
+		if( Float.isNaN( value ) ){
 			isNaN = true;
 			isPosInfty = false;
 			isNegInfty = false;
@@ -129,63 +129,63 @@ public class NumDouble implements Num {
 	}
 	
 	public static Num createPositiveInfinity() {
-		NumDouble pos_infty = new NumDouble();
+		NumSingle pos_infty = new NumSingle();
 		pos_infty.instantiatePositiveInfinity();
 		return pos_infty;
 	}
 	
 	private void instantiatePositiveInfinity() {
-		value = Double.POSITIVE_INFINITY;
+		value = Float.POSITIVE_INFINITY;
 		isNaN = false;
 		isPosInfty = true;
 		isNegInfty = false;
 	}
 
 	public static Num createNegativeInfinity() {
-		NumDouble neg_infty = new NumDouble();
+		NumSingle neg_infty = new NumSingle();
 		neg_infty.instantiateNegativeInfinity();
 		return neg_infty;
 	}
 
 	private void instantiateNegativeInfinity() {
-		value = Double.NEGATIVE_INFINITY;
+		value = Float.NEGATIVE_INFINITY;
 		isNaN = false;
 		isPosInfty = false;
 		isNegInfty = true;
 	}
 	
 	public static Num createNaN() {
-		NumDouble nan = new NumDouble();
+		NumSingle nan = new NumSingle();
 		nan.instantiateNaN();
 		return nan;
 	}
 	
 	private void instantiateNaN() {
-		value = Double.NaN;
+		value = Float.NaN;
 		isNaN = true;
 		isPosInfty = false;
 		isNegInfty = false;
 	}
 	
 	public static Num createZero() {
-		NumDouble zero = new NumDouble();
+		NumSingle zero = new NumSingle();
 		zero.instantiateZero();
 		return zero;
 	}
 	
 	private void instantiateZero() {
-		value = 0.0;
+		value = 0.0f;
 		isNaN = false;
 		isPosInfty = false;
 		isNegInfty = false;
 	}
 	
 	protected static Num createEpsilon() {
-        return new NumDouble( EPSILON );
+        return new NumSingle( EPSILON );
 	}
 	
-	protected static Num add( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( num1.value + num2.value );
+	protected static Num add( NumSingle num1, NumSingle num2 ) {
+		return new NumSingle( num1.value + num2.value );
 	}
 	
 	@Override
@@ -193,24 +193,24 @@ public class NumDouble implements Num {
 		value += num2.doubleValue();
 	}
 	
-	protected static Num sub( NumDouble num1, NumDouble num2 ) {
-		double result = num1.value - num2.value;
+	protected static Num sub( NumSingle num1, NumSingle num2 ) {
+		float result = num1.value - num2.value;
 		if( Math.abs( result ) <= EPSILON ) {
 			result = 0;
 		}
-		return new NumDouble( result );
+		return new NumSingle( result );
 	}
 	
 	@Override
 	public void sub( Num num2 ) {
-		double result = this.value - num2.doubleValue();
+		float result = this.value - (new Float( num2.doubleValue() )).floatValue();
 		if( Math.abs( result ) <= EPSILON ) {
 			this.value = 0;
 		}
 	}
 	
-	protected static Num mult( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( num1.value * num2.value );
+	protected static Num mult( NumSingle num1, NumSingle num2 ) {
+		return new NumSingle( num1.value * num2.value );
 	}
 	
 	@Override
@@ -218,8 +218,8 @@ public class NumDouble implements Num {
 		this.value *= num2.doubleValue();
 	}
 
-	protected static Num div( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( num1.value / num2.value );
+	protected static Num div( NumSingle num1, NumSingle num2 ) {
+		return new NumSingle( num1.value / num2.value );
 	}
 	
 	@Override
@@ -227,25 +227,25 @@ public class NumDouble implements Num {
 		this.value /= num2.doubleValue();
 	}
 
-	protected static Num diff( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( Math.max( num1.value, num2.value )
+	protected static Num diff( NumSingle num1, NumSingle num2 ) {
+		return new NumSingle( Math.max( num1.value, num2.value )
 										- Math.min( num1.value, num2.value ) );	
 	}
 
-	protected static Num max( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( Math.max( num1.value, num2.value ) );
+	protected static Num max( NumSingle num1, NumSingle num2 ) {
+		return new NumSingle( Math.max( num1.value, num2.value ) );
 	}
 
-	protected static Num min( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( Math.min( num1.value, num2.value ) );
+	protected static Num min( NumSingle num1, NumSingle num2 ) {
+		return new NumSingle( Math.min( num1.value, num2.value ) );
 	}
 	
-	protected static Num abs( NumDouble num ) {
-		return new NumDouble( Math.abs( num.value ) );
+	protected static Num abs( NumSingle num ) {
+		return new NumSingle( Math.abs( num.value ) );
 	}
 
-	protected static Num negate( NumDouble num ) {
-	    return new NumDouble( num.value * -1 );
+	protected static Num negate( NumSingle num ) {
+	    return new NumSingle( num.value * -1 );
 	}
 
 	public boolean greater( Num num2 ) {
@@ -338,7 +338,7 @@ public class NumDouble implements Num {
 	
 	@Override
 	public double doubleValue() {
-	    return value;
+	    return new Double( value );
 	}
 
 	@Override
@@ -353,7 +353,7 @@ public class NumDouble implements Num {
 			return createNegativeInfinity();
 		}
     	
-		return new NumDouble( value );
+		return new NumSingle( value );
 	}
 	
 	@Override
@@ -361,22 +361,36 @@ public class NumDouble implements Num {
 		if( Double.isNaN( num2 ) ){
 			return isNaN;
 		}
-		if( num2 == Double.POSITIVE_INFINITY ){
+		if( num2 == Float.POSITIVE_INFINITY ){
 			return isPosInfty;
 		}
-		if( num2 == Double.NEGATIVE_INFINITY ){
+		if( num2 == Float.NEGATIVE_INFINITY ){
 			return isNegInfty;
 		}
 		
-		if( Math.abs( value - num2 ) <= EPSILON ) {
+		if( Math.abs( (new Double( value )).doubleValue() - num2 ) <= EPSILON ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean equals( NumDouble num2 ) {
-		return equals( num2.value );
+	protected boolean equals( NumSingle num2 ) {
+		if( num2.isNaN ){
+			return isNaN;
+		}
+		if( num2.isPosInfty ){
+			return isPosInfty;
+		}
+		if( num2.isNegInfty ){
+			return isNegInfty;
+		}
+		
+		if( Math.abs( value - num2.value ) <= EPSILON ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -385,9 +399,9 @@ public class NumDouble implements Num {
 			return true;
 		}
 		
-		NumDouble num2_Num;
+		NumSingle num2_Num;
 		try {
-			num2_Num = (NumDouble) obj;
+			num2_Num = (NumSingle) obj;
 			return equals( num2_Num.value );
 		} catch( ClassCastException e ) {
 			return false;
@@ -396,11 +410,11 @@ public class NumDouble implements Num {
 	
 	@Override
 	public int hashCode() {
-		return Double.hashCode( value );
+		return Float.hashCode( value );
 	}
 	
 	@Override
 	public String toString(){
-		return Double.toString( value );
+		return Float.toString( value );
 	}
 }

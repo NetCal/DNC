@@ -162,6 +162,16 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 			result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  NumClass.DOUBLE ) ) ;
 			result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  NumClass.DOUBLE ) ) ;
 			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  NumClass.DOUBLE ) ) ;
+
+			result.add( new FunctionalTestConfig( single_ab, false, false, false, false, NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, false, false, true,  NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  NumClass.SINGLE ) ) ;
+			result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  NumClass.SINGLE ) ) ;
+			
 			result.add( new FunctionalTestConfig( single_ab, false, false, false, false, NumClass.FRACTION ) ) ;
 			result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, NumClass.FRACTION ) ) ;
 			result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, NumClass.FRACTION ) ) ;
@@ -210,6 +220,24 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  NumClass.DOUBLE ) );
 			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  NumClass.DOUBLE ) );
 			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  NumClass.DOUBLE ) );
+
+//			result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  NumClass.SINGLE ) );
+//			result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  NumClass.SINGLE ) );
+			
 			result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, NumClass.FRACTION ) );
 			result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, NumClass.FRACTION ) );
 			result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, NumClass.FRACTION ) );
@@ -253,6 +281,24 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  NumClass.DOUBLE ) );
 		result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  NumClass.DOUBLE ) );
 		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  NumClass.DOUBLE ) );
+
+//		result.add( new FunctionalTestConfig( triplet, false, false, false, false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  false, false, false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, true,  false, false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  true,  false, false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, false, true,  false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  false, true,  false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, true,  true,  false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, false, false, true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  false, false, true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, true,  false, true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, false, true,  true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  NumClass.SINGLE ) );
+//		result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  NumClass.SINGLE ) );
+		
 		result.add( new FunctionalTestConfig( triplet, false, false, false, false, NumClass.FRACTION ) );
 		result.add( new FunctionalTestConfig( triplet, true,  false, false, false, NumClass.FRACTION ) );
 		result.add( new FunctionalTestConfig( triplet, false, true,  false, false, NumClass.FRACTION ) );

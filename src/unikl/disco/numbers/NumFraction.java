@@ -29,7 +29,7 @@ package unikl.disco.numbers;
 
 import org.apache.commons.math3.fraction.Fraction;
 
-import unikl.disco.nc.CalculatorConfig.NumClass;
+import unikl.disco.numbers.NumFactory.SpecialValue;
 
 /**
  * Wrapper class around org.apache.commons.math3.fraction.Fraction
@@ -43,8 +43,8 @@ import unikl.disco.nc.CalculatorConfig.NumClass;
  * @author Steffen Bondorf
  *
  */
-public class NumFraction extends Num {
-	public final NumClass num_class = NumClass.FRACTION;
+public class NumFraction implements Num {
+	private boolean isNaN, isPosInfty, isNegInfty;
 	
 	private Fraction value = new Fraction( 0.0 );
 	
@@ -68,7 +68,7 @@ public class NumFraction extends Num {
 		if( num_str.equals( "Infinity" ) ) {
 			value = POSITIVE_INFINITY.value;
 		} else {
-			value = new Fraction( Num.parse( num_str ).doubleValue() );
+			value = new Fraction( NumFactory.parse( num_str ).doubleValue() );
 			checkInftyNaN();
 		}
 	}
@@ -108,6 +108,18 @@ public class NumFraction extends Num {
 				instantiateZero();
 				break;
 		}
+	}
+	
+	public boolean isNaN() {
+		return isNaN;
+	}
+	
+	public boolean isPosInfty() {
+		return isPosInfty;
+	}
+	
+	public boolean isNegInfty() {
+		return isNegInfty;
 	}
 	
 	private void checkInftyNaN() {
@@ -191,22 +203,33 @@ public class NumFraction extends Num {
 	// a rational number object, these functions emulate copy by value for objects that
 	// typically inhibit copy by reference
 	protected static NumFraction add( NumFraction num1, NumFraction num2 ) {
-		// May throw MathArithmeticException due to integer overflow
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		// Prevent overflow exception when adding integer based number representations like Fraction
+		if( num1.isPosInfty() || num2.isPosInfty() ) {
+			return createPositiveInfinity();
+		}
+		if( num1.isNegInfty() || num2.isNegInfty() ) {
+			return createNegativeInfinity();
+		}
+		
+		// May still throw MathArithmeticException due to integer overflow
         return new NumFraction( num1.value.add( num2.value ) );
 	}
 	
 	@Override
 	public void add( Num num2 ) {
-		if( this.isNaN || num2.isNaN ) {
+		if( isNaN || num2.isNaN() ) {
 			instantiateNaN();
 			return;
 		}
 		// Prevent overflow exception when adding integer based number representations like Fraction
-		if( this.isPosInfty || num2.isPosInfty ) {
+		if( isPosInfty || num2.isPosInfty() ) {
 			instantiatePositiveInfinity();
 			return;
 		}
-		if( this.isNegInfty || num2.isNegInfty ) {
+		if( isNegInfty || num2.isNegInfty() ) {
 			instantiateNegativeInfinity();
 			return;
 		}
@@ -215,22 +238,33 @@ public class NumFraction extends Num {
 	}
 	
 	protected static NumFraction sub( NumFraction num1, NumFraction num2 ) {
-        // May throw MathArithmeticException due to integer overflow
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		// Prevent overflow exception when adding integer based number representations like Fraction
+		if( num1.isPosInfty() || num2.isPosInfty() ) {
+			return createPositiveInfinity();
+		}
+		if( num1.isNegInfty() || num2.isNegInfty() ) {
+			return createNegativeInfinity();
+		}
+		
+        // May still throw MathArithmeticException due to integer overflow
         return new NumFraction( num1.value.subtract( num2.value ) );
 	}
 
 	@Override
 	public void sub( Num num2 ) {
-		if( this.isNaN || num2.isNaN ) {
+		if( isNaN || num2.isNaN() ) {
 			instantiateNaN();
 			return;
 		}
 		// Prevent overflow exception when adding integer based number representations like Fraction
-		if( this.isPosInfty || num2.isPosInfty ) {
+		if( isPosInfty || num2.isPosInfty() ) {
 			instantiatePositiveInfinity();
 			return;
 		}
-		if( this.isNegInfty || num2.isNegInfty ) {
+		if( isNegInfty || num2.isNegInfty() ) {
 			instantiateNegativeInfinity();
 			return;
 		}
@@ -240,21 +274,31 @@ public class NumFraction extends Num {
 	}
 	
 	protected static NumFraction mult( NumFraction num1, NumFraction num2 ) {
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		if( num1.isPosInfty() || num2.isPosInfty() ) {
+			return createPositiveInfinity();
+		}
+		if( num1.isNegInfty() || num2.isNegInfty() ) {
+			return createNegativeInfinity();
+		}
+		
         // May throw MathArithmeticException due to integer overflow
        	return new NumFraction( num1.value.multiply( num2.value ) );
 	}
 
 	@Override
 	public void mult( Num num2 ) {
-		if( this.isNaN || num2.isNaN ) {
+		if( isNaN || num2.isNaN() ) {
 			instantiateNaN();
 			return;
 		}
-		if( this.isPosInfty || num2.isPosInfty ) {
+		if( isPosInfty || num2.isPosInfty() ) {
 			instantiatePositiveInfinity();
 			return;
 		}
-		if( this.isNegInfty || num2.isNegInfty ) {
+		if( isNegInfty || num2.isNegInfty() ) {
 			instantiateNegativeInfinity();
 			return;
 		}
@@ -264,6 +308,24 @@ public class NumFraction extends Num {
 	}
 
 	protected static NumFraction div( NumFraction num1, NumFraction num2 ) {
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		
+		// Integer based number representations use Integer.MAX_VALUE to signal infinity so special treatment is necessary when dividing
+		if( num1.isPosInfty() ) {
+			return createPositiveInfinity();
+		}
+		if( num2.isPosInfty() ) {
+			return createZero();
+		}
+		if( num1.isNegInfty() ) {
+			return createNegativeInfinity();
+		}
+		if( num2.isNegInfty() ) {
+			return createZero();
+		}
+		
         if ( num2.value.getNumerator() == 0 ) {
         	return createPositiveInfinity();
        	} else {
@@ -273,21 +335,21 @@ public class NumFraction extends Num {
 
 	@Override
 	public void div( Num num2 ) {
-		if( this.isNaN || num2.isNaN ) {
+		if( isNaN || num2.isNaN() ) {
 			instantiateNaN();
 			return;
 		}
 		
 		// Integer based number representations use Integer.MAX_VALUE to signal infinity so special treatment is necessary when dividing
-		if( this.isPosInfty || ((Fraction)((NumFraction)num2).value).getNumerator() == 0 ) {
+		if( isPosInfty || ((Fraction)((NumFraction)num2).value).getNumerator() == 0 ) {
 			instantiatePositiveInfinity();
 			return;
 		}
-		if( num2.isPosInfty || num2.isNegInfty ) {
+		if( num2.isPosInfty() || num2.isNegInfty() ) {
 			instantiateZero();
 			return;
 		}
-		if( this.isNegInfty ) {
+		if( isNegInfty ) {
 			instantiateNegativeInfinity();
 			return;
 		}
@@ -296,10 +358,29 @@ public class NumFraction extends Num {
 	}
 
 	protected static NumFraction diff( NumFraction num1, NumFraction num2 ) {
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		
+		if( num1.isPosInfty() || num1.isNegInfty() 
+				 || num2.isPosInfty() || num2.isNegInfty() ) {
+			return createPositiveInfinity();
+		}
+		
 		return sub( max( num1, num2 ), min( num1, num2 ) );	
 	}
 
 	protected static NumFraction max( NumFraction num1, NumFraction num2 ) {
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		if( num1.isPosInfty() ) {
+			return num1;
+		}
+		if( num1.isNegInfty() ) {
+			return num2;
+		}
+		
 		if( num1.value.compareTo( num2.value ) >= 0 ) {
 			return num1;
 		} else {
@@ -308,6 +389,16 @@ public class NumFraction extends Num {
 	}
 
 	protected static NumFraction min( NumFraction num1, NumFraction num2 ) {
+		if( num1.isNaN() || num2.isNaN() ) {
+			return createNaN();
+		}
+		if( num1.isPosInfty() ) {
+			return num2;
+		}
+		if( num1.isNegInfty() ) {
+			return num1;
+		}
+		
 		if( num1.value.compareTo( num2.value ) <= 0 ) {
 			return num1;
 		} else {
@@ -316,29 +407,49 @@ public class NumFraction extends Num {
 	}
 	
 	protected static NumFraction abs( NumFraction num ) {
+		if ( num.isNaN() ) {
+    		return createNaN();
+    	}
+    	if ( num.isPosInfty() ) {
+    		return createPositiveInfinity();
+    	}
+    	if ( num.isNegInfty() ) {
+			return createNegativeInfinity();
+		}
+	    
     	return new NumFraction( num.value.abs() );
 	}
 
 	protected static NumFraction negate( NumFraction num ) {
+		if ( num.isNaN() ) {
+    		return createNaN();
+    	}
+    	if ( num.isPosInfty() ) {
+    		return createNegativeInfinity();
+    	}
+    	if ( num.isNegInfty() ) {
+			return createPositiveInfinity();
+		}
+    	
     	return new NumFraction( num.value.negate() );
 	}
 
 	public boolean greater( Num num2 ) {
-		if( this.isNaN || num2.isNaN ){
+		if( isNaN || num2.isNaN() ){
 			return false;
 		}
 		
-		if( num2.isPosInfty ){
+		if( num2.isPosInfty() ){
 			return false;
 		}
-		if( this.isPosInfty ){
+		if( isPosInfty ){
 			return true;
 		}
 		
-		if( this.isNegInfty ){
+		if( isNegInfty ){
 			return false;
 		}
-		if( num2.isNegInfty ){
+		if( num2.isNegInfty() ){
 			return true;
 		}
 		
@@ -350,21 +461,21 @@ public class NumFraction extends Num {
 	}
 
 	public boolean ge( Num num2 ) {
-		if( this.isNaN || num2.isNaN ){
+		if( isNaN || num2.isNaN() ){
 			return false;
 		}
 		
-		if( this.isPosInfty ){
+		if( isPosInfty ){
 			return true;
 		}
-		if( num2.isPosInfty ){
+		if( num2.isPosInfty() ){
 			return false;
 		}
 
-		if( num2.isNegInfty ){
+		if( num2.isNegInfty() ){
 			return true;
 		}
-		if( this.isNegInfty ){
+		if( isNegInfty ){
 			return false;
 		}
 		
@@ -376,21 +487,21 @@ public class NumFraction extends Num {
 	}
 
 	public boolean less( Num num2 ) {
-		if( this.isNaN || num2.isNaN ){
+		if( isNaN || num2.isNaN() ){
 			return false;
 		}
 
-		if( this.isPosInfty ){
+		if( isPosInfty ){
 			return false;
 		}
-		if( num2.isPosInfty ){
+		if( num2.isPosInfty() ){
 			return true;
 		}
 		
-		if( num2.isNegInfty ){
+		if( num2.isNegInfty() ){
 			return false;
 		}
-		if( this.isNegInfty ){
+		if( isNegInfty ){
 			return true;
 		}
 			
@@ -402,21 +513,21 @@ public class NumFraction extends Num {
 	}
 
 	public boolean le( Num num2 ) {
-		if( this.isNaN || num2.isNaN ){
+		if( isNaN || num2.isNaN() ){
 			return false;
 		}
 
-		if( num2.isPosInfty ){
+		if( num2.isPosInfty() ){
 			return true;
 		}
-		if( this.isPosInfty ){
+		if( isPosInfty ){
 			return false;
 		}
 
-		if( this.isNegInfty ){
+		if( isNegInfty ){
 			return true;
 		}
-		if( num2.isNegInfty ){
+		if( num2.isNegInfty() ){
 			return false;
 		}
 		
@@ -429,27 +540,28 @@ public class NumFraction extends Num {
 	
 	@Override
 	public double doubleValue() {
-		if ( this.isNaN ) {
+		if ( isNaN ) {
     		return Double.NaN;
     	}
-    	if ( this.isPosInfty ) {
+    	if ( isPosInfty ) {
     		return Double.POSITIVE_INFINITY;
     	}
-    	if ( this.isNegInfty ) {
+    	if ( isNegInfty ) {
 			return Double.NEGATIVE_INFINITY;
 		}
+    	
 	    return value.doubleValue();
 	}
 
 	@Override
 	public Num copy() {
-		if ( this.isNaN ) {
+		if ( isNaN ) {
     		return createNaN();
     	}
-    	if ( this.isPosInfty ) {
+    	if ( isPosInfty ) {
     		return createPositiveInfinity();
     	}
-    	if ( this.isNegInfty ) {
+    	if ( isNegInfty ) {
 			return createNegativeInfinity();
 		}
 
@@ -459,26 +571,26 @@ public class NumFraction extends Num {
 	@Override
 	public boolean equals( double num2 ) {
 		if( Double.isNaN( num2 ) ){
-			return this.isNaN;
+			return isNaN;
 		}
 		if( num2 == Double.POSITIVE_INFINITY ){
-			return this.isPosInfty;
+			return isPosInfty;
 		}
 		if( num2 == Double.NEGATIVE_INFINITY ){
-			return this.isNegInfty;
+			return isNegInfty;
 		}
 		
 		return equals( new NumFraction( num2 ) );
 	}
 
 	public boolean equals( NumFraction num2 ) {
-		if( this.isNaN & num2.isNaN ){
+		if( isNaN & num2.isNaN() ){
 			return true;
 		}
-		if( this.isPosInfty & num2.isPosInfty ){
+		if( isPosInfty & num2.isPosInfty() ){
 			return true;
 		}
-		if( this.isNegInfty & num2.isNegInfty ){
+		if( isNegInfty & num2.isNegInfty() ){
 			return true;
 		}
         
@@ -490,14 +602,14 @@ public class NumFraction extends Num {
 	}
 
 	@Override
-	public boolean equals( Object num2 ) {
-		if( num2 == null ){
+	public boolean equals( Object obj ) {
+		if( obj == null ){
 			return true;
 		}
 		
 		NumFraction num2_Num;
 		try {
-			num2_Num = (NumFraction) num2;
+			num2_Num = (NumFraction) obj;
 			return equals( num2_Num );
 		} catch( ClassCastException e ) {
 			return false;
@@ -511,13 +623,13 @@ public class NumFraction extends Num {
 	
 	@Override
 	public String toString(){
-		if ( this.isNaN ) {
+		if ( isNaN ) {
     		return "NaN";
     	}
-    	if ( this.isPosInfty ) {
+    	if ( isPosInfty ) {
     		return "Infinity";
     	}
-    	if ( this.isNegInfty ) {
+    	if ( isNegInfty ) {
 			return "-Infinity";
 		}
     	

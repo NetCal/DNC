@@ -360,7 +360,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				System.out.println( "backlog bound   : " + Double.toString( backlog_bound ) );
 				System.out.println();
 				
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
 				System.out.println( e.toString() );
@@ -372,7 +372,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 			try {
 				double backlog_bound = BacklogBound.derivePmooSinkTreeTbRl( network, f0.getSink() );
 
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( e.toString() );
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -642,7 +642,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				System.out.println( "backlog bound   : " + Double.toString( backlog_bound ) );
 				System.out.println();
 				
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
 				System.out.println( e.toString() );
@@ -654,7 +654,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 			try {
 				double backlog_bound = BacklogBound.derivePmooSinkTreeTbRl( network, f1.getSink() );
 
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( e.toString() );
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -924,7 +924,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				System.out.println( "backlog bound   : " + Double.toString( backlog_bound ) );
 				System.out.println();
 				
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
 				System.out.println( e.toString() );
@@ -936,7 +936,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 			try {
 				double backlog_bound = BacklogBound.derivePmooSinkTreeTbRl( network, f2.getSink() );
 
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( e.toString() );
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -1206,7 +1206,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				System.out.println( "backlog bound   : " + Double.toString( backlog_bound ) );
 				System.out.println();
 				
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
 				System.out.println( e.toString() );
@@ -1218,7 +1218,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 			try {
 				double backlog_bound = BacklogBound.derivePmooSinkTreeTbRl( network, f3.getSink() );
 
-				assertEquals( "Tree backlog", 200, backlog_bound, 0.0 );
+				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( e.toString() );
 				assertEquals( "Unexpected exception occured", 0, 1 );
