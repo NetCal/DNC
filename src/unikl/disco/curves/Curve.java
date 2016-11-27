@@ -37,6 +37,7 @@ import java.util.List;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>
@@ -64,7 +65,7 @@ public class Curve {
 
 	protected LinearSegment[] segments;
 
-	public boolean is_zero_delay_infinite_burst = false;
+	protected boolean is_delayed_infinite_burst = false;
 
 	private boolean has_token_bucket_meta_info = false;
 	protected boolean is_token_bucket = false;
@@ -94,6 +95,10 @@ public class Curve {
 	protected Curve( int segment_count ) {
 		createNullSegmentsCurve( segment_count );
 	}
+	
+	public boolean isDelayedInfiniteBurst() {
+		return is_delayed_infinite_burst;
+	}	
 	
 	private void createNullSegmentsCurve( int segment_count ) {
 		segments = new LinearSegment[segment_count];
@@ -185,7 +190,7 @@ public class Curve {
 		getSegment( 0 ).grad     = NumFactory.createZero();
 		getSegment( 0 ).leftopen = false;
 		
-		getSegment( 1 ).x        = NumFactory.max( NumFactory.getZero(), latency );
+		getSegment( 1 ).x        = NumUtils.max( NumFactory.getZero(), latency );
 		getSegment( 1 ).y        = NumFactory.createPositiveInfinity();
 		getSegment( 1 ).grad     = NumFactory.createZero();
 		getSegment( 1 ).leftopen = true;
@@ -418,7 +423,7 @@ public class Curve {
 				continue;
 			}
 			Num rate = segments[i].grad;
-			Num burst = NumFactory.sub( segments[i].y, NumFactory.mult( segments[i].x, segments[i].grad ) );
+			Num burst = NumUtils.sub( segments[i].y, NumUtils.mult( segments[i].x, segments[i].grad ) );
 			token_buckets.add( createTokenBucket( rate, burst ) );
 		}
 		
@@ -495,7 +500,7 @@ public class Curve {
 					continue;
 				}
 				Num rate = segments[i].grad;
-				Num latency = NumFactory.sub( segments[i].x, NumFactory.div( segments[i].y, segments[i].grad ) );
+				Num latency = NumUtils.sub( segments[i].x, NumUtils.div( segments[i].y, segments[i].grad ) );
 				rate_latencies.add( createRateLatency( rate, latency ) );
 			}
 		}
@@ -638,7 +643,7 @@ public class Curve {
 	 * @return <code>true</code> if the IP is a discontinuity, <code>false</code> if not.
 	 */
 	public boolean isDiscontinuity( int i ) {
-		return (i+1 < segments.length && ( NumFactory.abs( NumFactory.sub( segments[i+1].x, segments[i].x ) ) ).less( NumFactory.getEpsilon() ) );
+		return (i+1 < segments.length && ( NumUtils.abs( NumUtils.sub( segments[i+1].x, segments[i].x ) ) ).less( NumFactory.getEpsilon() ) );
 	}
 
 	/**
@@ -649,7 +654,7 @@ public class Curve {
 	 * @return <code>true</code> if the IP is a real discontinuity, <code>false</code> if not.
 	 */
 	public boolean isRealDiscontinuity( int i ) {
-		return (isDiscontinuity(i) && ( NumFactory.abs( NumFactory.sub( segments[i+1].y, segments[i].y ) ) ).ge( NumFactory.getEpsilon() ) );
+		return ( isDiscontinuity(i) && ( NumUtils.abs( NumUtils.sub( segments[i+1].y, segments[i].y ) ) ).ge( NumFactory.getEpsilon() ) );
 	}
 
 	/**
@@ -661,7 +666,7 @@ public class Curve {
 	 * @return <code>true</code> if the IP is an unreal discontinuity, <code>false</code> if not.
 	 */
 	public boolean isUnrealDiscontinuity( int i ) {
-		return (isDiscontinuity(i) && ( NumFactory.abs( NumFactory.sub(segments[i+1].y, segments[i].y ) ) ).less( NumFactory.getEpsilon() ) );
+		return ( isDiscontinuity(i) && ( NumUtils.abs( NumUtils.sub(segments[i+1].y, segments[i].y ) ) ).less( NumFactory.getEpsilon() ) );
 	}
 
 	/**
@@ -766,7 +771,7 @@ public class Curve {
 		}
 		Num dx;
 		for (int i = start; i < segments.length; i++) {
-			dx = NumFactory.sub( segments[i].x, segments[i-1].x );
+			dx = NumUtils.sub( segments[i].x, segments[i-1].x );
 			segments[i].y = dx.copy();
 			segments[i].y.mult( segments[i-1].grad );
 			segments[i].y.add( segments[i-1].y );
@@ -819,22 +824,22 @@ public class Curve {
 		i = 0;
 		while(i < segments.length-1) {
 			// Join colinear segments
-			Num firstArg = NumFactory.sub( segments[i+1].grad, segments[i].grad );
+			Num firstArg = NumUtils.sub( segments[i+1].grad, segments[i].grad );
 			
-			Num secondArg = NumFactory.sub( segments[i+1].x, segments[i].x );
-			secondArg = NumFactory.mult( secondArg, segments[i].grad );
+			Num secondArg = NumUtils.sub( segments[i+1].x, segments[i].x );
+			secondArg = NumUtils.mult( secondArg, segments[i].grad );
 			secondArg.add( segments[i].y );
-			secondArg = NumFactory.sub( segments[i+1].y, secondArg );
+			secondArg = NumUtils.sub( segments[i+1].y, secondArg );
 			
-			if ( NumFactory.abs( firstArg ).less( NumFactory.getEpsilon() )
-					&& NumFactory.abs( secondArg ).less( NumFactory.getEpsilon() ) ){
+			if ( NumUtils.abs( firstArg ).less( NumFactory.getEpsilon() )
+					&& NumUtils.abs( secondArg ).less( NumFactory.getEpsilon() ) ){
 				
 				removeSegment(i+1);
 				if (i+1 < segments.length && !segments[i+1].leftopen) {
-					Num resultPt1 = NumFactory.sub( segments[i+1].y, segments[i].y );
-					Num resultPt2 = NumFactory.sub( segments[i+1].x, segments[i].x );
+					Num resultPt1 = NumUtils.sub( segments[i+1].y, segments[i].y );
+					Num resultPt2 = NumUtils.sub( segments[i+1].x, segments[i].x );
 					
-					segments[i].grad = NumFactory.div( resultPt1, resultPt2 );
+					segments[i].grad = NumUtils.div( resultPt1, resultPt2 );
 				}
 				continue;
 			}
@@ -1074,8 +1079,8 @@ public class Curve {
 
 		Num ret = NumFactory.getZero(); // No need to create an object as this value is only set for initial comparison in the loop.
 		for(int i=sa; i<=sb; ++i) {
-			Num end = ( i+1 < segments.length ? NumFactory.min(getSegment(i+1).x, b) : b );
-			ret = NumFactory.max( ret, NumFactory.max( f( NumFactory.max( a, getSegment(i).x ) ), f( end ) ) );
+			Num end = ( i+1 < segments.length ? NumUtils.min(getSegment(i+1).x, b) : b );
+			ret = NumUtils.max( ret, NumUtils.max( f( NumUtils.max( a, getSegment(i).x ) ), f( end ) ) );
 		}
 
 		return ret;
@@ -1127,8 +1132,8 @@ public class Curve {
 			}
 			Num gradient;
 			if (i < segments.length-1) {
-				gradient = NumFactory.sub( segments[i+1].y, segments[i].y );
-				gradient.div( NumFactory.sub( segments[i+1].x, segments[i].x ) );
+				gradient = NumUtils.sub( segments[i+1].y, segments[i].y );
+				gradient.div( NumUtils.sub( segments[i+1].x, segments[i].x ) );
 			} else {
 				gradient = segments[i].grad;
 			}
@@ -1168,8 +1173,8 @@ public class Curve {
 			Num gradient;
 			// Handles discontinuities
 			if ( i < segments.length-1 ) {
-				gradient = NumFactory.sub( segments[i+1].y, segments[i].y );
-				gradient.div( NumFactory.sub( segments[i+1].x, segments[i].x ) );
+				gradient = NumUtils.sub( segments[i+1].y, segments[i].y );
+				gradient.div( NumUtils.sub( segments[i+1].x, segments[i].x ) );
 			} else {
 				gradient = segments[i].grad;
 			}
@@ -1198,8 +1203,8 @@ public class Curve {
 
 			Num gradient;
 			if (i < segments.length-1) {
-				gradient = NumFactory.sub( segments[i+1].y, segments[i].y );
-				gradient.div( NumFactory.sub( segments[i+1].x, segments[i].x ) );
+				gradient = NumUtils.sub( segments[i+1].y, segments[i].y );
+				gradient.div( NumUtils.sub( segments[i+1].x, segments[i].x ) );
 			} else {
 				gradient = segments[i].grad;
 			}
@@ -1335,7 +1340,7 @@ public class Curve {
 		}
 		for (int i = 0; i < segments.length; i++) {
 			Num y0 = segments[i].y;
-			if (y0.less( NumFactory.getZero() ) && y0.greater( NumFactory.negate( NumFactory.getEpsilon() ) ) ) {
+			if (y0.less( NumFactory.getZero() ) && y0.greater( NumUtils.negate( NumFactory.getEpsilon() ) ) ) {
 				y0 = NumFactory.createZero();
 			}
 			if ( y0.greater( NumFactory.getZero() )
@@ -1364,7 +1369,7 @@ public class Curve {
 			if (isDiscontinuity(i-1)) {
 				continue;
 			}
-			y_intervals.add( NumFactory.sub( segments[i].y, segments[i-1].y ) );
+			y_intervals.add( NumUtils.sub( segments[i].y, segments[i-1].y ) );
 		}
 		
 		return y_intervals;
@@ -1492,7 +1497,7 @@ public class Curve {
 								curve1.getSegment( i1+1 ).x : NumFactory.createPositiveInfinity();
 			Num x_next2 = ( i2+1 < curve2.getSegmentCount() ) ?
 								curve2.getSegment( i2+1 ).x : NumFactory.createPositiveInfinity();
-			Num x_next  = NumFactory.min( x_next1, x_next2 );
+			Num x_next  = NumUtils.min( x_next1, x_next2 );
 								
 			leftopen = curve1.getSegment( i1 ).leftopen || curve2.getSegment( i2 ).leftopen;
 
@@ -1658,14 +1663,14 @@ public class Curve {
 		
 		Num burst_c1 = c1.fLimitRight( NumFactory.getZero() );
 		Num burst_c2 = c2.fLimitRight( NumFactory.getZero() );
-		Num result = NumFactory.diff( burst_c1, burst_c2 );
+		Num result = NumUtils.diff( burst_c1, burst_c2 );
 		
 		ArrayList<Num> xcoords = computeInflectionPointsX( c1, c2 );	
 		for( int i = 0; i < xcoords.size(); i++ ) {
 			Num ip_x = ( (Num) xcoords.get( i ) );
 
-			Num backlog = NumFactory.sub( c1.f( ip_x ), c2.f( ip_x ) );
-			result = NumFactory.max( result, backlog );
+			Num backlog = NumUtils.sub( c1.f( ip_x ), c2.f( ip_x ) );
+			result = NumUtils.max( result, backlog );
 		}
 		return result;
 	}
@@ -1686,14 +1691,14 @@ public class Curve {
 		for( int i = 0; i < c1.getSegmentCount(); i++ ) {
 			Num ip_y = c1.getSegment( i ).y;
 
-			Num delay = NumFactory.sub( c2.f_inv( ip_y, true ), c1.f_inv( ip_y, false ) );
-			result = NumFactory.max( result, delay );
+			Num delay = NumUtils.sub( c2.f_inv( ip_y, true ), c1.f_inv( ip_y, false ) );
+			result = NumUtils.max( result, delay );
 		}
 		for( int i = 0; i < c2.getSegmentCount(); i++ ) {
 			Num ip_y = c2.getSegment( i ).y;
 
-			Num delay = NumFactory.sub( c2.f_inv( ip_y, true ), c1.f_inv( ip_y, false ) );
-			result = NumFactory.max( result, delay );
+			Num delay = NumUtils.sub( c2.f_inv( ip_y, true ), c1.f_inv( ip_y, false ) );
+			result = NumUtils.max( result, delay );
 		}
 		return result;
 	}

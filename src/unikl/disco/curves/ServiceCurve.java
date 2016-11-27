@@ -88,7 +88,7 @@ public class ServiceCurve extends Curve {
 	public static ServiceCurve createZeroDelayInfiniteBurst() {
 		ServiceCurve sc_result = new ServiceCurve();
 		sc_result.initializeZeroDelayInfiniteBurst();
-		sc_result.is_zero_delay_infinite_burst = true;
+		sc_result.is_delayed_infinite_burst = true;
 		
 		return sc_result;
 	}
@@ -104,7 +104,7 @@ public class ServiceCurve extends Curve {
 		sc_result.initializeDelayedInfiniteBurst( delay );
 		
 		if( delay.doubleValue() == 0.0 ) {
-			sc_result.is_zero_delay_infinite_burst = true;
+			sc_result.is_delayed_infinite_burst = true;
 		}
 		
 		return sc_result;
@@ -126,7 +126,7 @@ public class ServiceCurve extends Curve {
 		sc_result.is_rate_latency = true;
 
 		if( rate.doubleValue() == Double.POSITIVE_INFINITY && latency.doubleValue() == 0.0 ) {
-			sc_result.is_zero_delay_infinite_burst = true;
+			sc_result.is_delayed_infinite_burst = true;
 		}
 		
 		return sc_result;
@@ -148,7 +148,7 @@ public class ServiceCurve extends Curve {
 		sc_result.is_rate_latency = true;
 		
 		if( rate == Double.POSITIVE_INFINITY && latency == 0.0 ) {
-			sc_result.is_zero_delay_infinite_burst = true;
+			sc_result.is_delayed_infinite_burst = true;
 		}
 		
 		return sc_result;
@@ -158,7 +158,7 @@ public class ServiceCurve extends Curve {
 		ServiceCurve sc_copy = new ServiceCurve();
 		sc_copy.initializeCurve( this );
 		
-		sc_copy.is_zero_delay_infinite_burst = this.is_zero_delay_infinite_burst;
+		sc_copy.is_delayed_infinite_burst = this.is_delayed_infinite_burst;
 		
 		return sc_copy;
 	}

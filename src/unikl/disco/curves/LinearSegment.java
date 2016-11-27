@@ -30,6 +30,7 @@ package unikl.disco.curves;
 
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * Class representing linear segments of a curve. A linear segments starts at
@@ -194,11 +195,11 @@ public class LinearSegment{
 	public static LinearSegment sub( LinearSegment s1, LinearSegment s2, Num x, boolean leftopen ) {
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x       = x;
-		result.y       = NumFactory.sub( s1.f( x ), s2.f( x ) );
+		result.y       = NumUtils.sub( s1.f( x ), s2.f( x ) );
 		// FIXME Causes test failures
 //		result.y       = s1.f( x );
 //		result.y.sub( s2.f( x ) );
-		result.grad     = NumFactory.sub( s1.grad, s2.grad );
+		result.grad     = NumUtils.sub( s1.grad, s2.grad );
 		// FIXME Causes test failures
 //		result.grad     = s1.grad.copy();
 //		result.grad.sub( s2.grad );
@@ -223,9 +224,9 @@ public class LinearSegment{
 
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x = x;
-		if ( crossed || NumFactory.abs( NumFactory.sub( f1_x, f2_x ) ).less( NumFactory.getEpsilon() ) ) {
+		if ( crossed || NumUtils.abs( NumUtils.sub( f1_x, f2_x ) ).less( NumFactory.getEpsilon() ) ) {
 			result.y   = f1_x;
-			result.grad = NumFactory.min( s1.grad, s2.grad );
+			result.grad = NumUtils.min( s1.grad, s2.grad );
 		} else if ( f1_x.less( f2_x ) ) {
 			result.y   = f1_x;
 			result.grad = s1.grad;
@@ -254,9 +255,9 @@ public class LinearSegment{
 
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x = x;
-		if ( crossed || NumFactory.abs( NumFactory.sub( f1_x, f2_x ) ).less( NumFactory.getEpsilon() ) ) {
+		if ( crossed || NumUtils.abs( NumUtils.sub( f1_x, f2_x ) ).less( NumFactory.getEpsilon() ) ) {
 			result.y   = f1_x;
-			result.grad = NumFactory.max( s1.grad, s2.grad );
+			result.grad = NumUtils.max( s1.grad, s2.grad );
 		} else if ( f1_x.greater( f2_x ) ) {
 			result.y   = f1_x;
 			result.grad = s1.grad;
@@ -312,7 +313,7 @@ public class LinearSegment{
 //		result.mult( grad );
 //		result.add( y );
 		
-		Num result = NumFactory.add( NumFactory.mult( NumFactory.sub( x, this.x ), grad ), y ); 
+		Num result = NumUtils.add( NumUtils.mult( NumUtils.sub( x, this.x ), grad ), y ); 
 		return result;
 	}
 
@@ -324,15 +325,15 @@ public class LinearSegment{
 	 * @return the x-coordinate at which the segments cross or NaN of they are parallel
 	 */
 	public Num getXIntersectionWith( LinearSegment other ) {
-		Num y1 = NumFactory.sub( this.y, NumFactory.mult( x, this.grad ) );
-		Num y2 = NumFactory.sub( other.y, NumFactory.mult( other.x, other.grad ) );
+		Num y1 = NumUtils.sub( this.y, NumUtils.mult( x, this.grad ) );
+		Num y2 = NumUtils.sub( other.y, NumUtils.mult( other.x, other.grad ) );
 		
 		// FIXME Causes test failures
 //		y2.sub( y1 );
 //		y2.div( Num.sub( this.grad, other.grad ) );
 //		return y2;
 		
-		return NumFactory.div( NumFactory.sub( y2, y1 ), NumFactory.sub( this.grad, other.grad ) ); // returns NaN if lines are parallel
+		return NumUtils.div( NumUtils.sub( y2, y1 ), NumUtils.sub( this.grad, other.grad ) ); // returns NaN if lines are parallel
 	}
 	
 	@Override

@@ -33,6 +33,7 @@ import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * 
@@ -81,16 +82,16 @@ public class DelayBound {
 
 			Num delay = service_curve.f_inv( ip_y, true );
 			delay.sub( arrival_curve.f_inv( ip_y, false ) );
-			result = NumFactory.max( result, delay );
+			result = NumUtils.max( result, delay );
 		}
 		for( int i = 0; i < service_curve.getSegmentCount(); i++ ) {
 			Num ip_y = service_curve.getSegment( i ).getY();
 
 			Num delay = service_curve.f_inv( ip_y, true );
 			delay.sub( arrival_curve.f_inv( ip_y, false ) );
-			result = NumFactory.max( result, delay );
+			result = NumUtils.max( result, delay );
 		}
 		
-		return NumFactory.max( NumFactory.getZero(), result );
+		return NumUtils.max( NumFactory.getZero(), result );
 	}
 }

@@ -44,6 +44,7 @@ import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * 
@@ -82,7 +83,7 @@ public class TotalFlowAnalysis extends Analysis {
 			Pair<Num> min_D_B = deriveBoundsAtServer( server );
 
 			delay_bound.add( min_D_B.getFirst() );
-			backlog_bound = NumFactory.max( backlog_bound, min_D_B.getSecond() );
+			backlog_bound = NumUtils.max( backlog_bound, min_D_B.getSecond() );
 		}
 		
 		result.delay_bound = delay_bound;

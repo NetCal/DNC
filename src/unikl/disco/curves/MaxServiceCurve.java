@@ -183,7 +183,7 @@ public class MaxServiceCurve extends Curve {
 		msc_result.is_rate_latency = true;
 
 		if( rate.doubleValue() == Double.POSITIVE_INFINITY && latency.doubleValue() == 0.0 ) {
-			msc_result.is_zero_delay_infinite_burst = true;
+			msc_result.is_delayed_infinite_burst = true;
 		}
 		
 		return msc_result;
@@ -205,7 +205,7 @@ public class MaxServiceCurve extends Curve {
 		msc_result.is_rate_latency = true;
 		
 		if( rate == Double.POSITIVE_INFINITY && latency == 0.0 ) {
-			msc_result.is_zero_delay_infinite_burst = true;
+			msc_result.is_delayed_infinite_burst = true;
 		}
 		
 		return msc_result;

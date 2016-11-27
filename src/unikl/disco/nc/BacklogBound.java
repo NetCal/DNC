@@ -38,6 +38,7 @@ import unikl.disco.network.Network;
 import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * 
@@ -78,8 +79,8 @@ public class BacklogBound {
 		for( int i = 0; i < xcoords.size(); i++ ) {
 			Num ip_x = ( (Num) xcoords.get( i ) );
 
-			Num backlog = NumFactory.sub( arrival_curve.f( ip_x ), service_curve.f( ip_x ) );
-			result = NumFactory.max( result, backlog );
+			Num backlog = NumUtils.sub( arrival_curve.f( ip_x ), service_curve.f( ip_x ) );
+			result = NumUtils.max( result, backlog );
 		}
 		return result;
 	}

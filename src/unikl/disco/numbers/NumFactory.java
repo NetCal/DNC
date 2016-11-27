@@ -8,8 +8,10 @@ public class NumFactory {
 
 	public static Num getPositiveInfinity() {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
-			 case FRACTION:
-				 return NumFraction.POSITIVE_INFINITY;
+		 case FRACTION:
+			 return NumFraction.POSITIVE_INFINITY;
+			 case BIG_FRACTION:
+				 return NumBigFraction.POSITIVE_INFINITY;
 			 case SINGLE:
 				 return NumSingle.POSITIVE_INFINITY;
 			 case DOUBLE:
@@ -22,6 +24,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return NumFraction.NEGATIVE_INFINITY;
+			 case BIG_FRACTION:
+				 return NumBigFraction.NEGATIVE_INFINITY;
 			 case SINGLE:
 				 return NumSingle.NEGATIVE_INFINITY;
 			 case DOUBLE:
@@ -34,6 +38,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return NumFraction.NaN;
+			 case BIG_FRACTION:
+				 return NumBigFraction.NaN;
 			 case SINGLE:
 				 return NumSingle.NaN;
 			 case DOUBLE:
@@ -46,6 +52,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return NumFraction.ZERO;
+			 case BIG_FRACTION:
+				 return NumBigFraction.ZERO;
 			 case SINGLE:
 				 return NumSingle.ZERO;
 			 case DOUBLE:
@@ -58,6 +66,8 @@ public class NumFactory {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION:
 				return NumFraction.createEpsilon();
+			 case BIG_FRACTION:
+				 return NumBigFraction.createEpsilon();
 			 case SINGLE:
 				 return NumSingle.createEpsilon();
 			case DOUBLE:
@@ -70,6 +80,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return new NumFraction( num );
+			 case BIG_FRACTION:
+				 return new NumBigFraction( num );
 			 case SINGLE:
 				 return new NumSingle( num );
 			 case DOUBLE:
@@ -82,6 +94,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return new NumFraction( value );
+			 case BIG_FRACTION:
+				 return new NumBigFraction( value );
 			 case SINGLE:
 				 return new NumSingle( value );
 			 case DOUBLE:
@@ -94,6 +108,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return new NumFraction( num_str );
+			 case BIG_FRACTION:
+				 return new NumBigFraction( num_str );
 			 case SINGLE:
 				 return new NumSingle( num_str );
 			 case DOUBLE:
@@ -106,6 +122,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			 case FRACTION:
 				 return new NumFraction( num, den );
+			 case BIG_FRACTION:
+				 return new NumBigFraction( num, den );
 			 case SINGLE:
 				 return new NumSingle( num, den );
 			 case DOUBLE:
@@ -118,6 +136,8 @@ public class NumFactory {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION:
 				return new NumFraction( SpecialValue.ZERO );
+			 case BIG_FRACTION:
+				 return new NumBigFraction( SpecialValue.ZERO );
 			case SINGLE:
 				 return new NumSingle( SpecialValue.ZERO );
 			case DOUBLE:
@@ -130,6 +150,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION:
 				 return new NumFraction( SpecialValue.POSITIVE_INFINITY );
+			case BIG_FRACTION:
+				 return new NumBigFraction( SpecialValue.POSITIVE_INFINITY );
 			case SINGLE:
 				 return new NumSingle( SpecialValue.POSITIVE_INFINITY );
 			case DOUBLE:
@@ -142,6 +164,8 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 		 	case FRACTION:
 				 return new NumFraction( SpecialValue.NEGATIVE_INFINITY );
+		 	case BIG_FRACTION:
+				 return new NumBigFraction( SpecialValue.NEGATIVE_INFINITY );
 			case SINGLE:
 				 return new NumSingle( SpecialValue.NEGATIVE_INFINITY );
 			case DOUBLE:
@@ -154,115 +178,14 @@ public class NumFactory {
 		 switch ( CalculatorConfig.NUM_CLASS ) {
 		 	case FRACTION:
 		 		return new NumFraction( SpecialValue.NaN );
+		 	case BIG_FRACTION:
+				 return new NumBigFraction( SpecialValue.NaN );
 			case SINGLE:
 				 return new NumSingle( SpecialValue.NaN );
 		 	case DOUBLE:
 		 	default:
 		 		return new NumDouble( SpecialValue.NaN );
 		 }
-	}
-
-	public static Num add( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.add( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.add( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.add( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	
-	public static Num sub( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.sub( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.sub( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.sub( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	
-	public static Num mult( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.mult( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.mult( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.mult( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	
-	public static Num div( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.div( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.div( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.div( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	public static Num diff( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.diff( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.diff( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.diff( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	public static Num max( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.max( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.max( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.max( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	public static Num min( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.min( (NumFraction)num1, (NumFraction)num2 );
-			case SINGLE:
-				 return NumSingle.min( (NumSingle)num1, (NumSingle)num2 );
-			case DOUBLE:
-			default:
-				return NumDouble.min( (NumDouble)num1, (NumDouble)num2 );
-		}
-	}
-	public static Num abs( Num num ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.abs( (NumFraction)num );
-			case SINGLE:
-				 return NumSingle.abs( (NumSingle)num );
-			case DOUBLE:
-			default:
-				return NumDouble.abs( (NumDouble)num );
-		}
-	}
-	public static Num negate( Num num ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION:
-				return NumFraction.negate( (NumFraction)num );
-			case SINGLE:
-				 return NumSingle.negate( (NumSingle)num );
-			case DOUBLE:
-			default:
-				return NumDouble.negate( (NumDouble)num );
-		}
 	}
 
 	protected static Num parse( String num_str ) throws Exception {

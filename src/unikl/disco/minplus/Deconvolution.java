@@ -40,6 +40,7 @@ import unikl.disco.curves.ServiceCurve;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * 
@@ -101,7 +102,7 @@ public class Deconvolution {
 		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
 			return arrival_curve;
 		}
-		if( service_curve.is_zero_delay_infinite_burst ) {
+		if( service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0 ) {
 			return arrival_curve;
 		}
 		if( arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
@@ -180,7 +181,7 @@ public class Deconvolution {
 				for( int j = 0; j < candidate_tmp.getSegmentCount(); j++ ) {
 					LinearSegment lin_seg = candidate_tmp.getSegment(j);
 					y_alpha = lin_seg.getY();
-					candidate_tmp.getSegment(j).setY( NumFactory.sub( y_alpha, y_beta ) );
+					candidate_tmp.getSegment(j).setY( NumUtils.sub( y_alpha, y_beta ) );
 				}
 			}
 			result_candidates.add( candidate_tmp );
@@ -199,7 +200,7 @@ public class Deconvolution {
 			x_inflect_alpha = curve_1.getSegment( i ).getX();
 			y_alpha = curve_1.f( x_inflect_alpha );
 			y_beta = curve_2.f( x_inflect_alpha );
-			results_cand_burst = NumFactory.sub( y_alpha, y_beta );
+			results_cand_burst = NumUtils.sub( y_alpha, y_beta );
 			
 			if( x_inflect_alpha.equals( NumFactory.getZero() ) // The inflection point is in the origin and thus the candidate is a null curve.
 					|| results_cand_burst.less( NumFactory.getZero() ) ) { // At the inflection point, the service curve is larger than the arrival curve.
@@ -231,7 +232,7 @@ public class Deconvolution {
 				current_candidate_segment.setGrad( current_beta_segment.getGrad().copy() );
 
 				// The length of this segment is defined by the following one's y-coordinate:
-				next_x_coord = NumFactory.sub( x_inflect_alpha, x_inflect_beta );
+				next_x_coord = NumUtils.sub( x_inflect_alpha, x_inflect_beta );
 				next_y_coord = next_x_coord.copy();
 				next_y_coord.mult( current_beta_segment.getGrad() );
 				next_y_coord.add( results_cand_burst );
@@ -251,7 +252,7 @@ public class Deconvolution {
 					current_candidate_segment.setY( next_y_coord );
 					current_candidate_segment.setGrad( current_beta_segment.getGrad().copy() );
 					
-					current_segment_length = NumFactory.sub( prev_beta_segment.getX(), current_beta_segment.getX() );
+					current_segment_length = NumUtils.sub( prev_beta_segment.getX(), current_beta_segment.getX() );
 					next_x_coord.add( current_segment_length );
 					
 					next_y_coord = current_segment_length.copy();

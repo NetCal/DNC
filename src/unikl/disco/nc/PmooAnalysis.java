@@ -49,6 +49,7 @@ import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
 
 /**
  * 
@@ -362,12 +363,12 @@ public class PmooAnalysis extends Analysis {
 			}
 
 			// Compute left-over rate; update min
-			Num Ri = NumFactory.sub( current_rl.getSustainedRate(), sum_r );
+			Num Ri = NumUtils.sub( current_rl.getSustainedRate(), sum_r );
 			if ( Ri.le( NumFactory.getZero() ) )
 			{
 				return ServiceCurve.createNullService();
 			}
-			R = NumFactory.min( R, Ri );
+			R = NumUtils.min( R, Ri );
 
 			// Remove all outgoing flows from the set of present flows
 			Set<Flow> leaving_flows = new HashSet<Flow>();

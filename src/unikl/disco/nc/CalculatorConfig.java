@@ -33,8 +33,8 @@ package unikl.disco.nc;
  *
  */
 public final class CalculatorConfig {
-	public static enum NumClass { FRACTION, SINGLE, DOUBLE };
-	public static NumClass NUM_CLASS = NumClass.DOUBLE;
+	public static enum NumClass { SINGLE, DOUBLE, FRACTION, BIG_FRACTION };
+	public static NumClass NUM_CLASS = NumClass.BIG_FRACTION;
 
 	public static boolean ARRIVAL_CURVE_CHECKS = false;
 	public static boolean SERVICE_CURVE_CHECKS = false;
