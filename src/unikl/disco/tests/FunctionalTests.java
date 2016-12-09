@@ -138,9 +138,9 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		Set<FunctionalTestConfig> result = new HashSet<FunctionalTestConfig>();
 		
 		Set<NumClass> nums =  new HashSet<NumClass>();
-		nums.add( NumClass.DOUBLE );
-		nums.add( NumClass.SINGLE );
-		nums.add( NumClass.FRACTION );
+		nums.add( NumClass.DOUBLE_PRECISION );
+		nums.add( NumClass.SINGLE_PRECISION );
+		nums.add( NumClass.FRACTION_INTEGER );
 //		nums.add( NumClass.BIG_FRACTION );
 		
 		

@@ -25,73 +25,43 @@
  *
  */
  
-package unikl.disco.numbers;
+package unikl.disco.numbers.implementations;
 
-import unikl.disco.numbers.NumFactory.SpecialValue;
+import unikl.disco.numbers.Num;
 
 /**
- * Wrapper class around double;
+ * Wrapper class around float;
  *
  * @author Steffen Bondorf
  *
  */
-public class NumDouble implements Num {
+public class SinglePrecision implements Num {
 	private boolean isNaN, isPosInfty, isNegInfty;
 	
-	private double value = 0.0;
+	private float value = 0.0f;
 	
-	private static final double EPSILON = Double.parseDouble("5E-10");
+	private static final float EPSILON = 0.00016f; // Maximum rounding error observed in the functional tests
 
 	public static final Num POSITIVE_INFINITY = createPositiveInfinity();
 	public static final Num NEGATIVE_INFINITY = createNegativeInfinity();
-	public static final Num NaN = createNaN();
 	public static final Num ZERO = createZero();
 	
-	private NumDouble() {}
+	private SinglePrecision() {}
 	
-	protected NumDouble( double value ) {
-		this.value = value;
-		checkInftyNaN();
+	public SinglePrecision( double value ) {
+		this.value = new Float( value ).floatValue();
 	}
 	
-	protected NumDouble( String num_str ) throws Exception {
-		if( num_str.equals( "Infinity" ) ) {
-			value = Double.POSITIVE_INFINITY;
-		} else {
-			value = NumFactory.parse( num_str ).doubleValue();
-			checkInftyNaN();
-		}
+	public SinglePrecision( int num ) {
+		value = (float)num;
 	}
 	
-	protected NumDouble( int num ) {
-		value = (double)num;
-		checkInftyNaN();
+	public SinglePrecision( int num, int den ) {
+		value = ((float)num) / ((float)den);
 	}
 	
-	protected NumDouble( int num, int den ) {
-		value = ((double)num) / ((double)den);
-		checkInftyNaN();
-	}
-	
-	protected NumDouble( NumDouble num ) {
+	public SinglePrecision( SinglePrecision num ) {
 		value = num.value;
-	}
-
-	protected NumDouble( SpecialValue indicator ) {
-		switch (indicator) {
-			case POSITIVE_INFINITY:
-				instantiatePositiveInfinity();
-				break;
-			case NEGATIVE_INFINITY:
-				instantiateNegativeInfinity();
-				break;
-			case NaN:
-				instantiateNaN();
-				break;
-			case ZERO:
-				instantiateZero();
-				break;
-		}
 	}
 	
 	public boolean isNaN() {
@@ -106,86 +76,48 @@ public class NumDouble implements Num {
 		return isNegInfty;
 	}
 	
-	private void checkInftyNaN() {
-		// See Java documentation on parsing Doubles. There are rounding errors up to Math.ulp(Double.MAX_VALUE)/2.
-		if( value >= Double.MAX_VALUE ){
-			isNaN = false;
-			isPosInfty = true;
-			isNegInfty = false;
-			return;
-		}
-		if ( Math.abs( value - Double.NEGATIVE_INFINITY ) < EPSILON ) {
-			isNaN = false;
-			isPosInfty = false;
-			isNegInfty = true;
-			return;
-		}
-		if( Double.isNaN( value ) ){
-			isNaN = true;
-			isPosInfty = false;
-			isNegInfty = false;
-			return;
-		}
-	}
-	
 	public static Num createPositiveInfinity() {
-		NumDouble pos_infty = new NumDouble();
+		SinglePrecision pos_infty = new SinglePrecision();
 		pos_infty.instantiatePositiveInfinity();
 		return pos_infty;
 	}
 	
 	private void instantiatePositiveInfinity() {
-		value = Double.POSITIVE_INFINITY;
-		isNaN = false;
+		value = Float.POSITIVE_INFINITY;
 		isPosInfty = true;
 		isNegInfty = false;
 	}
 
 	public static Num createNegativeInfinity() {
-		NumDouble neg_infty = new NumDouble();
+		SinglePrecision neg_infty = new SinglePrecision();
 		neg_infty.instantiateNegativeInfinity();
 		return neg_infty;
 	}
 
 	private void instantiateNegativeInfinity() {
-		value = Double.NEGATIVE_INFINITY;
-		isNaN = false;
+		value = Float.NEGATIVE_INFINITY;
 		isPosInfty = false;
 		isNegInfty = true;
 	}
 	
-	public static Num createNaN() {
-		NumDouble nan = new NumDouble();
-		nan.instantiateNaN();
-		return nan;
-	}
-	
-	private void instantiateNaN() {
-		value = Double.NaN;
-		isNaN = true;
-		isPosInfty = false;
-		isNegInfty = false;
-	}
-	
 	public static Num createZero() {
-		NumDouble zero = new NumDouble();
+		SinglePrecision zero = new SinglePrecision();
 		zero.instantiateZero();
 		return zero;
 	}
 	
 	private void instantiateZero() {
-		value = 0.0;
-		isNaN = false;
+		value = 0.0f;
 		isPosInfty = false;
 		isNegInfty = false;
 	}
 	
-	protected static Num createEpsilon() {
-        return new NumDouble( EPSILON );
+	public static Num createEpsilon() {
+        return new SinglePrecision( EPSILON );
 	}
 	
-	protected static Num add( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( num1.value + num2.value );
+	public static Num add( SinglePrecision num1, SinglePrecision num2 ) {
+		return new SinglePrecision( num1.value + num2.value );
 	}
 	
 	@Override
@@ -193,24 +125,24 @@ public class NumDouble implements Num {
 		value += num2.doubleValue();
 	}
 	
-	protected static Num sub( NumDouble num1, NumDouble num2 ) {
-		double result = num1.value - num2.value;
+	public static Num sub( SinglePrecision num1, SinglePrecision num2 ) {
+		float result = num1.value - num2.value;
 		if( Math.abs( result ) <= EPSILON ) {
 			result = 0;
 		}
-		return new NumDouble( result );
+		return new SinglePrecision( result );
 	}
 	
 	@Override
 	public void sub( Num num2 ) {
-		double result = this.value - num2.doubleValue();
+		float result = this.value - (new Float( num2.doubleValue() )).floatValue();
 		if( Math.abs( result ) <= EPSILON ) {
 			this.value = 0;
 		}
 	}
 	
-	protected static Num mult( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( num1.value * num2.value );
+	public static Num mult( SinglePrecision num1, SinglePrecision num2 ) {
+		return new SinglePrecision( num1.value * num2.value );
 	}
 	
 	@Override
@@ -218,8 +150,8 @@ public class NumDouble implements Num {
 		this.value *= num2.doubleValue();
 	}
 
-	protected static Num div( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( num1.value / num2.value );
+	public static Num div( SinglePrecision num1, SinglePrecision num2 ) {
+		return new SinglePrecision( num1.value / num2.value );
 	}
 	
 	@Override
@@ -227,32 +159,28 @@ public class NumDouble implements Num {
 		this.value /= num2.doubleValue();
 	}
 
-	protected static Num diff( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( Math.max( num1.value, num2.value )
+	public static Num diff( SinglePrecision num1, SinglePrecision num2 ) {
+		return new SinglePrecision( Math.max( num1.value, num2.value )
 										- Math.min( num1.value, num2.value ) );	
 	}
 
-	protected static Num max( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( Math.max( num1.value, num2.value ) );
+	public static Num max( SinglePrecision num1, SinglePrecision num2 ) {
+		return new SinglePrecision( Math.max( num1.value, num2.value ) );
 	}
 
-	protected static Num min( NumDouble num1, NumDouble num2 ) {
-		return new NumDouble( Math.min( num1.value, num2.value ) );
+	public static Num min( SinglePrecision num1, SinglePrecision num2 ) {
+		return new SinglePrecision( Math.min( num1.value, num2.value ) );
 	}
 	
-	protected static Num abs( NumDouble num ) {
-		return new NumDouble( Math.abs( num.value ) );
+	public static Num abs( SinglePrecision num ) {
+		return new SinglePrecision( Math.abs( num.value ) );
 	}
 
-	protected static Num negate( NumDouble num ) {
-	    return new NumDouble( num.value * -1 );
+	public static Num negate( SinglePrecision num ) {
+	    return new SinglePrecision( num.value * -1 );
 	}
 
 	public boolean greater( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-		
 		if( num2.isPosInfty() ){
 			return false;
 		}
@@ -271,10 +199,6 @@ public class NumDouble implements Num {
 	}
 
 	public boolean ge( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-		
 		if( isPosInfty ){
 			return true;
 		}
@@ -293,10 +217,6 @@ public class NumDouble implements Num {
 	}
 
 	public boolean less( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-
 		if( isPosInfty ){
 			return false;
 		}
@@ -315,10 +235,6 @@ public class NumDouble implements Num {
 	}
 
 	public boolean le( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-
 		if( num2.isPosInfty() ){
 			return true;
 		}
@@ -338,14 +254,11 @@ public class NumDouble implements Num {
 	
 	@Override
 	public double doubleValue() {
-	    return value;
+	    return new Double( value );
 	}
 
 	@Override
 	public Num copy() {
-		if ( isNaN ) {
-    		return createNaN();
-    	}
     	if ( isPosInfty ) {
     		return createPositiveInfinity();
     	}
@@ -353,30 +266,38 @@ public class NumDouble implements Num {
 			return createNegativeInfinity();
 		}
     	
-		return new NumDouble( value );
+		return new SinglePrecision( value );
 	}
 	
 	@Override
 	public boolean equals( double num2 ) {
-		if( Double.isNaN( num2 ) ){
-			return isNaN;
-		}
-		if( num2 == Double.POSITIVE_INFINITY ){
+		if( num2 == Float.POSITIVE_INFINITY ){
 			return isPosInfty;
 		}
-		if( num2 == Double.NEGATIVE_INFINITY ){
+		if( num2 == Float.NEGATIVE_INFINITY ){
 			return isNegInfty;
 		}
 		
-		if( Math.abs( value - num2 ) <= EPSILON ) {
+		if( Math.abs( (new Double( value )).doubleValue() - num2 ) <= EPSILON ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean equals( NumDouble num2 ) {
-		return equals( num2.value );
+	public boolean equals( SinglePrecision num2 ) {
+		if( num2.isPosInfty ){
+			return isPosInfty;
+		}
+		if( num2.isNegInfty ){
+			return isNegInfty;
+		}
+		
+		if( Math.abs( value - num2.value ) <= EPSILON ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -385,9 +306,9 @@ public class NumDouble implements Num {
 			return true;
 		}
 		
-		NumDouble num2_Num;
+		SinglePrecision num2_Num;
 		try {
-			num2_Num = (NumDouble) obj;
+			num2_Num = (SinglePrecision) obj;
 			return equals( num2_Num.value );
 		} catch( ClassCastException e ) {
 			return false;
@@ -396,11 +317,11 @@ public class NumDouble implements Num {
 	
 	@Override
 	public int hashCode() {
-		return Double.hashCode( value );
+		return Float.hashCode( value );
 	}
 	
 	@Override
 	public String toString(){
-		return Double.toString( value );
+		return Float.toString( value );
 	}
 }

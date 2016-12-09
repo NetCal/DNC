@@ -25,101 +25,66 @@
  *
  */
 
-package unikl.disco.numbers;
+package unikl.disco.numbers.implementations;
 
-import java.math.BigInteger;
+import org.apache.commons.math3.fraction.Fraction;
 
-import org.apache.commons.math3.fraction.BigFraction;
-
-import unikl.disco.numbers.NumFactory.SpecialValue;
+import unikl.disco.numbers.Num;
 
 /**
- * Wrapper class around org.apache.commons.math3.BigFraction.BigFraction
+ * Wrapper class around org.apache.commons.math3.fraction.Fraction
  * introducing special values like positive / negative infinity and NaN
  * as well as operators like min, max, ==, &gt;, &gt;=, &lt;, and &lt;= that are
- * not part of BigFraction but needed by the network calculator.
+ * not part of Fraction but needed by the network calculator.
  * 
  * For the ease of converting from the primitive data type double
- * to BigFraction objects, copy by value semantic are is applied. 
+ * to Fraction objects, copy by value semantic are is applied. 
  * 
  * @author Steffen Bondorf
  *
  */
-public class NumBigFraction implements Num {
-	private boolean isNaN, isPosInfty, isNegInfty;
+public class FractionInteger implements Num {
+	private boolean isNaN, isPosInfty, isNegInfty; 
 	
-	private BigFraction value = new BigFraction( 0.0 );
+	private Fraction value = new Fraction( 0.0 );
 	
 	// Unfortunately you cannot give the constructor the double value 0.0000001
-	private static final BigFraction EPSILON = new BigFraction( 1, 1000000 ); 
+	private static final Fraction EPSILON = new Fraction( 1, 1000000 ); 
 	
-	// BigFraction is based in Integer and thus there's no infinity (and BigFraction is prone to overflows as well)
-	public static final NumBigFraction POSITIVE_INFINITY = createPositiveInfinity();
-	public static final NumBigFraction NEGATIVE_INFINITY = createNegativeInfinity();
-	public static final NumBigFraction NaN = createNaN();
-	public static final NumBigFraction ZERO = createZero();
+	// Fraction is based in Integer and thus there's no infinity (and Fraction is prone to overflows as well)
+	public static final FractionInteger POSITIVE_INFINITY = createPositiveInfinity();
+	public static final FractionInteger NEGATIVE_INFINITY = createNegativeInfinity();
+	public static final FractionInteger ZERO = createZero();
 	
-	private NumBigFraction(){}
+	private FractionInteger(){}
 	
-	protected NumBigFraction( double value ) {
-//		if (value == Double.NaN ) {
-//			this.value = new BigFraction( 0.0 );
-//			isNaN = true;
-//		} else {
-			this.value = new BigFraction( value );
-			checkInftyNaN();
-//		}
-	}
-	
-	protected NumBigFraction( String num_str ) throws Exception {
-		if( num_str.equals( "Infinity" ) ) {
-			value = POSITIVE_INFINITY.value;
-		} else {
-			value = new BigFraction( NumFactory.parse( num_str ).doubleValue() );
-			checkInftyNaN();
+	public FractionInteger( double value ) {
+		if( value == Double.POSITIVE_INFINITY ) {
+			instantiatePositiveInfinity();
+			return;
 		}
-	}
-	
-	protected NumBigFraction( int num ) {
-		value = new BigFraction( num );
-		checkInftyNaN();
-	}
-	
-	protected NumBigFraction( int num, int den ) {
-		value = new BigFraction( num, den );
-		checkInftyNaN();
-	}
-	
-	protected NumBigFraction( BigInteger num, BigInteger den ) {
-		value = new BigFraction( num, den );
-		checkInftyNaN();
-	}
-	
-	protected NumBigFraction( NumBigFraction num ) {
-		value = new BigFraction( num.value.getNumerator(), num.value.getDenominator() );
-		checkInftyNaN();
-	}
-	
-	private NumBigFraction( BigFraction frac ) {
-		value = new BigFraction( frac.getNumerator(), frac.getDenominator() );
-		checkInftyNaN();
-	}
-	
-	protected NumBigFraction( SpecialValue indicator ) {
-		switch (indicator) {
-			case POSITIVE_INFINITY:
-				instantiatePositiveInfinity();
-				break;
-			case NEGATIVE_INFINITY:
-				instantiateNegativeInfinity();
-				break;
-			case NaN:
-				instantiateNaN();
-				break;
-			case ZERO:
-				instantiateZero();
-				break;
+		if( value == Double.NEGATIVE_INFINITY ) {
+			instantiateNegativeInfinity();
+			return;
 		}
+		
+		this.value = new Fraction( value );
+	}
+	
+	public FractionInteger( int num ) {
+		value = new Fraction( num );
+	}
+	
+	public FractionInteger( int num, int den ) {
+		value = new Fraction( num, den );
+	}
+	
+	public FractionInteger( FractionInteger num ) {
+		value = new Fraction( num.value.getNumerator(), num.value.getDenominator() );
+	}
+	
+	private FractionInteger( Fraction frac ) {
+		value = new Fraction( frac.getNumerator(), frac.getDenominator() );
 	}
 	
 	public boolean isNaN() {
@@ -134,91 +99,51 @@ public class NumBigFraction implements Num {
 		return isNegInfty;
 	}
 	
-	private void checkInftyNaN() {
-//		if( value.compareTo( NaN.value ) == 0 ) {
-//			isNaN = true;
-//			isPosInfty = false;
-//			isNegInfty = false;
-//			return;
-//		}
-//		if( value.compareTo( POSITIVE_INFINITY.value ) == 0 ) {
-//			isNaN = false;
-//			isPosInfty = true;
-//			isNegInfty = false;
-//			return;
-//		}
-//		if( value.compareTo( NEGATIVE_INFINITY.value ) == 0 ) {
-//			isNaN = false;
-//			isPosInfty = false;
-//			isNegInfty = true;
-//			return;
-//		}
-	}
-
-	public static NumBigFraction createPositiveInfinity() {
-		NumBigFraction pos_infty = new NumBigFraction();
+	public static FractionInteger createPositiveInfinity() {
+		FractionInteger pos_infty = new FractionInteger();
 		pos_infty.instantiatePositiveInfinity();
 		return pos_infty;
 	}
 	
 	private void instantiatePositiveInfinity() {
-		value = new BigFraction( Integer.MAX_VALUE );
-		isNaN = false;
+		value = new Fraction( Integer.MAX_VALUE );
 		isPosInfty = true;
 		isNegInfty = false;
 	}
 
-	public static NumBigFraction createNegativeInfinity() {
-		NumBigFraction neg_infty = new NumBigFraction();
+	public static FractionInteger createNegativeInfinity() {
+		FractionInteger neg_infty = new FractionInteger();
 		neg_infty.instantiateNegativeInfinity();
 		return neg_infty;
 	}
 
 	private void instantiateNegativeInfinity() {
-		value = new BigFraction( Integer.MIN_VALUE );
-		isNaN = false;
+		value = new Fraction( Integer.MIN_VALUE );
 		isPosInfty = false;
 		isNegInfty = true;
 	}
 	
-	public static NumBigFraction createNaN() {
-		NumBigFraction nan = new NumBigFraction();
-		nan.instantiateNaN();
-		return nan;
-	}
-	
-	private void instantiateNaN() {
-		value = new BigFraction( 0.0 ); // Double.NaN does not work
-		isNaN = true;
-		isPosInfty = false;
-		isNegInfty = false;
-	}
-	
-	public static NumBigFraction createZero() {
-		NumBigFraction zero = new NumBigFraction();
+	public static FractionInteger createZero() {
+		FractionInteger zero = new FractionInteger();
 		zero.instantiateZero();
 		return zero;
 	}
 	
 	private void instantiateZero() {
-		value = new BigFraction( 0.0 );
-		isNaN = false;
+		value = new Fraction( 0.0 );
 		isPosInfty = false;
 		isNegInfty = false;
 	}
 	
-	protected static NumBigFraction createEpsilon() {
-        return new NumBigFraction( EPSILON );
+	public static FractionInteger createEpsilon() {
+        return new FractionInteger( EPSILON );
 	}
 	
 	// In order to simplify the transition from the primitive data type double to
 	// a rational number object, these functions emulate copy by value for objects that
 	// typically inhibit copy by reference
-	protected static NumBigFraction add( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
-		// Prevent overflow exception when adding integer based number representations like BigFraction
+	public static FractionInteger add( FractionInteger num1, FractionInteger num2 ) {
+		// Prevent overflow exception when adding integer based number representations like Fraction
 		if( num1.isPosInfty() || num2.isPosInfty() ) {
 			return createPositiveInfinity();
 		}
@@ -227,16 +152,12 @@ public class NumBigFraction implements Num {
 		}
 		
 		// May still throw MathArithmeticException due to integer overflow
-        return new NumBigFraction( num1.value.add( num2.value ) );
+        return new FractionInteger( num1.value.add( num2.value ) );
 	}
 	
 	@Override
 	public void add( Num num2 ) {
-		if( isNaN || num2.isNaN() ) {
-			instantiateNaN();
-			return;
-		}
-		// Prevent overflow exception when adding integer based number representations like BigFraction
+		// Prevent overflow exception when adding integer based number representations like Fraction
 		if( isPosInfty || num2.isPosInfty() ) {
 			instantiatePositiveInfinity();
 			return;
@@ -246,14 +167,11 @@ public class NumBigFraction implements Num {
 			return;
 		}
 		
-		this.value = this.value.add( (BigFraction)((NumBigFraction)num2).value );
+		this.value = this.value.add( (Fraction)((FractionInteger)num2).value );
 	}
 	
-	protected static NumBigFraction sub( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
-		// Prevent overflow exception when adding integer based number representations like BigFraction
+	public static FractionInteger sub( FractionInteger num1, FractionInteger num2 ) {
+		// Prevent overflow exception when adding integer based number representations like Fraction
 		if( num1.isPosInfty() || num2.isPosInfty() ) {
 			return createPositiveInfinity();
 		}
@@ -262,16 +180,12 @@ public class NumBigFraction implements Num {
 		}
 		
         // May still throw MathArithmeticException due to integer overflow
-        return new NumBigFraction( num1.value.subtract( num2.value ) );
+        return new FractionInteger( num1.value.subtract( num2.value ) );
 	}
 
 	@Override
 	public void sub( Num num2 ) {
-		if( isNaN || num2.isNaN() ) {
-			instantiateNaN();
-			return;
-		}
-		// Prevent overflow exception when adding integer based number representations like BigFraction
+		// Prevent overflow exception when adding integer based number representations like Fraction
 		if( isPosInfty || num2.isPosInfty() ) {
 			instantiatePositiveInfinity();
 			return;
@@ -282,13 +196,10 @@ public class NumBigFraction implements Num {
 		}
 		
         // May throw MathArithmeticException due to integer overflow
-		this.value =  this.value.subtract( (BigFraction)((NumBigFraction)num2).value );
+		this.value =  this.value.subtract( (Fraction)((FractionInteger)num2).value );
 	}
 	
-	protected static NumBigFraction mult( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
+	public static FractionInteger mult( FractionInteger num1, FractionInteger num2 ) {
 		if( num1.isPosInfty() || num2.isPosInfty() ) {
 			return createPositiveInfinity();
 		}
@@ -297,15 +208,11 @@ public class NumBigFraction implements Num {
 		}
 		
         // May throw MathArithmeticException due to integer overflow
-       	return new NumBigFraction( num1.value.multiply( num2.value ) );
+       	return new FractionInteger( num1.value.multiply( num2.value ) );
 	}
 
 	@Override
 	public void mult( Num num2 ) {
-		if( isNaN || num2.isNaN() ) {
-			instantiateNaN();
-			return;
-		}
 		if( isPosInfty || num2.isPosInfty() ) {
 			instantiatePositiveInfinity();
 			return;
@@ -316,14 +223,10 @@ public class NumBigFraction implements Num {
 		}
 		
         // May throw MathArithmeticException due to integer overflow
-		this.value =  this.value.multiply( (BigFraction)((NumBigFraction)num2).value );
+		this.value =  this.value.multiply( (Fraction)((FractionInteger)num2).value );
 	}
 
-	protected static NumBigFraction div( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
-		
+	public static FractionInteger div( FractionInteger num1, FractionInteger num2 ) {
 		// Integer based number representations use Integer.MAX_VALUE to signal infinity so special treatment is necessary when dividing
 		if( num1.isPosInfty() ) {
 			return createPositiveInfinity();
@@ -338,22 +241,17 @@ public class NumBigFraction implements Num {
 			return createZero();
 		}
 		
-        if ( num2.value.getNumerator().doubleValue() == 0 ) {
+        if ( num2.value.getNumerator() == 0 ) {
         	return createPositiveInfinity();
        	} else {
-           	return new NumBigFraction( num1.value.divide( num2.value ) );        		
+           	return new FractionInteger( num1.value.divide( num2.value ) );        		
        	}
 	}
 
 	@Override
 	public void div( Num num2 ) {
-		if( isNaN || num2.isNaN() ) {
-			instantiateNaN();
-			return;
-		}
-		
 		// Integer based number representations use Integer.MAX_VALUE to signal infinity so special treatment is necessary when dividing
-		if( isPosInfty || ((BigFraction)((NumBigFraction)num2).value).getNumerator().doubleValue() == 0 ) {
+		if( isPosInfty || ((Fraction)((FractionInteger)num2).value).getNumerator() == 0 ) {
 			instantiatePositiveInfinity();
 			return;
 		}
@@ -366,14 +264,10 @@ public class NumBigFraction implements Num {
 			return;
 		}
 		
-       	this.value =  this.value.divide( (BigFraction)((NumBigFraction)num2).value );        		
+       	this.value =  this.value.divide( (Fraction)((FractionInteger)num2).value );        		
 	}
 
-	protected static NumBigFraction diff( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
-		
+	public static FractionInteger diff( FractionInteger num1, FractionInteger num2 ) {
 		if( num1.isPosInfty() || num1.isNegInfty() 
 				 || num2.isPosInfty() || num2.isNegInfty() ) {
 			return createPositiveInfinity();
@@ -382,10 +276,7 @@ public class NumBigFraction implements Num {
 		return sub( max( num1, num2 ), min( num1, num2 ) );	
 	}
 
-	protected static NumBigFraction max( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
+	public static FractionInteger max( FractionInteger num1, FractionInteger num2 ) {
 		if( num1.isPosInfty() ) {
 			return num1;
 		}
@@ -400,10 +291,7 @@ public class NumBigFraction implements Num {
 		}
 	}
 
-	protected static NumBigFraction min( NumBigFraction num1, NumBigFraction num2 ) {
-		if( num1.isNaN() || num2.isNaN() ) {
-			return createNaN();
-		}
+	public static FractionInteger min( FractionInteger num1, FractionInteger num2 ) {
 		if( num1.isPosInfty() ) {
 			return num2;
 		}
@@ -418,10 +306,7 @@ public class NumBigFraction implements Num {
 		}
 	}
 	
-	protected static NumBigFraction abs( NumBigFraction num ) {
-		if ( num.isNaN() ) {
-    		return createNaN();
-    	}
+	public static FractionInteger abs( FractionInteger num ) {
     	if ( num.isPosInfty() ) {
     		return createPositiveInfinity();
     	}
@@ -429,13 +314,10 @@ public class NumBigFraction implements Num {
 			return createNegativeInfinity();
 		}
 	    
-    	return new NumBigFraction( num.value.abs() );
+    	return new FractionInteger( num.value.abs() );
 	}
 
-	protected static NumBigFraction negate( NumBigFraction num ) {
-		if ( num.isNaN() ) {
-    		return createNaN();
-    	}
+	public static FractionInteger negate( FractionInteger num ) {
     	if ( num.isPosInfty() ) {
     		return createNegativeInfinity();
     	}
@@ -443,14 +325,10 @@ public class NumBigFraction implements Num {
 			return createPositiveInfinity();
 		}
     	
-    	return new NumBigFraction( num.value.negate() );
+    	return new FractionInteger( num.value.negate() );
 	}
 
 	public boolean greater( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-		
 		if( num2.isPosInfty() ){
 			return false;
 		}
@@ -465,7 +343,7 @@ public class NumBigFraction implements Num {
 			return true;
 		}
 		
-		if( this.value.compareTo( ((NumBigFraction)num2).value ) > 0 ) {
+		if( this.value.compareTo( ((FractionInteger)num2).value ) > 0 ) {
 			return true;
 		} else {
 			return false;
@@ -473,10 +351,6 @@ public class NumBigFraction implements Num {
 	}
 
 	public boolean ge( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-		
 		if( isPosInfty ){
 			return true;
 		}
@@ -491,7 +365,7 @@ public class NumBigFraction implements Num {
 			return false;
 		}
 		
-		if( this.value.compareTo( ((NumBigFraction)num2).value ) >= 0 ) {
+		if( this.value.compareTo( ((FractionInteger)num2).value ) >= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -499,10 +373,6 @@ public class NumBigFraction implements Num {
 	}
 
 	public boolean less( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-
 		if( isPosInfty ){
 			return false;
 		}
@@ -517,7 +387,7 @@ public class NumBigFraction implements Num {
 			return true;
 		}
 			
-		if( this.value.compareTo( ((NumBigFraction)num2).value ) < 0 ) {
+		if( this.value.compareTo( ((FractionInteger)num2).value ) < 0 ) {
 			return true;
 		} else {
 			return false;
@@ -525,10 +395,6 @@ public class NumBigFraction implements Num {
 	}
 
 	public boolean le( Num num2 ) {
-		if( isNaN || num2.isNaN() ){
-			return false;
-		}
-
 		if( num2.isPosInfty() ){
 			return true;
 		}
@@ -543,7 +409,7 @@ public class NumBigFraction implements Num {
 			return false;
 		}
 		
-		if( this.value.compareTo( ((NumBigFraction)num2).value ) <= 0 ) {
+		if( this.value.compareTo( ((FractionInteger)num2).value ) <= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -552,9 +418,6 @@ public class NumBigFraction implements Num {
 	
 	@Override
 	public double doubleValue() {
-		if ( isNaN ) {
-    		return Double.NaN;
-    	}
     	if ( isPosInfty ) {
     		return Double.POSITIVE_INFINITY;
     	}
@@ -567,9 +430,6 @@ public class NumBigFraction implements Num {
 
 	@Override
 	public Num copy() {
-		if ( isNaN ) {
-    		return createNaN();
-    	}
     	if ( isPosInfty ) {
     		return createPositiveInfinity();
     	}
@@ -577,14 +437,11 @@ public class NumBigFraction implements Num {
 			return createNegativeInfinity();
 		}
 
-		return new NumBigFraction( this.value.getNumerator(), this.value.getDenominator() );
+		return new FractionInteger( this.value.getNumerator(), this.value.getDenominator() );
 	}
 	
 	@Override
 	public boolean equals( double num2 ) {
-		if( Double.isNaN( num2 ) ){
-			return isNaN;
-		}
 		if( num2 == Double.POSITIVE_INFINITY ){
 			return isPosInfty;
 		}
@@ -592,13 +449,10 @@ public class NumBigFraction implements Num {
 			return isNegInfty;
 		}
 		
-		return equals( new NumBigFraction( num2 ) );
+		return equals( new FractionInteger( num2 ) );
 	}
 
-	public boolean equals( NumBigFraction num2 ) {
-		if( isNaN & num2.isNaN() ){
-			return true;
-		}
+	public boolean equals( FractionInteger num2 ) {
 		if( isPosInfty & num2.isPosInfty() ){
 			return true;
 		}
@@ -619,9 +473,9 @@ public class NumBigFraction implements Num {
 			return true;
 		}
 		
-		NumBigFraction num2_Num;
+		FractionInteger num2_Num;
 		try {
-			num2_Num = (NumBigFraction) obj;
+			num2_Num = (FractionInteger) obj;
 			return equals( num2_Num );
 		} catch( ClassCastException e ) {
 			return false;
@@ -635,9 +489,6 @@ public class NumBigFraction implements Num {
 	
 	@Override
 	public String toString(){
-		if ( isNaN ) {
-    		return "NaN";
-    	}
     	if ( isPosInfty ) {
     		return "Infinity";
     	}

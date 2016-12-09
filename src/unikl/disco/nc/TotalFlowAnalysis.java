@@ -75,7 +75,7 @@ public class TotalFlowAnalysis extends Analysis {
 		Num delay_bound = NumFactory.createZero();
 		Num backlog_bound = NumFactory.createZero();
 		
-		if( CalculatorConfig.NUM_CLASS == CalculatorConfig.NumClass.FRACTION ) {
+		if( CalculatorConfig.NUM_CLASS == CalculatorConfig.NumClass.FRACTION_INTEGER ) {
 			System.out.print("");
 		}
 		
