@@ -59,18 +59,6 @@ public class DoublePrecision implements Num {
 		value = num.value;
 	}
 	
-	public boolean isNaN() {
-		return value == Double.NaN;
-	}
-	
-	public boolean isPosInfty() {
-		return value == Double.POSITIVE_INFINITY;
-	}
-	
-	public boolean isNegInfty() {
-		return value == Double.NEGATIVE_INFINITY;
-	}
-	
 	public static Num createEpsilon() {
         return new DoublePrecision( EPSILON );
 	}

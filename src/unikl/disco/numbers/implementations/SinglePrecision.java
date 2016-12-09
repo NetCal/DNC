@@ -59,18 +59,6 @@ public class SinglePrecision implements Num {
 		value = num.value;
 	}
 	
-	public boolean isNaN() {
-		return value == Float.NaN;
-	}
-	
-	public boolean isPosInfty() {
-		return value == Float.POSITIVE_INFINITY;
-	}
-	
-	public boolean isNegInfty() {
-		return value == Float.NEGATIVE_INFINITY;
-	}
-	
 	public static Num createEpsilon() {
         return new SinglePrecision( EPSILON );
 	}

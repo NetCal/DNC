@@ -30,6 +30,9 @@ package unikl.disco.numbers.implementations;
 import org.apache.commons.math3.fraction.Fraction;
 
 import unikl.disco.numbers.Num;
+import unikl.disco.numbers.values.NaN;
+import unikl.disco.numbers.values.NegativeInfinity;
+import unikl.disco.numbers.values.PositiveInfinity;
 
 /**
  * Wrapper class around org.apache.commons.math3.fraction.Fraction
@@ -44,8 +47,6 @@ import unikl.disco.numbers.Num;
  *
  */
 public class FractionInteger implements Num {
-//	private boolean isNaN, isPosInfty, isNegInfty; 
-	
 	private Fraction value = new Fraction( 0.0 );
 	
 	// Unfortunately you cannot give the constructor the double value 0.0000001
@@ -73,18 +74,6 @@ public class FractionInteger implements Num {
 		value = new Fraction( frac.getNumerator(), frac.getDenominator() );
 	}
 	
-	public boolean isNaN() {
-		return false;
-	}
-	
-	public boolean isPosInfty() {
-		return false;
-	}
-	
-	public boolean isNegInfty() {
-		return false;
-	}
-	
 	public boolean isZero() {
 		return value.getNumerator() == 0;
 	}
@@ -103,9 +92,6 @@ public class FractionInteger implements Num {
         return new FractionInteger( EPSILON );
 	}
 	
-	// In order to simplify the transition from the primitive data type double to
-	// a rational number object, these functions emulate copy by value for objects that
-	// typically inhibit copy by reference
 	public static FractionInteger add( FractionInteger num1, FractionInteger num2 ) {
 		// May still throw MathArithmeticException due to integer overflow
         return new FractionInteger( num1.value.add( num2.value ) );
@@ -130,13 +116,6 @@ public class FractionInteger implements Num {
 	}
 
 	public static FractionInteger max( FractionInteger num1, FractionInteger num2 ) {
-		if( num1.isPosInfty() ) {
-			return num1;
-		}
-		if( num1.isNegInfty() ) {
-			return num2;
-		}
-		
 		if( num1.value.compareTo( num2.value ) >= 0 ) {
 			return num1;
 		} else {
@@ -161,13 +140,13 @@ public class FractionInteger implements Num {
 	}
 
 	public boolean greater( Num num2 ) {
-		if( num2.isNaN() ){
+		if( num2 instanceof NaN ){
 			return false;
 		}
-		if( num2.isPosInfty() ){
+		if( num2 instanceof PositiveInfinity ){
 			return false;
 		}
-		if( num2.isNegInfty() ){
+		if( num2 instanceof NegativeInfinity ){
 			return true;
 		}
 		
@@ -179,13 +158,13 @@ public class FractionInteger implements Num {
 	}
 
 	public boolean ge( Num num2 ) {
-		if( num2.isNaN() ){
+		if( num2 instanceof NaN ){
 			return false;
 		}
-		if( num2.isPosInfty() ){
+		if( num2 instanceof PositiveInfinity ){
 			return false;
 		}
-		if( num2.isNegInfty() ){
+		if( num2 instanceof NegativeInfinity ){
 			return true;
 		}
 		
@@ -197,13 +176,13 @@ public class FractionInteger implements Num {
 	}
 
 	public boolean less( Num num2 ) {
-		if( num2.isNaN() ){
+		if( num2 instanceof NaN ){
 			return false;
 		}
-		if( num2.isPosInfty() ){
+		if( num2 instanceof PositiveInfinity ){
 			return true;
 		}
-		if( num2.isNegInfty() ){
+		if( num2 instanceof NegativeInfinity ){
 			return false;
 		}
 		
@@ -215,13 +194,13 @@ public class FractionInteger implements Num {
 	}
 
 	public boolean le( Num num2 ) {
-		if( num2.isNaN() ){
+		if( num2 instanceof NaN ){
 			return false;
 		}
-		if( num2.isPosInfty() ){
+		if( num2 instanceof PositiveInfinity ){
 			return true;
 		}
-		if( num2.isNegInfty() ){
+		if( num2 instanceof NegativeInfinity ){
 			return false;
 		}
 		

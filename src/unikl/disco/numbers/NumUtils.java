@@ -26,15 +26,15 @@ public class NumUtils {
 			return SinglePrecision.add( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 		
-		if( num1.isNaN() || num2.isNaN() 
-				|| ( num1.isPosInfty() && num2.isNegInfty() ) 
-				|| ( num1.isNegInfty() && num2.isPosInfty() ) ) {
+		if( num1 instanceof NaN || num2 instanceof NaN 
+				|| ( num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity ) 
+				|| ( num1 instanceof NegativeInfinity && num2 instanceof PositiveInfinity ) ) {
 			return new NaN();
 		}
-		if( num1.isPosInfty() || num2.isPosInfty() ) { // other num is not negative infinity
+		if( num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity ) { // other num is not negative infinity
 			return new PositiveInfinity(); 
 		}
-		if( num1.isNegInfty() || num2.isNegInfty() ) { // other num is not positive infinity
+		if( num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity ) { // other num is not positive infinity
 			return new NegativeInfinity(); 
 		}
 		
@@ -55,21 +55,21 @@ public class NumUtils {
 			return SinglePrecision.sub( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 		
-		if( num1.isNaN() || num2.isNaN() ) {
+		if( num1 instanceof NaN || num2 instanceof NaN ) {
 			return new NaN();
 		}
 		
-		if( num1.isNaN() || num2.isNaN() 
-				|| ( num1.isPosInfty() && num2.isPosInfty() ) 
-				|| ( num1.isNegInfty() && num2.isNegInfty() ) ) {
+		if( num1 instanceof NaN || num2 instanceof NaN 
+				|| ( num1 instanceof PositiveInfinity && num2 instanceof PositiveInfinity ) 
+				|| ( num1 instanceof NegativeInfinity && num2 instanceof NegativeInfinity ) ) {
 			return new NaN();
 		}
-		if( num1.isPosInfty()				// num2 is not positive infinity
-				|| num2.isNegInfty() ) {	// num1 is not negative infinity
+		if( num1 instanceof PositiveInfinity				// num2 is not positive infinity
+				|| num2 instanceof NegativeInfinity ) {	// num1 is not negative infinity
 			return new PositiveInfinity(); 
 		}
-		if( num1.isNegInfty()				// num2 is not negative infinity
-				|| num2.isPosInfty() ) {	// num1 is not positive infinity
+		if( num1 instanceof NegativeInfinity				// num2 is not negative infinity
+				|| num2 instanceof PositiveInfinity ) {	// num1 is not positive infinity
 			return new NegativeInfinity(); 
 		}
 		
@@ -90,32 +90,32 @@ public class NumUtils {
 			return SinglePrecision.mult( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 		
-		if( num1.isNaN() || num2.isNaN() ) {
+		if( num1 instanceof NaN || num2 instanceof NaN ) {
 			return new NaN();
 		}
-		if( num1.isPosInfty() ) {
-			if ( num2.less( NumFactory.getZero() ) || num2.isNegInfty() ) {
+		if( num1 instanceof PositiveInfinity ) {
+			if ( num2.less( NumFactory.getZero() ) || num2 instanceof NegativeInfinity ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
-		if( num2.isPosInfty() ) {
-			if ( num1.less( NumFactory.getZero() ) || num1.isNegInfty() ) {
+		if( num2 instanceof PositiveInfinity ) {
+			if ( num1.less( NumFactory.getZero() ) || num1 instanceof NegativeInfinity ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
-		if( num1.isNegInfty() ) {
-			if ( num2.less( NumFactory.getZero() ) || num2.isNegInfty() ) {
+		if( num1 instanceof NegativeInfinity ) {
+			if ( num2.less( NumFactory.getZero() ) || num2 instanceof NegativeInfinity ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
 			}
 		}
-		if( num2.isNegInfty() ) {
-			if ( num1.less( NumFactory.getZero() ) || num1.isNegInfty() ) {
+		if( num2 instanceof NegativeInfinity ) {
+			if ( num1.less( NumFactory.getZero() ) || num1 instanceof NegativeInfinity ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
@@ -139,25 +139,25 @@ public class NumUtils {
 			return SinglePrecision.div( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 
-		if( num1.isNaN() || num2.isNaN() 
-				|| ( ( num1.isPosInfty() || num1.isNegInfty() ) && ( num2.isPosInfty() || num2.isNegInfty() ) ) ) { // two infinities in the division
+		if( num1 instanceof NaN || num2 instanceof NaN 
+				|| ( ( num1 instanceof PositiveInfinity || num1 instanceof NegativeInfinity ) && ( num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity ) ) ) { // two infinities in the division
 			return new NaN();
 		}
-		if( num1.isPosInfty() ) { // positive infinity divided by some finite value
+		if( num1 instanceof PositiveInfinity ) { // positive infinity divided by some finite value
 			if( num2.less( NumFactory.getZero() ) ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
-		if( num1.isNegInfty() ) { // negative infinity divided by some finite value 
+		if( num1 instanceof NegativeInfinity ) { // negative infinity divided by some finite value 
 			if( num2.less( NumFactory.getZero() ) ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
 			}
 		}
-		if( num2.isPosInfty() || num2.isNegInfty() ) { // finite value divided by infinity
+		if( num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity ) { // finite value divided by infinity
 			return NumFactory.createZero();
 		}
 
@@ -186,10 +186,10 @@ public class NumUtils {
 			return SinglePrecision.abs( (SinglePrecision)num );
 		}
 		
-		if( num.isNaN() ) {
+		if( num instanceof NaN ) {
 			return new NaN();
 		}
-		if( num.isPosInfty() || num.isNegInfty() ) {
+		if( num instanceof PositiveInfinity || num instanceof NegativeInfinity ) {
 			return new PositiveInfinity();
 		}
 		
@@ -210,11 +210,11 @@ public class NumUtils {
 			return SinglePrecision.diff( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 		
-		if( num1.isNaN() || num2.isNaN() ) { 
+		if( num1 instanceof NaN || num2 instanceof NaN ) { 
 			return new NaN();
 		}
-		if( num1.isPosInfty() || num2.isPosInfty() 
-				|| num1.isNegInfty() || num2.isNegInfty() ) {
+		if( num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity 
+				|| num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity ) {
 			return new PositiveInfinity();
 		}
 		
@@ -235,16 +235,16 @@ public class NumUtils {
 			return SinglePrecision.max( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 		
-		if( num1.isNaN() || num2.isNaN() ) {
+		if( num1 instanceof NaN || num2 instanceof NaN ) {
 			return new NaN();
 		}
-		if( num1.isPosInfty() || num2.isPosInfty() ) {
+		if( num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity ) {
 			return new PositiveInfinity();
 		}
-		if( num1.isNegInfty() ) {
+		if( num1 instanceof NegativeInfinity ) {
 			return num2.copy();
 		}
-		if( num2.isNegInfty() ) {
+		if( num2 instanceof NegativeInfinity ) {
 			return num1.copy();
 		}
 		
@@ -265,16 +265,16 @@ public class NumUtils {
 			return SinglePrecision.min( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
 		
-		if( num1.isNaN() || num2.isNaN() ) {
+		if( num1 instanceof NaN || num2 instanceof NaN ) {
 			return new NaN();
 		}
-		if( num1.isNegInfty() || num2.isNegInfty() ) {
+		if( num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity ) {
 			return new NegativeInfinity();
 		}
-		if( num1.isPosInfty() ) {
+		if( num1 instanceof PositiveInfinity ) {
 			return num2.copy();
 		}
-		if( num2.isPosInfty() ) {
+		if( num2 instanceof PositiveInfinity ) {
 			return num1.copy();
 		}
 		
@@ -295,13 +295,13 @@ public class NumUtils {
 			return DoublePrecision.negate( (DoublePrecision)num );
 		}
 		
-		if( num.isNaN() ) {
+		if( num instanceof NaN ) {
 			return new NaN();
 		}
-		if( num.isPosInfty() ) {
+		if( num instanceof PositiveInfinity ) {
 			return new NegativeInfinity();
 		}
-		if( num.isNegInfty() ) {
+		if( num instanceof NegativeInfinity ) {
 			return new PositiveInfinity();
 		}
 		

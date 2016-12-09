@@ -36,11 +36,6 @@ package unikl.disco.numbers;
  *
  */
 public interface Num {
-	public boolean isNaN();
-	
-	public boolean isPosInfty();
-	
-	public boolean isNegInfty();
 	// TODO
 //	public boolean is0();
 

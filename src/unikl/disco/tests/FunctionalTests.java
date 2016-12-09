@@ -149,7 +149,7 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		nums.add( NumClass.DOUBLE_PRECISION );
 		nums.add( NumClass.SINGLE_PRECISION );
 		nums.add( NumClass.FRACTION_INTEGER );
-//		nums.add( NumClass.BIG_FRACTION );
+		nums.add( NumClass.FRACTION_BIG_INTEGER );
 		
 		
 		Set<ArrivalBoundMethod> single_1 = new HashSet<ArrivalBoundMethod>();
