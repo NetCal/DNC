@@ -175,10 +175,8 @@ public class LinearSegment{
 	protected static LinearSegment add( LinearSegment s1, LinearSegment s2, Num x, boolean leftopen ) {
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x       = x;
-		result.y       = s1.f( x );
-		result.y.add( s2.f( x ) );
-		result.grad     = s1.grad.copy();
-		result.grad.add( s2.grad );
+		result.y       = NumUtils.add( s1.f( x ), s2.f( x ) );
+		result.grad     = NumUtils.add( s1.grad, s2.grad );
 		result.leftopen = leftopen;
 		return result;
 	}
@@ -196,13 +194,7 @@ public class LinearSegment{
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x       = x;
 		result.y       = NumUtils.sub( s1.f( x ), s2.f( x ) );
-		// FIXME Causes test failures
-//		result.y       = s1.f( x );
-//		result.y.sub( s2.f( x ) );
 		result.grad     = NumUtils.sub( s1.grad, s2.grad );
-		// FIXME Causes test failures
-//		result.grad     = s1.grad.copy();
-//		result.grad.sub( s2.grad );
 		result.leftopen = leftopen;
 		return result;
 	}

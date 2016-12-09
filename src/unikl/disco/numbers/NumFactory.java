@@ -1,94 +1,111 @@
 package unikl.disco.numbers;
 
-//TODO throw exceptions in subclasses to indicate that a special value (NaN, +/- infty) was computed
-//TODO Use the special values only for number representations that do not have them --> i.e., not for double --> make double faster
 import unikl.disco.nc.CalculatorConfig;
+import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.numbers.implementations.FractionBigInteger;
 import unikl.disco.numbers.implementations.DoublePrecision;
 import unikl.disco.numbers.implementations.FractionInteger;
 import unikl.disco.numbers.implementations.SinglePrecision;
 import unikl.disco.numbers.values.NaN;
+import unikl.disco.numbers.values.NegativeInfinity;
+import unikl.disco.numbers.values.PositiveInfinity;
 
-// TODO Adapt to NumUtil's structure: First IEEE Floating Point, then those needing extra representation of special values
-//TODO throw exceptions in subclasses to indicate that a special value (NaN, +/- infty) was computed
-//TODO Use the special values only for number representations that do not have them --> i.e., not for double --> make double faster
 public class NumFactory {
+	private static Num POSITIVE_INFINITY = createPositiveInfinity();
+	private static Num NEGATIVE_INFINITY = createNegativeInfinity();
+	private static Num NaN = createNaN();
+	private static Num ZERO = createZero();
+	private static Num EPSILON = createEpsilon();
 	
-	protected static enum SpecialValue { POSITIVE_INFINITY, NEGATIVE_INFINITY, NaN, ZERO }
-
-//	public static final Num POSITIVE_INFINITY = createPositiveInfinity();
-//	public static final Num NEGATIVE_INFINITY = createNegativeInfinity();
-	public static final Num NaN = new NaN(); // createNaN();
-//	public static final Num ZERO = createZero();
-
-//	public static void reinitialize() {
-//		POSITIVE_INFINITY = createPositiveInfinity();
-//		NEGATIVE_INFINITY = createNegativeInfinity();
-//		NaN = createNaN();
-//		ZERO = createZero();
-//	}
+	/**
+	 * 
+	 * Required to call if the number representation is changed.
+	 * 
+	 */
+	public static void createSingletons() {
+		POSITIVE_INFINITY = createPositiveInfinity();
+		NEGATIVE_INFINITY = createNegativeInfinity();
+		NaN = createNaN();
+		ZERO = createZero();
+		EPSILON = createEpsilon();
+	}
 	
 	public static Num getPositiveInfinity() {
-//		return POSITIVE_INFINITY;
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
-				return FractionInteger.POSITIVE_INFINITY;
-			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.POSITIVE_INFINITY;
-			case SINGLE_PRECISION:
-				return SinglePrecision.POSITIVE_INFINITY;
-			case DOUBLE_PRECISION:
-			default:
-				return DoublePrecision.POSITIVE_INFINITY;
-		 }
+//		return createPositiveInfinity();
+		return POSITIVE_INFINITY;
+	}
+
+	public static Num createPositiveInfinity() {
+		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+			return new DoublePrecision( Double.POSITIVE_INFINITY );
+		}
+		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+			return new SinglePrecision( Float.POSITIVE_INFINITY );
+		}
+		
+		// non IEEE 754 floating point data types 
+		return new PositiveInfinity();
 	}
 	
 	public static Num getNegativeInfinity() {
-//		return NEGATIVE_INFINITY;
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
-				return FractionInteger.NEGATIVE_INFINITY;
-			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.NEGATIVE_INFINITY;
-			case SINGLE_PRECISION:
-				return SinglePrecision.NEGATIVE_INFINITY;
-			case DOUBLE_PRECISION:
-			default:
-				return DoublePrecision.NEGATIVE_INFINITY;
-		 }
+//		return createNegativeInfinity();
+		return NEGATIVE_INFINITY;
+	}
+	
+	public static Num createNegativeInfinity() {
+		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+			return new DoublePrecision( Double.NEGATIVE_INFINITY );
+		}
+		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+			return new SinglePrecision( Float.NEGATIVE_INFINITY );
+		}
+		
+		// non IEEE 754 floating point data types
+		return new NegativeInfinity();
 	}
 
 	public static Num getNaN() {
+//		return createNaN();
 		return NaN;
-//		switch ( CalculatorConfig.NUM_CLASS ) {
-//			case FRACTION:
-//				return NumFraction.NaN;
-//			case BIG_FRACTION:
-//				return NumBigFraction.NaN;
-//			case SINGLE:
-//				return NumSingle.NaN;
-//			case DOUBLE:
-//			default:
-//				return NumDouble.NaN;
-//		 }
 	}
 	
+	public static Num createNaN() {
+		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+			return new DoublePrecision( Double.NaN );
+		}
+		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+			return new SinglePrecision( Float.NaN );
+		}
+		
+		// non IEEE 754 floating point data types 
+		return new NaN();
+	}
+
 	public static Num getZero() {
-//		return ZERO;
+//		return createZero();
+		return ZERO;
+	}
+	
+	public static Num createZero() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_INTEGER:
-				return FractionInteger.ZERO;
+				return new FractionInteger( 0 );
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.ZERO;
+				return new FractionBigInteger( 0 );
 			case SINGLE_PRECISION:
-				return SinglePrecision.ZERO;
+				return new SinglePrecision( 0 );
 			case DOUBLE_PRECISION:
 			default:
-				return DoublePrecision.ZERO;
-		 }
+				return new DoublePrecision( 0 );
+		}
 	}
 	
 	public static Num getEpsilon() {
+//		return createEpsilon();
+		return EPSILON;
+	}
+	
+	public static Num createEpsilon() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_INTEGER:
 				return FractionInteger.createEpsilon();
@@ -102,31 +119,49 @@ public class NumFactory {
 		}
 	}
 	
-	public static Num createNum( int num ) {
+	public static Num createNum( double value ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+			return new DoublePrecision( value );
+		}
+		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+			return new SinglePrecision( value );
+		}
+		
+		// non IEEE 754 floating point data types
+		if( value == Double.POSITIVE_INFINITY ) {
+			return createPositiveInfinity();
+		}
+		if( value == Double.NEGATIVE_INFINITY ) {
+			return createNegativeInfinity();
+		}
+		if( value == Double.NaN ) {
+			return createNaN();
+		}
+		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
-				return new FractionInteger( num );
 			case FRACTION_BIG_INTEGER:
-				return new FractionBigInteger( num );
-			case SINGLE_PRECISION:
-				return new SinglePrecision( num );
-			case DOUBLE_PRECISION:
+				return new FractionBigInteger( value );
+			case FRACTION_INTEGER:
 			default:
-				return new DoublePrecision( num );
+				return new FractionInteger( value );
 		 }
 	}
 	
-	public static Num createNum( double value ) {
+	public static Num createNum( int num, int den ) {
+		if ( den == 0 ) { // division by integer 0 throws an arithmetic exception
+			throw new ArithmeticException( "/ by zero" );
+		}
+		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_INTEGER:
-				return new FractionInteger( value );
+				return new FractionInteger( num, den );
 			case FRACTION_BIG_INTEGER:
-				return new FractionBigInteger( value );
+				return new FractionBigInteger( num, den );
 			case SINGLE_PRECISION:
-				return new SinglePrecision( value );
+				return new SinglePrecision( num, den );
 			case DOUBLE_PRECISION:
 			default:
-				return new DoublePrecision( value );
+				return new DoublePrecision( num, den );
 		 }
 	}
 	
@@ -182,70 +217,5 @@ public class NumFactory {
 		// of raise an exception of some kind. Yet, Java does not get this and thus complains if there's no "finalizing statement". 
 		throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.NUM_CLASS.toString()
 								+ ": " + num_str );
-	}
-	
-	public static Num createNum( int num, int den ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
-				return new FractionInteger( num, den );
-			case FRACTION_BIG_INTEGER:
-				return new FractionBigInteger( num, den );
-			case SINGLE_PRECISION:
-				return new SinglePrecision( num, den );
-			case DOUBLE_PRECISION:
-			default:
-				return new DoublePrecision( num, den );
-		 }
-	}
-	
-	public static Num createZero() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
-				return FractionInteger.createZero();
-			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.createZero();
-			case SINGLE_PRECISION:
-				return SinglePrecision.createZero();
-			case DOUBLE_PRECISION:
-			default:
-				return DoublePrecision.createZero();
-		}
-	}
-
-	public static Num createPositiveInfinity() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
-				return FractionInteger.createPositiveInfinity();
-			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.createPositiveInfinity();
-			case SINGLE_PRECISION:
-				return SinglePrecision.createPositiveInfinity();
-			case DOUBLE_PRECISION:
-			default:
-				return DoublePrecision.createPositiveInfinity();
-		 }
-	}
-	
-	public static Num createNegativeInfinity() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-		 	case FRACTION_INTEGER:
-				return FractionInteger.createNegativeInfinity();
-		 	case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.createNegativeInfinity();
-			case SINGLE_PRECISION:
-				return SinglePrecision.createNegativeInfinity();
-			case DOUBLE_PRECISION:
-			default:
-				return DoublePrecision.createNegativeInfinity();
-		 }
-	}
-	
-	public static Num createNaN() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
-			case DOUBLE_PRECISION:
-				return new DoublePrecision( Double.NaN );
-		 	default:
-		 		return new NaN();
-		 }
 	}
 }

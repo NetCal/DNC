@@ -49,60 +49,13 @@ public final class PositiveInfinity implements Num {
 	public boolean isNegInfty() {
 		return false;
 	}
-	protected static Num add( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();
-	}
-	
-	@Override
-	public void add( Num num2 ) {}
-	
-	protected static Num sub( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();
-	}
-	
-	@Override
-	public void sub( Num num2 ) {}
-	
-	protected static Num mult( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();
-	}
-	
-	@Override
-	public void mult( Num num2 ) {}
-
-	protected static Num div( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();
-	}
-	
-	@Override
-	public void div( Num num2 ) {}
-
-	protected static Num diff( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();	
-	}
-
-	protected static Num max( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();
-	}
-
-	protected static Num min( PositiveInfinity num1, PositiveInfinity num2 ) {
-		return new PositiveInfinity();
-	}
-	
-	protected static Num abs( PositiveInfinity num ) {
-		return new PositiveInfinity();
-	}
-
-	protected static Num negate( PositiveInfinity num ) {
-	    return new PositiveInfinity();
-	}
 
 	public boolean greater( Num num2 ) {
-		return false;
+		return true;
 	}
 
 	public boolean ge( Num num2 ) {
-		return false;
+		return true;
 	}
 
 	public boolean less( Num num2 ) {
@@ -115,7 +68,7 @@ public final class PositiveInfinity implements Num {
 	
 	@Override
 	public double doubleValue() {
-	    return Double.NaN;
+	    return Double.POSITIVE_INFINITY;
 	}
 
 	@Override
@@ -128,22 +81,22 @@ public final class PositiveInfinity implements Num {
 		return false;
 	}
 
-	protected boolean equals( PositiveInfinity num2 ) {
-		return false;
-	}
-
 	@Override
 	public boolean equals( Object obj ) {
-		return false;
+		if( obj instanceof PositiveInfinity ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
 	public int hashCode() {
-		return Double.hashCode( Double.NaN );
+		return Double.hashCode( Double.POSITIVE_INFINITY );
 	}
 	
 	@Override
 	public String toString(){
-		return "NaN";
+		return "Infinity";
 	}
 }

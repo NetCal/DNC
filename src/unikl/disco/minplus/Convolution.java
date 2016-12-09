@@ -214,6 +214,7 @@ public class Convolution {
 		int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
 		int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
 		if (i1 > 0 || i2 > 0) {
+			x = NumFactory.createZero();
 			y = NumUtils.add( service_curve_1.fLimitRight( NumFactory.getZero() ), service_curve_2.fLimitRight( NumFactory.getZero() ) );
 			grad = NumFactory.createZero();
 			s = new LinearSegment( x, y, grad, true );
@@ -228,15 +229,12 @@ public class Convolution {
 					break;
 				}
 
-				x = service_curve_1.getSegment( i1+1 ).getX().copy();
-				x.sub( service_curve_1.getSegment( i1 ).getX() );
-				x.add( result.getSegment( result.getSegmentCount()-1 ).getX() );
-				
-				y = service_curve_1.getSegment( i1+1 ).getY().copy();
-				y.sub( service_curve_1.getSegment( i1 ).getY() );
-				y.add( result.getSegment( result.getSegmentCount()-1 ).getY() );
-				
-				s = new LinearSegment( x, y, NumFactory.createZero(), true );
+				x = NumUtils.add( result.getSegment( result.getSegmentCount()-1 ).getX(),
+						( NumUtils.sub( service_curve_1.getSegment( i1+1 ).getX(), service_curve_1.getSegment( i1 ).getX() ) ) );
+				y = NumUtils.add( result.getSegment( result.getSegmentCount()-1 ).getY(),
+						( NumUtils.sub( service_curve_1.getSegment( i1+1 ).getY(), service_curve_1.getSegment( i1 ).getY() ) ) );
+				grad = NumFactory.createZero();
+				s = new LinearSegment( x, y, grad, true );
 
 				result.getSegment(result.getSegmentCount()-1).setGrad( service_curve_1.getSegment(i1).getGrad() );
 				result.addSegment(s);
@@ -248,15 +246,12 @@ public class Convolution {
 					break;
 				}
 				
-				x = service_curve_2.getSegment( i2+1 ).getX();
-				x.sub( service_curve_2.getSegment( i2 ).getX() );
-				x.add( result.getSegment( result.getSegmentCount()-1 ).getX() );
-				
-				y = service_curve_2.getSegment( i2+1 ).getY().copy();
-				y.sub( service_curve_2.getSegment( i2 ).getY() );
-				y.add( result.getSegment( result.getSegmentCount()-1 ).getY() );
-				
-				s = new LinearSegment( x, y, NumFactory.createZero(), true );
+				x = NumUtils.add( result.getSegment( result.getSegmentCount()-1 ).getX(),
+						( NumUtils.sub( service_curve_2.getSegment( i2+1 ).getX(), service_curve_2.getSegment( i2 ).getX() ) ) );
+				y = NumUtils.add( result.getSegment( result.getSegmentCount()-1 ).getY(),
+						( NumUtils.sub( service_curve_2.getSegment( i2+1 ).getY(), service_curve_2.getSegment( i2 ).getY() ) ) );
+				grad = NumFactory.createZero();
+				s = new LinearSegment( x, y, grad, true );
 				
 				result.getSegment(result.getSegmentCount()-1).setGrad( service_curve_2.getSegment(i2).getGrad() );
 				result.addSegment(s);

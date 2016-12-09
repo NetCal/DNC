@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
+ * This file is part of the Disco Deterministic Network Calculator v2.2.8 "Heavy Ion".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -75,14 +75,10 @@ public class TotalFlowAnalysis extends Analysis {
 		Num delay_bound = NumFactory.createZero();
 		Num backlog_bound = NumFactory.createZero();
 		
-		if( CalculatorConfig.NUM_CLASS == CalculatorConfig.NumClass.FRACTION_INTEGER ) {
-			System.out.print("");
-		}
-		
 		for ( Server server : path.getServers() ) {
 			Pair<Num> min_D_B = deriveBoundsAtServer( server );
 
-			delay_bound.add( min_D_B.getFirst() );
+			delay_bound = NumUtils.add( delay_bound, min_D_B.getFirst() );
 			backlog_bound = NumUtils.max( backlog_bound, min_D_B.getSecond() );
 		}
 		

@@ -44,6 +44,7 @@ import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
+import unikl.disco.numbers.NumFactory;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -66,6 +67,7 @@ import unikl.disco.network.Server.Multiplexing;
 		FeedForward_1SC_3Flows_1AC_3Paths.class,
 		FeedForward_1SC_4Flows_1AC_4Paths.class
 		})
+
 /**
  * 
  * @author Steffen Bondorf
@@ -74,6 +76,8 @@ import unikl.disco.network.Server.Multiplexing;
 public class FunctionalTests { // Cannot make this class static as that prevents it from starting the tests listed above.
 	protected static Collection<FunctionalTestConfig> test_configurations = createParameters();
 
+	private static NumClass last_number_representation = null;
+	
 	protected FunctionalTestConfig test_config;
 	
 	public FunctionalTests( FunctionalTestConfig test_config ) {
@@ -85,7 +89,11 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 			CalculatorConfig.disableAllChecks();
 		}
 		
-		CalculatorConfig.NUM_CLASS = test_config.numbers;
+		if ( CalculatorConfig.NUM_CLASS != test_config.numbers 
+				|| last_number_representation == null ) {
+			CalculatorConfig.NUM_CLASS = test_config.numbers;
+			NumFactory.createSingletons();
+		}
 	}
 	
 	@Before
@@ -134,8 +142,8 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 	}
 
 	@Parameters(name= "{index}: {0}")
-	public static Set<FunctionalTestConfig> createParameters(){
-		Set<FunctionalTestConfig> result = new HashSet<FunctionalTestConfig>();
+	public static Set<FunctionalTestConfig> createParameters() {
+		Set<FunctionalTestConfig> test_configurations = new HashSet<FunctionalTestConfig>();
 		
 		Set<NumClass> nums =  new HashSet<NumClass>();
 		nums.add( NumClass.DOUBLE_PRECISION );
@@ -158,22 +166,6 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		single_abs.add( single_2 );
 		single_abs.add( single_3 );
 		
-		// Parameter configurations for single arrival bounding tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
-		for( Set<ArrivalBoundMethod> single_ab : single_abs ) {
-			for( NumClass num : nums ) {
-				result.add( new FunctionalTestConfig( single_ab, false, false, false, false, num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, true,  false, false, num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, false, true,  false, num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, false, false, true,  num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  num ) ) ;
-				result.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  num ) ) ;
-			}
-		}
-		
-		
 		
 		Set<ArrivalBoundMethod> pair_1 = new HashSet<ArrivalBoundMethod>();
 		pair_1.add( ArrivalBoundMethod.PBOO_PER_HOP );
@@ -191,30 +183,6 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		pair_abs.add( pair_1 );
 		pair_abs.add( pair_2 );
 		pair_abs.add( pair_3 );
-
-		// Parameter configurations for "pairs of arrival boundings"-tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
-		for( Set<ArrivalBoundMethod> pair_ab : pair_abs ) {
-			for( NumClass num : nums ) {
-				result.add( new FunctionalTestConfig( pair_ab, false, false, false, false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  num ) );
-				result.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  num ) );
-			}
-		}
-		
 		
 		
 		Set<ArrivalBoundMethod> triplet = new HashSet<ArrivalBoundMethod>();
@@ -222,27 +190,61 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		triplet.add( ArrivalBoundMethod.PBOO_CONCATENATION );
 		triplet.add( ArrivalBoundMethod.PMOO );
 		
-		// Parameter configurations for "triplets of arrival boundings"-tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
 		for( NumClass num : nums ) {
-			result.add( new FunctionalTestConfig( triplet, false, false, false, false, num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  false, false, false, num ) );
-			result.add( new FunctionalTestConfig( triplet, false, true,  false, false, num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  true,  false, false, num ) );
-			result.add( new FunctionalTestConfig( triplet, false, false, true,  false, num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  false, true,  false, num ) );
-			result.add( new FunctionalTestConfig( triplet, false, true,  true,  false, num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, num ) );
-			result.add( new FunctionalTestConfig( triplet, false, false, false, true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  false, false, true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, false, true,  false, true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, false, false, true,  true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  num ) );
-			result.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  num ) );
+			// Parameter configurations for single arrival bounding tests
+			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
+			for( Set<ArrivalBoundMethod> single_ab : single_abs ) {
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, false, num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, false, num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  false, num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  false, num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, true,  num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, true,  num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  true,  num ) ) ;
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  true,  num ) ) ;
+			}
+			
+			// Parameter configurations for "pairs of arrival boundings"-tests
+			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
+			for( Set<ArrivalBoundMethod> pair_ab : pair_abs ) {
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  true,  num ) );
+			}
+			
+			// Parameter configurations for "triplets of arrival boundings"-tests
+			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, global mux def, number class to use
+			test_configurations.add( new FunctionalTestConfig( triplet, false, false, false, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  false, false, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, true,  false, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  true,  false, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, false, true,  false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  false, true,  false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, true,  true,  false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  true,  true,  false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, false, false, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  false, false, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, true,  false, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  true,  false, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, false, true,  true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  false, true,  true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, false, true,  true,  true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet, true,  true,  true,  true,  num ) );
 		}
 		
-		return result;
+		return test_configurations;
 	}
 }

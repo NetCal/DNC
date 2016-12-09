@@ -36,16 +36,11 @@ import unikl.disco.numbers.Num;
  *
  */
 public class SinglePrecision implements Num {
-	private boolean isNaN, isPosInfty, isNegInfty;
-	
 	private float value = 0.0f;
 	
 	private static final float EPSILON = 0.00016f; // Maximum rounding error observed in the functional tests
-
-	public static final Num POSITIVE_INFINITY = createPositiveInfinity();
-	public static final Num NEGATIVE_INFINITY = createNegativeInfinity();
-	public static final Num ZERO = createZero();
 	
+	@SuppressWarnings("unused")
 	private SinglePrecision() {}
 	
 	public SinglePrecision( double value ) {
@@ -65,51 +60,15 @@ public class SinglePrecision implements Num {
 	}
 	
 	public boolean isNaN() {
-		return isNaN;
+		return value == Float.NaN;
 	}
 	
 	public boolean isPosInfty() {
-		return isPosInfty;
+		return value == Float.POSITIVE_INFINITY;
 	}
 	
 	public boolean isNegInfty() {
-		return isNegInfty;
-	}
-	
-	public static Num createPositiveInfinity() {
-		SinglePrecision pos_infty = new SinglePrecision();
-		pos_infty.instantiatePositiveInfinity();
-		return pos_infty;
-	}
-	
-	private void instantiatePositiveInfinity() {
-		value = Float.POSITIVE_INFINITY;
-		isPosInfty = true;
-		isNegInfty = false;
-	}
-
-	public static Num createNegativeInfinity() {
-		SinglePrecision neg_infty = new SinglePrecision();
-		neg_infty.instantiateNegativeInfinity();
-		return neg_infty;
-	}
-
-	private void instantiateNegativeInfinity() {
-		value = Float.NEGATIVE_INFINITY;
-		isPosInfty = false;
-		isNegInfty = true;
-	}
-	
-	public static Num createZero() {
-		SinglePrecision zero = new SinglePrecision();
-		zero.instantiateZero();
-		return zero;
-	}
-	
-	private void instantiateZero() {
-		value = 0.0f;
-		isPosInfty = false;
-		isNegInfty = false;
+		return value == Float.NEGATIVE_INFINITY;
 	}
 	
 	public static Num createEpsilon() {
@@ -120,11 +79,6 @@ public class SinglePrecision implements Num {
 		return new SinglePrecision( num1.value + num2.value );
 	}
 	
-	@Override
-	public void add( Num num2 ) {
-		value += num2.doubleValue();
-	}
-	
 	public static Num sub( SinglePrecision num1, SinglePrecision num2 ) {
 		float result = num1.value - num2.value;
 		if( Math.abs( result ) <= EPSILON ) {
@@ -133,30 +87,12 @@ public class SinglePrecision implements Num {
 		return new SinglePrecision( result );
 	}
 	
-	@Override
-	public void sub( Num num2 ) {
-		float result = this.value - (new Float( num2.doubleValue() )).floatValue();
-		if( Math.abs( result ) <= EPSILON ) {
-			this.value = 0;
-		}
-	}
-	
 	public static Num mult( SinglePrecision num1, SinglePrecision num2 ) {
 		return new SinglePrecision( num1.value * num2.value );
-	}
-	
-	@Override
-	public void mult( Num num2 ) {
-		this.value *= num2.doubleValue();
 	}
 
 	public static Num div( SinglePrecision num1, SinglePrecision num2 ) {
 		return new SinglePrecision( num1.value / num2.value );
-	}
-	
-	@Override
-	public void div( Num num2 ) {
-		this.value /= num2.doubleValue();
 	}
 
 	public static Num diff( SinglePrecision num1, SinglePrecision num2 ) {
@@ -181,74 +117,18 @@ public class SinglePrecision implements Num {
 	}
 
 	public boolean greater( Num num2 ) {
-		if( num2.isPosInfty() ){
-			return false;
-		}
-		if( isPosInfty ){
-			return true;
-		}
-		
-		if( isNegInfty ){
-			return false;
-		}
-		if( num2.isNegInfty() ){
-			return true;
-		}
-		
 		return value > num2.doubleValue();
 	}
 
 	public boolean ge( Num num2 ) {
-		if( isPosInfty ){
-			return true;
-		}
-		if( num2.isPosInfty() ){
-			return false;
-		}
-
-		if( num2.isNegInfty() ){
-			return true;
-		}
-		if( isNegInfty ){
-			return false;
-		}
-		
 		return value >= num2.doubleValue();
 	}
 
 	public boolean less( Num num2 ) {
-		if( isPosInfty ){
-			return false;
-		}
-		if( num2.isPosInfty() ){
-			return true;
-		}
-		
-		if( num2.isNegInfty() ){
-			return false;
-		}
-		if( isNegInfty ){
-			return true;
-		}
-		
 		return value < num2.doubleValue();
 	}
 
 	public boolean le( Num num2 ) {
-		if( num2.isPosInfty() ){
-			return true;
-		}
-		if( isPosInfty ){
-			return false;
-		}
-
-		if( isNegInfty ){
-			return true;
-		}
-		if( num2.isNegInfty() ){
-			return false;
-		}
-		
 		return value <= num2.doubleValue();
 	}
 	
@@ -259,23 +139,14 @@ public class SinglePrecision implements Num {
 
 	@Override
 	public Num copy() {
-    	if ( isPosInfty ) {
-    		return createPositiveInfinity();
-    	}
-    	if ( isNegInfty ) {
-			return createNegativeInfinity();
-		}
-    	
 		return new SinglePrecision( value );
 	}
 	
 	@Override
 	public boolean equals( double num2 ) {
-		if( num2 == Float.POSITIVE_INFINITY ){
-			return isPosInfty;
-		}
-		if( num2 == Float.NEGATIVE_INFINITY ){
-			return isNegInfty;
+		if( ( this.value == Float.POSITIVE_INFINITY && num2 == Double.POSITIVE_INFINITY ) 
+				|| ( this.value == Float.NEGATIVE_INFINITY && num2 == Double.NEGATIVE_INFINITY ) ) {
+			return true;
 		}
 		
 		if( Math.abs( (new Double( value )).doubleValue() - num2 ) <= EPSILON ) {
@@ -286,11 +157,9 @@ public class SinglePrecision implements Num {
 	}
 
 	public boolean equals( SinglePrecision num2 ) {
-		if( num2.isPosInfty ){
-			return isPosInfty;
-		}
-		if( num2.isNegInfty ){
-			return isNegInfty;
+		if( ( this.value == Float.POSITIVE_INFINITY && num2.value == Float.POSITIVE_INFINITY ) 
+				|| ( this.value == Float.NEGATIVE_INFINITY && num2.value == Float.NEGATIVE_INFINITY ) ) {
+			return true;
 		}
 		
 		if( Math.abs( value - num2.value ) <= EPSILON ) {
@@ -302,16 +171,11 @@ public class SinglePrecision implements Num {
 
 	@Override
 	public boolean equals( Object obj ) {
-		if( obj == null ){
-			return true;
-		}
-		
-		SinglePrecision num2_Num;
-		try {
-			num2_Num = (SinglePrecision) obj;
-			return equals( num2_Num.value );
-		} catch( ClassCastException e ) {
+		if( obj == null 
+				|| !( obj instanceof SinglePrecision ) ) {
 			return false;
+		} else {
+			return equals( ((SinglePrecision) obj).value );
 		}
 	}
 	

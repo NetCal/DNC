@@ -764,19 +764,19 @@ public class Curve {
 	 * 
 	 * @param start the IP at which to start computing y-coordinates.
 	 */
-	@Deprecated
-	public void computeYs(int start) {
-		if (start < 1) {
-			throw new IllegalArgumentException("Value of 'start' must be >= 1!");
-		}
-		Num dx;
-		for (int i = start; i < segments.length; i++) {
-			dx = NumUtils.sub( segments[i].x, segments[i-1].x );
-			segments[i].y = dx.copy();
-			segments[i].y.mult( segments[i-1].grad );
-			segments[i].y.add( segments[i-1].y );
-		}
-	}
+//	@Deprecated
+//	public void computeYs(int start) {
+//		if (start < 1) {
+//			throw new IllegalArgumentException("Value of 'start' must be >= 1!");
+//		}
+//		Num dx;
+//		for (int i = start; i < segments.length; i++) {
+//			dx = NumUtils.sub( segments[i].x, segments[i-1].x );
+//			segments[i].y = dx.copy();
+//			segments[i].y.mult( segments[i-1].grad );
+//			segments[i].y.add( segments[i-1].y );
+//		}
+//	}
 
 	/**
 	 * Returns the burstiness of this token bucket curve.<br>
@@ -828,7 +828,7 @@ public class Curve {
 			
 			Num secondArg = NumUtils.sub( segments[i+1].x, segments[i].x );
 			secondArg = NumUtils.mult( secondArg, segments[i].grad );
-			secondArg.add( segments[i].y );
+			secondArg = NumUtils.add( segments[i].y, secondArg);
 			secondArg = NumUtils.sub( segments[i+1].y, secondArg );
 			
 			if ( NumUtils.abs( firstArg ).less( NumFactory.getEpsilon() )
@@ -915,11 +915,7 @@ public class Curve {
 		if (i < 0) {
 			return NumFactory.createNaN();
 		}
-		Num result = x.copy();
-		result.sub( segments[i].x );
-		result.mult( segments[i].grad );
-		result.add( segments[i].y );
-		return result;
+		return NumUtils.add( NumUtils.mult( NumUtils.sub( x, segments[i].x ), segments[i].grad ), segments[i].y );
 	}
 
 	/**
@@ -977,11 +973,7 @@ public class Curve {
 		if (i < 0) {
 			return NumFactory.createNaN();
 		}
-		Num result = x.copy();
-		result.sub( segments[i].x );
-		result.mult( segments[i].grad );
-		result.add(segments[i].y  );
-		return result;
+		return NumUtils.add( NumUtils.mult( NumUtils.sub( x, segments[i].x ), segments[i].grad ), segments[i].y ).copy();
 	}
 
 	/**
@@ -1062,13 +1054,9 @@ public class Curve {
 			}
 		}
 		if ( !segments[i].grad.equals( NumFactory.getZero() ) ) {
-			Num result = y.copy();
-			result.sub( segments[i].y );
-			result.div( segments[i].grad );
-			result.add( segments[i].x );
-			return result;
+			return NumUtils.add( segments[i].x, NumUtils.div( NumUtils.sub( y, segments[i].y ), segments[i].grad ) );
 		} else {
-			return segments[i].x.copy();
+			return segments[i].x;
 		}
 	}
 
@@ -1132,8 +1120,8 @@ public class Curve {
 			}
 			Num gradient;
 			if (i < segments.length-1) {
-				gradient = NumUtils.sub( segments[i+1].y, segments[i].y );
-				gradient.div( NumUtils.sub( segments[i+1].x, segments[i].x ) );
+				gradient = NumUtils.div( NumUtils.sub( segments[i+1].y, segments[i].y ),
+											NumUtils.sub( segments[i+1].x, segments[i].x ) );
 			} else {
 				gradient = segments[i].grad;
 			}
@@ -1173,8 +1161,8 @@ public class Curve {
 			Num gradient;
 			// Handles discontinuities
 			if ( i < segments.length-1 ) {
-				gradient = NumUtils.sub( segments[i+1].y, segments[i].y );
-				gradient.div( NumUtils.sub( segments[i+1].x, segments[i].x ) );
+				gradient = NumUtils.div( NumUtils.sub( segments[i+1].y, segments[i].y ),
+											NumUtils.sub( segments[i+1].x, segments[i].x ) );
 			} else {
 				gradient = segments[i].grad;
 			}
@@ -1203,8 +1191,8 @@ public class Curve {
 
 			Num gradient;
 			if (i < segments.length-1) {
-				gradient = NumUtils.sub( segments[i+1].y, segments[i].y );
-				gradient.div( NumUtils.sub( segments[i+1].x, segments[i].x ) );
+				gradient = NumUtils.div( NumUtils.sub( segments[i+1].y, segments[i].y ),
+											NumUtils.sub( segments[i+1].x, segments[i].x ) );
 			} else {
 				gradient = segments[i].grad;
 			}
@@ -1235,9 +1223,11 @@ public class Curve {
 		}
 		
 		Curve result = new Curve( curve_copy.getSegmentCount()+1 );
+		result.segments[0] = LinearSegment.createHorizontalLine( 0.0 );
+		result.segments[0].y = curve_copy.getSegment(0).y; // Decide what to do if pass thru origin req. dropped...
 		for (int i = 0; i < curve_copy.getSegmentCount(); i++) {
 			result.segments[i+1] = curve_copy.getSegment(i);
-			result.segments[i+1].x.add( dx );
+			result.segments[i+1].x = NumUtils.add( result.segments[i+1].x, dx );
 		}
 		
 		result.beautify();
@@ -1256,10 +1246,11 @@ public class Curve {
 	 */
 	public static Curve shiftLeftClipping( Curve curve, Num dx ) {
 		Curve result = curve.copy();
-		int i = result.getSegmentDefining( dx );
+		int i = result.getSegmentDefining(dx);
 		if ( result.segments[i].x.less( dx ) ) {
-			result.segments[i].y = result.segments[i].f( dx );
-			result.segments[i].x = dx.copy();
+			result.segments[i].y = NumUtils.add( result.segments[i].y, 
+									NumUtils.mult( NumUtils.sub( dx, result.segments[i].x ), result.segments[i].grad ) );
+			result.segments[i].x = dx;
 			result.segments[i].leftopen = false;
 		}
 		if (i > 0) {
@@ -1268,7 +1259,7 @@ public class Curve {
 			System.arraycopy(old_segments, i, result.segments, 0, result.segments.length);
 		}
 		for (i = 0; i < result.segments.length; i++) {
-			result.segments[i].x.sub( dx );
+			result.segments[i].x = NumUtils.sub( result.segments[i].x, dx );
 		}
 
 		return result;
@@ -1303,7 +1294,7 @@ public class Curve {
 		// Shift remaining segments left by latency
 		Num L = result.segments[0].x;
 		for (int i = 0; i < result.segments.length; i++) {
-			result.segments[i].x.sub( L );
+			result.segments[i].x = NumUtils.sub( result.segments[i].x, L );
 		}
 		if (result.segments[0].leftopen) {
 			result.addSegment(0, LinearSegment.createHorizontalLine( 0.0 ));
@@ -1322,7 +1313,7 @@ public class Curve {
 	public static Curve add( Curve curve, Num dy ) {
 		Curve result = curve.copy();
 		for (int i = 0; i < curve.getSegmentCount(); i++) {
-			result.segments[i].y.add( dy );
+			result.segments[i].y = NumUtils.add( result.segments[i].y, dy );
 		}
 		
 		return result;

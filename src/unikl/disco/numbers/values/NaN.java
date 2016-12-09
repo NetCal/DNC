@@ -49,53 +49,6 @@ public final class NaN implements Num {
 	public boolean isNegInfty() {
 		return false;
 	}
-	protected static Num add( NaN num1, NaN num2 ) {
-		return new NaN();
-	}
-	
-	@Override
-	public void add( Num num2 ) {}
-	
-	protected static Num sub( NaN num1, NaN num2 ) {
-		return new NaN();
-	}
-	
-	@Override
-	public void sub( Num num2 ) {}
-	
-	protected static Num mult( NaN num1, NaN num2 ) {
-		return new NaN();
-	}
-	
-	@Override
-	public void mult( Num num2 ) {}
-
-	protected static Num div( NaN num1, NaN num2 ) {
-		return new NaN();
-	}
-	
-	@Override
-	public void div( Num num2 ) {}
-
-	protected static Num diff( NaN num1, NaN num2 ) {
-		return new NaN();	
-	}
-
-	protected static Num max( NaN num1, NaN num2 ) {
-		return new NaN();
-	}
-
-	protected static Num min( NaN num1, NaN num2 ) {
-		return new NaN();
-	}
-	
-	protected static Num abs( NaN num ) {
-		return new NaN();
-	}
-
-	protected static Num negate( NaN num ) {
-	    return new NaN();
-	}
 
 	public boolean greater( Num num2 ) {
 		return false;

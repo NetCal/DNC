@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
+ * This file is part of the Disco Deterministic Network Calculator v2.2.8 "Heavy Ion".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -326,7 +326,7 @@ public class PmooAnalysis extends Analysis {
 		Num T = NumFactory.createZero();
 		Num R = NumFactory.createPositiveInfinity();
 		Num sum_bursts = NumFactory.createZero();
-		Num sum_latencyterms = NumFactory.createZero(); 
+		Num sum_latencyterms = NumFactory.createZero();
 
 		double sum_r_at_s;
 		
@@ -351,7 +351,7 @@ public class PmooAnalysis extends Analysis {
 			Curve current_rl = service_curves[i].getRLComponent( server_rl_iters[i] );
 
 			// Sum up latencies
-			T.add( current_rl.getLatency() );
+			T = NumUtils.add( T, current_rl.getLatency() );
 
 			// Compute and store sum of rates of all passing flows
 			Num sum_r = NumFactory.createZero();
@@ -359,8 +359,11 @@ public class PmooAnalysis extends Analysis {
 			{
 				ArrivalCurve bound = f.getArrivalCurve();
 				Curve current_tb = bound.getTBComponent( ((Integer) flow_tb_iter_map.get( f )).intValue() );
-				sum_r.add( current_tb.getSustainedRate() );
+				sum_r = NumUtils.add( sum_r, current_tb.getSustainedRate() );
 			}
+
+			// Update latency terms (increments)
+			sum_latencyterms = NumUtils.add( sum_latencyterms, NumUtils.mult( sum_r, current_rl.getLatency() ) );
 
 			// Compute left-over rate; update min
 			Num Ri = NumUtils.sub( current_rl.getSustainedRate(), sum_r );
@@ -378,11 +381,6 @@ public class PmooAnalysis extends Analysis {
 				}
 			}
 			present_flows.removeAll( leaving_flows );
-
-			// Update latency terms (increments), repurpose the sum_r variable
-			sum_r.mult( current_rl.getLatency() );
-			sum_latencyterms.add( sum_r );
-			
 		}
 
 		// Compute sum of bursts
@@ -390,12 +388,10 @@ public class PmooAnalysis extends Analysis {
 		{
 			ArrivalCurve bound = f.getArrivalCurve();
 			Curve current_tb = bound.getTBComponent( ((Integer) flow_tb_iter_map.get( f )).intValue() );
-			sum_bursts.add( current_tb.getTBBurst() );
+			sum_bursts = NumUtils.add( sum_bursts, current_tb.getTBBurst() );
 		}
 
-		sum_bursts.add( sum_latencyterms );
-		sum_bursts.div( R );
-		T.add( sum_bursts );
+ 		T = NumUtils.add( T, NumUtils.div( NumUtils.add( sum_bursts, sum_latencyterms ), R ) );
 
  		if( T == NumFactory.getPositiveInfinity() ) {
  			return ServiceCurve.createNullService();

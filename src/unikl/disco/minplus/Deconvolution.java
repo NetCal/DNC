@@ -193,8 +193,6 @@ public class Deconvolution {
 		// and add a linear segment that resembeles the beta's one
 		// (The first one might be cut off by the alpha inflection point).
 		Num x_inflect_alpha, results_cand_burst;
-		Num current_segment_length;
-		Num next_x_coord, next_y_coord;
 		
 		for( int i = curve_1.getSegmentCount()-1; i >= 0; i-- ) {
 			x_inflect_alpha = curve_1.getSegment( i ).getX();
@@ -223,21 +221,22 @@ public class Deconvolution {
 				candidate_tmp = new ArrivalCurve( segment_count );	// Consists of null segments (x,y),r = (0,0),0 only.
 																	// The origin (first segment, id 0) stays as is, the remainder needs to be constructed.
 				// Compute the second segment
+				Num next_x_coord = NumFactory.createZero();
+				Num next_y_coord = results_cand_burst;
 				
 				LinearSegment current_candidate_segment = candidate_tmp.getSegment( 1 );
 				LinearSegment current_beta_segment = curve_2.getSegment( j );
-
-				current_candidate_segment.setX( NumFactory.createZero() );
-				current_candidate_segment.setY( results_cand_burst );
+				
+				current_candidate_segment.setX( next_x_coord );
+				current_candidate_segment.setY( next_y_coord );
 				current_candidate_segment.setGrad( current_beta_segment.getGrad().copy() );
 
 				// The length of this segment is defined by the following one's y-coordinate:
 				next_x_coord = NumUtils.sub( x_inflect_alpha, x_inflect_beta );
-				next_y_coord = next_x_coord.copy();
-				next_y_coord.mult( current_beta_segment.getGrad() );
-				next_y_coord.add( results_cand_burst );
+				next_y_coord = NumUtils.add( results_cand_burst, NumUtils.mult( next_x_coord, current_beta_segment.getGrad() ) );
 				
 				LinearSegment prev_beta_segment;
+				Num current_segment_length;
 				
 				// The remaining service curve segments in reverse order
 				int j_new = j; // Alpha's inflection point is above beta's segment j. Now we need to continue decreasing j (renamed to j_new although there is no concurrent modification with primitive int).
@@ -253,12 +252,8 @@ public class Deconvolution {
 					current_candidate_segment.setGrad( current_beta_segment.getGrad().copy() );
 					
 					current_segment_length = NumUtils.sub( prev_beta_segment.getX(), current_beta_segment.getX() );
-					next_x_coord.add( current_segment_length );
-					
-					next_y_coord = current_segment_length.copy();
-					next_y_coord.mult( current_beta_segment.getGrad() );
-					next_y_coord.add( current_candidate_segment.getY() );
-					
+					next_x_coord = NumUtils.add( next_x_coord, current_segment_length ); // Prev > current because we iterate j in decreasing order.
+					next_y_coord = NumUtils.add( current_candidate_segment.getY(), NumUtils.mult( current_segment_length, current_beta_segment.getGrad() ) );
 				}
 				
 				// Add a horizontal line at the end.

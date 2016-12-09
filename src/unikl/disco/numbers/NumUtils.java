@@ -31,10 +31,10 @@ public class NumUtils {
 				|| ( num1.isNegInfty() && num2.isPosInfty() ) ) {
 			return new NaN();
 		}
-		if( num1.isPosInfty() ) { // num2 is not negative infinity
+		if( num1.isPosInfty() || num2.isPosInfty() ) { // other num is not negative infinity
 			return new PositiveInfinity(); 
 		}
-		if( num1.isNegInfty() ) { // num2 is not positive infinity
+		if( num1.isNegInfty() || num2.isNegInfty() ) { // other num is not positive infinity
 			return new NegativeInfinity(); 
 		}
 		
@@ -100,8 +100,22 @@ public class NumUtils {
 				return new PositiveInfinity();
 			}
 		}
+		if( num2.isPosInfty() ) {
+			if ( num1.less( NumFactory.getZero() ) || num1.isNegInfty() ) {
+				return new NegativeInfinity();
+			} else {
+				return new PositiveInfinity();
+			}
+		}
 		if( num1.isNegInfty() ) {
 			if ( num2.less( NumFactory.getZero() ) || num2.isNegInfty() ) {
+				return new PositiveInfinity();
+			} else {
+				return new NegativeInfinity();
+			}
+		}
+		if( num2.isNegInfty() ) {
+			if ( num1.less( NumFactory.getZero() ) || num1.isNegInfty() ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
@@ -124,7 +138,7 @@ public class NumUtils {
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
 			return SinglePrecision.div( (SinglePrecision)num1, (SinglePrecision)num2 );
 		}
-		
+
 		if( num1.isNaN() || num2.isNaN() 
 				|| ( ( num1.isPosInfty() || num1.isNegInfty() ) && ( num2.isPosInfty() || num2.isNegInfty() ) ) ) { // two infinities in the division
 			return new NaN();
@@ -149,10 +163,18 @@ public class NumUtils {
 
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.div( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+		        if ( ((FractionBigInteger)num2).isZero() ) {
+		        	return new PositiveInfinity();
+		       	} else {
+					return FractionBigInteger.div( (FractionBigInteger)num1, (FractionBigInteger)num2 );     		
+		       	}
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.div( (FractionInteger)num1, (FractionInteger)num2 );
+		        if ( ((FractionInteger)num2).isZero() ) {
+		        	return new PositiveInfinity();
+		       	} else {
+		       		return FractionInteger.div( (FractionInteger)num1, (FractionInteger)num2 );        		
+		       	}
 		}
 	}
 

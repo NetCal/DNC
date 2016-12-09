@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
+ * This file is part of the Disco Deterministic Network Calculator v2.2.8 "Heavy Ion".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2011 - 2016 Steffen Bondorf
@@ -42,19 +42,26 @@ import unikl.disco.numbers.NumUtils;
  *
  */
 public class DelayBound {
-	public static Num deriveARB( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if ( service_curve.equals( ServiceCurve.createNullService() )
-				&& !arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
+	private static Num deriveForSpecialCurves( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
+		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
+			return NumFactory.createZero();
+		}
+		if ( service_curve.isDelayedInfiniteBurst() ) {
+			// Assumption: the arrival curve does not have an initial latency.
+			//             Otherwise its sub-additive closure would be zero, i.e., the arrival curve would not be sensible.
+			return service_curve.getLatency().copy();
+		}
+		if ( service_curve.equals( ServiceCurve.createNullService() )  // We know from above that the arrivals are not zero. 
+				|| arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) {
 			return NumFactory.createPositiveInfinity();
 		}
-		
-		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) 
-				|| service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-			return NumFactory.createZero();
-		} else {
-			if( arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) { // Only if the service curve is
-				return NumFactory.createPositiveInfinity();
-			}
+		return null;
+	}
+	
+	public static Num deriveARB( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
+		Num result = deriveForSpecialCurves( arrival_curve, service_curve );
+		if( result != null ) {
+			return result;
 		}
 		
 		return Curve.getXIntersection( arrival_curve, service_curve );
@@ -62,33 +69,23 @@ public class DelayBound {
 
 	// Single flow to be bound, i.e., fifo per micro flow holds
 	public static Num deriveFIFO( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if ( service_curve.equals( ServiceCurve.createNullService() )
-				&& !arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
-			return NumFactory.createPositiveInfinity();
+
+		Num result = deriveForSpecialCurves( arrival_curve, service_curve );
+		if( result != null ) {
+			return result;
 		}
 		
-		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) 
-				|| service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-			return NumFactory.createZero();
-		} else {
-			if( arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) { // Only if the service curve is
-				return NumFactory.createPositiveInfinity();
-			}
-		}
-
-		Num result = NumFactory.createNegativeInfinity();
+		result = NumFactory.createNegativeInfinity();
 		for( int i = 0; i < arrival_curve.getSegmentCount(); i++ ) {
 			Num ip_y = arrival_curve.getSegment( i ).getY();
 
-			Num delay = service_curve.f_inv( ip_y, true );
-			delay.sub( arrival_curve.f_inv( ip_y, false ) );
+			Num delay = NumUtils.sub( service_curve.f_inv( ip_y, true ), arrival_curve.f_inv( ip_y, false ) );
 			result = NumUtils.max( result, delay );
 		}
 		for( int i = 0; i < service_curve.getSegmentCount(); i++ ) {
 			Num ip_y = service_curve.getSegment( i ).getY();
 
-			Num delay = service_curve.f_inv( ip_y, true );
-			delay.sub( arrival_curve.f_inv( ip_y, false ) );
+			Num delay = NumUtils.sub( service_curve.f_inv( ip_y, true ), arrival_curve.f_inv( ip_y, false ) );
 			result = NumUtils.max( result, delay );
 		}
 		

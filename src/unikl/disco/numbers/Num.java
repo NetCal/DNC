@@ -43,14 +43,6 @@ public interface Num {
 	public boolean isNegInfty();
 	// TODO
 //	public boolean is0();
-	
-	public void add( Num num2 );
-	
-	public void sub( Num num2 );
-	
-	public void mult( Num num2 );
-	
-	public void div( Num num2 );
 
 	public boolean equals( double obj );
 	// TODO

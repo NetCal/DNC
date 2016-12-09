@@ -43,60 +43,13 @@ public final class NegativeInfinity implements Num {
 	}
 	
 	public boolean isPosInfty() {
-		return true;
+		return false;
 	}
 	
 	public boolean isNegInfty() {
-		return false;
-	}
-	protected static Num add( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();
+		return true;
 	}
 	
-	@Override
-	public void add( Num num2 ) {}
-	
-	protected static Num sub( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();
-	}
-	
-	@Override
-	public void sub( Num num2 ) {}
-	
-	protected static Num mult( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();
-	}
-	
-	@Override
-	public void mult( Num num2 ) {}
-
-	protected static Num div( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();
-	}
-	
-	@Override
-	public void div( Num num2 ) {}
-
-	protected static Num diff( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();	
-	}
-
-	protected static Num max( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();
-	}
-
-	protected static Num min( NegativeInfinity num1, NegativeInfinity num2 ) {
-		return new NegativeInfinity();
-	}
-	
-	protected static Num abs( NegativeInfinity num ) {
-		return new NegativeInfinity();
-	}
-
-	protected static Num negate( NegativeInfinity num ) {
-	    return new NegativeInfinity();
-	}
-
 	public boolean greater( Num num2 ) {
 		return false;
 	}
@@ -106,16 +59,16 @@ public final class NegativeInfinity implements Num {
 	}
 
 	public boolean less( Num num2 ) {
-		return false;
+		return true;
 	}
 
 	public boolean le( Num num2 ) {
-		return false;
+		return true;
 	}
 	
 	@Override
 	public double doubleValue() {
-	    return Double.NaN;
+	    return Double.NEGATIVE_INFINITY;
 	}
 
 	@Override
@@ -128,22 +81,26 @@ public final class NegativeInfinity implements Num {
 		return false;
 	}
 
-	protected boolean equals( NegativeInfinity num2 ) {
-		return false;
-	}
+//	protected boolean equals( NegativeInfinity num2 ) {
+//		return true;
+//	}
 
 	@Override
 	public boolean equals( Object obj ) {
-		return false;
+		if( obj instanceof NegativeInfinity ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
 	public int hashCode() {
-		return Double.hashCode( Double.NaN );
+		return Double.hashCode( Double.NEGATIVE_INFINITY );
 	}
 	
 	@Override
 	public String toString(){
-		return "NaN";
+		return "-Infinity";
 	}
 }
