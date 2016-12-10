@@ -100,12 +100,12 @@ public class PmooAnalysis extends Analysis {
 		
 		for( ServiceCurve beta_e2e : ((PmooAnalysisResults) result).betas_e2e ) {
 			delay_bound__beta_e2e = DelayBound.deriveFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // Single flow of interest, i.e., fifo per micro flow holds
-			if( delay_bound__beta_e2e.le( result.delay_bound ) ) {
+			if( delay_bound__beta_e2e.leq( result.delay_bound ) ) {
 				result.delay_bound = delay_bound__beta_e2e;
 			}
 			
 			backlog_bound__beta_e2e = BacklogBound.derive( flow_of_interest.getArrivalCurve(), beta_e2e );
-			if( backlog_bound__beta_e2e.le( result.backlog_bound ) ) {
+			if( backlog_bound__beta_e2e.leq( result.backlog_bound ) ) {
 				result.backlog_bound = backlog_bound__beta_e2e;
 			}
 		}
@@ -367,7 +367,7 @@ public class PmooAnalysis extends Analysis {
 
 			// Compute left-over rate; update min
 			Num Ri = NumUtils.sub( current_rl.getSustainedRate(), sum_r );
-			if ( Ri.le( NumFactory.getZero() ) )
+			if ( Ri.leq( NumFactory.getZero() ) )
 			{
 				return ServiceCurve.createNullService();
 			}

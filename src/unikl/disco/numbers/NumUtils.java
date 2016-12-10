@@ -9,10 +9,10 @@ package unikl.disco.numbers;
  */
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
-import unikl.disco.numbers.implementations.FractionBigInteger;
-import unikl.disco.numbers.implementations.DoublePrecision;
-import unikl.disco.numbers.implementations.FractionInteger;
-import unikl.disco.numbers.implementations.SinglePrecision;
+import unikl.disco.numbers.implementations.RationalBigInteger;
+import unikl.disco.numbers.implementations.RealDoublePrecision;
+import unikl.disco.numbers.implementations.RationalInteger;
+import unikl.disco.numbers.implementations.RealSinglePrecision;
 import unikl.disco.numbers.values.NaN;
 import unikl.disco.numbers.values.NegativeInfinity;
 import unikl.disco.numbers.values.PositiveInfinity;
@@ -20,10 +20,10 @@ import unikl.disco.numbers.values.PositiveInfinity;
 public class NumUtils {
 	public static Num add( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.add( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.add( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.add( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.add( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN 
@@ -40,19 +40,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				 return FractionBigInteger.add( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+				 return RationalBigInteger.add( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.add( (FractionInteger)num1, (FractionInteger)num2 );
+				return RationalInteger.add( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num sub( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.sub( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.sub( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.sub( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.sub( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -75,19 +75,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.sub( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+				return RationalBigInteger.sub( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			default:
 			case FRACTION_INTEGER:
-				return FractionInteger.sub( (FractionInteger)num1, (FractionInteger)num2 );
+				return RationalInteger.sub( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num mult( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.mult( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.mult( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.mult( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.mult( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -124,19 +124,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.mult( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+				return RationalBigInteger.mult( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.mult( (FractionInteger)num1, (FractionInteger)num2 );
+				return RationalInteger.mult( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num div( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.div( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.div( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.div( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.div( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 
 		if( num1 instanceof NaN || num2 instanceof NaN 
@@ -163,27 +163,27 @@ public class NumUtils {
 
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-		        if ( ((FractionBigInteger)num2).isZero() ) {
+		        if ( ((RationalBigInteger)num2).isZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
-					return FractionBigInteger.div( (FractionBigInteger)num1, (FractionBigInteger)num2 );     		
+					return RationalBigInteger.div( (RationalBigInteger)num1, (RationalBigInteger)num2 );     		
 		       	}
 			case FRACTION_INTEGER:
 			default:
-		        if ( ((FractionInteger)num2).isZero() ) {
+		        if ( ((RationalInteger)num2).isZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
-		       		return FractionInteger.div( (FractionInteger)num1, (FractionInteger)num2 );        		
+		       		return RationalInteger.div( (RationalInteger)num1, (RationalInteger)num2 );        		
 		       	}
 		}
 	}
 
 	public static Num abs( Num num ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.abs( (DoublePrecision)num );
+			return RealDoublePrecision.abs( (RealDoublePrecision)num );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.abs( (SinglePrecision)num );
+			return RealSinglePrecision.abs( (RealSinglePrecision)num );
 		}
 		
 		if( num instanceof NaN ) {
@@ -195,19 +195,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.abs( (FractionBigInteger)num );
+				return RationalBigInteger.abs( (RationalBigInteger)num );
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.abs( (FractionInteger)num );
+				return RationalInteger.abs( (RationalInteger)num );
 		}
 	}
 
 	public static Num diff( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.diff( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.diff( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.diff( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.diff( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) { 
@@ -220,19 +220,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.diff( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+				return RationalBigInteger.diff( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			default:
 			case FRACTION_INTEGER:
-				return FractionInteger.diff( (FractionInteger)num1, (FractionInteger)num2 );
+				return RationalInteger.diff( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num max( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.max( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.max( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.max( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.max( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -250,19 +250,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.max( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+				return RationalBigInteger.max( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.max( (FractionInteger)num1, (FractionInteger)num2 );
+				return RationalInteger.max( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num min( Num num1, Num num2 ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return DoublePrecision.min( (DoublePrecision)num1, (DoublePrecision)num2 );
+			return RealDoublePrecision.min( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return SinglePrecision.min( (SinglePrecision)num1, (SinglePrecision)num2 );
+			return RealSinglePrecision.min( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -280,19 +280,19 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.min( (FractionBigInteger)num1, (FractionBigInteger)num2 );
+				return RationalBigInteger.min( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.min( (FractionInteger)num1, (FractionInteger)num2 );
+				return RationalInteger.min( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num negate( Num num ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return SinglePrecision.negate( (SinglePrecision)num );
+			return RealSinglePrecision.negate( (RealSinglePrecision)num );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return DoublePrecision.negate( (DoublePrecision)num );
+			return RealDoublePrecision.negate( (RealDoublePrecision)num );
 		}
 		
 		if( num instanceof NaN ) {
@@ -307,10 +307,10 @@ public class NumUtils {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.negate( (FractionBigInteger)num );
+				return RationalBigInteger.negate( (RationalBigInteger)num );
 			case FRACTION_INTEGER:
 			default:
-				return FractionInteger.negate( (FractionInteger)num );
+				return RationalInteger.negate( (RationalInteger)num );
 		}
 	}
 }

@@ -54,7 +54,7 @@ public final class PositiveInfinity implements Num {
 		return true;
 	}
 
-	public boolean ge( Num num2 ) {
+	public boolean geq( Num num2 ) {
 		return true;
 	}
 
@@ -62,7 +62,7 @@ public final class PositiveInfinity implements Num {
 		return false;
 	}
 
-	public boolean le( Num num2 ) {
+	public boolean leq( Num num2 ) {
 		return false;
 	}
 	

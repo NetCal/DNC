@@ -2,10 +2,10 @@ package unikl.disco.numbers;
 
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
-import unikl.disco.numbers.implementations.FractionBigInteger;
-import unikl.disco.numbers.implementations.DoublePrecision;
-import unikl.disco.numbers.implementations.FractionInteger;
-import unikl.disco.numbers.implementations.SinglePrecision;
+import unikl.disco.numbers.implementations.RationalBigInteger;
+import unikl.disco.numbers.implementations.RealDoublePrecision;
+import unikl.disco.numbers.implementations.RationalInteger;
+import unikl.disco.numbers.implementations.RealSinglePrecision;
 import unikl.disco.numbers.values.NaN;
 import unikl.disco.numbers.values.NegativeInfinity;
 import unikl.disco.numbers.values.PositiveInfinity;
@@ -37,10 +37,10 @@ public class NumFactory {
 
 	public static Num createPositiveInfinity() {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return new DoublePrecision( Double.POSITIVE_INFINITY );
+			return new RealDoublePrecision( Double.POSITIVE_INFINITY );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return new SinglePrecision( Float.POSITIVE_INFINITY );
+			return new RealSinglePrecision( Float.POSITIVE_INFINITY );
 		}
 		
 		// non IEEE 754 floating point data types 
@@ -54,10 +54,10 @@ public class NumFactory {
 	
 	public static Num createNegativeInfinity() {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return new DoublePrecision( Double.NEGATIVE_INFINITY );
+			return new RealDoublePrecision( Double.NEGATIVE_INFINITY );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return new SinglePrecision( Float.NEGATIVE_INFINITY );
+			return new RealSinglePrecision( Float.NEGATIVE_INFINITY );
 		}
 		
 		// non IEEE 754 floating point data types
@@ -71,10 +71,10 @@ public class NumFactory {
 	
 	public static Num createNaN() {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return new DoublePrecision( Double.NaN );
+			return new RealDoublePrecision( Double.NaN );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return new SinglePrecision( Float.NaN );
+			return new RealSinglePrecision( Float.NaN );
 		}
 		
 		// non IEEE 754 floating point data types 
@@ -89,14 +89,14 @@ public class NumFactory {
 	public static Num createZero() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_INTEGER:
-				return new FractionInteger( 0 );
+				return new RationalInteger( 0 );
 			case FRACTION_BIG_INTEGER:
-				return new FractionBigInteger( 0 );
+				return new RationalBigInteger( 0 );
 			case SINGLE_PRECISION:
-				return new SinglePrecision( 0 );
+				return new RealSinglePrecision( 0 );
 			case DOUBLE_PRECISION:
 			default:
-				return new DoublePrecision( 0 );
+				return new RealDoublePrecision( 0 );
 		}
 	}
 	
@@ -108,23 +108,23 @@ public class NumFactory {
 	public static Num createEpsilon() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_INTEGER:
-				return FractionInteger.createEpsilon();
+				return RationalInteger.createEpsilon();
 			case FRACTION_BIG_INTEGER:
-				return FractionBigInteger.createEpsilon();
+				return RationalBigInteger.createEpsilon();
 			case SINGLE_PRECISION:
-				return SinglePrecision.createEpsilon();
+				return RealSinglePrecision.createEpsilon();
 			case DOUBLE_PRECISION:
 			default:
-				return DoublePrecision.createEpsilon();
+				return RealDoublePrecision.createEpsilon();
 		}
 	}
 	
 	public static Num createNum( double value ) {
 		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
-			return new DoublePrecision( value );
+			return new RealDoublePrecision( value );
 		}
 		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
-			return new SinglePrecision( value );
+			return new RealSinglePrecision( value );
 		}
 		
 		// non IEEE 754 floating point data types
@@ -140,10 +140,10 @@ public class NumFactory {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_BIG_INTEGER:
-				return new FractionBigInteger( value );
+				return new RationalBigInteger( value );
 			case FRACTION_INTEGER:
 			default:
-				return new FractionInteger( value );
+				return new RationalInteger( value );
 		 }
 	}
 	
@@ -154,14 +154,14 @@ public class NumFactory {
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case FRACTION_INTEGER:
-				return new FractionInteger( num, den );
+				return new RationalInteger( num, den );
 			case FRACTION_BIG_INTEGER:
-				return new FractionBigInteger( num, den );
+				return new RationalBigInteger( num, den );
 			case SINGLE_PRECISION:
-				return new SinglePrecision( num, den );
+				return new RealSinglePrecision( num, den );
 			case DOUBLE_PRECISION:
 			default:
-				return new DoublePrecision( num, den );
+				return new RealDoublePrecision( num, den );
 		 }
 	}
 	

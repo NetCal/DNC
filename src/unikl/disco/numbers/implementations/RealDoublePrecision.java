@@ -35,80 +35,80 @@ import unikl.disco.numbers.Num;
  * @author Steffen Bondorf
  *
  */
-public class DoublePrecision implements Num {
+public class RealDoublePrecision implements Num {
 	private double value = 0.0;
 	
 	private static final double EPSILON = Double.parseDouble("5E-10");
 	
 	@SuppressWarnings("unused")
-	private DoublePrecision() {}
+	private RealDoublePrecision() {}
 	
-	public DoublePrecision( double value ) {
+	public RealDoublePrecision( double value ) {
 		this.value = value;
 	}
 	
-	public DoublePrecision( int num ) {
+	public RealDoublePrecision( int num ) {
 		value = (double)num;
 	}
 	
-	public DoublePrecision( int num, int den ) {
+	public RealDoublePrecision( int num, int den ) {
 		value = ((double)num) / ((double)den);
 	}
 	
-	public DoublePrecision( DoublePrecision num ) {
+	public RealDoublePrecision( RealDoublePrecision num ) {
 		value = num.value;
 	}
 	
 	public static Num createEpsilon() {
-        return new DoublePrecision( EPSILON );
+        return new RealDoublePrecision( EPSILON );
 	}
 	
-	public static Num add( DoublePrecision num1, DoublePrecision num2 ) {
-		return new DoublePrecision( num1.value + num2.value );
+	public static Num add( RealDoublePrecision num1, RealDoublePrecision num2 ) {
+		return new RealDoublePrecision( num1.value + num2.value );
 	}
 	
-	public static Num sub( DoublePrecision num1, DoublePrecision num2 ) {
+	public static Num sub( RealDoublePrecision num1, RealDoublePrecision num2 ) {
 		double result = num1.value - num2.value;
 		if( Math.abs( result ) <= EPSILON ) {
 			result = 0;
 		}
-		return new DoublePrecision( result );
+		return new RealDoublePrecision( result );
 	}
 	
-	public static Num mult( DoublePrecision num1, DoublePrecision num2 ) {
-		return new DoublePrecision( num1.value * num2.value );
+	public static Num mult( RealDoublePrecision num1, RealDoublePrecision num2 ) {
+		return new RealDoublePrecision( num1.value * num2.value );
 	}
 
-	public static Num div( DoublePrecision num1, DoublePrecision num2 ) {
-		return new DoublePrecision( num1.value / num2.value );
+	public static Num div( RealDoublePrecision num1, RealDoublePrecision num2 ) {
+		return new RealDoublePrecision( num1.value / num2.value );
 	}
 
-	public static Num diff( DoublePrecision num1, DoublePrecision num2 ) {
-		return new DoublePrecision( Math.max( num1.value, num2.value )
+	public static Num diff( RealDoublePrecision num1, RealDoublePrecision num2 ) {
+		return new RealDoublePrecision( Math.max( num1.value, num2.value )
 										- Math.min( num1.value, num2.value ) );	
 	}
 
-	public static Num max( DoublePrecision num1, DoublePrecision num2 ) {
-		return new DoublePrecision( Math.max( num1.value, num2.value ) );
+	public static Num max( RealDoublePrecision num1, RealDoublePrecision num2 ) {
+		return new RealDoublePrecision( Math.max( num1.value, num2.value ) );
 	}
 
-	public static Num min( DoublePrecision num1, DoublePrecision num2 ) {
-		return new DoublePrecision( Math.min( num1.value, num2.value ) );
+	public static Num min( RealDoublePrecision num1, RealDoublePrecision num2 ) {
+		return new RealDoublePrecision( Math.min( num1.value, num2.value ) );
 	}
 	
-	public static Num abs( DoublePrecision num ) {
-		return new DoublePrecision( Math.abs( num.value ) );
+	public static Num abs( RealDoublePrecision num ) {
+		return new RealDoublePrecision( Math.abs( num.value ) );
 	}
 
-	public static Num negate( DoublePrecision num ) {
-	    return new DoublePrecision( num.value * -1 );
+	public static Num negate( RealDoublePrecision num ) {
+	    return new RealDoublePrecision( num.value * -1 );
 	}
 
 	public boolean greater( Num num2 ) {
 		return value > num2.doubleValue();
 	}
 
-	public boolean ge( Num num2 ) {
+	public boolean geq( Num num2 ) {
 		return value >= num2.doubleValue();
 	}
 
@@ -116,7 +116,7 @@ public class DoublePrecision implements Num {
 		return value < num2.doubleValue();
 	}
 
-	public boolean le( Num num2 ) {
+	public boolean leq( Num num2 ) {
 		return value <= num2.doubleValue();
 	}
 	
@@ -127,7 +127,7 @@ public class DoublePrecision implements Num {
 
 	@Override
 	public Num copy() {
-		return new DoublePrecision( value );
+		return new RealDoublePrecision( value );
 	}
 	
 	@Override
@@ -144,17 +144,17 @@ public class DoublePrecision implements Num {
 		}
 	}
 
-	public boolean equals( DoublePrecision num2 ) {
+	public boolean equals( RealDoublePrecision num2 ) {
 		return equals( num2.value );
 	}
 
 	@Override
 	public boolean equals( Object obj ) {
 		if( obj == null 
-				|| !( obj instanceof DoublePrecision ) ) {
+				|| !( obj instanceof RealDoublePrecision ) ) {
 			return false;
 		} else {
-			return equals( ((DoublePrecision) obj).value );
+			return equals( ((RealDoublePrecision) obj).value );
 		}
 	}
 	

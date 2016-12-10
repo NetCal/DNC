@@ -35,80 +35,80 @@ import unikl.disco.numbers.Num;
  * @author Steffen Bondorf
  *
  */
-public class SinglePrecision implements Num {
+public class RealSinglePrecision implements Num {
 	private float value = 0.0f;
 	
 	private static final float EPSILON = 0.00016f; // Maximum rounding error observed in the functional tests
 	
 	@SuppressWarnings("unused")
-	private SinglePrecision() {}
+	private RealSinglePrecision() {}
 	
-	public SinglePrecision( double value ) {
+	public RealSinglePrecision( double value ) {
 		this.value = new Float( value ).floatValue();
 	}
 	
-	public SinglePrecision( int num ) {
+	public RealSinglePrecision( int num ) {
 		value = (float)num;
 	}
 	
-	public SinglePrecision( int num, int den ) {
+	public RealSinglePrecision( int num, int den ) {
 		value = ((float)num) / ((float)den);
 	}
 	
-	public SinglePrecision( SinglePrecision num ) {
+	public RealSinglePrecision( RealSinglePrecision num ) {
 		value = num.value;
 	}
 	
 	public static Num createEpsilon() {
-        return new SinglePrecision( EPSILON );
+        return new RealSinglePrecision( EPSILON );
 	}
 	
-	public static Num add( SinglePrecision num1, SinglePrecision num2 ) {
-		return new SinglePrecision( num1.value + num2.value );
+	public static Num add( RealSinglePrecision num1, RealSinglePrecision num2 ) {
+		return new RealSinglePrecision( num1.value + num2.value );
 	}
 	
-	public static Num sub( SinglePrecision num1, SinglePrecision num2 ) {
+	public static Num sub( RealSinglePrecision num1, RealSinglePrecision num2 ) {
 		float result = num1.value - num2.value;
 		if( Math.abs( result ) <= EPSILON ) {
 			result = 0;
 		}
-		return new SinglePrecision( result );
+		return new RealSinglePrecision( result );
 	}
 	
-	public static Num mult( SinglePrecision num1, SinglePrecision num2 ) {
-		return new SinglePrecision( num1.value * num2.value );
+	public static Num mult( RealSinglePrecision num1, RealSinglePrecision num2 ) {
+		return new RealSinglePrecision( num1.value * num2.value );
 	}
 
-	public static Num div( SinglePrecision num1, SinglePrecision num2 ) {
-		return new SinglePrecision( num1.value / num2.value );
+	public static Num div( RealSinglePrecision num1, RealSinglePrecision num2 ) {
+		return new RealSinglePrecision( num1.value / num2.value );
 	}
 
-	public static Num diff( SinglePrecision num1, SinglePrecision num2 ) {
-		return new SinglePrecision( Math.max( num1.value, num2.value )
+	public static Num diff( RealSinglePrecision num1, RealSinglePrecision num2 ) {
+		return new RealSinglePrecision( Math.max( num1.value, num2.value )
 										- Math.min( num1.value, num2.value ) );	
 	}
 
-	public static Num max( SinglePrecision num1, SinglePrecision num2 ) {
-		return new SinglePrecision( Math.max( num1.value, num2.value ) );
+	public static Num max( RealSinglePrecision num1, RealSinglePrecision num2 ) {
+		return new RealSinglePrecision( Math.max( num1.value, num2.value ) );
 	}
 
-	public static Num min( SinglePrecision num1, SinglePrecision num2 ) {
-		return new SinglePrecision( Math.min( num1.value, num2.value ) );
+	public static Num min( RealSinglePrecision num1, RealSinglePrecision num2 ) {
+		return new RealSinglePrecision( Math.min( num1.value, num2.value ) );
 	}
 	
-	public static Num abs( SinglePrecision num ) {
-		return new SinglePrecision( Math.abs( num.value ) );
+	public static Num abs( RealSinglePrecision num ) {
+		return new RealSinglePrecision( Math.abs( num.value ) );
 	}
 
-	public static Num negate( SinglePrecision num ) {
-	    return new SinglePrecision( num.value * -1 );
+	public static Num negate( RealSinglePrecision num ) {
+	    return new RealSinglePrecision( num.value * -1 );
 	}
 
 	public boolean greater( Num num2 ) {
 		return value > num2.doubleValue();
 	}
 
-	public boolean ge( Num num2 ) {
+	public boolean geq( Num num2 ) {
 		return value >= num2.doubleValue();
 	}
 
@@ -116,7 +116,7 @@ public class SinglePrecision implements Num {
 		return value < num2.doubleValue();
 	}
 
-	public boolean le( Num num2 ) {
+	public boolean leq( Num num2 ) {
 		return value <= num2.doubleValue();
 	}
 	
@@ -127,7 +127,7 @@ public class SinglePrecision implements Num {
 
 	@Override
 	public Num copy() {
-		return new SinglePrecision( value );
+		return new RealSinglePrecision( value );
 	}
 	
 	@Override
@@ -144,7 +144,7 @@ public class SinglePrecision implements Num {
 		}
 	}
 
-	public boolean equals( SinglePrecision num2 ) {
+	public boolean equals( RealSinglePrecision num2 ) {
 		if( ( this.value == Float.POSITIVE_INFINITY && num2.value == Float.POSITIVE_INFINITY ) 
 				|| ( this.value == Float.NEGATIVE_INFINITY && num2.value == Float.NEGATIVE_INFINITY ) ) {
 			return true;
@@ -160,10 +160,10 @@ public class SinglePrecision implements Num {
 	@Override
 	public boolean equals( Object obj ) {
 		if( obj == null 
-				|| !( obj instanceof SinglePrecision ) ) {
+				|| !( obj instanceof RealSinglePrecision ) ) {
 			return false;
 		} else {
-			return equals( ((SinglePrecision) obj).value );
+			return equals( ((RealSinglePrecision) obj).value );
 		}
 	}
 	

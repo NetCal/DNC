@@ -176,7 +176,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
 			Num tfa_backlog_bound_min = NumFactory.getPositiveInfinity();
 			
 			for( Num tfa_backlog_bound : tfa_backlog_bounds ) {
-				if( tfa_backlog_bound.le( tfa_backlog_bound_min ) ) {
+				if( tfa_backlog_bound.leq( tfa_backlog_bound_min ) ) {
 					tfa_backlog_bound_min = tfa_backlog_bound;
 				}
 			}

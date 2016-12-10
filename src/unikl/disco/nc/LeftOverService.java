@@ -101,7 +101,7 @@ public final class LeftOverService {
 			Num x_alpha = arrival_curve.f_inv( ip_y, false );
 			Num x_beta  = service_curve.f_inv( ip_y, true );
 			
-			if ( arrival_curve.getGradientLimitRight( x_alpha ).le( service_curve.getGradientLimitRight( x_beta ) ) ) {
+			if ( arrival_curve.getGradientLimitRight( x_alpha ).leq( service_curve.getGradientLimitRight( x_beta ) ) ) {
 				
 				Num theta = NumUtils.sub( x_beta, x_alpha );
 				ServiceCurve beta_fifo = ServiceCurve.boundAtXAxis(

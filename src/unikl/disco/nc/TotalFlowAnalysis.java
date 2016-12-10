@@ -106,7 +106,7 @@ public class TotalFlowAnalysis extends Analysis {
 			Num backlog_bound_server_alpha = BacklogBound.derive( alpha_candidate, beta_server );
 			backlog_bounds_server.add( backlog_bound_server_alpha );
 			
-			if( backlog_bound_server_alpha.le( backlog_bound_s__min ) ) {
+			if( backlog_bound_server_alpha.leq( backlog_bound_s__min ) ) {
 				backlog_bound_s__min = backlog_bound_server_alpha;
 			}
 			
@@ -127,7 +127,7 @@ public class TotalFlowAnalysis extends Analysis {
 			}
 			delay_bounds_server.add( delay_bound_server_alpha );
 			
-			if( delay_bound_server_alpha.le( delay_bound_s__min ) ) {
+			if( delay_bound_server_alpha.leq( delay_bound_s__min ) ) {
 				delay_bound_s__min = delay_bound_server_alpha;
 			}
 		}

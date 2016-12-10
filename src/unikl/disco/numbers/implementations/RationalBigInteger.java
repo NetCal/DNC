@@ -27,7 +27,9 @@
 
 package unikl.disco.numbers.implementations;
 
-import org.apache.commons.math3.fraction.Fraction;
+import java.math.BigInteger;
+
+import org.apache.commons.math3.fraction.BigFraction;
 
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.values.NaN;
@@ -35,87 +37,91 @@ import unikl.disco.numbers.values.NegativeInfinity;
 import unikl.disco.numbers.values.PositiveInfinity;
 
 /**
- * Wrapper class around org.apache.commons.math3.fraction.Fraction
+ * Wrapper class around org.apache.commons.math3.BigFraction.BigFraction
  * introducing special values like positive / negative infinity and NaN
  * as well as operators like min, max, ==, &gt;, &gt;=, &lt;, and &lt;= that are
- * not part of Fraction but needed by the network calculator.
+ * not part of BigFraction but needed by the network calculator.
  * 
  * For the ease of converting from the primitive data type double
- * to Fraction objects, copy by value semantic are is applied. 
+ * to BigFraction objects, copy by value semantic are is applied. 
  * 
  * @author Steffen Bondorf
  *
  */
-public class FractionInteger implements Num {
-	private Fraction value = new Fraction( 0.0 );
+public class RationalBigInteger implements Num {
+	private BigFraction value = new BigFraction( 0.0 );
 	
 	// Unfortunately you cannot give the constructor the double value 0.0000001
-	private static final Fraction EPSILON = new Fraction( 1, 1000000 ); 
+	private static final BigFraction EPSILON = new BigFraction( 1, 1000000 ); 
 	
-	private FractionInteger(){}
+	private RationalBigInteger(){}
 	
-	public FractionInteger( double value ) {
-		this.value = new Fraction( value );
+	public RationalBigInteger( double value ) {
+		this.value = new BigFraction( value );
 	}
 	
-	public FractionInteger( int num ) {
-		value = new Fraction( num );
+	public RationalBigInteger( int num ) {
+		value = new BigFraction( num );
 	}
 	
-	public FractionInteger( int num, int den ) {
-		value = new Fraction( num, den );
+	public RationalBigInteger( int num, int den ) {
+		value = new BigFraction( num, den );
 	}
 	
-	public FractionInteger( FractionInteger num ) {
-		value = new Fraction( num.value.getNumerator(), num.value.getDenominator() );
+	public RationalBigInteger( BigInteger num, BigInteger den ) {
+		value = new BigFraction( num, den );
 	}
 	
-	private FractionInteger( Fraction frac ) {
-		value = new Fraction( frac.getNumerator(), frac.getDenominator() );
+	public RationalBigInteger( RationalBigInteger num ) {
+		value = new BigFraction( num.value.getNumerator(), num.value.getDenominator() );
+	}
+	
+	private RationalBigInteger( BigFraction frac ) {
+		value = new BigFraction( frac.getNumerator(), frac.getDenominator() );
 	}
 	
 	public boolean isZero() {
-		return value.getNumerator() == 0;
+		return value.getNumerator().intValue() == 0;
 	}
 	
-	public static FractionInteger createZero() {
-		FractionInteger zero = new FractionInteger();
+	public static RationalBigInteger createZero() {
+		RationalBigInteger zero = new RationalBigInteger();
 		zero.instantiateZero();
 		return zero;
 	}
 	
 	private void instantiateZero() {
-		value = new Fraction( 0.0 );
+		value = new BigFraction( 0.0 );
 	}
 	
-	public static FractionInteger createEpsilon() {
-        return new FractionInteger( EPSILON );
+	public static RationalBigInteger createEpsilon() {
+        return new RationalBigInteger( EPSILON );
 	}
 	
-	public static FractionInteger add( FractionInteger num1, FractionInteger num2 ) {
+	public static RationalBigInteger add( RationalBigInteger num1, RationalBigInteger num2 ) {
 		// May still throw MathArithmeticException due to integer overflow
-        return new FractionInteger( num1.value.add( num2.value ) );
+        return new RationalBigInteger( num1.value.add( num2.value ) );
 	}
 	
-	public static FractionInteger sub( FractionInteger num1, FractionInteger num2 ) {
+	public static RationalBigInteger sub( RationalBigInteger num1, RationalBigInteger num2 ) {
         // May still throw MathArithmeticException due to integer overflow
-        return new FractionInteger( num1.value.subtract( num2.value ) );
+        return new RationalBigInteger( num1.value.subtract( num2.value ) );
 	}
 	
-	public static FractionInteger mult( FractionInteger num1, FractionInteger num2 ) {
+	public static RationalBigInteger mult( RationalBigInteger num1, RationalBigInteger num2 ) {
         // May throw MathArithmeticException due to integer overflow
-       	return new FractionInteger( num1.value.multiply( num2.value ) );
+       	return new RationalBigInteger( num1.value.multiply( num2.value ) );
 	}
 
-	public static FractionInteger div( FractionInteger num1, FractionInteger num2 ) {
-		return new FractionInteger( num1.value.divide( num2.value ) );        		
+	public static RationalBigInteger div( RationalBigInteger num1, RationalBigInteger num2 ) {
+		return new RationalBigInteger( num1.value.divide( num2.value ) );        		
 	}
 
-	public static FractionInteger diff( FractionInteger num1, FractionInteger num2 ) {
+	public static RationalBigInteger diff( RationalBigInteger num1, RationalBigInteger num2 ) {
 		return sub( max( num1, num2 ), min( num1, num2 ) );	
 	}
 
-	public static FractionInteger max( FractionInteger num1, FractionInteger num2 ) {
+	public static RationalBigInteger max( RationalBigInteger num1, RationalBigInteger num2 ) {
 		if( num1.value.compareTo( num2.value ) >= 0 ) {
 			return num1;
 		} else {
@@ -123,7 +129,7 @@ public class FractionInteger implements Num {
 		}
 	}
 
-	public static FractionInteger min( FractionInteger num1, FractionInteger num2 ) {
+	public static RationalBigInteger min( RationalBigInteger num1, RationalBigInteger num2 ) {
 		if( num1.value.compareTo( num2.value ) <= 0 ) {
 			return num1;
 		} else {
@@ -131,12 +137,12 @@ public class FractionInteger implements Num {
 		}
 	}
 	
-	public static FractionInteger abs( FractionInteger num ) {
-    	return new FractionInteger( num.value.abs() );
+	public static RationalBigInteger abs( RationalBigInteger num ) {
+    	return new RationalBigInteger( num.value.abs() );
 	}
 
-	public static FractionInteger negate( FractionInteger num ) {
-    	return new FractionInteger( num.value.negate() );
+	public static RationalBigInteger negate( RationalBigInteger num ) {
+    	return new RationalBigInteger( num.value.negate() );
 	}
 
 	public boolean greater( Num num2 ) {
@@ -150,14 +156,14 @@ public class FractionInteger implements Num {
 			return true;
 		}
 		
-		if( this.value.compareTo( ((FractionInteger)num2).value ) > 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num2).value ) > 0 ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean ge( Num num2 ) {
+	public boolean geq( Num num2 ) {
 		if( num2 instanceof NaN ){
 			return false;
 		}
@@ -168,7 +174,7 @@ public class FractionInteger implements Num {
 			return true;
 		}
 		
-		if( this.value.compareTo( ((FractionInteger)num2).value ) >= 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num2).value ) >= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -186,14 +192,14 @@ public class FractionInteger implements Num {
 			return false;
 		}
 		
-		if( this.value.compareTo( ((FractionInteger)num2).value ) < 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num2).value ) < 0 ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean le( Num num2 ) {
+	public boolean leq( Num num2 ) {
 		if( num2 instanceof NaN ){
 			return false;
 		}
@@ -204,7 +210,7 @@ public class FractionInteger implements Num {
 			return false;
 		}
 		
-		if( this.value.compareTo( ((FractionInteger)num2).value ) <= 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num2).value ) <= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -218,29 +224,29 @@ public class FractionInteger implements Num {
 
 	@Override
 	public Num copy() {
-		return new FractionInteger( this.value.getNumerator(), this.value.getDenominator() );
+		return new RationalBigInteger( this.value.getNumerator(), this.value.getDenominator() );
 	}
 	
 	@Override
 	public boolean equals( double num2 ) {
-		return equals( new FractionInteger( num2 ) );
+		return this.doubleValue() - num2 <= RealDoublePrecision.createEpsilon().doubleValue();
 	}
 
-	public boolean equals( FractionInteger num2 ) {
+	public boolean equals( RationalBigInteger num2 ) {
 		if( this.value.compareTo( num2.value ) == 0 ) {
 			return true;
 		} else {
-			return false;
+			return equals( num2.doubleValue() );
 		}
 	}
 
 	@Override
 	public boolean equals( Object obj ) {
 		if( obj == null 
-				|| !( obj instanceof FractionInteger ) ) {
+				|| !( obj instanceof RationalBigInteger ) ) {
 			return false;
 		} else {
-			return equals( ((FractionInteger) obj) );
+			return equals( ((RationalBigInteger) obj) );
 		}
 	}
 	

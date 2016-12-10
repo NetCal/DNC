@@ -654,7 +654,7 @@ public class Curve {
 	 * @return <code>true</code> if the IP is a real discontinuity, <code>false</code> if not.
 	 */
 	public boolean isRealDiscontinuity( int i ) {
-		return ( isDiscontinuity(i) && ( NumUtils.abs( NumUtils.sub( segments[i+1].y, segments[i].y ) ) ).ge( NumFactory.getEpsilon() ) );
+		return ( isDiscontinuity(i) && ( NumUtils.abs( NumUtils.sub( segments[i+1].y, segments[i].y ) ) ).geq( NumFactory.getEpsilon() ) );
 	}
 
 	/**
@@ -680,7 +680,7 @@ public class Curve {
 				&& segments[0].y.equals( NumFactory.getZero() )
 				&& segments[0].grad.equals( NumFactory.getZero() )
 				&& !segments[0].leftopen
-				&& segments[1].x.ge( NumFactory.getZero() )
+				&& segments[1].x.geq( NumFactory.getZero() )
 				&& segments[1].y.equals( NumFactory.getPositiveInfinity() )
 				&& segments[1].grad.equals( NumFactory.getZero() )
 				&& segments[1].leftopen);
@@ -883,7 +883,7 @@ public class Curve {
 					return i;
 				}
 			} else {
-				if ( segments[i].x.le( x ) ) {
+				if ( segments[i].x.leq( x ) ) {
 					return i;
 				}
 			}
@@ -953,7 +953,7 @@ public class Curve {
 	 */
 	public int getSegmentLimitRight( Num x ) {
 		for (int i = segments.length - 1; i >= 0; i--) {
-			if ( segments[i].x.le( x ) ) {
+			if ( segments[i].x.leq( x ) ) {
 				return i;
 			}
 		}
@@ -1006,7 +1006,7 @@ public class Curve {
 		}
 		for (int i = 0; i < segments.length; i++) {
 			if (i < segments.length-1) {
-				if ( segments[i+1].y.ge( y ) ) {
+				if ( segments[i+1].y.geq( y ) ) {
 					return i;
 				}
 			} else {
@@ -1335,7 +1335,7 @@ public class Curve {
 				y0 = NumFactory.createZero();
 			}
 			if ( y0.greater( NumFactory.getZero() )
-					|| ( y0.ge( NumFactory.getZero() ) && segments[i].grad.greater( NumFactory.getZero() ) )
+					|| ( y0.geq( NumFactory.getZero() ) && segments[i].grad.greater( NumFactory.getZero() ) )
 				) {
 				return segments[i].x;
 			}
