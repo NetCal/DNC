@@ -96,28 +96,28 @@ public class NumUtils {
 			return new NaN();
 		}
 		if( num1 instanceof PositiveInfinity ) {
-			if ( num2.less( NumFactory.getZero() ) || num2 instanceof NegativeInfinity ) {
+			if ( num2.lessZero() || num2 instanceof NegativeInfinity ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
 		if( num2 instanceof PositiveInfinity ) {
-			if ( num1.less( NumFactory.getZero() ) || num1 instanceof NegativeInfinity ) {
+			if ( num1.lessZero() || num1 instanceof NegativeInfinity ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
 		if( num1 instanceof NegativeInfinity ) {
-			if ( num2.less( NumFactory.getZero() ) || num2 instanceof NegativeInfinity ) {
+			if ( num2.lessZero() || num2 instanceof NegativeInfinity ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
 			}
 		}
 		if( num2 instanceof NegativeInfinity ) {
-			if ( num1.less( NumFactory.getZero() ) || num1 instanceof NegativeInfinity ) {
+			if ( num1.lessZero() || num1 instanceof NegativeInfinity ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
@@ -147,14 +147,14 @@ public class NumUtils {
 			return new NaN();
 		}
 		if( num1 instanceof PositiveInfinity ) { // positive infinity divided by some finite value
-			if( num2.less( NumFactory.getZero() ) ) {
+			if( num2.lessZero() ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
 		if( num1 instanceof NegativeInfinity ) { // negative infinity divided by some finite value 
-			if( num2.less( NumFactory.getZero() ) ) {
+			if( num2.lessZero() ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();

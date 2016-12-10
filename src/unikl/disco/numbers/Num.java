@@ -39,20 +39,18 @@ public interface Num {
 	public boolean isZero();
 
 	public boolean equals( double obj );
-	// TODO
-//	public boolean equalsZero();
 
 	public boolean greater( Num num2 );
-//	public boolean greater0();
+	public boolean greaterZero();
 
 	public boolean geq( Num num2 );
-//	public boolean geqZero();
+	public boolean geqZero();
 
 	public boolean less( Num num2 );
-//	public boolean lessZero();
+	public boolean lessZero();
 
 	public boolean leq( Num num2 );
-//	public boolean leqZero();
+	public boolean leqZero();
 	
 	public double doubleValue();
 

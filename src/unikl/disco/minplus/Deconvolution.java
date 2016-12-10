@@ -200,8 +200,8 @@ public class Deconvolution {
 			y_beta = curve_2.f( x_inflect_alpha );
 			results_cand_burst = NumUtils.sub( y_alpha, y_beta );
 			
-			if( x_inflect_alpha.equals( NumFactory.getZero() ) // The inflection point is in the origin and thus the candidate is a null curve.
-					|| results_cand_burst.less( NumFactory.getZero() ) ) { // At the inflection point, the service curve is larger than the arrival curve.
+			if( x_inflect_alpha.isZero() // The inflection point is in the origin and thus the candidate is a null curve.
+					|| results_cand_burst.lessZero() ) { // At the inflection point, the service curve is larger than the arrival curve.
 					continue;
 			}
 			

@@ -280,7 +280,7 @@ public class Convolution {
 	}
 	
 	public static Set<ArrivalCurve> convolve_ACs_EGamma( Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve ) throws Exception {
-		if( extra_gamma_curve.getLatency().greater( NumFactory.getZero() ) ) {
+		if( extra_gamma_curve.getLatency().greaterZero() ) {
 			throw new Exception( "Cannot convolve with an extra gamma curve with latency" );
 		}
 		

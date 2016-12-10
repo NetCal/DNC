@@ -46,7 +46,15 @@ public final class PositiveInfinity implements Num {
 		return true;
 	}
 
+	public boolean greaterZero() {
+		return true;
+	}
+
 	public boolean geq( Num num2 ) {
+		return true;
+	}
+
+	public boolean geqZero() {
 		return true;
 	}
 
@@ -54,7 +62,15 @@ public final class PositiveInfinity implements Num {
 		return false;
 	}
 
+	public boolean lessZero() {
+		return false;
+	}
+
 	public boolean leq( Num num2 ) {
+		return false;
+	}
+
+	public boolean leqZero() {
 		return false;
 	}
 	

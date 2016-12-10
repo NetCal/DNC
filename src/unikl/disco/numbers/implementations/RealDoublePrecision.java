@@ -36,9 +36,10 @@ import unikl.disco.numbers.Num;
  *
  */
 public class RealDoublePrecision implements Num {
-	private double value = 0.0;
+	private double value;
 	
 	private static final double EPSILON = Double.parseDouble("5E-10");
+	private static boolean comparison_with_epsilon = false;
 	
 	@SuppressWarnings("unused")
 	private RealDoublePrecision() {}
@@ -57,10 +58,6 @@ public class RealDoublePrecision implements Num {
 	
 	public RealDoublePrecision( RealDoublePrecision num ) {
 		value = num.value;
-	}
-	
-	public boolean isZero() {
-		return value == 0.0;
 	}
 	
 	public static Num createEpsilon() {
@@ -107,21 +104,85 @@ public class RealDoublePrecision implements Num {
 	public static Num negate( RealDoublePrecision num ) {
 	    return new RealDoublePrecision( num.value * -1 );
 	}
+	
+	public boolean isZero() {
+		if( comparison_with_epsilon ) {
+			return ( value <= EPSILON ) && ( value >= -EPSILON );
+		} else {
+			return value == 0.0;
+		}
+	}
 
 	public boolean greater( Num num2 ) {
-		return value > num2.doubleValue();
+		float num2float = new Float( num2.doubleValue() ).floatValue();
+		
+		if( comparison_with_epsilon ) {
+			return value > ( num2float + EPSILON );
+		} else {
+			return value > num2float;
+		}
+	}
+
+	public boolean greaterZero() {
+		if( comparison_with_epsilon ) {
+			return value > EPSILON;
+		} else {
+			return value > 0.0;
+		}
 	}
 
 	public boolean geq( Num num2 ) {
-		return value >= num2.doubleValue();
+		float num2float = new Float( num2.doubleValue() ).floatValue();
+		
+		if( comparison_with_epsilon ) {
+			return value >= ( num2float + EPSILON );
+		} else {
+			return value >= num2float;
+		}
+	}
+
+	public boolean geqZero() {
+		if( comparison_with_epsilon ) {
+			return value >= EPSILON;
+		} else {
+			return value >= 0.0;
+		}
 	}
 
 	public boolean less( Num num2 ) {
-		return value < num2.doubleValue();
+		float num2float = new Float( num2.doubleValue() ).floatValue();
+		
+		if( comparison_with_epsilon ) {
+			return value < ( num2float - EPSILON );
+		} else {
+			return value < num2float;
+		}
+	}
+
+	public boolean lessZero() {
+		if( comparison_with_epsilon ) {
+			return value < -EPSILON;
+		} else {
+			return value < 0.0;
+		}
 	}
 
 	public boolean leq( Num num2 ) {
-		return value <= num2.doubleValue();
+		float num2float = new Float( num2.doubleValue() ).floatValue();
+		
+		if( comparison_with_epsilon ) {
+			return value <= ( num2float - EPSILON );
+		} else {
+			return value <= num2float;
+		}
+	}
+
+	public boolean leqZero() {
+		if( comparison_with_epsilon ) {
+			return value <= -EPSILON;
+		} else {
+			return value <= 0.0;
+		}
 	}
 	
 	@Override

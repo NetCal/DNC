@@ -367,7 +367,7 @@ public class PmooAnalysis extends Analysis {
 
 			// Compute left-over rate; update min
 			Num Ri = NumUtils.sub( current_rl.getSustainedRate(), sum_r );
-			if ( Ri.leq( NumFactory.getZero() ) )
+			if ( Ri.leqZero() )
 			{
 				return ServiceCurve.createNullService();
 			}

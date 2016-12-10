@@ -680,7 +680,7 @@ public class Curve {
 				&& segments[0].y.isZero()
 				&& segments[0].grad.isZero()
 				&& !segments[0].leftopen
-				&& segments[1].x.geq( NumFactory.getZero() )
+				&& segments[1].x.geqZero()
 				&& segments[1].y.equals( NumFactory.getPositiveInfinity() )
 				&& segments[1].grad.isZero()
 				&& segments[1].leftopen);
@@ -1011,7 +1011,7 @@ public class Curve {
 					return i;
 				}
 			} else {
-				if ( segments[i].grad.greater( NumFactory.getZero() ) ) {
+				if ( segments[i].grad.greaterZero() ) {
 					return i;
 				}
 			}
@@ -1054,7 +1054,7 @@ public class Curve {
 				return NumFactory.createPositiveInfinity();
 			}
 		}
-		if ( !segments[i].grad.equals( NumFactory.getZero() ) ) {
+		if ( !segments[i].grad.isZero() ) {
 			return NumUtils.add( segments[i].x, NumUtils.div( NumUtils.sub( y, segments[i].y ), segments[i].grad ) );
 		} else {
 			return segments[i].x;
@@ -1083,7 +1083,7 @@ public class Curve {
 	public boolean isWideSenseIncreasing() {
 		Num y = NumFactory.getNegativeInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
 		for (int i = 0; i < segments.length; i++) {
-			if ( segments[i].y.less( y ) || segments[i].grad.less( NumFactory.getZero() ) ) {
+			if ( segments[i].y.less( y ) || segments[i].grad.lessZero() ) {
 				return false;
 			}
 			y = segments[i].y;
@@ -1278,10 +1278,10 @@ public class Curve {
 
 		// Remove all segment(s) with y0==0.0 and grad==0.0
 		while(result.segments.length > 0) {
-			if ( result.segments[0].y.greater( NumFactory.getZero() ) || result.segments[0].grad.greater( NumFactory.getZero() ) ) {
+			if ( result.segments[0].y.greaterZero() || result.segments[0].grad.greaterZero() ) {
 				break;
 			}
-			if ( curve.getSegment(0).y.less( NumFactory.getZero() ) || curve.getSegment(0).grad.less( NumFactory.getZero() ) ) {
+			if ( curve.getSegment(0).y.lessZero() || curve.getSegment(0).grad.lessZero() ) {
 				throw new RuntimeException("Should have avoided neg. gradients elsewhere...");
 			}
 			result.removeSegment(0);
@@ -1327,20 +1327,20 @@ public class Curve {
 	 * @return the latency of this curve.
 	 */
 	public Num getLatency() {
-		if ( segments[0].y.greater( NumFactory.getZero() ) ) {
+		if ( segments[0].y.greaterZero() ) {
 			return NumFactory.createZero();
 		}
 		for (int i = 0; i < segments.length; i++) {
 			Num y0 = segments[i].y;
-			if (y0.less( NumFactory.getZero() ) && y0.greater( NumUtils.negate( NumFactory.getEpsilon() ) ) ) {
+			if ( y0.lessZero() && y0.greater( NumUtils.negate( NumFactory.getEpsilon() ) ) ) {
 				y0 = NumFactory.createZero();
 			}
-			if ( y0.greater( NumFactory.getZero() )
-					|| ( y0.geq( NumFactory.getZero() ) && segments[i].grad.greater( NumFactory.getZero() ) )
+			if ( y0.greaterZero()
+					|| ( y0.geqZero() && segments[i].grad.greaterZero() )
 				) {
 				return segments[i].x;
 			}
-			if (y0.less( NumFactory.getZero() ) || segments[i].grad.less( NumFactory.getZero() ) ) {
+			if ( y0.lessZero() || segments[i].grad.lessZero() ) {
 				throw new RuntimeException("Should have avoided neg. gradients elsewhere...");
 			}
 		}
@@ -1382,7 +1382,7 @@ public class Curve {
 					break;
 				}
 				
-				if( x_int_tmp.greater( NumFactory.getZero() ) ){
+				if( x_int_tmp.greaterZero() ){
 					if( !curve1_last ){
 						if( !curve2_last ){
 							if( x_int_tmp.less( curve1.segments[i+1].x )
@@ -1597,10 +1597,10 @@ public class Curve {
 
 		LinearSegment s;
 		for ( int i = 0; i < curve_copy.getSegmentCount(); i++ ) {
-			if ( curve_copy.getSegment( i ).y.greater( NumFactory.getZero() ) ) {
+			if ( curve_copy.getSegment( i ).y.greaterZero() ) {
 				result.addSegment( curve_copy.getSegment( i ) );
 
-				if ( curve_copy.getSegment(i).grad.less( NumFactory.getZero() ) ) {
+				if ( curve_copy.getSegment(i).grad.lessZero() ) {
 					Num x_cross = curve_copy.getSegment( i ).getXIntersectionWith( LinearSegment.getXAxis() );
 					if ( i+1 >= curve_copy.getSegmentCount() || x_cross.less( curve_copy.getSegment( i+1 ).x ) ) {
 						s = LinearSegment.createHorizontalLine( 0.0 );
@@ -1614,7 +1614,7 @@ public class Curve {
 				s.leftopen = curve_copy.getSegment( i ).leftopen;
 				result.addSegment( s );
 
-				if ( curve_copy.getSegment(i).grad.greater( NumFactory.getZero() ) ) {
+				if ( curve_copy.getSegment(i).grad.greaterZero() ) {
 					Num x_cross = curve_copy.getSegment( i ).getXIntersectionWith( LinearSegment.getXAxis() );
 					if ( i+1 >= curve_copy.getSegmentCount() || x_cross.less( curve_copy.getSegment(i+1).x ) ) {
 						s = LinearSegment.createHorizontalLine( 0.0 );

@@ -46,7 +46,15 @@ public final class NaN implements Num {
 		return false;
 	}
 
+	public boolean greaterZero() {
+		return false;
+	}
+
 	public boolean geq( Num num2 ) {
+		return false;
+	}
+
+	public boolean geqZero() {
 		return false;
 	}
 
@@ -54,7 +62,15 @@ public final class NaN implements Num {
 		return false;
 	}
 
+	public boolean lessZero() {
+		return false;
+	}
+
 	public boolean leq( Num num2 ) {
+		return false;
+	}
+
+	public boolean leqZero() {
 		return false;
 	}
 	

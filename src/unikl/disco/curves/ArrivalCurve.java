@@ -76,7 +76,7 @@ public class ArrivalCurve extends Curve {
 	}
 
 	private void makeArrivalCurve() {
-		if ( getSegment(0).y.greater( NumFactory.getZero() ) ) {
+		if ( getSegment(0).y.greaterZero() ) {
 			LinearSegment[] segments_new = new LinearSegment[segments.length+1];
 			segments_new[0] = LinearSegment.createNullSegment();
 			

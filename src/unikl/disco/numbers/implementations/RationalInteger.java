@@ -47,10 +47,11 @@ import unikl.disco.numbers.values.PositiveInfinity;
  *
  */
 public class RationalInteger implements Num {
-	private Fraction value = new Fraction( 0.0 );
+	private Fraction value;
 	
 	// Unfortunately you cannot give the constructor the double value 0.0000001
-	private static final Fraction EPSILON = new Fraction( 1, 1000000 ); 
+	private static final Fraction EPSILON = new Fraction( 1, 1000000 );
+	private static final Fraction ZERO_FRACTION = new Fraction( 0 );
 	
 	private RationalInteger(){}
 	
@@ -72,10 +73,6 @@ public class RationalInteger implements Num {
 	
 	private RationalInteger( Fraction frac ) {
 		value = new Fraction( frac.getNumerator(), frac.getDenominator() );
-	}
-	
-	public boolean isZero() {
-		return value.getNumerator() == 0;
 	}
 	
 	public static RationalInteger createZero() {
@@ -138,6 +135,10 @@ public class RationalInteger implements Num {
 	public static RationalInteger negate( RationalInteger num ) {
     	return new RationalInteger( num.value.negate() );
 	}
+	
+	public boolean isZero() {
+		return value.getNumerator() == 0;
+	}
 
 	public boolean greater( Num num2 ) {
 		if( num2 instanceof NaN ){
@@ -151,6 +152,14 @@ public class RationalInteger implements Num {
 		}
 		
 		if( this.value.compareTo( ((RationalInteger)num2).value ) > 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean greaterZero() {
+		if( this.value.compareTo( ZERO_FRACTION ) > 0 ) {
 			return true;
 		} else {
 			return false;
@@ -175,6 +184,14 @@ public class RationalInteger implements Num {
 		}
 	}
 
+	public boolean geqZero() {
+		if( this.value.compareTo( ZERO_FRACTION ) >= 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean less( Num num2 ) {
 		if( num2 instanceof NaN ){
 			return false;
@@ -193,6 +210,14 @@ public class RationalInteger implements Num {
 		}
 	}
 
+	public boolean lessZero() {
+		if( this.value.compareTo( ZERO_FRACTION ) < 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean leq( Num num2 ) {
 		if( num2 instanceof NaN ){
 			return false;
@@ -205,6 +230,14 @@ public class RationalInteger implements Num {
 		}
 		
 		if( this.value.compareTo( ((RationalInteger)num2).value ) <= 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean leqZero() {
+		if( this.value.compareTo( ZERO_FRACTION ) <= 0 ) {
 			return true;
 		} else {
 			return false;

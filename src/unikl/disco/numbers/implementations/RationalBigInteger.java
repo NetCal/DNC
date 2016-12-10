@@ -53,6 +53,7 @@ public class RationalBigInteger implements Num {
 	
 	// Unfortunately you cannot give the constructor the double value 0.0000001
 	private static final BigFraction EPSILON = new BigFraction( 1, 1000000 ); 
+	private static final BigFraction ZERO_BIGFRACTION = new BigFraction( 0 );
 	
 	private RationalBigInteger(){}
 	
@@ -78,10 +79,6 @@ public class RationalBigInteger implements Num {
 	
 	private RationalBigInteger( BigFraction frac ) {
 		value = new BigFraction( frac.getNumerator(), frac.getDenominator() );
-	}
-	
-	public boolean isZero() {
-		return value.getNumerator().intValue() == 0;
 	}
 	
 	public static RationalBigInteger createZero() {
@@ -144,6 +141,10 @@ public class RationalBigInteger implements Num {
 	public static RationalBigInteger negate( RationalBigInteger num ) {
     	return new RationalBigInteger( num.value.negate() );
 	}
+	
+	public boolean isZero() {
+		return value.getNumerator().intValue() == 0;
+	}
 
 	public boolean greater( Num num2 ) {
 		if( num2 instanceof NaN ){
@@ -157,6 +158,14 @@ public class RationalBigInteger implements Num {
 		}
 		
 		if( this.value.compareTo( ((RationalBigInteger)num2).value ) > 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean greaterZero() {
+		if( this.value.compareTo( ZERO_BIGFRACTION ) > 0 ) {
 			return true;
 		} else {
 			return false;
@@ -181,6 +190,14 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
+	public boolean geqZero() {
+		if( this.value.compareTo( ZERO_BIGFRACTION ) >= 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean less( Num num2 ) {
 		if( num2 instanceof NaN ){
 			return false;
@@ -199,6 +216,14 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
+	public boolean lessZero() {
+		if( this.value.compareTo( ZERO_BIGFRACTION ) < 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean leq( Num num2 ) {
 		if( num2 instanceof NaN ){
 			return false;
@@ -211,6 +236,14 @@ public class RationalBigInteger implements Num {
 		}
 		
 		if( this.value.compareTo( ((RationalBigInteger)num2).value ) <= 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean leqZero() {
+		if( this.value.compareTo( ZERO_BIGFRACTION ) <= 0 ) {
 			return true;
 		} else {
 			return false;
