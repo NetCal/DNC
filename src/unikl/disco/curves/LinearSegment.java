@@ -1,10 +1,10 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.0 "Centaur".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2012 - 2016 Steffen Bondorf
+ * Copyright (C) 2012 - 2017 Steffen Bondorf
  *
- * disco | Distributed Computer Systems Lab
+ * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
  * http://disco.cs.uni-kl.de
