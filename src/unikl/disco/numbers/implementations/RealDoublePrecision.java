@@ -59,6 +59,10 @@ public class RealDoublePrecision implements Num {
 		value = num.value;
 	}
 	
+	public boolean isZero() {
+		return value == 0.0;
+	}
+	
 	public static Num createEpsilon() {
         return new RealDoublePrecision( EPSILON );
 	}

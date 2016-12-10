@@ -38,15 +38,7 @@ import unikl.disco.numbers.Num;
 public final class NaN implements Num {
 	public NaN() {}
 	
-	public boolean isNaN() {
-		return true;
-	}
-	
-	public boolean isPosInfty() {
-		return false;
-	}
-	
-	public boolean isNegInfty() {
+	public boolean isZero() {
 		return false;
 	}
 

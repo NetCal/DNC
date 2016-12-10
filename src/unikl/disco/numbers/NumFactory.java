@@ -31,15 +31,14 @@ public class NumFactory {
 	}
 	
 	public static Num getPositiveInfinity() {
-//		return createPositiveInfinity();
 		return POSITIVE_INFINITY;
 	}
 
 	public static Num createPositiveInfinity() {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return new RealDoublePrecision( Double.POSITIVE_INFINITY );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return new RealSinglePrecision( Float.POSITIVE_INFINITY );
 		}
 		
@@ -48,15 +47,14 @@ public class NumFactory {
 	}
 	
 	public static Num getNegativeInfinity() {
-//		return createNegativeInfinity();
 		return NEGATIVE_INFINITY;
 	}
 	
 	public static Num createNegativeInfinity() {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return new RealDoublePrecision( Double.NEGATIVE_INFINITY );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return new RealSinglePrecision( Float.NEGATIVE_INFINITY );
 		}
 		
@@ -65,15 +63,14 @@ public class NumFactory {
 	}
 
 	public static Num getNaN() {
-//		return createNaN();
 		return NaN;
 	}
 	
 	public static Num createNaN() {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return new RealDoublePrecision( Double.NaN );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return new RealSinglePrecision( Float.NaN );
 		}
 		
@@ -82,48 +79,46 @@ public class NumFactory {
 	}
 
 	public static Num getZero() {
-//		return createZero();
 		return ZERO;
 	}
 	
 	public static Num createZero() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 				return new RationalInteger( 0 );
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return new RationalBigInteger( 0 );
-			case SINGLE_PRECISION:
+			case REAL_SINGLE_PRECISION:
 				return new RealSinglePrecision( 0 );
-			case DOUBLE_PRECISION:
+			case REAL_DOUBLE_PRECISION:
 			default:
 				return new RealDoublePrecision( 0 );
 		}
 	}
 	
 	public static Num getEpsilon() {
-//		return createEpsilon();
 		return EPSILON;
 	}
 	
 	public static Num createEpsilon() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 				return RationalInteger.createEpsilon();
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.createEpsilon();
-			case SINGLE_PRECISION:
+			case REAL_SINGLE_PRECISION:
 				return RealSinglePrecision.createEpsilon();
-			case DOUBLE_PRECISION:
+			case REAL_DOUBLE_PRECISION:
 			default:
 				return RealDoublePrecision.createEpsilon();
 		}
 	}
 	
 	public static Num createNum( double value ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return new RealDoublePrecision( value );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return new RealSinglePrecision( value );
 		}
 		
@@ -139,9 +134,9 @@ public class NumFactory {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return new RationalBigInteger( value );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return new RationalInteger( value );
 		 }
@@ -153,13 +148,13 @@ public class NumFactory {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 				return new RationalInteger( num, den );
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return new RationalBigInteger( num, den );
-			case SINGLE_PRECISION:
+			case REAL_SINGLE_PRECISION:
 				return new RealSinglePrecision( num, den );
-			case DOUBLE_PRECISION:
+			case REAL_DOUBLE_PRECISION:
 			default:
 				return new RealDoublePrecision( num, den );
 		 }
@@ -185,7 +180,7 @@ public class NumFactory {
 		}
 		
 		try {
-			// Either an integer of something strange
+			// either an integer of something strange
 			if ( !fraction_indicator && !double_based ) {
 				return createNum( Integer.parseInt( num_str ) );
 			}

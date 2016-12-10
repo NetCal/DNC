@@ -59,6 +59,10 @@ public class RealSinglePrecision implements Num {
 		value = num.value;
 	}
 	
+	public boolean isZero() {
+		return value == 0.0f;
+	}
+	
 	public static Num createEpsilon() {
         return new RealSinglePrecision( EPSILON );
 	}

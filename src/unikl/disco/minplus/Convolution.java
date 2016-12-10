@@ -196,17 +196,17 @@ public class Convolution {
 			}
 		}
 		
-		if ( service_curve_1.isBurstDelay() && service_curve_1.getSegment(1).getX().equals( NumFactory.getZero() ) ) {
+		if ( service_curve_1.isBurstDelay() && service_curve_1.getSegment(1).getX().isZero() ) {
 			return service_curve_2.copy();
 		}
-		if ( service_curve_2.isBurstDelay() && service_curve_2.getSegment(1).getX().equals( NumFactory.getZero() ) ) {
+		if ( service_curve_2.isBurstDelay() && service_curve_2.getSegment(1).getX().isZero() ) {
 			return service_curve_1.copy();
 		}
 
 		ServiceCurve result = new ServiceCurve();
 		
 		Num x = NumFactory.createZero();
-		Num y = NumUtils.add( service_curve_1.f( NumFactory.getZero() ), service_curve_2.f( NumFactory.getZero() ) );
+		Num y = NumFactory.createZero(); // Functions pass though the origin
 		Num grad = NumFactory.createZero();
 		LinearSegment s = new LinearSegment( x, y, grad, false );
 		result.addSegment(s);

@@ -146,10 +146,10 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		Set<FunctionalTestConfig> test_configurations = new HashSet<FunctionalTestConfig>();
 		
 		Set<NumClass> nums =  new HashSet<NumClass>();
-		nums.add( NumClass.DOUBLE_PRECISION );
-		nums.add( NumClass.SINGLE_PRECISION );
-		nums.add( NumClass.FRACTION_INTEGER );
-		nums.add( NumClass.FRACTION_BIG_INTEGER );
+		nums.add( NumClass.REAL_DOUBLE_PRECISION );
+		nums.add( NumClass.REAL_SINGLE_PRECISION );
+		nums.add( NumClass.RATIONAL_INTEGER );
+//		nums.add( NumClass.RATIONAL_BIGINTEGER );
 		
 		
 		Set<ArrivalBoundMethod> single_1 = new HashSet<ArrivalBoundMethod>();

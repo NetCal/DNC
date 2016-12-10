@@ -36,8 +36,7 @@ package unikl.disco.numbers;
  *
  */
 public interface Num {
-	// TODO
-//	public boolean isZero();
+	public boolean isZero();
 
 	public boolean equals( double obj );
 	// TODO

@@ -38,16 +38,8 @@ import unikl.disco.numbers.Num;
 public final class NegativeInfinity implements Num {
 	public NegativeInfinity() {}
 	
-	public boolean isNaN() {
+	public boolean isZero() {
 		return false;
-	}
-	
-	public boolean isPosInfty() {
-		return false;
-	}
-	
-	public boolean isNegInfty() {
-		return true;
 	}
 	
 	public boolean greater( Num num2 ) {

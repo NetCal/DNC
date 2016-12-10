@@ -110,7 +110,7 @@ public class Deconvolution {
 		}
 		if( service_curve.equals( ServiceCurve.createNullService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
-				|| ( service_curve.getSustainedRate().equals( NumFactory.getZero() ) && service_curve.getSegment( service_curve.getSegmentCount() - 1 ).getY().equals( NumFactory.getZero() ) ) ) {
+				|| ( service_curve.getSustainedRate().isZero() && service_curve.getSegment( service_curve.getSegmentCount() - 1 ).getY().isZero() ) ) {
 			return ArrivalCurve.createNullArrival();
 		}
 		if ( tb_rl_optimized ) {
@@ -126,7 +126,7 @@ public class Deconvolution {
 		}
 		if( service_curve.equals( ServiceCurve.createNullService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
-				|| ( service_curve.getSustainedRate().equals( NumFactory.getZero() ) && service_curve.getSegment( 1 ).getY().equals( NumFactory.getZero() ) ) ) {
+				|| ( service_curve.getSustainedRate().isZero() && service_curve.getSegment( 1 ).getY().isZero() ) ) {
 			return ArrivalCurve.createNullArrival();
 		}
 		
@@ -152,7 +152,7 @@ public class Deconvolution {
 		}
 		if( curve_2.equals( ServiceCurve.createNullService() )
 				|| curve_2.getLatency().equals( NumFactory.getPositiveInfinity() )
-				|| ( curve_2.getSustainedRate().equals( NumFactory.getZero() ) && curve_2.getSegment( 1 ).getY().equals( NumFactory.getZero() ) ) ) {
+				|| ( curve_2.getSustainedRate().isZero() && curve_2.getSegment( 1 ).getY().isZero() ) ) {
 			return ArrivalCurve.createNullArrival();
 		}
 		if ( CalculatorConfig.DECONVOLUTION_CHECKS ) {

@@ -38,15 +38,7 @@ import unikl.disco.numbers.Num;
 public final class PositiveInfinity implements Num {
 	public PositiveInfinity() {}
 	
-	public boolean isNaN() {
-		return false;
-	}
-	
-	public boolean isPosInfty() {
-		return true;
-	}
-	
-	public boolean isNegInfty() {
+	public boolean isZero() {
 		return false;
 	}
 

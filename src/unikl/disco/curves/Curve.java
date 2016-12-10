@@ -245,7 +245,7 @@ public class Curve {
 	 */
 	// Do not move to ServiceCurve as MaxServiceCurve can also be a token bucket.
 	protected void initializeRateLatency( Num rate, Num latency ) {
-		if ( latency.equals( NumFactory.getZero() ) ) {
+		if ( latency.isZero() ) {
 			createNullSegmentsCurve( 1 );
 
 			getSegment(0).x        = NumFactory.createZero();
@@ -343,7 +343,7 @@ public class Curve {
 	 */
 	private static Curve createRateLatency( Num rate, Num latency ) {
 		Curve c;
-		if ( latency.equals( NumFactory.getZero() ) ) {
+		if ( latency.isZero() ) {
 			c = new Curve(1);
 
 			c.getSegment(0).x        = NumFactory.createZero();
@@ -676,13 +676,13 @@ public class Curve {
 	 */
 	public boolean isBurstDelay() {
 		return (segments.length == 2
-				&& segments[0].x.equals( NumFactory.getZero() )
-				&& segments[0].y.equals( NumFactory.getZero() )
-				&& segments[0].grad.equals( NumFactory.getZero() )
+				&& segments[0].x.isZero()
+				&& segments[0].y.isZero()
+				&& segments[0].grad.isZero()
 				&& !segments[0].leftopen
 				&& segments[1].x.geq( NumFactory.getZero() )
 				&& segments[1].y.equals( NumFactory.getPositiveInfinity() )
-				&& segments[1].grad.equals( NumFactory.getZero() )
+				&& segments[1].grad.isZero()
 				&& segments[1].leftopen);
 	}
 
@@ -854,10 +854,11 @@ public class Curve {
 		
 		// Remove rate of tb arrival curves' first segment
 		if ( segments.length > 1 
-				&& segments[0].x == NumFactory.getZero() 
-				&& segments[0].y != NumFactory.getZero()
-				&& segments[1].x == NumFactory.getZero() 
-				&& segments[1].y != NumFactory.getZero() ) {
+				&& segments[0].x.isZero() // == NumFactory.getZero() 
+				&& !segments[0].y.isZero() // != NumFactory.getZero()
+				&& segments[1].x.isZero() // == NumFactory.getZero() 
+				&& !segments[1].y.isZero() // != NumFactory.getZero() 
+				) {
 			segments[0].grad = NumFactory.createZero();
 		}
 		clearMetaInfo();
@@ -1046,7 +1047,7 @@ public class Curve {
 			return NumFactory.createNaN();
 		}
 		if (rightmost) {
-			while(i < segments.length && segments[i].grad.equals( NumFactory.getZero() ) ) {
+			while(i < segments.length && segments[i].grad.isZero() ) {
 				i++;
 			}
 			if (i >= segments.length) {
@@ -1185,7 +1186,7 @@ public class Curve {
 
 		for (int i = 0; i < segments.length; i++) {
 			// Skip the horizontal part at the beginning
-			if ( last_gradient.equals( NumFactory.getPositiveInfinity() ) && segments[i].grad.equals( NumFactory.getZero() ) ) {
+			if ( last_gradient.equals( NumFactory.getPositiveInfinity() ) && segments[i].grad.isZero() ) {
 				continue;
 			}
 
@@ -1218,7 +1219,7 @@ public class Curve {
 			return curve_copy;
 		}
 		
-		if ( !( ( curve_copy.getSegment(0).y ).equals( NumFactory.getZero() ) ) ) {
+		if ( !curve_copy.getSegment(0).y.isZero() ) {
 			throw new RuntimeException("Curve to shift right must pass through origin!");
 		}
 		

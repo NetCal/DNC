@@ -19,10 +19,10 @@ import unikl.disco.numbers.values.PositiveInfinity;
 
 public class NumUtils {
 	public static Num add( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.add( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.add( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
@@ -39,19 +39,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				 return RationalBigInteger.add( (RationalBigInteger)num1, (RationalBigInteger)num2 );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return RationalInteger.add( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num sub( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.sub( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.sub( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
@@ -74,19 +74,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.sub( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			default:
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 				return RationalInteger.sub( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num mult( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.mult( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.mult( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
@@ -123,19 +123,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.mult( (RationalBigInteger)num1, (RationalBigInteger)num2 );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return RationalInteger.mult( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num div( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.div( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.div( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 
@@ -162,13 +162,13 @@ public class NumUtils {
 		}
 
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 		        if ( ((RationalBigInteger)num2).isZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
 					return RationalBigInteger.div( (RationalBigInteger)num1, (RationalBigInteger)num2 );     		
 		       	}
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 		        if ( ((RationalInteger)num2).isZero() ) {
 		        	return new PositiveInfinity();
@@ -179,10 +179,10 @@ public class NumUtils {
 	}
 
 	public static Num abs( Num num ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.abs( (RealDoublePrecision)num );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.abs( (RealSinglePrecision)num );
 		}
 		
@@ -194,19 +194,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.abs( (RationalBigInteger)num );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return RationalInteger.abs( (RationalInteger)num );
 		}
 	}
 
 	public static Num diff( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.diff( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.diff( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
@@ -219,19 +219,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.diff( (RationalBigInteger)num1, (RationalBigInteger)num2 );
 			default:
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 				return RationalInteger.diff( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num max( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.max( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.max( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
@@ -249,19 +249,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.max( (RationalBigInteger)num1, (RationalBigInteger)num2 );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return RationalInteger.max( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num min( Num num1, Num num2 ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealDoublePrecision.min( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealSinglePrecision.min( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
 		}
 		
@@ -279,19 +279,19 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.min( (RationalBigInteger)num1, (RationalBigInteger)num2 );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return RationalInteger.min( (RationalInteger)num1, (RationalInteger)num2 );
 		}
 	}
 
 	public static Num negate( Num num ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.DOUBLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
 			return RealSinglePrecision.negate( (RealSinglePrecision)num );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.SINGLE_PRECISION ) {
+		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
 			return RealDoublePrecision.negate( (RealDoublePrecision)num );
 		}
 		
@@ -306,9 +306,9 @@ public class NumUtils {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
-			case FRACTION_BIG_INTEGER:
+			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.negate( (RationalBigInteger)num );
-			case FRACTION_INTEGER:
+			case RATIONAL_INTEGER:
 			default:
 				return RationalInteger.negate( (RationalInteger)num );
 		}
