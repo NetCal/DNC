@@ -1,7 +1,6 @@
 package unikl.disco.numbers;
 
 import unikl.disco.nc.CalculatorConfig;
-import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.numbers.implementations.RationalBigInteger;
 import unikl.disco.numbers.implementations.RealDoublePrecision;
 import unikl.disco.numbers.implementations.RationalInteger;
@@ -10,6 +9,7 @@ import unikl.disco.numbers.values.NaN;
 import unikl.disco.numbers.values.NegativeInfinity;
 import unikl.disco.numbers.values.PositiveInfinity;
 
+@SuppressWarnings("incomplete-switch")
 public class NumFactory {
 	private static Num POSITIVE_INFINITY = createPositiveInfinity();
 	private static Num NEGATIVE_INFINITY = createNegativeInfinity();
@@ -35,15 +35,18 @@ public class NumFactory {
 	}
 
 	public static Num createPositiveInfinity() {
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
-			return new RealDoublePrecision( Double.POSITIVE_INFINITY );
+		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return new RealDoublePrecision( Double.POSITIVE_INFINITY );
+			case REAL_SINGLE_PRECISION:
+				return new RealSinglePrecision( Float.POSITIVE_INFINITY );
+			// non IEEE 754 floating point data types
+			case RATIONAL_INTEGER:
+			case RATIONAL_BIGINTEGER:
+				return new PositiveInfinity();
+			default:
+				throw new RuntimeException( "Undefined number representation" );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
-			return new RealSinglePrecision( Float.POSITIVE_INFINITY );
-		}
-		
-		// non IEEE 754 floating point data types 
-		return new PositiveInfinity();
 	}
 	
 	public static Num getNegativeInfinity() {
@@ -51,15 +54,18 @@ public class NumFactory {
 	}
 	
 	public static Num createNegativeInfinity() {
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
-			return new RealDoublePrecision( Double.NEGATIVE_INFINITY );
+		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return new RealDoublePrecision( Double.NEGATIVE_INFINITY );
+			case REAL_SINGLE_PRECISION:
+				return new RealSinglePrecision( Float.NEGATIVE_INFINITY );
+			// non IEEE 754 floating point data types
+			case RATIONAL_INTEGER:
+			case RATIONAL_BIGINTEGER:
+				return new NegativeInfinity();
+			default:
+				throw new RuntimeException( "Undefined number representation" );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
-			return new RealSinglePrecision( Float.NEGATIVE_INFINITY );
-		}
-		
-		// non IEEE 754 floating point data types
-		return new NegativeInfinity();
 	}
 
 	public static Num getNaN() {
@@ -67,15 +73,18 @@ public class NumFactory {
 	}
 	
 	public static Num createNaN() {
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
-			return new RealDoublePrecision( Double.NaN );
+		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return new RealDoublePrecision( Double.NaN );
+			case REAL_SINGLE_PRECISION:
+				return new RealSinglePrecision( Float.NaN );
+			// non IEEE 754 floating point data types
+			case RATIONAL_INTEGER:
+			case RATIONAL_BIGINTEGER:
+				return new NaN();
+			default:
+				throw new RuntimeException( "Undefined number representation" );
 		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
-			return new RealSinglePrecision( Float.NaN );
-		}
-		
-		// non IEEE 754 floating point data types 
-		return new NaN();
 	}
 
 	public static Num getZero() {
@@ -84,15 +93,16 @@ public class NumFactory {
 	
 	public static Num createZero() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return new RealDoublePrecision( 0 );
+			case REAL_SINGLE_PRECISION:
+				return new RealSinglePrecision( 0 );
 			case RATIONAL_INTEGER:
 				return new RationalInteger( 0 );
 			case RATIONAL_BIGINTEGER:
 				return new RationalBigInteger( 0 );
-			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( 0 );
-			case REAL_DOUBLE_PRECISION:
 			default:
-				return new RealDoublePrecision( 0 );
+				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 	
@@ -102,25 +112,26 @@ public class NumFactory {
 	
 	public static Num createEpsilon() {
 		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return RealDoublePrecision.createEpsilon();
+			case REAL_SINGLE_PRECISION:
+				return RealSinglePrecision.createEpsilon();
 			case RATIONAL_INTEGER:
 				return RationalInteger.createEpsilon();
 			case RATIONAL_BIGINTEGER:
 				return RationalBigInteger.createEpsilon();
-			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.createEpsilon();
-			case REAL_DOUBLE_PRECISION:
 			default:
-				return RealDoublePrecision.createEpsilon();
+				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 	
 	public static Num createNum( double value ) {
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_DOUBLE_PRECISION ) {
-			return new RealDoublePrecision( value );
-		}
-		if( CalculatorConfig.NUM_CLASS == NumClass.REAL_SINGLE_PRECISION ) {
-			return new RealSinglePrecision( value );
-		}
+		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return new RealDoublePrecision( value );
+			case REAL_SINGLE_PRECISION:
+				return new RealSinglePrecision( value );
+		}	
 		
 		// non IEEE 754 floating point data types
 		if( value == Double.POSITIVE_INFINITY ) {
@@ -137,8 +148,9 @@ public class NumFactory {
 			case RATIONAL_BIGINTEGER:
 				return new RationalBigInteger( value );
 			case RATIONAL_INTEGER:
-			default:
 				return new RationalInteger( value );
+			default:
+				throw new RuntimeException( "Undefined number representation" );
 		 }
 	}
 	
@@ -148,15 +160,16 @@ public class NumFactory {
 		}
 		
 		switch ( CalculatorConfig.NUM_CLASS ) {
+			case REAL_DOUBLE_PRECISION:
+				return new RealDoublePrecision( num, den );
+			case REAL_SINGLE_PRECISION:
+				return new RealSinglePrecision( num, den );
 			case RATIONAL_INTEGER:
 				return new RationalInteger( num, den );
 			case RATIONAL_BIGINTEGER:
 				return new RationalBigInteger( num, den );
-			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( num, den );
-			case REAL_DOUBLE_PRECISION:
 			default:
-				return new RealDoublePrecision( num, den );
+				throw new RuntimeException( "Undefined number representation" );
 		 }
 	}
 	
