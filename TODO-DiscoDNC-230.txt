@@ -1,0 +1,6 @@
+* v2.2.7 and v2.2.8 changes (SB internally called DiscoDNC-2.3.0 atm)
+* \delta_T for PMOO left-over service curve
+* Fix RationalBigInteger tests —> bigger EPSILON
+* Rational numbers —> option to use EPSILON in comparisons as with reals
+* Rename incoming screenshot
+* Remove deprecated methods —> Does Philip use them?
