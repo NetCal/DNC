@@ -162,7 +162,7 @@ public class Curve {
 	 * @param y the y-intercept of the curve
 	 */
 	protected void initializeHorizontal( double y ) {
-		initializeHorizontal( NumFactory.createNum( y ) );
+		initializeHorizontal( NumFactory.create( y ) );
 	}
 	
 	/**
@@ -208,7 +208,7 @@ public class Curve {
 	 * @param burst the burstiness
 	 */
 	protected void initializeTokenBucket( double rate, double burst ) {
-		initializeTokenBucket( NumFactory.createNum( rate ), NumFactory.createNum( burst ) ) ;
+		initializeTokenBucket( NumFactory.create( rate ), NumFactory.create( burst ) ) ;
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class Curve {
 	 * @param latency the latency
 	 */
 	protected void initializeRateLatency( double rate, double latency ) {
-		initializeRateLatency( NumFactory.createNum( rate ), NumFactory.createNum( latency ) );
+		initializeRateLatency( NumFactory.create( rate ), NumFactory.create( latency ) );
 	}
 
 	/**
@@ -336,7 +336,7 @@ public class Curve {
 	 * @return a <code>Curve</code> instance
 	 */
 	public static Curve createTokenBucket( double rate, double burst ) {
-		return createTokenBucket( NumFactory.createNum( rate ), NumFactory.createNum( burst ) ) ;
+		return createTokenBucket( NumFactory.create( rate ), NumFactory.create( burst ) ) ;
 	}
 
 	/**

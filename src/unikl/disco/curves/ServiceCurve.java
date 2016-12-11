@@ -95,7 +95,7 @@ public class ServiceCurve extends Curve {
 	}
 
 	public static ServiceCurve createDelayedInfiniteBurst( double delay ) {
-		return createDelayedInfiniteBurst( NumFactory.createNum( delay ) );
+		return createDelayedInfiniteBurst( NumFactory.create( delay ) );
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class ServiceCurve extends Curve {
 	 * @return a <code>ServiceCurve</code> instance
 	 */
 	public static ServiceCurve createRateLatency( double rate, double latency ) {
-		return createRateLatency( NumFactory.createNum( rate ), NumFactory.createNum( latency ) );
+		return createRateLatency( NumFactory.create( rate ), NumFactory.create( latency ) );
 	}
 	
 	/**

@@ -71,9 +71,9 @@ public class LinearSegment{
 	}
 	
 	public LinearSegment( double x, double y, double grad, boolean leftopen ) {
-		this.x = NumFactory.createNum( x );
-		this.y = NumFactory.createNum( y );
-		this.grad = NumFactory.createNum( grad );
+		this.x = NumFactory.create( x );
+		this.y = NumFactory.create( y );
+		this.grad = NumFactory.create( grad );
 		this.leftopen = leftopen;
 	}
 	
@@ -120,9 +120,9 @@ public class LinearSegment{
 			throw new RuntimeException( "Invalid string representation of a linear segment." );
 		}
 		
-		x = NumFactory.createNum( x_y[0] );
-		y = NumFactory.createNum( x_y[1] );
-		grad = NumFactory.createNum( xy_r[1] );
+		x = NumFactory.create( x_y[0] );
+		y = NumFactory.create( x_y[1] );
+		grad = NumFactory.create( xy_r[1] );
 	}
 
 	public static LinearSegment createNullSegment() {
@@ -132,7 +132,7 @@ public class LinearSegment{
 	public static LinearSegment createHorizontalLine( double y ) {
 		LinearSegment segment = new LinearSegment();
 		segment.x = NumFactory.createZero();
-		segment.y = NumFactory.createNum( y );
+		segment.y = NumFactory.create( y );
 		segment.grad = NumFactory.createZero();
 		segment.leftopen = false;
 		return segment;

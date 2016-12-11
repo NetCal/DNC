@@ -152,7 +152,7 @@ public class NumFactory {
 		}
 	}
 	
-	public static Num createNum( double value ) {
+	public static Num create( double value ) {
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case REAL_DOUBLE_PRECISION:
 				return new RealDoublePrecision( value );
@@ -181,7 +181,7 @@ public class NumFactory {
 		 }
 	}
 	
-	public static Num createNum( int num, int den ) {
+	public static Num create( int num, int den ) {
 		if ( den == 0 ) { // division by integer 0 throws an arithmetic exception
 			throw new ArithmeticException( "/ by zero" );
 		}
@@ -200,7 +200,7 @@ public class NumFactory {
 		 }
 	}
 	
-	public static Num createNum( String num_str ) throws Exception {
+	public static Num create( String num_str ) throws Exception {
 		if( num_str.equals( "Infinity" ) ) {
 			return createPositiveInfinity();
 		}
@@ -222,7 +222,7 @@ public class NumFactory {
 		try {
 			// either an integer of something strange
 			if ( !fraction_indicator && !double_based ) {
-				return createNum( Integer.parseInt( num_str ) );
+				return create( Integer.parseInt( num_str ) );
 			}
 			
 			if ( fraction_indicator ) {
@@ -234,14 +234,14 @@ public class NumFactory {
 				
 				int den = Integer.parseInt( num_den[1] );
 				if( den != 0 ) {
-					return createNum( Integer.parseInt( num_den[0] ), den );
+					return create( Integer.parseInt( num_den[0] ), den );
 				} else {
 					return createNaN();
 				}
 			}
 			
 			if ( double_based ) {
-				return createNum( Double.parseDouble( num_str ) );
+				return create( Double.parseDouble( num_str ) );
 			}
 		} catch (Exception e) {
 			throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.NUM_CLASS.toString()

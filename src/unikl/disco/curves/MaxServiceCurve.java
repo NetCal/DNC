@@ -175,7 +175,7 @@ public class MaxServiceCurve extends Curve {
 	 * @return a <code>MaxServiceCurve</code> instance
 	 */
 	public static MaxServiceCurve createRateLatency( double rate, double latency ) {
-		return createRateLatency( NumFactory.createNum( rate ), NumFactory.createNum( latency ) );
+		return createRateLatency( NumFactory.create( rate ), NumFactory.create( latency ) );
 	}
 	
 	/**
