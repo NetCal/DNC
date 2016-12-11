@@ -46,13 +46,15 @@ public class Server {
 	 * A zero delay burst curve lets the influence of the maximum service curve vanish
 	 */
 	private MaxServiceCurve max_service_curve = MaxServiceCurve.createZeroDelayInfiniteBurst();
+	
 	private boolean max_service_curve_flag = false;
 	
 	/** Whether to use maximum service curves in output bound computation */
 	private boolean	use_gamma = false;
+	
 	/**
 	 * Whether to constrain the output bound further through convolution with
-	 * the maximum service curve
+	 * the maximum service curve's rate as the server cannot output data faster than this rate.
 	 */
 	private boolean	use_extra_gamma = false;
 	

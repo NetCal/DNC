@@ -66,6 +66,32 @@ public class LinearSegment{
 		leftopen = false;
 	}
 	
+	public LinearSegment( double x, double y, double grad ) {
+		new LinearSegment( x, y, grad, true );
+	}
+	
+	public LinearSegment( double x, double y, double grad, boolean leftopen ) {
+		this.x = NumFactory.createNum( x );
+		this.y = NumFactory.createNum( y );
+		this.grad = NumFactory.createNum( grad );
+		this.leftopen = leftopen;
+	}
+	
+	/**
+	 * A convenient constructor.
+	 * 
+	 * @param x The x-coordinate this segments starts at.
+	 * @param y The y-coordinate this segments starts at.
+	 * @param grad The segments gradient.
+	 * @param leftopen Set the segment to be left-open.
+	 */
+	public LinearSegment( Num x, Num y, Num grad, boolean leftopen ) {
+		this.x = x;
+		this.y = y;
+		this.grad = grad;
+		this.leftopen = leftopen;
+	}
+	
 	public LinearSegment( String segment_str ) throws Exception {
 		// Is this segment left-open?
 		leftopen = false;
@@ -114,21 +140,6 @@ public class LinearSegment{
 	
 	public static LinearSegment getXAxis() {
 		return createHorizontalLine( 0.0 );
-	}
-	
-	/**
-	 * A convenient constructor.
-	 * 
-	 * @param x The x-coordinate this segments starts at.
-	 * @param y The y-coordinate this segments starts at.
-	 * @param grad The segments gradient.
-	 * @param leftopen Set the segment to be left-open.
-	 */
-	public LinearSegment( Num x, Num y, Num grad, boolean leftopen ) {
-		this.x = x;
-		this.y = y;
-		this.grad = grad;
-		this.leftopen = leftopen;
 	}
 
 	public Num getX() {

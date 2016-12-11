@@ -95,10 +95,15 @@ public class Curve {
 	protected Curve( int segment_count ) {
 		createNullSegmentsCurve( segment_count );
 	}
-	
+
+	/**
+	 * Returns whether the current curve is a burst delay curve.
+	 * 
+	 * @return <code>true</code> if the curve is burst delay, <code>false</code> otherwise
+	 */
 	public boolean isDelayedInfiniteBurst() {
 		return is_delayed_infinite_burst;
-	}	
+	}
 	
 	private void createNullSegmentsCurve( int segment_count ) {
 		segments = new LinearSegment[segment_count];
@@ -667,23 +672,6 @@ public class Curve {
 	 */
 	public boolean isUnrealDiscontinuity( int i ) {
 		return ( isDiscontinuity(i) && ( NumUtils.abs( NumUtils.sub(segments[i+1].y, segments[i].y ) ) ).less( NumFactory.getEpsilon() ) );
-	}
-
-	/**
-	 * Returns whether the current curve is a burst delay curve.
-	 * 
-	 * @return <code>true</code> if the curve is burst delay, <code>false</code> otherwise
-	 */
-	public boolean isBurstDelay() {
-		return (segments.length == 2
-				&& segments[0].x.isZero()
-				&& segments[0].y.isZero()
-				&& segments[0].grad.isZero()
-				&& !segments[0].leftopen
-				&& segments[1].x.geqZero()
-				&& segments[1].y.equals( NumFactory.getPositiveInfinity() )
-				&& segments[1].grad.isZero()
-				&& segments[1].leftopen);
 	}
 
 	/**

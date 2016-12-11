@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
+import unikl.disco.numbers.NumFactory;
 
 /**
  * 
@@ -93,6 +94,10 @@ public class ServiceCurve extends Curve {
 		return sc_result;
 	}
 
+	public static ServiceCurve createDelayedInfiniteBurst( double delay ) {
+		return createDelayedInfiniteBurst( NumFactory.createNum( delay ) );
+	}
+	
 	/**
 	 * Creates a burst delay curve.
 	 * 
@@ -102,12 +107,20 @@ public class ServiceCurve extends Curve {
 	public static ServiceCurve createDelayedInfiniteBurst( Num delay ) {
 		ServiceCurve sc_result = new ServiceCurve();
 		sc_result.initializeDelayedInfiniteBurst( delay );
-		
-		if( delay.doubleValue() == 0.0 ) {
-			sc_result.is_delayed_infinite_burst = true;
-		}
+		sc_result.is_delayed_infinite_burst = true;
 		
 		return sc_result;
+	}
+
+	/**
+	 * Creates a new rate latency curve.
+	 * 
+	 * @param rate the rate
+	 * @param latency the latency
+	 * @return a <code>ServiceCurve</code> instance
+	 */
+	public static ServiceCurve createRateLatency( double rate, double latency ) {
+		return createRateLatency( NumFactory.createNum( rate ), NumFactory.createNum( latency ) );
 	}
 	
 	/**
@@ -125,29 +138,7 @@ public class ServiceCurve extends Curve {
 		sc_result.rate_latencies.add( sc_result.copy() );
 		sc_result.is_rate_latency = true;
 
-		if( rate.doubleValue() == Double.POSITIVE_INFINITY && latency.doubleValue() == 0.0 ) {
-			sc_result.is_delayed_infinite_burst = true;
-		}
-		
-		return sc_result;
-	}
-
-	/**
-	 * Creates a new rate latency curve.
-	 * 
-	 * @param rate the rate
-	 * @param latency the latency
-	 * @return a <code>ServiceCurve</code> instance
-	 */
-	public static ServiceCurve createRateLatency( double rate, double latency ) {
-		ServiceCurve sc_result = new ServiceCurve();
-		sc_result.initializeRateLatency( rate, latency );
-		
-		sc_result.rate_latencies = new ArrayList<Curve>();
-		sc_result.rate_latencies.add( sc_result.copy() );
-		sc_result.is_rate_latency = true;
-		
-		if( rate == Double.POSITIVE_INFINITY && latency == 0.0 ) {
+		if( rate.doubleValue() == Double.POSITIVE_INFINITY ) {
 			sc_result.is_delayed_infinite_burst = true;
 		}
 		
@@ -157,7 +148,6 @@ public class ServiceCurve extends Curve {
 	public ServiceCurve copy() {
 		ServiceCurve sc_copy = new ServiceCurve();
 		sc_copy.initializeCurve( this );
-		
 		sc_copy.is_delayed_infinite_burst = this.is_delayed_infinite_burst;
 		
 		return sc_copy;

@@ -143,30 +143,10 @@ public class Convolution {
 	}
 	
 	public static ServiceCurve convolve( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
-		if ( service_curve_1.isDelayedInfiniteBurst() ) {
-			return new ServiceCurve( Curve.shiftRight( service_curve_2 , service_curve_1.getLatency() ) );
-		} else {
-			if ( service_curve_2.isDelayedInfiniteBurst() ) {
-				return new ServiceCurve( Curve.shiftRight( service_curve_1 , service_curve_2.getLatency() ) );
-			}
-		}
-		
 		return convolve( service_curve_1, service_curve_2, false ); 
 	}
 
 	public static ServiceCurve convolve( ServiceCurve service_curve_1, ServiceCurve service_curve_2, boolean tb_rl_optimized ) {
-		if ( service_curve_1.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-			return service_curve_2.copy();
-		} else {
-			if ( service_curve_2.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-				return service_curve_1.copy();
-			}
-		}
-		ServiceCurve null_service = ServiceCurve.createNullService(); 
-		if( service_curve_1.equals( null_service ) || service_curve_2.equals( null_service ) ){
-			return null_service;
-		}
-		
 		if ( tb_rl_optimized ) {
 			return convolve_SC_SC_RLs( service_curve_1, service_curve_2 );
 		} else {
@@ -188,19 +168,24 @@ public class Convolution {
 	 * @return The convolved curve.
 	 */
 	public static ServiceCurve convolve_SC_SC_Generic( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
-		if ( service_curve_1.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-			return service_curve_2.copy();
-		} else {
-			if ( service_curve_2.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-				return service_curve_1.copy();
+		// Shortcut: only go here if there is at least one delayed infinite burst
+		if( service_curve_1.isDelayedInfiniteBurst() || service_curve_2.isDelayedInfiniteBurst() ) { 
+			if ( service_curve_1.isDelayedInfiniteBurst() && service_curve_2.isDelayedInfiniteBurst() ) {
+				return ServiceCurve.createDelayedInfiniteBurst( NumUtils.add( service_curve_1.getLatency(), service_curve_2.getLatency() ) );
+			}
+			
+			if ( service_curve_1.isDelayedInfiniteBurst() ) { // service_curve_2 is not a delayed infinite burst
+				return new ServiceCurve( Curve.shiftRight( service_curve_2 , service_curve_1.getLatency() ) );
+			}
+			
+			if ( service_curve_2.isDelayedInfiniteBurst() ) { // service_curve_2 is not a delayed infinite burst
+				return new ServiceCurve( Curve.shiftRight( service_curve_1 , service_curve_2.getLatency() ) );
 			}
 		}
 		
-		if ( service_curve_1.isBurstDelay() && service_curve_1.getSegment(1).getX().isZero() ) {
-			return service_curve_2.copy();
-		}
-		if ( service_curve_2.isBurstDelay() && service_curve_2.getSegment(1).getX().isZero() ) {
-			return service_curve_1.copy();
+		ServiceCurve null_service = ServiceCurve.createNullService(); 
+		if( service_curve_1.equals( null_service ) || service_curve_2.equals( null_service ) ){
+			return null_service;
 		}
 
 		ServiceCurve result = new ServiceCurve();

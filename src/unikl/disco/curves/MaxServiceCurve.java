@@ -166,6 +166,17 @@ public class MaxServiceCurve extends Curve {
 		
 		return msc_copy;
 	}
+
+	/**
+	 * Creates a new rate latency curve.
+	 * 
+	 * @param rate the rate
+	 * @param latency the latency
+	 * @return a <code>MaxServiceCurve</code> instance
+	 */
+	public static MaxServiceCurve createRateLatency( double rate, double latency ) {
+		return createRateLatency( NumFactory.createNum( rate ), NumFactory.createNum( latency ) );
+	}
 	
 	/**
 	 * Creates a new rate latency curve.
@@ -182,29 +193,7 @@ public class MaxServiceCurve extends Curve {
 		msc_result.rate_latencies.add( msc_result.copy() );
 		msc_result.is_rate_latency = true;
 
-		if( rate.doubleValue() == Double.POSITIVE_INFINITY && latency.doubleValue() == 0.0 ) {
-			msc_result.is_delayed_infinite_burst = true;
-		}
-		
-		return msc_result;
-	}
-
-	/**
-	 * Creates a new rate latency curve.
-	 * 
-	 * @param rate the rate
-	 * @param latency the latency
-	 * @return a <code>MaxServiceCurve</code> instance
-	 */
-	public static MaxServiceCurve createRateLatency( double rate, double latency ) {
-		MaxServiceCurve msc_result = new MaxServiceCurve();
-		msc_result.initializeRateLatency( rate, latency );
-		
-		msc_result.rate_latencies = new ArrayList<Curve>();
-		msc_result.rate_latencies.add( msc_result.copy() );
-		msc_result.is_rate_latency = true;
-		
-		if( rate == Double.POSITIVE_INFINITY && latency == 0.0 ) {
+		if( rate.doubleValue() == Double.POSITIVE_INFINITY ) {
 			msc_result.is_delayed_infinite_burst = true;
 		}
 		

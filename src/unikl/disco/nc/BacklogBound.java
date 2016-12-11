@@ -48,18 +48,15 @@ import unikl.disco.numbers.NumUtils;
  */
 public class BacklogBound {
 	public static Num derive( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if ( service_curve.equals( ServiceCurve.createNullService() )
-				&& !arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
-			return NumFactory.createPositiveInfinity();
-		}
-		
-		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) 
-				|| service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
+		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
 			return NumFactory.createZero();
-		} else {
-			if( arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) { // Only if the service curve is
-				return NumFactory.createPositiveInfinity();
-			}
+		}
+		if( service_curve.isDelayedInfiniteBurst() ) {
+			return arrival_curve.f( service_curve.getLatency() );
+		}
+		if ( service_curve.equals( ServiceCurve.createNullService() ) // We know from above that the arrivals are not zero.
+				|| arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) {
+			return NumFactory.createPositiveInfinity();
 		}
 		
 		// The computeInflectionPoints based method does not work for 

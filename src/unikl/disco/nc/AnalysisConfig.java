@@ -43,8 +43,13 @@ public class AnalysisConfig {
 
 	private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
 
+	/** Whether to use maximum service curves in output bound computation */
 	private GammaFlag use_gamma = GammaFlag.SERVER_LOCAL;
 
+	/**
+	 * Whether to constrain the output bound further through convolution with
+	 * the maximum service curve's rate as the server cannot output data faster than this rate.
+	 */
 	private GammaFlag use_extra_gamma = GammaFlag.SERVER_LOCAL;
 
 	public static enum ArrivalBoundMethod
