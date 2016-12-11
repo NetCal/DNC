@@ -11,6 +11,7 @@ v2.3.0 "Centaur" (2017-ABC-NM)
 * Convolution: Improvements for convolution involving \delta_T.
 * FunctionalTests: Further streamlined test configuration generation.
 * Curve.java: isBurstDelay() was removed, functionality is provided by isDelayedInfiniteBurst() since version 2.2.7.
+* Updated the output tests.
 * Various fixes, performance improvements, reduced code duplication, improved parameter naming, etc.
 
 v2.2.8 "Heavy Ion" (2016-Dec-06)

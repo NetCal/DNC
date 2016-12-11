@@ -29,37 +29,72 @@ package unikl.disco.tests.output;
 
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.CalculatorConfig;
+import unikl.disco.nc.PmooAnalysis;
 import unikl.disco.nc.SeparateFlowAnalysis;
+import unikl.disco.nc.TotalFlowAnalysis;
 import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import unikl.disco.nc.AnalysisConfig.GammaFlag;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.network.Flow;
+import unikl.disco.network.Network;
 
 public class UseSavedNetwork {
-	public static void main( String[] args )
-	{
-		new SavedNetwork(); // Initialize the static network object in there. 
+	public static void main( String[] args ) throws Exception {
+		// Get the server graph
+		@SuppressWarnings("static-access")
+		Network server_graph = ( new SavedNetwork() ).network;
 		
-		AnalysisConfig configuration = new AnalysisConfig();
-
+		
+		// Analysis configurations
 		CalculatorConfig.disableAllChecks();
-		configuration.setRemoveDuplicateArrivalBounds( true );
-		configuration.setUseTbrlConvolution( true );
-		configuration.setUseTbrlDeconvolution( true );
-		configuration.setUseGamma( GammaFlag.GLOBALLY_OFF );
-		configuration.setUseGamma( GammaFlag.GLOBALLY_OFF );
-		configuration.setUseExtraGamma( GammaFlag.GLOBALLY_OFF );
-		configuration.setMultiplexingDiscipline( MuxDiscipline.GLOBAL_ARBITRARY );
-		configuration.setArrivalBoundMethod( ArrivalBoundMethod.PBOO_CONCATENATION );
+		
+		AnalysisConfig pboo_concat_config = new AnalysisConfig();
+		
+		pboo_concat_config.setUseTbrlConvolution( true );
+		pboo_concat_config.setUseTbrlDeconvolution( true );
+		
+		pboo_concat_config.setUseGamma( GammaFlag.GLOBALLY_OFF );
+		pboo_concat_config.setUseExtraGamma( GammaFlag.GLOBALLY_OFF );
+		
+		pboo_concat_config.setMultiplexingDiscipline( MuxDiscipline.GLOBAL_ARBITRARY );
 
-		SeparateFlowAnalysis sfa = new SeparateFlowAnalysis( SavedNetwork.network, configuration );
-		for( Flow f : SavedNetwork.network.getFlows() ) {
-			try {
-				sfa.performAnalysis( f );
-				System.out.println( f.toShortString() + "'s delay bound: " + sfa.getDelayBound().toString() );
-			} catch (Exception e) {
-				System.out.println( e.toString() );
-			}
+		// TFA + aggrPBOO-AB
+		pboo_concat_config.setArrivalBoundMethod( ArrivalBoundMethod.PBOO_CONCATENATION );
+		TotalFlowAnalysis tfa_analysis = new TotalFlowAnalysis( server_graph, pboo_concat_config );
+
+		// SFA + aggrPBOO-AB
+		pboo_concat_config.setArrivalBoundMethod( ArrivalBoundMethod.PBOO_CONCATENATION );
+		SeparateFlowAnalysis sfa_analysis = new SeparateFlowAnalysis( server_graph, pboo_concat_config );
+
+		// PMOO + aggrPMOO-AB
+		AnalysisConfig pmoo_concat_config = pboo_concat_config.copy();
+		pmoo_concat_config.setArrivalBoundMethod( ArrivalBoundMethod.PMOO );
+		PmooAnalysis pmoo_analysis = new PmooAnalysis( server_graph, pmoo_concat_config );
+		
+		
+		// Run the analyses
+		System.out.println( "Fid, TFA_D, SFA_D, PMOO_D" );
+		
+		for( Flow flow_of_interest : server_graph.getFlows() ) {
+			System.out.print( flow_of_interest.getAlias().substring( 1 ) + ", " );
+			
+			// TFA
+			tfa_analysis.performAnalysis( flow_of_interest );
+			
+			System.out.print( tfa_analysis.getDelayBound().toString() );
+			System.out.print( ", " );
+			
+			// SFA
+			sfa_analysis.performAnalysis( flow_of_interest );
+			
+			System.out.print( sfa_analysis.getDelayBound().toString() );
+			System.out.print( ", " );
+			
+			// PMOO
+			pmoo_analysis.performAnalysis( flow_of_interest );
+			
+			System.out.print( pmoo_analysis.getDelayBound().toString() );
+			System.out.println();
 		}
 	}
 }

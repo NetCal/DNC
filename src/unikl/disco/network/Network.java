@@ -1239,13 +1239,24 @@ public class Network {
  		Writer w = new OutputStreamWriter( new FileOutputStream(file), "UTF-8" );
  		PrintWriter pw = new PrintWriter(w);
  		
- 		pw.println( "/*" );
- 		pw.println( " * This file was created with the Disco Deterministic Network Calculator (DiscoDNC) v2.2." );
+ 		pw.println( "/* " );
+ 		pw.println( " * This file is part of the Disco Deterministic Network Calculator v2.3 \"Centaur\"." );
  		pw.println( " *" );
- 		pw.println( " * The DiscoDNC is an open-source tool for deterministic network calculus analysis." );
- 		pw.println( " * For more information visit http://disco.cs.uni-kl.de/index.php/projects/disco-dnc" );
- 		pw.println( " *" );
- 		pw.println( " */" );
+ 		pw.println( " * The Disco Deterministic Network Calculator (DiscoDNC) is free software;" );
+ 		pw.println( " * you can redistribute it and/or modify it under the terms of the " );
+ 		pw.println( " * GNU Lesser General Public License as published by the Free Software Foundation; " );
+ 		pw.println( " * either version 2.1 of the License, or (at your option) any later version." );
+ 		pw.println( " * " );
+ 		pw.println( " * This library is distributed in the hope that it will be useful," );
+ 		pw.println( " * but WITHOUT ANY WARRANTY; without even the implied warranty of" );
+ 		pw.println( " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU" );
+ 		pw.println( " * Lesser General Public License for more details." );
+ 		pw.println( " * " );
+ 		pw.println( " * You should have received a copy of the GNU Lesser General Public" );
+ 		pw.println( " * License along with this library; if not, write to the Free Software" );
+ 		pw.println( " * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA" );
+ 		pw.println( " * " );
+ 		pw.println( " */ " );
  		pw.println();
  		
  		pw.println( "package " + package_name + ";" );
