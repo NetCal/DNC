@@ -1,8 +1,6 @@
-* Fix RationalBigInteger tests —> bigger EPSILON
+* Fix RationalBigInteger tests —> bigger EPSILON?
 * Rational numbers —> option to use EPSILON in comparisons as with reals
-* Rename incoming screenshot
 * Remove deprecated methods —> Does Philip use them?
-* NumFactory: rename createNum to create
 * Coverity Scan static analysis
 
 * Changelog

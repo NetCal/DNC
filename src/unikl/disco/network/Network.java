@@ -852,20 +852,20 @@ public class Network {
 	 * Returns a null curve if the intersection of those sets of curves is empty.
 	 * 
 	 * @param source The source of all flows to be aggregated.
-	 * @param outgoing_flows The set of all flows to be aggregated.
+	 * @param source_flows The set of all flows to be aggregated.
 	 * @return An aggregate arrival curve.
 	 */
-	public ArrivalCurve getSourceFlowArrivalCurve( Server source, Set<Flow> outgoing_flows )
+	public ArrivalCurve getSourceFlowArrivalCurve( Server source, Set<Flow> source_flows )
 	{
 		ArrivalCurve a_out = ArrivalCurve.createNullArrival();
 		
 		// Returns an empty set if one of the arguments is null
-		Set<Flow> source_flows = SetUtils.getIntersection( map__server__source_flows.get( source ), outgoing_flows );
-		if ( source_flows.isEmpty() ) {
+		Set<Flow> source_flows_internal = SetUtils.getIntersection( map__server__source_flows.get( source ), source_flows );
+		if ( source_flows_internal.isEmpty() ) {
 			return a_out;
 		} else {
-			if ( source_flows != null ) {
-				for ( Flow f : source_flows ) 
+			if ( source_flows_internal != null ) {
+				for ( Flow f : source_flows_internal ) 
 				{
 					a_out = ArrivalCurve.add( a_out, f.getArrivalCurve() );
 				}
