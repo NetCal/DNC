@@ -1,3 +1,35 @@
+v2.3.0 "Centaur" (2017-ABC-NM)
+------------------------------
+* Rework of the number abstraction layer in unikl.disco.numbers:
+  The DiscoDNC is now built on a factory pattern with four implementations -- the lower body and the four legs of our new Centaur release. 
+  - Num.java is now an interface to be implemented by the actual number representations in unikl.disco.numbers.implementations
+  - NumFactory.java provides methods to create a number, takes care of the representation given in the CalculatorConfig
+  - NumUtils.java provides methods to work with objects implementing the Num interface
+  - unikl.disco.numbers.implementations provides four implementations:
+    - Real numbers with single precision or double precision.
+    - Rational numbers based on Integer or BigInteger (requires Apache Commons Math 3 and special values in unikl.disco.numbers.values). 
+* Convolution: Improvements for convolution involving \delta_T.
+* FunctionalTests: Further streamlined test configuration generation.
+* Curve.java: isBurstDelay() was removed, functionality is provided by isDelayedInfiniteBurst() since version 2.2.7.
+* Various fixes, performance improvements, reduced code duplication.
+
+v2.2.8 "Heavy Ion" (2016-Dec-06)
+--------------------------------
+* Fixed bugs concerning the delay and backlog bounding with \delta_T, T>0, service curves (delayed infinite burst).
+* Improved JavaDocs for use_gamma and use_extra_gamma
+Thanks to Mathias Kreider from the GSI Helmholtz Centre for Heavy Ion Research for reporting these bugs. This release was code named "Heavy Ion".
+
+v2.2.7 (2016-Nov-17)
+--------------------
+* Fixed a bug when convolving \delta_T with T>0 (delayed infinite burst).
+* Curve.java:
+ - is_zero_delay_infinite_burst was replaced by the more general is_delayed_infinite_burst.
+ - Visibility was restricted, reading the value is enabled by isDelayedInfiniteBurst().
+* LinearSegment.java: Constructors that accept primitive double arguments were added.
+* FunctionalTests: 
+ - Streamlined test config generation.
+ - assertEquals based on double values now considers the internal number representation's rounding error safety margin epsilon. 
+
 v2.2.6 (2016-Mar-31)
 --------------------
 * Added the arrival bound burstiness reduction of the MMB & DFT 2016 paper
@@ -200,6 +232,6 @@ v2.0.1 (2014-Oct-16)
 * Apache Commons Math: Updated bundled version to 3.3.
 * Minor improvements of the documentation and naming of internal variables.
 
-v2.0.0 (2014-Oct-02)
---------------------
+v2.0.0 "Hydra" (2014-Oct-02)
+----------------------------
 Please see http://disco.cs.uni-kl.de/index.php/88-projects/169-discodnc-20-dev
