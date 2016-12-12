@@ -1245,11 +1245,12 @@ public class Network {
  		pw.println( "import unikl.disco.curves.ArrivalCurve;" );
  		pw.println();
  		pw.println( "import unikl.disco.network.Network;" );
+ 		pw.println( "import unikl.disco.network.IsNetwork;" );
  		pw.println( "import unikl.disco.network.Server;" );
  		pw.println( "import unikl.disco.network.Server.Multiplexing;" );
  		pw.println();
 
- 		pw.println( "public class " + file_name + " implements unikl.disco.network.ReturnsNetwork {");
+ 		pw.println( "public class " + file_name + " implements IsNetwork {");
  		pw.println( "\tpublic static Network network;" );
  		pw.println( "\tprivate static Server[] servers;" );
  		pw.println();

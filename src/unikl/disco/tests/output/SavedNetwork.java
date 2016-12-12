@@ -26,10 +26,11 @@ import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 
 import unikl.disco.network.Network;
+import unikl.disco.network.IsNetwork;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
 
-public class SavedNetwork implements unikl.disco.network.SavedNetwork {
+public class SavedNetwork implements IsNetwork {
 	public static Network network;
 	private static Server[] servers;
 
