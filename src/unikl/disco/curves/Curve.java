@@ -441,12 +441,6 @@ public class Curve {
 		has_token_bucket_meta_info = true;
 	}
 
-	@Deprecated
-	public boolean isTokenBucket() {
-		decomposeIntoTokenBuckets();
-		return is_token_bucket;		
-	}
-
 	/**
 	 * Returns the number of token buckets the curve can be decomposed into.
 	 * 
@@ -455,18 +449,6 @@ public class Curve {
 	public int getTBComponentCount() {
 		decomposeIntoTokenBuckets();
 		return token_buckets.size();
-	}
-	
-	/**
-	 * Returns a list of token bucket curves that this curve can be
-	 * decomposed into.
-	 * 
-	 * @return the list of token buckets
-	 */
-	@Deprecated
-	public final List<Curve> getTBComponents() {
-		decomposeIntoTokenBuckets();
-		return token_buckets;
 	}
 	
 	/**
@@ -519,12 +501,6 @@ public class Curve {
 		has_rate_latency_meta_info = true;
 	}
 
-	@Deprecated
-	public boolean isRateLatency() {
-		decomposeIntoRateLatencies();
-		return is_rate_latency;
-	}
-
 	/**
 	 * Returns the number of rate latency curves the curve can be decomposed into.
 	 * 
@@ -533,18 +509,6 @@ public class Curve {
 	public int getRLComponentCount() {
 		decomposeIntoRateLatencies();
 		return rate_latencies.size();
-	}
-
-	/**
-	 * Returns a list of rate latency curves that this curve can be
-	 * decomposed into.
-	 * 
-	 * @return the list of rate latency curves
-	 */
-	@Deprecated
-	public final List<Curve> getRLComponents() {
-		decomposeIntoRateLatencies();
-		return rate_latencies;
 	}
 
 	/**
@@ -569,76 +533,12 @@ public class Curve {
 	}
 
 	/**
-	 * Returns the x-coordinate of inflection point <code>i</code>.
-	 * 
-	 * @param i the index of the IP.
-	 * @return the x-coordinate of the inflection point.
-	 */
-	@Deprecated
-	public Num getIPX(int i) {
-		return segments[i].x;
-	}
-
-	/**
-	 * Returns the y-coordinate of inflection point <code>i</code>.
-	 * 
-	 * @param i the index of the IP.
-	 * @return the y-coordinate of the inflection point.
-	 */
-	@Deprecated
-	public Num getIPY(int i) {
-		return segments[i].y;
-	}
-
-	/**
 	 * Returns the sustained rate (the gradient of the last segment).
 	 * 
 	 * @return the sustained rate.
 	 */
 	public Num getSustainedRate() {
 		return segments[segments.length-1].grad;
-	}
-
-	/**
-	 * Returns the highest rate (the steepest gradient of any segment).
-	 * 
-	 * @return the highest rate.
-	 */
-	@Deprecated
-	public Num getHighestRate() {
-		Num max_rate = NumFactory.getNegativeInfinity(); // No need to create an object here as this negative infinity is only used for initial comparison
-		for (int i = 0; i < segments.length; i++) {
-			if ( !isDiscontinuity(i) && ( segments[i].grad ).greater( max_rate ) ) {
-				max_rate = segments[i].grad;
-			}
-		}
-		return max_rate;
-	}
-
-	/**
-	 * Sets the sustained rate (the gradient of the last segment).
-	 * Note: No checks are performed when setting the sustained rate.
-	 * The caller has to ensure that <code>r</code> is larger (smaller) than
-	 * the gradient of the 2nd-to-last segment to keep the curve convex (concave).
-	 * 
-	 * @param rate the new sustained rate
-	 */
-	@Deprecated
-	public void setSustainedRate( Num rate ) {
-		segments[segments.length-1].grad = rate;
-		clearMetaInfo();
-	}
-
-	/**
-	 * Returns whether the inflection point <code>i</code> is excluded
-	 * from the segment or not.
-	 * 
-	 * @param i the index of the IP.
-	 * @return <code>true</code> if the IP is excluded, <code>false</code> if not.
-	 */
-	@Deprecated
-	public boolean isLeftopen( int i ) {
-		return segments[i].leftopen;
 	}
 
 	/**
@@ -731,42 +631,6 @@ public class Curve {
 	}
 
 	/**
-	 * Marks discontinuities (subsequent segments having the same
-	 * x-coordinate) by setting <code>leftopen</code> of the second segment.
-	 */
-	@Deprecated
-	public void markDiscontinuities() {
-		for (int i = 0; i < segments.length; i++) {
-			segments[i].leftopen = false;
-		}
-		for (int i = 1; i < segments.length; i++) {
-			if (segments[i-1].x == segments[i].x) {
-				segments[i].leftopen = true;
-			}
-		}
-	}
-
-	/**
-	 * Computes the y-coordinates of inflection points starting with
-	 * inflection point <code>start</code>.
-	 * 
-	 * @param start the IP at which to start computing y-coordinates.
-	 */
-//	@Deprecated
-//	public void computeYs(int start) {
-//		if (start < 1) {
-//			throw new IllegalArgumentException("Value of 'start' must be >= 1!");
-//		}
-//		Num dx;
-//		for (int i = start; i < segments.length; i++) {
-//			dx = NumUtils.sub( segments[i].x, segments[i-1].x );
-//			segments[i].y = dx.copy();
-//			segments[i].y.mult( segments[i-1].grad );
-//			segments[i].y.add( segments[i-1].y );
-//		}
-//	}
-
-	/**
 	 * Returns the burstiness of this token bucket curve.<br>
 	 * Note: For performance reasons there are no sanity checks! Only
 	 *       call this method on a valid token bucket curve!
@@ -779,19 +643,6 @@ public class Curve {
 		} else { // Assume a continuous TB function, i.e., a simple rate 
 			return NumFactory.createZero();
 		}
-	}
-
-	/**
-	 * Sets the burstiness of this token bucket curve.<br>
-	 * Note: For performance reasons there are no sanity checks! Only
-	 *       call this method on a valid token bucket curve!
-	 *       
-	 * @param burst the burstiness
-	 */
-	@Deprecated
-	public void setTBBurst( Num burst ) {
-		segments[1].y = burst;
-		clearMetaInfo();
 	}
 
 	/**
@@ -908,26 +759,6 @@ public class Curve {
 	}
 
 	/**
-	 * Returns the curve's gradient at x-coordinate <code>x</code>, if
-	 * <code>x&gt;=0</code>, and <code>NaN</code> if not. Note that the
-	 * gradient returned at discontinuities is <code>0.0</code>, the
-	 * gradient returned at an inflection point is the gradient of the
-	 * linear segment right of the inflection point, but only if the
-	 * segment is not left-open.
-	 * 
-	 * @param x the x-coordinate
-	 * @return the gradient
-	 */
-	@Deprecated
-	public Num getGradientAt( Num x ) {
-		int i = getSegmentDefining(x);
-		if (i < 0) {
-			return NumFactory.createNaN();
-		}
-		return segments[i].grad;
-	}
-
-	/**
 	 * Returns the number of the segment that defines the value
 	 * of the function when computing the limit to the right
 	 * of the function at x-coordinate <code>x</code>. The
@@ -1008,18 +839,6 @@ public class Curve {
 	}
 
 	/**
-	 * Returns the smallest x value at which the function value is
-	 * equal to <code>y</code>.
-	 * 
-	 * @param y the y-coordinate
-	 * @return the smallest x value
-	 */
-	@Deprecated
-	public Num f_inv( Num y ) {
-		return f_inv(y, false);
-	}
-
-	/**
 	 * Returns the x value at which the function value is
 	 * equal to <code>y</code>. If <code>rightmost</code> is
 	 * <code>true</code>, returns the rightmost x-coordinate,
@@ -1047,20 +866,6 @@ public class Curve {
 		} else {
 			return segments[i].x;
 		}
-	}
-
-	@Deprecated
-	public Num getMaxY( Num a, Num b ) {
-		int sa = getSegmentDefining(a);
-		int sb = getSegmentDefining(b);
-
-		Num ret = NumFactory.getZero(); // No need to create an object as this value is only set for initial comparison in the loop.
-		for(int i=sa; i<=sb; ++i) {
-			Num end = ( i+1 < segments.length ? NumUtils.min(getSegment(i+1).x, b) : b );
-			ret = NumUtils.max( ret, NumUtils.max( f( NumUtils.max( a, getSegment(i).x ) ), f( end ) ) );
-		}
-
-		return ret;
 	}
 
 	/**
@@ -1334,25 +1139,6 @@ public class Curve {
 		}
 		
 		return NumFactory.createPositiveInfinity();
-	}
-
-	/**
-	 * Returns a list containing each segment's height when projected onto
-	 * the y-axis.
-	 * 
-	 * @return a list of doubles containing the segment heights
-	 */
-	@Deprecated
-	public List<Num> getYIntervals() {
-		List<Num> y_intervals = new ArrayList<Num>();
-		for (int i = 1; i < segments.length; i++) {
-			if (isDiscontinuity(i-1)) {
-				continue;
-			}
-			y_intervals.add( NumUtils.sub( segments[i].y, segments[i-1].y ) );
-		}
-		
-		return y_intervals;
 	}
 
 	public static Num getXIntersection( Curve curve1, Curve curve2 ){

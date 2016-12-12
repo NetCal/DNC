@@ -717,34 +717,18 @@ public class Network {
 	 * For every distinct sub-path of p
 	 * this method returns the flows taking it entirely.
 	 * 
-	 * 
 	 * @param p The path to split up and analyze for flows.
 	 * @return Map from a path to the flows taking exactly this tandem of servers.
 	 * @throws Exception Could not sort although there may be flows.
 	 */
 	public Map<Path,Set<Flow>> getFlowsPerSubPath( Path p ) throws Exception {
-		return getFlowsPerSubPath( p, new HashSet<Flow>() );
-	}
-	
-	/**
-	 * For every distinct sub-path of p
-	 * this method returns the flows taking it entirely.
-	 * 
-	 * @param p The path to split up and analyze for flows.
-	 * @param excluded_flows Flows to omit in the sorting operation.
-	 * @return Map from a path to the flows taking exactly this tandem of servers.
-	 * @throws Exception Could not sort although there may be flows.
-	 */
-	@Deprecated
-	public Map<Path,Set<Flow>> getFlowsPerSubPath( Path p, Set<Flow> excluded_flows ) throws Exception {
 		Map<Path,Set<Flow>> map__path__set_flows = new HashMap<Path,Set<Flow>>();
 				
-		Map<Server,Set<Flow>> map__s_i__joining_flows = getServerJoiningFlowsMap( p, excluded_flows );
+		Map<Server,Set<Flow>> map__s_i__joining_flows = getServerJoiningFlowsMap( p );
 		Set<Flow> all_interfering_flows = new HashSet<Flow>();
 		for( Set<Flow> flows_on_path : map__s_i__joining_flows.values() ) {
 			all_interfering_flows.addAll( flows_on_path );
 		}
-		all_interfering_flows.removeAll( excluded_flows ); // Should have been done by the map__server__joining_flows construction
 		if ( all_interfering_flows.isEmpty() ) { // If there are no interfering flows to be considered, return the convolution of a ll service curves on the path
 			return map__path__set_flows;
 		}
@@ -769,7 +753,6 @@ public class Network {
 	 			Server s_j_egress = servers.get( j );
 	 			
 	 			Set<Flow> s_i_ingress__s_j_egress = SetUtils.getIntersection( s_i_ingress, map__server__leaving_flows.get( s_j_egress ) ); // Intersection with the remaining joining_flows prevents rejoining flows to be considered multiple times
-	 			s_i_ingress__s_j_egress.removeAll( excluded_flows );
 	 			
 	 			if ( s_i_ingress__s_j_egress.isEmpty() ) { // No such flows to bound
 	 				continue;
@@ -787,7 +770,7 @@ public class Network {
 	public Map<Path,Set<Flow>> groupFlowsPerSubPath( Path p, Set<Flow> flows_to_group ) throws Exception {
 		Map<Path,Set<Flow>> map__path__set_flows = new HashMap<Path,Set<Flow>>();
 				
-		Map<Server,Set<Flow>> map__s_i__joining_flows_tmp = getServerJoiningFlowsMap( p, null );
+		Map<Server,Set<Flow>> map__s_i__joining_flows_tmp = getServerJoiningFlowsMap( p );
 		Map<Server,Set<Flow>> map__s_i__joining_flows = new HashMap<Server,Set<Flow>>();
 		
 		Set<Flow> tmp_set;
@@ -992,11 +975,7 @@ public class Network {
 	 * @return The joining flows.
 	 * @throws Exception Could not derive the joining flows even if there are.
 	 */
-	public Map<Server,Set<Flow>> getServerJoiningFlowsMap( Path path, Set<Flow> flows_to_join ) throws Exception {
-		if ( flows_to_join == null ) {
-			flows_to_join = new HashSet<Flow>();
-		}
-		
+	public Map<Server,Set<Flow>> getServerJoiningFlowsMap( Path path ) throws Exception {
 		Map<Server,Set<Flow>> map__server__joining_flows = new HashMap<Server,Set<Flow>>();
 		
 		Server path_source = path.getSource();
@@ -1005,12 +984,10 @@ public class Network {
 		
 		// Default for first server
 		Set<Flow> flows_joining = getFlows( path_source );
-		flows_joining.removeAll( flows_to_join );
 		map__server__joining_flows.put( path_source, flows_joining );
 		
 		for ( Server s : servers_iteration ) {
 			flows_joining = SetUtils.getDifference( getFlows( s ), getFlows( path.getPrecedingLink( s ) ) );
-			flows_joining.removeAll( flows_to_join );
 			
 			// Results in an empty set if there a no joining flow at server s
 			map__server__joining_flows.put( s, flows_joining );

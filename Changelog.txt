@@ -14,6 +14,7 @@ v2.3.0 "Centaur" (2017-ABC-NM)
 * Curve.java: isBurstDelay() was removed, functionality is provided by isDelayedInfiniteBurst() since version 2.2.7.
 * Updated the output tests.
 * Network.java: Fixed getting a server by its ID (had an offset of +1 before).
+* Removed methods that were deprecated in v2.2. 
 * Various fixes, performance improvements, reduced code duplication, improved parameter naming, etc.
 
 v2.2.8 "Heavy Ion" (2016-Dec-06)

@@ -29,7 +29,6 @@
 package unikl.disco.curves;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
@@ -62,7 +61,7 @@ public class ArrivalCurve extends Curve {
 	}
 	
 	public ArrivalCurve( String arrival_curve_str ) throws Exception {
-		if( arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9 ) { // Smallest possible string: {(0,0),0}
+		if( arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9 ) { // smallest possible string: {(0,0),0}
 			throw new RuntimeException( "Invalid string representation of a service curve." );
 		}
 		
@@ -146,29 +145,13 @@ public class ArrivalCurve extends Curve {
 		
 		return ac_result;
 	}
-
-	/**
-	 * Creates a new curve from a list of token bucket curves.
-	 * 
-	 * @param token_buckets a list of token bucket curves
-	 * @return a <code>Curve</code> instance
-	 */
-	@Deprecated
-	public static ArrivalCurve createFromTokenBuckets( List<Curve> token_buckets ) {
-		ArrivalCurve ac_result = new ArrivalCurve();
-		ac_result.initializeCurve( Curve.createFromTokenBuckets( token_buckets ) );
-		
-		return ac_result;
-	}
 	
 	public Num getBurst() {
-		if( segments.length > 1 ) {		// Arrival curves pass through the origin
+		if( segments.length > 1 ) {		// arrival curves pass through the origin
 			return segments[1].y.copy();
 		} else {						// rate functions have burst 0
 			return NumFactory.createZero();
 		}
-		// Old code working with any kind of curve
-//		return fLimitRight( Num.getZero() );
 	}
 	
 	public ArrivalCurve copy() {
@@ -199,19 +182,6 @@ public class ArrivalCurve extends Curve {
 	 */
 	public static ArrivalCurve shiftRight( ArrivalCurve ac, Num dx ) {
 		return new ArrivalCurve( Curve.shiftRight( ac, dx ) );
-	}
-	
-	/**
-	 * Returns a copy of this curve that is shifted to the left by <code>dx</code>,
-	 * i.e. g(x) = f(x+dx). Note that the new curve is clipped at the y-axis so
-	 * that in most cases <code>c.shiftLeftClipping(dx).shiftRight(dx) != c</code>!
-	 * 
-	 * @param dx the offset to shift the curve.
-	 * @return the shifted curve.
-	 */
-	@Deprecated
-	public ArrivalCurve shiftLeftClipping( Num dx ) {
-		return new ArrivalCurve( Curve.shiftLeftClipping( this, dx ) );
 	}
 	
 	@Override

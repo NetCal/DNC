@@ -179,17 +179,6 @@ public class ServiceCurve extends Curve {
 		return new ServiceCurve( Curve.boundAtXAxis( service_curve ) ); 
 	}
 	
-	/**
-	 * Returns a copy of this curve with latency removed, i.e. shifted left by
-	 * the latency.
-	 * 
-	 * @return a copy of this curve without latency
-	 */
-	@Deprecated
-	public ServiceCurve removeLatency() {
-		return new ServiceCurve( Curve.removeLatency( this ) );
-	}
-	
 	@Override
 	public boolean equals( Object obj ) {
 		return ( obj instanceof ServiceCurve ) && super.equals( obj );

@@ -29,7 +29,6 @@
 package unikl.disco.curves;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
@@ -145,20 +144,6 @@ public class MaxServiceCurve extends Curve {
 		
 		return msc_result;
 	}
-
-	/**
-	 * Creates a new curve from a list of token bucket curves.
-	 * 
-	 * @param token_buckets a list of token bucket curves
-	 * @return a <code>MaxServiceCurve</code> instance
-	 */
-	@Deprecated
-	public static MaxServiceCurve createFromTokenBuckets( List<Curve> token_buckets ) {
-		MaxServiceCurve msc_result = new MaxServiceCurve();
-		msc_result.initializeCurve( Curve.createFromTokenBuckets( token_buckets ) );
-		
-		return msc_result;
-	}
 	
 	public MaxServiceCurve copy() {
 		MaxServiceCurve msc_copy = new MaxServiceCurve();
@@ -221,19 +206,6 @@ public class MaxServiceCurve extends Curve {
 	 */
 	public MaxServiceCurve shiftRight( Num dx ) {
 		return new MaxServiceCurve( Curve.shiftRight( this, dx ) );
-	}
-	
-	/**
-	 * Returns a copy of this curve that is shifted to the left by <code>dx</code>,
-	 * i.e. g(x) = f(x+dx). Note that the new curve is clipped at the y-axis so
-	 * that in most cases <code>c.shiftLeftClipping(dx).shiftRight(dx) != c</code>!
-	 * 
-	 * @param dx the offset to shift the curve.
-	 * @return the shifted curve.
-	 */
-	@Deprecated
-	public MaxServiceCurve shiftLeftClipping( Num dx ) {
-		return new MaxServiceCurve( Curve.shiftLeftClipping( this, dx ) );
 	}
 
 	/**
