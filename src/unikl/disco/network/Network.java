@@ -1249,9 +1249,10 @@ public class Network {
  		pw.println( "import unikl.disco.network.Server.Multiplexing;" );
  		pw.println();
 
- 		pw.println( "public class " + file_name + "{");
+ 		pw.println( "public class " + file_name + " implements unikl.disco.network.ReturnsNetwork {");
  		pw.println( "\tpublic static Network network;" );
  		pw.println( "\tprivate static Server[] servers;" );
+ 		pw.println();
  		
  		// Server creation
  		int i_servers_func = 1;
@@ -1362,9 +1363,12 @@ public class Network {
  		pw.println( "\t\t}" );
  		pw.println( "\t}" );
  		pw.println();
+
+ 		pw.println( "\tpublic Network getNetwork() {" );
+ 		pw.println( "\t\treturn network;");
+ 		pw.println( "\t}");
  		
- 		pw.println( "}" );
- 		pw.println();
+ 		pw.print( "}" );
  		
  		pw.close();
  	}

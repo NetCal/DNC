@@ -41,8 +41,7 @@ import unikl.disco.network.Network;
 public class UseSavedNetwork {
 	public static void main( String[] args ) throws Exception {
 		// Get the server graph
-		@SuppressWarnings("static-access")
-		Network server_graph = ( new SavedNetwork() ).network;
+		Network server_graph = ( new SavedNetwork() ).getNetwork();
 		
 		
 		// Analysis configurations

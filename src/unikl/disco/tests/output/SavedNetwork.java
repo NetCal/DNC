@@ -29,9 +29,10 @@ import unikl.disco.network.Network;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
 
-public class SavedNetwork{
+public class SavedNetwork implements unikl.disco.network.ReturnsNetwork {
 	public static Network network;
 	private static Server[] servers;
+
 	public static void createServers1() throws Exception {
 		servers[29] = network.addServer( "s26", new ServiceCurve( "SC{(0.0,0.0),10000.0}" ), new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" ), Multiplexing.ARBITRARY, true, true );
 		servers[32] = network.addServer( "s14", new ServiceCurve( "SC{(0.0,0.0),10000.0}" ), new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" ), Multiplexing.ARBITRARY, true, true );
@@ -1273,5 +1274,7 @@ public class SavedNetwork{
 		}
 	}
 
+	public Network getNetwork() {
+		return network;
+	}
 }
-
