@@ -29,7 +29,7 @@ import unikl.disco.network.Network;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
 
-public class SavedNetwork implements unikl.disco.network.ReturnsNetwork {
+public class SavedNetwork implements unikl.disco.network.SavedNetwork {
 	public static Network network;
 	private static Server[] servers;
 
