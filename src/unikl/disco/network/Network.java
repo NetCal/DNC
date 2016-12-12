@@ -238,8 +238,6 @@ public class Network {
 	}
 	
 	private void updateServerAdditionInternally( Server new_server ) {
-		server_id_counter++;
-		
 		map__server__in_links.put( new_server, new HashSet<Link>() );
 		map__server__out_links.put( new_server, new HashSet<Link>() );
 		
@@ -250,6 +248,8 @@ public class Network {
 		
 		Integer integer_object = new Integer( server_id_counter );
 		map__id__server.put( integer_object, new_server );
+		
+		server_id_counter++;
 	}
 	
 	public void removeServer( Server s ) throws Exception {
