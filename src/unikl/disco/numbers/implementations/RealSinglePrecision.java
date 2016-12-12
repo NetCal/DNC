@@ -39,7 +39,7 @@ public class RealSinglePrecision implements Num {
 	private float value;
 	
 	private static final float EPSILON = 0.00016f; // Maximum rounding error observed in the functional tests
-	private static boolean comparison_with_epsilon = false;
+	private static boolean comparison_epsilon = false;
 	
 	@SuppressWarnings("unused")
 	private RealSinglePrecision() {}
@@ -70,7 +70,7 @@ public class RealSinglePrecision implements Num {
 	
 	public static Num sub( RealSinglePrecision num1, RealSinglePrecision num2 ) {
 		float result = num1.value - num2.value;
-		if( comparison_with_epsilon && Math.abs( result ) <= EPSILON ) {
+		if( comparison_epsilon && Math.abs( result ) <= EPSILON ) {
 			result = 0;
 		}
 		return new RealSinglePrecision( result );
@@ -106,7 +106,7 @@ public class RealSinglePrecision implements Num {
 	}
 	
 	public boolean isZero() {
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return ( value <= EPSILON ) && ( value >= -EPSILON );
 		} else {
 			return value == 0.0f;
@@ -116,7 +116,7 @@ public class RealSinglePrecision implements Num {
 	public boolean greater( Num num2 ) {
 		float num2float = new Float( num2.doubleValue() ).floatValue();
 		
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value > ( num2float + EPSILON );
 		} else {
 			return value > num2float;
@@ -124,7 +124,7 @@ public class RealSinglePrecision implements Num {
 	}
 
 	public boolean greaterZero() {
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value > EPSILON;
 		} else {
 			return value > 0.0f;
@@ -134,7 +134,7 @@ public class RealSinglePrecision implements Num {
 	public boolean geq( Num num2 ) {
 		float num2float = new Float( num2.doubleValue() ).floatValue();
 		
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value >= ( num2float + EPSILON );
 		} else {
 			return value >= num2float;
@@ -142,7 +142,7 @@ public class RealSinglePrecision implements Num {
 	}
 
 	public boolean geqZero() {
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value >= EPSILON;
 		} else {
 			return value >= 0.0f;
@@ -152,7 +152,7 @@ public class RealSinglePrecision implements Num {
 	public boolean less( Num num2 ) {
 		float num2float = new Float( num2.doubleValue() ).floatValue();
 		
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value < ( num2float - EPSILON );
 		} else {
 			return value < num2float;
@@ -160,7 +160,7 @@ public class RealSinglePrecision implements Num {
 	}
 
 	public boolean lessZero() {
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value < -EPSILON;
 		} else {
 			return value < 0.0f;
@@ -170,7 +170,7 @@ public class RealSinglePrecision implements Num {
 	public boolean leq( Num num2 ) {
 		float num2float = new Float( num2.doubleValue() ).floatValue();
 		
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value <= ( num2float - EPSILON );
 		} else {
 			return value <= num2float;
@@ -178,7 +178,7 @@ public class RealSinglePrecision implements Num {
 	}
 
 	public boolean leqZero() {
-		if( comparison_with_epsilon ) {
+		if( comparison_epsilon ) {
 			return value <= -EPSILON;
 		} else {
 			return value <= 0.0f;

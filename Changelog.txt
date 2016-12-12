@@ -7,6 +7,7 @@ v2.3.0 "Centaur" (2017-ABC-NM)
   - NumUtils.java provides methods to work with objects implementing the Num interface
   - unikl.disco.numbers.implementations provides four implementations:
     - Real numbers with single precision or double precision.
+    	- Both provide a flag to account for potential rounding errors when comparing numbers (comparison_epsilon).
     - Rational numbers based on Integer or BigInteger (requires Apache Commons Math 3 and special values in unikl.disco.numbers.values). 
 * Convolution: Improvements for convolution involving \delta_T.
 * FunctionalTests: Further streamlined test configuration generation.

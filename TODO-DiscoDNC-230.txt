@@ -1,5 +1,4 @@
 * Fix RationalBigInteger tests —> bigger EPSILON?
-* Rational numbers —> option to use EPSILON in comparisons as with reals
 * Remove deprecated methods —> Does Philip use them?
 * Coverity Scan static analysis
 
