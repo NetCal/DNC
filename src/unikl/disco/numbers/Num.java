@@ -38,18 +38,18 @@ package unikl.disco.numbers;
 public interface Num {
 	public boolean isZero();
 
-	public boolean equals( double obj );
+	public boolean equals( double num );
 
-	public boolean greater( Num num2 );
+	public boolean greater( Num num );
 	public boolean greaterZero();
 
-	public boolean geq( Num num2 );
+	public boolean geq( Num num );
 	public boolean geqZero();
 
-	public boolean less( Num num2 );
+	public boolean less( Num num );
 	public boolean lessZero();
 
-	public boolean leq( Num num2 );
+	public boolean leq( Num num );
 	public boolean leqZero();
 	
 	public double doubleValue();

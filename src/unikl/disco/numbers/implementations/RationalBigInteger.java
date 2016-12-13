@@ -146,18 +146,18 @@ public class RationalBigInteger implements Num {
 		return value.getNumerator().intValue() == 0;
 	}
 
-	public boolean greater( Num num2 ) {
-		if( num2 instanceof NaN ){
+	public boolean greater( Num num ) {
+		if( num instanceof NaN ){
 			return false;
 		}
-		if( num2 instanceof PositiveInfinity ){
+		if( num instanceof PositiveInfinity ){
 			return false;
 		}
-		if( num2 instanceof NegativeInfinity ){
+		if( num instanceof NegativeInfinity ){
 			return true;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num2).value ) > 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num).value ) > 0 ) {
 			return true;
 		} else {
 			return false;
@@ -172,18 +172,18 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public boolean geq( Num num2 ) {
-		if( num2 instanceof NaN ){
+	public boolean geq( Num num ) {
+		if( num instanceof NaN ){
 			return false;
 		}
-		if( num2 instanceof PositiveInfinity ){
+		if( num instanceof PositiveInfinity ){
 			return false;
 		}
-		if( num2 instanceof NegativeInfinity ){
+		if( num instanceof NegativeInfinity ){
 			return true;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num2).value ) >= 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num).value ) >= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -198,18 +198,18 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public boolean less( Num num2 ) {
-		if( num2 instanceof NaN ){
+	public boolean less( Num num ) {
+		if( num instanceof NaN ){
 			return false;
 		}
-		if( num2 instanceof PositiveInfinity ){
+		if( num instanceof PositiveInfinity ){
 			return true;
 		}
-		if( num2 instanceof NegativeInfinity ){
+		if( num instanceof NegativeInfinity ){
 			return false;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num2).value ) < 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num).value ) < 0 ) {
 			return true;
 		} else {
 			return false;
@@ -224,18 +224,18 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public boolean leq( Num num2 ) {
-		if( num2 instanceof NaN ){
+	public boolean leq( Num num ) {
+		if( num instanceof NaN ){
 			return false;
 		}
-		if( num2 instanceof PositiveInfinity ){
+		if( num instanceof PositiveInfinity ){
 			return true;
 		}
-		if( num2 instanceof NegativeInfinity ){
+		if( num instanceof NegativeInfinity ){
 			return false;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num2).value ) <= 0 ) {
+		if( this.value.compareTo( ((RationalBigInteger)num).value ) <= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -261,15 +261,15 @@ public class RationalBigInteger implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num2 ) {
-		return this.doubleValue() - num2 <= RealDoublePrecision.createEpsilon().doubleValue();
+	public boolean equals( double num ) {
+		return this.doubleValue() - num <= RealDoublePrecision.createEpsilon().doubleValue();
 	}
 
-	public boolean equals( RationalBigInteger num2 ) {
-		if( this.value.compareTo( num2.value ) == 0 ) {
+	public boolean equals( RationalBigInteger num ) {
+		if( this.value.compareTo( num.value ) == 0 ) {
 			return true;
 		} else {
-			return equals( num2.doubleValue() );
+			return equals( num.doubleValue() );
 		}
 	}
 
@@ -279,7 +279,7 @@ public class RationalBigInteger implements Num {
 				|| !( obj instanceof RationalBigInteger ) ) {
 			return false;
 		} else {
-			return equals( ((RationalBigInteger) obj) );
+			return equals( ((RationalBigInteger)obj) );
 		}
 	}
 	

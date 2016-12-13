@@ -42,7 +42,7 @@ public final class NegativeInfinity implements Num {
 		return false;
 	}
 	
-	public boolean greater( Num num2 ) {
+	public boolean greater( Num num ) {
 		return false;
 	}
 	
@@ -50,7 +50,7 @@ public final class NegativeInfinity implements Num {
 		return false;
 	}
 
-	public boolean geq( Num num2 ) {
+	public boolean geq( Num num ) {
 		return false;
 	}
 
@@ -58,7 +58,7 @@ public final class NegativeInfinity implements Num {
 		return false;
 	}
 
-	public boolean less( Num num2 ) {
+	public boolean less( Num num ) {
 		return true;
 	}
 
@@ -66,7 +66,7 @@ public final class NegativeInfinity implements Num {
 		return true;
 	}
 
-	public boolean leq( Num num2 ) {
+	public boolean leq( Num num ) {
 		return true;
 	}
 
@@ -85,21 +85,26 @@ public final class NegativeInfinity implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num2 ) {
-		return false;
-	}
-
-//	protected boolean equals( NegativeInfinity num2 ) {
-//		return true;
-//	}
-
-	@Override
-	public boolean equals( Object obj ) {
-		if( obj instanceof NegativeInfinity ) {
+	public boolean equals( double num ) {
+		if( num == Double.NEGATIVE_INFINITY ) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean equals( Object obj ) {
+		if( obj == null ) {
+			return false;
+		}
+		if( obj instanceof NegativeInfinity ) {
+			return true;
+		}
+		if( obj instanceof Num ) {
+			return equals( ((Num)obj).doubleValue() );
+		}
+		return false;
 	}
 	
 	@Override
@@ -109,6 +114,6 @@ public final class NegativeInfinity implements Num {
 	
 	@Override
 	public String toString(){
-		return "-Infinity";
+		return Double.toString( Double.NEGATIVE_INFINITY );
 	}
 }

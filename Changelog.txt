@@ -2,9 +2,9 @@ v2.3.0 "Centaur" (2017-ABC-NM)
 ------------------------------
 * Rework of the number abstraction layer in unikl.disco.numbers:
   The DiscoDNC is now built on a factory pattern with four implementations -- the lower body and the four legs of our new Centaur release. 
-  - Num.java is now an interface to be implemented by the actual number representations in unikl.disco.numbers.implementations
-  - NumFactory.java provides methods to create a number, takes care of the representation given in the CalculatorConfig
-  - NumUtils.java provides methods to work with objects implementing the Num interface
+  - Num.java is now an interface to be implemented by the actual number representations in unikl.disco.numbers.implementations.
+  - NumFactory.java provides methods to create a number, takes care of the representation given in the CalculatorConfig.
+  - NumUtils.java provides methods to work with objects implementing the Num interface.
   - unikl.disco.numbers.implementations provides four implementations:
     - Real numbers with single precision or double precision.
     	- Both provide a flag to account for potential rounding errors when comparing numbers (comparison_epsilon).

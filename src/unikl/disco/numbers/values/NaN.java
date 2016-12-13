@@ -42,7 +42,7 @@ public final class NaN implements Num {
 		return false;
 	}
 
-	public boolean greater( Num num2 ) {
+	public boolean greater( Num num ) {
 		return false;
 	}
 
@@ -50,7 +50,7 @@ public final class NaN implements Num {
 		return false;
 	}
 
-	public boolean geq( Num num2 ) {
+	public boolean geq( Num num ) {
 		return false;
 	}
 
@@ -58,7 +58,7 @@ public final class NaN implements Num {
 		return false;
 	}
 
-	public boolean less( Num num2 ) {
+	public boolean less( Num num ) {
 		return false;
 	}
 
@@ -66,7 +66,7 @@ public final class NaN implements Num {
 		return false;
 	}
 
-	public boolean leq( Num num2 ) {
+	public boolean leq( Num num ) {
 		return false;
 	}
 
@@ -85,11 +85,7 @@ public final class NaN implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num2 ) {
-		return false;
-	}
-
-	protected boolean equals( NaN num2 ) {
+	public boolean equals( double num ) {
 		return false;
 	}
 
@@ -105,6 +101,6 @@ public final class NaN implements Num {
 	
 	@Override
 	public String toString(){
-		return "NaN";
+		return Double.toString( Double.NaN );
 	}
 }

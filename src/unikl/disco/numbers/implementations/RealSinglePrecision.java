@@ -113,13 +113,13 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean greater( Num num2 ) {
-		float num2float = new Float( num2.doubleValue() ).floatValue();
+	public boolean greater( Num num ) {
+		float num_float = new Float( num.doubleValue() ).floatValue();
 		
 		if( comparison_epsilon ) {
-			return value > ( num2float + EPSILON );
+			return value > ( num_float + EPSILON );
 		} else {
-			return value > num2float;
+			return value > num_float;
 		}
 	}
 
@@ -131,13 +131,13 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean geq( Num num2 ) {
-		float num2float = new Float( num2.doubleValue() ).floatValue();
+	public boolean geq( Num num ) {
+		float num_float = new Float( num.doubleValue() ).floatValue();
 		
 		if( comparison_epsilon ) {
-			return value >= ( num2float + EPSILON );
+			return value >= ( num_float + EPSILON );
 		} else {
-			return value >= num2float;
+			return value >= num_float;
 		}
 	}
 
@@ -149,13 +149,13 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean less( Num num2 ) {
-		float num2float = new Float( num2.doubleValue() ).floatValue();
+	public boolean less( Num num ) {
+		float num_float = new Float( num.doubleValue() ).floatValue();
 		
 		if( comparison_epsilon ) {
-			return value < ( num2float - EPSILON );
+			return value < ( num_float - EPSILON );
 		} else {
-			return value < num2float;
+			return value < num_float;
 		}
 	}
 
@@ -167,13 +167,13 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean leq( Num num2 ) {
-		float num2float = new Float( num2.doubleValue() ).floatValue();
+	public boolean leq( Num num ) {
+		float num_float = new Float( num.doubleValue() ).floatValue();
 		
 		if( comparison_epsilon ) {
-			return value <= ( num2float - EPSILON );
+			return value <= ( num_float - EPSILON );
 		} else {
-			return value <= num2float;
+			return value <= num_float;
 		}
 	}
 
@@ -196,26 +196,33 @@ public class RealSinglePrecision implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num2 ) {
-		if( ( this.value == Float.POSITIVE_INFINITY && num2 == Double.POSITIVE_INFINITY ) 
-				|| ( this.value == Float.NEGATIVE_INFINITY && num2 == Double.NEGATIVE_INFINITY ) ) {
-			return true;
-		}
+	public boolean equals( double num ) {
+		return equals( new Float( num ).floatValue() );
 		
-		if( Math.abs( (new Double( value )).doubleValue() - num2 ) <= EPSILON ) {
-			return true;
-		} else {
-			return false;
-		}
+		// Alternative code path using a comparison of doubles
+//		if( ( this.value == Float.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
+//				|| ( this.value == Float.NEGATIVE_INFINITY && num == Double.NEGATIVE_INFINITY ) ) {
+//			return true;
+//		}
+//		
+//		if( Math.abs( (new Double( value )).doubleValue() - num ) <= EPSILON ) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
-	public boolean equals( RealSinglePrecision num2 ) {
-		if( ( this.value == Float.POSITIVE_INFINITY && num2.value == Float.POSITIVE_INFINITY ) 
-				|| ( this.value == Float.NEGATIVE_INFINITY && num2.value == Float.NEGATIVE_INFINITY ) ) {
+	public boolean equals( RealSinglePrecision num ) {
+		return equals( num.value );
+	}
+	
+	private boolean equals( float num ) {
+		if( ( this.value == Float.POSITIVE_INFINITY && num == Float.POSITIVE_INFINITY ) 
+				|| ( this.value == Float.NEGATIVE_INFINITY && num == Float.NEGATIVE_INFINITY ) ) {
 			return true;
 		}
 		
-		if( Math.abs( value - num2.value ) <= EPSILON ) {
+		if( Math.abs( value - num ) <= EPSILON ) {
 			return true;
 		} else {
 			return false;
@@ -228,7 +235,7 @@ public class RealSinglePrecision implements Num {
 				|| !( obj instanceof RealSinglePrecision ) ) {
 			return false;
 		} else {
-			return equals( ((RealSinglePrecision) obj).value );
+			return equals( ((RealSinglePrecision)obj).value );
 		}
 	}
 	
