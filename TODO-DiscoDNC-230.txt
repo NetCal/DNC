@@ -1,5 +1,4 @@
 * Fix RationalBigInteger tests —> bigger EPSILON?
-* Remove deprecated methods —> Does Philip use them?
 * Coverity Scan static analysis
 
 * Changelog

@@ -731,9 +731,9 @@ public class Curve {
 		return -1;
 	}
 	
-	public LinearSegment[] getSegments() {
-		return segments;
-	}
+//	public LinearSegment[] getSegments() {
+//		return segments;
+//	}
 	
 	public LinearSegment getSegment(int i) {
 		if(i>=0) {

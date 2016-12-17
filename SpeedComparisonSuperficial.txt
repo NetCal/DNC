@@ -1,0 +1,28 @@
+-rw-rw-r-- 1 sbondorf sbondorf  10231 Dec 12 12:01 exp/20_delay_v2.2.8.txt	t=0
+-rw-rw-r-- 1 sbondorf sbondorf  32158 Dec 12 12:02 exp/40_delay_v2.2.8.txt	  1min
+-rw-rw-r-- 1 sbondorf sbondorf  44369 Dec 12 12:07 exp/60_delay_v2.2.8.txt	  5min
+-rw-rw-r-- 1 sbondorf sbondorf  76769 Dec 12 12:16 exp/80_delay_v2.2.8.txt	  9min
+-rw-rw-r-- 1 sbondorf sbondorf  98723 Dec 12 12:27 exp/100_delay_v2.2.8.txt	 11min
+-rw-rw-r-- 1 sbondorf sbondorf 107840 Dec 12 12:56 exp/120_delay_v2.2.8.txt	 29min
+-rw-rw-r-- 1 sbondorf sbondorf 138898 Dec 12 13:29 exp/140_delay_v2.2.8.txt	 33min
+-rw-rw-r-- 1 sbondorf sbondorf 155330 Dec 12 14:00 exp/160_delay_v2.2.8.txt	 31min
+-rw-rw-r-- 1 sbondorf sbondorf 175589 Dec 12 15:22 exp/180_delay_v2.2.8.txt	 82min
+-rw-rw-r-- 1 sbondorf sbondorf 200811 Dec 12 15:56 exp/200_delay_v2.2.8.txt	 34min
+-rw-rw-r-- 1 sbondorf sbondorf 201824 Dec 12 18:20 exp/220_delay_v2.2.8.txt	144min
+-rw-rw-r-- 1 sbondorf sbondorf 239289 Dec 13 00:07 exp/240_delay_v2.2.8.txt	347min
+-rw-rw-r-- 1 sbondorf sbondorf 265355 Dec 13 01:29 exp/260_delay_v2.2.8.txt	 89min
+-rw-rw-r-- 1 sbondorf sbondorf 269205 Dec 16 14:02 exp/280_delay_v2.2.8.txt	 84.5hours
+-rw-rw-r-- 1 sbondorf sbondorf 304359 Dec 16 19:17 exp/300_delay_v2.2.8.txt	315min
+
+
+-rw-rw-r-- 1 sbondorf sbondorf  10230 Dec 17 08:41 exp2/20_delay_v2.3.0.txt	t=0
+-rw-rw-r-- 1 sbondorf sbondorf  32178 Dec 17 08:42 exp2/40_delay_v2.3.0.txt	  1min 
+-rw-rw-r-- 1 sbondorf sbondorf  44357 Dec 17 08:46 exp2/60_delay_v2.3.0.txt	  4min
+-rw-rw-r-- 1 sbondorf sbondorf  76715 Dec 17 08:53 exp2/80_delay_v2.3.0.txt	  7min
+-rw-rw-r-- 1 sbondorf sbondorf  98691 Dec 17 09:01 exp2/100_delay_v2.3.0.txt	  8min
+-rw-rw-r-- 1 sbondorf sbondorf 107828 Dec 17 09:23 exp2/120_delay_v2.3.0.txt	 22min
+-rw-rw-r-- 1 sbondorf sbondorf 138950 Dec 17 09:48 exp2/140_delay_v2.3.0.txt	 25min
+-rw-rw-r-- 1 sbondorf sbondorf 155339 Dec 17 10:11 exp2/160_delay_v2.3.0.txt	 23min
+-rw-rw-r-- 1 sbondorf sbondorf 175511 Dec 17 11:14 exp2/180_delay_v2.3.0.txt	 63min
+-rw-rw-r-- 1 sbondorf sbondorf 200834 Dec 17 11:39 exp2/200_delay_v2.3.0.txt	 25min
+-rw-rw-r-- 1 sbondorf sbondorf 201831 Dec 17 13:28 exp2/220_delay_v2.3.0.txt	109min
