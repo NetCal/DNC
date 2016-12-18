@@ -67,14 +67,13 @@ public class Curve {
 
 	protected boolean is_delayed_infinite_burst = false;
 
-	private boolean has_token_bucket_meta_info = false;
-	protected boolean is_token_bucket = false;
-	protected List<Curve> token_buckets = new LinkedList<Curve>();
-
 	private boolean has_rate_latency_meta_info = false;
 	protected boolean is_rate_latency = false;
 	protected List<Curve> rate_latencies = new LinkedList<Curve>();
 
+	private boolean has_token_bucket_meta_info = false;
+	protected boolean is_token_bucket = false;
+	protected List<Curve> token_buckets = new LinkedList<Curve>();
 	/**
 	 * Creates an empty <code>Curve</code> instance.
 	 */

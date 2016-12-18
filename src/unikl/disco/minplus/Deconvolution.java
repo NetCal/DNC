@@ -99,14 +99,10 @@ public class Deconvolution {
 	}
 	
 	public static ArrivalCurve deconvolve( ArrivalCurve arrival_curve, ServiceCurve service_curve, boolean tb_rl_optimized ) {
-		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-			return arrival_curve;
-		}
-		if( service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0 ) {
-			return arrival_curve;
-		}
-		if( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) ) {
-			return arrival_curve;
+		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() )
+				|| ( service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0 ) 
+				|| ( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) ) ) {
+			return arrival_curve.copy();
 		}
 		if( service_curve.equals( ServiceCurve.createZeroService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
