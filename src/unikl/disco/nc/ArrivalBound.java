@@ -133,7 +133,7 @@ public class ArrivalBound {
 	 */
 	public Set<ArrivalCurve> computeArrivalBounds( Server server, Set<Flow> flows_to_bound, Flow flow_of_interest ) throws Exception {
 		flows_to_bound.remove( flow_of_interest );
-		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createNullArrival() ) );
+		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createZeroArrival() ) );
 		if( flows_to_bound.isEmpty() ) {
 			return arrival_bounds;
 		}
@@ -193,7 +193,7 @@ public class ArrivalBound {
 	public Set<ArrivalCurve> computeArrivalBounds( Link link, Set<Flow> flows_to_bound, Flow flow_of_interest ) throws Exception {
 		flows_to_bound.remove( flow_of_interest );
 		if( flows_to_bound.isEmpty() ) {
-			return new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createNullArrival() ) );
+			return new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createZeroArrival() ) );
 		}
 		
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();

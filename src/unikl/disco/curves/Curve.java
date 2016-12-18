@@ -79,7 +79,7 @@ public class Curve {
 	 * Creates an empty <code>Curve</code> instance.
 	 */
 	protected Curve() {
-		createNullSegmentsCurve( 1 );
+		createZeroSegmentsCurve( 1 );
 	}
 
 	protected Curve( Curve curve ) {
@@ -93,7 +93,7 @@ public class Curve {
 	 * @param segment_count the number of segments
 	 */
 	protected Curve( int segment_count ) {
-		createNullSegmentsCurve( segment_count );
+		createZeroSegmentsCurve( segment_count );
 	}
 
 	/**
@@ -105,13 +105,13 @@ public class Curve {
 		return is_delayed_infinite_burst;
 	}
 	
-	private void createNullSegmentsCurve( int segment_count ) {
+	private void createZeroSegmentsCurve( int segment_count ) {
 		segments = new LinearSegment[segment_count];
 		
-		segments[0] = LinearSegment.createNullSegment();
+		segments[0] = LinearSegment.createZeroSegment();
 		
 		for (int i = 1; i < segment_count; i++) {
-			segments[i] = LinearSegment.createNullSegment();
+			segments[i] = LinearSegment.createZeroSegment();
 			segments[i].leftopen = true;
 		}
 	}
@@ -135,7 +135,7 @@ public class Curve {
 		String curve_str_internal = curve_str.substring( 1, curve_str.length()-1 );
 		
 		String[] segments_to_parse = curve_str_internal.split( ";" );
-		segments = new LinearSegment[ segments_to_parse.length ]; // No need to use createNullSegments( i ) because we will store parsed segments
+		segments = new LinearSegment[ segments_to_parse.length ]; // No need to use createZeroSegments( i ) because we will store parsed segments
 		
 		for( int i = 0; i<segments_to_parse.length; i++ ) {
 			segments[i] = new LinearSegment( segments_to_parse[i] );
@@ -143,16 +143,16 @@ public class Curve {
 	}
 
 	public void initializeCurve( Curve curve ) {
-		createNullSegmentsCurve( curve.getSegmentCount() );
+		createZeroSegmentsCurve( curve.getSegmentCount() );
 		for ( int i = 0; i < curve.getSegmentCount(); i++ ) {
 			segments[i] = curve.getSegment( i ).copy();
 		}
 	}
 	
 	/**
-	 * Initializes this curve with a null curve.
+	 * Initializes this curve with a zero curve.
 	 */
-	protected void initializeNullCurve() {
+	protected void initializeZeroCurve() {
 		initializeHorizontal( NumFactory.createZero() );
 	}
 
@@ -171,7 +171,7 @@ public class Curve {
 	 * @param y the y-intercept of the curve
 	 */
 	protected void initializeHorizontal( Num y ) {
-		createNullSegmentsCurve( 1 );
+		createZeroSegmentsCurve( 1 );
 		getSegment(0).y = y;
 	}
 	
@@ -188,7 +188,7 @@ public class Curve {
 	 * @param latency the delay, which must be &gt;= 0.0
 	 */
 	protected void initializeDelayedInfiniteBurst( Num latency ) {
-		createNullSegmentsCurve( 2 );
+		createZeroSegmentsCurve( 2 );
 		
 		getSegment( 0 ).x        = NumFactory.createZero();
 		getSegment( 0 ).y        = NumFactory.createZero();
@@ -219,7 +219,7 @@ public class Curve {
 	 */
 	// Do not move to ArrivalCurve as MaxServiceCurve can also be a token bucket.
 	protected void initializeTokenBucket( Num rate, Num burst ) {
-		createNullSegmentsCurve( 2 );
+		createZeroSegmentsCurve( 2 );
 
 		getSegment( 0 ).x        = NumFactory.createZero();
 		getSegment( 0 ).y        = NumFactory.createZero();
@@ -251,14 +251,14 @@ public class Curve {
 	// Do not move to ServiceCurve as MaxServiceCurve can also be a token bucket.
 	protected void initializeRateLatency( Num rate, Num latency ) {
 		if ( latency.isZero() ) {
-			createNullSegmentsCurve( 1 );
+			createZeroSegmentsCurve( 1 );
 
 			getSegment(0).x        = NumFactory.createZero();
 			getSegment(0).y        = NumFactory.createZero();
 			getSegment(0).grad     = rate;
 			getSegment(0).leftopen = false;
 		} else {
-			createNullSegmentsCurve( 2 );
+			createZeroSegmentsCurve( 2 );
 			
 			getSegment(0).x        = NumFactory.createZero();
 			getSegment(0).y        = NumFactory.createZero();
@@ -273,11 +273,11 @@ public class Curve {
 	}
 	
 	/**
-	 * Creates a null curve.
+	 * Creates a zero curve.
 	 * 
 	 * @return a <code>Curve</code> instance
 	 */
-	private static Curve createNullCurve() {
+	private static Curve createZeroCurve() {
 		return createHorizontal( NumFactory.createZero() );
 	}
 	
@@ -1080,9 +1080,9 @@ public class Curve {
 			result.removeSegment(0);
 		}
 
-		// In case that we've removed everything, the curve had infinite latency, so return the NULL curve.
+		// In case that we've removed everything, the curve had infinite latency, so return the zero curve.
 		if (result.segments.length == 0) {
-			return createNullCurve();
+			return createZeroCurve();
 		}
 
 		// Shift remaining segments left by latency
@@ -1553,10 +1553,10 @@ public class Curve {
 		other_cpy.beautify();
 		
  		if( this_cpy.getLatency() == NumFactory.getPositiveInfinity() ) {
- 			this_cpy = createNullCurve();
+ 			this_cpy = createZeroCurve();
  		}
  		if( other_cpy.getLatency() == NumFactory.getPositiveInfinity() ) {
- 			other_cpy = createNullCurve();
+ 			other_cpy = createZeroCurve();
  		}
 		
 		int this_segment_length = this_cpy.segments.length;

@@ -76,7 +76,7 @@ public class MaxServiceCurve extends Curve {
 	private void makeMaximumServiceCurve() {
 		if ( this.getSegment(0).y.greater( NumFactory.getZero() ) ) {
 			LinearSegment[] segments_new = new LinearSegment[segments.length+1];
-			segments_new[0] = LinearSegment.createNullSegment();
+			segments_new[0] = LinearSegment.createZeroSegment();
 			
 			System.arraycopy( this.segments, 0, segments_new, 1, this.segments.length );
 			segments_new[1].leftopen = true;
@@ -86,13 +86,13 @@ public class MaxServiceCurve extends Curve {
 	}
 	
 	/**
-	 * Creates a null maximum service curve.
+	 * Creates a zero maximum service curve.
 	 * 
 	 * @return a <code>MaxServiceCurve</code> instance
 	 */
-	public static MaxServiceCurve createNullMaxService() {
+	public static MaxServiceCurve createZeroMaxService() {
 		MaxServiceCurve msc_result = new MaxServiceCurve();
-		msc_result.initializeNullCurve();
+		msc_result.initializeZeroCurve();
 		
 		return msc_result;
 	}

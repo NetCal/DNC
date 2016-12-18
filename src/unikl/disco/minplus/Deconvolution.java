@@ -105,13 +105,13 @@ public class Deconvolution {
 		if( service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0 ) {
 			return arrival_curve;
 		}
-		if( arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
+		if( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) ) {
 			return arrival_curve;
 		}
-		if( service_curve.equals( ServiceCurve.createNullService() )
+		if( service_curve.equals( ServiceCurve.createZeroService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
 				|| ( service_curve.getSustainedRate().isZero() && service_curve.getSegment( service_curve.getSegmentCount() - 1 ).getY().isZero() ) ) {
-			return ArrivalCurve.createNullArrival();
+			return ArrivalCurve.createZeroArrival();
 		}
 		if ( tb_rl_optimized ) {
 			return deconvolveTB_RL( arrival_curve, service_curve );
@@ -124,10 +124,10 @@ public class Deconvolution {
 		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
 			return arrival_curve;
 		}
-		if( service_curve.equals( ServiceCurve.createNullService() )
+		if( service_curve.equals( ServiceCurve.createZeroService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
 				|| ( service_curve.getSustainedRate().isZero() && service_curve.getSegment( 1 ).getY().isZero() ) ) {
-			return ArrivalCurve.createNullArrival();
+			return ArrivalCurve.createZeroArrival();
 		}
 		
 		// Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
@@ -150,10 +150,10 @@ public class Deconvolution {
 		if( curve_2.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
 			return new ArrivalCurve( curve_1 );
 		}
-		if( curve_2.equals( ServiceCurve.createNullService() )
+		if( curve_2.equals( ServiceCurve.createZeroService() )
 				|| curve_2.getLatency().equals( NumFactory.getPositiveInfinity() )
 				|| ( curve_2.getSustainedRate().isZero() && curve_2.getSegment( 1 ).getY().isZero() ) ) {
-			return ArrivalCurve.createNullArrival();
+			return ArrivalCurve.createZeroArrival();
 		}
 		if ( CalculatorConfig.DECONVOLUTION_CHECKS ) {
 			if( !curve_1.isAlmostConcave() ) {
@@ -200,7 +200,7 @@ public class Deconvolution {
 			y_beta = curve_2.f( x_inflect_alpha );
 			results_cand_burst = NumUtils.sub( y_alpha, y_beta );
 			
-			if( x_inflect_alpha.isZero() // The inflection point is in the origin and thus the candidate is a null curve.
+			if( x_inflect_alpha.isZero() // The inflection point is in the origin and thus the candidate is a zero curve.
 					|| results_cand_burst.lessZero() ) { // At the inflection point, the service curve is larger than the arrival curve.
 					continue;
 			}
@@ -218,7 +218,7 @@ public class Deconvolution {
 				// The origin, j+1 segments (we start counting j at 0), and a horizontal line at the end.
 				
 				int segment_count = j + 3; // At least 2 (the origin and and a burst followed by rate 0)
-				candidate_tmp = new ArrivalCurve( segment_count );	// Consists of null segments (x,y),r = (0,0),0 only.
+				candidate_tmp = new ArrivalCurve( segment_count );	// Consists of zero segments (x,y),r = (0,0),0 only.
 																	// The origin (first segment, id 0) stays as is, the remainder needs to be constructed.
 				// Compute the second segment
 				Num next_x_coord = NumFactory.createZero();

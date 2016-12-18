@@ -840,7 +840,7 @@ public class Network {
 	 */
 	public ArrivalCurve getSourceFlowArrivalCurve( Server source, Set<Flow> source_flows )
 	{
-		ArrivalCurve a_out = ArrivalCurve.createNullArrival();
+		ArrivalCurve a_out = ArrivalCurve.createZeroArrival();
 		
 		// Returns an empty set if one of the arguments is null
 		Set<Flow> source_flows_internal = SetUtils.getIntersection( map__server__source_flows.get( source ), source_flows );

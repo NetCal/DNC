@@ -50,7 +50,7 @@ import unikl.disco.numbers.NumUtils;
 public class Convolution {
 	public static ArrivalCurve convolve( Set<ArrivalCurve> arrival_curves ) {
 		if ( arrival_curves == null || arrival_curves.isEmpty() ) {
-			return ArrivalCurve.createNullArrival();
+			return ArrivalCurve.createZeroArrival();
 		}
 		if( arrival_curves.size() == 1 ) {
 			return arrival_curves.iterator().next();
@@ -65,10 +65,16 @@ public class Convolution {
 	}
 	
 	public static ArrivalCurve convolve( ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2 ) {
-		ArrivalCurve null_arrival = ArrivalCurve.createNullArrival();
-		if ( arrival_curve_1 == null || arrival_curve_2 == null 
-				|| arrival_curve_1.equals( null_arrival ) || arrival_curve_2.equals( null_arrival )  ) {
-			return null_arrival;
+    	if (arrival_curve_1 == null ) {
+            return arrival_curve_2;
+        }
+    	if (arrival_curve_2 == null ) {
+            return arrival_curve_1;
+        }
+    	
+		ArrivalCurve zero_arrival = ArrivalCurve.createZeroArrival();
+		if ( arrival_curve_1.equals( zero_arrival ) || arrival_curve_2.equals( zero_arrival )  ) {
+			return zero_arrival;
 		}
 		
 		ArrivalCurve zero_delay_infinite_burst = ArrivalCurve.createZeroDelayInfiniteBurst();
@@ -183,9 +189,9 @@ public class Convolution {
 			}
 		}
 		
-		ServiceCurve null_service = ServiceCurve.createNullService(); 
-		if( service_curve_1.equals( null_service ) || service_curve_2.equals( null_service ) ){
-			return null_service;
+		ServiceCurve zero_service = ServiceCurve.createZeroService(); 
+		if( service_curve_1.equals( zero_service ) || service_curve_2.equals( zero_service ) ){
+			return zero_service;
 		}
 
 		ServiceCurve result = new ServiceCurve();

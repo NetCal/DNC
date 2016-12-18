@@ -73,12 +73,12 @@ public final class LeftOverService {
 	 * @return The FIFO service curve
 	 */
 	public static ServiceCurve fifoMux( ServiceCurve service_curve, ArrivalCurve arrival_curve ) {
-		if( arrival_curve.equals( ArrivalCurve.createNullArrival() ) 
+		if( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) 
 				|| service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
 			return service_curve.copy();
 		}
-		if( service_curve.equals( ServiceCurve.createNullService() ) ) {
-			return ServiceCurve.createNullService();
+		if( service_curve.equals( ServiceCurve.createZeroService() ) ) {
+			return ServiceCurve.createZeroService();
 		}
 		
 		if ( CalculatorConfig.FIFO_MUX_CHECKS ) {
@@ -115,7 +115,7 @@ public final class LeftOverService {
 		}
 
 		// Reaching this code means that there's no service left-over
-		return ServiceCurve.createNullService();
+		return ServiceCurve.createZeroService();
 	}
 	
 	public static Set<ServiceCurve> arbMux( ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves ) {
@@ -138,12 +138,12 @@ public final class LeftOverService {
 	 * @return The FIFO service curve
 	 */
 	public static ServiceCurve arbMux( ServiceCurve service_curve, ArrivalCurve arrival_curve ) {
-		if( arrival_curve.equals( ArrivalCurve.createNullArrival() ) 
+		if( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) 
 				|| service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
 			return service_curve.copy();
 		}
-		if( service_curve.equals( ServiceCurve.createNullService() ) ) {
-			return ServiceCurve.createNullService();
+		if( service_curve.equals( ServiceCurve.createZeroService() ) ) {
+			return ServiceCurve.createZeroService();
 		}
 		
 		return new ServiceCurve( ServiceCurve.boundAtXAxis( ServiceCurve.sub( service_curve, arrival_curve ) ) );

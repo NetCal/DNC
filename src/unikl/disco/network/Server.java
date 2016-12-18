@@ -41,7 +41,7 @@ public class Server {
 	private int id;
 	private String alias;
 	
-	private ServiceCurve service_curve = ServiceCurve.createNullService();
+	private ServiceCurve service_curve = ServiceCurve.createZeroService();
 	/**
 	 * A zero delay burst curve lets the influence of the maximum service curve vanish
 	 */

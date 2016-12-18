@@ -125,7 +125,7 @@ public class LinearSegment{
 		grad = NumFactory.create( xy_r[1] );
 	}
 
-	public static LinearSegment createNullSegment() {
+	public static LinearSegment createZeroSegment() {
 		return LinearSegment.createHorizontalLine( 0.0 ); // X-axis
 	}
 	
@@ -310,12 +310,6 @@ public class LinearSegment{
 	 * @return the function value
 	 */
 	public Num f( Num x ) {
-		// FIXME makes tests fail
-//		Num result = x.copy();
-//		result.sub( this.x );
-//		result.mult( grad );
-//		result.add( y );
-		
 		Num result = NumUtils.add( NumUtils.mult( NumUtils.sub( x, this.x ), grad ), y ); 
 		return result;
 	}

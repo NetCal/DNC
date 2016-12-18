@@ -48,13 +48,13 @@ import unikl.disco.numbers.NumUtils;
  */
 public class BacklogBound {
 	public static Num derive( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
+		if ( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) ) {
 			return NumFactory.createZero();
 		}
 		if( service_curve.isDelayedInfiniteBurst() ) {
 			return arrival_curve.f( service_curve.getLatency() );
 		}
-		if ( service_curve.equals( ServiceCurve.createNullService() ) // We know from above that the arrivals are not zero.
+		if ( service_curve.equals( ServiceCurve.createZeroService() ) // We know from above that the arrivals are not zero.
 				|| arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) {
 			return NumFactory.createPositiveInfinity();
 		}

@@ -77,7 +77,7 @@ public class ArrivalCurve extends Curve {
 	private void makeArrivalCurve() {
 		if ( getSegment(0).y.greaterZero() ) {
 			LinearSegment[] segments_new = new LinearSegment[segments.length+1];
-			segments_new[0] = LinearSegment.createNullSegment();
+			segments_new[0] = LinearSegment.createZeroSegment();
 			
 			System.arraycopy( segments, 0, segments_new, 1, segments.length );
 			segments_new[1].leftopen = true;
@@ -87,13 +87,13 @@ public class ArrivalCurve extends Curve {
 	}
 	
 	/**
-	 * Creates a null arrival curve.
+	 * Creates a zero arrival curve.
 	 * 
 	 * @return a <code>Curve</code> instance
 	 */
-	public static ArrivalCurve createNullArrival() {
+	public static ArrivalCurve createZeroArrival() {
 		ArrivalCurve ac_result = new ArrivalCurve();
-		ac_result.initializeNullCurve();
+		ac_result.initializeZeroCurve();
 		
 		return ac_result;
 	}

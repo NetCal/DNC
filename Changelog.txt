@@ -15,6 +15,9 @@ v2.3.0 "Centaur" (2017-ABC-NM)
 * Network.java: Fixed getting a server by its ID (had an offset of +1 before).
 * Removed methods that were deprecated in v2.2. 
 * Updated the output tests (also serves as the demo for saving a network and reusing it).
+* Better distinction between number zero and null objects: 
+  - Renamed *null{Segment,Curve,ArrivalCurve,ServiceCurve,MaxServiceCurve}* to *zero{Segment,Curve,ArrivalCurve,ServiceCurve,MaxServiceCurve} *
+  - Convolution of an arrival curve with a null object now returns the arrival curve instead of a zeroArrival curve.
 * Various fixes, performance improvements, reduced code duplication, improved parameter naming, etc.
 
 v2.2.8 "Heavy Ion" (2016-Dec-06)

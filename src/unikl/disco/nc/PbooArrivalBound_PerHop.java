@@ -68,7 +68,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 	}
 	
 	public Set<ArrivalCurve> computeArrivalBound( Link link, Set<Flow> f_xfcaller, Flow flow_of_interest ) throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createNullArrival() ) );
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createZeroArrival() ) );
 		if ( f_xfcaller == null || f_xfcaller.isEmpty() )
 		{
 			return alphas_xfcaller;
@@ -137,7 +137,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 			}
 			
 			// Check if there's any service left on this path. If not, the set only contains a null-service curve.
-			if( betas_lo_s.size() == 1 && betas_lo_s.iterator().next().equals( ServiceCurve.createNullService() ) ) {
+			if( betas_lo_s.size() == 1 && betas_lo_s.iterator().next().equals( ServiceCurve.createZeroService() ) ) {
 				System.out.println( "No service left over during PBOO arrival bounding!" );
 				alphas_xfcaller.clear();
 				alphas_xfcaller.add( ArrivalCurve.createZeroDelayInfiniteBurst() );

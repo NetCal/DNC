@@ -190,7 +190,7 @@ public class PmooAnalysis extends Analysis {
 		}
 		
 		// Derive the left-over service curves
-		ServiceCurve null_service = ServiceCurve.createNullService();
+		ServiceCurve null_service = ServiceCurve.createZeroService();
 		for( List<Flow> xtx_substitutes : cross_flow_substitutes_set ) {
 			ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve( path, xtx_substitutes );
 			
@@ -200,7 +200,7 @@ public class PmooAnalysis extends Analysis {
 		}
 
 		if( betas_e2e.isEmpty() ) {
-			betas_e2e.add( ServiceCurve.createNullService() );
+			betas_e2e.add( ServiceCurve.createZeroService() );
 		}
 		return betas_e2e;
 	}
@@ -243,7 +243,7 @@ public class PmooAnalysis extends Analysis {
 			i++;
 		}
 
-		ServiceCurve beta_total = ServiceCurve.createNullService();
+		ServiceCurve beta_total = ServiceCurve.createZeroService();
 
 		boolean more_combinations = true;
 		while ( more_combinations )
@@ -254,7 +254,7 @@ public class PmooAnalysis extends Analysis {
 															cross_flow_substitutes,
 															flow_tb_iter_map,
 															server_rl_iters );
-			if ( !beta.equals( ServiceCurve.createNullService() ) )
+			if ( !beta.equals( ServiceCurve.createZeroService() ) )
 			{
 				beta_total = ServiceCurve.max( beta_total, beta );
 			}
@@ -345,7 +345,7 @@ public class PmooAnalysis extends Analysis {
 
 			// Check for stability constraint violation
 			if( sum_r_at_s >= s.getServiceCurve().getSustainedRate().doubleValue() ) {
-				return ServiceCurve.createNullService();
+				return ServiceCurve.createZeroService();
 			}
 
 			Curve current_rl = service_curves[i].getRLComponent( server_rl_iters[i] );
@@ -369,7 +369,7 @@ public class PmooAnalysis extends Analysis {
 			Num Ri = NumUtils.sub( current_rl.getSustainedRate(), sum_r );
 			if ( Ri.leqZero() )
 			{
-				return ServiceCurve.createNullService();
+				return ServiceCurve.createZeroService();
 			}
 			R = NumUtils.min( R, Ri );
 
@@ -394,7 +394,7 @@ public class PmooAnalysis extends Analysis {
  		T = NumUtils.add( T, NumUtils.div( NumUtils.add( sum_bursts, sum_latencyterms ), R ) );
 
  		if( T == NumFactory.getPositiveInfinity() ) {
- 			return ServiceCurve.createNullService();
+ 			return ServiceCurve.createZeroService();
  		}
  		if( R == NumFactory.getPositiveInfinity() ) {
  			return ServiceCurve.createDelayedInfiniteBurst( T );

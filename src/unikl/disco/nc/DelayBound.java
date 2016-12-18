@@ -43,7 +43,7 @@ import unikl.disco.numbers.NumUtils;
  */
 public class DelayBound {
 	private static Num deriveForSpecialCurves( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if ( arrival_curve.equals( ArrivalCurve.createNullArrival() ) ) {
+		if ( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) ) {
 			return NumFactory.createZero();
 		}
 		if ( service_curve.isDelayedInfiniteBurst() ) {
@@ -51,7 +51,7 @@ public class DelayBound {
 			//             Otherwise its sub-additive closure would be zero, i.e., the arrival curve would not be sensible.
 			return service_curve.getLatency().copy();
 		}
-		if ( service_curve.equals( ServiceCurve.createNullService() )  // We know from above that the arrivals are not zero. 
+		if ( service_curve.equals( ServiceCurve.createZeroService() )  // We know from above that the arrivals are not zero. 
 				|| arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) {
 			return NumFactory.createPositiveInfinity();
 		}

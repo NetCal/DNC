@@ -70,13 +70,13 @@ public class ServiceCurve extends Curve {
 	}
 	
 	/**
-	 * Creates a null arrival curve.
+	 * Creates a zero service curve.
 	 * 
 	 * @return a <code>ServiceCurve</code> instance
 	 */
-	public static ServiceCurve createNullService() {
+	public static ServiceCurve createZeroService() {
 		ServiceCurve sc_result = new ServiceCurve();
-		sc_result.initializeNullCurve();
+		sc_result.initializeZeroCurve();
 		
 		return sc_result;
 	}

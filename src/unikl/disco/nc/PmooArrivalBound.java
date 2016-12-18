@@ -85,7 +85,7 @@ public class PmooArrivalBound extends ArrivalBound {
 	 * @throws Exception If any of the sanity checks fails.
 	 */
 	public Set<ArrivalCurve> computeArrivalBound( Link link, Set<Flow> f_xfcaller, Flow flow_of_interest ) throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createNullArrival() ) );
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createZeroArrival() ) );
 		if ( f_xfcaller == null || f_xfcaller.isEmpty() )
 		{
 			return alphas_xfcaller;
@@ -109,7 +109,7 @@ public class PmooArrivalBound extends ArrivalBound {
 		Server from = network.findSplittingServer( to, f_xfcaller_to );
 		Path common_subpath;
 		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
-		ServiceCurve null_service = ServiceCurve.createNullService();
+		ServiceCurve null_service = ServiceCurve.createZeroService();
 		
 		if ( from.equals( to ) ) { // Shortcut if the common subpath only consists of a single hop
 			common_subpath = new Path( to );

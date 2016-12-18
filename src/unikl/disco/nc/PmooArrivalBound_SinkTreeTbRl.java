@@ -145,8 +145,8 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
 			return result;
 		}
 
-		ArrivalCurve arrival_bound = ArrivalCurve.createNullArrival();
-		ArrivalCurve arrival_bound_f = ArrivalCurve.createNullArrival();
+		ArrivalCurve arrival_bound = ArrivalCurve.createZeroArrival();
+		ArrivalCurve arrival_bound_f = ArrivalCurve.createZeroArrival();
 		ServiceCurve sc_s_subpath = ServiceCurve.createZeroDelayInfiniteBurst();
 		for ( Flow f : f_xfcaller_server ) {
 			arrival_bound_f = ab_cache.getEntry( link, f );	
@@ -189,8 +189,8 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
 			return result;
 		}
 
-		ArrivalCurve arrival_bound = ArrivalCurve.createNullArrival();
-		ArrivalCurve arrival_bound_f = ArrivalCurve.createNullArrival();
+		ArrivalCurve arrival_bound = ArrivalCurve.createZeroArrival();
+		ArrivalCurve arrival_bound_f = ArrivalCurve.createZeroArrival();
 		ServiceCurve sc_s_subpath = ServiceCurve.createZeroDelayInfiniteBurst();
 		for ( Flow f : f_xfcaller_server ) {
 			arrival_bound_f = ab_cache.getEntry( link, f );	
