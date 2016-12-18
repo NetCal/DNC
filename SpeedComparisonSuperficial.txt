@@ -1,3 +1,6 @@
+Double Precision Floating Points
+————————————————————————————————
+
 -rw-rw-r-- 1 sbondorf sbondorf  10231 Dec 12 12:01 exp/20_delay_v2.2.8.txt	t=0
 -rw-rw-r-- 1 sbondorf sbondorf  32158 Dec 12 12:02 exp/40_delay_v2.2.8.txt	  1min
 -rw-rw-r-- 1 sbondorf sbondorf  44369 Dec 12 12:07 exp/60_delay_v2.2.8.txt	  5min
@@ -26,3 +29,15 @@
 -rw-rw-r-- 1 sbondorf sbondorf 175511 Dec 17 11:14 exp2/180_delay_v2.3.0.txt	 63min
 -rw-rw-r-- 1 sbondorf sbondorf 200834 Dec 17 11:39 exp2/200_delay_v2.3.0.txt	 25min
 -rw-rw-r-- 1 sbondorf sbondorf 201831 Dec 17 13:28 exp2/220_delay_v2.3.0.txt	109min
+-rw-rw-r-- 1 sbondorf sbondorf 239344 Dec 17 17:50 exp2/240_delay_v2.3.0.txt	262min
+-rw-rw-r-- 1 sbondorf sbondorf 265336 Dec 17 18:53 exp2/260_delay_v2.3.0.txt	 63min
+-rw-rw-r-- 1 sbondorf sbondorf        Dec          exp2/280_delay_v2.3.0.txt
+-rw-rw-r-- 1 sbondorf sbondorf        Dec          exp2/300_delay_v2.3.0.txt
+
+Note the different output file sizes required for the analysis results of equal networks.
+This is caused by double rounding errors. The amount of decimals can vary.
+
+
+
+Single Precision Floating Points
+————————————————————————————————
