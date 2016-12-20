@@ -1,0 +1,69 @@
+v2.3.1
+------
+Num interface: Add neq
+
+
+    /**
+     * Returns a copy of this curve that is shifted to the right by <code>dx</code>,
+     * i.e. g(x) = f(x-dx).
+     *
+     * @param curve The curve to shift.
+     * @param dx    The offset to shift the curve.
+     * @return The shifted curve.
+     */
+    public static Curve shiftRight(Curve curve, Num dx) {
+        Curve curve_copy = curve.copy();
+        if (dx.equals(0.0)) {
+            return curve_copy;
+        }
+
+        LinearSegment current_segment = curve_copy.getSegment( 0 );
+        if( !current_segment.getX().equals( 0 )
+        		|| !current_segment.getY().equals( 0 ) ) {
+            throw new RuntimeException("Curve to shift right must pass through origin!");
+        }
+        
+        if( current_segment.getGrad().greater( Num.getZero() ) ) {
+        	 // Add a zero segment at the front
+        	curve_copy.addSegment( 0, LinearSegmentFactory.createZeroSegment() );
+        }	
+
+        for( int i = 1; i < curve_copy.getSegmentCount(); i++ ) {
+    		// TODO Needs a better way than modifying the result of a getter!
+        	curve_copy.getSegments()[i].setX( Num.add( curve_copy.getSegments()[i].getX(), dx ) );
+    	}
+
+        curve_copy.beautify();
+    	return curve_copy;
+    }
+
+// getBurst and getTBBurst; move the latter to arrival curve?
+
+Curve.java:
+    /**
+     * Returns the burstiness of this token bucket curve.<br>
+     * Note: For performance reasons there are no sanity checks! Only
+     * call this method on a valid token bucket curve!
+     *
+     * @return the burstiness
+     */
+    public Num getTBBurst() {
+    	if( segments.length > 1 ) {		// Token Buckets pass through the origin
+			return segments[1].getY().copy();
+		} else {						// rate functions have burst 0
+			return Num.createZero();
+		}
+    }
+	
+	public Num getBurst() {
+		return fLimitRight( Num.getZero() );
+	}
+
+PMOO:
+// Compute sum of bursts
+		for ( Flow f : cross_flow_substitutes )
+		{
+			ArrivalCurve bound = f.getArrivalCurve();
+			ArrivalCurve current_tb = (ArrivalCurve) bound.getTBComponent( ((Integer) flow_tb_iter_map.get( f )).intValue() );
+			sum_bursts = Num.add( sum_bursts, current_tb.getTBBurst() );
+		}
