@@ -36,23 +36,23 @@ package unikl.disco.numbers;
  *
  */
 public interface Num {
-	public boolean isZero();
+	public double doubleValue();
 
-	public boolean equals( double num );
+	public boolean eq( double num );
+	public boolean eqZero();
 
-	public boolean greater( Num num );
-	public boolean greaterZero();
+	public boolean gt( Num num );
+	public boolean gtZero();
 
 	public boolean geq( Num num );
 	public boolean geqZero();
 
-	public boolean less( Num num );
-	public boolean lessZero();
+	public boolean lt( Num num );
+	public boolean ltZero();
 
 	public boolean leq( Num num );
 	public boolean leqZero();
 	
-	public double doubleValue();
 
 	public Num copy();
 }

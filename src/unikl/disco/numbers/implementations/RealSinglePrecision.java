@@ -105,7 +105,7 @@ public class RealSinglePrecision implements Num {
 	    return new RealSinglePrecision( num.value * -1 );
 	}
 	
-	public boolean isZero() {
+	public boolean eqZero() {
 		if( comparison_epsilon ) {
 			return ( value <= EPSILON ) && ( value >= -EPSILON );
 		} else {
@@ -113,7 +113,7 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean greater( Num num ) {
+	public boolean gt( Num num ) {
 		float num_float = new Float( num.doubleValue() ).floatValue();
 		
 		if( comparison_epsilon ) {
@@ -123,7 +123,7 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean greaterZero() {
+	public boolean gtZero() {
 		if( comparison_epsilon ) {
 			return value > EPSILON;
 		} else {
@@ -149,7 +149,7 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean less( Num num ) {
+	public boolean lt( Num num ) {
 		float num_float = new Float( num.doubleValue() ).floatValue();
 		
 		if( comparison_epsilon ) {
@@ -159,7 +159,7 @@ public class RealSinglePrecision implements Num {
 		}
 	}
 
-	public boolean lessZero() {
+	public boolean ltZero() {
 		if( comparison_epsilon ) {
 			return value < -EPSILON;
 		} else {
@@ -196,7 +196,7 @@ public class RealSinglePrecision implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num ) {
+	public boolean eq( double num ) {
 		return equals( new Float( num ).floatValue() );
 		
 		// Alternative code path using a comparison of doubles

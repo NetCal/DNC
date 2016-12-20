@@ -74,7 +74,7 @@ public class MaxServiceCurve extends Curve {
 	}
 
 	private void makeMaximumServiceCurve() {
-		if ( this.getSegment(0).y.greater( NumFactory.getZero() ) ) {
+		if ( this.getSegment(0).y.gt( NumFactory.getZero() ) ) {
 			LinearSegment[] segments_new = new LinearSegment[segments.length+1];
 			segments_new[0] = LinearSegment.createZeroSegment();
 			

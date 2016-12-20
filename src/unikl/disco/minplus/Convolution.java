@@ -214,7 +214,7 @@ public class Convolution {
 		}
 
 		while(i1 < service_curve_1.getSegmentCount() || i2 < service_curve_2.getSegmentCount()) {
-			if ( service_curve_1.getSegment(i1).getGrad().less( service_curve_2.getSegment(i2).getGrad() ) ) {
+			if ( service_curve_1.getSegment(i1).getGrad().lt( service_curve_2.getSegment(i2).getGrad() ) ) {
 				if (i1+1 >= service_curve_1.getSegmentCount()) {
 					result.getSegment(result.getSegmentCount()-1).setGrad( service_curve_1.getSegment(i1).getGrad() );
 					break;
@@ -271,7 +271,7 @@ public class Convolution {
 	}
 	
 	public static Set<ArrivalCurve> convolve_ACs_EGamma( Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve ) throws Exception {
-		if( extra_gamma_curve.getLatency().greaterZero() ) {
+		if( extra_gamma_curve.getLatency().gtZero() ) {
 			throw new Exception( "Cannot convolve with an extra gamma curve with latency" );
 		}
 		

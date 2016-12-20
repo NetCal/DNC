@@ -124,28 +124,28 @@ public class NumUtils {
 			return new NaN();
 		}
 		if( num1 instanceof PositiveInfinity ) {
-			if ( num2.lessZero() || num2 instanceof NegativeInfinity ) {
+			if ( num2.ltZero() || num2 instanceof NegativeInfinity ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
 		if( num2 instanceof PositiveInfinity ) {
-			if ( num1.lessZero() || num1 instanceof NegativeInfinity ) {
+			if ( num1.ltZero() || num1 instanceof NegativeInfinity ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
 		if( num1 instanceof NegativeInfinity ) {
-			if ( num2.lessZero() || num2 instanceof NegativeInfinity ) {
+			if ( num2.ltZero() || num2 instanceof NegativeInfinity ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
 			}
 		}
 		if( num2 instanceof NegativeInfinity ) {
-			if ( num1.lessZero() || num1 instanceof NegativeInfinity ) {
+			if ( num1.ltZero() || num1 instanceof NegativeInfinity ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
@@ -175,14 +175,14 @@ public class NumUtils {
 			return new NaN();
 		}
 		if( num1 instanceof PositiveInfinity ) { // positive infinity divided by some finite value
-			if( num2.lessZero() ) {
+			if( num2.ltZero() ) {
 				return new NegativeInfinity();
 			} else {
 				return new PositiveInfinity();
 			}
 		}
 		if( num1 instanceof NegativeInfinity ) { // negative infinity divided by some finite value 
-			if( num2.lessZero() ) {
+			if( num2.ltZero() ) {
 				return new PositiveInfinity();
 			} else {
 				return new NegativeInfinity();
@@ -194,13 +194,13 @@ public class NumUtils {
 
 		switch ( CalculatorConfig.NUM_CLASS ) {
 			case RATIONAL_BIGINTEGER:
-		        if ( ((RationalBigInteger)num2).isZero() ) {
+		        if ( ((RationalBigInteger)num2).eqZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
 					return RationalBigInteger.div( (RationalBigInteger)num1, (RationalBigInteger)num2 );     		
 		       	}
 			case RATIONAL_INTEGER:
-		        if ( ((RationalInteger)num2).isZero() ) {
+		        if ( ((RationalInteger)num2).eqZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
 		       		return RationalInteger.div( (RationalInteger)num1, (RationalInteger)num2 );        		

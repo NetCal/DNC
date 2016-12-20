@@ -38,15 +38,15 @@ import unikl.disco.numbers.Num;
 public final class NegativeInfinity implements Num {
 	public NegativeInfinity() {}
 	
-	public boolean isZero() {
+	public boolean eqZero() {
 		return false;
 	}
 	
-	public boolean greater( Num num ) {
+	public boolean gt( Num num ) {
 		return false;
 	}
 	
-	public boolean greaterZero() {
+	public boolean gtZero() {
 		return false;
 	}
 
@@ -58,11 +58,11 @@ public final class NegativeInfinity implements Num {
 		return false;
 	}
 
-	public boolean less( Num num ) {
+	public boolean lt( Num num ) {
 		return true;
 	}
 
-	public boolean lessZero() {
+	public boolean ltZero() {
 		return true;
 	}
 
@@ -85,7 +85,7 @@ public final class NegativeInfinity implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num ) {
+	public boolean eq( double num ) {
 		if( num == Double.NEGATIVE_INFINITY ) {
 			return true;
 		} else {
@@ -102,7 +102,7 @@ public final class NegativeInfinity implements Num {
 			return true;
 		}
 		if( obj instanceof Num ) {
-			return equals( ((Num)obj).doubleValue() );
+			return eq( ((Num)obj).doubleValue() );
 		}
 		return false;
 	}

@@ -227,10 +227,10 @@ public class LinearSegment{
 
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x = x;
-		if ( crossed || NumUtils.abs( NumUtils.sub( f1_x, f2_x ) ).less( NumFactory.getEpsilon() ) ) {
+		if ( crossed || NumUtils.abs( NumUtils.sub( f1_x, f2_x ) ).lt( NumFactory.getEpsilon() ) ) {
 			result.y   = f1_x;
 			result.grad = NumUtils.min( s1.grad, s2.grad );
-		} else if ( f1_x.less( f2_x ) ) {
+		} else if ( f1_x.lt( f2_x ) ) {
 			result.y   = f1_x;
 			result.grad = s1.grad;
 		} else {
@@ -258,10 +258,10 @@ public class LinearSegment{
 
 		LinearSegment result = LinearSegment.createHorizontalLine( 0.0 );
 		result.x = x;
-		if ( crossed || NumUtils.abs( NumUtils.sub( f1_x, f2_x ) ).less( NumFactory.getEpsilon() ) ) {
+		if ( crossed || NumUtils.abs( NumUtils.sub( f1_x, f2_x ) ).lt( NumFactory.getEpsilon() ) ) {
 			result.y   = f1_x;
 			result.grad = NumUtils.max( s1.grad, s2.grad );
-		} else if ( f1_x.greater( f2_x ) ) {
+		} else if ( f1_x.gt( f2_x ) ) {
 			result.y   = f1_x;
 			result.grad = s1.grad;
 		} else {

@@ -38,15 +38,15 @@ import unikl.disco.numbers.Num;
 public final class NaN implements Num {
 	public NaN() {}
 	
-	public boolean isZero() {
+	public boolean eqZero() {
 		return false;
 	}
 
-	public boolean greater( Num num ) {
+	public boolean gt( Num num ) {
 		return false;
 	}
 
-	public boolean greaterZero() {
+	public boolean gtZero() {
 		return false;
 	}
 
@@ -58,11 +58,11 @@ public final class NaN implements Num {
 		return false;
 	}
 
-	public boolean less( Num num ) {
+	public boolean lt( Num num ) {
 		return false;
 	}
 
-	public boolean lessZero() {
+	public boolean ltZero() {
 		return false;
 	}
 
@@ -85,7 +85,7 @@ public final class NaN implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num ) {
+	public boolean eq( double num ) {
 		return false;
 	}
 

@@ -52,7 +52,7 @@ public class DelayBound {
 			return service_curve.getLatency().copy();
 		}
 		if ( service_curve.equals( ServiceCurve.createZeroService() )  // We know from above that the arrivals are not zero. 
-				|| arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) {
+				|| arrival_curve.getSustainedRate().gt( service_curve.getSustainedRate() ) ) {
 			return NumFactory.createPositiveInfinity();
 		}
 		return null;

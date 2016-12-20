@@ -142,11 +142,11 @@ public class RationalBigInteger implements Num {
     	return new RationalBigInteger( num.value.negate() );
 	}
 	
-	public boolean isZero() {
+	public boolean eqZero() {
 		return value.getNumerator().intValue() == 0;
 	}
 
-	public boolean greater( Num num ) {
+	public boolean gt( Num num ) {
 		if( num instanceof NaN ){
 			return false;
 		}
@@ -164,7 +164,7 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public boolean greaterZero() {
+	public boolean gtZero() {
 		if( this.value.compareTo( ZERO_BIGFRACTION ) > 0 ) {
 			return true;
 		} else {
@@ -198,7 +198,7 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public boolean less( Num num ) {
+	public boolean lt( Num num ) {
 		if( num instanceof NaN ){
 			return false;
 		}
@@ -216,7 +216,7 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public boolean lessZero() {
+	public boolean ltZero() {
 		if( this.value.compareTo( ZERO_BIGFRACTION ) < 0 ) {
 			return true;
 		} else {
@@ -261,7 +261,7 @@ public class RationalBigInteger implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num ) {
+	public boolean eq( double num ) {
 		return this.doubleValue() - num <= RealDoublePrecision.createEpsilon().doubleValue();
 	}
 
@@ -269,7 +269,7 @@ public class RationalBigInteger implements Num {
 		if( this.value.compareTo( num.value ) == 0 ) {
 			return true;
 		} else {
-			return equals( num.doubleValue() );
+			return eq( num.doubleValue() );
 		}
 	}
 

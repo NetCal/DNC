@@ -105,7 +105,7 @@ public class RealDoublePrecision implements Num {
 	    return new RealDoublePrecision( num.value * -1 );
 	}
 	
-	public boolean isZero() {
+	public boolean eqZero() {
 		if( comparison_epsilon ) {
 			return ( value <= EPSILON ) && ( value >= -EPSILON );
 		} else {
@@ -113,7 +113,7 @@ public class RealDoublePrecision implements Num {
 		}
 	}
 
-	public boolean greater( Num num ) {
+	public boolean gt( Num num ) {
 		if( comparison_epsilon ) {
 			return value > ( num.doubleValue() + EPSILON );
 		} else {
@@ -121,7 +121,7 @@ public class RealDoublePrecision implements Num {
 		}
 	}
 
-	public boolean greaterZero() {
+	public boolean gtZero() {
 		if( comparison_epsilon ) {
 			return value > EPSILON;
 		} else {
@@ -145,7 +145,7 @@ public class RealDoublePrecision implements Num {
 		}
 	}
 
-	public boolean less( Num num ) {
+	public boolean lt( Num num ) {
 		if( comparison_epsilon ) {
 			return value < ( num.doubleValue() - EPSILON );
 		} else {
@@ -153,7 +153,7 @@ public class RealDoublePrecision implements Num {
 		}
 	}
 
-	public boolean lessZero() {
+	public boolean ltZero() {
 		if( comparison_epsilon ) {
 			return value < -EPSILON;
 		} else {
@@ -188,7 +188,7 @@ public class RealDoublePrecision implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num ) {
+	public boolean eq( double num ) {
 		if( ( this.value == Double.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
 				|| ( this.value == Double.NEGATIVE_INFINITY && num == Double.NEGATIVE_INFINITY ) ) {
 			return true;
@@ -202,7 +202,7 @@ public class RealDoublePrecision implements Num {
 	}
 
 	public boolean equals( RealDoublePrecision num ) {
-		return equals( num.value );
+		return eq( num.value );
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class RealDoublePrecision implements Num {
 				|| !( obj instanceof RealDoublePrecision ) ) {
 			return false;
 		} else {
-			return equals( ((RealDoublePrecision)obj).value );
+			return eq( ((RealDoublePrecision)obj).value );
 		}
 	}
 	

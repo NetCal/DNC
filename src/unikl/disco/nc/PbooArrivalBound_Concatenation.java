@@ -183,7 +183,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
 			
 			// Reduce the burst
 			for( ArrivalCurve alpha_xfcaller : alphas_xfcaller ) {
-				if( alpha_xfcaller.getBurst().greater( tfa_backlog_bound_min ) ) {
+				if( alpha_xfcaller.getBurst().gt( tfa_backlog_bound_min ) ) {
 					alpha_xfcaller.getSegment( 1 ).setY( tfa_backlog_bound_min ); // if the burst is >0 then there are at least two segments and the second holds the burst as its y-axis value
 				}
 			}

@@ -106,7 +106,7 @@ public class Deconvolution {
 		}
 		if( service_curve.equals( ServiceCurve.createZeroService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
-				|| ( service_curve.getSustainedRate().isZero() && service_curve.getSegment( service_curve.getSegmentCount() - 1 ).getY().isZero() ) ) {
+				|| ( service_curve.getSustainedRate().eqZero() && service_curve.getSegment( service_curve.getSegmentCount() - 1 ).getY().eqZero() ) ) {
 			return ArrivalCurve.createZeroArrival();
 		}
 		if ( tb_rl_optimized ) {
@@ -122,7 +122,7 @@ public class Deconvolution {
 		}
 		if( service_curve.equals( ServiceCurve.createZeroService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )
-				|| ( service_curve.getSustainedRate().isZero() && service_curve.getSegment( 1 ).getY().isZero() ) ) {
+				|| ( service_curve.getSustainedRate().eqZero() && service_curve.getSegment( 1 ).getY().eqZero() ) ) {
 			return ArrivalCurve.createZeroArrival();
 		}
 		
@@ -140,7 +140,7 @@ public class Deconvolution {
 	 * @return The deconvolved curve, an arrival curve.
 	 */
 	private static ArrivalCurve deconvolveGeneric( Curve curve_1, Curve curve_2 ) {
-		if( curve_1.getSustainedRate().greater( curve_2.getSustainedRate() ) ) { // Violation of the sability constraint
+		if( curve_1.getSustainedRate().gt( curve_2.getSustainedRate() ) ) { // Violation of the sability constraint
 			return ArrivalCurve.createZeroDelayInfiniteBurst();
 		}
 		if( curve_2.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
@@ -148,7 +148,7 @@ public class Deconvolution {
 		}
 		if( curve_2.equals( ServiceCurve.createZeroService() )
 				|| curve_2.getLatency().equals( NumFactory.getPositiveInfinity() )
-				|| ( curve_2.getSustainedRate().isZero() && curve_2.getSegment( 1 ).getY().isZero() ) ) {
+				|| ( curve_2.getSustainedRate().eqZero() && curve_2.getSegment( 1 ).getY().eqZero() ) ) {
 			return ArrivalCurve.createZeroArrival();
 		}
 		if ( CalculatorConfig.DECONVOLUTION_CHECKS ) {
@@ -196,8 +196,8 @@ public class Deconvolution {
 			y_beta = curve_2.f( x_inflect_alpha );
 			results_cand_burst = NumUtils.sub( y_alpha, y_beta );
 			
-			if( x_inflect_alpha.isZero() // The inflection point is in the origin and thus the candidate is a zero curve.
-					|| results_cand_burst.lessZero() ) { // At the inflection point, the service curve is larger than the arrival curve.
+			if( x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero curve.
+					|| results_cand_burst.ltZero() ) { // At the inflection point, the service curve is larger than the arrival curve.
 					continue;
 			}
 			
@@ -205,7 +205,7 @@ public class Deconvolution {
 			// => Start constructing the candidate based on the service curve's first inflection points.
 			for( int j = curve_2.getSegmentCount()-1; j >= 0; j-- ) {
 				x_inflect_beta = curve_2.getSegment( j ).getX();
-				if( x_inflect_beta.greater( x_inflect_alpha ) ) {
+				if( x_inflect_beta.gt( x_inflect_alpha ) ) {
 					continue;
 				}
 

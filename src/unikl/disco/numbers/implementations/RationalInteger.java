@@ -136,11 +136,11 @@ public class RationalInteger implements Num {
     	return new RationalInteger( num.value.negate() );
 	}
 	
-	public boolean isZero() {
+	public boolean eqZero() {
 		return value.getNumerator() == 0;
 	}
 
-	public boolean greater( Num num ) {
+	public boolean gt( Num num ) {
 		if( num instanceof NaN ){
 			return false;
 		}
@@ -158,7 +158,7 @@ public class RationalInteger implements Num {
 		}
 	}
 
-	public boolean greaterZero() {
+	public boolean gtZero() {
 		if( this.value.compareTo( ZERO_FRACTION ) > 0 ) {
 			return true;
 		} else {
@@ -192,7 +192,7 @@ public class RationalInteger implements Num {
 		}
 	}
 
-	public boolean less( Num num ) {
+	public boolean lt( Num num ) {
 		if( num instanceof NaN ){
 			return false;
 		}
@@ -210,7 +210,7 @@ public class RationalInteger implements Num {
 		}
 	}
 
-	public boolean lessZero() {
+	public boolean ltZero() {
 		if( this.value.compareTo( ZERO_FRACTION ) < 0 ) {
 			return true;
 		} else {
@@ -255,7 +255,7 @@ public class RationalInteger implements Num {
 	}
 	
 	@Override
-	public boolean equals( double num ) {
+	public boolean eq( double num ) {
 		return equals( new RationalInteger( num ) );
 	}
 

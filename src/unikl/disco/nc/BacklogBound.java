@@ -55,7 +55,7 @@ public class BacklogBound {
 			return arrival_curve.f( service_curve.getLatency() );
 		}
 		if ( service_curve.equals( ServiceCurve.createZeroService() ) // We know from above that the arrivals are not zero.
-				|| arrival_curve.getSustainedRate().greater( service_curve.getSustainedRate() ) ) {
+				|| arrival_curve.getSustainedRate().gt( service_curve.getSustainedRate() ) ) {
 			return NumFactory.createPositiveInfinity();
 		}
 		

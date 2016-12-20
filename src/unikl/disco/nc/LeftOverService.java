@@ -94,7 +94,7 @@ public final class LeftOverService {
 		List<Num> ycoords = Curve.computeInflectionPointsY( arrival_curve, service_curve );
 		for( int i = 0; i < ycoords.size(); i++ ) {
 			Num ip_y = ( ycoords.get( i ) );
-			if ( ip_y.less( arrival_curve.getBurst() ) ) {
+			if ( ip_y.lt( arrival_curve.getBurst() ) ) {
 				continue;
 			}
 
