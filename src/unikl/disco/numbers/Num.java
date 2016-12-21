@@ -52,7 +52,6 @@ public interface Num {
 
 	public boolean leq( Num num );
 	public boolean leqZero();
-	
 
 	public Num copy();
 }
