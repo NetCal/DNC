@@ -55,5 +55,9 @@ Single Precision Floating Points
 -rw-rw-r-- 1 sbondorf sbondorf 124012 Dec 20 20:29 exp3/220_delay_v2.3.0S.txt	104min
 -rw-rw-r-- 1 sbondorf sbondorf 147176 Dec 21 00:40 exp3/240_delay_v2.3.0S.txt	251min
 -rw-rw-r-- 1 sbondorf sbondorf 163277 Dec 21 01:40 exp3/260_delay_v2.3.0S.txt	 60min
--rw-rw-r-- 1 sbondorf sbondorf        Dec          exp3/280_delay_v2.3.0S.txt
--rw-rw-r-- 1 sbondorf sbondorf        Dec          exp3/300_delay_v2.3.0S.txt
+-rw-rw-r-- 1 sbondorf sbondorf 164984 Dec 23 15:10 exp3/280_delay_v2.3.0S.txt	 61.5hours
+-rw-rw-r-- 1 sbondorf sbondorf 186641 Dec 23 18:57 exp3/300_delay_v2.3.0S.txt	226min
+
+
+Check this out:
+http://stackoverflow.com/questions/14531235/in-java-is-it-more-efficient-to-use-byte-or-short-instead-of-int-and-float-inst
