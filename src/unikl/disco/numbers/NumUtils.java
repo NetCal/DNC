@@ -326,9 +326,9 @@ public abstract class NumUtils {
 	public static Num negate( Num num ) {
 		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealSingle.negate( (RealSingle)num );
-			case REAL_SINGLE_PRECISION:
 				return RealDouble.negate( (RealDouble)num );
+			case REAL_SINGLE_PRECISION:
+				return RealSingle.negate( (RealSingle)num );
 		}	
 		
 		if( num instanceof NaN ) {
