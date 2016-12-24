@@ -36,22 +36,22 @@ package unikl.disco.numbers;
  * 
  */
 import unikl.disco.nc.CalculatorConfig;
-import unikl.disco.numbers.implementations.RationalBigInteger;
-import unikl.disco.numbers.implementations.RealDoublePrecision;
-import unikl.disco.numbers.implementations.RationalInteger;
-import unikl.disco.numbers.implementations.RealSinglePrecision;
+import unikl.disco.numbers.implementations.RationalBigInt;
+import unikl.disco.numbers.implementations.RealDouble;
+import unikl.disco.numbers.implementations.RationalInt;
+import unikl.disco.numbers.implementations.RealSingle;
 import unikl.disco.numbers.values.NaN;
 import unikl.disco.numbers.values.NegativeInfinity;
 import unikl.disco.numbers.values.PositiveInfinity;
 
 @SuppressWarnings("incomplete-switch")
-public class NumUtils {
+public abstract class NumUtils {
 	public static Num add( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.add( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.add( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.add( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.add( (RealSingle)num1, (RealSingle)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN 
@@ -66,22 +66,22 @@ public class NumUtils {
 			return new NegativeInfinity(); 
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				 return RationalBigInteger.add( (RationalBigInteger)num1, (RationalBigInteger)num2 );
+				 return RationalBigInt.add( (RationalBigInt)num1, (RationalBigInt)num2 );
 			case RATIONAL_INTEGER:
-				return RationalInteger.add( (RationalInteger)num1, (RationalInteger)num2 );
+				return RationalInt.add( (RationalInt)num1, (RationalInt)num2 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num sub( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.sub( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.sub( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.sub( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.sub( (RealSingle)num1, (RealSingle)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -102,22 +102,22 @@ public class NumUtils {
 			return new NegativeInfinity(); 
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.sub( (RationalBigInteger)num1, (RationalBigInteger)num2 );
+				return RationalBigInt.sub( (RationalBigInt)num1, (RationalBigInt)num2 );
 			case RATIONAL_INTEGER:
-				return RationalInteger.sub( (RationalInteger)num1, (RationalInteger)num2 );
+				return RationalInt.sub( (RationalInt)num1, (RationalInt)num2 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num mult( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.mult( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.mult( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.mult( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.mult( (RealSingle)num1, (RealSingle)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -152,22 +152,22 @@ public class NumUtils {
 			}
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.mult( (RationalBigInteger)num1, (RationalBigInteger)num2 );
+				return RationalBigInt.mult( (RationalBigInt)num1, (RationalBigInt)num2 );
 			case RATIONAL_INTEGER:
-				return RationalInteger.mult( (RationalInteger)num1, (RationalInteger)num2 );
+				return RationalInt.mult( (RationalInt)num1, (RationalInt)num2 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num div( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.div( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.div( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.div( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.div( (RealSingle)num1, (RealSingle)num2 );
 		}
 
 		if( num1 instanceof NaN || num2 instanceof NaN 
@@ -192,18 +192,18 @@ public class NumUtils {
 			return NumFactory.createZero();
 		}
 
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-		        if ( ((RationalBigInteger)num2).eqZero() ) {
+		        if ( ((RationalBigInt)num2).eqZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
-					return RationalBigInteger.div( (RationalBigInteger)num1, (RationalBigInteger)num2 );     		
+					return RationalBigInt.div( (RationalBigInt)num1, (RationalBigInt)num2 );     		
 		       	}
 			case RATIONAL_INTEGER:
-		        if ( ((RationalInteger)num2).eqZero() ) {
+		        if ( ((RationalInt)num2).eqZero() ) {
 		        	return new PositiveInfinity();
 		       	} else {
-		       		return RationalInteger.div( (RationalInteger)num1, (RationalInteger)num2 );        		
+		       		return RationalInt.div( (RationalInt)num1, (RationalInt)num2 );        		
 		       	}
 			default:
 				throw new RuntimeException( "Undefined number representation" );
@@ -211,11 +211,11 @@ public class NumUtils {
 	}
 
 	public static Num abs( Num num ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.abs( (RealDoublePrecision)num );
+				return RealDouble.abs( (RealDouble)num );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.abs( (RealSinglePrecision)num );
+				return RealSingle.abs( (RealSingle)num );
 		}
 		
 		if( num instanceof NaN ) {
@@ -225,22 +225,22 @@ public class NumUtils {
 			return new PositiveInfinity();
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.abs( (RationalBigInteger)num );
+				return RationalBigInt.abs( (RationalBigInt)num );
 			case RATIONAL_INTEGER:
-				return RationalInteger.abs( (RationalInteger)num );
+				return RationalInt.abs( (RationalInt)num );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num diff( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.diff( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.diff( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.diff( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.diff( (RealSingle)num1, (RealSingle)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) { 
@@ -251,22 +251,22 @@ public class NumUtils {
 			return new PositiveInfinity();
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.diff( (RationalBigInteger)num1, (RationalBigInteger)num2 );
+				return RationalBigInt.diff( (RationalBigInt)num1, (RationalBigInt)num2 );
 			case RATIONAL_INTEGER:
-				return RationalInteger.diff( (RationalInteger)num1, (RationalInteger)num2 );
+				return RationalInt.diff( (RationalInt)num1, (RationalInt)num2 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num max( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.max( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.max( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.max( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.max( (RealSingle)num1, (RealSingle)num2 );
 		}
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -282,22 +282,22 @@ public class NumUtils {
 			return num1.copy();
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.max( (RationalBigInteger)num1, (RationalBigInteger)num2 );
+				return RationalBigInt.max( (RationalBigInt)num1, (RationalBigInt)num2 );
 			case RATIONAL_INTEGER:
-				return RationalInteger.max( (RationalInteger)num1, (RationalInteger)num2 );
+				return RationalInt.max( (RationalInt)num1, (RationalInt)num2 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num min( Num num1, Num num2 ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.min( (RealDoublePrecision)num1, (RealDoublePrecision)num2 );
+				return RealDouble.min( (RealDouble)num1, (RealDouble)num2 );
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.min( (RealSinglePrecision)num1, (RealSinglePrecision)num2 );
+				return RealSingle.min( (RealSingle)num1, (RealSingle)num2 );
 		}	
 		
 		if( num1 instanceof NaN || num2 instanceof NaN ) {
@@ -313,22 +313,22 @@ public class NumUtils {
 			return num1.copy();
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.min( (RationalBigInteger)num1, (RationalBigInteger)num2 );
+				return RationalBigInt.min( (RationalBigInt)num1, (RationalBigInt)num2 );
 			case RATIONAL_INTEGER:
-				return RationalInteger.min( (RationalInteger)num1, (RationalInteger)num2 );
+				return RationalInt.min( (RationalInt)num1, (RationalInt)num2 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 
 	public static Num negate( Num num ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealSinglePrecision.negate( (RealSinglePrecision)num );
+				return RealSingle.negate( (RealSingle)num );
 			case REAL_SINGLE_PRECISION:
-				return RealDoublePrecision.negate( (RealDoublePrecision)num );
+				return RealDouble.negate( (RealDouble)num );
 		}	
 		
 		if( num instanceof NaN ) {
@@ -341,11 +341,11 @@ public class NumUtils {
 			return new PositiveInfinity();
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.negate( (RationalBigInteger)num );
+				return RationalBigInt.negate( (RationalBigInt)num );
 			case RATIONAL_INTEGER:
-				return RationalInteger.negate( (RationalInteger)num );
+				return RationalInt.negate( (RationalInt)num );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}

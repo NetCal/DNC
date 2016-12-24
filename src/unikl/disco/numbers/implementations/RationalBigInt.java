@@ -48,41 +48,41 @@ import unikl.disco.numbers.values.PositiveInfinity;
  * @author Steffen Bondorf
  *
  */
-public class RationalBigInteger implements Num {
+public class RationalBigInt implements Num {
 	private BigFraction value = new BigFraction( 0.0 );
 	
 	// Unfortunately you cannot give the constructor the double value 0.0000001
 	private static final BigFraction EPSILON = new BigFraction( 1, 1000000 ); 
 	private static final BigFraction ZERO_BIGFRACTION = new BigFraction( 0 );
 	
-	private RationalBigInteger(){}
+	private RationalBigInt(){}
 	
-	public RationalBigInteger( double value ) {
+	public RationalBigInt( double value ) {
 		this.value = new BigFraction( value );
 	}
 	
-	public RationalBigInteger( int num ) {
+	public RationalBigInt( int num ) {
 		value = new BigFraction( num );
 	}
 	
-	public RationalBigInteger( int num, int den ) {
+	public RationalBigInt( int num, int den ) {
 		value = new BigFraction( num, den );
 	}
 	
-	public RationalBigInteger( BigInteger num, BigInteger den ) {
+	public RationalBigInt( BigInteger num, BigInteger den ) {
 		value = new BigFraction( num, den );
 	}
 	
-	public RationalBigInteger( RationalBigInteger num ) {
+	public RationalBigInt( RationalBigInt num ) {
 		value = new BigFraction( num.value.getNumerator(), num.value.getDenominator() );
 	}
 	
-	private RationalBigInteger( BigFraction frac ) {
+	private RationalBigInt( BigFraction frac ) {
 		value = new BigFraction( frac.getNumerator(), frac.getDenominator() );
 	}
 	
-	public static RationalBigInteger createZero() {
-		RationalBigInteger zero = new RationalBigInteger();
+	public static RationalBigInt createZero() {
+		RationalBigInt zero = new RationalBigInt();
 		zero.instantiateZero();
 		return zero;
 	}
@@ -91,34 +91,34 @@ public class RationalBigInteger implements Num {
 		value = new BigFraction( 0.0 );
 	}
 	
-	public static RationalBigInteger createEpsilon() {
-        return new RationalBigInteger( EPSILON );
+	public static RationalBigInt createEpsilon() {
+        return new RationalBigInt( EPSILON );
 	}
 	
-	public static RationalBigInteger add( RationalBigInteger num1, RationalBigInteger num2 ) {
+	public static RationalBigInt add( RationalBigInt num1, RationalBigInt num2 ) {
 		// May still throw MathArithmeticException due to integer overflow
-        return new RationalBigInteger( num1.value.add( num2.value ) );
+        return new RationalBigInt( num1.value.add( num2.value ) );
 	}
 	
-	public static RationalBigInteger sub( RationalBigInteger num1, RationalBigInteger num2 ) {
+	public static RationalBigInt sub( RationalBigInt num1, RationalBigInt num2 ) {
         // May still throw MathArithmeticException due to integer overflow
-        return new RationalBigInteger( num1.value.subtract( num2.value ) );
+        return new RationalBigInt( num1.value.subtract( num2.value ) );
 	}
 	
-	public static RationalBigInteger mult( RationalBigInteger num1, RationalBigInteger num2 ) {
+	public static RationalBigInt mult( RationalBigInt num1, RationalBigInt num2 ) {
         // May throw MathArithmeticException due to integer overflow
-       	return new RationalBigInteger( num1.value.multiply( num2.value ) );
+       	return new RationalBigInt( num1.value.multiply( num2.value ) );
 	}
 
-	public static RationalBigInteger div( RationalBigInteger num1, RationalBigInteger num2 ) {
-		return new RationalBigInteger( num1.value.divide( num2.value ) );        		
+	public static RationalBigInt div( RationalBigInt num1, RationalBigInt num2 ) {
+		return new RationalBigInt( num1.value.divide( num2.value ) );        		
 	}
 
-	public static RationalBigInteger diff( RationalBigInteger num1, RationalBigInteger num2 ) {
+	public static RationalBigInt diff( RationalBigInt num1, RationalBigInt num2 ) {
 		return sub( max( num1, num2 ), min( num1, num2 ) );	
 	}
 
-	public static RationalBigInteger max( RationalBigInteger num1, RationalBigInteger num2 ) {
+	public static RationalBigInt max( RationalBigInt num1, RationalBigInt num2 ) {
 		if( num1.value.compareTo( num2.value ) >= 0 ) {
 			return num1;
 		} else {
@@ -126,7 +126,7 @@ public class RationalBigInteger implements Num {
 		}
 	}
 
-	public static RationalBigInteger min( RationalBigInteger num1, RationalBigInteger num2 ) {
+	public static RationalBigInt min( RationalBigInt num1, RationalBigInt num2 ) {
 		if( num1.value.compareTo( num2.value ) <= 0 ) {
 			return num1;
 		} else {
@@ -134,12 +134,12 @@ public class RationalBigInteger implements Num {
 		}
 	}
 	
-	public static RationalBigInteger abs( RationalBigInteger num ) {
-    	return new RationalBigInteger( num.value.abs() );
+	public static RationalBigInt abs( RationalBigInt num ) {
+    	return new RationalBigInt( num.value.abs() );
 	}
 
-	public static RationalBigInteger negate( RationalBigInteger num ) {
-    	return new RationalBigInteger( num.value.negate() );
+	public static RationalBigInt negate( RationalBigInt num ) {
+    	return new RationalBigInt( num.value.negate() );
 	}
 	
 	public boolean eqZero() {
@@ -157,7 +157,7 @@ public class RationalBigInteger implements Num {
 			return true;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num).value ) > 0 ) {
+		if( this.value.compareTo( ((RationalBigInt)num).value ) > 0 ) {
 			return true;
 		} else {
 			return false;
@@ -183,7 +183,7 @@ public class RationalBigInteger implements Num {
 			return true;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num).value ) >= 0 ) {
+		if( this.value.compareTo( ((RationalBigInt)num).value ) >= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -209,7 +209,7 @@ public class RationalBigInteger implements Num {
 			return false;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num).value ) < 0 ) {
+		if( this.value.compareTo( ((RationalBigInt)num).value ) < 0 ) {
 			return true;
 		} else {
 			return false;
@@ -235,7 +235,7 @@ public class RationalBigInteger implements Num {
 			return false;
 		}
 		
-		if( this.value.compareTo( ((RationalBigInteger)num).value ) <= 0 ) {
+		if( this.value.compareTo( ((RationalBigInt)num).value ) <= 0 ) {
 			return true;
 		} else {
 			return false;
@@ -257,15 +257,15 @@ public class RationalBigInteger implements Num {
 
 	@Override
 	public Num copy() {
-		return new RationalBigInteger( this.value.getNumerator(), this.value.getDenominator() );
+		return new RationalBigInt( this.value.getNumerator(), this.value.getDenominator() );
 	}
 	
 	@Override
 	public boolean eq( double num ) {
-		return this.doubleValue() - num <= RealDoublePrecision.createEpsilon().doubleValue();
+		return this.doubleValue() - num <= RealDouble.createEpsilon().doubleValue();
 	}
 
-	public boolean equals( RationalBigInteger num ) {
+	public boolean equals( RationalBigInt num ) {
 		if( this.value.compareTo( num.value ) == 0 ) {
 			return true;
 		} else {
@@ -276,10 +276,10 @@ public class RationalBigInteger implements Num {
 	@Override
 	public boolean equals( Object obj ) {
 		if( obj == null 
-				|| !( obj instanceof RationalBigInteger ) ) {
+				|| !( obj instanceof RationalBigInt ) ) {
 			return false;
 		} else {
-			return equals( ((RationalBigInteger)obj) );
+			return equals( ((RationalBigInt)obj) );
 		}
 	}
 	

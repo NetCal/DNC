@@ -89,9 +89,9 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 			CalculatorConfig.disableAllChecks();
 		}
 		
-		if ( CalculatorConfig.NUM_CLASS != test_config.numbers 
+		if ( CalculatorConfig.getNumClass() != test_config.numbers 
 				|| last_number_representation == null ) {
-			CalculatorConfig.NUM_CLASS = test_config.numbers;
+			CalculatorConfig.setNumClass( test_config.numbers );
 			NumFactory.createSingletons();
 		}
 	}

@@ -28,16 +28,16 @@
 package unikl.disco.numbers;
 
 import unikl.disco.nc.CalculatorConfig;
-import unikl.disco.numbers.implementations.RationalBigInteger;
-import unikl.disco.numbers.implementations.RealDoublePrecision;
-import unikl.disco.numbers.implementations.RationalInteger;
-import unikl.disco.numbers.implementations.RealSinglePrecision;
+import unikl.disco.numbers.implementations.RationalBigInt;
+import unikl.disco.numbers.implementations.RealDouble;
+import unikl.disco.numbers.implementations.RationalInt;
+import unikl.disco.numbers.implementations.RealSingle;
 import unikl.disco.numbers.values.NaN;
 import unikl.disco.numbers.values.NegativeInfinity;
 import unikl.disco.numbers.values.PositiveInfinity;
 
 @SuppressWarnings("incomplete-switch")
-public class NumFactory {
+public abstract class NumFactory {
 	private static Num POSITIVE_INFINITY = createPositiveInfinity();
 	private static Num NEGATIVE_INFINITY = createNegativeInfinity();
 	private static Num NaN = createNaN();
@@ -62,11 +62,11 @@ public class NumFactory {
 	}
 
 	public static Num createPositiveInfinity() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return new RealDoublePrecision( Double.POSITIVE_INFINITY );
+				return new RealDouble( Double.POSITIVE_INFINITY );
 			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( Float.POSITIVE_INFINITY );
+				return new RealSingle( Float.POSITIVE_INFINITY );
 			// non IEEE 754 floating point data types
 			case RATIONAL_INTEGER:
 			case RATIONAL_BIGINTEGER:
@@ -81,11 +81,11 @@ public class NumFactory {
 	}
 	
 	public static Num createNegativeInfinity() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return new RealDoublePrecision( Double.NEGATIVE_INFINITY );
+				return new RealDouble( Double.NEGATIVE_INFINITY );
 			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( Float.NEGATIVE_INFINITY );
+				return new RealSingle( Float.NEGATIVE_INFINITY );
 			// non IEEE 754 floating point data types
 			case RATIONAL_INTEGER:
 			case RATIONAL_BIGINTEGER:
@@ -100,11 +100,11 @@ public class NumFactory {
 	}
 	
 	public static Num createNaN() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return new RealDoublePrecision( Double.NaN );
+				return new RealDouble( Double.NaN );
 			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( Float.NaN );
+				return new RealSingle( Float.NaN );
 			// non IEEE 754 floating point data types
 			case RATIONAL_INTEGER:
 			case RATIONAL_BIGINTEGER:
@@ -119,15 +119,15 @@ public class NumFactory {
 	}
 	
 	public static Num createZero() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return new RealDoublePrecision( 0 );
+				return new RealDouble( 0 );
 			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( 0 );
+				return new RealSingle( 0 );
 			case RATIONAL_INTEGER:
-				return new RationalInteger( 0 );
+				return new RationalInt( 0 );
 			case RATIONAL_BIGINTEGER:
-				return new RationalBigInteger( 0 );
+				return new RationalBigInt( 0 );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
@@ -138,26 +138,26 @@ public class NumFactory {
 	}
 	
 	public static Num createEpsilon() {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return RealDoublePrecision.createEpsilon();
+				return RealDouble.createEpsilon();
 			case REAL_SINGLE_PRECISION:
-				return RealSinglePrecision.createEpsilon();
+				return RealSingle.createEpsilon();
 			case RATIONAL_INTEGER:
-				return RationalInteger.createEpsilon();
+				return RationalInt.createEpsilon();
 			case RATIONAL_BIGINTEGER:
-				return RationalBigInteger.createEpsilon();
+				return RationalBigInt.createEpsilon();
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		}
 	}
 	
 	public static Num create( double value ) {
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return new RealDoublePrecision( value );
+				return new RealDouble( value );
 			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( value );
+				return new RealSingle( value );
 		}	
 		
 		// non IEEE 754 floating point data types
@@ -171,11 +171,11 @@ public class NumFactory {
 			return createNaN();
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case RATIONAL_BIGINTEGER:
-				return new RationalBigInteger( value );
+				return new RationalBigInt( value );
 			case RATIONAL_INTEGER:
-				return new RationalInteger( value );
+				return new RationalInt( value );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		 }
@@ -186,15 +186,15 @@ public class NumFactory {
 			throw new ArithmeticException( "/ by zero" );
 		}
 		
-		switch ( CalculatorConfig.NUM_CLASS ) {
+		switch ( CalculatorConfig.getNumClass() ) {
 			case REAL_DOUBLE_PRECISION:
-				return new RealDoublePrecision( num, den );
+				return new RealDouble( num, den );
 			case REAL_SINGLE_PRECISION:
-				return new RealSinglePrecision( num, den );
+				return new RealSingle( num, den );
 			case RATIONAL_INTEGER:
-				return new RationalInteger( num, den );
+				return new RationalInt( num, den );
 			case RATIONAL_BIGINTEGER:
-				return new RationalBigInteger( num, den );
+				return new RationalBigInt( num, den );
 			default:
 				throw new RuntimeException( "Undefined number representation" );
 		 }
@@ -215,7 +215,7 @@ public class NumFactory {
 		boolean double_based = num_str.contains( "." );
 		
 		if ( fraction_indicator && double_based ) {
-			throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.NUM_CLASS.toString() 
+			throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString() 
 									+ ": " + num_str );
 		}
 		
@@ -228,7 +228,7 @@ public class NumFactory {
 			if ( fraction_indicator ) {
 				String[] num_den = num_str.split( " / " ); // ["num","den"]
 				if( num_den.length != 2 ) {
-					throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.NUM_CLASS.toString() 
+					throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString() 
 											+ ": " + num_str );
 				}
 				
@@ -244,13 +244,13 @@ public class NumFactory {
 				return create( Double.parseDouble( num_str ) );
 			}
 		} catch (Exception e) {
-			throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.NUM_CLASS.toString()
+			throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString()
 									+ ": " + num_str );
 		}
 		
 		// This code should not be reachable because all the operations above either succeed such that we can return a number
 		// of raise an exception of some kind. Yet, Java does not get this and thus complains if there's no "finalizing statement". 
-		throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.NUM_CLASS.toString()
+		throw new Exception( "Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString()
 								+ ": " + num_str );
 	}
 }

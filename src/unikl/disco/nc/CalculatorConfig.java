@@ -34,8 +34,16 @@ package unikl.disco.nc;
  */
 public final class CalculatorConfig {
 	public static enum NumClass { REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER };
-	public static NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
+	private static NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
 
+	public static NumClass getNumClass() {
+		return NUM_CLASS;
+	}
+	
+	public static void setNumClass( NumClass num_class ) {
+		NUM_CLASS = num_class;
+	}
+	
 	public static boolean ARRIVAL_CURVE_CHECKS = false;
 	public static boolean SERVICE_CURVE_CHECKS = false;
 	public static boolean MAX_SERVICE_CURVE_CHECKS = false;
