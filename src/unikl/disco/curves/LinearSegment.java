@@ -325,11 +325,6 @@ public class LinearSegment{
 		Num y1 = NumUtils.sub( this.y, NumUtils.mult( x, this.grad ) );
 		Num y2 = NumUtils.sub( other.y, NumUtils.mult( other.x, other.grad ) );
 		
-		// FIXME Causes test failures
-//		y2.sub( y1 );
-//		y2.div( Num.sub( this.grad, other.grad ) );
-//		return y2;
-		
 		return NumUtils.div( NumUtils.sub( y2, y1 ), NumUtils.sub( this.grad, other.grad ) ); // returns NaN if lines are parallel
 	}
 	

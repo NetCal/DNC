@@ -30,9 +30,9 @@ package unikl.disco.numbers.implementations;
 import org.apache.commons.math3.fraction.Fraction;
 
 import unikl.disco.numbers.Num;
-import unikl.disco.numbers.values.NaN;
-import unikl.disco.numbers.values.NegativeInfinity;
-import unikl.disco.numbers.values.PositiveInfinity;
+import unikl.disco.numbers.extraValues.NaN;
+import unikl.disco.numbers.extraValues.NegativeInfinity;
+import unikl.disco.numbers.extraValues.PositiveInfinity;
 
 /**
  * Wrapper class around org.apache.commons.math3.fraction.Fraction

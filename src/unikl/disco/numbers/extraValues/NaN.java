@@ -25,7 +25,7 @@
  *
  */
  
-package unikl.disco.numbers.values;
+package unikl.disco.numbers.extraValues;
 
 import unikl.disco.numbers.Num;
 

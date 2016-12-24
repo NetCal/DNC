@@ -36,13 +36,13 @@ package unikl.disco.numbers;
  * 
  */
 import unikl.disco.nc.CalculatorConfig;
+import unikl.disco.numbers.extraValues.NaN;
+import unikl.disco.numbers.extraValues.NegativeInfinity;
+import unikl.disco.numbers.extraValues.PositiveInfinity;
 import unikl.disco.numbers.implementations.RationalBigInt;
 import unikl.disco.numbers.implementations.RealDouble;
 import unikl.disco.numbers.implementations.RationalInt;
 import unikl.disco.numbers.implementations.RealSingle;
-import unikl.disco.numbers.values.NaN;
-import unikl.disco.numbers.values.NegativeInfinity;
-import unikl.disco.numbers.values.PositiveInfinity;
 
 @SuppressWarnings("incomplete-switch")
 public abstract class NumUtils {
