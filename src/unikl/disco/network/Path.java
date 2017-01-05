@@ -55,7 +55,7 @@ public class Path {
 	private LinkedList<Server> path_servers = new LinkedList<Server>();
 	private LinkedList<Link> path_links = new LinkedList<Link>();
 
-	public static Path createNullPath() {
+	public static Path createEmptyPath() {
 		return new Path();
 	}
 	

@@ -1,5 +1,8 @@
 * Fix RationalBigInteger tests —> bigger EPSILON?
 * Coverity Scan static analysis
+* Do the createCurve(String) constructors work?
+  - I guess so because the experiments work
+  - But it is a lot of duplicate code --> move to the abstract factory?
 
 * Remove TODO and FIXME labels from the code 
 

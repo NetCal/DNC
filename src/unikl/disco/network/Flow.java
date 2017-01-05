@@ -40,7 +40,7 @@ import unikl.disco.curves.ArrivalCurve;
  * @author Steffen Bondorf
  */
 public class Flow {
-	public static final Flow NULL_FLOW = createDummyFlow( "null", ArrivalCurve.createZeroArrival(), Path.createNullPath() ); 
+	public static final Flow NULL_FLOW = createDummyFlow( "null", ArrivalCurve.createZeroArrival(), Path.createEmptyPath() ); 
 	
 	/** The flow's ID. */
 	private int	id;
