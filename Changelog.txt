@@ -1,4 +1,4 @@
-v2.3.0 "Centaur" (2017-ABC-NM)
+v2.3.0 "Centaur" (2017-JAN-NM)
 ------------------------------
 * Rework of the number abstraction layer in unikl.disco.numbers:
   The DiscoDNC is now built on a factory pattern with four implementations -- the lower body and the four legs of our new Centaur release. 
