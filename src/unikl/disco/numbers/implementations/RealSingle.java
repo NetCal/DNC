@@ -187,7 +187,7 @@ public class RealSingle implements Num {
 	
 	@Override
 	public double doubleValue() {
-	    return new Double( value ).doubleValue();
+	    return new Double( value );
 	}
 
 	@Override
