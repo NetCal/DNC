@@ -189,8 +189,11 @@ public class RealDouble implements Num {
 	
 	@Override
 	public boolean eq( double num ) {
-		if( ( this.value == Double.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
-				|| ( this.value == Double.NEGATIVE_INFINITY && num == Double.NEGATIVE_INFINITY ) ) {
+//		if( ( this.value == Double.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
+//				|| ( this.value == Double.NEGATIVE_INFINITY && num == Double.NEGATIVE_INFINITY ) ) {
+		if( Double.isInfinite( this.value ) 
+				&& Double.isInfinite( num )
+				&& ( Double.compare( this.value, num ) == 0 ) ) {
 			return true;
 		}
 		
