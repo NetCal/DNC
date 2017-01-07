@@ -198,18 +198,6 @@ public class RealSingle implements Num {
 	@Override
 	public boolean eq( double num ) {
 		return equals( new Float( num ) );
-		
-		// Alternative code path using a comparison of doubles
-//		if( ( this.value == Float.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
-//				|| ( this.value == Float.NEGATIVE_INFINITY && num == Double.NEGATIVE_INFINITY ) ) {
-//			return true;
-//		}
-//		
-//		if( Math.abs( (new Double( value )).doubleValue() - num ) <= EPSILON ) {
-//			return true;
-//		} else {
-//			return false;
-//		}
 	}
 
 	public boolean equals( RealSingle num ) {
