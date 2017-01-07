@@ -1,5 +1,3 @@
 * Fix RationalBigInteger tests —> bigger EPSILON?
 
-* Remove TODO and FIXME labels from the code 
-
 * Changelog
