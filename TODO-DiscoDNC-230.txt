@@ -1,5 +1,4 @@
 * Fix RationalBigInteger tests —> bigger EPSILON?
-* Coverity Scan static analysis
 
 * Remove TODO and FIXME labels from the code 
 
