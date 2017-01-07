@@ -167,7 +167,7 @@ public abstract class NumFactory {
 		if( value == Double.NEGATIVE_INFINITY ) {
 			return createNegativeInfinity();
 		}
-		if( value == Double.NaN ) {
+		if( Double.isNaN( value ) ) {
 			return createNaN();
 		}
 		
