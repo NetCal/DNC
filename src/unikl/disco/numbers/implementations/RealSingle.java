@@ -197,7 +197,11 @@ public class RealSingle implements Num {
 	
 	@Override
 	public boolean eq( double num ) {
-		return equals( new Float( num ) );
+		if( comparison_epsilon ) {
+			return Math.abs( num - value ) <= EPSILON;
+		} else {
+			return Double.compare( value, num ) == 0;
+		}
 	}
 
 	public boolean equals( RealSingle num ) {
@@ -205,8 +209,13 @@ public class RealSingle implements Num {
 	}
 	
 	private boolean equals( float num ) {
-		if( ( this.value == Float.POSITIVE_INFINITY && num == Float.POSITIVE_INFINITY ) 
-				|| ( this.value == Float.NEGATIVE_INFINITY && num == Float.NEGATIVE_INFINITY ) ) {
+//		if( ( this.value == Float.POSITIVE_INFINITY && num == Float.POSITIVE_INFINITY ) 
+//				|| ( this.value == Float.NEGATIVE_INFINITY && num == Float.NEGATIVE_INFINITY ) ) {
+//			return true;
+//		}
+		if( Float.isInfinite( this.value ) 
+				&& Float.isInfinite( num )
+				&& ( Float.compare( this.value, num ) == 0 ) ) {
 			return true;
 		}
 		

@@ -27,6 +27,7 @@
  
 package unikl.disco.numbers.extraValues;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import unikl.disco.numbers.Num;
 
 /**
@@ -89,7 +90,7 @@ public final class NaN implements Num {
 		return false;
 	}
 
-//	@SuppressFBWarnings(value="EQ_ALWAYS_FALSE",justification ="Comparison to NaN should always return false")
+	@SuppressFBWarnings(value="EQ_ALWAYS_FALSE",justification ="Comparison to NaN should always return false")
 	@Override
 	public boolean equals( Object obj ) {
 		return false;
