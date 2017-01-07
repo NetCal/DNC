@@ -19,11 +19,12 @@
       <fileset dir="${classes.dir}">
         <include name="unikl/disco/curves/"/>
         <include name="unikl/disco/minplus/"/>
-        <include name="unikl/disco/curves/"/>
         <include name="unikl/disco/misc/"/>
         <include name="unikl/disco/nc/"/>
         <include name="unikl/disco/network/"/>
         <include name="unikl/disco/numbers/"/>
+        <include name="unikl/disco/numbers/extraValues/"/>
+        <include name="unikl/disco/numbers/implementations/"/>
       </fileset>
     </jar>
   </target>
