@@ -45,7 +45,7 @@ public class RealSingle implements Num {
 	private RealSingle() {}
 	
 	public RealSingle( double value ) {
-		this.value = new Float( value ).floatValue();
+		this.value = new Float( value );
 	}
 	
 	public RealSingle( int num ) {
@@ -114,7 +114,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean gt( Num num ) {
-		float num_float = new Float( num.doubleValue() ).floatValue();
+		float num_float = new Float( num.doubleValue() );
 		
 		if( comparison_epsilon ) {
 			return value > ( num_float + EPSILON );
@@ -132,7 +132,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean geq( Num num ) {
-		float num_float = new Float( num.doubleValue() ).floatValue();
+		float num_float = new Float( num.doubleValue() );
 		
 		if( comparison_epsilon ) {
 			return value >= ( num_float + EPSILON );
@@ -150,7 +150,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean lt( Num num ) {
-		float num_float = new Float( num.doubleValue() ).floatValue();
+		float num_float = new Float( num.doubleValue() );
 		
 		if( comparison_epsilon ) {
 			return value < ( num_float - EPSILON );
@@ -168,7 +168,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean leq( Num num ) {
-		float num_float = new Float( num.doubleValue() ).floatValue();
+		float num_float = new Float( num.doubleValue() );
 		
 		if( comparison_epsilon ) {
 			return value <= ( num_float - EPSILON );
@@ -197,7 +197,7 @@ public class RealSingle implements Num {
 	
 	@Override
 	public boolean eq( double num ) {
-		return equals( new Float( num ).floatValue() );
+		return equals( new Float( num ) );
 		
 		// Alternative code path using a comparison of doubles
 //		if( ( this.value == Float.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
