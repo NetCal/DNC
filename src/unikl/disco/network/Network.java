@@ -1251,14 +1251,14 @@ public class Network {
  		pw.println();
 
  		pw.println( "public class " + file_name + " implements IsNetwork {");
- 		pw.println( "\tpublic static Network network;" );
- 		pw.println( "\tprivate static Server[] servers;" );
+ 		pw.println( "\tprivate Network network;" );
+ 		pw.println( "\tprivate Server[] servers;" );
  		pw.println();
  		
  		// Server creation
  		int i_servers_func = 1;
  		int i_servers_lines = 0;
- 		pw.println( "\tpublic static void createServers" + Integer.toString( i_servers_func ) + "() throws Exception {" );
+ 		pw.println( "\tpublic void createServers" + Integer.toString( i_servers_func ) + "() throws Exception {" );
  		for ( Server s : servers ) {
  			pw.print( "\t\tservers[" + s.getId() + "] = " );
  			pw.print( "network.addServer( " );
@@ -1277,7 +1277,7 @@ public class Network {
 
  				pw.println( "\t}" );
  		 		pw.println();
- 		 		pw.println( "\tpublic static void createServers" + Integer.toString( i_servers_func ) + "() throws Exception {" );
+ 		 		pw.println( "\tpublic void createServers" + Integer.toString( i_servers_func ) + "() throws Exception {" );
  			}
  		}
  		pw.println( "\t}" );
@@ -1286,7 +1286,7 @@ public class Network {
  		// Link creation
  		int i_links_func = 1;
  		int i_links_lines = 0;
- 		pw.println( "\tpublic static void createLinks" + Integer.toString( i_links_func ) + "() throws Exception {" );
+ 		pw.println( "\tpublic void createLinks" + Integer.toString( i_links_func ) + "() throws Exception {" );
  		for ( Link l : links ) {
  			pw.print( "\t\tnetwork.addLink( " );
  			pw.print( "\"" + l.getAlias() + "\"" + ", " );
@@ -1301,7 +1301,7 @@ public class Network {
 
  				pw.println( "\t}" );
  		 		pw.println();
- 		 		pw.println( "\tpublic static void createLinks" + Integer.toString( i_links_func ) + "() throws Exception {" );
+ 		 		pw.println( "\tpublic void createLinks" + Integer.toString( i_links_func ) + "() throws Exception {" );
  			}
  		}
  		pw.println( "\t}" );
@@ -1310,7 +1310,7 @@ public class Network {
  		// Flow creation
  		int i_flows_func = 1;
  		int i_flows_lines = 0;
- 		pw.println( "\tpublic static void createFlows" + Integer.toString( i_flows_func ) + "() throws Exception {" );
+ 		pw.println( "\tpublic void createFlows" + Integer.toString( i_flows_func ) + "() throws Exception {" );
  		pw.println( "\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();" );
  		i_flows_lines++;
  		pw.println();
@@ -1336,7 +1336,7 @@ public class Network {
 
  				pw.println( "\t}" );
  		 		pw.println();
- 		 		pw.println( "\tpublic static void createFlows" + Integer.toString( i_flows_func ) + "() throws Exception {" );
+ 		 		pw.println( "\tpublic void createFlows" + Integer.toString( i_flows_func ) + "() throws Exception {" );
  		 		pw.println( "\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();" );
  		 		i_flows_lines++;
  			}

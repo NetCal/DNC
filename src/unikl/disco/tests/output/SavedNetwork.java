@@ -31,10 +31,10 @@ import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
 
 public class SavedNetwork implements IsNetwork {
-	public static Network network;
-	private static Server[] servers;
+	private Network network;
+	private Server[] servers;
 
-	public static void createServers1() throws Exception {
+	public void createServers1() throws Exception {
 		servers[29] = network.addServer( "s26", new ServiceCurve( "SC{(0.0,0.0),10000.0}" ), new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" ), Multiplexing.ARBITRARY, true, true );
 		servers[32] = network.addServer( "s14", new ServiceCurve( "SC{(0.0,0.0),10000.0}" ), new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" ), Multiplexing.ARBITRARY, true, true );
 		servers[4] = network.addServer( "s30", new ServiceCurve( "SC{(0.0,0.0),10000.0}" ), new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" ), Multiplexing.ARBITRARY, true, true );
@@ -75,7 +75,7 @@ public class SavedNetwork implements IsNetwork {
 		servers[24] = network.addServer( "s21", new ServiceCurve( "SC{(0.0,0.0),10000.0}" ), new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" ), Multiplexing.ARBITRARY, true, true );
 	}
 
-	public static void createLinks1() throws Exception {
+	public void createLinks1() throws Exception {
 		network.addLink( "l38", servers[29], servers[11] );
 		network.addLink( "l21", servers[8], servers[0] );
 		network.addLink( "l18", servers[9], servers[24] );
@@ -132,7 +132,7 @@ public class SavedNetwork implements IsNetwork {
 		network.addLink( "l13", servers[1], servers[6] );
 	}
 
-	public static void createFlows1() throws Exception {
+	public void createFlows1() throws Exception {
 		LinkedList<Server> servers_on_path_s = new LinkedList<Server>();
 
 		servers_on_path_s.add( servers[29] );
@@ -639,7 +639,7 @@ public class SavedNetwork implements IsNetwork {
 
 	}
 
-	public static void createFlows2() throws Exception {
+	public void createFlows2() throws Exception {
 		LinkedList<Server> servers_on_path_s = new LinkedList<Server>();
 		servers_on_path_s.add( servers[5] );
 		servers_on_path_s.add( servers[30] );
@@ -1145,7 +1145,7 @@ public class SavedNetwork implements IsNetwork {
 
 	}
 
-	public static void createFlows3() throws Exception {
+	public void createFlows3() throws Exception {
 		LinkedList<Server> servers_on_path_s = new LinkedList<Server>();
 		servers_on_path_s.add( servers[2] );
 		servers_on_path_s.add( servers[26] );
