@@ -1298,6 +1298,7 @@ public class Curve {
 				}
 				break;
 			default:
+				throw new IllegalArgumentException( "Null operation on two curves is not defined." );
 			}
 
 			if ( x_next1.equals( x_next ) ) {
