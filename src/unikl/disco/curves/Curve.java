@@ -1245,6 +1245,7 @@ public class Curve {
 			}
 			break;
 		default:
+			throw new IllegalArgumentException( "Null operation on two curves is not defined." );
 		}
 		
 		Curve result = new Curve();
