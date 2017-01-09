@@ -32,6 +32,7 @@ import java.util.LinkedList;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
+import unikl.disco.network.IsNetwork;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
@@ -40,39 +41,45 @@ import unikl.disco.network.Server.Multiplexing;
  * 
  * @author Steffen Bondorf
  */
-public class TestNetwork
-{
-	public static Network network;
-	private static Server[] servers;
-	private static Multiplexing mux = Multiplexing.ARBITRARY;
+public class TestNetwork implements IsNetwork {
+	private Network network;
+	private Server[] servers;
+	private Multiplexing mux = Multiplexing.ARBITRARY;
 
-	private static ServiceCurve service_curve;
-	private static MaxServiceCurve max_service_curve;
-	private static ArrivalCurve arrival_curve;
+	private ServiceCurve service_curve;
+	private MaxServiceCurve max_service_curve;
+	private ArrivalCurve arrival_curve;
 	
 	public static void main( String[] args )
 	{
 		try {
-			servers = new Server[38];
-			
-			service_curve = new ServiceCurve( "SC{(0.0,0.0),10000.0}" );
-			max_service_curve = new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" );
-			arrival_curve = new ArrivalCurve( "AC{(0.0,0.0),0.0;!(0.0,5.0),5.0}" );
-
-			network = new Network();
-			createServers1();
-			createLinks1();
-			createFlows1();
-			createFlows2();
-			createFlows3();
-			
+			Network network = new TestNetwork().getNetwork();
 			network.saveAs( "./src/unikl/disco/tests/output/", "SavedNetwork.java", "unikl.disco.tests.output" );
 		} catch (Exception e) {
 			System.out.println( e.toString() );
 		}
 	}
 	
-	public static void createServers1() throws Exception {
+	public TestNetwork() throws Exception {
+		servers = new Server[38];
+		
+		service_curve = new ServiceCurve( "SC{(0.0,0.0),10000.0}" );
+		max_service_curve = new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" );
+		arrival_curve = new ArrivalCurve( "AC{(0.0,0.0),0.0;!(0.0,5.0),5.0}" );
+
+		network = new Network();
+		createServers1();
+		createLinks1();
+		createFlows1();
+		createFlows2();
+		createFlows3();
+	}
+
+	public Network getNetwork() {
+		return network;
+	}
+	
+	public void createServers1() throws Exception {
 		servers[34] = network.addServer( "s34", service_curve, max_service_curve, mux, true, true );
 		servers[11] = network.addServer( "s11", service_curve, max_service_curve, mux, true, true );
 		servers[29] = network.addServer( "s29", service_curve, max_service_curve, mux, true, true );
@@ -113,7 +120,7 @@ public class TestNetwork
 		servers[1] = network.addServer( "s1", service_curve, max_service_curve, mux, true, true );
 	}
 
-	public static void createLinks1() throws Exception {
+	public void createLinks1() throws Exception {
 		network.addLink( "l19", servers[14], servers[0] );
 		network.addLink( "l13", servers[11], servers[28] );
 		network.addLink( "l26", servers[9], servers[3] );
@@ -170,7 +177,7 @@ public class TestNetwork
 		network.addLink( "l31", servers[0], servers[20] );
 	}
 
-	public static void createFlows1() throws Exception {
+	public void createFlows1() throws Exception {
 		LinkedList<Server> servers_on_path_s = new LinkedList<Server>();
 
 		servers_on_path_s.add( servers[34] );
@@ -675,7 +682,7 @@ public class TestNetwork
 
 	}
 
-	public static void createFlows2() throws Exception {
+	public void createFlows2() throws Exception {
 		LinkedList<Server> servers_on_path_s = new LinkedList<Server>();
 		servers_on_path_s.add( servers[24] );
 		network.addFlow( "f58", arrival_curve, servers_on_path_s );
@@ -1180,7 +1187,7 @@ public class TestNetwork
 
 	}
 
-	public static void createFlows3() throws Exception {
+	public void createFlows3() throws Exception {
 		LinkedList<Server> servers_on_path_s = new LinkedList<Server>();
 		servers_on_path_s.add( servers[14] );
 		servers_on_path_s.add( servers[0] );
