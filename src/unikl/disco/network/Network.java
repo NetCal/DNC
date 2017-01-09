@@ -269,7 +269,7 @@ public class Network {
 			throw new Exception( "No server with id " + Integer.toString(id) + " found" );
 		}
 
-		Server server = map__id__server.get( new Integer( id ) );
+		Server server = map__id__server.get( Integer.valueOf( id ) );
 		
 		if ( server == null ) {
 			throw new Exception( "No server with id " + Integer.toString(id) + " found" );
