@@ -57,10 +57,10 @@ import unikl.disco.numbers.NumFactory;
  */
 public class FeedForward_1SC_4Flows_1AC_4Paths extends FunctionalTests
 {
-	static Network network;
-	static Server s0, s1, s2, s3;
-	static Flow f0, f1, f2, f3;
-	static Link l_s0_s1, l_s1_s3, l_s2_s0, l_s0_s3;
+	private Network network;
+	private Server s0, s1, s2, s3;
+	private Flow f0, f1, f2, f3;
+	private Link l_s0_s1, l_s1_s3, l_s2_s0, l_s0_s3;
 	 
 	public FeedForward_1SC_4Flows_1AC_4Paths( FunctionalTestConfig test_config ) {
 		super( test_config );

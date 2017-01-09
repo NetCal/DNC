@@ -54,9 +54,9 @@ import unikl.disco.numbers.NumFactory;
  */
 public class Tandem_1SC_3Flows_1AC_3Paths extends FunctionalTests
 {
-	static Network network;
-	static Server s0, s1, s2;
-	static Flow f0, f1, f2;
+	private Network network;
+	private Server s0, s1, s2;
+	private Flow f0, f1, f2;
 	 
 	public Tandem_1SC_3Flows_1AC_3Paths( FunctionalTestConfig test_config ) {
 		super( test_config );

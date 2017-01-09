@@ -53,9 +53,9 @@ import unikl.disco.numbers.NumFactory;
  */
 public class Single_1Flow extends FunctionalTests
 {
-	static Network network;
-	static Server s0;
-	static Flow f0;
+	private Network network;
+	private Server s0;
+	private Flow f0;
 	
 	public Single_1Flow( FunctionalTestConfig test_config ) {
 		super( test_config );

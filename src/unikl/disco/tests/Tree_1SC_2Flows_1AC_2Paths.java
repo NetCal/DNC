@@ -54,9 +54,9 @@ import unikl.disco.numbers.NumFactory;
  */
 public class Tree_1SC_2Flows_1AC_2Paths extends FunctionalTests
 {
-	static Network network;
-	static Server s0, s1, s2;
-	static Flow f0, f1;
+	private Network network;
+	private Server s0, s1, s2;
+	private Flow f0, f1;
 	
 	public Tree_1SC_2Flows_1AC_2Paths( FunctionalTestConfig test_config ) {
 		super( test_config );
