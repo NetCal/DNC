@@ -246,7 +246,7 @@ public class Network {
 		
 		servers.add( new_server );
 		
-		Integer integer_object = new Integer( server_id_counter );
+		Integer integer_object = Integer.valueOf( server_id_counter );
 		map__id__server.put( integer_object, new_server );
 		
 		server_id_counter++;
