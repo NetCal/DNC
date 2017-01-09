@@ -197,15 +197,8 @@ public class MaxServiceCurve extends Curve {
 		return new MaxServiceCurve( Curve.min( max_service_curve_1, max_service_curve_2 ) );
 	}
 	
-	/**
-	 * Returns a copy of this curve that is shifted to the right by <code>dx</code>,
-	 * i.e. g(x) = f(x-dx).
-	 * 
-	 * @param dx the offset to shift the curve.
-	 * @return the shifted curve.
-	 */
-	public MaxServiceCurve shiftRight( Num dx ) {
-		return new MaxServiceCurve( Curve.shiftRight( this, dx ) );
+	public void shiftRight( Num dx ) {
+		initializeCurve( Curve.shiftRight( this, dx ) );
 	}
 
 	/**
