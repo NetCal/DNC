@@ -45,7 +45,7 @@ public class RealSingle implements Num {
 	private RealSingle() {}
 	
 	public RealSingle( double value ) {
-		this.value = new Float( value );
+		this.value = (float)value;
 	}
 	
 	public RealSingle( int num ) {
@@ -114,7 +114,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean gt( Num num ) {
-		float num_float = new Float( num.doubleValue() );
+		float num_float = (float)num.doubleValue();
 		
 		if( comparison_epsilon ) {
 			return value > ( num_float + EPSILON );
@@ -132,7 +132,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean geq( Num num ) {
-		float num_float = new Float( num.doubleValue() );
+		float num_float = (float)num.doubleValue();
 		
 		if( comparison_epsilon ) {
 			return value >= ( num_float + EPSILON );
@@ -150,7 +150,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean lt( Num num ) {
-		float num_float = new Float( num.doubleValue() );
+		float num_float = (float)num.doubleValue();
 		
 		if( comparison_epsilon ) {
 			return value < ( num_float - EPSILON );
@@ -168,7 +168,7 @@ public class RealSingle implements Num {
 	}
 
 	public boolean leq( Num num ) {
-		float num_float = new Float( num.doubleValue() );
+		float num_float = (float)num.doubleValue();
 		
 		if( comparison_epsilon ) {
 			return value <= ( num_float - EPSILON );
@@ -187,7 +187,7 @@ public class RealSingle implements Num {
 	
 	@Override
 	public double doubleValue() {
-	    return new Double( value );
+	    return (double)value;
 	}
 
 	@Override
