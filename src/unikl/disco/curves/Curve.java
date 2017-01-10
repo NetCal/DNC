@@ -28,6 +28,8 @@
 
 package unikl.disco.curves;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -68,10 +70,12 @@ public class Curve {
 	protected boolean is_delayed_infinite_burst = false;
 
 	private boolean has_rate_latency_meta_info = false;
+	@SuppressFBWarnings(value="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",justification ="Will be used in a later version")
 	protected boolean is_rate_latency = false;
 	protected List<Curve> rate_latencies = new LinkedList<Curve>();
 
 	private boolean has_token_bucket_meta_info = false;
+	@SuppressFBWarnings(value="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",justification ="Will be used in a later version")
 	protected boolean is_token_bucket = false;
 	protected List<Curve> token_buckets = new LinkedList<Curve>();
 	/**
