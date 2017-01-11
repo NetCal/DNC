@@ -142,9 +142,31 @@ public class Curve {
 	}
 
 	public void copy( Curve curve ) {
-		createZeroSegmentsCurve( curve.getSegmentCount() );
+		createZeroSegmentsCurve( curve.getSegmentCount() ); // clears all internal variables
 		for ( int i = 0; i < curve.getSegmentCount(); i++ ) {
 			segments[i] = curve.getSegment( i ).copy();
+		}
+
+		this.is_delayed_infinite_burst = curve.isDelayedInfiniteBurst();
+		
+		this.has_rate_latency_meta_info = curve.has_rate_latency_meta_info;
+		for( Curve rl : curve.rate_latencies ) {
+			this.rate_latencies.add( rl );
+		}
+//		this.is_rate_latency = curve.isRateLatency();
+		// deduce property instead of copying it
+		if( this.rate_latencies.size() == 1 ) {
+			this.is_rate_latency = true;
+		}
+
+		this.has_token_bucket_meta_info = curve.has_token_bucket_meta_info;
+		for( Curve tb : curve.token_buckets ) {
+			this.token_buckets.add( tb );
+		}
+//		this.is_token_bucket = curve.isTokenBucket();
+		// deduce property instead of copying it
+		if( this.token_buckets.size() == 1 ) {
+			this.is_token_bucket = true;
 		}
 	}
 	
