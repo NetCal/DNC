@@ -64,7 +64,7 @@ public class MaxServiceCurve extends Curve {
 	}
 	
 	public MaxServiceCurve( Curve curve ) {
-		initializeCurve( curve );
+		copy( curve );
 		
 		if( CalculatorConfig.MAX_SERVICE_CURVE_CHECKS &&  !isWideSenseIncreasing() ) { // too strong requirement: !isAlmostConcave() ) {
 			throw new RuntimeException( "Maximum service curves can only be created from wide-sense increasing functions." );
@@ -147,7 +147,7 @@ public class MaxServiceCurve extends Curve {
 	
 	public MaxServiceCurve copy() {
 		MaxServiceCurve msc_copy = new MaxServiceCurve();
-		msc_copy.initializeCurve( this );
+		msc_copy.copy( this );
 		
 		return msc_copy;
 	}
@@ -198,7 +198,7 @@ public class MaxServiceCurve extends Curve {
 	}
 	
 	public void shiftRight( Num dx ) {
-		initializeCurve( Curve.shiftRight( this, dx ) );
+		copy( Curve.shiftRight( this, dx ) );
 	}
 
 	/**

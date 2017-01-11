@@ -62,7 +62,7 @@ public class ServiceCurve extends Curve {
 	}
 	
 	public ServiceCurve( Curve curve ) {
-		initializeCurve( curve );
+		copy( curve );
 
 		if( CalculatorConfig.SERVICE_CURVE_CHECKS && !isWideSenseIncreasing() ) { // too strong requirement: !isConvex()
 			throw new RuntimeException( "Service curves can only be created from wide-sense increasing functions." );
@@ -147,7 +147,7 @@ public class ServiceCurve extends Curve {
 
 	public ServiceCurve copy() {
 		ServiceCurve sc_copy = new ServiceCurve();
-		sc_copy.initializeCurve( this );
+		sc_copy.copy( this );
 		sc_copy.is_delayed_infinite_burst = this.is_delayed_infinite_burst;
 		
 		return sc_copy;

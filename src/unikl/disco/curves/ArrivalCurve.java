@@ -156,7 +156,7 @@ public class ArrivalCurve extends Curve {
 	
 	public ArrivalCurve copy() {
 		ArrivalCurve ac_copy = new ArrivalCurve();
-		ac_copy.initializeCurve( this );
+		ac_copy.copy( this );
 		
 		return ac_copy;
 	}
