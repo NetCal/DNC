@@ -1,4 +1,4 @@
-v2.3.0 "Centaur" (2017-JAN-NM)
+v2.3.0 "Centaur" (2017-JAN-11)
 ------------------------------
 * Rework of the number abstraction layer in unikl.disco.numbers:
   The DiscoDNC is now built on a factory pattern with four implementations -- the lower body and the four legs of our new Centaur release. 
@@ -20,7 +20,7 @@ v2.3.0 "Centaur" (2017-JAN-NM)
   - Renamed *null{Segment,Curve,ArrivalCurve,ServiceCurve,MaxServiceCurve}* to *zero{Segment,Curve,ArrivalCurve,ServiceCurve,MaxServiceCurve} *
   - Convolution of an arrival curve with a null object now returns the arrival curve instead of a zeroArrival curve.
 * CalculatorConfig.java: NUM_CLASS is now only accessible via get and set. 
-* Various fixes (e.g., suggested by Coverity Scan and FindBugs), performance improvements, reduced code duplication, improved parameter naming, etc.
+* Various fixes , performance improvements (e.g., suggested by Coverity Scan and FindBugs), reduced code duplication, improved parameter naming, etc.
 
 v2.2.8 "Heavy Ion" (2016-Dec-06)
 --------------------------------
