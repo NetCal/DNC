@@ -150,7 +150,7 @@ public class ArrivalBound {
 		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve( server, f_xfcaller_sourceflows_server ); // Will at least be a zeroArrivalCurve
 		arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( alpha_xfcaller_sourceflows_server ) );
 		
-		if( f_xfcaller_sourceflows_server.contains( f_xfcaller_server ) ) {
+		if( f_xfcaller_sourceflows_server.containsAll( f_xfcaller_server ) ) {
 			return arrival_bounds;
 		}
 		
