@@ -147,19 +147,19 @@ public class ArrivalBound {
 		// Get cross-traffic originating in server
 		Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection( f_xfcaller_server, network.getSourceFlows( server ) );
 		f_xfcaller_sourceflows_server.remove( flow_of_interest );
-		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve( server, f_xfcaller_sourceflows_server ); // Will at least be a nullArrivalCurve
+		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve( server, f_xfcaller_sourceflows_server ); // Will at least be a zeroArrivalCurve
 		arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( alpha_xfcaller_sourceflows_server ) );
 		
-		// Get arrival curves of flows originating at this server.
-		Set<Flow> f_xfcaller_server_bounded = new HashSet<Flow>( f_xfcaller_sourceflows_server );
+		if( f_xfcaller_sourceflows_server.contains( f_xfcaller_server ) ) {
+			return arrival_bounds;
+		}
 		
 		// Get cross-traffic from each predecessor. Call per link in order to get splitting points.
 		Set<ArrivalCurve> arrival_bounds_link;
 		Set<ArrivalCurve> arrival_bounds_link_permutations = new HashSet<ArrivalCurve>();
 		
 		Iterator<Link> in_link_iter = network.getInLinks( server ).iterator();
-		while ( !f_xfcaller_server_bounded.containsAll( f_xfcaller_server )
-					&& in_link_iter.hasNext() ) { // The second condition cannot be true while the first one is false because f_xfcaller_server == Intersection( f_server, flows_to_bound ).
+		while ( in_link_iter.hasNext() ) {
 			
 			Link in_l = in_link_iter.next();
 			Set<Flow> f_xfcaller_in_l = SetUtils.getIntersection( network.getFlows( in_l ), f_xfcaller_server );
