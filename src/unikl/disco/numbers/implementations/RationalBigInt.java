@@ -143,7 +143,7 @@ public class RationalBigInt implements Num {
 	}
 	
 	public boolean eqZero() {
-		return value.getNumerator().intValue() == 0;
+		return value.compareTo( BigFraction.ZERO ) == 0;
 	}
 
 	public boolean gt( Num num ) {
