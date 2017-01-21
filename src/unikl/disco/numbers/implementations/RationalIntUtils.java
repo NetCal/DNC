@@ -111,7 +111,8 @@ public class RationalIntUtils implements NumUtilsInterface {
 
 	public Num div( Num num1, Num num2 ) {
 		if( num1 instanceof NaN || num2 instanceof NaN 
-				|| ( ( num1 instanceof PositiveInfinity || num1 instanceof NegativeInfinity ) && ( num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity ) ) ) { // two infinities in the division
+				|| ( ( num1 instanceof PositiveInfinity || num1 instanceof NegativeInfinity ) 
+						&& ( num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity ) ) ) { // two infinities in the division
 			return new NaN();
 		}
 		if( num1 instanceof PositiveInfinity ) { // positive infinity divided by some finite value
@@ -219,7 +220,7 @@ public class RationalIntUtils implements NumUtilsInterface {
 	}
 
 	public boolean isInfinite( Num num ) {
-		if( ( num instanceof PositiveInfinity ) || ( num instanceof PositiveInfinity ) ) {
+		if( ( num instanceof PositiveInfinity ) || ( num instanceof NegativeInfinity ) ) {
 			return true;
 		} else {
 			return false; // NaN is neither finite nor infinite
