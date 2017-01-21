@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.0 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.1 "Centaur".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2012 - 2017 Steffen Bondorf
