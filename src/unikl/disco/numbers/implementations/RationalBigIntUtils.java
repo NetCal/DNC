@@ -209,4 +209,28 @@ public class RationalBigIntUtils implements NumUtilsInterface {
 		
 		return RationalBigInt.negate( (RationalBigInt)num );
 	}
+
+	public boolean isFinite( Num num ) {
+		if( num instanceof RationalBigInt ) { // Only stores finite values
+			return true;
+		} else {
+			return false; // NaN is neither finite nor infinite
+		}
+	}
+
+	public boolean isInfinite( Num num ) {
+		if( ( num instanceof PositiveInfinity ) || ( num instanceof PositiveInfinity ) ) {
+			return true;
+		} else {
+			return false; // NaN is neither finite nor infinite
+		}
+	}
+	
+	public boolean isNaN( Num num ) {
+		if( num instanceof NaN ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

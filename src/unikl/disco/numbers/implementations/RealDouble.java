@@ -29,12 +29,6 @@ package unikl.disco.numbers.implementations;
 
 import unikl.disco.numbers.Num;
 
-/**
- * Wrapper class around double;
- *
- * @author Steffen Bondorf
- *
- */
 public class RealDouble implements Num {
 	private double value;
 	
@@ -175,6 +169,18 @@ public class RealDouble implements Num {
 		} else {
 			return value <= 0.0;
 		}
+	}
+
+	public boolean isFinite() {
+		return Double.isFinite( value );
+	}
+
+	public boolean isInfinite() {
+		return Double.isInfinite( value );
+	}
+	
+	public boolean isNaN() {
+		return Double.isNaN( value );
 	}
 	
 	@Override

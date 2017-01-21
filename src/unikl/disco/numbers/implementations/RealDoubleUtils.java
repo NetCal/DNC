@@ -67,4 +67,16 @@ public class RealDoubleUtils implements NumUtilsInterface {
 	public Num negate( Num num ) {
 		return RealDouble.negate( (RealDouble)num );
 	}
+
+	public boolean isFinite( Num num ) {
+		return ( (RealDouble)num ).isFinite();
+	}
+
+	public boolean isInfinite( Num num ) {
+		return ( (RealDouble)num ).isInfinite();
+	}
+	
+	public boolean isNaN( Num num ) {
+		return ( (RealDouble)num ).isNaN();
+	}
 }

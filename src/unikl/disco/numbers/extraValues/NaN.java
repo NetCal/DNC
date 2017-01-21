@@ -74,6 +74,18 @@ public final class NaN implements Num {
 	public boolean leqZero() {
 		return false;
 	}
+
+	public boolean isFinite() {
+		return false;
+	}
+
+	public boolean isInfinite() {
+		return false;
+	}
+	
+	public boolean isNaN() {
+		return true;
+	}
 	
 	@Override
 	public double doubleValue() {

@@ -243,6 +243,18 @@ public class RationalInt implements Num {
 			return false;
 		}
 	}
+
+	public boolean isFinite() {
+		return true;
+	}
+
+	public boolean isInfinite() {
+		return false; // Handled by extraValues
+	}
+	
+	public boolean isNaN() {
+		return false; // Handled by extraValues
+	}
 	
 	@Override
 	public double doubleValue() {

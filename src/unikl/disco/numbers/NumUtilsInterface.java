@@ -47,4 +47,10 @@ public interface NumUtilsInterface {
 	Num min( Num num1, Num num2 );
 
 	Num negate( Num num );
+
+	boolean isFinite( Num num );
+
+	boolean isInfinite( Num num );
+	
+	boolean isNaN( Num num );
 }

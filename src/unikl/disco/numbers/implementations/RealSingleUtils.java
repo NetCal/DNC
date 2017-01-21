@@ -65,6 +65,18 @@ public class RealSingleUtils implements NumUtilsInterface {
 	}
 
 	public Num negate( Num num ) {
-		return RealDouble.negate( (RealDouble)num );
+		return RealSingle.negate( (RealSingle)num );
+	}
+
+	public boolean isFinite( Num num ) {
+		return ( (RealSingle)num ).isFinite();
+	}
+
+	public boolean isInfinite( Num num ) {
+		return ( (RealSingle)num ).isInfinite();
+	}
+	
+	public boolean isNaN( Num num ) {
+		return ( (RealSingle)num ).isNaN();
 	}
 }

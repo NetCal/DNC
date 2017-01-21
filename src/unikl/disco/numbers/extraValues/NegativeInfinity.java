@@ -73,6 +73,18 @@ public final class NegativeInfinity implements Num {
 	public boolean leqZero() {
 		return true;
 	}
+
+	public boolean isFinite() {
+		return false;
+	}
+
+	public boolean isInfinite() {
+		return true;
+	}
+	
+	public boolean isNaN() {
+		return false;
+	}
 	
 	@Override
 	public double doubleValue() {

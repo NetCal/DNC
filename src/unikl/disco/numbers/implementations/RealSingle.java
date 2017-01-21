@@ -29,12 +29,6 @@ package unikl.disco.numbers.implementations;
 
 import unikl.disco.numbers.Num;
 
-/**
- * Wrapper class around float;
- *
- * @author Steffen Bondorf
- *
- */
 public class RealSingle implements Num {
 	private float value;
 	
@@ -183,6 +177,18 @@ public class RealSingle implements Num {
 		} else {
 			return value <= 0.0f;
 		}
+	}
+
+	public boolean isFinite() {
+		return Float.isFinite( value );
+	}
+
+	public boolean isInfinite() {
+		return Float.isInfinite( value );
+	}
+	
+	public boolean isNaN() {
+		return Float.isNaN( value );
 	}
 	
 	@Override

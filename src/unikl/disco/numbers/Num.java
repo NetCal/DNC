@@ -37,7 +37,7 @@ package unikl.disco.numbers;
  */
 public interface Num {
 	double doubleValue();
-
+	
 	boolean eq( double num );
 	boolean eqZero();
 
@@ -52,6 +52,12 @@ public interface Num {
 
 	boolean leq( Num num );
 	boolean leqZero();
+
+	boolean isFinite();
+
+	boolean isInfinite();
+	
+	boolean isNaN();
 
 	Num copy();
 }
