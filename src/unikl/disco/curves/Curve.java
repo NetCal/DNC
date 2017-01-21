@@ -153,8 +153,6 @@ public class Curve {
 		for( Curve rl : curve.rate_latencies ) {
 			this.rate_latencies.add( rl );
 		}
-//		this.is_rate_latency = curve.isRateLatency();
-		// deduce property instead of copying it
 		if( this.rate_latencies.size() == 1 ) {
 			this.is_rate_latency = true;
 		}
@@ -163,8 +161,6 @@ public class Curve {
 		for( Curve tb : curve.token_buckets ) {
 			this.token_buckets.add( tb );
 		}
-//		this.is_token_bucket = curve.isTokenBucket();
-		// deduce property instead of copying it
 		if( this.token_buckets.size() == 1 ) {
 			this.is_token_bucket = true;
 		}
