@@ -1,4 +1,8 @@
-v2.3.0 "Centaur" (2017-JAN-11)
+v2.3.1 "Centaur" (2017-ABC-NM)
+------------------------------
+* Evolved the factory pattern for Num implementations to a (kind of) abstract factory pattern for simplified code and improved extensibility. 
+
+v2.3.0 "Centaur" (2017-Jan-11)
 ------------------------------
 * Rework of the number abstraction layer in unikl.disco.numbers:
   The DiscoDNC is now built on a factory pattern with four implementations -- the lower body and the four legs of our new Centaur release. 
@@ -28,7 +32,7 @@ v2.2.8 "Heavy Ion" (2016-Dec-06)
 * Improved JavaDocs for use_gamma and use_extra_gamma
 Thanks to Mathias Kreider from the GSI Helmholtz Centre for Heavy Ion Research for reporting these bugs. This release was code named "Heavy Ion".
 
-v2.2.7 (2016-Nov-17)
+v2.2.7 "Hydra" (2016-Nov-17)
 --------------------
 * Fixed a bug when convolving \delta_T with T>0 (delayed infinite burst).
 * Curve.java:
@@ -39,21 +43,21 @@ v2.2.7 (2016-Nov-17)
  - Streamlined test config generation.
  - assertEquals based on double values now considers the internal number representation's rounding error safety margin epsilon. 
 
-v2.2.6 (2016-Mar-31)
+v2.2.6 "Hydra" (2016-Mar-31)
 --------------------
 * Added the arrival bound burstiness reduction of the MMB & DFT 2016 paper
    "Improving Cross-Traffic Bounds in Feed-Forward Networks - There is a Job for Everyone".
   It can be switched on in the analysis configuration by setting the flag ab_consider_tfa_nodeBacklog to true.
 * Apache Commons Math version updated to 3.6.1.
 
-v2.2.5 (2015-Sep-29)
+v2.2.5 "Hydra" (2015-Sep-29)
 --------------------
 * Fixed deconvolution for delivering too optimistic results for some combinations of multi token buckets and multi rate latencies. Remember: The DiscoDNC is only tested for token-bucket arrivals and rate-latency service. Any other offering will is best effort. Please report encountered bugs.  
 * Curves: Creating a curve with specified segments count: All but the first segment will be leftopen.
 * Changed constructor visibility in NumDouble from protected to public.
 * Demo4: Removed unused server and link.
 
-v2.2.4 (2015-Aug-15)
+v2.2.4 "Hydra" (2015-Aug-15)
 --------------------
 * ArrivalCurve: Performance improvement computing an arrival curve's burst.
 * Network: Increased robustness against potential null pointers.
@@ -64,7 +68,7 @@ v2.2.4 (2015-Aug-15)
 * Ant build script to generate the DiscoDNC library.
 * Minor cleanups, better variable naming and other improvements.
 
-v2.2.3 (2015-Jul-11)
+v2.2.3 "Hydra" (2015-Jul-11)
 --------------------
 * Removal of the arrival bounding with the output arrival curve (PbooArrivalBound_Output_PerHop). Besides being deprecated since v2.0.0, it was broken by now.
 * The rejoining flows fix has been improved.
@@ -73,7 +77,7 @@ v2.2.3 (2015-Jul-11)
 * Minor improvements to comments.
 * Functional Test Documentation: Layout bug in FeedForward.pdf fixed.
 
-v2.2.2 (2015-Jul-02)
+v2.2.2 "Hydra" (2015-Jul-02)
 --------------------
 * Bugfix: Arrival bounding of flows at the servers they rejoin the flow of interest was fixed. 
 * NumDouble: Improved stability by catching double rounding error preventing a subtraction to result in exactly 0.
@@ -84,7 +88,7 @@ v2.2.2 (2015-Jul-02)
 * Demos: Code cleanups and simplifications.
 * Functional tests: FeedForward test documentation was updated to version 2.0beta.
 
-v2.2.1 (2015-Jun-15)
+v2.2.1 "Hydra" (2015-Jun-15)
 --------------------
 * Bugfix: Deconvolution with the zero delay, infinite burst-service curve (delta_0) always yielded delta_0 as result. Thanks to Fabien Geyer for discovering this bug. 
 * Added functions de-/convolving sets of curves.
@@ -93,7 +97,7 @@ v2.2.1 (2015-Jun-15)
  - Remaining problem for large networks: Constant pool (i.e., total amount of servers, links, flows) exceeding 65536 entries results in a failure.
 * Minor clean ups and efficiency improvements.
 
-v2.2.0 (2015-May-15)
+v2.2.0 "Hydra" (2015-May-15)
 --------------------
 * This is the first version checked with Coverity Scan (incl. FindBugs). We fixed all the uncovered performance issues and now pass the checks with 0 defects.
 * Reworked the Num classes in order to allow switching the number representation with a flag in CalculatorConfig (see below): 
@@ -119,7 +123,7 @@ v2.2.0 (2015-May-15)
 * Bugfix for per-flow arrival boundings restoring tightness of results (correctness was not compromised).
 * Various performance and stability improvements.
 
-v2.1.1 (2015-Mar-23)
+v2.1.1 "Hydra" (2015-Mar-23)
 --------------------
 * Network:
  - Version in SaveAs output changed to 2.1.
@@ -140,7 +144,7 @@ v2.1.1 (2015-Mar-23)
 * Obsolete class unikl.disco.nc.Configuration was removed.
 * Various minor improvements.
 
-v2.1.0 (2015-Feb-25)
+v2.1.0 "Hydra" (2015-Feb-25)
 --------------------
 * Notable API break (non-exhaustive list)
  - performAnalysisOnPath, performEnd2EndAnalysis -> performAnalysis (path determined by input parameters)
@@ -167,7 +171,7 @@ v2.1.0 (2015-Feb-25)
 * SeparateFlowAnalysis, PmooAnalysis: The end-to-end service curve now be computed for a given aggregate of flows.
 * Various minor improvements.
  
-v2.0.4 (2015-Jan-30)
+v2.0.4 "Hydra" (2015-Jan-30)
 --------------------
 * Server: Replaced boolean-based multiplexing definition with an enum.
 * LeftOverService, bounds: Fixed derivations with zero delay, infinite burst service curves. 
@@ -185,7 +189,7 @@ v2.0.4 (2015-Jan-30)
  - Apache Commons Math version updated to 3.4.1.
  - JUnit version 4.12.
 
-v2.0.3 (2014-Dec-30)
+v2.0.3 "Hydra" (2014-Dec-30)
 --------------------
 * Curve, LinearSegment: Moved static methods working on linear segments from Curve to LinearSegment.
 * Num, Num_double, Functional tests:
@@ -211,7 +215,7 @@ v2.0.3 (2014-Dec-30)
  - Minor fixes in the single server documentation.
 * Apache Commons Math: Updated bundled version to 3.4.
 
-v2.0.2 (2014-Nov-19)
+v2.0.2 "Hydra" (2014-Nov-19)
 --------------------
 * New feature: Network configurations can now be saved in a format that allows for reuse: 
  - Curves, LinearSegment, Num: Added constructors parsing a string representation of curves.
@@ -226,7 +230,7 @@ v2.0.2 (2014-Nov-19)
 * ServiceCurve: Removed effectively dead sanity check.
 * Minor improvements of the documentation and naming of internal variables. 
 
-v2.0.1 (2014-Oct-16)
+v2.0.1 "Hydra" (2014-Oct-16)
 --------------------
 * Bugfix in ArrivalBound. Removed bad sanity checks always resulting in false.
 * Server, Flow: Removed internal ID from string output.

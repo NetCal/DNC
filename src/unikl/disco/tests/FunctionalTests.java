@@ -44,7 +44,6 @@ import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
-import unikl.disco.numbers.NumFactory;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -92,7 +91,7 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 		if ( CalculatorConfig.getNumClass() != test_config.numbers 
 				|| last_number_representation == null ) {
 			CalculatorConfig.setNumClass( test_config.numbers );
-			NumFactory.createSingletons();
+//			NumFactory.createSingletons();
 		}
 	}
 	

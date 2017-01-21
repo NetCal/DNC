@@ -27,6 +27,9 @@
 
 package unikl.disco.nc;
 
+import unikl.disco.numbers.NumFactory;
+import unikl.disco.numbers.NumUtils;
+
 /**
  * 
  * @author Steffen Bondorf
@@ -42,6 +45,8 @@ public final class CalculatorConfig {
 	
 	public static void setNumClass( NumClass num_class ) {
 		NUM_CLASS = num_class;
+		NumFactory.setNumClass( num_class );
+		NumUtils.setNumClass( num_class );
 	}
 	
 	public static boolean ARRIVAL_CURVE_CHECKS = false;

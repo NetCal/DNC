@@ -61,3 +61,22 @@ Single Precision Floating Points
 
 Check this out:
 http://stackoverflow.com/questions/14531235/in-java-is-it-more-efficient-to-use-byte-or-short-instead-of-int-and-float-inst
+
+
+v2.3.1 Double Precision Floating Points
+———————————————————————————————————————
+-rw-rw-r-- 1 sbondorf sbondorf  10230 Dec 24 17:18 exp4/20_delay_v2.3.0.txt		t=0
+-rw-rw-r-- 1 sbondorf sbondorf  32197 Dec 24 17:19 exp4/40_delay_v2.3.0.txt		  1min
+-rw-rw-r-- 1 sbondorf sbondorf  44338 Dec 24 17:23 exp4/60_delay_v2.3.0.txt		  4min
+-rw-rw-r-- 1 sbondorf sbondorf  76801 Dec 24 17:29 exp4/80_delay_v2.3.0.txt		  6min
+-rw-rw-r-- 1 sbondorf sbondorf  98707 Dec 24 17:37 exp4/100_delay_v2.3.0.txt	  8min
+-rw-rw-r-- 1 sbondorf sbondorf 107852 Dec 24 17:59 exp4/120_delay_v2.3.0.txt	 22min
+-rw-rw-r-- 1 sbondorf sbondorf 138870 Dec 24 18:24 exp4/140_delay_v2.3.0.txt	 25min
+-rw-rw-r-- 1 sbondorf sbondorf 155360 Dec 24 18:47 exp4/160_delay_v2.3.0.txt	 23min
+-rw-rw-r-- 1 sbondorf sbondorf 175514 Dec 24 19:49 exp4/180_delay_v2.3.0.txt	 62min
+-rw-rw-r-- 1 sbondorf sbondorf 200865 Dec 24 20:15 exp4/200_delay_v2.3.0.txt	 26min
+-rw-rw-r-- 1 sbondorf sbondorf 201868 Dec 24 22:03 exp4/220_delay_v2.3.0.txt	108min
+-rw-rw-r-- 1 sbondorf sbondorf 239428 Dec 25 02:25 exp4/240_delay_v2.3.0.txt	262min
+-rw-rw-r-- 1 sbondorf sbondorf 265332 Dec 25 03:27 exp4/260_delay_v2.3.0.txt	 62min
+-rw-rw-r-- 1 sbondorf sbondorf 269176 Dec 27 19:52 exp4/280_delay_v2.3.0.txt	 64.42hours
+-rw-rw-r-- 1 sbondorf sbondorf 304563 Dec 27 23:50 exp4/300_delay_v2.3.0.txt	238min
