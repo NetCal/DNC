@@ -56,23 +56,21 @@ public class Deconvolution {
 
 	public static Set<ArrivalCurve> deconvolve( Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve, boolean tb_rl_optimized ) {
 		Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
-		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-			switch( OperatorInputChecks.inputNullCheck( arrival_curves, service_curve ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					results.add( ArrivalCurve.createZeroArrival() );
-					return results;
-				case 2:
-					results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
-					return results;
-				default:
-			}
-			if( arrival_curves.isEmpty() ) {
+		switch( OperatorInputChecks.inputNullCheck( arrival_curves, service_curve ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
 				results.add( ArrivalCurve.createZeroArrival() );
 				return results;
-			}
+			case 2:
+				results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
+				return results;
+			default:
+		}
+		if( arrival_curves.isEmpty() ) {
+			results.add( ArrivalCurve.createZeroArrival() );
+			return results;
 		}
 		
 		for ( ArrivalCurve alpha : arrival_curves ) {
@@ -90,31 +88,29 @@ public class Deconvolution {
 	public static Set<ArrivalCurve> deconvolve( Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves, boolean tb_rl_optimized ) {
 		Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-			switch( OperatorInputChecks.inputNullCheck( arrival_curves, service_curves ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					results.add( ArrivalCurve.createZeroArrival() );
-					return results;
-				case 2:
-					results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
-					return results;
-				default:
-			}
-			switch( OperatorInputChecks.inputEmptySetCheck( arrival_curves, service_curves ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					results.add( ArrivalCurve.createZeroArrival() );
-					return results;
-				case 2:
-					results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
-					return results;
-				default:
-			}
+		switch( OperatorInputChecks.inputNullCheck( arrival_curves, service_curves ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
+				results.add( ArrivalCurve.createZeroArrival() );
+				return results;
+			case 2:
+				results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
+				return results;
+			default:
+		}
+		switch( OperatorInputChecks.inputEmptySetCheck( arrival_curves, service_curves ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
+				results.add( ArrivalCurve.createZeroArrival() );
+				return results;
+			case 2:
+				results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
+				return results;
+			default:
 		}
 		
 		for ( ServiceCurve beta : service_curves ) {
@@ -133,17 +129,15 @@ public class Deconvolution {
 	}
 	
 	public static ArrivalCurve deconvolve( ArrivalCurve arrival_curve, ServiceCurve service_curve, boolean tb_rl_optimized ) {
-		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-			switch( OperatorInputChecks.inputNullCheck( arrival_curve,  service_curve ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					return ArrivalCurve.createZeroArrival();
-				case 2:
-					return ArrivalCurve.createZeroDelayInfiniteBurst(); 
-				default:
-			}
+		switch( OperatorInputChecks.inputNullCheck( arrival_curve,  service_curve ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
+				return ArrivalCurve.createZeroArrival();
+			case 2:
+				return ArrivalCurve.createZeroDelayInfiniteBurst(); 
+			default:
 		}
 			
 		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() )
@@ -166,31 +160,29 @@ public class Deconvolution {
 	public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs( Set<Curve> curves, Set<ServiceCurve> service_curves ) {
 		Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-			switch( OperatorInputChecks.inputNullCheck( curves, service_curves ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					results.add( ArrivalCurve.createZeroArrival() );
-					return results;
-				case 2:
-					results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
-					return results;
-				default:
-			}
-			switch( OperatorInputChecks.inputEmptySetCheck( curves, service_curves ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					results.add( ArrivalCurve.createZeroArrival() );
-					return results;
-				case 2:
-					results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
-					return results;
-				default:
-			}
+		switch( OperatorInputChecks.inputNullCheck( curves, service_curves ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
+				results.add( ArrivalCurve.createZeroArrival() );
+				return results;
+			case 2:
+				results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
+				return results;
+			default:
+		}
+		switch( OperatorInputChecks.inputEmptySetCheck( curves, service_curves ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
+				results.add( ArrivalCurve.createZeroArrival() );
+				return results;
+			case 2:
+				results.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
+				return results;
+			default:
 		}
 		
 		Num latency;
@@ -205,17 +197,15 @@ public class Deconvolution {
 	}
 	
 	public static ArrivalCurve deconvolveTB_RL( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-			switch( OperatorInputChecks.inputNullCheck( arrival_curve,  service_curve ) ) {
-				case 0:
-					break;
-				case 1:
-				case 3:
-					return ArrivalCurve.createZeroArrival();
-				case 2:
-					return ArrivalCurve.createZeroDelayInfiniteBurst(); 
-				default:
-			}
+		switch( OperatorInputChecks.inputNullCheck( arrival_curve,  service_curve ) ) {
+			case 0:
+				break;
+			case 1:
+			case 3:
+				return ArrivalCurve.createZeroArrival();
+			case 2:
+				return ArrivalCurve.createZeroDelayInfiniteBurst(); 
+			default:
 		}
 		
 		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
@@ -241,7 +231,7 @@ public class Deconvolution {
 	 * @return The deconvolved curve, an arrival curve.
 	 */
 	private static ArrivalCurve deconvolve_mTB_mRL( Curve curve_1, Curve curve_2 ) {
-		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+//		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
 			switch( OperatorInputChecks.inputNullCheck( curve_1,  curve_2 ) ) {
 				case 0:
 					break;
@@ -252,7 +242,7 @@ public class Deconvolution {
 					return ArrivalCurve.createZeroDelayInfiniteBurst(); 
 				default:
 			}
-		}
+//		}
 		
 		if( curve_1.getSustainedRate().gt( curve_2.getSustainedRate() ) ) { // Violation of the sability constraint
 			return ArrivalCurve.createZeroDelayInfiniteBurst();
