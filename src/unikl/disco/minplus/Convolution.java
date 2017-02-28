@@ -48,27 +48,6 @@ import unikl.disco.numbers.NumUtils;
  *
  */
 public class Convolution {
-	/**
-	 * @param obj1
-	 * @param obj2
-	 * @return 0 == none of the objects is null, <br/>
-	 * 		   1 == the first object is null, <br/>
-	 * 		   2 == the second object is null, <br/>
-	 * 		   3 == both objects is null.
-	 */
-	private static int inputNullCheck( Object obj1, Object obj2 ) {
-		int return_value = 0;
-		
-		if ( obj1 == null ) {
-			return_value += 1;
-        }
-    	if ( obj2 == null ) {
-    		return_value += 2;
-        }
-    	
-    	return return_value;
-	}
-	
 	
 	public static ArrivalCurve convolve( Set<ArrivalCurve> arrival_curves ) {
 		if ( arrival_curves == null || arrival_curves.isEmpty() ) {
@@ -87,7 +66,7 @@ public class Convolution {
 	}
 	
 	public static ArrivalCurve convolve( ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2 ) {
-		switch( inputNullCheck( arrival_curve_1, arrival_curve_2 ) ) {
+		switch( OperatorInputChecks.inputNullCheck( arrival_curve_1, arrival_curve_2 ) ) {
 			case 0:
 				break;
 			case 1:
@@ -126,7 +105,7 @@ public class Convolution {
 	 * @return The convolved maximum service curve.
 	 */
 	public static MaxServiceCurve convolve( MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2 ) {
-		switch( inputNullCheck( max_service_curve_1, max_service_curve_2 ) ) {
+		switch( OperatorInputChecks.inputNullCheck( max_service_curve_1, max_service_curve_2 ) ) {
 			case 0:
 				break;
 			case 1:
@@ -219,7 +198,7 @@ public class Convolution {
 	 * @return The convolved curve.
 	 */
 	public static ServiceCurve convolve_SC_SC_Generic( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
-		switch( inputNullCheck( service_curve_1, service_curve_2 ) ) {
+		switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
 			case 0:
 				break;
 			case 1:
@@ -315,7 +294,7 @@ public class Convolution {
 	
 	// The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
 	public static Set<Curve> convolve_ACs_MSC( Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve ) throws Exception {
-		switch( inputNullCheck( arrival_curves, maximum_service_curve ) ) {
+		switch( OperatorInputChecks.inputNullCheck( arrival_curves, maximum_service_curve ) ) {
 			case 0:
 				break;
 			case 1:
@@ -348,7 +327,7 @@ public class Convolution {
 	}
 	
 	public static Set<ArrivalCurve> convolve_ACs_EGamma( Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve ) throws Exception {
-		switch( inputNullCheck( arrival_curves, extra_gamma_curve ) ) {
+		switch( OperatorInputChecks.inputNullCheck( arrival_curves, extra_gamma_curve ) ) {
 			case 0:
 				break;
 			case 1:

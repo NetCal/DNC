@@ -1,7 +1,8 @@
-v2.3.1 "Centaur" (2017-ABC-NM)
+v2.3.1 "Centaur" (2017-Feb-NM)
 ------------------------------
 * Evolved the factory pattern for Num implementations to a (kind of) abstract factory pattern for simplified code and improved extensibility.
-* Convolution: Improved stability by handling
+* Package minplus: Improved stability by handling distorted input (null or empty sets). 
+* Deconvolution: Renamed private method deconvolveGeneric to deconvolve_mTB_mRL to better reflect its capabilities. 
 
 v2.3.0 "Centaur" (2017-Jan-11)
 ------------------------------
