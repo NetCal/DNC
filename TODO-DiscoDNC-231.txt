@@ -1,10 +1,10 @@
 v2.3.1
 ------
-Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution.
+Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
+Deconvolution: Also use the stability checks of Convolution.
+
 
 Num interface: Add neq
-
-
     /**
      * Returns a copy of this curve that is shifted to the right by <code>dx</code>,
      * i.e. g(x) = f(x-dx).

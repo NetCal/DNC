@@ -48,12 +48,34 @@ import unikl.disco.numbers.NumUtils;
  *
  */
 public class Convolution {
+	/**
+	 * @param obj1
+	 * @param obj2
+	 * @return 0 == none of the objects is null, <br/>
+	 * 		   1 == the first object is null, <br/>
+	 * 		   2 == the second object is null, <br/>
+	 * 		   3 == both objects is null.
+	 */
+	private static int inputNullCheck( Object obj1, Object obj2 ) {
+		int return_value = 0;
+		
+		if ( obj1 == null ) {
+			return_value += 1;
+        }
+    	if ( obj2 == null ) {
+    		return_value += 2;
+        }
+    	
+    	return return_value;
+	}
+	
+	
 	public static ArrivalCurve convolve( Set<ArrivalCurve> arrival_curves ) {
 		if ( arrival_curves == null || arrival_curves.isEmpty() ) {
 			return ArrivalCurve.createZeroArrival();
 		}
 		if( arrival_curves.size() == 1 ) {
-			return arrival_curves.iterator().next();
+			return arrival_curves.iterator().next().copy();
 		}
 		
 		ArrivalCurve arrival_curve_result = ArrivalCurve.createZeroDelayInfiniteBurst();
@@ -65,13 +87,18 @@ public class Convolution {
 	}
 	
 	public static ArrivalCurve convolve( ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2 ) {
-    	if (arrival_curve_1 == null ) {
-            return arrival_curve_2;
-        }
-    	if (arrival_curve_2 == null ) {
-            return arrival_curve_1;
-        }
-    	
+		switch( inputNullCheck( arrival_curve_1, arrival_curve_2 ) ) {
+			case 0:
+				break;
+			case 1:
+				return arrival_curve_2.copy();
+			case 2:
+				return arrival_curve_1.copy();
+			case 3:
+				return ArrivalCurve.createZeroArrival();
+			default:
+		}
+		
 		ArrivalCurve zero_arrival = ArrivalCurve.createZeroArrival();
 		if ( arrival_curve_1.equals( zero_arrival ) || arrival_curve_2.equals( zero_arrival )  ) {
 			return zero_arrival;
@@ -99,6 +126,18 @@ public class Convolution {
 	 * @return The convolved maximum service curve.
 	 */
 	public static MaxServiceCurve convolve( MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2 ) {
+		switch( inputNullCheck( max_service_curve_1, max_service_curve_2 ) ) {
+			case 0:
+				break;
+			case 1:
+				return max_service_curve_2.copy();
+			case 2:
+				return max_service_curve_1.copy();
+			case 3:
+				return MaxServiceCurve.createZeroDelayInfiniteBurst();
+			default:
+		}
+		
 		if ( CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && 
 				( !max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave() ) ) {
 			throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
@@ -130,11 +169,17 @@ public class Convolution {
 	}
 	
 	public static Set<ServiceCurve> convolve_SCs_SCs( Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized ) {
-		if ( service_curves_1.isEmpty() ) {
-			return service_curves_2;
-		}
-		if ( service_curves_2.isEmpty() ) {
-			return service_curves_1;
+		// Usually none is empty so this initial check promises best overall performance
+		if ( service_curves_1.isEmpty() || service_curves_2.isEmpty() ) {
+			if ( service_curves_1.isEmpty() && service_curves_2.isEmpty() ) {
+				return new HashSet<ServiceCurve>();
+			}
+			if ( service_curves_1.isEmpty() ) {
+				return service_curves_2;
+			}
+			if ( service_curves_2.isEmpty() ) {
+				return service_curves_1;
+			}
 		}
 		
 		Set<ServiceCurve> results = new HashSet<ServiceCurve>();
@@ -174,6 +219,18 @@ public class Convolution {
 	 * @return The convolved curve.
 	 */
 	public static ServiceCurve convolve_SC_SC_Generic( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
+		switch( inputNullCheck( service_curve_1, service_curve_2 ) ) {
+			case 0:
+				break;
+			case 1:
+				return service_curve_2.copy();
+			case 2:
+				return service_curve_1.copy();
+			case 3:
+				return ServiceCurve.createZeroService();
+			default:
+		}
+		
 		// Shortcut: only go here if there is at least one delayed infinite burst
 		if( service_curve_1.isDelayedInfiniteBurst() || service_curve_2.isDelayedInfiniteBurst() ) { 
 			if ( service_curve_1.isDelayedInfiniteBurst() && service_curve_2.isDelayedInfiniteBurst() ) {
@@ -258,6 +315,26 @@ public class Convolution {
 	
 	// The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
 	public static Set<Curve> convolve_ACs_MSC( Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve ) throws Exception {
+		switch( inputNullCheck( arrival_curves, maximum_service_curve ) ) {
+			case 0:
+				break;
+			case 1:
+				return new HashSet<Curve>();
+			case 2:
+				Set<Curve> clone = new HashSet<Curve>();
+		    	
+		    	for ( ArrivalCurve ac : arrival_curves ) {
+		    		clone.add( ac.copy() );
+		    	}
+		    	return clone;
+			case 3:
+				return new HashSet<Curve>();
+			default:
+		}
+		if( arrival_curves.isEmpty() ) {
+			return new HashSet<Curve>();
+		}
+		
 		Num msc_latency = maximum_service_curve.getLatency();
 		Set<Curve> result = new HashSet<Curve>();
 		
@@ -271,6 +348,26 @@ public class Convolution {
 	}
 	
 	public static Set<ArrivalCurve> convolve_ACs_EGamma( Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve ) throws Exception {
+		switch( inputNullCheck( arrival_curves, extra_gamma_curve ) ) {
+			case 0:
+				break;
+			case 1:
+				return new HashSet<ArrivalCurve>();
+			case 2:
+				Set<ArrivalCurve> clone = new HashSet<ArrivalCurve>();
+		    	
+		    	for ( ArrivalCurve ac : arrival_curves ) {
+		    		clone.add( ac.copy() );
+		    	}
+		    	return clone;
+			case 3:
+				return new HashSet<ArrivalCurve>();
+			default:
+		}
+		if( arrival_curves.isEmpty() ) {
+			return new HashSet<ArrivalCurve>();
+		}
+		
 		if( extra_gamma_curve.getLatency().gtZero() ) {
 			throw new Exception( "Cannot convolve with an extra gamma curve with latency" );
 		}

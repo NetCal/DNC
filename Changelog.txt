@@ -1,6 +1,7 @@
 v2.3.1 "Centaur" (2017-ABC-NM)
 ------------------------------
-* Evolved the factory pattern for Num implementations to a (kind of) abstract factory pattern for simplified code and improved extensibility. 
+* Evolved the factory pattern for Num implementations to a (kind of) abstract factory pattern for simplified code and improved extensibility.
+* Convolution: Improved stability by handling
 
 v2.3.0 "Centaur" (2017-Jan-11)
 ------------------------------
