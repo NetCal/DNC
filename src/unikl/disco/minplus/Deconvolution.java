@@ -210,7 +210,7 @@ public class Deconvolution {
 		}
 		
 		if( service_curve.equals( ServiceCurve.createZeroDelayInfiniteBurst() ) ) {
-			return arrival_curve;
+			return arrival_curve.copy();
 		}
 		if( service_curve.equals( ServiceCurve.createZeroService() )
 				|| service_curve.getLatency().equals( NumFactory.getPositiveInfinity() )

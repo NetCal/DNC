@@ -50,6 +50,7 @@ import unikl.disco.numbers.NumUtils;
 public class Convolution {
 	
 	public static ArrivalCurve convolve( Set<ArrivalCurve> arrival_curves ) {
+		// Custom null and empty checks for this single argument method.
 		if ( arrival_curves == null || arrival_curves.isEmpty() ) {
 			return ArrivalCurve.createZeroArrival();
 		}
@@ -85,13 +86,13 @@ public class Convolution {
 		
 		ArrivalCurve zero_delay_infinite_burst = ArrivalCurve.createZeroDelayInfiniteBurst();
 		if( arrival_curve_1.equals( zero_delay_infinite_burst ) ) {
-			return arrival_curve_2;
+			return arrival_curve_2.copy();
 		}
 		if( arrival_curve_2.equals( zero_delay_infinite_burst ) ) {
-			return arrival_curve_1;
+			return arrival_curve_1.copy();
 		}
 		
-		// Arrival curves are concave concave curves so we can do a minimum instead of a convolution here. 
+		// Arrival curves are concave curves so we can do a minimum instead of a convolution here. 
 		ArrivalCurve convolved_arrival_curve = new ArrivalCurve( Curve.min( arrival_curve_1, arrival_curve_2 ) );
 		return convolved_arrival_curve;
 	}
@@ -144,25 +145,53 @@ public class Convolution {
 	
 	// Java won't let me call this method "convolve" because it does not care about the Sets' types; tells that there's already another method taking the same arguments.
 	public static Set<ServiceCurve> convolve_SCs_SCs( Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2 ) {
+		// null and empty checks will be done by convolve_SCs_SCs( ... )
 		return convolve_SCs_SCs( service_curves_1, service_curves_2, false );
 	}
 	
 	public static Set<ServiceCurve> convolve_SCs_SCs( Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized ) {
-		// Usually none is empty so this initial check promises best overall performance
-		if ( service_curves_1.isEmpty() || service_curves_2.isEmpty() ) {
-			if ( service_curves_1.isEmpty() && service_curves_2.isEmpty() ) {
-				return new HashSet<ServiceCurve>();
-			}
-			if ( service_curves_1.isEmpty() ) {
-				return service_curves_2;
-			}
-			if ( service_curves_2.isEmpty() ) {
-				return service_curves_1;
-			}
-		}
-		
 		Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 		
+		// An empty or null set does is not interpreted as a convolution with a null curve.
+		// Instead, the other set is return in case it is neither null or empty.
+		Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
+		switch( OperatorInputChecks.inputNullCheck( service_curves_1, service_curves_2 ) ) {
+			case 0:
+				break;
+			case 1:
+		    	for ( ServiceCurve sc : service_curves_2 ) {
+		    		clone.add( sc.copy() );
+		    	}
+		    	return clone;
+			case 2:
+		    	for ( ServiceCurve sc : service_curves_1 ) {
+		    		clone.add( sc.copy() );
+		    	}
+		    	return clone;
+			case 3:
+				results.add( ServiceCurve.createZeroService() );
+				return results;
+			default:
+		}
+		switch( OperatorInputChecks.inputEmptySetCheck( service_curves_1, service_curves_2 ) ) {
+			case 0:
+				break;
+			case 1:
+		    	for ( ServiceCurve sc : service_curves_2 ) {
+		    		clone.add( sc.copy() );
+		    	}
+		    	return clone;
+			case 2:
+		    	for ( ServiceCurve sc : service_curves_1 ) {
+		    		clone.add( sc.copy() );
+		    	}
+		    	return clone;
+			case 3:
+				results.add( ServiceCurve.createZeroService() );
+				return results;
+			default:
+		}
+				
 		for ( ServiceCurve beta_1 : service_curves_1 ) {
 			for ( ServiceCurve beta_2 : service_curves_2 ) {
 				results.add( convolve( beta_1, beta_2, tb_rl_optimized ) );
@@ -173,10 +202,12 @@ public class Convolution {
 	}
 	
 	public static ServiceCurve convolve( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
+		// null checks will be done by convolve( ... )
 		return convolve( service_curve_1, service_curve_2, false ); 
 	}
 
 	public static ServiceCurve convolve( ServiceCurve service_curve_1, ServiceCurve service_curve_2, boolean tb_rl_optimized ) {
+		// null checks will be done by convolve_SC_SC_RLs( ... ) or convolve_SC_SC_Generic( ... )
 		if ( tb_rl_optimized ) {
 			return convolve_SC_SC_RLs( service_curve_1, service_curve_2 );
 		} else {
@@ -185,6 +216,18 @@ public class Convolution {
 	}
 	
 	private static ServiceCurve convolve_SC_SC_RLs( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
+		switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
+			case 0:
+				break;
+			case 1:
+				return service_curve_2.copy();
+			case 2:
+				return service_curve_1.copy();
+			case 3:
+				ServiceCurve.createZeroService();
+			default:
+		}
+		
 		return ServiceCurve.createRateLatency( 
 				Math.min( service_curve_1.getSustainedRate().doubleValue(), service_curve_2.getSustainedRate().doubleValue() ), 
 				service_curve_1.getLatency().doubleValue() + service_curve_2.getLatency().doubleValue() );
