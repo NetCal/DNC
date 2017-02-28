@@ -41,7 +41,7 @@ public class OperatorInputChecks {
 	 * @return 0 == none of the objects is null, <br/>
 	 * 		   1 == the first object is null, <br/>
 	 * 		   2 == the second object is null, <br/>
-	 * 		   3 == both objects is null.
+	 * 		   3 == both objects are null.
 	 */
 	public static int inputNullCheck( Object obj1, Object obj2 ) {
 		// Usually neither is null so this initial check promises best overall performance.
@@ -67,7 +67,7 @@ public class OperatorInputChecks {
 	 * @return 0 == none of the sets is empty, <br/>
 	 * 		   1 == the first sets is empty, <br/>
 	 * 		   2 == the second sets is empty, <br/>
-	 * 		   3 == both sets is empty.
+	 * 		   3 == both sets are empty.
 	 */
 	@SuppressWarnings("rawtypes")
 	public static int inputEmptySetCheck( Set set1, Set set2 ) {
