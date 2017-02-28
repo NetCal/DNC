@@ -67,16 +67,18 @@ public class Convolution {
 	}
 	
 	public static ArrivalCurve convolve( ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2 ) {
-		switch( OperatorInputChecks.inputNullCheck( arrival_curve_1, arrival_curve_2 ) ) {
-			case 0:
-				break;
-			case 1:
-				return arrival_curve_2.copy();
-			case 2:
-				return arrival_curve_1.copy();
-			case 3:
-				return ArrivalCurve.createZeroArrival();
-			default:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			switch( OperatorInputChecks.inputNullCheck( arrival_curve_1, arrival_curve_2 ) ) {
+				case 0:
+					break;
+				case 1:
+					return arrival_curve_2.copy();
+				case 2:
+					return arrival_curve_1.copy();
+				case 3:
+					return ArrivalCurve.createZeroArrival();
+				default:
+			}
 		}
 		
 		ArrivalCurve zero_arrival = ArrivalCurve.createZeroArrival();
@@ -106,16 +108,18 @@ public class Convolution {
 	 * @return The convolved maximum service curve.
 	 */
 	public static MaxServiceCurve convolve( MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2 ) {
-		switch( OperatorInputChecks.inputNullCheck( max_service_curve_1, max_service_curve_2 ) ) {
-			case 0:
-				break;
-			case 1:
-				return max_service_curve_2.copy();
-			case 2:
-				return max_service_curve_1.copy();
-			case 3:
-				return MaxServiceCurve.createZeroDelayInfiniteBurst();
-			default:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			switch( OperatorInputChecks.inputNullCheck( max_service_curve_1, max_service_curve_2 ) ) {
+				case 0:
+					break;
+				case 1:
+					return max_service_curve_2.copy();
+				case 2:
+					return max_service_curve_1.copy();
+				case 3:
+					return MaxServiceCurve.createZeroDelayInfiniteBurst();
+				default:
+			}
 		}
 		
 		if ( CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && 
@@ -154,42 +158,44 @@ public class Convolution {
 		
 		// An empty or null set does is not interpreted as a convolution with a null curve.
 		// Instead, the other set is return in case it is neither null or empty.
-		Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
-		switch( OperatorInputChecks.inputNullCheck( service_curves_1, service_curves_2 ) ) {
-			case 0:
-				break;
-			case 1:
-		    	for ( ServiceCurve sc : service_curves_2 ) {
-		    		clone.add( sc.copy() );
-		    	}
-		    	return clone;
-			case 2:
-		    	for ( ServiceCurve sc : service_curves_1 ) {
-		    		clone.add( sc.copy() );
-		    	}
-		    	return clone;
-			case 3:
-				results.add( ServiceCurve.createZeroService() );
-				return results;
-			default:
-		}
-		switch( OperatorInputChecks.inputEmptySetCheck( service_curves_1, service_curves_2 ) ) {
-			case 0:
-				break;
-			case 1:
-		    	for ( ServiceCurve sc : service_curves_2 ) {
-		    		clone.add( sc.copy() );
-		    	}
-		    	return clone;
-			case 2:
-		    	for ( ServiceCurve sc : service_curves_1 ) {
-		    		clone.add( sc.copy() );
-		    	}
-		    	return clone;
-			case 3:
-				results.add( ServiceCurve.createZeroService() );
-				return results;
-			default:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
+			switch( OperatorInputChecks.inputNullCheck( service_curves_1, service_curves_2 ) ) {
+				case 0:
+					break;
+				case 1:
+			    	for ( ServiceCurve sc : service_curves_2 ) {
+			    		clone.add( sc.copy() );
+			    	}
+			    	return clone;
+				case 2:
+			    	for ( ServiceCurve sc : service_curves_1 ) {
+			    		clone.add( sc.copy() );
+			    	}
+			    	return clone;
+				case 3:
+					results.add( ServiceCurve.createZeroService() );
+					return results;
+				default:
+			}
+			switch( OperatorInputChecks.inputEmptySetCheck( service_curves_1, service_curves_2 ) ) {
+				case 0:
+					break;
+				case 1:
+			    	for ( ServiceCurve sc : service_curves_2 ) {
+			    		clone.add( sc.copy() );
+			    	}
+			    	return clone;
+				case 2:
+			    	for ( ServiceCurve sc : service_curves_1 ) {
+			    		clone.add( sc.copy() );
+			    	}
+			    	return clone;
+				case 3:
+					results.add( ServiceCurve.createZeroService() );
+					return results;
+				default:
+			}
 		}
 				
 		for ( ServiceCurve beta_1 : service_curves_1 ) {
@@ -216,16 +222,18 @@ public class Convolution {
 	}
 	
 	private static ServiceCurve convolve_SC_SC_RLs( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
-		switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
-			case 0:
-				break;
-			case 1:
-				return service_curve_2.copy();
-			case 2:
-				return service_curve_1.copy();
-			case 3:
-				ServiceCurve.createZeroService();
-			default:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
+				case 0:
+					break;
+				case 1:
+					return service_curve_2.copy();
+				case 2:
+					return service_curve_1.copy();
+				case 3:
+					ServiceCurve.createZeroService();
+				default:
+			}
 		}
 		
 		return ServiceCurve.createRateLatency( 
@@ -241,16 +249,18 @@ public class Convolution {
 	 * @return The convolved curve.
 	 */
 	public static ServiceCurve convolve_SC_SC_Generic( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
-		switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
-			case 0:
-				break;
-			case 1:
-				return service_curve_2.copy();
-			case 2:
-				return service_curve_1.copy();
-			case 3:
-				return ServiceCurve.createZeroService();
-			default:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
+				case 0:
+					break;
+				case 1:
+					return service_curve_2.copy();
+				case 2:
+					return service_curve_1.copy();
+				case 3:
+					return ServiceCurve.createZeroService();
+				default:
+			}
 		}
 		
 		// Shortcut: only go here if there is at least one delayed infinite burst
@@ -337,24 +347,26 @@ public class Convolution {
 	
 	// The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
 	public static Set<Curve> convolve_ACs_MSC( Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve ) throws Exception {
-		switch( OperatorInputChecks.inputNullCheck( arrival_curves, maximum_service_curve ) ) {
-			case 0:
-				break;
-			case 1:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			switch( OperatorInputChecks.inputNullCheck( arrival_curves, maximum_service_curve ) ) {
+				case 0:
+					break;
+				case 1:
+					return new HashSet<Curve>();
+				case 2:
+					Set<Curve> clone = new HashSet<Curve>();
+			    	
+			    	for ( ArrivalCurve ac : arrival_curves ) {
+			    		clone.add( ac.copy() );
+			    	}
+			    	return clone;
+				case 3:
+					return new HashSet<Curve>();
+				default:
+			}
+			if( arrival_curves.isEmpty() ) {
 				return new HashSet<Curve>();
-			case 2:
-				Set<Curve> clone = new HashSet<Curve>();
-		    	
-		    	for ( ArrivalCurve ac : arrival_curves ) {
-		    		clone.add( ac.copy() );
-		    	}
-		    	return clone;
-			case 3:
-				return new HashSet<Curve>();
-			default:
-		}
-		if( arrival_curves.isEmpty() ) {
-			return new HashSet<Curve>();
+			}
 		}
 		
 		Num msc_latency = maximum_service_curve.getLatency();
@@ -370,24 +382,26 @@ public class Convolution {
 	}
 	
 	public static Set<ArrivalCurve> convolve_ACs_EGamma( Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve ) throws Exception {
-		switch( OperatorInputChecks.inputNullCheck( arrival_curves, extra_gamma_curve ) ) {
-			case 0:
-				break;
-			case 1:
+		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+			switch( OperatorInputChecks.inputNullCheck( arrival_curves, extra_gamma_curve ) ) {
+				case 0:
+					break;
+				case 1:
+					return new HashSet<ArrivalCurve>();
+				case 2:
+					Set<ArrivalCurve> clone = new HashSet<ArrivalCurve>();
+			    	
+			    	for ( ArrivalCurve ac : arrival_curves ) {
+			    		clone.add( ac.copy() );
+			    	}
+			    	return clone;
+				case 3:
+					return new HashSet<ArrivalCurve>();
+				default:
+			}
+			if( arrival_curves.isEmpty() ) {
 				return new HashSet<ArrivalCurve>();
-			case 2:
-				Set<ArrivalCurve> clone = new HashSet<ArrivalCurve>();
-		    	
-		    	for ( ArrivalCurve ac : arrival_curves ) {
-		    		clone.add( ac.copy() );
-		    	}
-		    	return clone;
-			case 3:
-				return new HashSet<ArrivalCurve>();
-			default:
-		}
-		if( arrival_curves.isEmpty() ) {
-			return new HashSet<ArrivalCurve>();
+			}
 		}
 		
 		if( extra_gamma_curve.getLatency().gtZero() ) {

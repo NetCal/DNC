@@ -54,6 +54,7 @@ public final class CalculatorConfig {
 	public static boolean MAX_SERVICE_CURVE_CHECKS = false;
 	public static boolean FIFO_MUX_CHECKS = false;
 	public static boolean DECONVOLUTION_CHECKS = false;
+	public static boolean OPERATOR_INPUT_CHECKS = false;
 	
 	public static void disableAllChecks() {
 		ARRIVAL_CURVE_CHECKS = false;
@@ -61,6 +62,7 @@ public final class CalculatorConfig {
 		MAX_SERVICE_CURVE_CHECKS = false;
 		FIFO_MUX_CHECKS = false;
 		DECONVOLUTION_CHECKS = false;
+		OPERATOR_INPUT_CHECKS = false;
 	}
 	
 	public static void enableAllChecks() {
@@ -69,5 +71,6 @@ public final class CalculatorConfig {
 		MAX_SERVICE_CURVE_CHECKS = true;
 		FIFO_MUX_CHECKS = true;
 		DECONVOLUTION_CHECKS = true;
+		OPERATOR_INPUT_CHECKS = true;
 	}
 }
