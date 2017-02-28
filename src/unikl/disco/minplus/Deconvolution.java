@@ -50,7 +50,7 @@ import unikl.disco.numbers.NumUtils;
  */
 public class Deconvolution {
 	public static Set<ArrivalCurve> deconvolve( Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve ) {
-		// null and isEmpty checks will be done by deconvolve( ... )
+		// null and empty checks will be done by deconvolve( ... )
 		return deconvolve( arrival_curves, service_curve, false );
 	}
 
@@ -82,7 +82,7 @@ public class Deconvolution {
 	}
 	
 	public static Set<ArrivalCurve> deconvolve( Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves ) {
-		// null checks will be done by deconvolve( ... )
+		// null and empty checks will be done by deconvolve( ... )
 		return deconvolve( arrival_curves, service_curves, false );
 	}
 	
