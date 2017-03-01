@@ -147,20 +147,20 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
 			// Combine into the sub-path's left-over service curve
 			betas_lo_subpath = Convolution.convolve_SCs_SCs( betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution() );
 		}
-		
-		// Next we need to know the arrival bound of f_xfcaller at the server 'from', i.e., at the above sub-path's source
+
+		// Next we need to know the arrival bound of f_xfcaller at the server 'common_subpath_src', i.e., at the above sub-path's source
 		// in order to deconvolve it with beta_lo_s to get the arrival bound of the sub-path
-		// Note that flows f_xfcaller that originate in 'from' are covered by this call of computeArrivalBound
-		Set<ArrivalCurve> alpha_xfcaller_from = super.computeArrivalBounds( common_subpath_src, f_xfcaller, flow_of_interest );
+		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered by this call of computeArrivalBound
+		Set<ArrivalCurve> alpha_xfcaller_src = super.computeArrivalBounds( common_subpath_src, f_xfcaller, flow_of_interest );
 
 		if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  )
 		{
 			MaxServiceCurve gamma = common_subpath.getGamma();
-			alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alpha_xfcaller_from, gamma ), betas_lo_subpath );
+			alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alpha_xfcaller_src, gamma ), betas_lo_subpath );
 		}
 		else
 		{
-			alphas_xfcaller = Deconvolution.deconvolve( alpha_xfcaller_from, betas_lo_subpath, configuration.tbrlDeconvolution() );
+			alphas_xfcaller = Deconvolution.deconvolve( alpha_xfcaller_src, betas_lo_subpath, configuration.tbrlDeconvolution() );
 		}
 		
 		if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF )
