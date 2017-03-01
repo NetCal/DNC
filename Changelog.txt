@@ -1,4 +1,8 @@
-v2.3.1 "Centaur" (2017-Feb-NM)
+v2.3.2 "Centaur" (2017-Mar-YX)
+------------------------------
+TODO
+
+v2.3.1 "Centaur" (2017-Feb-28)
 ------------------------------
 * Evolved the factory pattern for Num implementations to a (kind of) abstract factory pattern for simplified code and improved extensibility.
 * Package minplus: Improved stability by handling distorted input (null or empty sets). 
@@ -35,7 +39,7 @@ v2.2.8 "Heavy Ion" (2016-Dec-06)
 Thanks to Mathias Kreider from the GSI Helmholtz Centre for Heavy Ion Research for reporting these bugs. This release was code named "Heavy Ion".
 
 v2.2.7 "Hydra" (2016-Nov-17)
---------------------
+----------------------------
 * Fixed a bug when convolving \delta_T with T>0 (delayed infinite burst).
 * Curve.java:
  - is_zero_delay_infinite_burst was replaced by the more general is_delayed_infinite_burst.
@@ -46,21 +50,21 @@ v2.2.7 "Hydra" (2016-Nov-17)
  - assertEquals based on double values now considers the internal number representation's rounding error safety margin epsilon. 
 
 v2.2.6 "Hydra" (2016-Mar-31)
---------------------
+----------------------------
 * Added the arrival bound burstiness reduction of the MMB & DFT 2016 paper
    "Improving Cross-Traffic Bounds in Feed-Forward Networks - There is a Job for Everyone".
   It can be switched on in the analysis configuration by setting the flag ab_consider_tfa_nodeBacklog to true.
 * Apache Commons Math version updated to 3.6.1.
 
 v2.2.5 "Hydra" (2015-Sep-29)
---------------------
+----------------------------
 * Fixed deconvolution for delivering too optimistic results for some combinations of multi token buckets and multi rate latencies. Remember: The DiscoDNC is only tested for token-bucket arrivals and rate-latency service. Any other offering will is best effort. Please report encountered bugs.  
 * Curves: Creating a curve with specified segments count: All but the first segment will be leftopen.
 * Changed constructor visibility in NumDouble from protected to public.
 * Demo4: Removed unused server and link.
 
 v2.2.4 "Hydra" (2015-Aug-15)
---------------------
+----------------------------
 * ArrivalCurve: Performance improvement computing an arrival curve's burst.
 * Network: Increased robustness against potential null pointers.
 * JavaDocs cleanup: Existing documentation can now be compiled without any warnings or errors.
@@ -71,7 +75,7 @@ v2.2.4 "Hydra" (2015-Aug-15)
 * Minor cleanups, better variable naming and other improvements.
 
 v2.2.3 "Hydra" (2015-Jul-11)
---------------------
+----------------------------
 * Removal of the arrival bounding with the output arrival curve (PbooArrivalBound_Output_PerHop). Besides being deprecated since v2.0.0, it was broken by now.
 * The rejoining flows fix has been improved.
 * AnalysisResults classes used for internal storage of results have been moved into Analysis.java.
@@ -80,7 +84,7 @@ v2.2.3 "Hydra" (2015-Jul-11)
 * Functional Test Documentation: Layout bug in FeedForward.pdf fixed.
 
 v2.2.2 "Hydra" (2015-Jul-02)
---------------------
+----------------------------
 * Bugfix: Arrival bounding of flows at the servers they rejoin the flow of interest was fixed. 
 * NumDouble: Improved stability by catching double rounding error preventing a subtraction to result in exactly 0.
 * PmooAnalysis: Improved checking the stability constraint and returning a null service curve if violated. Thanks to Paul Nikolaus for pointing out potential problems with the previous version.
@@ -91,7 +95,7 @@ v2.2.2 "Hydra" (2015-Jul-02)
 * Functional tests: FeedForward test documentation was updated to version 2.0beta.
 
 v2.2.1 "Hydra" (2015-Jun-15)
---------------------
+----------------------------
 * Bugfix: Deconvolution with the zero delay, infinite burst-service curve (delta_0) always yielded delta_0 as result. Thanks to Fabien Geyer for discovering this bug. 
 * Added functions de-/convolving sets of curves.
 * Improved saving of large networks (see unikl.disco.tests.output.TestNetwork):
@@ -100,7 +104,7 @@ v2.2.1 "Hydra" (2015-Jun-15)
 * Minor clean ups and efficiency improvements.
 
 v2.2.0 "Hydra" (2015-May-15)
---------------------
+----------------------------
 * This is the first version checked with Coverity Scan (incl. FindBugs). We fixed all the uncovered performance issues and now pass the checks with 0 defects.
 * Reworked the Num classes in order to allow switching the number representation with a flag in CalculatorConfig (see below): 
  - Num is now an abstract class that coordinates creation of and calls to the right number representation.
@@ -126,7 +130,7 @@ v2.2.0 "Hydra" (2015-May-15)
 * Various performance and stability improvements.
 
 v2.1.1 "Hydra" (2015-Mar-23)
---------------------
+----------------------------
 * Network:
  - Version in SaveAs output changed to 2.1.
  - Added numLinks() and numFlows().
@@ -147,7 +151,7 @@ v2.1.1 "Hydra" (2015-Mar-23)
 * Various minor improvements.
 
 v2.1.0 "Hydra" (2015-Feb-25)
---------------------
+----------------------------
 * Notable API break (non-exhaustive list)
  - performAnalysisOnPath, performEnd2EndAnalysis -> performAnalysis (path determined by input parameters)
  - createBurstDelay -> createDelayedInfiniteBurst, createZeroDelayBurst -> createZeroDelayInfiniteBurst
@@ -174,7 +178,7 @@ v2.1.0 "Hydra" (2015-Feb-25)
 * Various minor improvements.
  
 v2.0.4 "Hydra" (2015-Jan-30)
---------------------
+----------------------------
 * Server: Replaced boolean-based multiplexing definition with an enum.
 * LeftOverService, bounds: Fixed derivations with zero delay, infinite burst service curves. 
 * Functional tests:
@@ -192,7 +196,7 @@ v2.0.4 "Hydra" (2015-Jan-30)
  - JUnit version 4.12.
 
 v2.0.3 "Hydra" (2014-Dec-30)
---------------------
+----------------------------
 * Curve, LinearSegment: Moved static methods working on linear segments from Curve to LinearSegment.
 * Num, Num_double, Functional tests:
  - Account for rounding errors when using the double based number representation.
@@ -218,7 +222,7 @@ v2.0.3 "Hydra" (2014-Dec-30)
 * Apache Commons Math: Updated bundled version to 3.4.
 
 v2.0.2 "Hydra" (2014-Nov-19)
---------------------
+----------------------------
 * New feature: Network configurations can now be saved in a format that allows for reuse: 
  - Curves, LinearSegment, Num: Added constructors parsing a string representation of curves.
  - Curves, Num_double: Reduced code duplication.
@@ -233,7 +237,7 @@ v2.0.2 "Hydra" (2014-Nov-19)
 * Minor improvements of the documentation and naming of internal variables. 
 
 v2.0.1 "Hydra" (2014-Oct-16)
---------------------
+----------------------------
 * Bugfix in ArrivalBound. Removed bad sanity checks always resulting in false.
 * Server, Flow: Removed internal ID from string output.
 * Flow: Removed unnecessary throws declaration from getServersOnPath(), string representation does not convert alias to lower case anymore.
