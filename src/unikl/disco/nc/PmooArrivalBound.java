@@ -112,7 +112,6 @@ public class PmooArrivalBound extends ArrivalBound {
 		Server common_subpath_src = network.findSplittingServer( loi, f_xfcaller_loi );
 		Path common_subpath;
 		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
-		ServiceCurve null_service = ServiceCurve.createZeroService();
 		
 		common_subpath = f_xfcaller_loi.iterator().next().getPath().getSubPath( common_subpath_src, common_subpath_dest );
 
@@ -124,6 +123,8 @@ public class PmooArrivalBound extends ArrivalBound {
 			f_xxfcaller.remove( flow_of_interest );
 			Set<ArrivalCurve> alphas_xxfcaller = super.computeArrivalBounds( common_subpath_src, f_xxfcaller, flow_of_interest );
 
+			ServiceCurve null_service = ServiceCurve.createZeroService();
+			
 			for( ServiceCurve beta_loxfcaller_subpath : LeftOverService.arbMux( common_subpath_src.getServiceCurve(), alphas_xxfcaller ) ) {
 				if( !beta_loxfcaller_subpath.equals( null_service ) ) {
 					betas_loxfcaller_subpath.add( beta_loxfcaller_subpath ); // Adding to the set, not adding up the curves
