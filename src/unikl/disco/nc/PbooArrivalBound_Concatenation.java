@@ -75,20 +75,23 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
 		}
 		
 		// Get the servers on common sub-path of f_xfcaller flows crossing link
-		Server to = link.getDest();
-		Set<Flow> f_to = network.getFlows( to );
-		Set<Flow> f_xfcaller_to = SetUtils.getIntersection( f_to, f_xfcaller );
-		f_xfcaller_to.remove( flow_of_interest );
-		if ( f_xfcaller_to.size() == 0 )
+		// loi == location of interference
+		Server loi = link.getDest();
+		Set<Flow> f_loi = network.getFlows( loi );
+		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection( f_loi, f_xfcaller );
+		f_xfcaller_loi.remove( flow_of_interest );
+		if ( f_xfcaller_loi.size() == 0 )
 		{
 			return alphas_xfcaller;
 		}
+		
+		Server common_subpath_dest = link.getSource();
 
-		// The shortcut found in PmooArrivalBound for the case that (from == to) will not be implemented here.
-		// There's not a big potential to increase performance as the PMOO arrival bound implicitly handles this situation by only iterating over one server in the for loop.
-		Server from = network.findSplittingServer( to, f_xfcaller_to );
-		Flow f_representative = f_xfcaller_to.iterator().next();
-		Path common_subpath = f_representative.getSubPath( from, link.getSource() );
+		// The shortcut found in PmooArrivalBound for the a common_subpath of length 1 will not be implemented here.
+		// There's not a big potential to increase performance as the PBOO arrival bound implicitly handles this situation by only iterating over one server in the for loop.
+		Server common_subpath_src = network.findSplittingServer( loi, f_xfcaller_loi );
+		Flow f_representative = f_xfcaller_loi.iterator().next();
+		Path common_subpath = f_representative.getSubPath( common_subpath_src, common_subpath_dest );
 		
 		// Calculate the left-over service curves on this sub-path by convolution of the individual left over service curves
 		Set<ServiceCurve> betas_lo_subpath = new HashSet<ServiceCurve>();
@@ -149,7 +152,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
 		// Next we need to know the arrival bound of f_xfcaller at the server 'from', i.e., at the above sub-path's source
 		// in order to deconvolve it with beta_lo_s to get the arrival bound of the sub-path
 		// Note that flows f_xfcaller that originate in 'from' are covered by this call of computeArrivalBound
-		Set<ArrivalCurve> alpha_xfcaller_from = super.computeArrivalBounds( from, f_xfcaller, flow_of_interest );
+		Set<ArrivalCurve> alpha_xfcaller_from = super.computeArrivalBounds( common_subpath_src, f_xfcaller, flow_of_interest );
 
 		if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  )
 		{

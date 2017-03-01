@@ -1,6 +1,6 @@
 v2.3.2 "Centaur" (2017-Mar-YX)
 ------------------------------
-TODO
+* Improved the arrival boundings and fixed the PMOO AB's shortcut for single hop subpaths (was actually dead code before).
 
 v2.3.1 "Centaur" (2017-Feb-28)
 ------------------------------
