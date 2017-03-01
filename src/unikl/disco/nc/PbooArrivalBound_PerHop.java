@@ -164,7 +164,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 		
 		if( configuration.abConsiderTFANodeBacklog() ) {
 			Server last_hop_xtx = link.getSource();
-			TotalFlowAnalysis tfa = new TotalFlowAnalysis( network, configuration ); // If we reach this point, then the configuration includes CUT_PMOO arrival bounding which should be best for TFA as well.
+			TotalFlowAnalysis tfa = new TotalFlowAnalysis( network, configuration );
 			tfa.deriveBoundsAtServer( last_hop_xtx );
 			
 			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get( last_hop_xtx );
