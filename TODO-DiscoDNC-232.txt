@@ -1,9 +1,9 @@
-v2.3.1
+v2.3.2
 ------
-Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
-
-
-Num interface: Add neq
+* Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
+* Left-over service: Create a generic compute method that dispatches according to the MUX flag. Currently, this is done in the analysis / arrival bounding classes.
+* Rearrange the checks: Currently, there are checks in curves that are specific to limitations of our operators. We should separate both parts more from each other. 
+* Num interface: Add neq
     /**
      * Returns a copy of this curve that is shifted to the right by <code>dx</code>,
      * i.e. g(x) = f(x-dx).
