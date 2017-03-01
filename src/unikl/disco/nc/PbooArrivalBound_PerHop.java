@@ -84,12 +84,11 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 		{
 			return alphas_xfcaller;
 		}
-		
-		Server common_subpath_dest = link.getSource();
 
 		// The shortcut found in PmooArrivalBound for the a common_subpath of length 1 will not be implemented here.
 		// There's not a big potential to increase performance as the PBOO arrival bound implicitly handles this situation by only iterating over one server in the for loop.
 		Server common_subpath_src = network.findSplittingServer( loi, f_xfcaller_loi );
+		Server common_subpath_dest = link.getSource();
 		Flow f_representative = f_xfcaller_loi.iterator().next();
 		Path common_subpath = f_representative.getSubPath( common_subpath_src, common_subpath_dest );
 

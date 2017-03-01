@@ -107,9 +107,8 @@ public class PmooArrivalBound extends ArrivalBound {
 			throw new Exception( "PMOO arrival bounding is not available for FIFO multiplexing nodes" );
 		}
 
-		Server common_subpath_dest = link.getSource();
-		
 		Server common_subpath_src = network.findSplittingServer( loi, f_xfcaller_loi );
+		Server common_subpath_dest = link.getSource();
 		Path common_subpath;
 		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
 		
@@ -144,21 +143,21 @@ public class PmooArrivalBound extends ArrivalBound {
 		}
 		
 		// Get arrival bound at the splitting point:
-		// We need to know the arrival bound of f_xfcaller at the server 'from', i.e., at the above sub-path's source
+		// We need to know the arrival bound of f_xfcaller at the server 'common_subpath_src', i.e., at the above sub-path's source
 		// in order to deconvolve it with beta_loxfcaller_subpath to get the arrival bound of the sub-path
-		// Note that flows f_xfcaller that originate in 'from' are covered by this call of computeArrivalBound
-		Set<ArrivalCurve> alpha_xfcaller_from = super.computeArrivalBounds( common_subpath_src, f_xfcaller, flow_of_interest );
+		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered by this call of computeArrivalBound
+		Set<ArrivalCurve> alpha_xfcaller_src = super.computeArrivalBounds( common_subpath_src, f_xfcaller, flow_of_interest );
 		
 		// Convolve to get the bound.
 		// See "Improving Performance Bounds in Feed-Forward Networks by Paying Multiplexing Only Once", Lemma 2
 		if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  )
 		{
 			MaxServiceCurve gamma = common_subpath.getGamma();
-			alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alpha_xfcaller_from, gamma ), betas_loxfcaller_subpath );
+			alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alpha_xfcaller_src, gamma ), betas_loxfcaller_subpath );
 		}
 		else
 		{
-			alphas_xfcaller = Deconvolution.deconvolve( alpha_xfcaller_from, betas_loxfcaller_subpath, configuration.tbrlDeconvolution() );
+			alphas_xfcaller = Deconvolution.deconvolve( alpha_xfcaller_src, betas_loxfcaller_subpath, configuration.tbrlDeconvolution() );
 		}
 		
 		if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF )
