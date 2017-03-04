@@ -149,7 +149,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 			// The deconvolution of the two sets, arrival curves and service curves, respectively, takes care of all the possible combinations
 			if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  )
 			{
-				MaxServiceCurve gamma = common_subpath.getGamma();
+				MaxServiceCurve gamma = server.getGamma();
 				alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alphas_xfcaller, gamma ), betas_lo_s );
 			}
 			else
@@ -159,7 +159,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 			
 			if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF )
 			{
-				MaxServiceCurve extra_gamma = common_subpath.getExtraGamma();
+				MaxServiceCurve extra_gamma = server.getExtraGamma();
 				alphas_xfcaller = Convolution.convolve_ACs_EGamma( alphas_xfcaller, extra_gamma );
 			}
 		}
