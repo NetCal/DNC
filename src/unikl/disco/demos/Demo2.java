@@ -29,10 +29,10 @@ package unikl.disco.demos;
 
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
+import unikl.disco.nc.analyses.PmooAnalysis;
+import unikl.disco.nc.analyses.SeparateFlowAnalysis;
+import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.curves.ArrivalCurve;
-import unikl.disco.nc.PmooAnalysis;
-import unikl.disco.nc.SeparateFlowAnalysis;
-import unikl.disco.nc.TotalFlowAnalysis;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;

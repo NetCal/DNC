@@ -27,7 +27,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.analyses;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +41,12 @@ import java.util.HashSet;
 import unikl.disco.curves.Curve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
+import unikl.disco.nc.Analysis;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.ArrivalBound;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
+import unikl.disco.nc.operations.BacklogBound;
+import unikl.disco.nc.operations.DelayBound;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
@@ -64,12 +69,12 @@ public class PmooAnalysis extends Analysis {
 	
 	public PmooAnalysis( Network network ) {
 		super( network );
-		super.result = new PmooAnalysisResults();
+		super.result = new PmooResults();
 	}
 	
 	public PmooAnalysis( Network network, AnalysisConfig configuration ) {
 		super( network, configuration );
-		super.result = new PmooAnalysisResults();
+		super.result = new PmooResults();
 	}
 
 	/**
@@ -90,7 +95,7 @@ public class PmooAnalysis extends Analysis {
 			throw new Exception( "PMOO analysis is not available for FIFO multiplexing nodes" );
 		}
 		
-		((PmooAnalysisResults) result).betas_e2e = getServiceCurves( flow_of_interest, path, Collections.singleton( flow_of_interest ) );
+		((PmooResults) result).betas_e2e = getServiceCurves( flow_of_interest, path, Collections.singleton( flow_of_interest ) );
 
 		Num delay_bound__beta_e2e;
 		Num backlog_bound__beta_e2e;
@@ -98,7 +103,7 @@ public class PmooAnalysis extends Analysis {
 		result.delay_bound = NumFactory.createPositiveInfinity();
 		result.backlog_bound = NumFactory.createPositiveInfinity();
 		
-		for( ServiceCurve beta_e2e : ((PmooAnalysisResults) result).betas_e2e ) {
+		for( ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e ) {
 			delay_bound__beta_e2e = DelayBound.deriveFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // Single flow of interest, i.e., fifo per micro flow holds
 			if( delay_bound__beta_e2e.leq( result.delay_bound ) ) {
 				result.delay_bound = delay_bound__beta_e2e;
@@ -404,6 +409,6 @@ public class PmooAnalysis extends Analysis {
 	}
 
 	public Set<ServiceCurve> getLeftOverServiceCurves() {
-		return ((PmooAnalysisResults) result).betas_e2e;
+		return ((PmooResults) result).betas_e2e;
 	}
 }

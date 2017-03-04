@@ -29,12 +29,12 @@ package unikl.disco.tests.output;
 
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.CalculatorConfig;
-import unikl.disco.nc.PmooAnalysis;
-import unikl.disco.nc.SeparateFlowAnalysis;
-import unikl.disco.nc.TotalFlowAnalysis;
 import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import unikl.disco.nc.AnalysisConfig.GammaFlag;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
+import unikl.disco.nc.analyses.PmooAnalysis;
+import unikl.disco.nc.analyses.SeparateFlowAnalysis;
+import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 

@@ -25,7 +25,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.arrivalBounds;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +37,8 @@ import unikl.disco.curves.ServiceCurve;
 import unikl.disco.minplus.Convolution;
 import unikl.disco.minplus.Deconvolution;
 import unikl.disco.misc.SetUtils;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.ArrivalBound;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Link;
 import unikl.disco.network.Network;

@@ -1,5 +1,6 @@
 v2.3.2 "Centaur" (2017-Mar-YX)
 ------------------------------
+* Advanced the structure of the package unikl.disco.nc with subpackages for analyses, arrivalBounds and operations.
 * Improved the arrival boundings and fixed the PMOO AB's shortcut for single hop subpaths (was actually dead code before).
 * PBOO Arrival Bounding with per-hop left-over service: Use server's max SC instead of entire common path's one.
 

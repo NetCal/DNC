@@ -27,7 +27,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.analyses;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,7 +36,13 @@ import java.util.Set;
 
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
+import unikl.disco.nc.Analysis;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.ArrivalBound;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
+import unikl.disco.nc.operations.BacklogBound;
+import unikl.disco.nc.operations.DelayBound;
+import unikl.disco.nc.operations.LeftOverService;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Link;
 import unikl.disco.network.Network;
@@ -61,12 +67,12 @@ public class SeparateFlowAnalysis extends Analysis {
 
 	public SeparateFlowAnalysis( Network network ) {
 		super( network );
-		super.result = new SeparateFlowAnalysisResults();
+		super.result = new SeparateFlowResults();
 	}
 
 	public SeparateFlowAnalysis( Network network, AnalysisConfig configuration ) {
 		super( network, configuration );
-		super.result = new SeparateFlowAnalysisResults();
+		super.result = new SeparateFlowResults();
 	}
 	
 	/**
@@ -94,7 +100,7 @@ public class SeparateFlowAnalysis extends Analysis {
 	}
 
 	public void performAnalysis( Flow flow_of_interest, Path path ) throws Exception {
-		((SeparateFlowAnalysisResults) result).betas_e2e = getServiceCurves( flow_of_interest, path, Collections.singleton( flow_of_interest ) );
+		((SeparateFlowResults) result).betas_e2e = getServiceCurves( flow_of_interest, path, Collections.singleton( flow_of_interest ) );
 
 		Num delay_bound__beta_e2e;
 		Num backlog_bound__beta_e2e;
@@ -102,7 +108,7 @@ public class SeparateFlowAnalysis extends Analysis {
 		result.delay_bound = NumFactory.createPositiveInfinity();
 		result.backlog_bound = NumFactory.createPositiveInfinity();
 		
-		for( ServiceCurve beta_e2e : ((SeparateFlowAnalysisResults) result).betas_e2e ) {
+		for( ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e ) {
 			delay_bound__beta_e2e = DelayBound.deriveFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // single flow of interest, i.e., fifo per micro flow holds
 			if( delay_bound__beta_e2e.leq( result.delay_bound ) ) {
 				result.delay_bound = delay_bound__beta_e2e;
@@ -177,7 +183,7 @@ public class SeparateFlowAnalysis extends Analysis {
 				}
 				result.map__server__alphas.put( server, alpha_xfois );
 			}
-			((SeparateFlowAnalysisResults) result).map__server__betas_lo.put( server, betas_lofoi_s );
+			((SeparateFlowResults) result).map__server__betas_lo.put( server, betas_lofoi_s );
 			
 			betas_lofoi_path = Convolution.convolve_SCs_SCs( betas_lofoi_path, betas_lofoi_s, configuration.tbrlConvolution() );
 		}
@@ -185,14 +191,14 @@ public class SeparateFlowAnalysis extends Analysis {
 	}
 
 	public Set<ServiceCurve> getLeftOverServiceCurves() {
-		return ((SeparateFlowAnalysisResults) result).betas_e2e;
+		return ((SeparateFlowResults) result).betas_e2e;
 	}
 	
 	public Map<Server,Set<ServiceCurve>> getServerLeftOverBetasMap(){
-		return ((SeparateFlowAnalysisResults) result).map__server__betas_lo;
+		return ((SeparateFlowResults) result).map__server__betas_lo;
 	}
 	
 	public String getServerLeftOverBetasMapString() {
-		return ((SeparateFlowAnalysisResults) result).getServerLeftOverBetasMapString();
+		return ((SeparateFlowResults) result).getServerLeftOverBetasMapString();
 	}
 }

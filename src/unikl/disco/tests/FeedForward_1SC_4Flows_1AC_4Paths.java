@@ -39,10 +39,10 @@ import org.junit.runners.Parameterized;
 
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
-import unikl.disco.nc.PmooAnalysis;
-import unikl.disco.nc.SeparateFlowAnalysis;
-import unikl.disco.nc.TotalFlowAnalysis;
 import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
+import unikl.disco.nc.analyses.PmooAnalysis;
+import unikl.disco.nc.analyses.SeparateFlowAnalysis;
+import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.network.Link;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;

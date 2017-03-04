@@ -26,7 +26,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.arrivalBounds;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,8 +36,12 @@ import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.misc.SetUtils;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.ArrivalBound;
 import unikl.disco.nc.AnalysisConfig.GammaFlag;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
+import unikl.disco.nc.analyses.PmooAnalysis;
+import unikl.disco.nc.operations.LeftOverService;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Link;
 import unikl.disco.network.Network;

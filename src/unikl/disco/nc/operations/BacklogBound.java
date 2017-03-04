@@ -26,7 +26,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.operations;
 
 import java.util.ArrayList;
 

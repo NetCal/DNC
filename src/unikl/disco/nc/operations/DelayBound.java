@@ -26,7 +26,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.operations;
 
 import unikl.disco.curves.Curve;
 import unikl.disco.curves.ArrivalCurve;

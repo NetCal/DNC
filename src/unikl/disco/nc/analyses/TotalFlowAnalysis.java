@@ -27,7 +27,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.analyses;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -36,7 +36,12 @@ import java.util.Set;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.misc.Pair;
+import unikl.disco.nc.Analysis;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.ArrivalBound;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
+import unikl.disco.nc.operations.BacklogBound;
+import unikl.disco.nc.operations.DelayBound;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
@@ -59,12 +64,12 @@ public class TotalFlowAnalysis extends Analysis {
 	
 	public TotalFlowAnalysis( Network network ) {
 		super( network );
-		super.result = new TotalFlowAnalysisResults();
+		super.result = new TotalFlowResults();
 	}
 	
 	public TotalFlowAnalysis( Network network, AnalysisConfig configuration ) {
 		super( network, configuration );
-		super.result = new TotalFlowAnalysisResults();
+		super.result = new TotalFlowResults();
 	}
 	
 	public void performAnalysis( Flow flow_of_interest ) throws Exception {
@@ -132,25 +137,25 @@ public class TotalFlowAnalysis extends Analysis {
 			}
 		}
 		result.map__server__alphas.put( server, alphas_server );
-		((TotalFlowAnalysisResults) result).map__server__D_server.put( server, delay_bounds_server );
-		((TotalFlowAnalysisResults) result).map__server__B_server.put( server, backlog_bounds_server );
+		((TotalFlowResults) result).map__server__D_server.put( server, delay_bounds_server );
+		((TotalFlowResults) result).map__server__B_server.put( server, backlog_bounds_server );
 		
 		return new Pair<Num>( delay_bound_s__min, backlog_bound_s__min );
 	}
 	
 	public Map<Server,Set<Num>> getServerDelayBoundMap(){
-		return ((TotalFlowAnalysisResults) result).map__server__D_server;
+		return ((TotalFlowResults) result).map__server__D_server;
 	}
 	
 	public String getServerDelayBoundMapString(){
-		return ((TotalFlowAnalysisResults) result).getServerDelayBoundMapString();
+		return ((TotalFlowResults) result).getServerDelayBoundMapString();
 	}
 
 	public Map<Server,Set<Num>> getServerBacklogBoundMap(){
-		return ((TotalFlowAnalysisResults) result).map__server__B_server;
+		return ((TotalFlowResults) result).map__server__B_server;
 	}
 	
 	public String getServerBacklogBoundMapString(){
-		return ((TotalFlowAnalysisResults) result).getServerBacklogBoundMapString();
+		return ((TotalFlowResults) result).getServerBacklogBoundMapString();
 	}
 }

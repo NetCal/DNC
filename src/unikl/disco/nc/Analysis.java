@@ -28,20 +28,18 @@
 
 package unikl.disco.nc;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import unikl.disco.curves.ArrivalCurve;
-import unikl.disco.curves.ServiceCurve;
+import unikl.disco.nc.analyses.PmooAnalysis;
+import unikl.disco.nc.analyses.SeparateFlowAnalysis;
+import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
-import unikl.disco.numbers.NumFactory;
 
 /**
  * This class contains all members and methods that are needed for more than one
@@ -153,203 +151,5 @@ public abstract class Analysis
 	public String toString()
 	{
 		return getClass().getSimpleName();
-	}
-}
-
-//--------------------------------------------------------------------------------------------------
-// Analysis Result Classes
-//--------------------------------------------------------------------------------------------------
-abstract class AnalysisResults {
-	public boolean succeeded;
-	
-	public Num delay_bound;
-	public Num backlog_bound;
-
-	public Map<Server,Set<ArrivalCurve>> map__server__alphas;
-	
-	protected AnalysisResults() {
-		this.succeeded = false;
-		this.delay_bound = NumFactory.createNaN();
-		this.backlog_bound = NumFactory.createNaN();
-		this.map__server__alphas = new HashMap<Server,Set<ArrivalCurve>>();
-	}
-	
-	protected AnalysisResults( boolean succeeded,
-							  Num delay_bound,
-							  Num backlog_bound,
-							  Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		
-		this.succeeded = succeeded;
-		this.delay_bound = delay_bound;
-		this.backlog_bound = backlog_bound;
-		this.map__server__alphas = map__server__alphas;
-	}
-	
-	public String getServerAlphasMapString() {
-		if( !succeeded ) {
-			return "Analysis failed";
-		}
-		
-		if( map__server__alphas.isEmpty() ) {
-			return "{}";
-		}
-
-		StringBuffer result_str = new StringBuffer( "{" );
-		for( Entry<Server, Set<ArrivalCurve>> entry : map__server__alphas.entrySet() ) {
-			result_str.append( entry.getKey().toShortString() );
-			result_str.append( "={" );
-			for ( ArrivalCurve ac : entry.getValue() ) {
-				result_str.append( ac.toString() );
-				result_str.append( "," );
-			}
-			result_str.deleteCharAt( result_str.length()-1 ); // Remove the trailing comma.
-			result_str.append( "}" );
-			result_str.append( ", " );
-		}
-		result_str.delete( result_str.length()-2, result_str.length() ); // Remove the trailing blank space and comma.
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
-}
-
-class TotalFlowAnalysisResults extends AnalysisResults {
-	protected Map<Server,Set<Num>> map__server__D_server;
-	protected Map<Server,Set<Num>> map__server__B_server;
-	
-	protected TotalFlowAnalysisResults(){
-		super();
-		map__server__D_server = new HashMap<Server,Set<Num>>();
-		map__server__B_server = new HashMap<Server,Set<Num>>();
-	}
-	
-	protected TotalFlowAnalysisResults( Num delay_bound,
-					 	 Map<Server,Set<Num>> map__server__D_server,
-					 	 Num backlog_bound,
-					 	 Map<Server,Set<Num>> map__server__B_server,
-					 	 Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		
-		super( true, delay_bound, backlog_bound, map__server__alphas );
-		
-		this.map__server__D_server = map__server__D_server;
-		this.map__server__B_server = map__server__B_server;
-	}
-	
-	public String getServerDelayBoundMapString() {
-		if( !succeeded ) {
-			return "Analysis failed";
-		}
-		
-		if( map__server__D_server.isEmpty() ) {
-			return "{}";
-		}
-
-		StringBuffer result_str = new StringBuffer( "{" );
-		for( Entry<Server,Set<Num>> entry : map__server__D_server.entrySet() ) {
-			result_str.append( entry.getKey().toShortString() );
-			result_str.append( "={" );
-			for ( Num delay_bound : entry.getValue() ) {
-				result_str.append( delay_bound.toString() );
-				result_str.append( "," );
-			}
-			result_str.deleteCharAt( result_str.length()-1 ); // Remove the trailing comma.
-			result_str.append( "}" );
-			result_str.append( ", " );
-		}
-		result_str.delete( result_str.length()-2, result_str.length() ); // Remove the trailing blank space and comma.
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
-	
-	public String getServerBacklogBoundMapString() {
-		if( map__server__B_server.isEmpty() ) {
-			return "{}";
-		}
-
-		StringBuffer result_str = new StringBuffer( "{" );
-		for( Entry<Server,Set<Num>> entry : map__server__B_server.entrySet() ) {
-			result_str.append( entry.getKey().toShortString() );
-			result_str.append( "={" );
-			for ( Num delay_bound : entry.getValue() ) {
-				result_str.append( delay_bound.toString() );
-				result_str.append( "," );
-			}
-			result_str.deleteCharAt( result_str.length()-1 ); // Remove the trailing comma.
-			result_str.append( "}" );
-			result_str.append( ", " );
-		}
-		result_str.delete( result_str.length()-2, result_str.length() ); // Remove the trailing blank space and comma.
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
-}
-
-class SeparateFlowAnalysisResults extends AnalysisResults {
-	protected Set<ServiceCurve> betas_e2e;
-	protected Map<Server,Set<ServiceCurve>> map__server__betas_lo;
-
-	protected SeparateFlowAnalysisResults(){
-		super();
-		betas_e2e = new HashSet<ServiceCurve>();
-		map__server__betas_lo = new HashMap<Server,Set<ServiceCurve>>();
-	}
-	
-	protected SeparateFlowAnalysisResults( Num delay_bound,
-						 Num backlog_bound,
-						 Set<ServiceCurve> betas_e2e,
-						 Map<Server,Set<ServiceCurve>> map__server__betas_lo,
-						 Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		
-		super( true, delay_bound, backlog_bound, map__server__alphas );
-		
-		this.betas_e2e = betas_e2e;
-		this.map__server__betas_lo = map__server__betas_lo;
-	}
-
-	public String getServerLeftOverBetasMapString() {
-		if( !succeeded ) {
-			return "Analysis failed";
-		}
-		
-		if( map__server__betas_lo.isEmpty() ) {
-			return "{}";
-		}
-
-		StringBuffer result_str = new StringBuffer( "{" );
-
-		for( Entry<Server,Set<ServiceCurve>> entry : map__server__betas_lo.entrySet() ) {
-			result_str.append( entry.getKey().toShortString() );
-			result_str.append( "={" );
-			for ( ServiceCurve beta_lo : entry.getValue() ) {
-				result_str.append( beta_lo.toString() );
-				result_str.append(  "," );
-			}
-			result_str.deleteCharAt( result_str.length()-1 ); // Remove the trailing comma.
-			result_str.append( "}" );
-			result_str.append( ", " );
-		}
-		result_str.delete( result_str.length()-2, result_str.length() ); // Remove the trailing blank space and comma.
-		
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
-}
-
-class PmooAnalysisResults extends AnalysisResults {
-	protected Set<ServiceCurve> betas_e2e;
-
-	protected PmooAnalysisResults(){}
-			
-	protected PmooAnalysisResults( Num delay_bound,
-						  Num backlog_bound,
-						  Set<ServiceCurve> betas_e2e,
-						  Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		
-		super( true, delay_bound, backlog_bound, map__server__alphas );
-		
-		this.betas_e2e = betas_e2e;
 	}
 }

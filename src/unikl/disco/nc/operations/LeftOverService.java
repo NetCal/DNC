@@ -26,7 +26,7 @@
  *
  */
 
-package unikl.disco.nc;
+package unikl.disco.nc.operations;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +34,7 @@ import java.util.Set;
 
 import unikl.disco.curves.Curve;
 import unikl.disco.curves.ServiceCurve;
+import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumUtils;
