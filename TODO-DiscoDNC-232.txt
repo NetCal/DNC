@@ -1,9 +1,9 @@
 v2.3.2
 ------
-* Check my MMB implementation: It only works for TB, RL where the output bound is TB as well, right? Because we reduce the deconvolution result's burstiness. That only works if we guarantee that both alternatives have the same output rates. This is only the case in TB, RL!  
 * Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
 * Rearrange the checks: Currently, there are checks in curves that are specific to limitations of our operators. We should separate both parts more from each other. 
 
+* Check my MMB implementation: It only works for TB, RL where the output bound is TB as well, right? Because we reduce the deconvolution result's burstiness. That only works if we guarantee that both alternatives have the same output rates. This is only the case in TB, RL!  
 * Output bound class: Chang only with TB, RL? TODO Check this up!
 
 * Num interface: Add neq

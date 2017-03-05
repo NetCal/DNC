@@ -1,6 +1,7 @@
 v2.3.2 "Centaur" (2017-Mar-YX)
 ------------------------------
 * Advanced the structure of the package unikl.disco.nc with subpackages for analyses, arrivalBounds and operations.
+* OutputBound.java: New class in unikl.disco.nc.operations providing the DNC output bound computation (reduces code duplication).
 * Improved the arrival boundings and fixed the PMOO AB's shortcut for single hop subpaths (was actually dead code before).
 * LeftOverService: Generic compute method dispatches according to the configuratoin's multiplexing flag. Used in SFA and PbooAB.
 * Fix: PBOO Arrival Bounding with per-hop left-over service: Use server's max SC instead of overly pessimistic entire common path's one.

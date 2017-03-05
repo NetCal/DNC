@@ -31,15 +31,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.misc.SetUtils;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
-import unikl.disco.nc.AnalysisConfig.GammaFlag;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.nc.operations.LeftOverService;
+import unikl.disco.nc.operations.OutputBound;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Link;
 import unikl.disco.network.Network;
@@ -48,7 +47,6 @@ import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 import unikl.disco.minplus.Convolution;
-import unikl.disco.minplus.Deconvolution;
 
 /**
  * 
@@ -146,22 +144,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
 		// in order to deconvolve it with beta_lo_s to get the arrival bound of the sub-path
 		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered by this call of computeArrivalBound
 		Set<ArrivalCurve> alpha_xfcaller_src = super.computeArrivalBounds( common_subpath_src, f_xfcaller, flow_of_interest );
-
-		if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  )
-		{
-			MaxServiceCurve gamma = common_subpath.getGamma();
-			alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alpha_xfcaller_src, gamma ), betas_lo_subpath );
-		}
-		else
-		{
-			alphas_xfcaller = Deconvolution.deconvolve( alpha_xfcaller_src, betas_lo_subpath, configuration.tbrlDeconvolution() );
-		}
-		
-		if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF )
-		{
-			MaxServiceCurve extra_gamma = common_subpath.getExtraGamma();
-			alphas_xfcaller = Convolution.convolve_ACs_EGamma( alphas_xfcaller, extra_gamma );
-		}
+		alphas_xfcaller = OutputBound.compute( configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath );
 		
 		if( configuration.abConsiderTFANodeBacklog() ) {
 			Server last_hop_xtx = link.getSource();

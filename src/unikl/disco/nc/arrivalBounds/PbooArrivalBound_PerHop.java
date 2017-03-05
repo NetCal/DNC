@@ -31,15 +31,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.misc.SetUtils;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
-import unikl.disco.nc.AnalysisConfig.GammaFlag;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.nc.operations.LeftOverService;
+import unikl.disco.nc.operations.OutputBound;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Link;
 import unikl.disco.network.Network;
@@ -47,8 +46,6 @@ import unikl.disco.network.Path;
 import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
-import unikl.disco.minplus.Convolution;
-import unikl.disco.minplus.Deconvolution;
 
 /**
  * 
@@ -139,23 +136,9 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 				alphas_xfcaller.add( ArrivalCurve.createZeroDelayInfiniteBurst() );
 				return alphas_xfcaller;
 			}
-			
+
 			// The deconvolution of the two sets, arrival curves and service curves, respectively, takes care of all the possible combinations
-			if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  )
-			{
-				MaxServiceCurve gamma = server.getGamma();
-				alphas_xfcaller = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( alphas_xfcaller, gamma ), betas_lo_s );
-			}
-			else
-			{
-				alphas_xfcaller = Deconvolution.deconvolve( alphas_xfcaller, betas_lo_s, configuration.tbrlDeconvolution() );
-			}
-			
-			if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF )
-			{
-				MaxServiceCurve extra_gamma = server.getExtraGamma();
-				alphas_xfcaller = Convolution.convolve_ACs_EGamma( alphas_xfcaller, extra_gamma );
-			}
+			alphas_xfcaller = OutputBound.compute( configuration, alphas_xfcaller, server, betas_lo_s );
 		}
 		
 		if( configuration.abConsiderTFANodeBacklog() ) {
