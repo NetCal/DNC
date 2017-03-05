@@ -38,7 +38,6 @@ import unikl.disco.misc.SetUtils;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
 import unikl.disco.nc.AnalysisConfig.GammaFlag;
-import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.nc.operations.LeftOverService;
 import unikl.disco.network.Flow;
@@ -46,7 +45,6 @@ import unikl.disco.network.Link;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
-import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 import unikl.disco.minplus.Convolution;
@@ -132,15 +130,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
 			}
 			
 			// Calculate the left-over service curve for this single server
-			if( configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
-					|| ( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL && server.multiplexingDiscipline() == Multiplexing.FIFO ) )
-			{
-				betas_lo_s = LeftOverService.fifoMux( server.getServiceCurve(), alphas_xxfcaller_s );
-			}
-			else
-			{
-				betas_lo_s = LeftOverService.arbMux( server.getServiceCurve(), alphas_xxfcaller_s );				
-			}
+			betas_lo_s = LeftOverService.compute( configuration, server, alphas_xxfcaller_s );
 			
 			// Check if there's any service left on this path. If not, the set only contains a null-service curve.
 			if( betas_lo_s.size() == 1 && betas_lo_s.iterator().next().equals( ServiceCurve.createZeroService() ) ) {

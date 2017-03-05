@@ -35,6 +35,10 @@ import java.util.Set;
 import unikl.disco.curves.Curve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.nc.CalculatorConfig;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
+import unikl.disco.network.Server;
+import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumUtils;
@@ -47,7 +51,26 @@ import unikl.disco.numbers.NumUtils;
  */
 public final class LeftOverService {
 	private LeftOverService() {}
+	
+	public static Set<ServiceCurve> compute( AnalysisConfig configuration, Server server, Set<ArrivalCurve> arrival_curves ){
+		if( configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
+				|| ( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL 
+						&& server.multiplexingDiscipline() == Multiplexing.FIFO ) )
+		{
+			return fifoMux( server.getServiceCurve(), arrival_curves );
+		} else {
+			return LeftOverService.arbMux( server.getServiceCurve(), arrival_curves );				
+		}
+	}
 
+	public static Set<ServiceCurve> compute( AnalysisConfig configuration, ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves ){
+		if( configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO ) {
+			return LeftOverService.fifoMux( service_curve, arrival_curves );
+		} else {
+			return LeftOverService.arbMux( service_curve, arrival_curves );				
+		}
+	}
+	
 	public static Set<ServiceCurve> fifoMux( ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves ) {
 		Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 		
