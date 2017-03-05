@@ -77,6 +77,7 @@ public class Convolution {
 			case 3:
 				return ArrivalCurve.createZeroArrival();
 			default:
+				break;
 		}
 		
 		ArrivalCurve zero_arrival = ArrivalCurve.createZeroArrival();
@@ -156,8 +157,6 @@ public class Convolution {
 		// Instead, the other set is return in case it is neither null or empty.
 		Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
 		switch( OperatorInputChecks.inputNullCheck( service_curves_1, service_curves_2 ) ) {
-			case 0:
-				break;
 			case 1:
 		    	for ( ServiceCurve sc : service_curves_2 ) {
 		    		clone.add( sc.copy() );
@@ -171,11 +170,11 @@ public class Convolution {
 			case 3:
 				results.add( ServiceCurve.createZeroService() );
 				return results;
+			case 0:
 			default:
+				break;
 		}
 		switch( OperatorInputChecks.inputEmptySetCheck( service_curves_1, service_curves_2 ) ) {
-			case 0:
-				break;
 			case 1:
 		    	for ( ServiceCurve sc : service_curves_2 ) {
 		    		clone.add( sc.copy() );
@@ -189,7 +188,9 @@ public class Convolution {
 			case 3:
 				results.add( ServiceCurve.createZeroService() );
 				return results;
+			case 0:
 			default:
+				break;
 		}
 				
 		for ( ServiceCurve beta_1 : service_curves_1 ) {
@@ -217,15 +218,15 @@ public class Convolution {
 	
 	private static ServiceCurve convolve_SC_SC_RLs( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
 		switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
-			case 0:
-				break;
 			case 1:
 				return service_curve_2.copy();
 			case 2:
 				return service_curve_1.copy();
 			case 3:
 				ServiceCurve.createZeroService();
+			case 0:
 			default:
+				break;
 		}
 		
 		return ServiceCurve.createRateLatency( 
@@ -242,15 +243,15 @@ public class Convolution {
 	 */
 	public static ServiceCurve convolve_SC_SC_Generic( ServiceCurve service_curve_1, ServiceCurve service_curve_2 ) {
 		switch( OperatorInputChecks.inputNullCheck( service_curve_1, service_curve_2 ) ) {
-			case 0:
-				break;
 			case 1:
 				return service_curve_2.copy();
 			case 2:
 				return service_curve_1.copy();
 			case 3:
 				return ServiceCurve.createZeroService();
+			case 0:
 			default:
+				break;
 		}
 		
 		// Shortcut: only go here if there is at least one delayed infinite burst
@@ -338,8 +339,6 @@ public class Convolution {
 	// The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
 	public static Set<Curve> convolve_ACs_MSC( Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve ) throws Exception {
 		switch( OperatorInputChecks.inputNullCheck( arrival_curves, maximum_service_curve ) ) {
-			case 0:
-				break;
 			case 1:
 				return new HashSet<Curve>();
 			case 2:
@@ -351,7 +350,9 @@ public class Convolution {
 		    	return clone;
 			case 3:
 				return new HashSet<Curve>();
+			case 0:
 			default:
+				break;
 		}
 		if( arrival_curves.isEmpty() ) {
 			return new HashSet<Curve>();
