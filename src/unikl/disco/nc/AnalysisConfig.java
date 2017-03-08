@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
+
 /**
  * 
  * @author Steffen Bondorf
@@ -141,6 +143,14 @@ public class AnalysisConfig {
 	
 	public void addArrivalBoundMethods( Set<ArrivalBoundMethod> arrival_bound_methods_set ) {
 		arrival_bound_methods.addAll( arrival_bound_methods_set );
+	}
+
+	public boolean removeArrivalBoundMethod( ArrivalBoundMethod arrival_bound_method ) {
+		if( arrival_bound_methods.size() == 1 ) {
+			return false;
+		} else {
+			return arrival_bound_methods.remove( arrival_bound_method );
+		}
 	}
 	
 	public boolean removeDuplicateArrivalBounds() {
