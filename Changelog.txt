@@ -5,6 +5,7 @@ v2.3.2 "Centaur" (2017-Mar-YX)
 * LeftOverService: A generic compute(...) method dispatches according to the analysis configuratoin's multiplexing flag. Used in SFA and PbooAB.
 * Fix: PBOO Arrival Bounding with per-hop left-over service now uses each server's max SC instead of an overly pessimistic entire common path's one.
 * Fix: PMOO Arrival Bounding's shortcut for single-hop subpaths was actually dead code before.
+* Added findbugs library.
 
 v2.3.1 "Centaur" (2017-Feb-28)
 ------------------------------
