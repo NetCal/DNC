@@ -21,6 +21,9 @@
         <include name="unikl/disco/minplus/"/>
         <include name="unikl/disco/misc/"/>
         <include name="unikl/disco/nc/"/>
+        <include name="unikl/disco/nc/analyses/"/>
+        <include name="unikl/disco/nc/arrivalBounds/"/>
+        <include name="unikl/disco/nc/operations/"/>
         <include name="unikl/disco/network/"/>
         <include name="unikl/disco/numbers/"/>
         <include name="unikl/disco/numbers/extraValues/"/>

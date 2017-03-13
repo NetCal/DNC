@@ -1,4 +1,4 @@
-v2.3.2 "Centaur" (2017-Mar-YX)
+v2.3.2 "Centaur" (2017-Mar-13)
 ------------------------------
 * Advanced the structure of package unikl.disco.nc (sub-)packages for analyses, arrivalBounds and operations.
 * OutputBound.java: New class in unikl.disco.nc.operations providing the DNC output bound computation (reduces code duplication).
