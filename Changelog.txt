@@ -1,3 +1,7 @@
+v2.3.3 "Centaur" (2017-Apr-XY)
+------------------------------
+* Functional tests: Replaced System.out.println( e.toString() ) with e.printStackTrace()
+
 v2.3.2 "Centaur" (2017-Mar-13)
 ------------------------------
 * Advanced the structure of package unikl.disco.nc (sub-)packages for analyses, arrivalBounds and operations.

@@ -81,7 +81,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 		try {
 			network.addLink( s0, s1 );
 		} catch (Exception e) {
-			System.out.println( e.toString() );
+			e.printStackTrace();
 			assertEquals( "Unexpected exception occured", 0, 1 );
 			return;
 		}
@@ -92,7 +92,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 			f2 = network.addFlow( arrival_curve, s0, s1 );
 			f3 = network.addFlow( arrival_curve, s0, s1 );
 		} catch (Exception e) {
-			System.out.println( e.toString() );
+			e.printStackTrace();
 			assertEquals( "Unexpected exception occured", 0, 1 );
 			return;
 		}
@@ -128,7 +128,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -143,7 +143,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -179,7 +179,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -191,7 +191,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB delay", NumFactory.create( 180 ), tfa.getDelayBound() );
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -226,7 +226,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -241,7 +241,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -277,7 +277,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -289,7 +289,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB delay", NumFactory.create( 82.5 ), sfa.getDelayBound() );
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -323,7 +323,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "PMOO analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -335,7 +335,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB delay", NumFactory.create( 60 ), pmoo.getDelayBound() );
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -363,7 +363,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -374,7 +374,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -410,7 +410,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -425,7 +425,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -461,7 +461,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -473,7 +473,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB delay", NumFactory.create( 180 ), tfa.getDelayBound() );
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -508,7 +508,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -523,7 +523,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -559,7 +559,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -571,7 +571,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB delay", NumFactory.create( 82.5 ), sfa.getDelayBound() );
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -605,7 +605,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "PMOO analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -617,7 +617,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB delay", NumFactory.create( 60 ), pmoo.getDelayBound() );
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -645,7 +645,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -656,7 +656,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -692,7 +692,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -707,7 +707,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -743,7 +743,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -755,7 +755,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB delay", NumFactory.create( 180 ), tfa.getDelayBound() );
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -790,7 +790,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -805,7 +805,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -841,7 +841,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -853,7 +853,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB delay", NumFactory.create( 82.5 ), sfa.getDelayBound() );
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -887,7 +887,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "PMOO analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -899,7 +899,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB delay", NumFactory.create( 60 ), pmoo.getDelayBound() );
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -927,7 +927,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -938,7 +938,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -974,7 +974,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -989,7 +989,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA FIFO backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -1025,7 +1025,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "TFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -1037,7 +1037,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "TFA ARB delay", NumFactory.create( 180 ), tfa.getDelayBound() );
 				assertEquals( "TFA ARB backlog", NumFactory.create( 200 ), tfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -1072,7 +1072,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
@@ -1087,7 +1087,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA FIFO backlog", NumFactory.create( 74 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				if( !test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
-					System.out.println( e.toString() );
+					e.printStackTrace();
 					assertEquals( "Unexpected exception occured", 0, 1 );
 				}
 			}
@@ -1123,7 +1123,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "SFA analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -1135,7 +1135,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "SFA ARB delay", NumFactory.create( 82.5 ), sfa.getDelayBound() );
 				assertEquals( "SFA ARB backlog", NumFactory.create( 170 ), sfa.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -1169,7 +1169,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
 				System.out.println( "PMOO analysis failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -1181,7 +1181,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "PMOO ARB delay", NumFactory.create( 60 ), pmoo.getDelayBound() );
 				assertEquals( "PMOO ARB backlog", NumFactory.create( 125 ), pmoo.getBacklogBound() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
@@ -1209,7 +1209,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
 				System.out.println( "Tree Backlog Bound Calculation failed" );
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				System.out.println();
 				
 				assertEquals( "Unexpected exception occured", 0, 1 );
@@ -1220,7 +1220,7 @@ public class Tandem_1SC_4Flows_1AC_1Path extends FunctionalTests
 
 				assertEquals( "Tree backlog", 200, backlog_bound, NumFactory.getEpsilon().doubleValue() );
 			} catch (Exception e) {
-				System.out.println( e.toString() );
+				e.printStackTrace();
 				assertEquals( "Unexpected exception occured", 0, 1 );
 			}
 		}
