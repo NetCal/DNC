@@ -49,8 +49,9 @@ import unikl.disco.numbers.Num;
  * @author Steffen Bondorf
  * 
  */
-public abstract class Analysis
-{
+public abstract class Analysis {
+	public enum Analyses { TFA, SFA, PMOO };
+	
 	protected Network network;
 	protected AnalysisConfig configuration;
 	

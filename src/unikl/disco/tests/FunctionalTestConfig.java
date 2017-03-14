@@ -32,15 +32,17 @@ import java.util.Set;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
+import unikl.disco.network.Server.Multiplexing;
 
 public class FunctionalTestConfig extends AnalysisConfig {
 	// Functional test specific parameters
-	boolean define_multiplexing_globally;
-	boolean console_output = false;
+	protected boolean define_multiplexing_globally;
+	protected Multiplexing mux_discipline;
+	protected boolean console_output = false;
 	
 	// Calculator parameters
-	boolean enable_checks = false;
-	NumClass numbers;
+	protected boolean enable_checks = false;
+	protected NumClass numbers;
 	
 	@SuppressWarnings("unused")
 	private FunctionalTestConfig(){}
@@ -49,6 +51,7 @@ public class FunctionalTestConfig extends AnalysisConfig {
 									boolean remove_duplicate_arrival_bounds,
 									boolean tbrl_convolution, 
 									boolean tbrl_deconvolution,
+									Multiplexing mux_discipline,
 									boolean define_multiplexing_globally,
 									CalculatorConfig.NumClass numbers ) {
 		
@@ -61,6 +64,7 @@ public class FunctionalTestConfig extends AnalysisConfig {
 				tbrl_deconvolution,
 				false );
 		
+		this.mux_discipline = mux_discipline;
 		this.define_multiplexing_globally = define_multiplexing_globally;
 		this.numbers = numbers;
 	}
@@ -71,28 +75,29 @@ public class FunctionalTestConfig extends AnalysisConfig {
 	
 	@Override
 	public String toString() {
-		// AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, global mux def
-		String func_test_str = arrivalBoundMethods().toString();
+		// AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def
+		StringBuffer func_test_str = new StringBuffer();
+		
+		func_test_str.append( arrivalBoundMethods().toString() );
 		
 		if( removeDuplicateArrivalBounds() ) {
-			func_test_str += ", ";
-			func_test_str += "Rem dupl ABs";
+			func_test_str.append( ", " + "Rem dupl ABs" );
 		}
 		if( tbrlConvolution() ) {
-			func_test_str += ", ";
-			func_test_str += "TbRl Conv";
+			func_test_str.append( ", " + "TbRl Conv" );
 		}
 		if( tbrlDeconvolution() ) {
-			func_test_str += ", ";
-			func_test_str += "TbRl Deconv";
-		}
-		if( define_multiplexing_globally ) {
-			func_test_str += ", ";
-			func_test_str += "MUX global";
+			func_test_str.append( ", " + "TbRl Deconv" );
 		}
 
-		func_test_str += ", " + numbers.toString();
+		func_test_str.append(  ", "+ mux_discipline.toString() );
 		
-		return func_test_str;
+		if( define_multiplexing_globally ) {
+			func_test_str.append( ", " + "MUX global" );
+		}
+
+		func_test_str.append( ", " + numbers.toString() );
+		
+		return func_test_str.toString();
 	}
 }
