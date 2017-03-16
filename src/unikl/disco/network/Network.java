@@ -28,10 +28,8 @@
 package unikl.disco.network;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
@@ -1212,166 +1210,181 @@ public class Network {
  			file_name = file_name.substring( 0, file_name.length() - 5 );
  		}
  		
- 		File file = new File( output_path + file_name + file_extension );
- 		Writer w = new OutputStreamWriter( new FileOutputStream(file), "UTF-8" );
- 		PrintWriter pw = new PrintWriter(w);
+ 		StringBuffer sb = new StringBuffer();
  		
- 		pw.println( "/* " );
- 		pw.println( " * This file is part of the Disco Deterministic Network Calculator v2.3 \"Centaur\"." );
- 		pw.println( " *" );
- 		pw.println( " * The Disco Deterministic Network Calculator (DiscoDNC) is free software;" );
- 		pw.println( " * you can redistribute it and/or modify it under the terms of the " );
- 		pw.println( " * GNU Lesser General Public License as published by the Free Software Foundation; " );
- 		pw.println( " * either version 2.1 of the License, or (at your option) any later version." );
- 		pw.println( " * " );
- 		pw.println( " * This library is distributed in the hope that it will be useful," );
- 		pw.println( " * but WITHOUT ANY WARRANTY; without even the implied warranty of" );
- 		pw.println( " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU" );
- 		pw.println( " * Lesser General Public License for more details." );
- 		pw.println( " * " );
- 		pw.println( " * You should have received a copy of the GNU Lesser General Public" );
- 		pw.println( " * License along with this library; if not, write to the Free Software" );
- 		pw.println( " * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA" );
- 		pw.println( " * " );
- 		pw.println( " */ " );
- 		pw.println();
+ 		sb.append( "/* \n" );
+ 		sb.append( " * This file is part of the Disco Deterministic Network Calculator >= v2.3.3 \"Centaur\".\n" );
+ 		sb.append( " *\n" );
+ 		sb.append( " * The Disco Deterministic Network Calculator (DiscoDNC) is free software;\n" );
+ 		sb.append( " * you can redistribute it and/or modify it under the terms of the \n" );
+ 		sb.append( " * GNU Lesser General Public License as published by the Free Software Foundation; \n" );
+ 		sb.append( " * either version 2.1 of the License, or (at your option) any later version.\n" );
+ 		sb.append( " * \n" );
+ 		sb.append( " * This library is distributed in the hope that it will be useful,\n" );
+ 		sb.append( " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" );
+ 		sb.append( " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n" );
+ 		sb.append( " * Lesser General Public License for more details.\n" );
+ 		sb.append( " * \n" );
+ 		sb.append( " * You should have received a copy of the GNU Lesser General Public\n" );
+ 		sb.append( " * License along with this library; if not, write to the Free Software\n" );
+ 		sb.append( " * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA\n" );
+ 		sb.append( " * \n" );
+ 		sb.append( " */ \n" );
+ 		sb.append( "\n" );
  		
- 		pw.println( "package " + package_name + ";" );
- 		pw.println();
- 		pw.println( "import java.util.LinkedList;" );
- 		pw.println();
- 		pw.println( "import unikl.disco.curves.ServiceCurve;" );
- 		pw.println( "import unikl.disco.curves.MaxServiceCurve;" );
- 		pw.println( "import unikl.disco.curves.ArrivalCurve;" );
- 		pw.println();
- 		pw.println( "import unikl.disco.network.Network;" );
- 		pw.println( "import unikl.disco.network.IsNetwork;" );
- 		pw.println( "import unikl.disco.network.Server;" );
- 		pw.println( "import unikl.disco.network.Server.Multiplexing;" );
- 		pw.println();
+ 		sb.append( "package " + package_name + ";\n" );
+ 		sb.append( "\n" );
+ 		sb.append( "import java.util.LinkedList;\n" );
+ 		sb.append( "\n" );
+ 		sb.append( "import unikl.disco.curves.ServiceCurve;\n" );
+ 		sb.append( "import unikl.disco.curves.MaxServiceCurve;\n" );
+ 		sb.append( "import unikl.disco.curves.ArrivalCurve;\n" );
+ 		sb.append( "\n" );
+ 		sb.append( "import unikl.disco.network.Network;\n" );
+ 		sb.append( "import unikl.disco.network.NetworkFactory;\n" );
+ 		sb.append( "import unikl.disco.network.Server;\n" );
+ 		sb.append( "import unikl.disco.network.Server.Multiplexing;\n" );
+ 		sb.append( "\n" );
 
- 		pw.println( "public class " + file_name + " implements IsNetwork {");
- 		pw.println( "\tprivate Network network;" );
- 		pw.println( "\tprivate Server[] servers;" );
- 		pw.println();
+ 		sb.append( "public class " + file_name + " implements NetworkFactory {");
+ 		sb.append( "\tprivate Network network;\n" );
+ 		sb.append( "\n" );
  		
  		// Server creation
  		int i_servers_func = 1;
  		int i_servers_lines = 0;
- 		pw.println( "\tpublic void createServers" + Integer.toString( i_servers_func ) + "() throws Exception {" );
+ 		sb.append( "\tpublic void createServers" + Integer.toString( i_servers_func ) 
+ 					+ "( Network network, Server[] servers ) throws Exception {\n" );
  		for ( Server s : servers ) {
- 			pw.print( "\t\tservers[" + s.getId() + "] = " );
- 			pw.print( "network.addServer( " );
- 			pw.print( "\"" + s.getAlias() + "\"" + ", " );
- 			pw.print( "new ServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", " );
- 			pw.print( "new MaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )" + ", " );
- 			pw.print( "Multiplexing." + s.multiplexingDiscipline() + ", " );
- 			pw.print( s.useGamma() + ", " );
- 			pw.print( s.useExtraGamma() );
- 			pw.println( " );" );
+ 			sb.append( "\t\tservers[" + s.getId() + "] = " );
+ 			sb.append( "network.addServer( " );
+ 			sb.append( "\"" + s.getAlias() + "\"" + ", " );
+ 			sb.append( "new ServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", " );
+ 			sb.append( "new MaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )" + ", " );
+ 			sb.append( "Multiplexing." + s.multiplexingDiscipline() + ", " );
+ 			sb.append( s.useGamma() + ", " );
+ 			sb.append( s.useExtraGamma() );
+ 			sb.append( " );\n" );
  			
  			i_servers_lines++;
  			
  			if( (i_servers_lines / 500) >= i_servers_func ) {
  				i_servers_func++;
 
- 				pw.println( "\t}" );
- 		 		pw.println();
- 		 		pw.println( "\tpublic void createServers" + Integer.toString( i_servers_func ) + "() throws Exception {" );
+ 				sb.append( "\t}\n" );
+ 		 		sb.append( "\n" );
+ 		 		sb.append( "\tpublic void createServers" + Integer.toString( i_servers_func ) 
+ 		 					+ "( Network network, Server[] servers ) throws Exception {\n" );
  			}
  		}
- 		pw.println( "\t}" );
- 		pw.println();
+ 		sb.append( "\t}\n" );
+ 		sb.append( "\n" );
  		
  		// Link creation
  		int i_links_func = 1;
  		int i_links_lines = 0;
- 		pw.println( "\tpublic void createLinks" + Integer.toString( i_links_func ) + "() throws Exception {" );
+ 		sb.append( "\tpublic void createLinks" + Integer.toString( i_links_func ) 
+ 					+ "( Network network, Server[] servers ) throws Exception {\n" );
  		for ( Link l : links ) {
- 			pw.print( "\t\tnetwork.addLink( " );
- 			pw.print( "\"" + l.getAlias() + "\"" + ", " );
- 			pw.print( "servers[" + l.getSource().getId() + "]" + ", " );
- 			pw.print( "servers[" + l.getDest().getId() + "]" );
- 			pw.println( " );" );
+ 			sb.append( "\t\tnetwork.addLink( " );
+ 			sb.append( "\"" + l.getAlias() + "\"" + ", " );
+ 			sb.append( "servers[" + l.getSource().getId() + "]" + ", " );
+ 			sb.append( "servers[" + l.getDest().getId() + "]" );
+ 			sb.append( " );\n" );
  			
  			i_links_lines++;
  			
  			if( (i_links_lines / 500) >= i_links_func ) {
  				i_links_func++;
 
- 				pw.println( "\t}" );
- 		 		pw.println();
- 		 		pw.println( "\tpublic void createLinks" + Integer.toString( i_links_func ) + "() throws Exception {" );
+ 				sb.append( "\t}\n" );
+ 		 		sb.append( "\n" );
+ 		 		sb.append( "\tpublic void createLinks" + Integer.toString( i_links_func ) 
+ 		 					+ "( Network network, Server[] servers ) throws Exception {\n" );
  			}
  		}
- 		pw.println( "\t}" );
- 		pw.println();
+ 		sb.append( "\t}\n" );
+ 		sb.append( "\n" );
  		
  		// Flow creation
  		int i_flows_func = 1;
  		int i_flows_lines = 0;
- 		pw.println( "\tpublic void createFlows" + Integer.toString( i_flows_func ) + "() throws Exception {" );
- 		pw.println( "\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();" );
+ 		sb.append( "\tpublic void createFlows" + Integer.toString( i_flows_func ) 
+ 					+ "( Network network, Server[] servers ) throws Exception {\n" );
+ 		sb.append( "\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();\n" );
  		i_flows_lines++;
- 		pw.println();
+ 		sb.append( "\n" );
  		for ( Flow f : flows ) {
  			for ( Server s : f.getServersOnPath() ) {
- 				pw.print( "\t\tservers_on_path_s.add( " );
- 				pw.print( "servers[" + s.getId() + "]" );
- 				pw.println( " );" );
+ 				sb.append( "\t\tservers_on_path_s.add( " );
+ 				sb.append( "servers[" + s.getId() + "]" );
+ 				sb.append( " );\n" );
  				i_flows_lines++;
  			}
- 			pw.print( "\t\tnetwork.addFlow( " );
- 			pw.print( "\"" + f.getAlias() + "\"" + ", " );
- 			pw.print( "new ArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", " );
- 			pw.print( "servers_on_path_s" );
- 			pw.println( " );" );
- 			pw.println( "\t\tservers_on_path_s.clear();" );
- 			pw.println();
+ 			sb.append( "\t\tnetwork.addFlow( " );
+ 			sb.append( "\"" + f.getAlias() + "\"" + ", " );
+ 			sb.append( "new ArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", " );
+ 			sb.append( "servers_on_path_s" );
+ 			sb.append( " );\n" );
+ 			sb.append( "\t\tservers_on_path_s.clear();" );
+ 			sb.append( "\n" );
  			
  			i_flows_lines += 3;
  			
  			if( (i_flows_lines / 500) >= i_flows_func ) {
  				i_flows_func++;
 
- 				pw.println( "\t}" );
- 		 		pw.println();
- 		 		pw.println( "\tpublic void createFlows" + Integer.toString( i_flows_func ) + "() throws Exception {" );
- 		 		pw.println( "\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();" );
+ 				sb.append( "\t}\n" );
+ 		 		sb.append( "\n" );
+ 		 		sb.append( "\tpublic void createFlows" + Integer.toString( i_flows_func ) 
+ 		 					+ "( Network network, Server[] servers ) throws Exception {\n" );
+ 		 		sb.append( "\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();\n" );
  		 		i_flows_lines++;
  			}
  		}
- 		pw.println( "\t}" );
+ 		sb.append( "\t}\n" );
  		
- 		pw.println();
- 		pw.println( "\tpublic " + file_name + "() {" );
- 		pw.println( "\t\ttry{" );
- 		pw.println( "\t\t\tservers = new Server[" + numServers() + "];" );
- 		pw.println( "\t\t\tnetwork = new Network();" );
+ 		sb.append( "\n" );
+ 		sb.append( "\tpublic " + file_name + "() {\n" );
+ 		sb.append( "\t\tnetwork = createNetwork();");
+ 		sb.append( "\t}\n" );
+ 		sb.append( "\n" );
  		
+ 		sb.append( "\tpublic Network createNetwork() {\n" );
+ 		sb.append( "\t\tServer[] servers = new Server[" + numServers() + "];\n" );
+ 		sb.append( "\t\tnetwork = new Network();\n" );
+ 		sb.append( "\t\ttry{\n" );
  		for( int i = 1; i <= i_servers_func; i++ ) {
- 	 		pw.println( "\t\t\tcreateServers" + Integer.toString( i ) + "();" );
+ 	 		sb.append( "\t\t\tcreateServers" + Integer.toString( i ) + "( network, servers );\n" );
  		}
  		for( int i = 1; i <= i_links_func; i++ ) {
- 			pw.println( "\t\t\tcreateLinks" + Integer.toString( i ) + "();" );
+ 			sb.append( "\t\t\tcreateLinks" + Integer.toString( i ) + "( network, servers );\n" );
  		}
  		for( int i = 1; i <= i_flows_func; i++ ) {
- 			pw.println( "\t\t\tcreateFlows" + Integer.toString( i ) + "();" );
+ 			sb.append( "\t\t\tcreateFlows" + Integer.toString( i ) + "( network, servers );\n" );
  		}
  		
- 		pw.println( "\t\t} catch (Exception e) {" );
- 		pw.println( "\t\t\tSystem.out.println( e.toString() );" );
- 		pw.println( "\t\t}" );
- 		pw.println( "\t}" );
- 		pw.println();
+ 		sb.append( "\t\t} catch (Exception e) {\n" );
+ 		sb.append( "\t\t\te.printStackTrace();\n" );
+ 		sb.append( "\t\t}\n" );
+ 		sb.append( "\t\treturn network;\n" );
+ 		sb.append( "\t}\n" );
+ 		sb.append( "\n" );
 
- 		pw.println( "\tpublic Network getNetwork() {" );
- 		pw.println( "\t\treturn network;");
- 		pw.println( "\t}");
+ 		sb.append( "\tpublic Network getNetwork() {\n" );
+ 		sb.append( "\t\treturn network;");
+ 		sb.append( "\t}");
+ 		sb.append( "\n" );
+
+ 		sb.append( "\tpublic void reinitializeCurves() {\n" );
+ 		sb.append( "\t\tnetwork = createNetwork();");
+ 		sb.append( "\t}");
  		
- 		pw.print( "}" );
- 		
- 		pw.close();
+ 		sb.append( "}\n" );
+
+ 		File output = new File( output_path, file_name + file_extension );
+ 		output.getParentFile().mkdirs();
+ 		Files.write( output.toPath(), sb.toString().getBytes( StandardCharsets.UTF_8 ) );
  	}
  	
 	@Override

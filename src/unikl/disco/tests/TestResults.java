@@ -26,7 +26,15 @@ public class TestResults {
 		pmoo_bounds_arb = new HashMap<Flow,Pair<Num>>();
 	}
 	
-	public void addBounds( Analyses analysis, Multiplexing mux, Flow flow, Num delay_bound, Num backlog_bound ) {
+	protected void clear() {
+		tfa_bounds_arb.clear();
+		tfa_bounds_fifo.clear();
+		sfa_bounds_arb.clear();
+		sfa_bounds_fifo.clear();
+		pmoo_bounds_arb.clear();
+	}
+	
+	protected void addBounds( Analyses analysis, Multiplexing mux, Flow flow, Num delay_bound, Num backlog_bound ) {
 		Pair<Map<Flow,Pair<Num>>> bounded_analysis;
 		switch( analysis ){
 		case TFA:

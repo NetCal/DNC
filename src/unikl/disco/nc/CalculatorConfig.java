@@ -43,10 +43,15 @@ public final class CalculatorConfig {
 		return NUM_CLASS;
 	}
 	
-	public static void setNumClass( NumClass num_class ) {
-		NUM_CLASS = num_class;
-		NumFactory.setNumClass( num_class );
-		NumUtils.setNumClass( num_class );
+	public static boolean setNumClass( NumClass num_class ) {
+		if( NUM_CLASS == num_class ) {
+			return false;
+		} else {
+			NUM_CLASS = num_class;
+			NumFactory.setNumClass( num_class );
+			NumUtils.setNumClass( num_class );
+			return true;
+		}
 	}
 	
 	public static boolean ARRIVAL_CURVE_CHECKS = false;

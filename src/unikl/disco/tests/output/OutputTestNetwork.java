@@ -32,7 +32,7 @@ import java.util.LinkedList;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
-import unikl.disco.network.IsNetwork;
+import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;
 import unikl.disco.network.Server.Multiplexing;
@@ -41,7 +41,7 @@ import unikl.disco.network.Server.Multiplexing;
  * 
  * @author Steffen Bondorf
  */
-public class TestNetwork implements IsNetwork {
+public class OutputTestNetwork implements NetworkFactory {
 	private Network network;
 	private Server[] servers;
 	private Multiplexing mux = Multiplexing.ARBITRARY;
@@ -49,34 +49,38 @@ public class TestNetwork implements IsNetwork {
 	private ServiceCurve service_curve;
 	private MaxServiceCurve max_service_curve;
 	private ArrivalCurve arrival_curve;
-	
-	public static void main( String[] args )
-	{
-		try {
-			Network network = new TestNetwork().getNetwork();
-			network.saveAs( "./src/unikl/disco/tests/output/", "SavedNetwork.java", "unikl.disco.tests.output" );
-		} catch (Exception e) {
-			System.out.println( e.toString() );
-		}
+
+	public OutputTestNetwork() throws Exception {
+		network = createNetwork();
 	}
 	
-	public TestNetwork() throws Exception {
+	public Network createNetwork() {
 		servers = new Server[38];
-		
-		service_curve = new ServiceCurve( "SC{(0.0,0.0),10000.0}" );
-		max_service_curve = new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" );
-		arrival_curve = new ArrivalCurve( "AC{(0.0,0.0),0.0;!(0.0,5.0),5.0}" );
 
-		network = new Network();
-		createServers1();
-		createLinks1();
-		createFlows1();
-		createFlows2();
-		createFlows3();
+		try{
+			service_curve = new ServiceCurve( "SC{(0.0,0.0),10000.0}" );
+			max_service_curve = new MaxServiceCurve( "MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}" );
+			arrival_curve = new ArrivalCurve( "AC{(0.0,0.0),0.0;!(0.0,5.0),5.0}" );
+			
+			network = new Network();
+			
+			createServers1();
+			createLinks1();
+			createFlows1();
+			createFlows2();
+			createFlows3();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return network;
 	}
 
 	public Network getNetwork() {
 		return network;
+	}
+
+	public void reinitializeCurves() {
+		network = createNetwork();
 	}
 	
 	public void createServers1() throws Exception {

@@ -84,12 +84,11 @@ import unikl.disco.numbers.Num;
  * @author Steffen Bondorf
  *
  */
-public class FunctionalTests { // Cannot make this class static as that prevents it from starting the tests listed above.
+public class FunctionalTests {
 	protected static Collection<FunctionalTestConfig> test_configurations = createParameters();
 
-	protected static NumClass last_number_representation = null;
-	
 	protected FunctionalTestConfig test_config;
+	protected boolean reinitilize_numbers = true;
 	
 	public FunctionalTests( FunctionalTestConfig test_config ) {
 		this.test_config = test_config;
@@ -100,10 +99,7 @@ public class FunctionalTests { // Cannot make this class static as that prevents
 			CalculatorConfig.disableAllChecks();
 		}
 		
-		if ( CalculatorConfig.getNumClass() != test_config.numbers 
-				|| last_number_representation == null ) {
-			CalculatorConfig.setNumClass( test_config.numbers );
-		}
+		reinitilize_numbers = CalculatorConfig.setNumClass( test_config.numbers );
 	}
 	
 	@Before

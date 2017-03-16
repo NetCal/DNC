@@ -33,11 +33,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.analyses.SeparateFlowAnalysis;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
+import unikl.disco.network.Server.Multiplexing;
+import unikl.disco.numbers.NumFactory;
 
 @RunWith(value = Parameterized.class)
 /**
@@ -47,8 +50,11 @@ import unikl.disco.network.Network;
  */
 public class FF_3S_1SC_2F_1AC_2P_Test extends FunctionalTests
 {
+	private static FF_3S_1SC_2F_1AC_2P_Net test_network;
 	private static Network network;
 	private static Flow f0, f1;
+
+	protected static TestResults expected_results = new TestResults();
 
 	public FF_3S_1SC_2F_1AC_2P_Test( FunctionalTestConfig test_config ) throws Exception {
 		super( test_config );
@@ -56,35 +62,62 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends FunctionalTests
 	
 	@BeforeClass
 	public static void createNetwork() {
-		network = FF_3S_1SC_2F_1AC_2P_Net.createNetwork();
-		f0 = FF_3S_1SC_2F_1AC_2P_Net.f0;
-		f1 = FF_3S_1SC_2F_1AC_2P_Net.f1;
+		test_network = new FF_3S_1SC_2F_1AC_2P_Net();
+		f0 = test_network.f0;
+		f1 = test_network.f1;
+
+		network = test_network.getNetwork();
+		
+		initializeBounds();
+	}
+
+	private static void initializeBounds() {
+		expected_results.clear();
+		
+		// TFA
+		expected_results.addBounds( Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.create( 485, 8 ), NumFactory.create( 1125, 2 ) );
+		expected_results.addBounds( Analyses.TFA, Multiplexing.FIFO, f1, NumFactory.create( 1395, 16 ), NumFactory.create( 1125, 2 ) );
+		expected_results.addBounds( Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create( 385, 3 ), NumFactory.create( 1900, 3 ) );
+		expected_results.addBounds( Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactory.create( 470, 3 ), NumFactory.create( 1900, 3 ) );
+
+		// SFA
+		expected_results.addBounds( Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.create( 2615, 48 ), NumFactory.create( 4625, 16 ) );
+		expected_results.addBounds( Analyses.SFA, Multiplexing.FIFO, f1, NumFactory.create( 3335, 48 ), NumFactory.create( 5825, 16 ) );
+		expected_results.addBounds( Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.create( 670, 9 ), NumFactory.create( 3500, 9 ) );
+		expected_results.addBounds( Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactory.create( 790, 9 ), NumFactory.create( 4100, 9 ) );
+
+		// PMOO
+		expected_results.addBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.create( 670, 9 ), NumFactory.create( 3500, 9 ) );
+		expected_results.addBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactory.create( 790, 9 ), NumFactory.create( 4100, 9 ) );
 	}
 	
-	// We need to reinitialize the network in order to react to changes of the number representation.
 	@Before
     public void reinitNetwork() {
-		FF_3S_1SC_2F_1AC_2P_Net.reinitializeCurves();
-		FF_3S_1SC_2F_1AC_2P_Net.initializeExpectedTestResults();
-    }
+		if( !super.reinitilize_numbers ){
+			return;
+		}
+		
+		test_network.reinitializeCurves();
+		initializeBounds();
+	}
 	
 //--------------------Flow 0--------------------
 	@Test
 	public void f0_tfa() {
 		setMux( network.getServers() );
-		super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f0, FF_3S_1SC_2F_1AC_2P_Net.expected_results );
+		super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f0, expected_results );
 	}
 	
 	@Test
 	public void f0_sfa() {
 		setMux( network.getServers() );
-		super.runSFAtest( new SeparateFlowAnalysis( network, test_config ), f0, FF_3S_1SC_2F_1AC_2P_Net.expected_results );
+		super.runSFAtest( new SeparateFlowAnalysis( network, test_config ), f0, expected_results );
 	}
 	
 	@Test
 	public void f0_pmoo_arbMux() {
 		setArbitraryMux( network.getServers() );
-		super.runPMOOtest( new PmooAnalysis( network, test_config ), f0, FF_3S_1SC_2F_1AC_2P_Net.expected_results );
+		super.runPMOOtest( new PmooAnalysis( network, test_config ), f0, expected_results );
 	}
 	
 	@Test
@@ -106,19 +139,19 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends FunctionalTests
 	@Test
 	public void f1_tfa() {
 		setMux( network.getServers() );
-		super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f1, FF_3S_1SC_2F_1AC_2P_Net.expected_results );
+		super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f1, expected_results );
 	}
 
 	@Test
 	public void f1_sfa() {
 		setMux( network.getServers() );
-		super.runSFAtest( new SeparateFlowAnalysis( network, test_config ), f1, FF_3S_1SC_2F_1AC_2P_Net.expected_results );
+		super.runSFAtest( new SeparateFlowAnalysis( network, test_config ), f1, expected_results );
 	}
 	
 	@Test
 	public void f1_pmoo_arbMux() {
 		setArbitraryMux( network.getServers() );
-		super.runPMOOtest( new PmooAnalysis( network, test_config ), f1, FF_3S_1SC_2F_1AC_2P_Net.expected_results );
+		super.runPMOOtest( new PmooAnalysis( network, test_config ), f1, expected_results );
 	}
 	
 	@Test
