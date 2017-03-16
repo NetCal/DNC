@@ -5,8 +5,9 @@ import java.util.Map;
 
 import unikl.disco.misc.Pair;
 import unikl.disco.nc.Analysis.Analyses;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.network.Flow;
-import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 
 //TODO Make files for all the expected results and a nice constructor
@@ -34,7 +35,7 @@ public class TestResults {
 		pmoo_bounds_arb.clear();
 	}
 	
-	protected void addBounds( Analyses analysis, Multiplexing mux, Flow flow, Num delay_bound, Num backlog_bound ) {
+	protected void addBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, Num delay_bound, Num backlog_bound ) {
 		Pair<Map<Flow,Pair<Num>>> bounded_analysis;
 		switch( analysis ){
 		case TFA:
@@ -51,14 +52,14 @@ public class TestResults {
 		}
 		
 		Pair<Num> bounds = new Pair<Num>( delay_bound.copy(), backlog_bound.copy() );
-		if( mux == Multiplexing.ARBITRARY ) {
+		if( mux == AnalysisConfig.Multiplexing.ARBITRARY ) {
 			bounded_analysis.getFirst().put( flow, bounds );
 		} else {
 			bounded_analysis.getSecond().put( flow, bounds );
 		}
 	}
 	
-	public Pair<Num> getBounds( Analyses analysis, Multiplexing mux, Flow flow ) {
+	public Pair<Num> getBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow ) {
 		Pair<Map<Flow,Pair<Num>>> bounded_analysis;
 		switch( analysis ){
 		case TFA:
@@ -74,7 +75,7 @@ public class TestResults {
 			throw new RuntimeException( "Invalid analysis given." );
 		}
 		
-		if( mux == Multiplexing.ARBITRARY ) {
+		if( mux == AnalysisConfig.Multiplexing.ARBITRARY ) {
 			return bounded_analysis.getFirst().get( flow );
 		} else {
 			return bounded_analysis.getSecond().get( flow );

@@ -1,6 +1,7 @@
 v2.3.3 "Centaur" (2017-Apr-XY)
 ------------------------------
-* Functional tests: 
+* Enum Multiplexing was moved from Server to AnalysisConfig
+* Functional tests:
   - Replaced System.out.println( e.toString() ) with e.printStackTrace()
   - Converted the output test to a JUnit test automatically compiling the generated class.
 

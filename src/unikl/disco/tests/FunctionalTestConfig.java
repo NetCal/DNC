@@ -30,14 +30,14 @@ package unikl.disco.tests;
 import java.util.Set;
 
 import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
-import unikl.disco.network.Server.Multiplexing;
 
 public class FunctionalTestConfig extends AnalysisConfig {
 	// Functional test specific parameters
 	protected boolean define_multiplexing_globally;
-	protected Multiplexing mux_discipline;
+	protected AnalysisConfig.Multiplexing mux_discipline;
 	protected boolean console_output = false;
 	
 	// Calculator parameters
@@ -51,11 +51,11 @@ public class FunctionalTestConfig extends AnalysisConfig {
 									boolean remove_duplicate_arrival_bounds,
 									boolean tbrl_convolution, 
 									boolean tbrl_deconvolution,
-									Multiplexing mux_discipline,
+									AnalysisConfig.Multiplexing mux_discipline,
 									boolean define_multiplexing_globally,
 									CalculatorConfig.NumClass numbers ) {
 		
-		super( MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
+		super( AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
 				arrival_bound_methods,

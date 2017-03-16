@@ -29,6 +29,7 @@ package unikl.disco.network;
 
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
+import unikl.disco.nc.AnalysisConfig;
 
 /**
  * 
@@ -36,8 +37,6 @@ import unikl.disco.curves.ServiceCurve;
  *
  */
 public class Server {
-	public static enum Multiplexing { ARBITRARY, FIFO }
-	
 	private int id;
 	private String alias;
 	
@@ -58,7 +57,7 @@ public class Server {
 	 */
 	private boolean	use_extra_gamma = false;
 	
-	private Multiplexing multiplexing = Multiplexing.ARBITRARY;
+	private AnalysisConfig.Multiplexing multiplexing = AnalysisConfig.Multiplexing.ARBITRARY;
 	
 	@SuppressWarnings("unused")
 	private Server(){}
@@ -73,7 +72,7 @@ public class Server {
 	 * @param use_gamma Convolve the maximum service curve with the arrival curve before deriving an output bound. 
 	 * @param use_extra_gamma Convolve the output bound with the maximum service curve.
 	 */
-	protected Server( int id, String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma ){
+	protected Server( int id, String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, AnalysisConfig.Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma ){
 		this.id = id;
 		this.alias = alias;
 		this.service_curve = service_curve;
@@ -84,7 +83,7 @@ public class Server {
 		this.use_extra_gamma = use_extra_gamma;
 	}
 
-	protected Server( int id, String alias, ServiceCurve service_curve, Multiplexing multiplexing ){
+	protected Server( int id, String alias, ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing ){
 		this.id = id;
 		this.alias = alias;
 		this.service_curve = service_curve;
@@ -196,11 +195,11 @@ public class Server {
 		this.use_extra_gamma = use_extra_gamma;
 	}
 	
-	public Multiplexing multiplexingDiscipline() {
+	public AnalysisConfig.Multiplexing multiplexingDiscipline() {
 		return multiplexing;
 	}
 	
-	public void setMultiplexingDiscipline( Multiplexing mux ) {
+	public void setMultiplexingDiscipline( AnalysisConfig.Multiplexing mux ) {
 		multiplexing = mux;
 	}
 	

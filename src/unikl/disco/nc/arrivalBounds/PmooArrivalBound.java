@@ -37,6 +37,7 @@ import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.misc.SetUtils;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.operations.LeftOverService;
@@ -46,7 +47,6 @@ import unikl.disco.network.Link;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
-import unikl.disco.network.Server.Multiplexing;
 
 /**
  * 
@@ -103,7 +103,7 @@ public class PmooArrivalBound extends ArrivalBound {
 		}
 		
 		if( configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO 
-				|| ( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL && link.getSource().multiplexingDiscipline() == Multiplexing.FIFO ) )
+				|| ( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL && link.getSource().multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO ) )
 		{
 			throw new Exception( "PMOO arrival bounding is not available for FIFO multiplexing nodes" );
 		}

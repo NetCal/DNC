@@ -32,10 +32,11 @@ import java.util.LinkedList;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;
-import unikl.disco.network.Server.Multiplexing;
 
 /**
  * 
@@ -44,7 +45,7 @@ import unikl.disco.network.Server.Multiplexing;
 public class OutputTestNetwork implements NetworkFactory {
 	private Network network;
 	private Server[] servers;
-	private Multiplexing mux = Multiplexing.ARBITRARY;
+	private AnalysisConfig.Multiplexing mux = AnalysisConfig.Multiplexing.ARBITRARY;
 
 	private ServiceCurve service_curve;
 	private MaxServiceCurve max_service_curve;

@@ -45,8 +45,10 @@ import org.junit.runners.Suite.SuiteClasses;
 import unikl.disco.misc.Pair;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.Analysis.Analyses;
+import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.Analysis;
 import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.nc.analyses.PmooAnalysis;
@@ -54,7 +56,6 @@ import unikl.disco.nc.analyses.SeparateFlowAnalysis;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Server;
-import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 
 @RunWith(Suite.class)
@@ -125,15 +126,15 @@ public class FunctionalTests {
 			
 		} else {
 			// Enforce potential test failure by defining the server-local multiplexing differently.
-			Multiplexing mux_local;
+			AnalysisConfig.Multiplexing mux_local;
 			MuxDiscipline mux_global;
 			
-			if( test_config.mux_discipline == Multiplexing.ARBITRARY ) {
+			if( test_config.mux_discipline == AnalysisConfig.Multiplexing.ARBITRARY ) {
 				mux_global = MuxDiscipline.GLOBAL_ARBITRARY;
-				mux_local = Multiplexing.FIFO;
+				mux_local = AnalysisConfig.Multiplexing.FIFO;
 			} else {
 				mux_global = MuxDiscipline.GLOBAL_FIFO;
-				mux_local = Multiplexing.ARBITRARY;
+				mux_local = AnalysisConfig.Multiplexing.ARBITRARY;
 			}
 			
 			test_config.setMultiplexingDiscipline( mux_global );
@@ -152,13 +153,13 @@ public class FunctionalTests {
 			test_config.setMultiplexingDiscipline( MuxDiscipline.GLOBAL_FIFO );
 			// Enforce potential test failure
 			for( Server s : servers ) {
-				s.setMultiplexingDiscipline( Multiplexing.ARBITRARY );
+				s.setMultiplexingDiscipline( AnalysisConfig.Multiplexing.ARBITRARY );
 			}
 		} else {
 			test_config.setMultiplexingDiscipline( MuxDiscipline.SERVER_LOCAL );
 			// Enforce potential test failure
 			for( Server s : servers ) {
-				s.setMultiplexingDiscipline( Multiplexing.FIFO );
+				s.setMultiplexingDiscipline( AnalysisConfig.Multiplexing.FIFO );
 			}
 		}
 	}
@@ -168,13 +169,13 @@ public class FunctionalTests {
 			test_config.setMultiplexingDiscipline( MuxDiscipline.GLOBAL_ARBITRARY );
 			// Enforce potential test failure
 			for( Server s : servers ) {
-				s.setMultiplexingDiscipline( Multiplexing.FIFO );
+				s.setMultiplexingDiscipline( AnalysisConfig.Multiplexing.FIFO );
 			}
 		} else {
 			test_config.setMultiplexingDiscipline( MuxDiscipline.SERVER_LOCAL );
 			// Enforce potential test failure
 			for( Server s : servers ) {
-				s.setMultiplexingDiscipline( Multiplexing.ARBITRARY );
+				s.setMultiplexingDiscipline( AnalysisConfig.Multiplexing.ARBITRARY );
 			}
 		}
 	}
@@ -254,7 +255,7 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		Pair<Num> bounds = expected_bounds.getBounds( Analyses.PMOO, Multiplexing.ARBITRARY, flow_of_interest);
+		Pair<Num> bounds = expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest);
 		assertEquals( "PMOO delay", bounds.getFirst(), pmoo.getDelayBound() );
 		assertEquals( "PMOO backlog", bounds.getSecond(), pmoo.getBacklogBound() );
 	}
@@ -270,9 +271,9 @@ public class FunctionalTests {
 		nums.add( NumClass.RATIONAL_BIGINTEGER );
 
 		
-		Set<Multiplexing> mux_disciplines = new HashSet<Multiplexing>();
-		mux_disciplines.add( Multiplexing.ARBITRARY );
-		mux_disciplines.add( Multiplexing.FIFO );
+		Set<AnalysisConfig.Multiplexing> mux_disciplines = new HashSet<AnalysisConfig.Multiplexing>();
+		mux_disciplines.add( AnalysisConfig.Multiplexing.ARBITRARY );
+		mux_disciplines.add( AnalysisConfig.Multiplexing.FIFO );
 		
 		
 		Set<ArrivalBoundMethod> single_1 = new HashSet<ArrivalBoundMethod>();
@@ -319,7 +320,7 @@ public class FunctionalTests {
 			// Parameter configurations for single arrival bounding tests
 			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
 			for( Set<ArrivalBoundMethod> single_ab : single_abs_allMux ) {
-				for( Multiplexing mux : mux_disciplines ) {
+				for( AnalysisConfig.Multiplexing mux : mux_disciplines ) {
 					test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, mux, false, num ) );
 					test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, mux, false, num ) );
 					test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true, mux,  false, num ) );
@@ -331,20 +332,20 @@ public class FunctionalTests {
 				}
 			}
 			for( Set<ArrivalBoundMethod> single_ab : single_abs_arbMux ) {
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
 			}
 			
 			// Parameter configurations for "pairs of arrival boundings"-tests
 			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
 			for( Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux ) {
-				for( Multiplexing mux : mux_disciplines ) {
+				for( AnalysisConfig.Multiplexing mux : mux_disciplines ) {
 					test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, mux, false, num ) );
 					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, mux, false, num ) );
 					test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, mux, false, num ) );
@@ -364,42 +365,42 @@ public class FunctionalTests {
 				}
 			}
 			for( Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux ) {
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
 			}
 			
 			// Parameter configurations for "triplets of arrival boundings"-tests
 			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, false, Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, false, Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  false, Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  false, Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, true,  Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, true,  Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  true,  Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  true,  Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, false, Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, false, Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  false, Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  false, Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, true,  Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, true,  Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  true,  Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  true,  Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
 		}
 		
 		return test_configurations;

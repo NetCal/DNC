@@ -43,7 +43,8 @@ import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.misc.SetUtils;
-import unikl.disco.network.Server.Multiplexing;
+import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 
 /**
  * 
@@ -165,18 +166,18 @@ public class Network {
 	// --------------------------------------------------------------------------------------------
 	// Without given maximum service curve
 	public Server addServer( ServiceCurve service_curve ) {
-		return addServer( service_curve, MaxServiceCurve.createZeroDelayInfiniteBurst(), Multiplexing.ARBITRARY, false, false );
+		return addServer( service_curve, MaxServiceCurve.createZeroDelayInfiniteBurst(), AnalysisConfig.Multiplexing.ARBITRARY, false, false );
 	}
 	
-	public Server addServer( ServiceCurve service_curve, Multiplexing multiplexing ) {
+	public Server addServer( ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing ) {
 		return addServer( service_curve, MaxServiceCurve.createZeroDelayInfiniteBurst(), multiplexing, true, true );
 	}
 	
 	public Server addServer( String alias, ServiceCurve service_curve ) {
-		return addServer( alias, service_curve, MaxServiceCurve.createZeroDelayInfiniteBurst(), Multiplexing.ARBITRARY, false, false );
+		return addServer( alias, service_curve, MaxServiceCurve.createZeroDelayInfiniteBurst(), AnalysisConfig.Multiplexing.ARBITRARY, false, false );
 	}
 	
-	public Server addServer( String alias, ServiceCurve service_curve, Multiplexing multiplexing ) {
+	public Server addServer( String alias, ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing ) {
 		Server new_server = new Server( server_id_counter, alias, service_curve.copy(), multiplexing );
 		updateServerAdditionInternally( new_server );
 		
@@ -192,7 +193,7 @@ public class Network {
 	 * @return The added server.
 	 */
 	public Server addServer( ServiceCurve service_curve, MaxServiceCurve max_service_curve ) {
-		return addServer( service_curve, max_service_curve, Multiplexing.ARBITRARY, true, true );
+		return addServer( service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, true, true );
 	}
 	
 	/**
@@ -204,31 +205,31 @@ public class Network {
 	 * @return The added server.
 	 */
 	public Server addServer( String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve ) {
-		return addServer( alias , service_curve, max_service_curve, Multiplexing.ARBITRARY, true, true );
+		return addServer( alias , service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, true, true );
 	}
 
 	public Server addServer( ServiceCurve service_curve, MaxServiceCurve max_service_curve, boolean use_gamma, boolean use_extra_gamma ) {
-		return addServer( service_curve, max_service_curve, Multiplexing.ARBITRARY, use_gamma, use_extra_gamma );
+		return addServer( service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, use_gamma, use_extra_gamma );
 	}
 	
-	public Server addServer( String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing ) {
+	public Server addServer( String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, AnalysisConfig.Multiplexing multiplexing ) {
 		return addServer( alias , service_curve, max_service_curve, multiplexing, true, true );		
 	}
 	
-	public Server addServer( ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing ) {
+	public Server addServer( ServiceCurve service_curve, MaxServiceCurve max_service_curve, AnalysisConfig.Multiplexing multiplexing ) {
 		return addServer( service_curve, max_service_curve, multiplexing, true, true );
 	}
 	
 	public Server addServer( String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, boolean use_gamma, boolean use_extra_gamma ) {
-		return addServer( alias, service_curve, max_service_curve, Multiplexing.ARBITRARY, use_gamma, use_extra_gamma );
+		return addServer( alias, service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, use_gamma, use_extra_gamma );
 	}
 	
-	public Server addServer( ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma ) {
+	public Server addServer( ServiceCurve service_curve, MaxServiceCurve max_service_curve, AnalysisConfig.Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma ) {
 		String alias = server_default_name_prefix + Integer.toString( server_id_counter );
 		return addServer( alias, service_curve, max_service_curve, multiplexing, use_gamma, use_extra_gamma );
 	}
 	
-	public Server addServer( String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma ) {
+	public Server addServer( String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, AnalysisConfig.Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma ) {
 		Server new_server = new Server( server_id_counter, alias, service_curve.copy(), max_service_curve.copy(), multiplexing, use_gamma, use_extra_gamma );
 		updateServerAdditionInternally( new_server );
 		

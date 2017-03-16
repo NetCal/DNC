@@ -44,6 +44,7 @@ import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.nc.Analysis;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.operations.BacklogBound;
 import unikl.disco.nc.operations.DelayBound;
@@ -51,7 +52,6 @@ import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
-import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 import unikl.disco.numbers.NumUtils;
@@ -121,7 +121,7 @@ public class PmooAnalysis extends Analysis {
 	public Set<ServiceCurve> getServiceCurves( Flow flow_of_interest, Path path, Set<Flow> flows_to_serve ) throws Exception {
 		if( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL ) {
 			for( Server s : path.getServers() ) {
-				if( s.multiplexingDiscipline() == Multiplexing.FIFO ) {
+				if( s.multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO ) {
 					throw new Exception( "PMOO analysis is not available for FIFO multiplexing nodes" );
 				}
 			}

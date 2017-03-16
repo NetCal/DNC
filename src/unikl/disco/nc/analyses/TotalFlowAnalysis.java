@@ -39,6 +39,7 @@ import unikl.disco.misc.Pair;
 import unikl.disco.nc.Analysis;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
+import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.operations.BacklogBound;
 import unikl.disco.nc.operations.DelayBound;
@@ -46,7 +47,6 @@ import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
-import unikl.disco.network.Server.Multiplexing;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 import unikl.disco.numbers.NumUtils;
@@ -123,7 +123,7 @@ public class TotalFlowAnalysis extends Analysis {
 
 			Num delay_bound_server_alpha;
 			if( configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
-				|| ( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL && server.multiplexingDiscipline() == Multiplexing.FIFO )
+				|| ( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL && server.multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO )
 				|| fifo_per_micro_flow )
 			{
 				delay_bound_server_alpha = DelayBound.deriveFIFO( alpha_candidate, beta_server );	

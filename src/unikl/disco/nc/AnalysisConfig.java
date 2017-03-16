@@ -41,6 +41,7 @@ public class AnalysisConfig {
 
 	public static enum GammaFlag { SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF }
 
+	public static enum Multiplexing { ARBITRARY, FIFO }
 	private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
 
 	/** Whether to use maximum service curves in output bound computation */
