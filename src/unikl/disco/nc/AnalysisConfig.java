@@ -37,13 +37,11 @@ import java.util.Set;
  *
  */
 public class AnalysisConfig {
-	public static enum MuxDiscipline { SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO }
-
-	public static enum GammaFlag { SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF }
-
 	public static enum Multiplexing { ARBITRARY, FIFO }
+	public static enum MuxDiscipline { SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO }
 	private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
 
+	public static enum GammaFlag { SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF }
 	/** Whether to use maximum service curves in output bound computation */
 	private GammaFlag use_gamma = GammaFlag.SERVER_LOCAL;
 
