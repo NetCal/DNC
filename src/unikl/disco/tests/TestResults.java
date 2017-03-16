@@ -6,11 +6,9 @@ import java.util.Map;
 import unikl.disco.misc.Pair;
 import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.AnalysisConfig;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.network.Flow;
 import unikl.disco.numbers.Num;
 
-//TODO Make files for all the expected results and a nice constructor
 public class TestResults {
 		// flow of interest --> <Delay Bound, Backlog Bound>
 	private Map<Flow,Pair<Num>> tfa_bounds_arb;

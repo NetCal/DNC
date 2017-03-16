@@ -36,7 +36,6 @@ import unikl.disco.curves.Curve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.AnalysisConfig;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.network.Server;
 import unikl.disco.curves.ArrivalCurve;

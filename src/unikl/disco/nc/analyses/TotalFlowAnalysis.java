@@ -39,7 +39,6 @@ import unikl.disco.misc.Pair;
 import unikl.disco.nc.Analysis;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.operations.BacklogBound;
 import unikl.disco.nc.operations.DelayBound;

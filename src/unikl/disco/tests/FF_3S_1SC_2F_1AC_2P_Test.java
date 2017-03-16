@@ -35,7 +35,6 @@ import org.junit.runners.Parameterized;
 
 import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.AnalysisConfig;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.analyses.SeparateFlowAnalysis;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;

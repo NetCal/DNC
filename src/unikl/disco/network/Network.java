@@ -44,7 +44,6 @@ import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.misc.SetUtils;
 import unikl.disco.nc.AnalysisConfig;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 
 /**
  * 
@@ -1241,10 +1240,11 @@ public class Network {
  		sb.append( "import unikl.disco.curves.MaxServiceCurve;\n" );
  		sb.append( "import unikl.disco.curves.ArrivalCurve;\n" );
  		sb.append( "\n" );
+ 		sb.append( "import unikl.disco.nc.AnalysisConfig.Multiplexing;\n" );
+ 		sb.append( "\n" );
  		sb.append( "import unikl.disco.network.Network;\n" );
  		sb.append( "import unikl.disco.network.NetworkFactory;\n" );
  		sb.append( "import unikl.disco.network.Server;\n" );
- 		sb.append( "import unikl.disco.network.Server.Multiplexing;\n" );
  		sb.append( "\n" );
 
  		sb.append( "public class " + file_name + " implements NetworkFactory {");

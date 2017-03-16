@@ -30,7 +30,6 @@ package unikl.disco.tests;
 import java.util.Set;
 
 import unikl.disco.nc.AnalysisConfig;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 

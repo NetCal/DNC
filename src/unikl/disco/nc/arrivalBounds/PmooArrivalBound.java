@@ -37,7 +37,6 @@ import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.misc.SetUtils;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.ArrivalBound;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.operations.LeftOverService;

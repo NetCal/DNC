@@ -33,7 +33,6 @@ import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.MaxServiceCurve;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.nc.AnalysisConfig;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;

@@ -48,7 +48,6 @@ import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.Analysis;
 import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
-import unikl.disco.nc.AnalysisConfig.Multiplexing;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.nc.analyses.PmooAnalysis;
