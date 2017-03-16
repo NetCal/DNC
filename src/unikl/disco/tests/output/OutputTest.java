@@ -30,21 +30,10 @@ package unikl.disco.tests.output;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.junit.After;
@@ -74,8 +63,6 @@ public class OutputTest {
 	
 	@BeforeClass
 	public static void createNetworks() throws Exception {
-	
-//	public static void main( String args[] ) throws Exception {
 		File saved_network_java = new File( saved_network_path + saved_network_name + ".java" );
 		
 		try {
@@ -108,7 +95,6 @@ public class OutputTest {
 		network_saved = network_newly_compiled.getNetwork();
 		
 		classLoader.close();
-//		System.out.println( network_saved.toString() );
 	}
 	
 	@Test
