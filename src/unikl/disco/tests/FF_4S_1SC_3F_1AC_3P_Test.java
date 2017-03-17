@@ -65,6 +65,7 @@ public class FF_4S_1SC_3F_1AC_3P_Test extends FunctionalTests {
 		test_network = new FF_4S_1SC_3F_1AC_3P_Network();
 		f0 = test_network.f0;
 		f1 = test_network.f1;
+		f2 = test_network.f2;
 
 		network = test_network.getNetwork();
 		
@@ -126,8 +127,7 @@ public class FF_4S_1SC_3F_1AC_3P_Test extends FunctionalTests {
 	}
 	
 	@Test
-	public void f0_sinktree_arbMux()
-	{
+	public void f0_sinktree_arbMux() {
 		if( test_config.fullConsoleOutput() ) {
 			System.out.println( "Analysis:\t\tTree Backlog Bound Analysis" );
 			System.out.println( "Multiplexing:\t\tArbitrary" );
@@ -160,8 +160,7 @@ public class FF_4S_1SC_3F_1AC_3P_Test extends FunctionalTests {
 	}
 	
 	@Test
-	public void f1_sinktree_arbMux()
-	{
+	public void f1_sinktree_arbMux() {
 		if( test_config.fullConsoleOutput() ) {
 			System.out.println( "Analysis:\t\tTree Backlog Bound Analysis" );
 			System.out.println( "Multiplexing:\t\tArbitrary" );
@@ -178,24 +177,23 @@ public class FF_4S_1SC_3F_1AC_3P_Test extends FunctionalTests {
 	@Test
 	public void f2_tfa() {
 		setMux( network.getServers() );
-		super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f0, expected_results );
+		super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f2, expected_results );
 	}
 	
 	@Test
 	public void f2_sfa() {
 		setMux( network.getServers() );
-		super.runSFAtest( new SeparateFlowAnalysis( network, test_config ), f0, expected_results );
+		super.runSFAtest( new SeparateFlowAnalysis( network, test_config ), f2, expected_results );
 	}
 	
 	@Test
 	public void f2_pmoo_arbMux() {
 		setArbitraryMux( network.getServers() );
-		super.runPMOOtest( new PmooAnalysis( network, test_config ), f0, expected_results );
+		super.runPMOOtest( new PmooAnalysis( network, test_config ), f2, expected_results );
 	}
 	
 	@Test
-	public void f2_sinktree_arbMux()
-	{
+	public void f2_sinktree_arbMux() {
 		if( test_config.fullConsoleOutput() ) {
 			System.out.println( "Analysis:\t\tTree Backlog Bound Analysis" );
 			System.out.println( "Multiplexing:\t\tArbitrary" );

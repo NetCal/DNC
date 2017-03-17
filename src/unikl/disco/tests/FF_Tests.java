@@ -34,7 +34,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 		FF_3S_1SC_2F_1AC_2P_Test.class,
-		FF_4S_1SC_3F_1AC_3P_Test.class
+		FF_4S_1SC_3F_1AC_3P_Test.class,
+		FF_4S_1SC_4F_1AC_4P_Test.class
 		})
 /**
  * 

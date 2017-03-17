@@ -121,8 +121,7 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends FunctionalTests {
 	}
 	
 	@Test
-	public void f0_sinktree_arbMux()
-	{
+	public void f0_sinktree_arbMux() {
 		if( test_config.fullConsoleOutput() ) {
 			System.out.println( "Analysis:\t\tTree Backlog Bound Analysis" );
 			System.out.println( "Multiplexing:\t\tArbitrary" );
@@ -155,8 +154,7 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends FunctionalTests {
 	}
 	
 	@Test
-	public void f1_sinktree_arbMux()
-	{
+	public void f1_sinktree_arbMux() {
 		if( test_config.fullConsoleOutput() ) {
 			System.out.println( "Analysis:\t\tTree Backlog Bound Analysis" );
 			System.out.println( "Multiplexing:\t\tArbitrary" );
