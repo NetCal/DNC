@@ -1,5 +1,6 @@
 v2.3.3 "Centaur" (2017-Apr-XY)
 ------------------------------
+* Analysis Result: Remove obsolete flag "succeeded".
 * Enum Multiplexing was moved from Server to AnalysisConfig.
 * InNetwork was renamed to NetworkFactory as well as extended for this purpose.
 * Functional tests:

@@ -39,35 +39,27 @@ import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 
 public class AnalysisResults {
-	public boolean succeeded;
-	
 	public Num delay_bound;
 	public Num backlog_bound;
 
 	public Map<Server,Set<ArrivalCurve>> map__server__alphas;
 	
-	protected AnalysisResults() {
-		this.succeeded = false;
+	public AnalysisResults() {
 		this.delay_bound = NumFactory.createNaN();
 		this.backlog_bound = NumFactory.createNaN();
 		this.map__server__alphas = new HashMap<Server,Set<ArrivalCurve>>();
 	}
 	
-	protected AnalysisResults( boolean succeeded,
-							  Num delay_bound,
-							  Num backlog_bound,
-							  Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
+	protected AnalysisResults( Num delay_bound,
+							   Num backlog_bound,
+							   Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
 		
-		this.succeeded = succeeded;
 		this.delay_bound = delay_bound;
 		this.backlog_bound = backlog_bound;
 		this.map__server__alphas = map__server__alphas;
 	}
 	
 	public String getServerAlphasMapString() {
-		if( !succeeded ) {
-			return "Analysis failed";
-		}
 		
 		if( map__server__alphas.isEmpty() ) {
 			return "{}";
