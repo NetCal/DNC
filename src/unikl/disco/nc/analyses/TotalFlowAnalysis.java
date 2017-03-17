@@ -88,7 +88,6 @@ public class TotalFlowAnalysis extends Analysis {
 		
 		result.delay_bound = delay_bound;
 		result.backlog_bound = backlog_bound;
-		result.succeeded = true;
 	}
 	
 	public Pair<Num> deriveBoundsAtServer( Server server ) throws Exception {

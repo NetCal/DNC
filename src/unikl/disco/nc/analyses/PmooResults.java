@@ -55,7 +55,7 @@ public class PmooResults extends AnalysisResults {
 						  Set<ServiceCurve> betas_e2e,
 						  Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
 		
-		super( true, delay_bound, backlog_bound, map__server__alphas );
+		super( delay_bound, backlog_bound, map__server__alphas );
 		
 		this.betas_e2e = betas_e2e;
 	}

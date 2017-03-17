@@ -64,17 +64,13 @@ public class SeparateFlowResults extends AnalysisResults {
 						 Map<Server,Set<ServiceCurve>> map__server__betas_lo,
 						 Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
 		
-		super( true, delay_bound, backlog_bound, map__server__alphas );
+		super( delay_bound, backlog_bound, map__server__alphas );
 		
 		this.betas_e2e = betas_e2e;
 		this.map__server__betas_lo = map__server__betas_lo;
 	}
 
 	public String getServerLeftOverBetasMapString() {
-		if( !succeeded ) {
-			return "Analysis failed";
-		}
-		
 		if( map__server__betas_lo.isEmpty() ) {
 			return "{}";
 		}

@@ -117,8 +117,6 @@ public class SeparateFlowAnalysis extends Analysis {
 				result.backlog_bound = backlog_bound__beta_e2e;
 			}
 		}
-		
-		result.succeeded = true;
 	}
 
 	protected Set<ServiceCurve> getServiceCurves( Flow flow_of_interest, Path path, Set<Flow> flows_to_serve ) throws Exception {

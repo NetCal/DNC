@@ -62,17 +62,13 @@ public class TotalFlowResults extends AnalysisResults {
 					 	 Map<Server,Set<Num>> map__server__B_server,
 					 	 Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
 		
-		super( true, delay_bound, backlog_bound, map__server__alphas );
+		super( delay_bound, backlog_bound, map__server__alphas );
 		
 		this.map__server__D_server = map__server__D_server;
 		this.map__server__B_server = map__server__B_server;
 	}
 	
 	public String getServerDelayBoundMapString() {
-		if( !succeeded ) {
-			return "Analysis failed";
-		}
-		
 		if( map__server__D_server.isEmpty() ) {
 			return "{}";
 		}
