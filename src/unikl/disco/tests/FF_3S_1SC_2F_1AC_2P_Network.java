@@ -42,7 +42,7 @@ import unikl.disco.network.Server;
  * @author Steffen Bondorf
  *
  */
-public class FF_3S_1SC_2F_1AC_2P_Net implements NetworkFactory {
+public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	private static final int sc_R = 20;
 	private static final int sc_T = 20;
 	private static final int ac_r = 5;
@@ -51,13 +51,12 @@ public class FF_3S_1SC_2F_1AC_2P_Net implements NetworkFactory {
 	private static ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
 	private static ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
 	
-	
 	private Network network;
 	protected Server s0, s1, s2;
 	protected Link l_s0_s1, l_s1_s2;
 	protected Flow f0, f1;
 	
-	public FF_3S_1SC_2F_1AC_2P_Net() {
+	public FF_3S_1SC_2F_1AC_2P_Network() {
 		network = createNetwork();
 	}
 
