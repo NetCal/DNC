@@ -41,7 +41,6 @@ import unikl.disco.numbers.NumFactory;
 public class AnalysisResults {
 	public Num delay_bound;
 	public Num backlog_bound;
-
 	public Map<Server,Set<ArrivalCurve>> map__server__alphas;
 	
 	public AnalysisResults() {
@@ -50,13 +49,16 @@ public class AnalysisResults {
 		this.map__server__alphas = new HashMap<Server,Set<ArrivalCurve>>();
 	}
 	
-	protected AnalysisResults( Num delay_bound,
+	public AnalysisResults( Num delay_bound,
 							   Num backlog_bound,
 							   Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		
 		this.delay_bound = delay_bound;
 		this.backlog_bound = backlog_bound;
-		this.map__server__alphas = map__server__alphas;
+		if( map__server__alphas == null ) {
+			this.map__server__alphas = new HashMap<Server,Set<ArrivalCurve>>();
+		} else {
+			this.map__server__alphas = map__server__alphas;
+		}
 	}
 	
 	public String getServerAlphasMapString() {

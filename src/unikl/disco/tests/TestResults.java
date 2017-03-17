@@ -6,23 +6,22 @@ import java.util.Map;
 import unikl.disco.misc.Pair;
 import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisResults;
 import unikl.disco.network.Flow;
-import unikl.disco.numbers.Num;
 
 public class TestResults {
-		// flow of interest --> <Delay Bound, Backlog Bound>
-	private Map<Flow,Pair<Num>> tfa_bounds_arb;
-	private Map<Flow,Pair<Num>> tfa_bounds_fifo;
-	private Map<Flow,Pair<Num>> sfa_bounds_arb;
-	private Map<Flow,Pair<Num>> sfa_bounds_fifo;
-	private Map<Flow,Pair<Num>> pmoo_bounds_arb;
+	private Map<Flow,AnalysisResults> tfa_bounds_arb;
+	private Map<Flow,AnalysisResults> tfa_bounds_fifo;
+	private Map<Flow,AnalysisResults> sfa_bounds_arb;
+	private Map<Flow,AnalysisResults> sfa_bounds_fifo;
+	private Map<Flow,AnalysisResults> pmoo_bounds_arb;
 	
 	public TestResults(){
-		tfa_bounds_arb = new HashMap<Flow,Pair<Num>>();
-		tfa_bounds_fifo = new HashMap<Flow,Pair<Num>>();
-		sfa_bounds_arb = new HashMap<Flow,Pair<Num>>();
-		sfa_bounds_fifo = new HashMap<Flow,Pair<Num>>();
-		pmoo_bounds_arb = new HashMap<Flow,Pair<Num>>();
+		tfa_bounds_arb = new HashMap<Flow,AnalysisResults>();
+		tfa_bounds_fifo = new HashMap<Flow,AnalysisResults>();
+		sfa_bounds_arb = new HashMap<Flow,AnalysisResults>();
+		sfa_bounds_fifo = new HashMap<Flow,AnalysisResults>();
+		pmoo_bounds_arb = new HashMap<Flow,AnalysisResults>();
 	}
 	
 	protected void clear() {
@@ -33,23 +32,22 @@ public class TestResults {
 		pmoo_bounds_arb.clear();
 	}
 	
-	protected void addBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, Num delay_bound, Num backlog_bound ) {
-		Pair<Map<Flow,Pair<Num>>> bounded_analysis;
+	protected void setBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, AnalysisResults bounds ) {
+		Pair<Map<Flow,AnalysisResults>> bounded_analysis;
 		switch( analysis ){
 		case TFA:
-			bounded_analysis = new Pair<Map<Flow,Pair<Num>>>( tfa_bounds_arb, tfa_bounds_fifo );
+			bounded_analysis = new Pair<Map<Flow,AnalysisResults>>( tfa_bounds_arb, tfa_bounds_fifo );
 			break;
 		case SFA:
-			bounded_analysis = new Pair<Map<Flow,Pair<Num>>>( sfa_bounds_arb, sfa_bounds_fifo );
+			bounded_analysis = new Pair<Map<Flow,AnalysisResults>>( sfa_bounds_arb, sfa_bounds_fifo );
 			break;
 		case PMOO:
-			bounded_analysis = new Pair<Map<Flow,Pair<Num>>>( pmoo_bounds_arb, null );
+			bounded_analysis = new Pair<Map<Flow,AnalysisResults>>( pmoo_bounds_arb, null );
 			break;
 		default:
 			throw new RuntimeException( "Invalid analysis given." );
 		}
 		
-		Pair<Num> bounds = new Pair<Num>( delay_bound.copy(), backlog_bound.copy() );
 		if( mux == AnalysisConfig.Multiplexing.ARBITRARY ) {
 			bounded_analysis.getFirst().put( flow, bounds );
 		} else {
@@ -57,17 +55,17 @@ public class TestResults {
 		}
 	}
 	
-	public Pair<Num> getBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow ) {
-		Pair<Map<Flow,Pair<Num>>> bounded_analysis;
+	public AnalysisResults getBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow ) {
+		Pair<Map<Flow,AnalysisResults>> bounded_analysis;
 		switch( analysis ){
 		case TFA:
-			bounded_analysis = new Pair<Map<Flow,Pair<Num>>>( tfa_bounds_arb, tfa_bounds_fifo );
+			bounded_analysis = new Pair<Map<Flow,AnalysisResults>>( tfa_bounds_arb, tfa_bounds_fifo );
 			break;
 		case SFA:
-			bounded_analysis = new Pair<Map<Flow,Pair<Num>>>( sfa_bounds_arb, sfa_bounds_fifo );
+			bounded_analysis = new Pair<Map<Flow,AnalysisResults>>( sfa_bounds_arb, sfa_bounds_fifo );
 			break;
 		case PMOO:
-			bounded_analysis = new Pair<Map<Flow,Pair<Num>>>( pmoo_bounds_arb, null );
+			bounded_analysis = new Pair<Map<Flow,AnalysisResults>>( pmoo_bounds_arb, null );
 			break;
 		default:
 			throw new RuntimeException( "Invalid analysis given." );

@@ -42,10 +42,10 @@ import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import unikl.disco.misc.Pair;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.AnalysisConfig;
+import unikl.disco.nc.AnalysisResults;
 import unikl.disco.nc.Analysis;
 import unikl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
@@ -55,7 +55,6 @@ import unikl.disco.nc.analyses.SeparateFlowAnalysis;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Server;
-import unikl.disco.numbers.Num;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -207,9 +206,9 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		Pair<Num> bounds = expected_bounds.getBounds( Analyses.TFA, test_config.mux_discipline, flow_of_interest);
-		assertEquals( "TFA delay", bounds.getFirst(), tfa.getDelayBound() );
-		assertEquals( "TFA backlog", bounds.getSecond(), tfa.getBacklogBound() );
+		AnalysisResults bounds = expected_bounds.getBounds( Analyses.TFA, test_config.mux_discipline, flow_of_interest);
+		assertEquals( "TFA delay", bounds.delay_bound, tfa.getDelayBound() );
+		assertEquals( "TFA backlog", bounds.backlog_bound, tfa.getBacklogBound() );
 	}
 	
 	protected void runSFAtest( SeparateFlowAnalysis sfa, Flow flow_of_interest, TestResults expected_bounds ) {
@@ -231,9 +230,9 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		Pair<Num> bounds = expected_bounds.getBounds( Analyses.SFA, test_config.mux_discipline, flow_of_interest);
-		assertEquals( "SFA delay", bounds.getFirst(), sfa.getDelayBound() );
-		assertEquals( "SFA backlog", bounds.getSecond(), sfa.getBacklogBound() );
+		AnalysisResults bounds = expected_bounds.getBounds( Analyses.SFA, test_config.mux_discipline, flow_of_interest);
+		assertEquals( "SFA delay", bounds.delay_bound, sfa.getDelayBound() );
+		assertEquals( "SFA backlog", bounds.backlog_bound, sfa.getBacklogBound() );
 	}
 	
 	protected void runPMOOtest( PmooAnalysis pmoo, Flow flow_of_interest, TestResults expected_bounds ) {
@@ -254,9 +253,9 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		Pair<Num> bounds = expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest);
-		assertEquals( "PMOO delay", bounds.getFirst(), pmoo.getDelayBound() );
-		assertEquals( "PMOO backlog", bounds.getSecond(), pmoo.getBacklogBound() );
+		AnalysisResults bounds = expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest);
+		assertEquals( "PMOO delay", bounds.delay_bound, pmoo.getDelayBound() );
+		assertEquals( "PMOO backlog", bounds.backlog_bound, pmoo.getBacklogBound() );
 	}
 	
 	@Parameters(name= "{index}: {0}")
