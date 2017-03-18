@@ -80,7 +80,7 @@ public class FunctionalTestConfig extends AnalysisConfig {
 		func_test_str.append( arrivalBoundMethods().toString() );
 		
 		if( removeDuplicateArrivalBounds() ) {
-			func_test_str.append( ", " + "Rem dupl ABs" );
+			func_test_str.append( ", " + "rm dupl ABs" );
 		}
 		if( tbrlConvolution() ) {
 			func_test_str.append( ", " + "TbRl Conv" );
