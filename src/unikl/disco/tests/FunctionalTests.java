@@ -53,7 +53,9 @@ import unikl.disco.nc.CalculatorConfig.NumClass;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.analyses.SeparateFlowAnalysis;
 import unikl.disco.nc.analyses.TotalFlowAnalysis;
+import unikl.disco.nc.operations.BacklogBound;
 import unikl.disco.network.Flow;
+import unikl.disco.network.Network;
 import unikl.disco.network.Server;
 
 @RunWith(Suite.class)
@@ -206,7 +208,7 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_bounds.getBounds( Analyses.TFA, test_config.mux_discipline, flow_of_interest);
+		AnalysisResults bounds = expected_bounds.getBounds( Analyses.TFA, test_config.mux_discipline, flow_of_interest );
 		assertEquals( "TFA delay", bounds.delay_bound, tfa.getDelayBound() );
 		assertEquals( "TFA backlog", bounds.backlog_bound, tfa.getBacklogBound() );
 	}
@@ -230,7 +232,7 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_bounds.getBounds( Analyses.SFA, test_config.mux_discipline, flow_of_interest);
+		AnalysisResults bounds = expected_bounds.getBounds( Analyses.SFA, test_config.mux_discipline, flow_of_interest );
 		assertEquals( "SFA delay", bounds.delay_bound, sfa.getDelayBound() );
 		assertEquals( "SFA backlog", bounds.backlog_bound, sfa.getBacklogBound() );
 	}
@@ -253,9 +255,35 @@ public class FunctionalTests {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest);
+		AnalysisResults bounds = expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest );
 		assertEquals( "PMOO delay", bounds.delay_bound, pmoo.getDelayBound() );
 		assertEquals( "PMOO backlog", bounds.backlog_bound, pmoo.getBacklogBound() );
+	}
+	
+	protected void runSinkTreePMOOtest( Network sink_tree, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
+		double backlog_bound = -1.0;
+		try {
+			backlog_bound = BacklogBound.derivePmooSinkTreeTbRl( sink_tree, flow_of_interest.getSink() );
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail( "Analysis failed" );
+		}
+		
+		if( test_config.fullConsoleOutput() ) {
+			System.out.println( "Analysis:\t\tTree Backlog Bound Analysis" );
+			System.out.println( "Multiplexing:\t\tArbitrary" );
+	
+			System.out.println( "Flow of interest:\t" + flow_of_interest.toString() );
+			System.out.println();
+			
+			System.out.println( "--- Result: ---" );
+
+			System.out.println( "backlog bound   : " + Double.toString( backlog_bound ) );
+			System.out.println();
+		}
+
+		assertEquals( "PMOO backlog", backlog_bound, 
+				expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest ).backlog_bound.doubleValue(), 0.0 );
 	}
 	
 	@Parameters(name= "{index}: {0}")
