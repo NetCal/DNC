@@ -187,7 +187,7 @@ public class FunctionalTests {
 		}
 	}
 	
-	protected void runTFAtest( TotalFlowAnalysis tfa, Flow flow_of_interest, TestResults expected_bounds ) {
+	protected void runTFAtest( TotalFlowAnalysis tfa, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
 		runAnalysis( tfa, flow_of_interest );
 		
 		if( test_config.fullConsoleOutput() ) {
@@ -211,7 +211,7 @@ public class FunctionalTests {
 		assertEquals( "TFA backlog", bounds.backlog_bound, tfa.getBacklogBound() );
 	}
 	
-	protected void runSFAtest( SeparateFlowAnalysis sfa, Flow flow_of_interest, TestResults expected_bounds ) {
+	protected void runSFAtest( SeparateFlowAnalysis sfa, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
 		runAnalysis( sfa, flow_of_interest );
 		
 		if( test_config.fullConsoleOutput() ) {
@@ -235,7 +235,7 @@ public class FunctionalTests {
 		assertEquals( "SFA backlog", bounds.backlog_bound, sfa.getBacklogBound() );
 	}
 	
-	protected void runPMOOtest( PmooAnalysis pmoo, Flow flow_of_interest, TestResults expected_bounds ) {
+	protected void runPMOOtest( PmooAnalysis pmoo, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
 		runAnalysis( pmoo, flow_of_interest );
 		
 		if( test_config.fullConsoleOutput() ) {

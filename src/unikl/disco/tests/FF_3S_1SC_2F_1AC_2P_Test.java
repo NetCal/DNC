@@ -54,7 +54,7 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends FunctionalTests {
 	private static Network network;
 	private static Flow f0, f1;
 
-	protected static TestResults expected_results = new TestResults();
+	protected static FunctionalTestResults expected_results = new FunctionalTestResults();
 
 	public FF_3S_1SC_2F_1AC_2P_Test( FunctionalTestConfig test_config ) throws Exception {
 		super( test_config );

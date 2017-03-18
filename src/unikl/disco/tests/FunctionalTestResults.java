@@ -9,14 +9,14 @@ import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.AnalysisResults;
 import unikl.disco.network.Flow;
 
-public class TestResults {
+public class FunctionalTestResults {
 	private Map<Flow,AnalysisResults> tfa_bounds_arb;
 	private Map<Flow,AnalysisResults> tfa_bounds_fifo;
 	private Map<Flow,AnalysisResults> sfa_bounds_arb;
 	private Map<Flow,AnalysisResults> sfa_bounds_fifo;
 	private Map<Flow,AnalysisResults> pmoo_bounds_arb;
 	
-	public TestResults(){
+	public FunctionalTestResults(){
 		tfa_bounds_arb = new HashMap<Flow,AnalysisResults>();
 		tfa_bounds_fifo = new HashMap<Flow,AnalysisResults>();
 		sfa_bounds_arb = new HashMap<Flow,AnalysisResults>();
