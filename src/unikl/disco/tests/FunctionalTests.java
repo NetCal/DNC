@@ -73,8 +73,8 @@ import unikl.disco.network.Server;
 		Tandem_1SC_2Flows_1AC_2Paths_v2.class,
 		Tandem_1SC_3Flows_1AC_3Paths.class,
 		Tandem_1SC_4Flows_1AC_1Path.class,
-		Tree_1SC_2Flows_1AC_2Paths.class,
-		Tree_1SC_3Flows_1AC_3Paths.class,
+		TR_3S_1SC_2F_1AC_2P_Test.class,
+		TR_7S_1SC_3F_1AC_3P_Test.class,
 		FF_3S_1SC_2F_1AC_2P_Test.class,
 		FF_4S_1SC_3F_1AC_3P_Test.class,
 		FF_4S_1SC_4F_1AC_4P_Test.class
