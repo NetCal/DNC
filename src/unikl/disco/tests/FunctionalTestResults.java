@@ -8,6 +8,7 @@ import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.AnalysisResults;
 import unikl.disco.network.Flow;
+import unikl.disco.numbers.Num;
 
 public class FunctionalTestResults {
 	private Map<Flow,AnalysisResults> tfa_bounds_arb;
@@ -32,7 +33,9 @@ public class FunctionalTestResults {
 		pmoo_bounds_arb.clear();
 	}
 	
-	protected void setBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, AnalysisResults bounds ) {
+	protected void setBounds( Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, Num delay, Num backlog ) {
+		AnalysisResults bounds = new AnalysisResults( delay, backlog, null );
+		
 		Pair<Map<Flow,AnalysisResults>> bounded_analysis;
 		switch( analysis ){
 		case TFA:

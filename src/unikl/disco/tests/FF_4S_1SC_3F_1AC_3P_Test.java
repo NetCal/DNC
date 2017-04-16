@@ -34,7 +34,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import unikl.disco.nc.AnalysisConfig.Multiplexing;
-import unikl.disco.nc.AnalysisResults;
 import unikl.disco.nc.Analysis.Analyses;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.analyses.SeparateFlowAnalysis;
@@ -76,25 +75,25 @@ public class FF_4S_1SC_3F_1AC_3P_Test extends FunctionalTests {
 		expected_results.clear();
 		
 		// TFA
-		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f0, new AnalysisResults( NumFactory.create( 5985, 64 ), NumFactory.create( 9425, 16 ), null ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f1, new AnalysisResults( NumFactory.create( 3965, 64 ), NumFactory.create( 9425, 16 ), null ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f2, new AnalysisResults( NumFactory.create( 885, 16 ), NumFactory.create( 1825, 4 ), null ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f0, new AnalysisResults( NumFactory.create( 6425, 36 ), NumFactory.create( 6125, 9 ), null ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f1, new AnalysisResults( NumFactory.create( 11975, 90 ), NumFactory.create( 6125, 9 ), null ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f2, new AnalysisResults( NumFactory.create( 685, 6 ), NumFactory.create( 1475, 3 ), null ) );
+		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.create( 5985, 64 ), NumFactory.create( 9425, 16 ) );
+		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f1, NumFactory.create( 3965, 64 ), NumFactory.create( 9425, 16 ) );
+		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f2, NumFactory.create( 885, 16 ), NumFactory.create( 1825, 4 ) );
+		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create( 6425, 36 ), NumFactory.create( 6125, 9 ) );
+		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactory.create( 11975, 90 ), NumFactory.create( 6125, 9 ) );
+		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f2, NumFactory.create( 685, 6 ), NumFactory.create( 1475, 3 ) );
 		
 		// SFA
-		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f0, new AnalysisResults( NumFactory.create( 1795, 24 ), NumFactory.create( 3125, 8 ), null ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f1, new AnalysisResults( NumFactory.create( 10715, 192 ), NumFactory.create( 18925, 64 ), null ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f2, new AnalysisResults( NumFactory.create( 295, 6 ), NumFactory.create( 525, 2 ), null ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f0, new AnalysisResults( NumFactory.create( 875, 9 ), NumFactory.create( 4525, 9 ), null ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f1, new AnalysisResults( NumFactory.create( 2095, 27 ), NumFactory.create( 10925, 27 ), null ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f2, new AnalysisResults( NumFactory.create( 65 ), NumFactory.create( 1025, 3 ), null ) );
+		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.create( 1795, 24 ), NumFactory.create( 3125, 8 ) );
+		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f1, NumFactory.create( 10715, 192 ), NumFactory.create( 18925, 64 ) );
+		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f2, NumFactory.create( 295, 6 ), NumFactory.create( 525, 2 ) );
+		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.create( 875, 9 ), NumFactory.create( 4525, 9 ) );
+		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactory.create( 2095, 27 ), NumFactory.create( 10925, 27 ) );
+		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f2, NumFactory.create( 65 ), NumFactory.create( 1025, 3 ) );
 		
 		// PMOO
-		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f0, new AnalysisResults( NumFactory.create( 875, 9 ), NumFactory.create( 4525, 9 ), null ) );
-		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f1, new AnalysisResults( NumFactory.create( 2095, 27 ), NumFactory.create( 10925, 27 ), null ) );
-		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f2, new AnalysisResults( NumFactory.create( 65 ), NumFactory.create( 1025, 3 ), null ) );
+		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.create( 875, 9 ), NumFactory.create( 4525, 9 ) );
+		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactory.create( 2095, 27 ), NumFactory.create( 10925, 27 ) );
+		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f2, NumFactory.create( 65 ), NumFactory.create( 1025, 3 ) );
 	}
 	
 	@Before
