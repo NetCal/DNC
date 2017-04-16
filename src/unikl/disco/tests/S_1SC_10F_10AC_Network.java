@@ -30,8 +30,8 @@ package unikl.disco.tests;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.network.Flow;
-import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Network;
+import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Server;
 
 /**
@@ -39,20 +39,20 @@ import unikl.disco.network.Server;
  * @author Steffen Bondorf
  *
  */
-public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
-	private static final int sc_R = 20;
-	private static final int sc_T = 20;
-	private static final int ac_r = 5;
-	private static final int ac_b = 25;
+public class S_1SC_10F_10AC_Network implements NetworkFactory {
+	private static final int sc_R = 10;
+	private static final int sc_T = 10;
 	
 	private static ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
-	private static ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
 	
+	private static Flow[] flows = new Flow[10];
+	private static ArrivalCurve[] arrival_curves = new ArrivalCurve[10];
+
 	private Network network;
-	protected Server s0, s1, s2;
-	protected Flow f0, f1;
+	protected Server s0;
+	protected Flow f0, f6;
 	
-	public TR_3S_1SC_2F_1AC_2P_Network() {
+	public S_1SC_10F_10AC_Network() {
 		network = createNetwork();
 	}
 
@@ -64,20 +64,16 @@ public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 		network = new Network();
 		
 		s0 = network.addServer( service_curve );
-		s1 = network.addServer( service_curve );
-		s2 = network.addServer( service_curve );
-
+		s0.setUseGamma( false );
+		s0.setUseExtraGamma( false );
+	
 		try {
-			network.addLink( s0, s2 );
-			network.addLink( s1, s2 );
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException( e );
-		}
-
-		try {	
-			f0 = network.addFlow( arrival_curve, s0, s2 );
-			f1 = network.addFlow( arrival_curve, s1, s2 );
+			for( int i = 1; i <= 10; i++ ){
+				arrival_curves[i-1] = ArrivalCurve.createTokenBucket( i*0.1, i );
+				flows[i-1] = network.addFlow( arrival_curves[i-1], s0 );
+			}
+			f0 = flows[0];
+			f6 = flows[6];
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException( e );
@@ -92,9 +88,9 @@ public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 			server.setServiceCurve( service_curve );
 		}
 
-		arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
-		for( Flow flow : network.getFlows() ) {
-			flow.setArrivalCurve( arrival_curve );
+		for( int i = 1; i <= 10; i++ ){
+			arrival_curves[i-1] = ArrivalCurve.createTokenBucket( i*0.1, i );
+			flows[i-1].setArrivalCurve( arrival_curves[i-1] );
 		}
 	}
 }

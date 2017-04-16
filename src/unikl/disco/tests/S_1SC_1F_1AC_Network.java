@@ -30,8 +30,8 @@ package unikl.disco.tests;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.network.Flow;
-import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Network;
+import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Server;
 
 /**
@@ -39,9 +39,9 @@ import unikl.disco.network.Server;
  * @author Steffen Bondorf
  *
  */
-public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
-	private static final int sc_R = 20;
-	private static final int sc_T = 20;
+public class S_1SC_1F_1AC_Network implements NetworkFactory {
+	private static final int sc_R = 10;
+	private static final int sc_T = 10;
 	private static final int ac_r = 5;
 	private static final int ac_b = 25;
 	
@@ -49,10 +49,10 @@ public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	private static ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
 	
 	private Network network;
-	protected Server s0, s1, s2;
-	protected Flow f0, f1;
-	
-	public TR_3S_1SC_2F_1AC_2P_Network() {
+	protected Server s0;
+	protected Flow f0;
+	 
+	public S_1SC_1F_1AC_Network() {
 		network = createNetwork();
 	}
 
@@ -64,20 +64,11 @@ public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 		network = new Network();
 		
 		s0 = network.addServer( service_curve );
-		s1 = network.addServer( service_curve );
-		s2 = network.addServer( service_curve );
-
-		try {
-			network.addLink( s0, s2 );
-			network.addLink( s1, s2 );
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException( e );
-		}
-
+		s0.setUseGamma( false );
+		s0.setUseExtraGamma( false );
+	
 		try {	
-			f0 = network.addFlow( arrival_curve, s0, s2 );
-			f1 = network.addFlow( arrival_curve, s1, s2 );
+			f0 = network.addFlow( arrival_curve, s0 );
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException( e );
@@ -93,8 +84,6 @@ public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 		}
 
 		arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
-		for( Flow flow : network.getFlows() ) {
-			flow.setArrivalCurve( arrival_curve );
-		}
+		f0.setArrivalCurve( arrival_curve );
 	}
 }

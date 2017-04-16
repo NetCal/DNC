@@ -27,9 +27,6 @@
 
 package unikl.disco.tests;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.network.Flow;
@@ -37,7 +34,6 @@ import unikl.disco.network.Network;
 import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Server;
 
-@RunWith(value = Parameterized.class)
 /**
  * 
  * @author Steffen Bondorf

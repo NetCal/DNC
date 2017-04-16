@@ -65,7 +65,7 @@ public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	}
 	
 	public Network createNetwork() {
-		Network network = new Network();
+		network = new Network();
 		
 		s0 = network.addServer( "s0", service_curve );
 		s1 = network.addServer( "s1", service_curve );

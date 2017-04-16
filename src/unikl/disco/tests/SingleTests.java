@@ -33,10 +33,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-		Single_1Flow.class,
-		Single_2Flows_1AC.class,
-		Single_2Flows_2ACs.class,
-		Single_10Flows_10ACs.class
+		S_1SC_1F_1AC_Test.class,
+		S_1SC_2F_1AC_Test.class,
+		S_1SC_2F_2AC_Test.class,
+		S_1SC_10F_10AC_Test.class
 		})
 /**
  * 

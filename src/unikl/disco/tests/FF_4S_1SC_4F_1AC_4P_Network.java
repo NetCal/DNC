@@ -69,9 +69,9 @@ public class FF_4S_1SC_4F_1AC_4P_Network implements NetworkFactory {
 		network = new Network();
 		
 		s0 = network.addServer( service_curve );
-		s1 = network.addServer( "s1", service_curve );
+		s1 = network.addServer( service_curve );
 		s2 = network.addServer( service_curve );
-		s3 = network.addServer( "s3", service_curve );
+		s3 = network.addServer( service_curve );
 
 		try {
 			l_s0_s1 = network.addLink( s0, s1 );

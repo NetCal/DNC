@@ -57,13 +57,15 @@ import unikl.disco.nc.operations.BacklogBound;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;
+import unikl.disco.numbers.Num;
+import unikl.disco.numbers.NumFactory;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-		Single_1Flow.class,
-		Single_2Flows_1AC.class,
-		Single_2Flows_2ACs.class,
-		Single_10Flows_10ACs.class,
+		S_1SC_1F_1AC_Test.class,
+		S_1SC_2F_1AC_Test.class,
+		S_1SC_2F_2AC_Test.class,
+		S_1SC_10F_10AC_Test.class,
 		Tandem_1SC_1Flow.class,
 		Tandem_2SCs_1Flow.class,
 		Tandem_1SC_2Flows_1AC_1Path.class,
@@ -261,9 +263,9 @@ public class FunctionalTests {
 	}
 	
 	protected void runSinkTreePMOOtest( Network sink_tree, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
-		double backlog_bound = -1.0;
+		Num backlog_bound = null;
 		try {
-			backlog_bound = BacklogBound.derivePmooSinkTreeTbRl( sink_tree, flow_of_interest.getSink() );
+			backlog_bound = NumFactory.create( BacklogBound.derivePmooSinkTreeTbRl( sink_tree, flow_of_interest.getSink() ) );
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail( "Analysis failed" );
@@ -278,12 +280,12 @@ public class FunctionalTests {
 			
 			System.out.println( "--- Result: ---" );
 
-			System.out.println( "backlog bound   : " + Double.toString( backlog_bound ) );
+			System.out.println( "backlog bound   : " + backlog_bound.toString() );
 			System.out.println();
 		}
 
 		assertEquals( "PMOO backlog", backlog_bound, 
-				expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest ).backlog_bound.doubleValue(), 0.0 );
+				expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest ).backlog_bound );
 	}
 	
 	@Parameters(name= "{index}: {0}")
