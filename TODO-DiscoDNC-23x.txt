@@ -3,9 +3,7 @@ v2.3.x
 * Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
 * Rearrange the checks: Currently, there are checks in curves that are specific to limitations of our operators. We should separate both parts more from each other. 
 
-* Tests: Separate networks from the expected test results and add a configurable demo.
-			--> How many classes? Where to put?
-			--> See isNetwork class and see the CPLEX branch for latest way to create the network.
+* See isNetwork class and see the CPLEX branch for latest way to create the network.
 * Make the tests an optional, separate package to get rid of dependencies (JUnit and hamcrest)
 
 * Get and set for AnalysisResults and *Results.
