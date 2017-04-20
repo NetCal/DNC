@@ -33,7 +33,7 @@ import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 
-public class FunctionalTestConfig extends AnalysisConfig {
+public class DncTestConfig extends AnalysisConfig {
 	// Functional test specific parameters
 	protected boolean define_multiplexing_globally;
 	protected AnalysisConfig.Multiplexing mux_discipline;
@@ -44,9 +44,9 @@ public class FunctionalTestConfig extends AnalysisConfig {
 	protected NumClass numbers;
 	
 	@SuppressWarnings("unused")
-	private FunctionalTestConfig(){}
+	private DncTestConfig(){}
 	
-	public FunctionalTestConfig( Set<ArrivalBoundMethod> arrival_bound_methods,
+	public DncTestConfig( Set<ArrivalBoundMethod> arrival_bound_methods,
 									boolean remove_duplicate_arrival_bounds,
 									boolean tbrl_convolution, 
 									boolean tbrl_deconvolution,

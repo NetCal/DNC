@@ -48,15 +48,15 @@ import unikl.disco.numbers.NumFactory;
  * @author Steffen Bondorf
  *
  */
-public class TA_2S_1SC_2F_1AC_1P_Test extends FunctionalTests {
+public class TA_2S_1SC_2F_1AC_1P_Test extends DncTests {
 	private static TA_2S_1SC_2F_1AC_1P_Network test_network;
 	private static Network network;
 	private static Flow f0, f1;
 
-	protected static FunctionalTestResults expected_results = new FunctionalTestResults();
-	protected static FunctionalTestResults expected_results_sinktree = new FunctionalTestResults();
+	protected static DncTestResults expected_results = new DncTestResults();
+	protected static DncTestResults expected_results_sinktree = new DncTestResults();
 	 
-	public TA_2S_1SC_2F_1AC_1P_Test( FunctionalTestConfig test_config ) throws Exception {
+	public TA_2S_1SC_2F_1AC_1P_Test( DncTestConfig test_config ) throws Exception {
 		super( test_config );
 	}
 

@@ -86,13 +86,13 @@ import unikl.disco.numbers.NumFactory;
  * @author Steffen Bondorf
  *
  */
-public class FunctionalTests {
-	protected static Collection<FunctionalTestConfig> test_configurations = createParameters();
+public class DncTests {
+	protected static Collection<DncTestConfig> test_configurations = createParameters();
 
-	protected FunctionalTestConfig test_config;
+	protected DncTestConfig test_config;
 	protected boolean reinitilize_numbers = true;
 	
-	public FunctionalTests( FunctionalTestConfig test_config ) {
+	public DncTests( DncTestConfig test_config ) {
 		this.test_config = test_config;
 
 		if( test_config.enable_checks ) {
@@ -190,7 +190,7 @@ public class FunctionalTests {
 		}
 	}
 	
-	protected void runTFAtest( TotalFlowAnalysis tfa, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
+	protected void runTFAtest( TotalFlowAnalysis tfa, Flow flow_of_interest, DncTestResults expected_bounds ) {
 		runAnalysis( tfa, flow_of_interest );
 		
 		if( test_config.fullConsoleOutput() ) {
@@ -214,7 +214,7 @@ public class FunctionalTests {
 		assertEquals( "TFA backlog", bounds.backlog_bound, tfa.getBacklogBound() );
 	}
 	
-	protected void runSFAtest( SeparateFlowAnalysis sfa, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
+	protected void runSFAtest( SeparateFlowAnalysis sfa, Flow flow_of_interest, DncTestResults expected_bounds ) {
 		runAnalysis( sfa, flow_of_interest );
 		
 		if( test_config.fullConsoleOutput() ) {
@@ -238,7 +238,7 @@ public class FunctionalTests {
 		assertEquals( "SFA backlog", bounds.backlog_bound, sfa.getBacklogBound() );
 	}
 	
-	protected void runPMOOtest( PmooAnalysis pmoo, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
+	protected void runPMOOtest( PmooAnalysis pmoo, Flow flow_of_interest, DncTestResults expected_bounds ) {
 		runAnalysis( pmoo, flow_of_interest );
 		
 		if( test_config.fullConsoleOutput() ) {
@@ -261,7 +261,7 @@ public class FunctionalTests {
 		assertEquals( "PMOO backlog", bounds.backlog_bound, pmoo.getBacklogBound() );
 	}
 	
-	protected void runSinkTreePMOOtest( Network sink_tree, Flow flow_of_interest, FunctionalTestResults expected_bounds ) {
+	protected void runSinkTreePMOOtest( Network sink_tree, Flow flow_of_interest, DncTestResults expected_bounds ) {
 		Num backlog_bound = null;
 		try {
 			backlog_bound = NumFactory.create( BacklogBound.derivePmooSinkTreeTbRl( sink_tree, flow_of_interest.getSink() ) );
@@ -288,8 +288,8 @@ public class FunctionalTests {
 	}
 	
 	@Parameters(name= "{index}: {0}")
-	public static Set<FunctionalTestConfig> createParameters() {
-		Set<FunctionalTestConfig> test_configurations = new HashSet<FunctionalTestConfig>();
+	public static Set<DncTestConfig> createParameters() {
+		Set<DncTestConfig> test_configurations = new HashSet<DncTestConfig>();
 		
 		Set<NumClass> nums =  new HashSet<NumClass>();
 		nums.add( NumClass.REAL_DOUBLE_PRECISION );
@@ -348,86 +348,86 @@ public class FunctionalTests {
 			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
 			for( Set<ArrivalBoundMethod> single_ab : single_abs_allMux ) {
 				for( AnalysisConfig.Multiplexing mux : mux_disciplines ) {
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true, mux,  false, num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true, mux,  false, num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true, mux,  true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true, mux,  true,  num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, false, false, mux, false, num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, true,  false, mux, false, num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, false, true, mux,  false, num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, true,  true, mux,  false, num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, false, false, mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, true,  false, mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, false, true, mux,  true,  num ) );
+					test_configurations.add( new DncTestConfig( single_ab, false, true,  true, mux,  true,  num ) );
 				}
 			}
 			for( Set<ArrivalBoundMethod> single_ab : single_abs_arbMux ) {
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( single_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( single_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
 			}
 			
 			// Parameter configurations for "pairs of arrival boundings"-tests
 			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
 			for( Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux ) {
 				for( AnalysisConfig.Multiplexing mux : mux_disciplines ) {
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  mux, false, num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  mux, true,  num ) );
-					test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, false, false, mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  false, false, mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, true,  false, mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  true,  false, mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, false, true,  mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  false, true,  mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, true,  true,  mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  true,  true,  mux, false, num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, false, false, mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  false, false, mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, true,  false, mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  true,  false, mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, false, true,  mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  false, true,  mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, false, true,  true,  mux, true,  num ) );
+					test_configurations.add( new DncTestConfig( pair_ab, true,  true,  true,  mux, true,  num ) );
 				}
 			}
 			for( Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux ) {
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-				test_configurations.add( new FunctionalTestConfig( pair_ab, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+				test_configurations.add( new DncTestConfig( pair_ab, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
 			}
 			
 			// Parameter configurations for "triplets of arrival boundings"-tests
 			// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
-			test_configurations.add( new FunctionalTestConfig( triplet_arbMux, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  true,  false, AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  false, true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, false, true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
+			test_configurations.add( new DncTestConfig( triplet_arbMux, true,  true,  true,  AnalysisConfig.Multiplexing.ARBITRARY, true,  num ) );
 		}
 		
 		return test_configurations;
