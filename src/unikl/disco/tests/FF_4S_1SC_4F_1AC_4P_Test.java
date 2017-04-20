@@ -137,7 +137,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends FunctionalTests {
 		setMux( network.getServers() );
 		
 		if( test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) {
+				&& test_config.arrivalBoundMethods().contains( ArrivalBoundMethod.PMOO ) ) { // Cannot be FIFO multiplexing due to PMOO
 			super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f0, expected_results_PMOOAB );
 		} else {
 			super.runTFAtest( new TotalFlowAnalysis( network, test_config ), f0, expected_results );

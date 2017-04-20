@@ -33,21 +33,21 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-		Tandem_1SC_1Flow.class,
-		Tandem_2SCs_1Flow.class,
-		Tandem_1SC_2Flows_1AC_1Path.class,
-		Tandem_2SCs_2Flows_1ACs_1Path.class,
-		Tandem_1SC_2Flows_1AC_1Path_v2.class,
-		Tandem_1SC_2Flows_1AC_2Paths.class,
-		Tandem_1SC_2Flows_1AC_2Paths_v2.class,
-		Tandem_1SC_3Flows_1AC_3Paths.class,
-		Tandem_1SC_4Flows_1AC_1Path.class
+		TA_2S_1SC_1F_1AC_1P_Test.class,
+		TA_3S_1SC_2F_1AC_1P_Test.class,
+		TA_2S_1SC_2F_1AC_1P_Test.class,
+		TA_4S_1SC_2F_1AC_2P_Test.class,
+		TA_2S_1SC_2F_1AC_2P_Test.class,
+		TA_3S_1SC_3F_1AC_3P_Test.class,
+		TA_2S_1SC_4F_1AC_1P_Test.class,
+		TA_2S_2SC_1F_1AC_1P_Test.class,
+		TA_2S_2SC_2F_1AC_1P_Test.class
 		})
 /**
  * 
  * @author Steffen Bondorf
  *
  */
-public class TandemTests {
+public class TA_Tests {
 
 }
