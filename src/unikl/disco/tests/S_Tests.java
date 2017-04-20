@@ -43,6 +43,6 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Steffen Bondorf
  *
  */
-public class ServerTests {
+public class S_Tests {
 
 }
