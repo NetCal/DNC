@@ -54,9 +54,9 @@ public class TA_4S_1SC_2F_1AC_2P_Test extends DncTests {
 	private static Network network;
 	private static Flow f0, f1;
 
-	protected static DncTestResults expected_results = new DncTestResults();
-	protected static DncTestResults expected_results_PMOOAB = new DncTestResults();
-	protected static DncTestResults expected_results_sinktree = new DncTestResults();
+	protected static final DncTestResults expected_results = new DncTestResults();
+	protected static final DncTestResults expected_results_PMOOAB = new DncTestResults();
+	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
 	 
 	public TA_4S_1SC_2F_1AC_2P_Test( DncTestConfig test_config ) throws Exception {
 		super( test_config );

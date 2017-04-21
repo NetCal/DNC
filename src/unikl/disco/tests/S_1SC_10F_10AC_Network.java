@@ -43,10 +43,10 @@ public class S_1SC_10F_10AC_Network implements NetworkFactory {
 	private static final int sc_R = 10;
 	private static final int sc_T = 10;
 	
-	private static ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
+	private ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
 	
-	private static Flow[] flows = new Flow[10];
-	private static ArrivalCurve[] arrival_curves = new ArrivalCurve[10];
+	private Flow[] flows = new Flow[10];
+	private ArrivalCurve[] arrival_curves = new ArrivalCurve[10];
 
 	private Network network;
 	protected Server s0;

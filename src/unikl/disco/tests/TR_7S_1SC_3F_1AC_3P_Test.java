@@ -53,8 +53,8 @@ public class TR_7S_1SC_3F_1AC_3P_Test extends DncTests {
 	private static Network network;
 	private static Flow f0, f1, f2;
 
-	protected static DncTestResults expected_results = new DncTestResults();
-	protected static DncTestResults expected_results_sinktree = new DncTestResults();
+	protected static final DncTestResults expected_results = new DncTestResults();
+	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
 	 
 	public TR_7S_1SC_3F_1AC_3P_Test( DncTestConfig test_config ) throws Exception {
 		super( test_config );

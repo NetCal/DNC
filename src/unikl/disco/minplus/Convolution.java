@@ -223,7 +223,7 @@ public class Convolution {
 			case 2:
 				return service_curve_1.copy();
 			case 3:
-				ServiceCurve.createZeroService();
+				return ServiceCurve.createZeroService();
 			case 0:
 			default:
 				break;

@@ -54,8 +54,8 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTests {
 	private static Network network;
 	private static Flow f0, f1, f2, f3;
 
-	protected static DncTestResults expected_results = new DncTestResults();
-	protected static DncTestResults expected_results_PMOOAB = new DncTestResults();
+	protected static final DncTestResults expected_results = new DncTestResults();
+	protected static final DncTestResults expected_results_PMOOAB = new DncTestResults();
 	
 	public FF_4S_1SC_4F_1AC_4P_Test( DncTestConfig test_config ) {
 		super( test_config );

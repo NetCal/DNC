@@ -53,8 +53,8 @@ public class S_1SC_2F_1AC_Test extends DncTests {
 	private static Network network;
 	private static Flow f0, f1;
 
-	protected static DncTestResults expected_results = new DncTestResults();
-	protected static DncTestResults expected_results_sinktree = new DncTestResults();
+	protected static final DncTestResults expected_results = new DncTestResults();
+	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
 	 
 	public S_1SC_2F_1AC_Test( DncTestConfig test_config ) {
 		super( test_config );

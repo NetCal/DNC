@@ -391,7 +391,7 @@ public class DncTests {
 					test_configurations.add( new DncTestConfig( pair_ab, true,  true,  true,  mux, true,  num ) );
 				}
 			}
-			for( Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux ) {
+			for( Set<ArrivalBoundMethod> pair_ab : pair_abs_arbMux ) {
 				test_configurations.add( new DncTestConfig( pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
 				test_configurations.add( new DncTestConfig( pair_ab, true,  false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );
 				test_configurations.add( new DncTestConfig( pair_ab, false, true,  false, AnalysisConfig.Multiplexing.ARBITRARY, false, num ) );

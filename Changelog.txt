@@ -3,6 +3,7 @@ v2.3.3 "Centaur" (2017-Apr-XY)
 * Analysis Result: Remove obsolete flag "succeeded".
 * Enum Multiplexing was moved from Server to AnalysisConfig.
 * InNetwork was renamed to NetworkFactory as well as extended for this purpose.
+* Convolution.java, convolve_SC_SC_RLs: Fix for the case that two rate-latency service curves should be convolved, yet, two null objects are given.
 * FunctionalTests, renamed to DncTests:
   - New naming scheme including more information. 
   - Separated networks from the tests and expected results.

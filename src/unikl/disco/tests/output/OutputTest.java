@@ -27,6 +27,8 @@
 
 package unikl.disco.tests.output;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -60,7 +62,9 @@ public class OutputTest {
 	private static String saved_network_path = "src/unikl/disco/tests/output/";
 	private static String saved_network_package = "unikl.disco.tests.output";
 	private static String saved_network_name = "OutputTestNetworkSaved";
-	
+
+	@SuppressFBWarnings(value = {"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE","DE_MIGHT_IGNORE"},
+						justification ="Returned File object is only used for deletion. Just ignore exception raised of there is no file to delete.")
 	@BeforeClass
 	public static void createNetworks() throws Exception {
 		File saved_network_java = new File( saved_network_path + saved_network_name + ".java" );
@@ -189,7 +193,8 @@ public class OutputTest {
 			assertEquals( "PMOO delay, flow " + Integer.toString( i ), d_pmoo_given_network[i], d_pmoo_saved_network[i] );
 		}
 	}
-	
+
+	@SuppressFBWarnings(value="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE",justification ="Returned File object is only used for deletion.")
 	@After
 	public void restoreDummyTestNetworkSaved() throws Exception {
 		new File( saved_network_path + saved_network_name + ".java" ).delete();

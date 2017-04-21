@@ -51,10 +51,10 @@ import unikl.disco.numbers.NumFactory;
 public class S_1SC_1F_1AC_Test extends DncTests {
 	private static S_1SC_1F_1AC_Network test_network;
 	private static Network network;
-	private static Flow f0, f1;
+	private static Flow f0;
 
-	protected static DncTestResults expected_results = new DncTestResults();
-	protected static DncTestResults expected_results_sinktree = new DncTestResults();
+	protected static final DncTestResults expected_results = new DncTestResults();
+	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
 	 
 	public S_1SC_1F_1AC_Test( DncTestConfig test_config ) {
 		super( test_config );
@@ -75,25 +75,19 @@ public class S_1SC_1F_1AC_Test extends DncTests {
 		
 		// TFA
 		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.FIFO, f1, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
 		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
-		expected_results.setBounds( Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
 		
 		// SFA
 		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.FIFO, f1, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
 		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
-		expected_results.setBounds( Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
 		
 		// PMOO
 		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
-		expected_results.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactory.create( 12.5 ), NumFactory.create( 75 ) );
 	
 		// Sink-Tree PMOO at sink
 		expected_results_sinktree.clear();
 		
 		expected_results_sinktree.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, NumFactory.create( 75 ) );
-		expected_results_sinktree.setBounds( Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, NumFactory.create( 75 ) );
 	}
 	
 	@Before

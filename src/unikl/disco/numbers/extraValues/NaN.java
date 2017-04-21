@@ -28,6 +28,7 @@
 package unikl.disco.numbers.extraValues;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import unikl.disco.numbers.Num;
 
 /**

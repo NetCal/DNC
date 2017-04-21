@@ -1384,8 +1384,11 @@ public class Network {
  		sb.append( "}\n" );
 
  		File output = new File( output_path, file_name + file_extension );
- 		output.getParentFile().mkdirs();
- 		Files.write( output.toPath(), sb.toString().getBytes( StandardCharsets.UTF_8 ) );
+ 		if( output.getParentFile() != null && output.getParentFile().mkdirs() ) {
+ 			Files.write( output.toPath(), sb.toString().getBytes( StandardCharsets.UTF_8 ) );
+ 		} else {
+ 			throw new Exception( "Output directory cannot be created." );
+ 		}
  	}
  	
 	@Override

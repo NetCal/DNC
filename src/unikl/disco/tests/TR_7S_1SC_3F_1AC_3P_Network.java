@@ -45,8 +45,8 @@ public class TR_7S_1SC_3F_1AC_3P_Network implements NetworkFactory {
 	private static final int ac_r = 5;
 	private static final int ac_b = 25;
 	
-	private static ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
-	private static ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
+	private ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
+	private ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
 	
 	private Network network;
 	protected Server s0, s1, s2, s3, s4, s5, s6;

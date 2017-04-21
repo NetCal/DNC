@@ -47,9 +47,9 @@ public class TA_2S_2SC_2F_1AC_1P_Network implements NetworkFactory {
 	private static final double ac_r = 2.5;
 	private static final double ac_b = 12.5;
 
-	private static ServiceCurve service_curve_0 = ServiceCurve.createRateLatency( sc_R_0, sc_T_0 );
-	private static ServiceCurve service_curve_1 = ServiceCurve.createRateLatency( sc_R_1, sc_T_1 );
-	private static ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
+	private ServiceCurve service_curve_0 = ServiceCurve.createRateLatency( sc_R_0, sc_T_0 );
+	private ServiceCurve service_curve_1 = ServiceCurve.createRateLatency( sc_R_1, sc_T_1 );
+	private ArrivalCurve arrival_curve = ArrivalCurve.createTokenBucket( ac_r, ac_b );
 	
 	private Network network;
 	protected Server s0, s1;
