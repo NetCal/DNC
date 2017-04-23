@@ -1,5 +1,7 @@
 v2.3.x
 ------
+* Adapt test documentation to new naming scheme
+
 * Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
 * Rearrange the checks: Currently, there are checks in curves that are specific to limitations of our operators. We should separate both parts more from each other. 
 

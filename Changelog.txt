@@ -1,3 +1,7 @@
+v2.3.4 "Centaur" (2017-May-XY)
+------------------------------
+* DncTestResults: Added missing copyright header.
+
 v2.3.3 "Centaur" (2017-Apr-22)
 ------------------------------
 * Analysis Result: Remove obsolete flag "succeeded".
