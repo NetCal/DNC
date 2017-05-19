@@ -1,5 +1,8 @@
-v2.3.4 "Centaur" (2017-May-XY)
+v2.3.4 "Centaur" (2017-May-19)
 ------------------------------
+* Added Flow Prolongation to the PMOO Analysis (but not the functional tests). See:
+	Better Bounds by Worse Assumptions – Improving Network Calculus Accuracy by Adding Pessimism to the Network Model
+	(Steffen Bondorf), In Proceedings of the IEEE International Conference on Communications (ICC 2017), May 2017.
 * DncTestResults: Added missing copyright header.
 
 v2.3.3 "Centaur" (2017-Apr-22)

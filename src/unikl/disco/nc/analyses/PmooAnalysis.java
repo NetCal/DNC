@@ -35,6 +35,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+
+import org.apache.commons.math3.util.Pair;
+
 import java.util.Set;
 import java.util.HashSet;
 
@@ -48,6 +51,7 @@ import unikl.disco.nc.AnalysisConfig.MuxDiscipline;
 import unikl.disco.nc.operations.BacklogBound;
 import unikl.disco.nc.operations.DelayBound;
 import unikl.disco.network.Flow;
+import unikl.disco.network.Link;
 import unikl.disco.network.Network;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
@@ -124,8 +128,236 @@ public class PmooAnalysis extends Analysis {
 			}
 		}
 		
-		Set<ServiceCurve> betas_e2e = new HashSet<ServiceCurve>();
+		if( configuration.useFlowProlongation() ) {
+			return getServiceCurvesFP( flow_of_interest, path, flows_to_serve );
+		} else {
+			return getServiceCurvesStandard( flow_of_interest, path, flows_to_serve );
+		}
+	}
+	
+	private Set<ServiceCurve> getServiceCurvesFP( Flow flow_of_interest, Path path, Set<Flow> flows_to_serve ) throws Exception {
+		// Get cross-flows grouped as needed for the PMOO left-over service curve
+		Set<Flow> flows_of_lower_priority = new HashSet<Flow>( flows_to_serve );
+		flows_of_lower_priority.add( flow_of_interest );
 		
+		Set<Flow> cross_flows = network.getFlows( path );
+		cross_flows.removeAll( flows_of_lower_priority );
+		
+		Map<Path,Set<Flow>> xtx_subpath_grouped_original = network.groupFlowsPerSubPath( path, cross_flows );
+		Map<Set<Flow>,LinkedList<Path>> prolongations = getProlongationsToSubpaths( path, xtx_subpath_grouped_original );
+
+		if( prolongations.isEmpty() ) {
+			return xtxSubpathBetas( flow_of_interest, path, xtx_subpath_grouped_original );
+		}
+		
+		// Create the set of cross-flow groupings, starting from the one for unprolonged flows.
+		Set<Map<Path,Set<Flow>>> xtx_subpath_grouped_incl_prolongation = new HashSet<Map<Path,Set<Flow>>>();
+		xtx_subpath_grouped_incl_prolongation.add( xtx_subpath_grouped_original );
+		
+
+		// General way it works:
+		// Permutations of all alternatives (see the code below ):
+		//  - iterate over all the sets above
+		//  - iterate over the results set
+		//  - merge into a temporary results set (prevents concurrent modification exception)
+		//  - replace results set with temporary one
+		//  - start over with the outer iteration
+		
+		// Move the individual cross flows around the xtx groups.
+		for( Entry<Set<Flow>,LinkedList<Path>> xf_prolongations : prolongations.entrySet() ) {
+			
+			LinkedList<Path> prolongable_paths = xf_prolongations.getValue();
+			if( prolongable_paths.size() == 1 ) {
+				throw new Exception( "Something strange went wrong during flow prolongation" );
+			}
+
+			Set<Flow> xfs = xf_prolongations.getKey();
+			Path common_path_old = prolongable_paths.getFirst(); // Original path needs to be always first.
+			Path common_path_new;
+			Server subpaths_src;
+			
+			// Every moving is defined by a prolonged flow aggregate's path.
+			// Start counting at 1 because the first element (at position 0) is the original interference path.
+			for( int i = 1; i <= prolongable_paths.size()-1; i++ ) {
+				common_path_new = prolongable_paths.get( i );
+				
+				// Each potential move of a flow generates a new set of xtx_subpath_groupings .
+				// They are merged into a temporary results set to prevent concurrent modification exceptions.
+				// Yes, we need a set of mappings because each mapping will be a unique interference patter no derive a left-over beta for.
+				Set<Map<Path,Set<Flow>>> xtx_subpath_grouped_incl_prolongation_tmp = new HashSet<Map<Path,Set<Flow>>>();
+				
+				for( Map<Path,Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation ) { // At the beginning, only the original interference pattern is in here.
+					// Prevent the original from getting lost because its sink is not part of xf_prolongations's Server list.
+					xtx_subpath_grouped_incl_prolongation_tmp.add( interference_pattern );
+					
+					// The general idea is to copy the map and modify the two mappings of interest only.
+					// Yet, the copy we need is deeper than constructing a new map or using clone()-functionality.
+					// We need a new map where a) the key can be the same path object as in to old map and
+					//						   b) the value is a new map with the old flow objects.
+					// Constructing this copy will require a loop -- the following loop we use for an "in situ" modification we need.
+					Map<Path,Set<Flow>> interference_pattern_new = new HashMap<Path,Set<Flow>>();
+					boolean add = true;
+					for ( Entry<Path,Set<Flow>> interference_entry : interference_pattern.entrySet() ) {
+						
+						Path key_path = interference_entry.getKey();
+						Set<Flow> value_flows = new HashSet<Flow>( interference_entry.getValue() );
+
+						if( key_path.equals( common_path_old ) ) {
+							if( !value_flows.removeAll( xfs ) ) { // The flows have already been moved -> skip this one.
+								add = false;
+								continue;
+							} 
+							interference_pattern_new.put( key_path, value_flows );
+						} else if( key_path.equals( common_path_new ) ) {
+							if( value_flows.isEmpty() ) { // Prolonging to an empty set will not cause aggregation effects.
+								add = false;
+								continue;
+							} 
+							
+							boolean aggr_potential = false;
+							subpaths_src = common_path_new.getSource();
+							Link inlink_xfs = xfs.iterator().next().getPrecedingLink( subpaths_src );
+							Link inlink_subpath_flows;
+							for( Flow f : value_flows ) {
+								try{
+									inlink_subpath_flows = f.getPrecedingLink( subpaths_src );
+									if( inlink_subpath_flows.equals( inlink_xfs ) ) {
+										aggr_potential = true;
+										continue;
+									}
+								} catch (Exception e) {} // There's an exception thrown by getPrecedingLink if f is originating in subpaths_src
+							}
+							
+							if( !aggr_potential ) {
+								add = false;
+								continue;
+							}
+							
+							value_flows.addAll( xfs );
+							interference_pattern_new.put( key_path, value_flows );
+						} else {
+							interference_pattern_new.put( key_path, value_flows );
+						}
+					}
+					
+					if( add ) {
+						xtx_subpath_grouped_incl_prolongation_tmp.add( interference_pattern_new );
+					}
+				}
+				xtx_subpath_grouped_incl_prolongation = xtx_subpath_grouped_incl_prolongation_tmp;
+			}
+		}
+
+		// Next, get the left-over betas for every prolongation variant.
+		Set<ServiceCurve> betas_e2e = Collections.synchronizedSet( new HashSet<ServiceCurve>() );
+
+		xtx_subpath_grouped_incl_prolongation.parallelStream().forEach( xtx_subpath_grouped -> {
+			try {
+				betas_e2e.addAll( xtxSubpathBetas( flow_of_interest, path, xtx_subpath_grouped ) );
+			} catch (Exception e) {
+				System.out.println();
+				e.printStackTrace();
+			}
+		} );
+
+		if( betas_e2e.isEmpty() ) {
+			betas_e2e.add( ServiceCurve.createZeroService() );
+		}
+		return betas_e2e;
+	}
+	
+	private Map<Set<Flow>,LinkedList<Path>> getProlongationsToSubpaths( Path path, Map<Path,Set<Flow>> xtx_subpath_grouped_original ) throws Exception {
+		Map<Server,Set<Path>> paths_starting_in_s = new HashMap<Server,Set<Path>>();
+		
+		Server subpath_src, subpath_snk;
+		Set<Path> paths_from_s;
+		for( Path existing_subpath : xtx_subpath_grouped_original.keySet() ) {
+			subpath_src = existing_subpath.getSource(); 
+			paths_from_s = paths_starting_in_s.get( subpath_src );
+			if( paths_from_s == null ) {
+				paths_from_s = new HashSet<Path>( Collections.singleton( existing_subpath ) );
+				paths_starting_in_s.put( subpath_src, paths_from_s );
+			} else {
+				paths_from_s.add( existing_subpath );
+			}
+		}
+		
+		// First create the required sets. Saves us from checking for an existing set every time.
+		Link inlink_flow;
+		Map<Pair<Path,Link>,Set<Flow>> xtx_subpath_grouped_inlink_original = new HashMap<Pair<Path,Link>,Set<Flow>>();
+		
+		for( Entry<Path,Set<Flow>> entry : xtx_subpath_grouped_original.entrySet() ) {
+			subpath_src = entry.getKey().getSource();
+			
+			for( Flow flow : entry.getValue() ) {
+				
+				if( flow.getSource().equals( subpath_src ) ) {
+					continue;
+				}
+
+				inlink_flow = flow.getPath().getPrecedingLink( subpath_src );
+				Set<Flow> flows_inlink = new HashSet<Flow>();
+				flows_inlink.add( flow );
+
+				Pair<Path,Link> key_pair = new Pair<Path,Link>( entry.getKey(), inlink_flow );
+				
+				// .put returns the previous value associated with key, or null if there was no mapping for key
+				Set<Flow> prev_flows_inlink = xtx_subpath_grouped_inlink_original.put( key_pair, flows_inlink );
+
+				if( prev_flows_inlink != null ) {
+					flows_inlink.addAll( prev_flows_inlink );
+				}
+			}
+		}
+		
+		Map<Set<Flow>,LinkedList<Path>> return_value = new HashMap<Set<Flow>,LinkedList<Path>>();
+		
+		Server path_snk = path.getSink();
+		LinkedList<Path> prolonged_paths; 
+		for( Entry<Pair<Path,Link>,Set<Flow>> entry : xtx_subpath_grouped_inlink_original.entrySet() ) {
+			Path current_subpath = entry.getKey().getKey();
+			subpath_src = current_subpath.getSource();
+			subpath_snk = current_subpath.getSink();
+			if( subpath_snk.equals( path_snk ) ) { // No prolonging possible here.
+				continue;
+			}
+			
+			prolonged_paths = new LinkedList<Path>();
+			prolonged_paths.add( current_subpath ); // Original path is always first. Needed for the functionality above
+
+			Set<Flow> entry_flows = entry.getValue();
+				
+			// What if the path prolonged to is empty due to prolongation of the flows in it? 
+			// At this point we do not know that as the actual prolongation has not been done yet.
+			// This situation will thus be handled in the calling method where we construct the interference patterns.
+			for( Path potential_path : paths_starting_in_s.get( subpath_src ) ) {
+
+				// Naturally, a prolonged subpath of path needs to be longer than the original one.
+				if( potential_path.getServers().size() <= current_subpath.getServers().size() ) {
+					continue;
+				}
+				
+				// Are there flow coming via the same inlink so prolongation has an effect?
+				if( xtx_subpath_grouped_inlink_original.get( new Pair<Path,Link>( potential_path, entry.getKey().getValue() ) )
+					== null ) {
+					continue;
+				}
+				
+				// "fast" neglects the left-over operation that is the source of uncertainty we previously used as an excuse for exhaustive stuff.
+				// Maybe weigh with the flows' alpha and the length of their previously traversed network
+				
+				prolonged_paths.add( potential_path );
+			}
+			
+			if( prolonged_paths.size() > 1 ) { // If more than the original one were added
+				return_value.put( entry_flows, prolonged_paths );
+			}
+		}
+		
+		return return_value;
+	}
+		
+	private Set<ServiceCurve> getServiceCurvesStandard( Flow flow_of_interest, Path path, Set<Flow> flows_to_serve ) throws Exception {
 		// Get cross-flows grouped as needed for the PMOO left-over service curve
 		Set<Flow> flows_of_lower_priority = new HashSet<Flow>( flows_to_serve );
 		flows_of_lower_priority.add( flow_of_interest );
@@ -138,13 +370,19 @@ public class PmooAnalysis extends Analysis {
 			return new HashSet<ServiceCurve>( Collections.singleton( path.getServiceCurve() ) );
 		}
 		
+		return xtxSubpathBetas( flow_of_interest, path, xtx_subpath_grouped );
+	}
+
+	private Set<ServiceCurve> xtxSubpathBetas( Flow flow_of_interest, Path path, Map<Path,Set<Flow>> xtx_subpath_grouped ) throws Exception {
+		Set<ServiceCurve> betas_e2e = new HashSet<ServiceCurve>();
+		
 		// Derive the cross-flow substitutes with their arrival bound
 		Set<List<Flow>> cross_flow_substitutes_set = new HashSet<List<Flow>>();
 		cross_flow_substitutes_set.add( new LinkedList<Flow>() );
 		Set<List<Flow>> arrival_bounds_link_permutations = new HashSet<List<Flow>>();
 
 		for ( Map.Entry<Path,Set<Flow>> entry : xtx_subpath_grouped.entrySet() ) {
-		// Create a single substitute flow 
+			// Create a single substitute flow 
 	 		// Name the substitute flow
 	 		String substitute_flow_alias = "subst_{";
 	 		for( Flow f : entry.getValue() ) {
@@ -154,19 +392,19 @@ public class PmooAnalysis extends Analysis {
 	 		substitute_flow_alias = substitute_flow_alias.concat( "}" );
 
 	 		// Derive the substitute flow's arrival bound
-	 		Set<ArrivalCurve> alphas_xf_group = ArrivalBound.computeArrivalBounds( network, configuration, entry.getKey().getSource(), entry.getValue(), Flow.NULL_FLOW );
+			Set<ArrivalCurve> alphas_xf_group = ArrivalBound.computeArrivalBounds( network, configuration, entry.getKey().getSource(), entry.getValue(), Flow.NULL_FLOW );
 			// entry.getKey().getSource() because entry.getKey() is the common subpath of path (above variable), i.e., start of interference on path.
-			// We are leaving the flow_of_interest's path with this arrival bounding. Therefore, worst-case arbitrary multiplexing cannot be modeled 
-			//   with assigning lowest priority to the flow of interest anymore (cf. rejoining flows) and we call computeArrivalBounds with Flow.NULL_FLOW instead of flow_of_interest.
+			// We are leaving the flow_of_interest's path with this arrival bounding. Therefore, worst-case arbitrary multiplexing cannot be modeled with 
+			//   by assigning lowest prioritization to the flow of interest anymore (cf. rejoining flows) and we call computeArrivalBounds with Flow.NULL_FLOW instead of flow_of_interest.
 
 			// Add the new bounds to the others by creating all the permutations.
 			// * For ever arrival bound derived for a flow substitute
 			// * take the existing flow substitutes (that belong to different subpaths)
 			// * and "multiply" the cross_flow_substitutes_set, i.e., create a new set each.
-	 		
+			
 			arrival_bounds_link_permutations.clear();
  			List<Flow> flow_list_tmp = new LinkedList<Flow>();
- 			for( ArrivalCurve alpha : alphas_xf_group ) {
+	 		for( ArrivalCurve alpha : alphas_xf_group ) {
 	 			alpha.beautify();
 	 			
 	 			for( List<Flow> f_subst_list : cross_flow_substitutes_set ) {
@@ -178,7 +416,7 @@ public class PmooAnalysis extends Analysis {
 	 				// Add this list to the set of permutations
 	 				arrival_bounds_link_permutations.add( new LinkedList<Flow>( flow_list_tmp ) ); // Prevent interaction with the clear() operation above.
 	 			}
-	 		} 
+	 		}
 	 		// Override cross_flow_substitutes_set for the next cross-flow substitute and its arrival bounds.
 			cross_flow_substitutes_set.clear();
 			cross_flow_substitutes_set.addAll( arrival_bounds_link_permutations );

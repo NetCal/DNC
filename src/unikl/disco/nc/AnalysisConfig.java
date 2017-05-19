@@ -63,6 +63,8 @@ public class AnalysisConfig {
 	private boolean tbrl_convolution = false;
 	
 	private boolean tbrl_deconvolution = false;
+
+	private boolean flow_prolongation = false;
 	
 	private boolean ab_consider_tfa_nodeBacklog = false;
 	
@@ -176,6 +178,14 @@ public class AnalysisConfig {
 	
 	public boolean abConsiderTFANodeBacklog() {
 		return ab_consider_tfa_nodeBacklog;
+	}
+	
+	public boolean useFlowProlongation() {
+		return flow_prolongation;
+	}
+	
+	public void setUseFlowProlongation( boolean prolong_flows ) {
+		flow_prolongation = prolong_flows;
 	}
 	
 	public void setAbConsiderTFANodeBacklog( boolean consider_backlog_bound ) {
