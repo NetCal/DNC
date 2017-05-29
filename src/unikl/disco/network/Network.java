@@ -1190,7 +1190,7 @@ public class Network {
  	 		
  	 		f_new_path = new Path( f_path_new_s, f_path_new_l );
  	 		network_new.addFlowToNetwork( f_old.getAlias(),
- 	 									  f_old.getArrivalCurve().copy(),
+ 	 									  f_old.getArrivalCurve(),
  	 									  f_new_path );
  		}
  		

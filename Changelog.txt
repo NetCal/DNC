@@ -1,3 +1,7 @@
+v2.3.5 "Centaur" (2017-Jun-XX)
+------------------------------
+* Network.java: Reduced amount of arrival curve copies.
+
 v2.3.4 "Centaur" (2017-May-19)
 ------------------------------
 * Added Flow Prolongation to the PMOO Analysis (but not the functional tests). See:
