@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -102,19 +102,19 @@ public class PmooAnalysis extends Analysis {
 
 		Num delay_bound__beta_e2e;
 		Num backlog_bound__beta_e2e;
-		
-		result.delay_bound = NumFactory.createPositiveInfinity();
-		result.backlog_bound = NumFactory.createPositiveInfinity();
+
+		((PmooResults) result).setDelayBound( NumFactory.createPositiveInfinity() );
+		((PmooResults) result).setBacklogBound( NumFactory.createPositiveInfinity() );
 		
 		for( ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e ) {
 			delay_bound__beta_e2e = DelayBound.deriveFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // Single flow of interest, i.e., fifo per micro flow holds
-			if( delay_bound__beta_e2e.leq( result.delay_bound ) ) {
-				result.delay_bound = delay_bound__beta_e2e;
+			if( delay_bound__beta_e2e.leq( result.getDelayBound() ) ) {
+				((PmooResults) result).setDelayBound( delay_bound__beta_e2e );
 			}
 			
 			backlog_bound__beta_e2e = BacklogBound.derive( flow_of_interest.getArrivalCurve(), beta_e2e );
-			if( backlog_bound__beta_e2e.leq( result.backlog_bound ) ) {
-				result.backlog_bound = backlog_bound__beta_e2e;
+			if( backlog_bound__beta_e2e.leq( result.getBacklogBound() ) ) {
+				((PmooResults) result).setBacklogBound( backlog_bound__beta_e2e );
 			}
 		}
 	}

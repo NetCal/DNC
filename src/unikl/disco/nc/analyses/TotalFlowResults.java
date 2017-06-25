@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -89,6 +89,16 @@ public class TotalFlowResults extends AnalysisResults {
 		result_str.append( "}" );
 		
 		return result_str.toString();
+	}
+
+	@Override
+	protected void setDelayBound( Num delay_bound ) {
+		super.setDelayBound( delay_bound );
+	}
+
+	@Override
+	protected void setBacklogBound( Num backlog_bound ) {
+		super.setBacklogBound( backlog_bound );
 	}
 	
 	public String getServerBacklogBoundMapString() {

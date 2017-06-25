@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2015 - 2017 Steffen Bondorf
  *
@@ -92,13 +92,18 @@ public class OutputTest {
 		// Load and instantiate compiled class.
 		URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { new File(saved_network_path).toURI().toURL() });
 		
-		Class<?> cls = Class.forName( saved_network_package + "." + saved_network_name, true, classLoader );
-		Object instance = cls.newInstance();
+		try {
+			Class<?> cls = Class.forName( saved_network_package + "." + saved_network_name, true, classLoader );
+			Object instance = cls.newInstance();
 
-		NetworkFactory network_newly_compiled = (NetworkFactory)instance;
-		network_saved = network_newly_compiled.getNetwork();
-		
-		classLoader.close();
+			NetworkFactory network_newly_compiled = (NetworkFactory)instance;
+			network_saved = network_newly_compiled.getNetwork();
+			
+			classLoader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 	
 	@Test

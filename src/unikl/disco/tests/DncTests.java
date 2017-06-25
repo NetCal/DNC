@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2013 - 2017 Steffen Bondorf
  *
@@ -210,8 +210,8 @@ public class DncTests {
 		}
 
 		AnalysisResults bounds = expected_bounds.getBounds( Analyses.TFA, test_config.mux_discipline, flow_of_interest );
-		assertEquals( "TFA delay", bounds.delay_bound, tfa.getDelayBound() );
-		assertEquals( "TFA backlog", bounds.backlog_bound, tfa.getBacklogBound() );
+		assertEquals( "TFA delay", bounds.getDelayBound(), tfa.getDelayBound() );
+		assertEquals( "TFA backlog", bounds.getBacklogBound(), tfa.getBacklogBound() );
 	}
 	
 	protected void runSFAtest( SeparateFlowAnalysis sfa, Flow flow_of_interest, DncTestResults expected_bounds ) {
@@ -234,8 +234,8 @@ public class DncTests {
 		}
 
 		AnalysisResults bounds = expected_bounds.getBounds( Analyses.SFA, test_config.mux_discipline, flow_of_interest );
-		assertEquals( "SFA delay", bounds.delay_bound, sfa.getDelayBound() );
-		assertEquals( "SFA backlog", bounds.backlog_bound, sfa.getBacklogBound() );
+		assertEquals( "SFA delay", bounds.getDelayBound(), sfa.getDelayBound() );
+		assertEquals( "SFA backlog", bounds.getBacklogBound(), sfa.getBacklogBound() );
 	}
 	
 	protected void runPMOOtest( PmooAnalysis pmoo, Flow flow_of_interest, DncTestResults expected_bounds ) {
@@ -257,8 +257,8 @@ public class DncTests {
 		}
 
 		AnalysisResults bounds = expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest );
-		assertEquals( "PMOO delay", bounds.delay_bound, pmoo.getDelayBound() );
-		assertEquals( "PMOO backlog", bounds.backlog_bound, pmoo.getBacklogBound() );
+		assertEquals( "PMOO delay", bounds.getDelayBound(), pmoo.getDelayBound() );
+		assertEquals( "PMOO backlog", bounds.getBacklogBound(), pmoo.getBacklogBound() );
 	}
 	
 	protected void runSinkTreePMOOtest( Network sink_tree, Flow flow_of_interest, DncTestResults expected_bounds ) {
@@ -284,7 +284,7 @@ public class DncTests {
 		}
 
 		assertEquals( "PMOO backlog", backlog_bound, 
-				expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest ).backlog_bound );
+				expected_bounds.getBounds( Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest ).getBacklogBound() );
 	}
 	
 	@Parameters(name= "{index}: {0}")

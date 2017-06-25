@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2008 - 2010 Andreas Kiefer
  * Copyright (C) 2011 - 2017 Steffen Bondorf
@@ -39,8 +39,8 @@ import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 
 public class AnalysisResults {
-	public Num delay_bound;
-	public Num backlog_bound;
+	protected Num delay_bound;
+	protected Num backlog_bound;
 	public Map<Server,Set<ArrivalCurve>> map__server__alphas;
 	
 	public AnalysisResults() {
@@ -59,6 +59,22 @@ public class AnalysisResults {
 		} else {
 			this.map__server__alphas = map__server__alphas;
 		}
+	}
+
+	protected void setDelayBound( Num delay_bound ) {
+		this.delay_bound = delay_bound;
+	}
+
+	public Num getDelayBound() {
+		return delay_bound;
+	}
+
+	protected void setBacklogBound( Num backlog_bound ) {
+		this.backlog_bound = backlog_bound;
+	}
+
+	public Num getBacklogBound() {
+		return backlog_bound;
 	}
 	
 	public String getServerAlphasMapString() {

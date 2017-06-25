@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2008 - 2010 Andreas Kiefer
  * Copyright (C) 2011 - 2017 Steffen Bondorf
@@ -54,7 +54,6 @@ public abstract class Analysis {
 	
 	protected Network network;
 	protected AnalysisConfig configuration;
-	
 	protected AnalysisResults result;
 	
 	public abstract void performAnalysis( Flow flow_of_interest ) throws Exception;
@@ -113,13 +112,22 @@ public abstract class Analysis {
 		return network;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName();
+	}
+	
+//----------------------------------------------------------------------------------------------------
+// Convenience functions to access the results object.
+//----------------------------------------------------------------------------------------------------
 	/**
 	 * Returns the delay bound of the analysis.
 	 * 
 	 * @return the delay bound
 	 */
 	public Num getDelayBound() {
-		return result.delay_bound;
+		return result.getDelayBound();
 	};
 	
 	/**
@@ -128,7 +136,7 @@ public abstract class Analysis {
 	 * @return the backlog bound
 	 */
 	public Num getBacklogBound() {
-		return result.backlog_bound;
+		return result.getBacklogBound();
 	};
 
 	/**
@@ -146,11 +154,5 @@ public abstract class Analysis {
 	
 	public String getServerAlphasMapString(){
 		return result.getServerAlphasMapString();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return getClass().getSimpleName();
 	}
 }

@@ -10,7 +10,6 @@ v2.3.x
 * See isNetwork class and see the CPLEX branch for latest way to create the network.
 * Make the tests an optional, separate package to get rid of dependencies (JUnit and hamcrest)
 
-* Get and set for AnalysisResults and *Results.
 * Test all part of an analysis' intermediate results as found in the documentation and *Results.
 * In the tests: Create Num objects instead of AnalysisResults and let expected_results reuse previously created AnalysisResult objects internally.
 

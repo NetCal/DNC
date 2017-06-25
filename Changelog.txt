@@ -1,6 +1,15 @@
-v2.3.5 "Centaur" (2017-Jun-XX)
+v2.3.5 "Centaur" (2017-Jun-25)
 ------------------------------
-* Network.java: Reduced amount of arrival curve copies.
+* Network.java: 
+  - Reduced amount of arrival curve copies.
+  - SaveAs won't fail if the directory already exists.
+* AnalysisResult.java:
+  - Reduced visibility of delay and backlog bound variables from public to protected.
+  - Get methods are public, set are protected (and overwritten by extending classes) so they are only accessed by the respective analysis.
+* OutputTest.java: Catch and print potential exceptions thrown when loading and instantiating the just compiled test network class.
+* Test documentation 2.0beta2
+  - Update to new file naming scheme (see v2.3.3 changes).
+  - Sources: LyX files updated to version 508 (requires LyX 2.2+). 
 
 v2.3.4 "Centaur" (2017-May-19)
 ------------------------------
@@ -11,7 +20,7 @@ v2.3.4 "Centaur" (2017-May-19)
 
 v2.3.3 "Centaur" (2017-Apr-22)
 ------------------------------
-* Analysis Result: Remove obsolete flag "succeeded".
+* Analysis Result: Removed obsolete flag "succeeded".
 * Enum Multiplexing was moved from Server to AnalysisConfig.
 * InNetwork was renamed to NetworkFactory as well as extended for this purpose.
 * Convolution.java, convolve_SC_SC_RLs: Fix for the case that two rate-latency service curves should be convolved, yet, two null objects are given.

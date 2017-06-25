@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -85,9 +85,9 @@ public class TotalFlowAnalysis extends Analysis {
 			delay_bound = NumUtils.add( delay_bound, min_D_B.getFirst() );
 			backlog_bound = NumUtils.max( backlog_bound, min_D_B.getSecond() );
 		}
-		
-		result.delay_bound = delay_bound;
-		result.backlog_bound = backlog_bound;
+
+		((TotalFlowResults) result).setDelayBound( delay_bound );
+		((TotalFlowResults) result).setBacklogBound( backlog_bound );
 	}
 	
 	public Pair<Num> deriveBoundsAtServer( Server server ) throws Exception {
@@ -134,7 +134,7 @@ public class TotalFlowAnalysis extends Analysis {
 				delay_bound_s__min = delay_bound_server_alpha;
 			}
 		}
-		result.map__server__alphas.put( server, alphas_server );
+		((TotalFlowResults) result).map__server__alphas.put( server, alphas_server );
 		((TotalFlowResults) result).map__server__D_server.put( server, delay_bounds_server );
 		((TotalFlowResults) result).map__server__B_server.put( server, backlog_bounds_server );
 		

@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -68,6 +68,16 @@ public class SeparateFlowResults extends AnalysisResults {
 		
 		this.betas_e2e = betas_e2e;
 		this.map__server__betas_lo = map__server__betas_lo;
+	}
+
+	@Override
+	protected void setDelayBound( Num delay_bound ) {
+		super.setDelayBound( delay_bound );
+	}
+
+	@Override
+	protected void setBacklogBound( Num backlog_bound ) {
+		super.setBacklogBound( backlog_bound );
 	}
 
 	public String getServerLeftOverBetasMapString() {

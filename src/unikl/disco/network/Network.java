@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.4 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
  *
  * Copyright (C) 2011 - 2017 Steffen Bondorf
  *
@@ -1384,10 +1384,11 @@ public class Network {
  		sb.append( "}\n" );
 
  		File output = new File( output_path, file_name + file_extension );
- 		if( output.getParentFile() != null && output.getParentFile().mkdirs() ) {
+ 		if( output.getParentFile() != null ) {
+ 			output.getParentFile().mkdirs();
  			Files.write( output.toPath(), sb.toString().getBytes( StandardCharsets.UTF_8 ) );
  		} else {
- 			throw new Exception( "Output directory cannot be created." );
+ 			throw new Exception( "Output directory " + output.toString() + " cannot be created." );
  		}
  	}
  	
