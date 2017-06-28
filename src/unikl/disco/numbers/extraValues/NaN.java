@@ -24,98 +24,97 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers.extraValues;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import unikl.disco.numbers.Num;
 
 /**
  * Wrapper class around double;
  *
  * @author Steffen Bondorf
- *
  */
 public final class NaN implements Num {
-	public NaN() {}
-	
-	public boolean eqZero() {
-		return false;
-	}
+    public NaN() {
+    }
 
-	public boolean gt( Num num ) {
-		return false;
-	}
+    public boolean eqZero() {
+        return false;
+    }
 
-	public boolean gtZero() {
-		return false;
-	}
+    public boolean gt(Num num) {
+        return false;
+    }
 
-	public boolean geq( Num num ) {
-		return false;
-	}
+    public boolean gtZero() {
+        return false;
+    }
 
-	public boolean geqZero() {
-		return false;
-	}
+    public boolean geq(Num num) {
+        return false;
+    }
 
-	public boolean lt( Num num ) {
-		return false;
-	}
+    public boolean geqZero() {
+        return false;
+    }
 
-	public boolean ltZero() {
-		return false;
-	}
+    public boolean lt(Num num) {
+        return false;
+    }
 
-	public boolean leq( Num num ) {
-		return false;
-	}
+    public boolean ltZero() {
+        return false;
+    }
 
-	public boolean leqZero() {
-		return false;
-	}
+    public boolean leq(Num num) {
+        return false;
+    }
 
-	public boolean isFinite() {
-		return false;
-	}
+    public boolean leqZero() {
+        return false;
+    }
 
-	public boolean isInfinite() {
-		return false;
-	}
-	
-	public boolean isNaN() {
-		return true;
-	}
-	
-	@Override
-	public double doubleValue() {
-	    return Double.NaN;
-	}
+    public boolean isFinite() {
+        return false;
+    }
 
-	@Override
-	public Num copy() {
-		return new NaN();
-	}
-	
-	@Override
-	public boolean eq( double num ) {
-		return false;
-	}
+    public boolean isInfinite() {
+        return false;
+    }
 
-	@SuppressFBWarnings(value="EQ_ALWAYS_FALSE",justification ="Comparison to NaN should always return false")
-	@Override
-	public boolean equals( Object obj ) {
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Double.hashCode( Double.NaN );
-	}
-	
-	@Override
-	public String toString(){
-		return Double.toString( Double.NaN );
-	}
+    public boolean isNaN() {
+        return true;
+    }
+
+    @Override
+    public double doubleValue() {
+        return Double.NaN;
+    }
+
+    @Override
+    public Num copy() {
+        return new NaN();
+    }
+
+    @Override
+    public boolean eq(double num) {
+        return false;
+    }
+
+    @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to NaN should always return false")
+    @Override
+    public boolean equals(Object obj) {
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Double.hashCode(Double.NaN);
+    }
+
+    @Override
+    public String toString() {
+        return Double.toString(Double.NaN);
+    }
 }

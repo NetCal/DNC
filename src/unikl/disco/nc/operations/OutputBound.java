@@ -26,16 +26,10 @@
  */
 
 /**
- * 
  * @author Frank A. Zdarsky
  * @author Steffen Bondorf
- *
  */
 package unikl.disco.nc.operations;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.curves.ServiceCurve;
@@ -46,42 +40,47 @@ import unikl.disco.nc.AnalysisConfig.GammaFlag;
 import unikl.disco.network.Path;
 import unikl.disco.network.Server;
 
-public class OutputBound {
-	private OutputBound() {}
-	
-	public static Set<ArrivalCurve> compute( AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server ) throws Exception {
-		return compute( configuration, arrival_curves, server, Collections.singleton( server.getServiceCurve() ) );
-	}
-	
-	public static Set<ArrivalCurve> compute( AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server, Set<ServiceCurve> betas_lo ) throws Exception {
-		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-		
-		if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF  ) {
-			result = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( arrival_curves, server.getGamma() ), betas_lo );
-		} else {
-			result = Deconvolution.deconvolve( arrival_curves, betas_lo, configuration.tbrlDeconvolution() );
-		}
-		
-		if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF ) {
-			result = Convolution.convolve_ACs_EGamma( result, server.getExtraGamma() );
-		}
-		
-		return result;
-	}
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-	public static Set<ArrivalCurve> compute( AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path, Set<ServiceCurve> betas_lo ) throws Exception {
-		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-		
-		if( configuration.useGamma() != GammaFlag.GLOBALLY_OFF ) {
-			result = Deconvolution.deconvolve_almostConcCs_SCs( Convolution.convolve_ACs_MSC( arrival_curves, path.getGamma() ), betas_lo );
-		} else {
-			result = Deconvolution.deconvolve( arrival_curves, betas_lo, configuration.tbrlDeconvolution() );
-		}
-		
-		if( configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF ) {
-			result = Convolution.convolve_ACs_EGamma( result, path.getExtraGamma() );
-		}
-		
-		return result;
-	}
+public class OutputBound {
+    private OutputBound() {
+    }
+
+    public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server) throws Exception {
+        return compute(configuration, arrival_curves, server, Collections.singleton(server.getServiceCurve()));
+    }
+
+    public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server, Set<ServiceCurve> betas_lo) throws Exception {
+        Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
+
+        if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = Deconvolution.deconvolve_almostConcCs_SCs(Convolution.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
+        } else {
+            result = Deconvolution.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+        }
+
+        if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = Convolution.convolve_ACs_EGamma(result, server.getExtraGamma());
+        }
+
+        return result;
+    }
+
+    public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path, Set<ServiceCurve> betas_lo) throws Exception {
+        Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
+
+        if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = Deconvolution.deconvolve_almostConcCs_SCs(Convolution.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
+        } else {
+            result = Deconvolution.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+        }
+
+        if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = Convolution.convolve_ACs_EGamma(result, path.getExtraGamma());
+        }
+
+        return result;
+    }
 }

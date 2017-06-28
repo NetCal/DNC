@@ -27,76 +27,77 @@
 
 package unikl.disco.tests;
 
-import java.util.Set;
-
 import unikl.disco.nc.AnalysisConfig;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.nc.CalculatorConfig.NumClass;
 
+import java.util.Set;
+
 public class DncTestConfig extends AnalysisConfig {
-	// Functional test specific parameters
-	protected boolean define_multiplexing_globally;
-	protected AnalysisConfig.Multiplexing mux_discipline;
-	protected boolean console_output = false;
-	
-	// Calculator parameters
-	protected boolean enable_checks = false;
-	protected NumClass numbers;
-	
-	@SuppressWarnings("unused")
-	private DncTestConfig(){}
-	
-	public DncTestConfig( Set<ArrivalBoundMethod> arrival_bound_methods,
-									boolean remove_duplicate_arrival_bounds,
-									boolean tbrl_convolution, 
-									boolean tbrl_deconvolution,
-									AnalysisConfig.Multiplexing mux_discipline,
-									boolean define_multiplexing_globally,
-									CalculatorConfig.NumClass numbers ) {
-		
-		super( AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
-				GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
-				GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
-				arrival_bound_methods,
-				remove_duplicate_arrival_bounds,
-				tbrl_convolution,
-				tbrl_deconvolution,
-				false );
-		
-		this.mux_discipline = mux_discipline;
-		this.define_multiplexing_globally = define_multiplexing_globally;
-		this.numbers = numbers;
-	}
-	
-	public boolean fullConsoleOutput() { // false == Exceptions only
-		return console_output;
-	}
-	
-	@Override
-	public String toString() {
-		// AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def
-		StringBuffer func_test_str = new StringBuffer();
-		
-		func_test_str.append( arrivalBoundMethods().toString() );
-		
-		if( removeDuplicateArrivalBounds() ) {
-			func_test_str.append( ", " + "rm dupl ABs" );
-		}
-		if( tbrlConvolution() ) {
-			func_test_str.append( ", " + "TbRl Conv" );
-		}
-		if( tbrlDeconvolution() ) {
-			func_test_str.append( ", " + "TbRl Deconv" );
-		}
+    // Functional test specific parameters
+    protected boolean define_multiplexing_globally;
+    protected AnalysisConfig.Multiplexing mux_discipline;
+    protected boolean console_output = false;
 
-		func_test_str.append(  ", "+ mux_discipline.toString() );
-		
-		if( define_multiplexing_globally ) {
-			func_test_str.append( ", " + "MUX global" );
-		}
+    // Calculator parameters
+    protected boolean enable_checks = false;
+    protected NumClass numbers;
 
-		func_test_str.append( ", " + numbers.toString() );
-		
-		return func_test_str.toString();
-	}
+    @SuppressWarnings("unused")
+    private DncTestConfig() {
+    }
+
+    public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods,
+                         boolean remove_duplicate_arrival_bounds,
+                         boolean tbrl_convolution,
+                         boolean tbrl_deconvolution,
+                         AnalysisConfig.Multiplexing mux_discipline,
+                         boolean define_multiplexing_globally,
+                         CalculatorConfig.NumClass numbers) {
+
+        super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
+                GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
+                GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
+                arrival_bound_methods,
+                remove_duplicate_arrival_bounds,
+                tbrl_convolution,
+                tbrl_deconvolution,
+                false);
+
+        this.mux_discipline = mux_discipline;
+        this.define_multiplexing_globally = define_multiplexing_globally;
+        this.numbers = numbers;
+    }
+
+    public boolean fullConsoleOutput() { // false == Exceptions only
+        return console_output;
+    }
+
+    @Override
+    public String toString() {
+        // AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def
+        StringBuffer func_test_str = new StringBuffer();
+
+        func_test_str.append(arrivalBoundMethods().toString());
+
+        if (removeDuplicateArrivalBounds()) {
+            func_test_str.append(", " + "rm dupl ABs");
+        }
+        if (tbrlConvolution()) {
+            func_test_str.append(", " + "TbRl Conv");
+        }
+        if (tbrlDeconvolution()) {
+            func_test_str.append(", " + "TbRl Deconv");
+        }
+
+        func_test_str.append(", " + mux_discipline.toString());
+
+        if (define_multiplexing_globally) {
+            func_test_str.append(", " + "MUX global");
+        }
+
+        func_test_str.append(", " + numbers.toString());
+
+        return func_test_str.toString();
+    }
 }

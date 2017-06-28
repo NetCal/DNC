@@ -26,6 +26,35 @@ public class MaxServiceCurveRTCultAffine extends CurveRTCultAffine implements Ma
     }
 
 
+    public MaxServiceCurveRTCultAffine(SegmentList aperSegments) {
+        rtc_curve = new Curve(aperSegments);
+    }
+
+    public MaxServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy);
+    }
+
+    public MaxServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
+    }
+
+    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
+    }
+
+
+    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
+    }
+
+    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, String name) {
+        rtc_curve = new Curve(aperSegments, name);
+    }
+
+    public MaxServiceCurveRTCultAffine(Curve c) {
+        rtc_curve = c.clone();
+    }
+
     //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
@@ -55,34 +84,5 @@ public class MaxServiceCurveRTCultAffine extends CurveRTCultAffine implements Ma
     @Override
     public String toString() {
         return "MS" + super.toString();
-    }
-
-
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments) {
-        rtc_curve = new Curve(aperSegments);
-    }
-
-    public MaxServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy);
-    }
-
-    public MaxServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
-    }
-
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
-    }
-
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
-    }
-
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, String name) {
-        rtc_curve = new Curve(aperSegments, name);
-    }
-
-    public MaxServiceCurveRTCultAffine(Curve c) {
-        rtc_curve = c.clone();
     }
 }

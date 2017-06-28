@@ -24,59 +24,58 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers.implementations;
 
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumUtilsInterface;
-import unikl.disco.numbers.implementations.RealSingle;
 
 public class RealSingleUtils implements NumUtilsInterface {
-	public Num add( Num num1, Num num2 ) {
-		return RealSingle.add( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num add(Num num1, Num num2) {
+        return RealSingle.add((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num sub( Num num1, Num num2 ) {
-		return RealSingle.sub( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num sub(Num num1, Num num2) {
+        return RealSingle.sub((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num mult( Num num1, Num num2 ) {
-		return RealSingle.mult( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num mult(Num num1, Num num2) {
+        return RealSingle.mult((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num div( Num num1, Num num2 ) {
-		return RealSingle.div( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num div(Num num1, Num num2) {
+        return RealSingle.div((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num abs( Num num ) {
-		return RealSingle.abs( (RealSingle)num );
-	}
+    public Num abs(Num num) {
+        return RealSingle.abs((RealSingle) num);
+    }
 
-	public Num diff( Num num1, Num num2 ) {
-		return RealSingle.diff( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num diff(Num num1, Num num2) {
+        return RealSingle.diff((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num max( Num num1, Num num2 ) {
-		return RealSingle.max( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num max(Num num1, Num num2) {
+        return RealSingle.max((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num min( Num num1, Num num2 ) {
-		return RealSingle.min( (RealSingle)num1, (RealSingle)num2 );
-	}
+    public Num min(Num num1, Num num2) {
+        return RealSingle.min((RealSingle) num1, (RealSingle) num2);
+    }
 
-	public Num negate( Num num ) {
-		return RealSingle.negate( (RealSingle)num );
-	}
+    public Num negate(Num num) {
+        return RealSingle.negate((RealSingle) num);
+    }
 
-	public boolean isFinite( Num num ) {
-		return ( (RealSingle)num ).isFinite();
-	}
+    public boolean isFinite(Num num) {
+        return ((RealSingle) num).isFinite();
+    }
 
-	public boolean isInfinite( Num num ) {
-		return ( (RealSingle)num ).isInfinite();
-	}
-	
-	public boolean isNaN( Num num ) {
-		return ( (RealSingle)num ).isNaN();
-	}
+    public boolean isInfinite(Num num) {
+        return ((RealSingle) num).isInfinite();
+    }
+
+    public boolean isNaN(Num num) {
+        return ((RealSingle) num).isNaN();
+    }
 }

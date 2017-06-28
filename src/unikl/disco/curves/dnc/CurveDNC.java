@@ -72,6 +72,28 @@ public class CurveDNC implements CurveUltAffine {
     protected boolean has_token_bucket_meta_info = false;
     protected List<CurveDNC> token_buckets = new LinkedList<CurveDNC>();
 
+    /**
+     * Creates a <code>CurveDNC</code> instance with a single segment on the x-axis.
+     */
+    public CurveDNC() {
+        createNewCurve(1, false);
+    }
+
+    public CurveDNC(CurveUltAffine curve) {
+        copy(curve);
+    }
+
+
+    /**
+     * Creates a <code>Curve</code> instance with <code>segment_count</code>
+     * empty <code>LinearSegment</code> instances.
+     *
+     * @param segment_count the number of segments
+     */
+    public CurveDNC(int segment_count) {
+        createNewCurve(segment_count, false);
+    }
+
     public boolean isIs_rate_latency() {
         return is_rate_latency;
     }
@@ -79,7 +101,6 @@ public class CurveDNC implements CurveUltAffine {
     public void setIs_rate_latency(boolean is_rate_latency) {
         this.is_rate_latency = is_rate_latency;
     }
-
 
     public boolean isIs_token_bucket() {
         return is_token_bucket;
@@ -89,7 +110,6 @@ public class CurveDNC implements CurveUltAffine {
         this.is_token_bucket = is_token_bucket;
     }
 
-
     public boolean isHas_rate_latency_meta_info() {
         return has_rate_latency_meta_info;
     }
@@ -98,19 +118,29 @@ public class CurveDNC implements CurveUltAffine {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
     }
 
+    /**
+     * Returns the sustained rate (the gradient of the last segment).
+     *
+     * @return the sustained rate.
+     */
+    @Override
+    public Num getSustainedRate() {
+        return segments[segments.length-1].grad;
+    }
+
     // TODO: @Steffen
     // Warning! Can cause runtime exceptions when not handled correctly while calling!
     // There are some cases where RateLatency Curves with is_rate_latency = true are created, but with empty RL list
     // May be fixed now
     public List<CurveUltAffine> getRate_latencies() {
         List<CurveUltAffine> tmp = new LinkedList<>();
-        if( this.is_rate_latency ) {
-    		tmp.add( this.copy() );
-    	} else {
+        if (this.is_rate_latency) {
+            tmp.add(this.copy());
+        } else {
             for (int i = 0; i < rate_latencies.size(); i++) {
                 tmp.add(rate_latencies.get(i));
             }
-    	}
+        }
         return tmp;
     }
 
@@ -122,10 +152,14 @@ public class CurveDNC implements CurveUltAffine {
         this.rate_latencies = tmp;
     }
 
-
     public boolean isHas_token_bucket_meta_info() {
         return has_token_bucket_meta_info;
     }
+
+
+//--------------------------------------------------------------------------------------------------------------
+// Constructors
+//--------------------------------------------------------------------------------------------------------------
 
     public void setHas_token_bucket_meta_info(boolean has_token_bucket_meta_info) {
         this.has_token_bucket_meta_info = has_token_bucket_meta_info;
@@ -146,32 +180,6 @@ public class CurveDNC implements CurveUltAffine {
             tmp.add((CurveDNC) token_buckets.get(i));
         }
         this.token_buckets = tmp;
-    }
-
-
-//--------------------------------------------------------------------------------------------------------------
-// Constructors
-//--------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a <code>CurveDNC</code> instance with a single segment on the x-axis.
-     */
-    public CurveDNC() {
-        createNewCurve(1, false);
-    }
-
-    public CurveDNC(CurveUltAffine curve) {
-        copy(curve);
-    }
-
-    /**
-     * Creates a <code>Curve</code> instance with <code>segment_count</code>
-     * empty <code>LinearSegment</code> instances.
-     *
-     * @param segment_count the number of segments
-     */
-    public CurveDNC(int segment_count) {
-        createNewCurve(segment_count, false);
     }
 
     private void createNewCurve(int segment_count, boolean empty) {
@@ -198,7 +206,7 @@ public class CurveDNC implements CurveUltAffine {
     private void createZeroSegmentsCurve(int segment_count) {
         segments = new LinearSegmentDNC[segment_count];
 
-        if (segment_count == 0)  {
+        if (segment_count == 0) {
             return;
         }
 

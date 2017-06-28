@@ -24,7 +24,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers.implementations;
 
 import unikl.disco.numbers.Num;
@@ -32,206 +32,205 @@ import unikl.disco.numbers.NumUtilsInterface;
 import unikl.disco.numbers.extraValues.NaN;
 import unikl.disco.numbers.extraValues.NegativeInfinity;
 import unikl.disco.numbers.extraValues.PositiveInfinity;
-import unikl.disco.numbers.implementations.RationalBigInt;
 
 public class RationalBigIntUtils implements NumUtilsInterface {
-	public Num add( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN 
-				|| ( num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity ) 
-				|| ( num1 instanceof NegativeInfinity && num2 instanceof PositiveInfinity ) ) {
-			return new NaN();
-		}
-		if( num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity ) { // other num is not negative infinity
-			return new PositiveInfinity(); 
-		}
-		if( num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity ) { // other num is not positive infinity
-			return new NegativeInfinity(); 
-		}
-		
-		return RationalBigInt.add( (RationalBigInt)num1, (RationalBigInt)num2 );
-	}
+    public Num add(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN
+                || (num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity)
+                || (num1 instanceof NegativeInfinity && num2 instanceof PositiveInfinity)) {
+            return new NaN();
+        }
+        if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) { // other num is not negative infinity
+            return new PositiveInfinity();
+        }
+        if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) { // other num is not positive infinity
+            return new NegativeInfinity();
+        }
 
-	public Num sub( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN ) {
-			return new NaN();
-		}
-		
-		if( num1 instanceof NaN || num2 instanceof NaN 
-				|| ( num1 instanceof PositiveInfinity && num2 instanceof PositiveInfinity ) 
-				|| ( num1 instanceof NegativeInfinity && num2 instanceof NegativeInfinity ) ) {
-			return new NaN();
-		}
-		if( num1 instanceof PositiveInfinity				// num2 is not positive infinity
-				|| num2 instanceof NegativeInfinity ) {	// num1 is not negative infinity
-			return new PositiveInfinity(); 
-		}
-		if( num1 instanceof NegativeInfinity				// num2 is not negative infinity
-				|| num2 instanceof PositiveInfinity ) {	// num1 is not positive infinity
-			return new NegativeInfinity(); 
-		}
-		
-		return RationalBigInt.sub( (RationalBigInt)num1, (RationalBigInt)num2 );
-	}
+        return RationalBigInt.add((RationalBigInt) num1, (RationalBigInt) num2);
+    }
 
-	public Num mult( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN ) {
-			return new NaN();
-		}
-		if( num1 instanceof PositiveInfinity ) {
-			if ( num2.ltZero() || num2 instanceof NegativeInfinity ) {
-				return new NegativeInfinity();
-			} else {
-				return new PositiveInfinity();
-			}
-		}
-		if( num2 instanceof PositiveInfinity ) {
-			if ( num1.ltZero() || num1 instanceof NegativeInfinity ) {
-				return new NegativeInfinity();
-			} else {
-				return new PositiveInfinity();
-			}
-		}
-		if( num1 instanceof NegativeInfinity ) {
-			if ( num2.ltZero() || num2 instanceof NegativeInfinity ) {
-				return new PositiveInfinity();
-			} else {
-				return new NegativeInfinity();
-			}
-		}
-		if( num2 instanceof NegativeInfinity ) {
-			if ( num1.ltZero() || num1 instanceof NegativeInfinity ) {
-				return new PositiveInfinity();
-			} else {
-				return new NegativeInfinity();
-			}
-		}
-		
-		return RationalBigInt.mult( (RationalBigInt)num1, (RationalBigInt)num2 );
-	}
+    public Num sub(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN) {
+            return new NaN();
+        }
 
-	public Num div( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN 
-				|| ( ( num1 instanceof PositiveInfinity || num1 instanceof NegativeInfinity ) 
-						&& ( num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity ) ) ) { // two infinities in the division
-			return new NaN();
-		}
-		if( num1 instanceof PositiveInfinity ) { // positive infinity divided by some finite value
-			if( num2.ltZero() ) {
-				return new NegativeInfinity();
-			} else {
-				return new PositiveInfinity();
-			}
-		}
-		if( num1 instanceof NegativeInfinity ) { // negative infinity divided by some finite value 
-			if( num2.ltZero() ) {
-				return new PositiveInfinity();
-			} else {
-				return new NegativeInfinity();
-			}
-		}
-		if( num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity ) { // finite value divided by infinity
-			return new RationalBigInt( 0 );
-		}
+        if (num1 instanceof NaN || num2 instanceof NaN
+                || (num1 instanceof PositiveInfinity && num2 instanceof PositiveInfinity)
+                || (num1 instanceof NegativeInfinity && num2 instanceof NegativeInfinity)) {
+            return new NaN();
+        }
+        if (num1 instanceof PositiveInfinity                // num2 is not positive infinity
+                || num2 instanceof NegativeInfinity) {    // num1 is not negative infinity
+            return new PositiveInfinity();
+        }
+        if (num1 instanceof NegativeInfinity                // num2 is not negative infinity
+                || num2 instanceof PositiveInfinity) {    // num1 is not positive infinity
+            return new NegativeInfinity();
+        }
 
-        if ( ((RationalBigInt)num2).eqZero() ) {
-        	return new PositiveInfinity();
-       	} else {
-			return RationalBigInt.div( (RationalBigInt)num1, (RationalBigInt)num2 );     		
-       	}
-	}
+        return RationalBigInt.sub((RationalBigInt) num1, (RationalBigInt) num2);
+    }
 
-	public Num abs( Num num ) {
-		if( num instanceof NaN ) {
-			return new NaN();
-		}
-		if( num instanceof PositiveInfinity || num instanceof NegativeInfinity ) {
-			return new PositiveInfinity();
-		}
-		
-		return RationalBigInt.abs( (RationalBigInt)num );
-	}
+    public Num mult(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN) {
+            return new NaN();
+        }
+        if (num1 instanceof PositiveInfinity) {
+            if (num2.ltZero() || num2 instanceof NegativeInfinity) {
+                return new NegativeInfinity();
+            } else {
+                return new PositiveInfinity();
+            }
+        }
+        if (num2 instanceof PositiveInfinity) {
+            if (num1.ltZero() || num1 instanceof NegativeInfinity) {
+                return new NegativeInfinity();
+            } else {
+                return new PositiveInfinity();
+            }
+        }
+        if (num1 instanceof NegativeInfinity) {
+            if (num2.ltZero() || num2 instanceof NegativeInfinity) {
+                return new PositiveInfinity();
+            } else {
+                return new NegativeInfinity();
+            }
+        }
+        if (num2 instanceof NegativeInfinity) {
+            if (num1.ltZero() || num1 instanceof NegativeInfinity) {
+                return new PositiveInfinity();
+            } else {
+                return new NegativeInfinity();
+            }
+        }
 
-	public Num diff( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN ) { 
-			return new NaN();
-		}
-		if( num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity 
-				|| num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity ) {
-			return new PositiveInfinity();
-		}
-		
-		return RationalBigInt.diff( (RationalBigInt)num1, (RationalBigInt)num2 );
-	}
+        return RationalBigInt.mult((RationalBigInt) num1, (RationalBigInt) num2);
+    }
 
-	public Num max( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN ) {
-			return new NaN();
-		}
-		if( num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity ) {
-			return new PositiveInfinity();
-		}
-		if( num1 instanceof NegativeInfinity ) {
-			return num2.copy();
-		}
-		if( num2 instanceof NegativeInfinity ) {
-			return num1.copy();
-		}
-		
-		return RationalBigInt.max( (RationalBigInt)num1, (RationalBigInt)num2 );
-	}
+    public Num div(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN
+                || ((num1 instanceof PositiveInfinity || num1 instanceof NegativeInfinity)
+                && (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity))) { // two infinities in the division
+            return new NaN();
+        }
+        if (num1 instanceof PositiveInfinity) { // positive infinity divided by some finite value
+            if (num2.ltZero()) {
+                return new NegativeInfinity();
+            } else {
+                return new PositiveInfinity();
+            }
+        }
+        if (num1 instanceof NegativeInfinity) { // negative infinity divided by some finite value
+            if (num2.ltZero()) {
+                return new PositiveInfinity();
+            } else {
+                return new NegativeInfinity();
+            }
+        }
+        if (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity) { // finite value divided by infinity
+            return new RationalBigInt(0);
+        }
 
-	public Num min( Num num1, Num num2 ) {
-		if( num1 instanceof NaN || num2 instanceof NaN ) {
-			return new NaN();
-		}
-		if( num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity ) {
-			return new NegativeInfinity();
-		}
-		if( num1 instanceof PositiveInfinity ) {
-			return num2.copy();
-		}
-		if( num2 instanceof PositiveInfinity ) {
-			return num1.copy();
-		}
-		
-		return RationalBigInt.min( (RationalBigInt)num1, (RationalBigInt)num2 );
-	}
+        if (((RationalBigInt) num2).eqZero()) {
+            return new PositiveInfinity();
+        } else {
+            return RationalBigInt.div((RationalBigInt) num1, (RationalBigInt) num2);
+        }
+    }
 
-	public Num negate( Num num ) {
-		if( num instanceof NaN ) {
-			return new NaN();
-		}
-		if( num instanceof PositiveInfinity ) {
-			return new NegativeInfinity();
-		}
-		if( num instanceof NegativeInfinity ) {
-			return new PositiveInfinity();
-		}
-		
-		return RationalBigInt.negate( (RationalBigInt)num );
-	}
+    public Num abs(Num num) {
+        if (num instanceof NaN) {
+            return new NaN();
+        }
+        if (num instanceof PositiveInfinity || num instanceof NegativeInfinity) {
+            return new PositiveInfinity();
+        }
 
-	public boolean isFinite( Num num ) {
-		if( num instanceof RationalBigInt ) { // Only stores finite values
-			return true;
-		} else {
-			return false; // NaN is neither finite nor infinite
-		}
-	}
+        return RationalBigInt.abs((RationalBigInt) num);
+    }
 
-	public boolean isInfinite( Num num ) {
-		if( ( num instanceof PositiveInfinity ) || ( num instanceof NegativeInfinity ) ) {
-			return true;
-		} else {
-			return false; // NaN is neither finite nor infinite
-		}
-	}
-	
-	public boolean isNaN( Num num ) {
-		if( num instanceof NaN ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public Num diff(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN) {
+            return new NaN();
+        }
+        if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity
+                || num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) {
+            return new PositiveInfinity();
+        }
+
+        return RationalBigInt.diff((RationalBigInt) num1, (RationalBigInt) num2);
+    }
+
+    public Num max(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN) {
+            return new NaN();
+        }
+        if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) {
+            return new PositiveInfinity();
+        }
+        if (num1 instanceof NegativeInfinity) {
+            return num2.copy();
+        }
+        if (num2 instanceof NegativeInfinity) {
+            return num1.copy();
+        }
+
+        return RationalBigInt.max((RationalBigInt) num1, (RationalBigInt) num2);
+    }
+
+    public Num min(Num num1, Num num2) {
+        if (num1 instanceof NaN || num2 instanceof NaN) {
+            return new NaN();
+        }
+        if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) {
+            return new NegativeInfinity();
+        }
+        if (num1 instanceof PositiveInfinity) {
+            return num2.copy();
+        }
+        if (num2 instanceof PositiveInfinity) {
+            return num1.copy();
+        }
+
+        return RationalBigInt.min((RationalBigInt) num1, (RationalBigInt) num2);
+    }
+
+    public Num negate(Num num) {
+        if (num instanceof NaN) {
+            return new NaN();
+        }
+        if (num instanceof PositiveInfinity) {
+            return new NegativeInfinity();
+        }
+        if (num instanceof NegativeInfinity) {
+            return new PositiveInfinity();
+        }
+
+        return RationalBigInt.negate((RationalBigInt) num);
+    }
+
+    public boolean isFinite(Num num) {
+        if (num instanceof RationalBigInt) { // Only stores finite values
+            return true;
+        } else {
+            return false; // NaN is neither finite nor infinite
+        }
+    }
+
+    public boolean isInfinite(Num num) {
+        if ((num instanceof PositiveInfinity) || (num instanceof NegativeInfinity)) {
+            return true;
+        } else {
+            return false; // NaN is neither finite nor infinite
+        }
+    }
+
+    public boolean isNaN(Num num) {
+        if (num instanceof NaN) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

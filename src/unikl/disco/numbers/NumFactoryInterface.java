@@ -24,33 +24,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers;
 
 public interface NumFactoryInterface {
-	 Num getPositiveInfinity();
+    Num getPositiveInfinity();
 
-	 Num createPositiveInfinity();
-	
-	 Num getNegativeInfinity();
-	
-	 Num createNegativeInfinity();
+    Num createPositiveInfinity();
 
-	 Num getNaN();
-	
-	 Num createNaN();
+    Num getNegativeInfinity();
 
-	 Num getZero();
-	
-	 Num createZero();
-	
-	 Num getEpsilon();
-	
-	 Num createEpsilon();
-	
-	 Num create( double value );
-	
-	 Num create( int num, int den );
-	
-	 Num create( String num_str ) throws Exception;
+    Num createNegativeInfinity();
+
+    Num getNaN();
+
+    Num createNaN();
+
+    Num getZero();
+
+    Num createZero();
+
+    Num getEpsilon();
+
+    Num createEpsilon();
+
+    Num create(double value);
+
+    Num create(int num, int den);
+
+    Num create(String num_str) throws Exception;
 }

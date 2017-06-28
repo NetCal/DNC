@@ -28,9 +28,6 @@
 
 package unikl.disco.nc;
 
-import java.util.Map;
-import java.util.Set;
-
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.nc.analyses.PmooAnalysis;
 import unikl.disco.nc.analyses.SeparateFlowAnalysis;
@@ -41,118 +38,126 @@ import unikl.disco.network.Path;
 import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * This class contains all members and methods that are needed for more than one
  * analysis.
- * 
+ *
  * @author Andreas Kiefer
  * @author Steffen Bondorf
- * 
  */
 public abstract class Analysis {
-	public enum Analyses { TFA, SFA, PMOO };
-	
-	protected Network network;
-	protected AnalysisConfig configuration;
-	protected AnalysisResults result;
-	
-	public abstract void performAnalysis( Flow flow_of_interest ) throws Exception;
+    protected Network network;
 
-	public abstract void performAnalysis( Flow flow_of_interest, Path path ) throws Exception;
-	
-	protected Analysis() {}
+    ;
+    protected AnalysisConfig configuration;
+    protected AnalysisResults result;
+    protected Analysis() {
+    }
 
-	protected Analysis( Network network ) {
-		this.network = network;
-		this.configuration = new AnalysisConfig();
-	}
-	
-	protected Analysis( Network network, AnalysisConfig configuration ) {
-		this.network = network;
-		this.configuration = configuration;
-	}
-	
-	public static TotalFlowAnalysis performTfaEnd2End( Network network, Flow flow_of_interest ) throws Exception {
-		TotalFlowAnalysis tfa = new TotalFlowAnalysis( network );
-		tfa.performAnalysis( flow_of_interest );
-		return tfa;
-	}
-	
-	public static TotalFlowAnalysis performTfaEnd2End( Network network, AnalysisConfig configuration, Flow flow_of_interest ) throws Exception {
-		TotalFlowAnalysis tfa = new TotalFlowAnalysis( network, configuration );
-		tfa.performAnalysis( flow_of_interest );
-		return tfa;
-	}
+    protected Analysis(Network network) {
+        this.network = network;
+        this.configuration = new AnalysisConfig();
+    }
 
-	public static SeparateFlowAnalysis performSfaEnd2End( Network network, Flow flow_of_interest ) throws Exception {
-		SeparateFlowAnalysis sfa = new SeparateFlowAnalysis( network );
-		sfa.performAnalysis( flow_of_interest );
-		return sfa;
-	}
-	
-	public static SeparateFlowAnalysis performSfaEnd2End( Network network, AnalysisConfig configuration, Flow flow_of_interest ) throws Exception {
-		SeparateFlowAnalysis sfa = new SeparateFlowAnalysis( network, configuration );
-		sfa.performAnalysis( flow_of_interest );
-		return sfa;
-	}
-	
-	public static PmooAnalysis performPmooEnd2End( Network network, Flow flow_of_interest ) throws Exception {
-		PmooAnalysis pmoo = new PmooAnalysis( network );
-		pmoo.performAnalysis( flow_of_interest );
-		return pmoo;
-	}
-	
-	public static PmooAnalysis performPmooEnd2End( Network network, AnalysisConfig configuration, Flow flow_of_interest ) throws Exception {
-		PmooAnalysis pmoo = new PmooAnalysis( network, configuration );
-		pmoo.performAnalysis( flow_of_interest );
-		return pmoo;
-	}
-	
-	public Network getNetwork() {
-		return network;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return getClass().getSimpleName();
-	}
-	
+    protected Analysis(Network network, AnalysisConfig configuration) {
+        this.network = network;
+        this.configuration = configuration;
+    }
+
+    public static TotalFlowAnalysis performTfaEnd2End(Network network, Flow flow_of_interest) throws Exception {
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
+        tfa.performAnalysis(flow_of_interest);
+        return tfa;
+    }
+
+    public static TotalFlowAnalysis performTfaEnd2End(Network network, AnalysisConfig configuration, Flow flow_of_interest) throws Exception {
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+        tfa.performAnalysis(flow_of_interest);
+        return tfa;
+    }
+
+    public static SeparateFlowAnalysis performSfaEnd2End(Network network, Flow flow_of_interest) throws Exception {
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
+        sfa.performAnalysis(flow_of_interest);
+        return sfa;
+    }
+
+    public static SeparateFlowAnalysis performSfaEnd2End(Network network, AnalysisConfig configuration, Flow flow_of_interest) throws Exception {
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
+        sfa.performAnalysis(flow_of_interest);
+        return sfa;
+    }
+
+    public static PmooAnalysis performPmooEnd2End(Network network, Flow flow_of_interest) throws Exception {
+        PmooAnalysis pmoo = new PmooAnalysis(network);
+        pmoo.performAnalysis(flow_of_interest);
+        return pmoo;
+    }
+
+    public static PmooAnalysis performPmooEnd2End(Network network, AnalysisConfig configuration, Flow flow_of_interest) throws Exception {
+        PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+        pmoo.performAnalysis(flow_of_interest);
+        return pmoo;
+    }
+
+    public abstract void performAnalysis(Flow flow_of_interest) throws Exception;
+
+    public abstract void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
+
+    public Network getNetwork() {
+        return network;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
+    /**
+     * Returns the delay bound of the analysis.
+     *
+     * @return the delay bound
+     */
+    public Num getDelayBound() {
+        return result.getDelayBound();
+    }
+
 //----------------------------------------------------------------------------------------------------
 // Convenience functions to access the results object.
 //----------------------------------------------------------------------------------------------------
-	/**
-	 * Returns the delay bound of the analysis.
-	 * 
-	 * @return the delay bound
-	 */
-	public Num getDelayBound() {
-		return result.getDelayBound();
-	};
-	
-	/**
-	 * Returns the backlog bound of the analysis.
-	 * 
-	 * @return the backlog bound
-	 */
-	public Num getBacklogBound() {
-		return result.getBacklogBound();
-	};
 
-	/**
-	 * For TFA this is the whole traffic at a server because
-	 * you do not separate the flow of interest during analysis.
-	 * 
-	 * For SFA and PMOO you will get the arrival bounds of
-	 * the cross-traffic at every server.
-	 * 
-	 * @return Mapping from the server to the server's arrival bound
-	 */
-	public Map<Server, Set<ArrivalCurve>> getServerAlphasMap(){
-		return result.map__server__alphas;
-	}
-	
-	public String getServerAlphasMapString(){
-		return result.getServerAlphasMapString();
-	}
+    /**
+     * Returns the backlog bound of the analysis.
+     *
+     * @return the backlog bound
+     */
+    public Num getBacklogBound() {
+        return result.getBacklogBound();
+    }
+
+    ;
+
+    /**
+     * For TFA this is the whole traffic at a server because
+     * you do not separate the flow of interest during analysis.
+     * <p>
+     * For SFA and PMOO you will get the arrival bounds of
+     * the cross-traffic at every server.
+     *
+     * @return Mapping from the server to the server's arrival bound
+     */
+    public Map<Server, Set<ArrivalCurve>> getServerAlphasMap() {
+        return result.map__server__alphas;
+    }
+
+    ;
+
+    public String getServerAlphasMapString() {
+        return result.getServerAlphasMapString();
+    }
+
+    public enum Analyses {TFA, SFA, PMOO}
 }

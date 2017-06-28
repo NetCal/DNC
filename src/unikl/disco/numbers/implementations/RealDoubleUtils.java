@@ -24,59 +24,58 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers.implementations;
 
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumUtilsInterface;
-import unikl.disco.numbers.implementations.RealDouble;
 
 public class RealDoubleUtils implements NumUtilsInterface {
-	public Num add( Num num1, Num num2 ) {
-		return RealDouble.add( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num add(Num num1, Num num2) {
+        return RealDouble.add((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num sub( Num num1, Num num2 ) {
-		return RealDouble.sub( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num sub(Num num1, Num num2) {
+        return RealDouble.sub((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num mult( Num num1, Num num2 ) {
-		return RealDouble.mult( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num mult(Num num1, Num num2) {
+        return RealDouble.mult((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num div( Num num1, Num num2 ) {
-		return RealDouble.div( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num div(Num num1, Num num2) {
+        return RealDouble.div((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num abs( Num num ) {
-		return RealDouble.abs( (RealDouble)num );
-	}
+    public Num abs(Num num) {
+        return RealDouble.abs((RealDouble) num);
+    }
 
-	public Num diff( Num num1, Num num2 ) {
-		return RealDouble.diff( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num diff(Num num1, Num num2) {
+        return RealDouble.diff((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num max( Num num1, Num num2 ) {
-		return RealDouble.max( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num max(Num num1, Num num2) {
+        return RealDouble.max((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num min( Num num1, Num num2 ) {
-		return RealDouble.min( (RealDouble)num1, (RealDouble)num2 );
-	}
+    public Num min(Num num1, Num num2) {
+        return RealDouble.min((RealDouble) num1, (RealDouble) num2);
+    }
 
-	public Num negate( Num num ) {
-		return RealDouble.negate( (RealDouble)num );
-	}
+    public Num negate(Num num) {
+        return RealDouble.negate((RealDouble) num);
+    }
 
-	public boolean isFinite( Num num ) {
-		return ( (RealDouble)num ).isFinite();
-	}
+    public boolean isFinite(Num num) {
+        return ((RealDouble) num).isFinite();
+    }
 
-	public boolean isInfinite( Num num ) {
-		return ( (RealDouble)num ).isInfinite();
-	}
-	
-	public boolean isNaN( Num num ) {
-		return ( (RealDouble)num ).isNaN();
-	}
+    public boolean isInfinite(Num num) {
+        return ((RealDouble) num).isInfinite();
+    }
+
+    public boolean isNaN(Num num) {
+        return ((RealDouble) num).isNaN();
+    }
 }

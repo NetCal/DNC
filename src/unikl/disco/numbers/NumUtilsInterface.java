@@ -24,33 +24,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers;
 
-import unikl.disco.numbers.Num;
-
 public interface NumUtilsInterface {
-	Num add( Num num1, Num num2 );
+    Num add(Num num1, Num num2);
 
-	Num sub( Num num1, Num num2 );
+    Num sub(Num num1, Num num2);
 
-	Num mult( Num num1, Num num2 );
+    Num mult(Num num1, Num num2);
 
-	Num div( Num num1, Num num2 );
+    Num div(Num num1, Num num2);
 
-	Num abs( Num num );
+    Num abs(Num num);
 
-	Num diff( Num num1, Num num2 );
+    Num diff(Num num1, Num num2);
 
-	Num max( Num num1, Num num2 );
+    Num max(Num num1, Num num2);
 
-	Num min( Num num1, Num num2 );
+    Num min(Num num1, Num num2);
 
-	Num negate( Num num );
+    Num negate(Num num);
 
-	boolean isFinite( Num num );
+    boolean isFinite(Num num);
 
-	boolean isInfinite( Num num );
-	
-	boolean isNaN( Num num );
+    boolean isInfinite(Num num);
+
+    boolean isNaN(Num num);
 }

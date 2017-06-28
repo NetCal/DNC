@@ -26,8 +26,37 @@ public class ArrivalCurveRTCultAffine extends CurveRTCultAffine implements Arriv
     }
 
 
+    public ArrivalCurveRTCultAffine(SegmentList aperSegments) {
+        rtc_curve = new Curve(aperSegments);
+    }
+
+    public ArrivalCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy);
+    }
+
+    public ArrivalCurveRTCultAffine(Curve c) {
+        rtc_curve = c.clone();
+    }
+
+    public ArrivalCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
+    }
+
+
+    public ArrivalCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
+    }
+
+    public ArrivalCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
+    }
+
+    public ArrivalCurveRTCultAffine(SegmentList aperSegments, java.lang.String name) {
+        rtc_curve = new Curve(aperSegments, name);
+    }
+
     //------------------------------------------------------------------------------------------------------------
-// Interface implementations	
+// Interface implementations
 //------------------------------------------------------------------------------------------------------------
     @Override
     public ArrivalCurveRTCultAffine copy() {
@@ -49,34 +78,5 @@ public class ArrivalCurveRTCultAffine extends CurveRTCultAffine implements Arriv
     @Override
     public String toString() {
         return "C" + super.toString();
-    }
-
-
-    public ArrivalCurveRTCultAffine(SegmentList aperSegments) {
-        rtc_curve = new Curve(aperSegments);
-    }
-
-    public ArrivalCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy);
-    }
-
-    public ArrivalCurveRTCultAffine(Curve c) {
-        rtc_curve = c.clone();
-    }
-
-    public ArrivalCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
-    }
-
-    public ArrivalCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
-    }
-
-    public ArrivalCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
-    }
-
-    public ArrivalCurveRTCultAffine(SegmentList aperSegments, java.lang.String name) {
-        rtc_curve = new Curve(aperSegments, name);
     }
 }

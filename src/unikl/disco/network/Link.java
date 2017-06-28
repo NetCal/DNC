@@ -28,69 +28,67 @@
 package unikl.disco.network;
 
 /**
- * 
  * @author Steffen Bondorf
- *
  */
 public class Link {
-	private int	id;
-	private String alias;
-	private Server src;
-	private Server dest;
+    private int id;
+    private String alias;
+    private Server src;
+    private Server dest;
 
-	protected Link( int id, String alias, Server source, Server destination ) {
-		this.id = id;
-		this.alias = alias;
-		src = source;
-		dest = destination;
-	}
+    protected Link(int id, String alias, Server source, Server destination) {
+        this.id = id;
+        this.alias = alias;
+        src = source;
+        dest = destination;
+    }
 
-	public Server getSource() {
-		return src;
-	}
-	
-	public Server getDest() {
-		return dest;
-	}
-	
-	public int getId() {
-		return id;
-	}
+    public Server getSource() {
+        return src;
+    }
 
-	public String getAlias() {
-		return alias;
-	}
-	
-	public void setAlias( String alias ) {
-		this.alias = alias;
-	}
-	
-	@Override
-	public boolean equals( Object obj ) {
-		if ( obj == null || !( obj instanceof Link ) ) {
-			return false;
-		}
+    public Server getDest() {
+        return dest;
+    }
 
-		Link l = (Link) obj;
-		return (this.src != null? this.src.equals(l.src) : l.src == null)
-				&& (this.dest != null? this.dest.equals(l.dest) : l.dest == null);
-	}
-	
-	@Override
-	public int hashCode() {
-		return (int) src.hashCode() * dest.hashCode();
-	}
-	
-	public String toShortString() {
-		return alias;
-	}
+    public int getId() {
+        return id;
+    }
 
-	@Override
-	public String toString() {
-		return "Link(" + src.toShortString() + ", " + dest.toShortString() + ")";
-	}
-	
-	public String toExtendedString() {
-		return "Link(" + src.toExtendedString() + ", " + dest.toExtendedString() + ")";
-	}
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Link)) {
+            return false;
+        }
+
+        Link l = (Link) obj;
+        return (this.src != null ? this.src.equals(l.src) : l.src == null)
+                && (this.dest != null ? this.dest.equals(l.dest) : l.dest == null);
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) src.hashCode() * dest.hashCode();
+    }
+
+    public String toShortString() {
+        return alias;
+    }
+
+    @Override
+    public String toString() {
+        return "Link(" + src.toShortString() + ", " + dest.toShortString() + ")";
+    }
+
+    public String toExtendedString() {
+        return "Link(" + src.toExtendedString() + ", " + dest.toExtendedString() + ")";
+    }
 }

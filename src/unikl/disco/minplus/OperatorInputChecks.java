@@ -30,61 +30,59 @@ package unikl.disco.minplus;
 import java.util.Set;
 
 /**
- * 
  * @author Steffen Bondorf
- *
  */
 public class OperatorInputChecks {
-	/**
-	 * @param obj1
-	 * @param obj2
-	 * @return 0 == none of the objects is null, <br/>
-	 * 		   1 == the first object is null, <br/>
-	 * 		   2 == the second object is null, <br/>
-	 * 		   3 == both objects are null.
-	 */
-	public static int inputNullCheck( Object obj1, Object obj2 ) {
-		// Usually neither is null so this initial check promises best overall performance.
-		if ( obj1 != null && obj2 != null ) {
-			return 0;
-		}
-		
-		int return_value = 0;
-		
-		if ( obj1 == null ) {
-			return_value += 1;
+    /**
+     * @param obj1
+     * @param obj2
+     * @return 0 == none of the objects is null, <br/>
+     * 1 == the first object is null, <br/>
+     * 2 == the second object is null, <br/>
+     * 3 == both objects are null.
+     */
+    public static int inputNullCheck(Object obj1, Object obj2) {
+        // Usually neither is null so this initial check promises best overall performance.
+        if (obj1 != null && obj2 != null) {
+            return 0;
         }
-    	if ( obj2 == null ) {
-    		return_value += 2;
+
+        int return_value = 0;
+
+        if (obj1 == null) {
+            return_value += 1;
         }
-    	
-    	return return_value;
-	}
-	
-	/**
-	 * @param set1
-	 * @param set
-	 * @return 0 == none of the sets is empty, <br/>
-	 * 		   1 == the first sets is empty, <br/>
-	 * 		   2 == the second sets is empty, <br/>
-	 * 		   3 == both sets are empty.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static int inputEmptySetCheck( Set set1, Set set2 ) {
-		// Usually neither is empty so this initial check promises best overall performance.
-		if ( !set1.isEmpty() && !set2.isEmpty() ) {
-			return 0;
-		}
-		
-		int return_value = 0;
-		
-		if ( set1.isEmpty() ) {
-			return_value += 1;
+        if (obj2 == null) {
+            return_value += 2;
         }
-    	if ( set2.isEmpty() ) {
-    		return_value += 2;
+
+        return return_value;
+    }
+
+    /**
+     * @param set1
+     * @param set
+     * @return 0 == none of the sets is empty, <br/>
+     * 1 == the first sets is empty, <br/>
+     * 2 == the second sets is empty, <br/>
+     * 3 == both sets are empty.
+     */
+    @SuppressWarnings("rawtypes")
+    public static int inputEmptySetCheck(Set set1, Set set2) {
+        // Usually neither is empty so this initial check promises best overall performance.
+        if (!set1.isEmpty() && !set2.isEmpty()) {
+            return 0;
         }
-    	
-    	return return_value;
-	}
+
+        int return_value = 0;
+
+        if (set1.isEmpty()) {
+            return_value += 1;
+        }
+        if (set2.isEmpty()) {
+            return_value += 2;
+        }
+
+        return return_value;
+    }
 }

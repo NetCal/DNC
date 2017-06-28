@@ -28,10 +28,9 @@
 
 package unikl.disco.nc.operations;
 
-import java.util.ArrayList;
-
-import unikl.disco.curves.Curve;
 import unikl.disco.curves.ArrivalCurve;
+import unikl.disco.curves.CurveFactory;
+import unikl.disco.curves.CurveUtils;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
@@ -40,59 +39,59 @@ import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 import unikl.disco.numbers.NumUtils;
 
+import java.util.ArrayList;
+
 /**
- * 
  * @author Frank A. Zdarsky
  * @author Steffen Bondorf
- *
  */
 public class BacklogBound {
-	public static Num derive( ArrivalCurve arrival_curve, ServiceCurve service_curve ) {
-		if ( arrival_curve.equals( ArrivalCurve.createZeroArrival() ) ) {
-			return NumFactory.createZero();
-		}
-		if( service_curve.isDelayedInfiniteBurst() ) {
-			return arrival_curve.f( service_curve.getLatency() );
-		}
-		if ( service_curve.equals( ServiceCurve.createZeroService() ) // We know from above that the arrivals are not zero.
-				|| arrival_curve.getSustainedRate().gt( service_curve.getSustainedRate() ) ) {
-			return NumFactory.createPositiveInfinity();
-		}
-		
-		// The computeInflectionPoints based method does not work for 
-		// single rate service curves (without latency)
-		// in conjunction with token bucket arrival curves
-		// because their common inflection point is in zero, 
-		// where the arrival curve is 0.0 by definition.
-		// This leads to a vertical deviation of 0 the arrival curve's burst
-		// (or infinity which is already handled by the first if-statement)
-		
-		// Solution: 
-		// Start with the burst as minimum vertical deviation
-		
-		Num result = arrival_curve.fLimitRight( NumFactory.getZero() );
-				
-		ArrayList<Num> xcoords = Curve.computeInflectionPointsX( arrival_curve, service_curve );	
-		for( int i = 0; i < xcoords.size(); i++ ) {
-			Num ip_x = ( (Num) xcoords.get( i ) );
+    public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+        if (arrival_curve.equals(CurveFactory.createZeroArrivals())) {
+            return NumFactory.createZero();
+        }
+        if (service_curve.isDelayedInfiniteBurst()) {
+            return arrival_curve.f(service_curve.getLatency());
+        }
+        if (service_curve.equals(CurveFactory.createZeroService()) // We know from above that the arrivals are not zero.
+                || arrival_curve.getSustainedRate().gt(service_curve.getSustainedRate())) {
+            return NumFactory.createPositiveInfinity();
+        }
 
-			Num backlog = NumUtils.sub( arrival_curve.f( ip_x ), service_curve.f( ip_x ) );
-			result = NumUtils.max( result, backlog );
-		}
-		return result;
-	}
-	
-	public static double derivePmooSinkTreeTbRl( Network tree, Server root) throws Exception {
-		double bound = 0.0;
-		double sum_T = 0.0;
-		
-		for ( Flow f : tree.getFlows( root ) ) {			
-			sum_T = 0.0;
-			for ( Server s : f.getSubPath( f.getSource(), root ).getServers() ) {
-				sum_T = sum_T + s.getServiceCurve().getLatency().doubleValue();
-			}
-			bound += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getSustainedRate().doubleValue() * sum_T;
-		}		
-		return bound;
-	}
+        // The computeInflectionPoints based method does not work for
+        // single rate service curves (without latency)
+        // in conjunction with token bucket arrival curves
+        // because their common inflection point is in zero,
+        // where the arrival curve is 0.0 by definition.
+        // This leads to a vertical deviation of 0 the arrival curve's burst
+        // (or infinity which is already handled by the first if-statement)
+
+        // Solution:
+        // Start with the burst as minimum vertical deviation
+
+        Num result = arrival_curve.fLimitRight(NumFactory.getZero());
+
+        ArrayList<Num> xcoords = CurveUtils.computeInflectionPointsX(arrival_curve, service_curve);
+        for (int i = 0; i < xcoords.size(); i++) {
+            Num ip_x = ((Num) xcoords.get(i));
+
+            Num backlog = NumUtils.sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
+            result = NumUtils.max(result, backlog);
+        }
+        return result;
+    }
+
+    public static double derivePmooSinkTreeTbRl(Network tree, Server root) throws Exception {
+        double bound = 0.0;
+        double sum_T = 0.0;
+
+        for (Flow f : tree.getFlows(root)) {
+            sum_T = 0.0;
+            for (Server s : f.getSubPath(f.getSource(), root).getServers()) {
+                sum_T = sum_T + s.getServiceCurve().getLatency().doubleValue();
+            }
+            bound += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getSustainedRate().doubleValue() * sum_T;
+        }
+        return bound;
+    }
 }

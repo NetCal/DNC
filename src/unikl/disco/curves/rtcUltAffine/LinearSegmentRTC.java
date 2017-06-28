@@ -8,11 +8,6 @@ import unikl.disco.numbers.NumUtils;
 
 public class LinearSegmentRTC implements LinearSegment {
 
-    // Setter in order to prevent copy bug
-    protected void setRtc_segment(Segment rtc_segment) {
-        this.rtc_segment = rtc_segment;
-    }
-
     private ch.ethz.rtc.kernel.Segment rtc_segment;
 
     //--------------------------------------------------------------------------------------------------------------
@@ -40,6 +35,10 @@ public class LinearSegmentRTC implements LinearSegment {
         rtc_segment = new Segment(segment_str);
     }
 
+    // Setter in order to prevent copy bug
+    protected void setRtc_segment(Segment rtc_segment) {
+        this.rtc_segment = rtc_segment;
+    }
 
     //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
@@ -52,12 +51,20 @@ public class LinearSegmentRTC implements LinearSegment {
         return NumFactory.create(rtc_segment.x());
     }
 
+    public void setX(double x) {
+        rtc_segment.setX(x);
+    }
+
     public void setX(Num x) {
         rtc_segment.setX(x.doubleValue());
     }
 
     public Num getY() {
         return NumFactory.create(rtc_segment.y());
+    }
+
+    public void setY(double y) {
+        rtc_segment.setY(y);
     }
 
     public void setY(Num y) {
@@ -155,14 +162,6 @@ public class LinearSegmentRTC implements LinearSegment {
 
     public void setS(double s) {
         rtc_segment.setS(s);
-    }
-
-    public void setX(double x) {
-        rtc_segment.setX(x);
-    }
-
-    public void setY(double y) {
-        rtc_segment.setY(y);
     }
 
     public java.lang.String toExportString() {

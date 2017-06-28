@@ -1,35 +1,35 @@
 <project name="DiscoDNCjar" basedir="." default="jar">
 
-  <property name="src.dir"     value="src"/>
-  <property name="classes.dir" value="bin"/>
-  <property name="jar.dir"     value="." />
-  <property name="lib.dir"     value="lib" />
+    <property name="src.dir" value="src"/>
+    <property name="classes.dir" value="bin"/>
+    <property name="jar.dir" value="."/>
+    <property name="lib.dir" value="lib"/>
 
-  <path id="classpath">
-    <fileset dir="${lib.dir}" includes="*.jar"/>
-  </path>
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
 
-  <target name="compile">
-    <mkdir dir="${classes.dir}"/>
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
-  </target>
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
 
-  <target name="jar" depends="compile">
-    <jar jarfile="DiscoDNC.jar" includes="*.class" basedir="bin">
-      <fileset dir="${classes.dir}">
-        <include name="unikl/disco/curves/"/>
-        <include name="unikl/disco/minplus/"/>
-        <include name="unikl/disco/misc/"/>
-        <include name="unikl/disco/nc/"/>
-        <include name="unikl/disco/nc/analyses/"/>
-        <include name="unikl/disco/nc/arrivalBounds/"/>
-        <include name="unikl/disco/nc/operations/"/>
-        <include name="unikl/disco/network/"/>
-        <include name="unikl/disco/numbers/"/>
-        <include name="unikl/disco/numbers/extraValues/"/>
-        <include name="unikl/disco/numbers/implementations/"/>
-      </fileset>
-    </jar>
-  </target>
+    <target name="jar" depends="compile">
+        <jar jarfile="DiscoDNC.jar" includes="*.class" basedir="bin">
+            <fileset dir="${classes.dir}">
+                <include name="unikl/disco/curves/"/>
+                <include name="unikl/disco/minplus/"/>
+                <include name="unikl/disco/misc/"/>
+                <include name="unikl/disco/nc/"/>
+                <include name="unikl/disco/nc/analyses/"/>
+                <include name="unikl/disco/nc/arrivalBounds/"/>
+                <include name="unikl/disco/nc/operations/"/>
+                <include name="unikl/disco/network/"/>
+                <include name="unikl/disco/numbers/"/>
+                <include name="unikl/disco/numbers/extraValues/"/>
+                <include name="unikl/disco/numbers/implementations/"/>
+            </fileset>
+        </jar>
+    </target>
 
 </project>

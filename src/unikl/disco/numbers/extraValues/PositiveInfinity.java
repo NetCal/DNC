@@ -24,7 +24,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers.extraValues;
 
 import unikl.disco.numbers.Num;
@@ -33,99 +33,99 @@ import unikl.disco.numbers.Num;
  * Wrapper class around double;
  *
  * @author Steffen Bondorf
- *
  */
 public final class PositiveInfinity implements Num {
-	public PositiveInfinity() {}
-	
-	public boolean eqZero() {
-		return false;
-	}
+    public PositiveInfinity() {
+    }
 
-	public boolean gt( Num num ) {
-		return true;
-	}
+    public boolean eqZero() {
+        return false;
+    }
 
-	public boolean gtZero() {
-		return true;
-	}
+    public boolean gt(Num num) {
+        return true;
+    }
 
-	public boolean geq( Num num ) {
-		return true;
-	}
+    public boolean gtZero() {
+        return true;
+    }
 
-	public boolean geqZero() {
-		return true;
-	}
+    public boolean geq(Num num) {
+        return true;
+    }
 
-	public boolean lt( Num num ) {
-		return false;
-	}
+    public boolean geqZero() {
+        return true;
+    }
 
-	public boolean ltZero() {
-		return false;
-	}
+    public boolean lt(Num num) {
+        return false;
+    }
 
-	public boolean leq( Num num ) {
-		return false;
-	}
+    public boolean ltZero() {
+        return false;
+    }
 
-	public boolean leqZero() {
-		return false;
-	}
+    public boolean leq(Num num) {
+        return false;
+    }
 
-	public boolean isFinite() {
-		return false;
-	}
+    public boolean leqZero() {
+        return false;
+    }
 
-	public boolean isInfinite() {
-		return true;
-	}
-	
-	public boolean isNaN() {
-		return false;
-	}
-	
-	@Override
-	public double doubleValue() {
-	    return Double.POSITIVE_INFINITY;
-	}
+    public boolean isFinite() {
+        return false;
+    }
 
-	@Override
-	public Num copy() {
-		return new PositiveInfinity();
-	}
-	
-	@Override
-	public boolean eq( double num ) {
-		if( num == Double.POSITIVE_INFINITY ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public boolean isInfinite() {
+        return true;
+    }
 
-	@Override
-	public boolean equals( Object obj ) {
-		if( obj == null ) {
-			return false;
-		}
-		if( obj instanceof PositiveInfinity ) {
-			return true;
-		}
-		if( obj instanceof Num ) {
-			return eq( ((Num)obj).doubleValue() );
-		}
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Double.hashCode( Double.POSITIVE_INFINITY );
-	}
-	
-	@Override
-	public String toString(){
-		return Double.toString( Double.POSITIVE_INFINITY );
-	}
+    public boolean isNaN() {
+        return false;
+    }
+
+    @Override
+    public double doubleValue() {
+        return Double.POSITIVE_INFINITY;
+    }
+
+    @Override
+    public Num copy() {
+        return new PositiveInfinity();
+    }
+
+    @Override
+    public boolean eq(double num) {
+        if (num == Double.POSITIVE_INFINITY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof PositiveInfinity) {
+            return true;
+        }
+        if (obj instanceof Num) {
+            return eq(((Num) obj).doubleValue());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Double.hashCode(Double.POSITIVE_INFINITY);
+    }
+
+    @Override
+    public String toString() {
+        return Double.toString(Double.POSITIVE_INFINITY);
+    }
 }

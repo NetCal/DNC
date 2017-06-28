@@ -29,79 +29,77 @@
 
 package unikl.disco.nc.analyses;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
+import unikl.disco.curves.ServiceCurve;
 import unikl.disco.nc.AnalysisResults;
 import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 /**
- * 
  * @author Frank A. Zdarsky
  * @author Andreas Kiefer
  * @author Steffen Bondorf
- * 
  */
 public class SeparateFlowResults extends AnalysisResults {
-	protected Set<ServiceCurve> betas_e2e;
-	protected Map<Server,Set<ServiceCurve>> map__server__betas_lo;
+    protected Set<ServiceCurve> betas_e2e;
+    protected Map<Server, Set<ServiceCurve>> map__server__betas_lo;
 
-	protected SeparateFlowResults(){
-		super();
-		betas_e2e = new HashSet<ServiceCurve>();
-		map__server__betas_lo = new HashMap<Server,Set<ServiceCurve>>();
-	}
-	
-	protected SeparateFlowResults( Num delay_bound,
-						 Num backlog_bound,
-						 Set<ServiceCurve> betas_e2e,
-						 Map<Server,Set<ServiceCurve>> map__server__betas_lo,
-						 Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		
-		super( delay_bound, backlog_bound, map__server__alphas );
-		
-		this.betas_e2e = betas_e2e;
-		this.map__server__betas_lo = map__server__betas_lo;
-	}
+    protected SeparateFlowResults() {
+        super();
+        betas_e2e = new HashSet<ServiceCurve>();
+        map__server__betas_lo = new HashMap<Server, Set<ServiceCurve>>();
+    }
 
-	@Override
-	protected void setDelayBound( Num delay_bound ) {
-		super.setDelayBound( delay_bound );
-	}
+    protected SeparateFlowResults(Num delay_bound,
+                                  Num backlog_bound,
+                                  Set<ServiceCurve> betas_e2e,
+                                  Map<Server, Set<ServiceCurve>> map__server__betas_lo,
+                                  Map<Server, Set<ArrivalCurve>> map__server__alphas) {
 
-	@Override
-	protected void setBacklogBound( Num backlog_bound ) {
-		super.setBacklogBound( backlog_bound );
-	}
+        super(delay_bound, backlog_bound, map__server__alphas);
 
-	public String getServerLeftOverBetasMapString() {
-		if( map__server__betas_lo.isEmpty() ) {
-			return "{}";
-		}
+        this.betas_e2e = betas_e2e;
+        this.map__server__betas_lo = map__server__betas_lo;
+    }
 
-		StringBuffer result_str = new StringBuffer( "{" );
+    @Override
+    protected void setDelayBound(Num delay_bound) {
+        super.setDelayBound(delay_bound);
+    }
 
-		for( Entry<Server,Set<ServiceCurve>> entry : map__server__betas_lo.entrySet() ) {
-			result_str.append( entry.getKey().toShortString() );
-			result_str.append( "={" );
-			for ( ServiceCurve beta_lo : entry.getValue() ) {
-				result_str.append( beta_lo.toString() );
-				result_str.append(  "," );
-			}
-			result_str.deleteCharAt( result_str.length()-1 ); // Remove the trailing comma.
-			result_str.append( "}" );
-			result_str.append( ", " );
-		}
-		result_str.delete( result_str.length()-2, result_str.length() ); // Remove the trailing blank space and comma.
-		
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
+    @Override
+    protected void setBacklogBound(Num backlog_bound) {
+        super.setBacklogBound(backlog_bound);
+    }
+
+    public String getServerLeftOverBetasMapString() {
+        if (map__server__betas_lo.isEmpty()) {
+            return "{}";
+        }
+
+        StringBuffer result_str = new StringBuffer("{");
+
+        for (Entry<Server, Set<ServiceCurve>> entry : map__server__betas_lo.entrySet()) {
+            result_str.append(entry.getKey().toShortString());
+            result_str.append("={");
+            for (ServiceCurve beta_lo : entry.getValue()) {
+                result_str.append(beta_lo.toString());
+                result_str.append(",");
+            }
+            result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
+            result_str.append("}");
+            result_str.append(", ");
+        }
+        result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
+
+        result_str.append("}");
+
+        return result_str.toString();
+    }
 }

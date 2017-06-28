@@ -27,12 +27,9 @@
 
 package unikl.disco.nc;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import unikl.disco.curves.ArrivalCurve;
+import unikl.disco.curves.CurveFactory;
+import unikl.disco.curves.CurveUtils;
 import unikl.disco.curves.ServiceCurve;
 import unikl.disco.minplus.Deconvolution;
 import unikl.disco.misc.SetUtils;
@@ -44,297 +41,298 @@ import unikl.disco.nc.arrivalBounds.PbooArrivalBound_PerHop;
 import unikl.disco.nc.arrivalBounds.PmooArrivalBound;
 import unikl.disco.nc.arrivalBounds.PmooArrivalBound_SinkTreeTbRl;
 import unikl.disco.network.Flow;
+import unikl.disco.network.Link;
 import unikl.disco.network.Network;
 import unikl.disco.network.Server;
-import unikl.disco.network.Link;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
- * 
  * @author Steffen Bondorf
- *
  */
 public class ArrivalBound {
-	protected Network network;
-	protected AnalysisConfig configuration;
-	
-	protected ArrivalBound() {}
-	
-	public ArrivalBound( Network network, AnalysisConfig configuration ) {
-		this.network = network;
-		this.configuration = configuration;
-	}
-	
-	/**
-	 * Calculates the alternative arrival curves for a the flows in flows_to_bound that arrive at the given server
-	 * while considering the lower priority of the flow_of_interest
-	 * 
-	 * @param network The analyzed network.
-	 * @param configuration The analysis configuration.
-	 * @param server The server seeing the arrival bound.
-	 * @return The arrival bound.
-	 * @throws Exception Potential exception raised in the called function computeArrivalBounds.
-	 */
-	public static Set<ArrivalCurve> computeArrivalBounds( Network network, AnalysisConfig configuration, Server server ) throws Exception {
-		return computeArrivalBounds( network, configuration, server, network.getFlows( server ), Flow.NULL_FLOW );
-	}
+    protected Network network;
+    protected AnalysisConfig configuration;
 
-	/**
-	 * 
-	 * The flow_of_interest low priority supersedes the wish to bound all flows in flows_to_bound,
-	 * i.e., if flow_of_interest will be removed from flows_to_bound before bounding the arrivals
-	 * such that the result will always hold (only) for {flows_to_bound} \ {flow_of_interest}.
-	 * 
-	 * To bound all flows in flows_to_bound, please call, e.g.,
-	 *   computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
-	 * 
-	 * @param network The analyzed network.
-	 * @param configuration The analysis configuration.
-	 * @param server The server seeing the arrival bound.
-	 * @param flows_to_bound The flows to be bounded.
-	 * @param flow_of_interest The flow of interest to get a lower priority.
-	 * @return The arrival bound.
-	 * @throws Exception Potential exception raised in the called function computeArrivalBounds.
-	 */
-	public static Set<ArrivalCurve> computeArrivalBounds( Network network, AnalysisConfig configuration, Server server, Set<Flow> flows_to_bound, Flow flow_of_interest ) throws Exception {
-		ArrivalBound arrival_bounding = new ArrivalBound( network, configuration );
-		return arrival_bounding.computeArrivalBounds( server, flows_to_bound, flow_of_interest );
-	}
-	
-	public static Set<ArrivalCurve> computeArrivalBounds( Network network, AnalysisConfig configuration, Link link, Set<Flow> flows_to_bound, Flow flow_of_interest ) throws Exception {
-		ArrivalBound arrival_bounding = new ArrivalBound( network, configuration );
-		return arrival_bounding.computeArrivalBounds( link, flows_to_bound, flow_of_interest );
-	}
-	
-	/**
-	 * 
-	 * The flow_of_interest low priority supersedes the wish to bound all flows in flows_to_bound,
-	 * i.e., if flow_of_interest will be removed from flows_to_bound before bounding the arrivals
-	 * such that the result will always hold (only) for {flows_to_bound} \ {flow_of_interest}.
-	 * 
-	 * To bound all flows in flows_to_bound, please call, e.g.,
-	 *   computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
-	 * 
-	 * @param server The server seeing the arrival bound.
-	 * @return The arrival bound.
-	 * @throws Exception Potential exception raised in the called function computeArrivalBounds.
-	 */
-	public Set<ArrivalCurve> computeArrivalBound( Server server ) throws Exception {
-		return computeArrivalBounds( server, network.getFlows( server ), Flow.NULL_FLOW );
-	}
-	
-	/**
-	 * 
-	 * The flow_of_interest low priority supersedes the wish to bound all flows in flows_to_bound,
-	 * i.e., if flow_of_interest will be removed from flows_to_bound before bounding the arrivals
-	 * such that the result will always hold (only) for {flows_to_bound} \ {flow_of_interest}.
-	 * 
-	 * To bound all flows in flows_to_bound, please call, e.g.,
-	 *   computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
-	 * 
-	 * @param server The server seeing the arrival bound.
-	 * @param flows_to_bound The flows to be bounded.
-	 * @param flow_of_interest The flow of interest to get a lower priority.
-	 * @return The arrival bound.
-	 * @throws Exception Potential exception raised in the called function computeArrivalBounds.
-	 */
-	public Set<ArrivalCurve> computeArrivalBounds( Server server, Set<Flow> flows_to_bound, Flow flow_of_interest ) throws Exception {
-		flows_to_bound.remove( flow_of_interest );
-		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createZeroArrival() ) );
-		if( flows_to_bound.isEmpty() ) {
-			return arrival_bounds;
-		}
-		
-		Set<Flow> f_server = network.getFlows( server );
-		Set<Flow> f_xfcaller_server = SetUtils.getIntersection( f_server, flows_to_bound );
-		if ( f_xfcaller_server.isEmpty() ) {
-			return arrival_bounds;
-		}
-	
-		// Get cross-traffic originating in server
-		Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection( f_xfcaller_server, network.getSourceFlows( server ) );
-		f_xfcaller_sourceflows_server.remove( flow_of_interest );
-		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve( server, f_xfcaller_sourceflows_server ); // Will at least be a zeroArrivalCurve
-		arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( alpha_xfcaller_sourceflows_server ) );
-		
-		if( f_xfcaller_sourceflows_server.containsAll( f_xfcaller_server ) ) {
-			return arrival_bounds;
-		}
-		
-		// Get cross-traffic from each predecessor. Call per link in order to get splitting points.
-		Set<ArrivalCurve> arrival_bounds_link;
-		Set<ArrivalCurve> arrival_bounds_link_permutations = new HashSet<ArrivalCurve>();
-		
-		Iterator<Link> in_link_iter = network.getInLinks( server ).iterator();
-		while ( in_link_iter.hasNext() ) {
-			
-			Link in_l = in_link_iter.next();
-			Set<Flow> f_xfcaller_in_l = SetUtils.getIntersection( network.getFlows( in_l ), f_xfcaller_server );
-			f_xfcaller_in_l.remove( flow_of_interest );
-			
-			if( f_xfcaller_in_l.isEmpty() ) { // Do not check links without flows of interest
-				continue;
-			}
-			
-			arrival_bounds_link = computeArrivalBounds( in_l, f_xfcaller_in_l, flow_of_interest );
-			
-			// Add the new bounds to the others:
-			// * Consider all the permutations of different bounds per in link.
-			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
-			for ( ArrivalCurve arrival_bound_link : arrival_bounds_link ) {
-				arrival_bound_link.beautify();
-				
-				for ( ArrivalCurve arrival_bound_exiting : arrival_bounds ) {
-					arrival_bounds_link_permutations.add( ArrivalCurve.add( arrival_bound_link, arrival_bound_exiting ) );
-				}
-			}
-			
-			arrival_bounds.clear();
-			arrival_bounds.addAll( arrival_bounds_link_permutations );
-			arrival_bounds_link_permutations.clear();
-		}
-		
-		return arrival_bounds;
-	}
+    protected ArrivalBound() {
+    }
 
-	public Set<ArrivalCurve> computeArrivalBounds( Link link, Set<Flow> flows_to_bound, Flow flow_of_interest ) throws Exception {
-		flows_to_bound.remove( flow_of_interest );
-		if( flows_to_bound.isEmpty() ) {
-			return new HashSet<ArrivalCurve>( Collections.singleton( ArrivalCurve.createZeroArrival() ) );
-		}
-		
-		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
-		
-		for( ArrivalBoundMethod arrival_bound_method : configuration.arrivalBoundMethods() ) {
-			Set<ArrivalCurve> arrival_bounds_tmp = new HashSet<ArrivalCurve>();
-			
-			switch( arrival_bound_method ) {
-				case PBOO_PER_HOP:
-					PbooArrivalBound_PerHop pboo_per_hop = new PbooArrivalBound_PerHop( network, configuration );
-					arrival_bounds_tmp = pboo_per_hop.computeArrivalBound( link, flows_to_bound, flow_of_interest );
-				break;
-				
-				case PBOO_CONCATENATION:
-					PbooArrivalBound_Concatenation pboo_concatenation = new PbooArrivalBound_Concatenation( network, configuration );
-					arrival_bounds_tmp = pboo_concatenation.computeArrivalBound( link, flows_to_bound, flow_of_interest );
-				break;
-	
-				case PMOO:
-					PmooArrivalBound pmoo_arrival_bound = new PmooArrivalBound( network, configuration );
-					arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound( link, flows_to_bound, flow_of_interest );
-				break;
-				
-				// Functional tests missing
-				case PMOO_SINKTREE_TBRL:
-					PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl = new PmooArrivalBound_SinkTreeTbRl( network, configuration );
-					arrival_bounds_tmp = pmoo_sinktree_tbrl.computeArrivalBound( link, flows_to_bound, flow_of_interest );
-				break;
-				
-				case PMOO_SINKTREE_TBRL_CONV:
-					PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_convolution = new PmooArrivalBound_SinkTreeTbRl( network, configuration );
-					arrival_bounds_tmp = pmoo_sinktree_tbrl_convolution.computeArrivalBoundDeConvolution( link, flows_to_bound, flow_of_interest );
-				break;
-				
-				case PMOO_SINKTREE_TBRL_CONV_TBRL:
-					PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_convolution_tbrl = new PmooArrivalBound_SinkTreeTbRl( network, configuration );
-					arrival_bounds_tmp = pmoo_sinktree_tbrl_convolution_tbrl.computeArrivalBoundDeConvolutionTBRL( link, flows_to_bound, flow_of_interest );
-				break;
-				
-				case PMOO_SINKTREE_TBRL_HOMO:
-					PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_homogeneous = new PmooArrivalBound_SinkTreeTbRl( network, configuration );
-					arrival_bounds_tmp = pmoo_sinktree_tbrl_homogeneous.computeArrivalBoundHomogeneous( link, flows_to_bound, flow_of_interest );
-				break;
-				
-				case PER_FLOW_SFA:					
-					for ( Flow flow : flows_to_bound ) {
-						SeparateFlowAnalysis sfa = new SeparateFlowAnalysis( network );
-						sfa.performAnalysis( flow, flow.getSubPath( flow.getSource(), link.getSource() ) );
-						
-						arrival_bounds_tmp = getPermutations(	arrival_bounds_tmp,
-																singleFlowABs( flow.getArrivalCurve(), sfa.getLeftOverServiceCurves() ) );
-					}
-				break;
-	
-				// Functional tests missing
-				case PER_FLOW_PMOO:
-					for ( Flow flow : flows_to_bound ) {
-						PmooAnalysis pmoo = new PmooAnalysis( network );
-						pmoo.performAnalysis( flow, flow.getSubPath( flow.getSource(), link.getSource() ) );
-						
-						arrival_bounds_tmp = getPermutations(	arrival_bounds_tmp,
-																singleFlowABs( flow.getArrivalCurve(), pmoo.getLeftOverServiceCurves() ) );
-					}
-				break;
-				
-				default:
-					System.out.println( "Executing default arrival bounding: PBOO_CONCATENATION" );
-					PbooArrivalBound_Concatenation default_ab = new PbooArrivalBound_Concatenation( network, configuration );
-					arrival_bounds_tmp = default_ab.computeArrivalBound( link, flows_to_bound, flow_of_interest );
-				break;
-			}
-			
-			addArrivalBounds( arrival_bounds_tmp, arrival_bounds_xfcaller );
-		}
+    public ArrivalBound(Network network, AnalysisConfig configuration) {
+        this.network = network;
+        this.configuration = configuration;
+    }
 
-		return arrival_bounds_xfcaller;
-	}
-	
-	private Set<ArrivalCurve> singleFlowABs( ArrivalCurve alpha, Set<ServiceCurve> betas_lo ) {
-		Set<ArrivalCurve> arrival_bounds_f = new HashSet<ArrivalCurve>();
-		
-		// All permutations of single flow results
-		for( ServiceCurve beta_lo : betas_lo ) {
-			arrival_bounds_f.add( Deconvolution.deconvolve( alpha, beta_lo, configuration.tbrlDeconvolution() ) );
-		}
-		
-		return arrival_bounds_f;
-	}
-	
-	private Set<ArrivalCurve> getPermutations( Set<ArrivalCurve> arrival_curves_1, Set<ArrivalCurve> arrival_curves_2 ) {
-		if( arrival_curves_1.isEmpty() ) {
-			return new HashSet<ArrivalCurve>( arrival_curves_2 );
-		}
-		if( arrival_curves_2.isEmpty() ) {
-			return new HashSet<ArrivalCurve>( arrival_curves_1 );
-		}
-		
-		Set<ArrivalCurve> arrival_bounds_merged = new HashSet<ArrivalCurve>();
-		
-		for ( ArrivalCurve alpha_1 : arrival_curves_1 ) {
-			for ( ArrivalCurve alpha_2 : arrival_curves_2 ) {
-				arrival_bounds_merged.add( ArrivalCurve.add( alpha_1, alpha_2 ) );
-			}
-		}
+    /**
+     * Calculates the alternative arrival curves for a the flows in flows_to_bound that arrive at the given server
+     * while considering the lower priority of the flow_of_interest
+     *
+     * @param network       The analyzed network.
+     * @param configuration The analysis configuration.
+     * @param server        The server seeing the arrival bound.
+     * @return The arrival bound.
+     * @throws Exception Potential exception raised in the called function computeArrivalBounds.
+     */
+    public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Server server) throws Exception {
+        return computeArrivalBounds(network, configuration, server, network.getFlows(server), Flow.NULL_FLOW);
+    }
 
-		return arrival_bounds_merged;
-	}
-	
-	private void addArrivalBounds( Set<ArrivalCurve> arrival_bounds_to_merge, Set<ArrivalCurve> arrival_bounds ) {
-		if( configuration.arrivalBoundMethods().size() == 1 ) { // In this case there can only be one arrival bound
-			arrival_bounds.addAll( arrival_bounds_to_merge );
-		} else {
-			for( ArrivalCurve arrival_bound : arrival_bounds_to_merge ) {
-				addArrivalBounds( arrival_bound, arrival_bounds );
-			}
-		}
-	}
-	
-	private void addArrivalBounds( ArrivalCurve arrival_bound_to_merge, Set<ArrivalCurve> arrival_bounds ) {
-		if( configuration.arrivalBoundMethods().size() == 1 ) { // In this case there can only be one arrival bound
-			arrival_bounds.add( arrival_bound_to_merge );
-		} else {
-			if( !configuration.removeDuplicateArrivalBounds() 
-					|| ( configuration.removeDuplicateArrivalBounds() && !isDuplicate( arrival_bound_to_merge, arrival_bounds )  ) ) {
-				arrival_bounds.add( arrival_bound_to_merge );
-			}
-		}
-	}
-	
-	private boolean isDuplicate( ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds ) {
-		for ( ArrivalCurve arrival_bound_existing : arrival_bounds ) {
-			if( arrival_bound_to_check.equals( arrival_bound_existing ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * The flow_of_interest low priority supersedes the wish to bound all flows in flows_to_bound,
+     * i.e., if flow_of_interest will be removed from flows_to_bound before bounding the arrivals
+     * such that the result will always hold (only) for {flows_to_bound} \ {flow_of_interest}.
+     * <p>
+     * To bound all flows in flows_to_bound, please call, e.g.,
+     * computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
+     *
+     * @param network          The analyzed network.
+     * @param configuration    The analysis configuration.
+     * @param server           The server seeing the arrival bound.
+     * @param flows_to_bound   The flows to be bounded.
+     * @param flow_of_interest The flow of interest to get a lower priority.
+     * @return The arrival bound.
+     * @throws Exception Potential exception raised in the called function computeArrivalBounds.
+     */
+    public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Server server, Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
+        ArrivalBound arrival_bounding = new ArrivalBound(network, configuration);
+        return arrival_bounding.computeArrivalBounds(server, flows_to_bound, flow_of_interest);
+    }
+
+    public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Link link, Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
+        ArrivalBound arrival_bounding = new ArrivalBound(network, configuration);
+        return arrival_bounding.computeArrivalBounds(link, flows_to_bound, flow_of_interest);
+    }
+
+    /**
+     * The flow_of_interest low priority supersedes the wish to bound all flows in flows_to_bound,
+     * i.e., if flow_of_interest will be removed from flows_to_bound before bounding the arrivals
+     * such that the result will always hold (only) for {flows_to_bound} \ {flow_of_interest}.
+     * <p>
+     * To bound all flows in flows_to_bound, please call, e.g.,
+     * computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
+     *
+     * @param server The server seeing the arrival bound.
+     * @return The arrival bound.
+     * @throws Exception Potential exception raised in the called function computeArrivalBounds.
+     */
+    public Set<ArrivalCurve> computeArrivalBound(Server server) throws Exception {
+        return computeArrivalBounds(server, network.getFlows(server), Flow.NULL_FLOW);
+    }
+
+    /**
+     * The flow_of_interest low priority supersedes the wish to bound all flows in flows_to_bound,
+     * i.e., if flow_of_interest will be removed from flows_to_bound before bounding the arrivals
+     * such that the result will always hold (only) for {flows_to_bound} \ {flow_of_interest}.
+     * <p>
+     * To bound all flows in flows_to_bound, please call, e.g.,
+     * computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
+     *
+     * @param server           The server seeing the arrival bound.
+     * @param flows_to_bound   The flows to be bounded.
+     * @param flow_of_interest The flow of interest to get a lower priority.
+     * @return The arrival bound.
+     * @throws Exception Potential exception raised in the called function computeArrivalBounds.
+     */
+    public Set<ArrivalCurve> computeArrivalBounds(Server server, Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
+        flows_to_bound.remove(flow_of_interest);
+        Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(CurveFactory.createZeroArrivals()));
+        if (flows_to_bound.isEmpty()) {
+            return arrival_bounds;
+        }
+
+        Set<Flow> f_server = network.getFlows(server);
+        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_server, flows_to_bound);
+        if (f_xfcaller_server.isEmpty()) {
+            return arrival_bounds;
+        }
+
+        // Get cross-traffic originating in server
+        Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection(f_xfcaller_server, network.getSourceFlows(server));
+        f_xfcaller_sourceflows_server.remove(flow_of_interest);
+        ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server, f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
+        arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
+
+        if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
+            return arrival_bounds;
+        }
+
+        // Get cross-traffic from each predecessor. Call per link in order to get splitting points.
+        Set<ArrivalCurve> arrival_bounds_link;
+        Set<ArrivalCurve> arrival_bounds_link_permutations = new HashSet<ArrivalCurve>();
+
+        Iterator<Link> in_link_iter = network.getInLinks(server).iterator();
+        while (in_link_iter.hasNext()) {
+
+            Link in_l = in_link_iter.next();
+            Set<Flow> f_xfcaller_in_l = SetUtils.getIntersection(network.getFlows(in_l), f_xfcaller_server);
+            f_xfcaller_in_l.remove(flow_of_interest);
+
+            if (f_xfcaller_in_l.isEmpty()) { // Do not check links without flows of interest
+                continue;
+            }
+
+            arrival_bounds_link = computeArrivalBounds(in_l, f_xfcaller_in_l, flow_of_interest);
+
+            // Add the new bounds to the others:
+            // * Consider all the permutations of different bounds per in link.
+            // * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
+            for (ArrivalCurve arrival_bound_link : arrival_bounds_link) {
+                CurveUtils.beautify(arrival_bound_link);
+
+                for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
+                    arrival_bounds_link_permutations.add(CurveUtils.add(arrival_bound_link, arrival_bound_exiting));
+                }
+            }
+
+            arrival_bounds.clear();
+            arrival_bounds.addAll(arrival_bounds_link_permutations);
+            arrival_bounds_link_permutations.clear();
+        }
+
+        return arrival_bounds;
+    }
+
+    public Set<ArrivalCurve> computeArrivalBounds(Link link, Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
+        flows_to_bound.remove(flow_of_interest);
+        if (flows_to_bound.isEmpty()) {
+            return new HashSet<ArrivalCurve>(Collections.singleton(CurveFactory.createZeroArrivals()));
+        }
+
+        Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
+
+        for (ArrivalBoundMethod arrival_bound_method : configuration.arrivalBoundMethods()) {
+            Set<ArrivalCurve> arrival_bounds_tmp = new HashSet<ArrivalCurve>();
+
+            switch (arrival_bound_method) {
+                case PBOO_PER_HOP:
+                    PbooArrivalBound_PerHop pboo_per_hop = new PbooArrivalBound_PerHop(network, configuration);
+                    arrival_bounds_tmp = pboo_per_hop.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                case PBOO_CONCATENATION:
+                    PbooArrivalBound_Concatenation pboo_concatenation = new PbooArrivalBound_Concatenation(network, configuration);
+                    arrival_bounds_tmp = pboo_concatenation.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                case PMOO:
+                    PmooArrivalBound pmoo_arrival_bound = new PmooArrivalBound(network, configuration);
+                    arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                // Functional tests missing
+                case PMOO_SINKTREE_TBRL:
+                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
+                    arrival_bounds_tmp = pmoo_sinktree_tbrl.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                case PMOO_SINKTREE_TBRL_CONV:
+                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_convolution = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
+                    arrival_bounds_tmp = pmoo_sinktree_tbrl_convolution.computeArrivalBoundDeConvolution(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                case PMOO_SINKTREE_TBRL_CONV_TBRL:
+                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_convolution_tbrl = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
+                    arrival_bounds_tmp = pmoo_sinktree_tbrl_convolution_tbrl.computeArrivalBoundDeConvolutionTBRL(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                case PMOO_SINKTREE_TBRL_HOMO:
+                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_homogeneous = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
+                    arrival_bounds_tmp = pmoo_sinktree_tbrl_homogeneous.computeArrivalBoundHomogeneous(link, flows_to_bound, flow_of_interest);
+                    break;
+
+                case PER_FLOW_SFA:
+                    for (Flow flow : flows_to_bound) {
+                        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
+                        sfa.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+
+                        arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
+                                singleFlowABs(flow.getArrivalCurve(), sfa.getLeftOverServiceCurves()));
+                    }
+                    break;
+
+                // Functional tests missing
+                case PER_FLOW_PMOO:
+                    for (Flow flow : flows_to_bound) {
+                        PmooAnalysis pmoo = new PmooAnalysis(network);
+                        pmoo.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+
+                        arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
+                                singleFlowABs(flow.getArrivalCurve(), pmoo.getLeftOverServiceCurves()));
+                    }
+                    break;
+
+                default:
+                    System.out.println("Executing default arrival bounding: PBOO_CONCATENATION");
+                    PbooArrivalBound_Concatenation default_ab = new PbooArrivalBound_Concatenation(network, configuration);
+                    arrival_bounds_tmp = default_ab.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+                    break;
+            }
+
+            addArrivalBounds(arrival_bounds_tmp, arrival_bounds_xfcaller);
+        }
+
+        return arrival_bounds_xfcaller;
+    }
+
+    private Set<ArrivalCurve> singleFlowABs(ArrivalCurve alpha, Set<ServiceCurve> betas_lo) {
+        Set<ArrivalCurve> arrival_bounds_f = new HashSet<ArrivalCurve>();
+
+        // All permutations of single flow results
+        for (ServiceCurve beta_lo : betas_lo) {
+            arrival_bounds_f.add(Deconvolution.deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
+        }
+
+        return arrival_bounds_f;
+    }
+
+    private Set<ArrivalCurve> getPermutations(Set<ArrivalCurve> arrival_curves_1, Set<ArrivalCurve> arrival_curves_2) {
+        if (arrival_curves_1.isEmpty()) {
+            return new HashSet<ArrivalCurve>(arrival_curves_2);
+        }
+        if (arrival_curves_2.isEmpty()) {
+            return new HashSet<ArrivalCurve>(arrival_curves_1);
+        }
+
+        Set<ArrivalCurve> arrival_bounds_merged = new HashSet<ArrivalCurve>();
+
+        for (ArrivalCurve alpha_1 : arrival_curves_1) {
+            for (ArrivalCurve alpha_2 : arrival_curves_2) {
+                arrival_bounds_merged.add(CurveUtils.add(alpha_1, alpha_2));
+            }
+        }
+
+        return arrival_bounds_merged;
+    }
+
+    private void addArrivalBounds(Set<ArrivalCurve> arrival_bounds_to_merge, Set<ArrivalCurve> arrival_bounds) {
+        if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
+            arrival_bounds.addAll(arrival_bounds_to_merge);
+        } else {
+            for (ArrivalCurve arrival_bound : arrival_bounds_to_merge) {
+                addArrivalBounds(arrival_bound, arrival_bounds);
+            }
+        }
+    }
+
+    private void addArrivalBounds(ArrivalCurve arrival_bound_to_merge, Set<ArrivalCurve> arrival_bounds) {
+        if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
+            arrival_bounds.add(arrival_bound_to_merge);
+        } else {
+            if (!configuration.removeDuplicateArrivalBounds()
+                    || (configuration.removeDuplicateArrivalBounds() && !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
+                arrival_bounds.add(arrival_bound_to_merge);
+            }
+        }
+    }
+
+    private boolean isDuplicate(ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds) {
+        for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
+            if (arrival_bound_to_check.equals(arrival_bound_existing)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

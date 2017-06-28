@@ -36,7 +36,7 @@ public class LinearSegmentFactory {
     public static LinearSegment createHorizontalLine(double y) {
         switch (CalculatorConfig.getCurveClass()) {
             case RTC:
-                return new LinearSegmentRTC(0.0,0.0,0.0);
+                return new LinearSegmentRTC(0.0, 0.0, 0.0);
             case DNC:
             default:
                 return new LinearSegmentDNC(NumFactory.createZero(), NumFactory.createZero(), NumFactory.createZero(), false);

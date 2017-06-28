@@ -3,11 +3,11 @@ package unikl.disco.curves.rtcUltAffine;
 import ch.ethz.rtc.kernel.*;
 import unikl.disco.curves.CurveUltAffine;
 import unikl.disco.curves.LinearSegment;
-import unikl.disco.curves.dnc.LinearSegmentDNC;
+import unikl.disco.curves.LinearSegmentFactory;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
-import unikl.disco.numbers.implementations.RealDoublePrecision;
+import unikl.disco.numbers.implementations.RealDouble;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -95,7 +95,7 @@ public class CurveRTCultAffine implements CurveUltAffine {
         //		* Might also fail due to a spot in the origin
         SegmentList segList_rtc = new SegmentList();
         for (int i = 0; i < segments_to_parse.length; i++) {
-            segments_to_parse[i] = segments_to_parse[i].replaceAll(" ","");
+            segments_to_parse[i] = segments_to_parse[i].replaceAll(" ", "");
             if (segments_to_parse[i].charAt(0) == '!') {
                 segments_to_parse[i] = segments_to_parse[i].substring(1);
             }
@@ -150,7 +150,7 @@ public class CurveRTCultAffine implements CurveUltAffine {
 
             this.has_rate_latency_meta_info = ((CurveRTCultAffine) curve).has_rate_latency_meta_info;
             this.rate_latencies = new LinkedList<>();
-            for (int i = 0; i < rate_latencies.size(); i++){
+            for (int i = 0; i < rate_latencies.size(); i++) {
                 this.rate_latencies.add(((CurveRTCultAffine) curve).rate_latencies.get(i).copy());
             }
 
@@ -190,7 +190,7 @@ public class CurveRTCultAffine implements CurveUltAffine {
      */
     public LinearSegmentRTC getSegment(int pos) {
         // IMPORTANT! This is the correct code to prevent update errors
-        LinearSegmentRTC s = new LinearSegmentRTC(0,0,0);
+        LinearSegmentRTC s = new LinearSegmentRTC(0, 0, 0);
         s.setRtc_segment(rtc_curve.aperiodicSegments().get(pos));
         return s;
         // Old code, bugged because it was not able to update the Segment, like done in various add functions
@@ -280,21 +280,21 @@ public class CurveRTCultAffine implements CurveUltAffine {
     public boolean isDiscontinuity(int pos) {
         return (pos + 1 < getSegmentCount()
                 && (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x()))
-                < RealDoublePrecision.createEpsilon().doubleValue()
+                < RealDouble.createEpsilon().doubleValue()
         );
     }
 
     public boolean isRealDiscontinuity(int pos) {
         return (isDiscontinuity(pos)
                 && (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y()))
-                >= RealDoublePrecision.createEpsilon().doubleValue()
+                >= RealDouble.createEpsilon().doubleValue()
         );
     }
 
     public boolean isUnrealDiscontinuity(int pos) {
         return (isDiscontinuity(pos)
                 && (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y()))
-                < RealDoublePrecision.createEpsilon().doubleValue()
+                < RealDouble.createEpsilon().doubleValue()
         );
     }
 
@@ -506,13 +506,13 @@ public class CurveRTCultAffine implements CurveUltAffine {
     @Override
     public List<CurveUltAffine> getRate_latencies() {
         List<CurveUltAffine> tmp = new LinkedList<>();
-    	if( this.is_rate_latency ) {
-    		tmp.add( this.copy() );
-    	} else {
+        if (this.is_rate_latency) {
+            tmp.add(this.copy());
+        } else {
             for (int i = 0; i < rate_latencies.size(); i++) {
                 tmp.add(rate_latencies.get(i));
             }
-    	}
+        }
         return tmp;
     }
 
@@ -552,6 +552,17 @@ public class CurveRTCultAffine implements CurveUltAffine {
     @Override
     public void setHas_rate_latency_meta_info(boolean has_rate_latency_meta_info) {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
+    }
+
+
+    /**
+     * Returns the sustained rate (the gradient of the last segment).
+     *
+     * @return the sustained rate.
+     */
+    @Override
+    public Num getSustainedRate() {
+        return NumFactory.create(rtc_curve.aperiodicSegments().lastSegment().s());
     }
 
     public Num getUltAffineRate() {

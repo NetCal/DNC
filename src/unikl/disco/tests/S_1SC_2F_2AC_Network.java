@@ -27,70 +27,67 @@
 
 package unikl.disco.tests;
 
-import unikl.disco.curves.ServiceCurve;
 import unikl.disco.curves.ArrivalCurve;
+import unikl.disco.curves.CurveFactory;
+import unikl.disco.curves.ServiceCurve;
 import unikl.disco.network.Flow;
 import unikl.disco.network.Network;
 import unikl.disco.network.NetworkFactory;
 import unikl.disco.network.Server;
 
 /**
- * 
  * @author Steffen Bondorf
- *
  */
 public class S_1SC_2F_2AC_Network implements NetworkFactory {
-	private static final int sc_R = 10;
-	private static final int sc_T = 10;
-	private static final int ac_r_0 = 4;
-	private static final int ac_b_0 = 10;
-	private static final int ac_r_1 = 5;
-	private static final int ac_b_1 = 25;
-	
-	private ServiceCurve service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
-	private ArrivalCurve arrival_curve_0 = ArrivalCurve.createTokenBucket( ac_r_0, ac_b_0 );
-	private ArrivalCurve arrival_curve_1 = ArrivalCurve.createTokenBucket( ac_r_1, ac_b_1 );
-	
-	private Network network;
-	protected Server s0;
-	protected Flow f0, f1;
-	 
-	public S_1SC_2F_2AC_Network() {
-		network = createNetwork();
-	}
+    private static final int sc_R = 10;
+    private static final int sc_T = 10;
+    private static final int ac_r_0 = 4;
+    private static final int ac_b_0 = 10;
+    private static final int ac_r_1 = 5;
+    private static final int ac_b_1 = 25;
+    protected Server s0;
+    protected Flow f0, f1;
+    private ServiceCurve service_curve = CurveFactory.createRateLatency(sc_R, sc_T);
+    private ArrivalCurve arrival_curve_0 = CurveFactory.createTokenBucket(ac_r_0, ac_b_0);
+    private ArrivalCurve arrival_curve_1 = CurveFactory.createTokenBucket(ac_r_1, ac_b_1);
+    private Network network;
 
-	public Network getNetwork() {
-		return network;
-	}
-	
-	public Network createNetwork() {		
-		network = new Network();
-		
-		s0 = network.addServer( service_curve );
-		s0.setUseGamma( false );
-		s0.setUseExtraGamma( false );
-	
-		try {	
-			f0 = network.addFlow( arrival_curve_0, s0 );	
-			f1 = network.addFlow( arrival_curve_1, s0 );
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException( e );
-		}
-		
-		return network;
-	}
-	
-	public void reinitializeCurves() {
-		service_curve = ServiceCurve.createRateLatency( sc_R, sc_T );
-		for( Server server : network.getServers() ) {
-			server.setServiceCurve( service_curve );
-		}
+    public S_1SC_2F_2AC_Network() {
+        network = createNetwork();
+    }
 
-		arrival_curve_0 = ArrivalCurve.createTokenBucket( ac_r_0, ac_b_0 );
-		f0.setArrivalCurve( arrival_curve_0 );
+    public Network getNetwork() {
+        return network;
+    }
 
-		arrival_curve_1 = ArrivalCurve.createTokenBucket( ac_r_1, ac_b_1 );
-		f1.setArrivalCurve( arrival_curve_1 );
-	}
+    public Network createNetwork() {
+        network = new Network();
+
+        s0 = network.addServer(service_curve);
+        s0.setUseGamma(false);
+        s0.setUseExtraGamma(false);
+
+        try {
+            f0 = network.addFlow(arrival_curve_0, s0);
+            f1 = network.addFlow(arrival_curve_1, s0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        return network;
+    }
+
+    public void reinitializeCurves() {
+        service_curve = CurveFactory.createRateLatency(sc_R, sc_T);
+        for (Server server : network.getServers()) {
+            server.setServiceCurve(service_curve);
+        }
+
+        arrival_curve_0 = CurveFactory.createTokenBucket(ac_r_0, ac_b_0);
+        f0.setArrivalCurve(arrival_curve_0);
+
+        arrival_curve_1 = CurveFactory.createTokenBucket(ac_r_1, ac_b_1);
+        f1.setArrivalCurve(arrival_curve_1);
+    }
 }

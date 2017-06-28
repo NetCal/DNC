@@ -28,9 +28,9 @@
 package unikl.disco.network;
 
 public interface NetworkFactory {
-	public Network createNetwork();
-	
-	public Network getNetwork();
-	
-	public void reinitializeCurves();
+    public Network createNetwork();
+
+    public Network getNetwork();
+
+    public void reinitializeCurves();
 }

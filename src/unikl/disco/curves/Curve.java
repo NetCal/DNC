@@ -93,4 +93,8 @@ public interface Curve {
     void setHas_rate_latency_meta_info(boolean has_rate_latency_meta_info);
     // Curve manipulation (entire curve)
     //void beautify();
+
+
+    Num getSustainedRate();
+
 }

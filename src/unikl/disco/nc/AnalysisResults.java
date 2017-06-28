@@ -28,76 +28,76 @@
 
 package unikl.disco.nc;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import unikl.disco.curves.ArrivalCurve;
 import unikl.disco.network.Server;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 public class AnalysisResults {
-	protected Num delay_bound;
-	protected Num backlog_bound;
-	public Map<Server,Set<ArrivalCurve>> map__server__alphas;
-	
-	public AnalysisResults() {
-		this.delay_bound = NumFactory.createNaN();
-		this.backlog_bound = NumFactory.createNaN();
-		this.map__server__alphas = new HashMap<Server,Set<ArrivalCurve>>();
-	}
-	
-	public AnalysisResults( Num delay_bound,
-							   Num backlog_bound,
-							   Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
-		this.delay_bound = delay_bound;
-		this.backlog_bound = backlog_bound;
-		if( map__server__alphas == null ) {
-			this.map__server__alphas = new HashMap<Server,Set<ArrivalCurve>>();
-		} else {
-			this.map__server__alphas = map__server__alphas;
-		}
-	}
+    public Map<Server, Set<ArrivalCurve>> map__server__alphas;
+    protected Num delay_bound;
+    protected Num backlog_bound;
 
-	protected void setDelayBound( Num delay_bound ) {
-		this.delay_bound = delay_bound;
-	}
+    public AnalysisResults() {
+        this.delay_bound = NumFactory.createNaN();
+        this.backlog_bound = NumFactory.createNaN();
+        this.map__server__alphas = new HashMap<Server, Set<ArrivalCurve>>();
+    }
 
-	public Num getDelayBound() {
-		return delay_bound;
-	}
+    public AnalysisResults(Num delay_bound,
+                           Num backlog_bound,
+                           Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+        this.delay_bound = delay_bound;
+        this.backlog_bound = backlog_bound;
+        if (map__server__alphas == null) {
+            this.map__server__alphas = new HashMap<Server, Set<ArrivalCurve>>();
+        } else {
+            this.map__server__alphas = map__server__alphas;
+        }
+    }
 
-	protected void setBacklogBound( Num backlog_bound ) {
-		this.backlog_bound = backlog_bound;
-	}
+    public Num getDelayBound() {
+        return delay_bound;
+    }
 
-	public Num getBacklogBound() {
-		return backlog_bound;
-	}
-	
-	public String getServerAlphasMapString() {
-		
-		if( map__server__alphas.isEmpty() ) {
-			return "{}";
-		}
+    protected void setDelayBound(Num delay_bound) {
+        this.delay_bound = delay_bound;
+    }
 
-		StringBuffer result_str = new StringBuffer( "{" );
-		for( Entry<Server, Set<ArrivalCurve>> entry : map__server__alphas.entrySet() ) {
-			result_str.append( entry.getKey().toShortString() );
-			result_str.append( "={" );
-			for ( ArrivalCurve ac : entry.getValue() ) {
-				result_str.append( ac.toString() );
-				result_str.append( "," );
-			}
-			result_str.deleteCharAt( result_str.length()-1 ); // Remove the trailing comma.
-			result_str.append( "}" );
-			result_str.append( ", " );
-		}
-		result_str.delete( result_str.length()-2, result_str.length() ); // Remove the trailing blank space and comma.
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
+    public Num getBacklogBound() {
+        return backlog_bound;
+    }
+
+    protected void setBacklogBound(Num backlog_bound) {
+        this.backlog_bound = backlog_bound;
+    }
+
+    public String getServerAlphasMapString() {
+
+        if (map__server__alphas.isEmpty()) {
+            return "{}";
+        }
+
+        StringBuffer result_str = new StringBuffer("{");
+        for (Entry<Server, Set<ArrivalCurve>> entry : map__server__alphas.entrySet()) {
+            result_str.append(entry.getKey().toShortString());
+            result_str.append("={");
+            for (ArrivalCurve ac : entry.getValue()) {
+                result_str.append(ac.toString());
+                result_str.append(",");
+            }
+            result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
+            result_str.append("}");
+            result_str.append(", ");
+        }
+        result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
+        result_str.append("}");
+
+        return result_str.toString();
+    }
 }

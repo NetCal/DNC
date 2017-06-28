@@ -24,40 +24,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
- 
+
 package unikl.disco.numbers;
 
 /**
- * 
- * Class emulating multiple dispatch (Java only offers single dispatch) 
- * in order to allow the user to switch between available number representations. 
+ * Class emulating multiple dispatch (Java only offers single dispatch)
+ * in order to allow the user to switch between available number representations.
  *
  * @author Steffen Bondorf
- *
  */
 public interface Num {
-	double doubleValue();
-	
-	boolean eq( double num );
-	boolean eqZero();
+    double doubleValue();
 
-	boolean gt( Num num );
-	boolean gtZero();
+    boolean eq(double num);
 
-	boolean geq( Num num );
-	boolean geqZero();
+    boolean eqZero();
 
-	boolean lt( Num num );
-	boolean ltZero();
+    boolean gt(Num num);
 
-	boolean leq( Num num );
-	boolean leqZero();
+    boolean gtZero();
 
-	boolean isFinite();
+    boolean geq(Num num);
 
-	boolean isInfinite();
-	
-	boolean isNaN();
+    boolean geqZero();
 
-	Num copy();
+    boolean lt(Num num);
+
+    boolean ltZero();
+
+    boolean leq(Num num);
+
+    boolean leqZero();
+
+    boolean isFinite();
+
+    boolean isInfinite();
+
+    boolean isNaN();
+
+    Num copy();
 }

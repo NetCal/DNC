@@ -26,6 +26,35 @@ public class ServiceCurveRTCultAffine extends CurveRTCultAffine implements Servi
     }
 
 
+    public ServiceCurveRTCultAffine(SegmentList aperSegments) {
+        rtc_curve = new Curve(aperSegments);
+    }
+
+    public ServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy);
+    }
+
+    public ServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
+    }
+
+    public ServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
+    }
+
+
+    public ServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
+    }
+
+    public ServiceCurveRTCultAffine(SegmentList aperSegments, String name) {
+        rtc_curve = new Curve(aperSegments, name);
+    }
+
+    public ServiceCurveRTCultAffine(Curve c) {
+        rtc_curve = c.clone();
+    }
+
     //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
@@ -54,34 +83,5 @@ public class ServiceCurveRTCultAffine extends CurveRTCultAffine implements Servi
     @Override
     public String toString() {
         return "S" + super.toString();
-    }
-
-
-    public ServiceCurveRTCultAffine(SegmentList aperSegments) {
-        rtc_curve = new Curve(aperSegments);
-    }
-
-    public ServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy);
-    }
-
-    public ServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
-    }
-
-    public ServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
-    }
-
-    public ServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
-    }
-
-    public ServiceCurveRTCultAffine(SegmentList aperSegments, String name) {
-        rtc_curve = new Curve(aperSegments, name);
-    }
-
-    public ServiceCurveRTCultAffine(Curve c) {
-        rtc_curve = c.clone();
     }
 }
