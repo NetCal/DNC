@@ -12,6 +12,7 @@
 		<mkdir dir="out"/>
 		<javac srcdir="src" destdir="out" includeantruntime="false">
 			<classpath refid="classpath"/>
+			<exclude name="**/*OutputTestNetworkSaved*"/>
 		</javac>
 	</target>
 
