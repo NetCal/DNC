@@ -5,7 +5,6 @@
 		<pathelement location="lib/junit-4.12.jar"/>
 		<pathelement location="lib/rtc.jar"/>
 		<pathelement location="lib/java-hamcrest-2.0.0.0.jar"/>
-		<pathelement location="lib/findbugs.jar"/>
 	</path>
 
 	<target name="compile">
@@ -26,7 +25,6 @@
 				<fileset dir="src" includes="**/*Test*.java">
 					<exclude name="**/*Config*"/>
 					<exclude name="**/*TestNetwork*"/>
-					<exclude name="**/*TestResults*"/>
 				</fileset>
 			</batchtest>
 		</junit>

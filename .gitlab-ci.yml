@@ -1,0 +1,18 @@
+test:
+  script:
+  - /usr/bin/time -f "%e" -o runtimes ant test > output_file
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - cat runtimes
+  - javac build_parser.java
+  - java build_parser
+  - ./analyze.sh
+  - git clone git@valgrind.informatik.uni-kl.de:ci-runner/Performance_Report.git
+  - ls
+  - cd Performance_Report
+  - ls
+  - Rscript makeplot.R
+  - git commit -a -m "new plot"
+  - git push
