@@ -14,5 +14,5 @@ sum=$(awk '{sum+=$1}END{ print sum/NR}' runtimes)
 #echo $lastupdate
 
 output="$sum,$timestamp,$uname,$java,$lastupdate"
-#echo $output
+echo $output
 echo "$output" >> "statistics"
