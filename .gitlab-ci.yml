@@ -1,10 +1,10 @@
 test:
   script:
   - /usr/bin/time -f "%e" -o runtimes ant test > output_file
-    #- /usr/bin/time -f "%e" -o runtimes -a ant test
-    #- /usr/bin/time -f "%e" -o runtimes -a ant test
-    #- /usr/bin/time -f "%e" -o runtimes -a ant test
-    #- /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
+  - /usr/bin/time -f "%e" -o runtimes -a ant test
   - cat runtimes
   - javac build_parser.java
   - java build_parser
