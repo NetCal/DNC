@@ -32,7 +32,7 @@ import java.util.List;
 import de.uni_kl.disco.numbers.Num;
 
 /**
- * Interface for wide-sense increasing, ultimately affine curves.
+ * Interface for piecewise affine dnc curves.
  */
 public interface CurvePwAffine extends Curve {
     @Override
