@@ -1,4 +1,4 @@
-package de.uni_kl.disco.curves.mpa_rtc_affine;
+package de.uni_kl.disco.curves.mpa_rtc_pwaffine;
 
 import ch.ethz.rtc.kernel.Segment;
 import de.uni_kl.disco.curves.LinearSegment;
@@ -6,20 +6,20 @@ import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 import de.uni_kl.disco.numbers.NumUtils;
 
-public class LinearSegment_MPARTC_affine implements LinearSegment {
+public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
 
     private ch.ethz.rtc.kernel.Segment rtc_segment;
 
     //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-    public LinearSegment_MPARTC_affine(double x, double y, double s) {
+    public LinearSegment_MPARTC_PwAffine(double x, double y, double s) {
         rtc_segment = new Segment(x, y, s);
     }
 
-    public LinearSegment_MPARTC_affine(LinearSegment segment) {
-        if (segment instanceof LinearSegment_MPARTC_affine) {
-            rtc_segment = ((LinearSegment_MPARTC_affine) segment).rtc_segment.clone();
+    public LinearSegment_MPARTC_PwAffine(LinearSegment segment) {
+        if (segment instanceof LinearSegment_MPARTC_PwAffine) {
+            rtc_segment = ((LinearSegment_MPARTC_PwAffine) segment).rtc_segment.clone();
         } else {
             rtc_segment = new Segment(segment.getX().doubleValue(),
                     segment.getY().doubleValue(),
@@ -27,11 +27,11 @@ public class LinearSegment_MPARTC_affine implements LinearSegment {
         }
     }
 
-    public LinearSegment_MPARTC_affine(Segment segment) {
+    public LinearSegment_MPARTC_PwAffine(Segment segment) {
         rtc_segment = segment.clone();
     }
 
-    public LinearSegment_MPARTC_affine(String segment_str) {
+    public LinearSegment_MPARTC_PwAffine(String segment_str) {
         rtc_segment = new Segment(segment_str);
     }
 
@@ -100,12 +100,12 @@ public class LinearSegment_MPARTC_affine implements LinearSegment {
 
     @Override
     public LinearSegment copy() {
-        return new LinearSegment_MPARTC_affine(rtc_segment);
+        return new LinearSegment_MPARTC_PwAffine(rtc_segment);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegment_MPARTC_affine)) {
+        if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
             return false;
         }
         return rtc_segment.equals(obj);

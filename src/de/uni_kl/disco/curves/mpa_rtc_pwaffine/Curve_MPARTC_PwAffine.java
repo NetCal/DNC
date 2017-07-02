@@ -1,4 +1,4 @@
-package de.uni_kl.disco.curves.mpa_rtc_affine;
+package de.uni_kl.disco.curves.mpa_rtc_pwaffine;
 
 import ch.ethz.rtc.kernel.*;
 import de.uni_kl.disco.curves.CurvePwAffine;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Curve_MPARTC_affine implements CurvePwAffine {
+public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     protected ch.ethz.rtc.kernel.Curve rtc_curve;
 
     protected boolean is_delayed_infinite_burst = false;
@@ -20,10 +20,10 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     protected boolean is_token_bucket = false;
 
     protected boolean has_rate_latency_meta_info = false;
-    protected List<Curve_MPARTC_affine> rate_latencies = new LinkedList<Curve_MPARTC_affine>();
+    protected List<Curve_MPARTC_PwAffine> rate_latencies = new LinkedList<Curve_MPARTC_PwAffine>();
 
     protected boolean has_token_bucket_meta_info = false;
-    protected List<Curve_MPARTC_affine> token_buckets = new LinkedList<Curve_MPARTC_affine>();
+    protected List<Curve_MPARTC_PwAffine> token_buckets = new LinkedList<Curve_MPARTC_PwAffine>();
 
 
     //--------------------------------------------------------------------------------------------------------------
@@ -33,11 +33,11 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     /**
      * Creates a <code>Curve</code> instance with a single segment on the x-axis.
      */
-    public Curve_MPARTC_affine() {
+    public Curve_MPARTC_PwAffine() {
         createZeroSegmentsCurve(1);
     }
 
-    public Curve_MPARTC_affine(CurvePwAffine curve) {
+    public Curve_MPARTC_PwAffine(CurvePwAffine curve) {
         copy(curve);
     }
 
@@ -47,7 +47,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
      *
      * @param segment_count the number of segments
      */
-    public Curve_MPARTC_affine(int segment_count) {
+    public Curve_MPARTC_PwAffine(int segment_count) {
         createZeroSegmentsCurve(segment_count);
     }
 
@@ -118,11 +118,11 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     private void clearMetaInfo() {
         has_token_bucket_meta_info = false;
         is_token_bucket = false;
-        token_buckets = new LinkedList<Curve_MPARTC_affine>();
+        token_buckets = new LinkedList<Curve_MPARTC_PwAffine>();
 
         has_rate_latency_meta_info = false;
         is_rate_latency = false;
-        rate_latencies = new LinkedList<Curve_MPARTC_affine>();
+        rate_latencies = new LinkedList<Curve_MPARTC_PwAffine>();
     }
 
 
@@ -136,27 +136,27 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
      * @return a copy of this instance.
      */
     @Override
-    public Curve_MPARTC_affine copy() {
-        Curve_MPARTC_affine c_copy = new Curve_MPARTC_affine();
+    public Curve_MPARTC_PwAffine copy() {
+        Curve_MPARTC_PwAffine c_copy = new Curve_MPARTC_PwAffine();
         c_copy.copy(this);
         return c_copy;
     }
 
     @Override
     public void copy(de.uni_kl.disco.curves.Curve curve) {
-        if (curve instanceof Curve_MPARTC_affine) {
-            this.rtc_curve = ((Curve_MPARTC_affine) curve).rtc_curve.clone();
+        if (curve instanceof Curve_MPARTC_PwAffine) {
+            this.rtc_curve = ((Curve_MPARTC_PwAffine) curve).rtc_curve.clone();
 
-            this.has_rate_latency_meta_info = ((Curve_MPARTC_affine) curve).has_rate_latency_meta_info;
+            this.has_rate_latency_meta_info = ((Curve_MPARTC_PwAffine) curve).has_rate_latency_meta_info;
             this.rate_latencies = new LinkedList<>();
             for (int i = 0; i < rate_latencies.size(); i++) {
-                this.rate_latencies.add(((Curve_MPARTC_affine) curve).rate_latencies.get(i).copy());
+                this.rate_latencies.add(((Curve_MPARTC_PwAffine) curve).rate_latencies.get(i).copy());
             }
 
-            this.has_token_bucket_meta_info = ((Curve_MPARTC_affine) curve).has_token_bucket_meta_info;
+            this.has_token_bucket_meta_info = ((Curve_MPARTC_PwAffine) curve).has_token_bucket_meta_info;
             this.token_buckets = new LinkedList<>();
             for (int i = 0; i < token_buckets.size(); i++) {
-                this.token_buckets.add(((Curve_MPARTC_affine) curve).token_buckets.get(i).copy());
+                this.token_buckets.add(((Curve_MPARTC_PwAffine) curve).token_buckets.get(i).copy());
             }
 
             this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
@@ -187,9 +187,9 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     /**
      * Starting at 0 as the RTC SegmentList extends ArrayList.
      */
-    public LinearSegment_MPARTC_affine getSegment(int pos) {
+    public LinearSegment_MPARTC_PwAffine getSegment(int pos) {
         // IMPORTANT! This is the correct code to prevent update errors
-        LinearSegment_MPARTC_affine s = new LinearSegment_MPARTC_affine(0, 0, 0);
+        LinearSegment_MPARTC_PwAffine s = new LinearSegment_MPARTC_PwAffine(0, 0, 0);
         s.setRtc_segment(rtc_curve.aperiodicSegments().get(pos));
         return s;
         // Old code, bugged because it was not able to update the Segment, like done in various add functions
@@ -407,11 +407,11 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Curve_MPARTC_affine)) {
+        if (obj == null || !(obj instanceof Curve_MPARTC_PwAffine)) {
             return false;
         }
 
-        return rtc_curve.equals(((Curve_MPARTC_affine) obj).rtc_curve);
+        return rtc_curve.equals(((Curve_MPARTC_PwAffine) obj).rtc_curve);
     }
 
     @Override
@@ -502,9 +502,9 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
 
     @Override
     public void setRL_Components(List<CurvePwAffine> rate_latencies) {
-        List<Curve_MPARTC_affine> tmp = new LinkedList<>();
+        List<Curve_MPARTC_PwAffine> tmp = new LinkedList<>();
         for (int i = 0; i < rate_latencies.size(); i++) {
-            tmp.add((Curve_MPARTC_affine) rate_latencies.get(i));
+            tmp.add((Curve_MPARTC_PwAffine) rate_latencies.get(i));
         }
         this.rate_latencies = tmp;
     }
@@ -521,9 +521,9 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
 
     @Override
     public void setTB_Components(List<CurvePwAffine> token_buckets) {
-        List<Curve_MPARTC_affine> tmp = new LinkedList<>();
+        List<Curve_MPARTC_PwAffine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
-            tmp.add((Curve_MPARTC_affine) token_buckets.get(i));
+            tmp.add((Curve_MPARTC_PwAffine) token_buckets.get(i));
         }
         this.token_buckets = tmp;
     }
@@ -580,7 +580,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
         return rate_latencies.size();
     }
 
-    public Curve_MPARTC_affine getRL_Component(int i) {
+    public Curve_MPARTC_PwAffine getRL_Component(int i) {
         decomposeIntoRateLatencies();
         // TODO @Steffen: does this fix break anything? This one is like your RateLatency Fix
         if (is_rate_latency) {
@@ -595,14 +595,14 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
         }
 
         if (CalculatorConfig.SERVICE_CURVE_CHECKS && !this.isConvex()) {
-            if (this.equals(CurveFactory_MPARTC_affine.factory_object.createZeroDelayInfiniteBurst())) {
-                rate_latencies = new ArrayList<Curve_MPARTC_affine>();
-                rate_latencies.add(CurveFactory_MPARTC_affine.factory_object.createRateLatency(NumFactory.createPositiveInfinity(), NumFactory.createZero()));
+            if (this.equals(CurveFactory_MPARTC_PwAffine.factory_object.createZeroDelayInfiniteBurst())) {
+                rate_latencies = new ArrayList<Curve_MPARTC_PwAffine>();
+                rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(NumFactory.createPositiveInfinity(), NumFactory.createZero()));
             } else {
                 throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
             }
         } else {
-            rate_latencies = new ArrayList<Curve_MPARTC_affine>();
+            rate_latencies = new ArrayList<Curve_MPARTC_PwAffine>();
             for (int i = 0; i < getSegmentCount(); i++) {
                 if (getSegmentRTC(i).y() == 0.0 && getSegmentRTC(i).s() == 0.0) {
                     continue;
@@ -613,7 +613,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
                 if (latency < 0.0) {
                     continue;
                 }
-                rate_latencies.add(CurveFactory_MPARTC_affine.factory_object.createRateLatency(rate, latency));
+                rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(rate, latency));
             }
         }
 
@@ -634,7 +634,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
         return token_buckets.size();
     }
 
-    public Curve_MPARTC_affine getTB_Component(int i) {
+    public Curve_MPARTC_PwAffine getTB_Component(int i) {
         decomposeIntoTokenBuckets();
         return token_buckets.get(i);
     }
@@ -648,7 +648,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
             throw new RuntimeException("Can only decompose concave arrival curves into token buckets.");
         }
 
-        token_buckets = new ArrayList<Curve_MPARTC_affine>();
+        token_buckets = new ArrayList<Curve_MPARTC_PwAffine>();
         for (int i = 0; i < getSegmentCount(); i++) {
             if (isDiscontinuity(i)) {
                 continue;
@@ -656,7 +656,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
             double rate = getSegmentRTC(i).s();
             double burst = getSegmentRTC(i).y() -
                     (getSegmentRTC(i).x() * getSegmentRTC(i).s());
-            token_buckets.add(CurveFactory_MPARTC_affine.factory_object.createTokenBucket(rate, burst));
+            token_buckets.add(CurveFactory_MPARTC_PwAffine.factory_object.createTokenBucket(rate, burst));
         }
 
         is_token_bucket = token_buckets.size() == 1;

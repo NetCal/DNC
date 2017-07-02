@@ -1,4 +1,4 @@
-package de.uni_kl.disco.curves.mpa_rtc_affine;
+package de.uni_kl.disco.curves.mpa_rtc_pwaffine;
 
 import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
@@ -15,8 +15,8 @@ import java.util.List;
 
 //TODO Currently, arrival curves are not enforced to be 0 in the origin
 //		because the RTC toolbox does not allow for such spots as they occur in token bucket constrained arrivals. 
-public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
-    protected static CurveFactory_MPARTC_affine factory_object = new CurveFactory_MPARTC_affine();
+public class CurveFactory_MPARTC_PwAffine implements CurveFactoryInterface {
+    protected static CurveFactory_MPARTC_PwAffine factory_object = new CurveFactory_MPARTC_PwAffine();
 
 //--------------------------------------------------------------------------------------------------------------
 // Curve Constructors
@@ -25,8 +25,8 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public Curve_MPARTC_affine createCurve(List<LinearSegment> segments) {
-        Curve_MPARTC_affine msc_rtc = new Curve_MPARTC_affine();
+    public Curve_MPARTC_PwAffine createCurve(List<LinearSegment> segments) {
+        Curve_MPARTC_PwAffine msc_rtc = new Curve_MPARTC_PwAffine();
 
         // Check for origin + burst
         if (segments.size() > 1
@@ -47,12 +47,12 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         return msc_rtc;
     }
 
-    public Curve_MPARTC_affine createZeroCurve() {
-        return new Curve_MPARTC_affine(); // CurveRTC constructor's default behavior
+    public Curve_MPARTC_PwAffine createZeroCurve() {
+        return new Curve_MPARTC_PwAffine(); // CurveRTC constructor's default behavior
     }
 
-    public Curve_MPARTC_affine createHorizontal(double y) {
-        Curve_MPARTC_affine c_rtc = new Curve_MPARTC_affine();
+    public Curve_MPARTC_PwAffine createHorizontal(double y) {
+        Curve_MPARTC_PwAffine c_rtc = new Curve_MPARTC_PwAffine();
         makeHorizontal(c_rtc, y);
         return c_rtc;
     }
@@ -63,7 +63,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
      * @param y the y-intercept of the curve
      * @return a <code>Curve</code> instance
      */
-    public Curve_MPARTC_affine createHorizontal(Num y) {
+    public Curve_MPARTC_PwAffine createHorizontal(Num y) {
         return createHorizontal(y.doubleValue());
     }
 
@@ -74,24 +74,24 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public ServiceCurve_MPARTC_affine createServiceCurve() {
-        return new ServiceCurve_MPARTC_affine();
+    public ServiceCurve_MPARTC_PwAffine createServiceCurve() {
+        return new ServiceCurve_MPARTC_PwAffine();
     }
 
-    public ServiceCurve_MPARTC_affine createServiceCurve(int segment_count) {
-        return new ServiceCurve_MPARTC_affine(segment_count);
+    public ServiceCurve_MPARTC_PwAffine createServiceCurve(int segment_count) {
+        return new ServiceCurve_MPARTC_PwAffine(segment_count);
     }
 
-    public ServiceCurve_MPARTC_affine createServiceCurve(String service_curve_str) throws Exception {
-        return new ServiceCurve_MPARTC_affine(service_curve_str);
+    public ServiceCurve_MPARTC_PwAffine createServiceCurve(String service_curve_str) throws Exception {
+        return new ServiceCurve_MPARTC_PwAffine(service_curve_str);
     }
 
-    public ServiceCurve_MPARTC_affine createServiceCurve(CurvePwAffine curve) {
-        return new ServiceCurve_MPARTC_affine(curve);
+    public ServiceCurve_MPARTC_PwAffine createServiceCurve(CurvePwAffine curve) {
+        return new ServiceCurve_MPARTC_PwAffine(curve);
     }
 
-    public ServiceCurve_MPARTC_affine createZeroService() {
-        return new ServiceCurve_MPARTC_affine(); // ServiceCurveRTC constructor's default behavior
+    public ServiceCurve_MPARTC_PwAffine createZeroService() {
+        return new ServiceCurve_MPARTC_PwAffine(); // ServiceCurveRTC constructor's default behavior
     }
 
     /**
@@ -99,29 +99,29 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
      *
      * @return a <code>ServiceCurve</code> instance
      */
-    public ServiceCurve_MPARTC_affine createZeroDelayInfiniteBurst() {
-        ServiceCurve_MPARTC_affine sc_rtc = new ServiceCurve_MPARTC_affine();
+    public ServiceCurve_MPARTC_PwAffine createZeroDelayInfiniteBurst() {
+        ServiceCurve_MPARTC_PwAffine sc_rtc = new ServiceCurve_MPARTC_PwAffine();
         makeHorizontal(sc_rtc, Double.POSITIVE_INFINITY);
         return sc_rtc;
     }
 
-    public ServiceCurve_MPARTC_affine createDelayedInfiniteBurst(double delay) {
-        ServiceCurve_MPARTC_affine sc_rtc = new ServiceCurve_MPARTC_affine();
+    public ServiceCurve_MPARTC_PwAffine createDelayedInfiniteBurst(double delay) {
+        ServiceCurve_MPARTC_PwAffine sc_rtc = new ServiceCurve_MPARTC_PwAffine();
         makeDelayedInfiniteBurst(sc_rtc, delay);
         return sc_rtc;
     }
 
-    public ServiceCurve_MPARTC_affine createDelayedInfiniteBurst(Num delay) {
+    public ServiceCurve_MPARTC_PwAffine createDelayedInfiniteBurst(Num delay) {
         return createDelayedInfiniteBurst(delay.doubleValue());
     }
 
-    public ServiceCurve_MPARTC_affine createRateLatency(double rate, double latency) {
-        ServiceCurve_MPARTC_affine sc_rtc = new ServiceCurve_MPARTC_affine();
+    public ServiceCurve_MPARTC_PwAffine createRateLatency(double rate, double latency) {
+        ServiceCurve_MPARTC_PwAffine sc_rtc = new ServiceCurve_MPARTC_PwAffine();
         makeRateLatency(sc_rtc, rate, latency);
         return sc_rtc;
     }
 
-    public ServiceCurve_MPARTC_affine createRateLatency(Num rate, Num latency) {
+    public ServiceCurve_MPARTC_PwAffine createRateLatency(Num rate, Num latency) {
         return createRateLatency(rate.doubleValue(), latency.doubleValue());
     }
 
@@ -168,47 +168,47 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public ArrivalCurve_MPARTC_affine createArrivalCurve() {
-        return new ArrivalCurve_MPARTC_affine();
+    public ArrivalCurve_MPARTC_PwAffine createArrivalCurve() {
+        return new ArrivalCurve_MPARTC_PwAffine();
     }
 
-    public ArrivalCurve_MPARTC_affine createArrivalCurve(int segment_count) {
-        return new ArrivalCurve_MPARTC_affine(segment_count);
+    public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(int segment_count) {
+        return new ArrivalCurve_MPARTC_PwAffine(segment_count);
     }
 
-    public ArrivalCurve_MPARTC_affine createArrivalCurve(String arrival_curve_str) throws Exception {
-        return new ArrivalCurve_MPARTC_affine(arrival_curve_str);
+    public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(String arrival_curve_str) throws Exception {
+        return new ArrivalCurve_MPARTC_PwAffine(arrival_curve_str);
     }
 
-    public ArrivalCurve_MPARTC_affine createArrivalCurve(CurvePwAffine curve) {
-        return new ArrivalCurve_MPARTC_affine(curve);
+    public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(CurvePwAffine curve) {
+        return new ArrivalCurve_MPARTC_PwAffine(curve);
     }
 
-    public ArrivalCurve_MPARTC_affine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
+    public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
         return createArrivalCurve(CurvePwAffineUtils.removeLatency(curve));
     }
 
-    public ArrivalCurve_MPARTC_affine createZeroArrivals() {
-        return new ArrivalCurve_MPARTC_affine(); // ArrivalCurveRTC constructor's default behavior
+    public ArrivalCurve_MPARTC_PwAffine createZeroArrivals() {
+        return new ArrivalCurve_MPARTC_PwAffine(); // ArrivalCurveRTC constructor's default behavior
     }
 
-    public ArrivalCurve_MPARTC_affine createPeakArrivalRate(double rate) {
-        ArrivalCurve_MPARTC_affine ac_rtc = new ArrivalCurve_MPARTC_affine();
+    public ArrivalCurve_MPARTC_PwAffine createPeakArrivalRate(double rate) {
+        ArrivalCurve_MPARTC_PwAffine ac_rtc = new ArrivalCurve_MPARTC_PwAffine();
         makePeakRate(ac_rtc, rate);
         return ac_rtc;
     }
 
-    public ArrivalCurve_MPARTC_affine createPeakArrivalRate(Num rate) {
+    public ArrivalCurve_MPARTC_PwAffine createPeakArrivalRate(Num rate) {
         return createPeakArrivalRate(rate.doubleValue());
     }
 
-    public ArrivalCurve_MPARTC_affine createTokenBucket(double rate, double burst) {
-        ArrivalCurve_MPARTC_affine ac_rtc = new ArrivalCurve_MPARTC_affine();
+    public ArrivalCurve_MPARTC_PwAffine createTokenBucket(double rate, double burst) {
+        ArrivalCurve_MPARTC_PwAffine ac_rtc = new ArrivalCurve_MPARTC_PwAffine();
         makeTokenBucket(ac_rtc, rate, burst);
         return ac_rtc;
     }
 
-    public ArrivalCurve_MPARTC_affine createTokenBucket(Num rate, Num burst) {
+    public ArrivalCurve_MPARTC_PwAffine createTokenBucket(Num rate, Num burst) {
         return createTokenBucket(rate.doubleValue(), burst.doubleValue());
     }
 
@@ -254,49 +254,49 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public MaxServiceCurve_MPARTC_affine createMaxServiceCurve() {
-        return new MaxServiceCurve_MPARTC_affine();
+    public MaxServiceCurve_MPARTC_PwAffine createMaxServiceCurve() {
+        return new MaxServiceCurve_MPARTC_PwAffine();
     }
 
-    public MaxServiceCurve_MPARTC_affine createMaxServiceCurve(int segment_count) {
-        return new MaxServiceCurve_MPARTC_affine(segment_count);
+    public MaxServiceCurve_MPARTC_PwAffine createMaxServiceCurve(int segment_count) {
+        return new MaxServiceCurve_MPARTC_PwAffine(segment_count);
     }
 
-    public MaxServiceCurve_MPARTC_affine createMaxServiceCurve(String max_service_curve_str) throws Exception {
-        return new MaxServiceCurve_MPARTC_affine(max_service_curve_str);
+    public MaxServiceCurve_MPARTC_PwAffine createMaxServiceCurve(String max_service_curve_str) throws Exception {
+        return new MaxServiceCurve_MPARTC_PwAffine(max_service_curve_str);
     }
 
-    public MaxServiceCurve_MPARTC_affine createMaxServiceCurve(CurvePwAffine curve) {
-        return new MaxServiceCurve_MPARTC_affine(curve);
+    public MaxServiceCurve_MPARTC_PwAffine createMaxServiceCurve(CurvePwAffine curve) {
+        return new MaxServiceCurve_MPARTC_PwAffine(curve);
     }
 
-    public MaxServiceCurve_MPARTC_affine createInfiniteMaxService() {
+    public MaxServiceCurve_MPARTC_PwAffine createInfiniteMaxService() {
         return createDelayedInfiniteBurstMSC(NumFactory.createZero());
     }
 
-    public MaxServiceCurve_MPARTC_affine createZeroDelayInfiniteBurstMSC() {
-        MaxServiceCurve_MPARTC_affine msc_rtc = new MaxServiceCurve_MPARTC_affine();
+    public MaxServiceCurve_MPARTC_PwAffine createZeroDelayInfiniteBurstMSC() {
+        MaxServiceCurve_MPARTC_PwAffine msc_rtc = new MaxServiceCurve_MPARTC_PwAffine();
         makeHorizontal(msc_rtc, Double.POSITIVE_INFINITY);
         return msc_rtc;
     }
 
-    public MaxServiceCurve_MPARTC_affine createDelayedInfiniteBurstMSC(double delay) {
-        MaxServiceCurve_MPARTC_affine msc_rtc = new MaxServiceCurve_MPARTC_affine();
+    public MaxServiceCurve_MPARTC_PwAffine createDelayedInfiniteBurstMSC(double delay) {
+        MaxServiceCurve_MPARTC_PwAffine msc_rtc = new MaxServiceCurve_MPARTC_PwAffine();
         makeDelayedInfiniteBurst(msc_rtc, delay);
         return msc_rtc;
     }
 
-    public MaxServiceCurve_MPARTC_affine createDelayedInfiniteBurstMSC(Num delay) {
+    public MaxServiceCurve_MPARTC_PwAffine createDelayedInfiniteBurstMSC(Num delay) {
         return createDelayedInfiniteBurstMSC(delay.doubleValue());
     }
 
-    public MaxServiceCurve_MPARTC_affine createRateLatencyMSC(double rate, double latency) {
-        MaxServiceCurve_MPARTC_affine msc_rtc = new MaxServiceCurve_MPARTC_affine();
+    public MaxServiceCurve_MPARTC_PwAffine createRateLatencyMSC(double rate, double latency) {
+        MaxServiceCurve_MPARTC_PwAffine msc_rtc = new MaxServiceCurve_MPARTC_PwAffine();
         makeRateLatency(msc_rtc, rate, latency);
         return msc_rtc;
     }
 
-    public MaxServiceCurve_MPARTC_affine createRateLatencyMSC(Num rate, Num latency) {
+    public MaxServiceCurve_MPARTC_PwAffine createRateLatencyMSC(Num rate, Num latency) {
         return createRateLatencyMSC(rate.doubleValue(), latency.doubleValue());
     }
 
@@ -338,7 +338,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
     //--------------------------------------------------------------------------------------------------------------
 // Curve assembly
 //--------------------------------------------------------------------------------------------------------------
-    private void makeHorizontal(Curve_MPARTC_affine c_rtc, double y) {
+    private void makeHorizontal(Curve_MPARTC_PwAffine c_rtc, double y) {
         c_rtc.initializeWithSegment(new Segment(0.0, y, 0.0));
 
         if (y == Double.POSITIVE_INFINITY) {
@@ -346,7 +346,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         }
     }
 
-    private void makeDelayedInfiniteBurst(Curve_MPARTC_affine c_rtc, double delay) {
+    private void makeDelayedInfiniteBurst(Curve_MPARTC_PwAffine c_rtc, double delay) {
         if (delay < 0.0) {
             throw new IllegalArgumentException("Delayed infinite burst curve must have delay >= 0.0");
         }
@@ -366,7 +366,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         c_rtc.is_delayed_infinite_burst = true;
     }
 
-    private void makePeakRate(Curve_MPARTC_affine c_rtc, double rate) {
+    private void makePeakRate(Curve_MPARTC_PwAffine c_rtc, double rate) {
         if (rate == Double.POSITIVE_INFINITY) {
             throw new IllegalArgumentException("Peak rate with rate infinity equals a delayed infinite burst curve with delay < 0.0");
         }
@@ -380,7 +380,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         // TODO Is it a RL with L=0 (in the PMOO's point of view)?
     }
 
-    private void makeRateLatency(Curve_MPARTC_affine c_rtc, double rate, double latency) {
+    private void makeRateLatency(Curve_MPARTC_PwAffine c_rtc, double rate, double latency) {
         if (rate == Double.POSITIVE_INFINITY) {
             makeDelayedInfiniteBurst(c_rtc, latency);
             return;
@@ -407,7 +407,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         c_rtc.is_rate_latency = true;
     }
 
-    private void makeTokenBucket(Curve_MPARTC_affine c_rtc, double rate, double burst) {
+    private void makeTokenBucket(Curve_MPARTC_PwAffine c_rtc, double rate, double burst) {
         if (rate == Double.POSITIVE_INFINITY
                 || burst == Double.POSITIVE_INFINITY) {
             makeDelayedInfiniteBurst(c_rtc, 0.0);

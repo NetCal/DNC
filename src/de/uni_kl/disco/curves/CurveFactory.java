@@ -3,7 +3,7 @@ package de.uni_kl.disco.curves;
 import java.util.List;
 
 import de.uni_kl.disco.curves.dnc.CurveFactory_DNC;
-import de.uni_kl.disco.curves.mpa_rtc_affine.CurveFactory_MPARTC_affine;
+import de.uni_kl.disco.curves.mpa_rtc_pwaffine.CurveFactory_MPARTC_PwAffine;
 import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.disco.numbers.Num;
@@ -16,7 +16,7 @@ import de.uni_kl.disco.numbers.NumFactory;
  */
 public class CurveFactory {
     private static CurveFactoryInterface dnc_factory = new CurveFactory_DNC();
-    private static CurveFactoryInterface mpa_rtc_affine_factory = new CurveFactory_MPARTC_affine();
+    private static CurveFactoryInterface mpa_rtc_affine_factory = new CurveFactory_MPARTC_PwAffine();
 
     private static CurveFactoryInterface factory = getCurveFactory();
 
