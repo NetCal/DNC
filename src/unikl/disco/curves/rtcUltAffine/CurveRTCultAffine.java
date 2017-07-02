@@ -3,7 +3,6 @@ package unikl.disco.curves.rtcUltAffine;
 import ch.ethz.rtc.kernel.*;
 import unikl.disco.curves.CurveUltAffine;
 import unikl.disco.curves.LinearSegment;
-import unikl.disco.curves.LinearSegmentFactory;
 import unikl.disco.nc.CalculatorConfig;
 import unikl.disco.numbers.Num;
 import unikl.disco.numbers.NumFactory;
