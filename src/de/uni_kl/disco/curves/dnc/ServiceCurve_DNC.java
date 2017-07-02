@@ -1,13 +1,14 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2013 - 2016 Steffen Bondorf
+ * Copyright (C) 2013 - 2017 Steffen Bondorf
+ * Copyright (C) 2017 The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
  *
- * http://disco.cs.uni-kl.de
+ * http://disco.cs.uni-kl.de/index.php/projects/disco-dnc
  *
  *
  * The Disco Deterministic Network Calculator (DiscoDNC) is free software;
@@ -37,7 +38,7 @@ import de.uni_kl.disco.nc.CalculatorConfig;
  * @author Steffen Bondorf
  */
 public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
-    //--------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
     public ServiceCurve_DNC() {
@@ -69,7 +70,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
     }
 
 
-    //--------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
     @Override

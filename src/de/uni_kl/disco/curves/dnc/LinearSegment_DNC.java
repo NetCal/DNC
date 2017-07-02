@@ -1,13 +1,14 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2012 - 2016 Steffen Bondorf
+ * Copyright (C) 2017 The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
  *
- * http://disco.cs.uni-kl.de
+ * http://disco.cs.uni-kl.de/index.php/projects/disco-dnc
  *
  *
  * The Disco Deterministic Network Calculator (DiscoDNC) is free software;

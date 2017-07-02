@@ -1,12 +1,13 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.3.5 "Centaur".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
  *
  * Copyright (C) 2017 Steffen Bondorf
+ * Copyright (C) 2017 The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
- * http://disco.cs.uni-kl.de
+ * http://disco.cs.uni-kl.de/index.php/projects/disco-dnc
  *
  *
  * The Disco Deterministic Network Calculator (DiscoDNC) is free software;

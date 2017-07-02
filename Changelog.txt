@@ -1,3 +1,9 @@
+v2.4.0 "Chimera" (2017-Jul-XY)
+------------------------------
+* Another curve backend for the DiscoDNC:
+  The DiscoDNC (min,+)-operations can work with piecewise affine curves.
+  This release wraps the MPA RTC Toolbox's curve implementation to be used with the DiscoDNC. 
+
 v2.3.5 "Centaur" (2017-Jun-25)
 ------------------------------
 * Network.java: 
