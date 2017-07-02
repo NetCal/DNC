@@ -5,9 +5,9 @@ import de.uni_kl.disco.numbers.Num;
 /**
  * Interface for wide-sense increasing, ultimately affine curves.
  */
-public interface CurveUltAffine extends Curve {
+public interface CurveMultAffine extends Curve {
     @Override
-    CurveUltAffine copy();
+    CurveMultAffine copy();
 
     @Override
     void copy(Curve curve);
@@ -32,12 +32,12 @@ public interface CurveUltAffine extends Curve {
 
     int getRLComponentCount();
 
-    CurveUltAffine getRLComponent(int i);
+    CurveMultAffine getRLComponent(int i);
 
     // (Multi-)Token bucket
     boolean isTokenBucket();
 
     int getTBComponentCount();
 
-    CurveUltAffine getTBComponent(int i);
+    CurveMultAffine getTBComponent(int i);
 }

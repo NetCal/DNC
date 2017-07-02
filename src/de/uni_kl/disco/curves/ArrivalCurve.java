@@ -1,6 +1,6 @@
 package de.uni_kl.disco.curves;
 
-public interface ArrivalCurve extends CurveUltAffine {
+public interface ArrivalCurve extends CurveMultAffine {
     @Override
     ArrivalCurve copy();
 

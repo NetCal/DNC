@@ -16,13 +16,13 @@ public interface CurveFactoryInterface {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    CurveUltAffine createCurve(List<LinearSegment> segments);
+    CurveMultAffine createCurve(List<LinearSegment> segments);
 
-    CurveUltAffine createZeroCurve();
+    CurveMultAffine createZeroCurve();
 
-    CurveUltAffine createHorizontal(double y);
+    CurveMultAffine createHorizontal(double y);
 
-    CurveUltAffine createHorizontal(Num y);
+    CurveMultAffine createHorizontal(Num y);
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ public interface CurveFactoryInterface {
 
     ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
 
-    ServiceCurve createServiceCurve(CurveUltAffine curve);
+    ServiceCurve createServiceCurve(CurveMultAffine curve);
 
     ServiceCurve createZeroService();
 
@@ -82,9 +82,9 @@ public interface CurveFactoryInterface {
 
     ArrivalCurve createArrivalCurve(String arrival_curve_str) throws Exception;
 
-    ArrivalCurve createArrivalCurve(CurveUltAffine curve);
+    ArrivalCurve createArrivalCurve(CurveMultAffine curve);
 
-    ArrivalCurve createArrivalCurve(CurveUltAffine curve, boolean remove_latency);
+    ArrivalCurve createArrivalCurve(CurveMultAffine curve, boolean remove_latency);
 
     ArrivalCurve createZeroArrivals();
 
@@ -126,7 +126,7 @@ public interface CurveFactoryInterface {
 
     MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception;
 
-    MaxServiceCurve createMaxServiceCurve(CurveUltAffine curve);
+    MaxServiceCurve createMaxServiceCurve(CurveMultAffine curve);
 
     MaxServiceCurve createInfiniteMaxService();
 

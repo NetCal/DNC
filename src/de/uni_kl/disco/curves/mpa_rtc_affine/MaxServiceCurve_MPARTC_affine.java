@@ -2,7 +2,7 @@ package de.uni_kl.disco.curves.mpa_rtc_affine;
 
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
-import de.uni_kl.disco.curves.CurveUltAffine;
+import de.uni_kl.disco.curves.CurveMultAffine;
 import de.uni_kl.disco.curves.MaxServiceCurve;
 
 public class MaxServiceCurve_MPARTC_affine extends Curve_MPARTC_affine implements MaxServiceCurve {
@@ -17,7 +17,7 @@ public class MaxServiceCurve_MPARTC_affine extends Curve_MPARTC_affine implement
         super(segment_count);
     }
 
-    public MaxServiceCurve_MPARTC_affine(CurveUltAffine curve) {
+    public MaxServiceCurve_MPARTC_affine(CurveMultAffine curve) {
         copy(curve);
     }
 

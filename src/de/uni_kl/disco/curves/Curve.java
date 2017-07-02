@@ -80,13 +80,13 @@ public interface Curve {
 
     void setIs_rate_latency(boolean is_rate_latency);
 
-    List<CurveUltAffine> getRate_latencies();
+    List<CurveMultAffine> getRate_latencies();
 
-    void setRate_latencies(List<CurveUltAffine> rate_latencies);
+    void setRate_latencies(List<CurveMultAffine> rate_latencies);
 
-    List<CurveUltAffine> getToken_buckets();
+    List<CurveMultAffine> getToken_buckets();
 
-    void setToken_buckets(List<CurveUltAffine> token_buckets);
+    void setToken_buckets(List<CurveMultAffine> token_buckets);
 
     boolean isHas_rate_latency_meta_info();
 

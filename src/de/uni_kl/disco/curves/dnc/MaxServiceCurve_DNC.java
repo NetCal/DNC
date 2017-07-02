@@ -28,7 +28,7 @@
 
 package de.uni_kl.disco.curves.dnc;
 
-import de.uni_kl.disco.curves.CurveUltAffine;
+import de.uni_kl.disco.curves.CurveMultAffine;
 import de.uni_kl.disco.curves.MaxServiceCurve;
 import de.uni_kl.disco.nc.CalculatorConfig;
 
@@ -48,7 +48,7 @@ public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
         super(segment_count);
     }
 
-    public MaxServiceCurve_DNC(CurveUltAffine curve) {
+    public MaxServiceCurve_DNC(CurveMultAffine curve) {
         copy(curve);
 
         if (CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
