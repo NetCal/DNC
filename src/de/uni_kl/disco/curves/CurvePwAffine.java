@@ -50,10 +50,10 @@ public interface CurvePwAffine extends Curve {
 
     // Curve function values
     Num getUltAffineRate();
-//    Num getSustainedRate();
 
-    // // Specific piecewise affine curve shapes
     
+    // // Specific piecewise affine curve shapes
+
     // Burst delay
     boolean getDelayedInfiniteBurst_Property();
 

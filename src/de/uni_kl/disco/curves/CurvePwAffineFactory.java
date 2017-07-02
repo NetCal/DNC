@@ -43,14 +43,14 @@ import de.uni_kl.disco.numbers.NumFactory;
  */
 public class CurvePwAffineFactory {
     private static CurvePwAffineFactoryInterface dnc_factory = new CurveFactory_DNC();
-    private static CurvePwAffineFactoryInterface mpa_rtc_affine_factory = new CurveFactory_MPARTC_PwAffine();
+    private static CurvePwAffineFactoryInterface mpa_rtc_pwaffine_factory = new CurveFactory_MPARTC_PwAffine();
 
     private static CurvePwAffineFactoryInterface factory = getCurveFactory();
 
     private static CurvePwAffineFactoryInterface getCurveFactory() {
         switch (CalculatorConfig.getCurveClass()) {
             case MPA_RTC:
-                return mpa_rtc_affine_factory;
+                return mpa_rtc_pwaffine_factory;
             case DNC:
             default:
                 return dnc_factory;
@@ -60,7 +60,7 @@ public class CurvePwAffineFactory {
     public static void setCurveClass(CurveClass curve_class) {
         switch (curve_class) {
             case MPA_RTC:
-                factory = mpa_rtc_affine_factory;
+                factory = mpa_rtc_pwaffine_factory;
                 return;
             case DNC:
             default:

@@ -31,9 +31,6 @@ import java.util.List;
 
 import de.uni_kl.disco.numbers.Num;
 
-//TODO Regarding Phase II, extension to more general curves with a periodic part:
-//		We need to define out own interfaces for SegmentList etc.
-//		Otherwise, we need to have the RTC toolbox jar in our workspace although we might not use RTC at all.
 public interface CurvePwAffineFactoryInterface {
 
 //--------------------------------------------------------------------------------------------------------------
@@ -79,22 +76,6 @@ public interface CurvePwAffineFactoryInterface {
 
     ServiceCurve createRateLatency(Num rate, Num latency);
 
-    // TODO Phase II
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//    ServiceCurve createServiceCurve(SegmentList aperSegments);
-//
-//    ServiceCurve createServiceCurve(SegmentList perSegments, double py0, long period, double pdy);
-//
-//    ServiceCurve createServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name);
-//
-//    ServiceCurve createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy);
-//
-//    ServiceCurve createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name);
-//
-//    ServiceCurve createServiceCurve(SegmentList aperSegments, java.lang.String name);
-
 
 //--------------------------------------------------------------------------------------------------------------
 // Arrival Curve Constructors
@@ -123,22 +104,6 @@ public interface CurvePwAffineFactoryInterface {
 
     ArrivalCurve createTokenBucket(Num rate, Num burst);
 
-    // TODO Phase II
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//    ArrivalCurve createArrivalCurve(SegmentList aperSegments);
-//
-//    ArrivalCurve createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy);
-//
-//    ArrivalCurve createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name);
-//
-//    ArrivalCurve createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy);
-//
-//    ArrivalCurve createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name);
-//    
-//    ArrivalCurve createArrivalCurve(SegmentList aperSegments, java.lang.String name);
-
 
 //--------------------------------------------------------------------------------------------------------------
 // Maximum Service Curve Constructors
@@ -166,20 +131,4 @@ public interface CurvePwAffineFactoryInterface {
     MaxServiceCurve createRateLatencyMSC(double rate, double latency);
 
     MaxServiceCurve createRateLatencyMSC(Num rate, Num latency);
-
-    // TODO Phase II
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//    MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments);
-//
-//    MaxServiceCurve createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy);
-//
-//    MaxServiceCurve createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name);
-//
-//    MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy);
-//
-//    MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name);
-//
-//    MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments, java.lang.String name);
 }

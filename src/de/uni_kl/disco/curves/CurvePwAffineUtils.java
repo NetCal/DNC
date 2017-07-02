@@ -490,7 +490,7 @@ public class CurvePwAffineUtils {
         LinearSegment current_segment = curve_copy.getSegment(0);
         if (!current_segment.getX().eq(0)
                 || !current_segment.getY().eq(0)) {
-            //throw new RuntimeException("Curve to shift right must pass through origin!:\n" + curve.toString());
+            // TODO throw new RuntimeException("Curve to shift right must pass through origin!:\n" + curve.toString());
         }
 
         if (current_segment.getGrad().gtZero() || current_segment.getY().gtZero()) {
@@ -502,7 +502,6 @@ public class CurvePwAffineUtils {
             curve_copy.getSegment(i).setX(NumUtils.add(curve_copy.getSegment(i).getX(), dx));
         }
 
-        //curve_copy = (CurveUltAffine)
         beautify(curve_copy);
         return curve_copy;
     }
