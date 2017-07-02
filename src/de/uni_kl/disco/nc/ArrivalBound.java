@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.minplus.Deconvolution;
@@ -138,7 +138,7 @@ public class ArrivalBound {
      */
     public Set<ArrivalCurve> computeArrivalBounds(Server server, Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
         flows_to_bound.remove(flow_of_interest);
-        Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(CurveFactory.createZeroArrivals()));
+        Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffineFactory.createZeroArrivals()));
         if (flows_to_bound.isEmpty()) {
             return arrival_bounds;
         }
@@ -198,7 +198,7 @@ public class ArrivalBound {
     public Set<ArrivalCurve> computeArrivalBounds(Link link, Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
         flows_to_bound.remove(flow_of_interest);
         if (flows_to_bound.isEmpty()) {
-            return new HashSet<ArrivalCurve>(Collections.singleton(CurveFactory.createZeroArrivals()));
+            return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffineFactory.createZeroArrivals()));
         }
 
         Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();

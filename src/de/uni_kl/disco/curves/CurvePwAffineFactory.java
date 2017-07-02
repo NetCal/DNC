@@ -41,13 +41,13 @@ import de.uni_kl.disco.numbers.NumFactory;
  *
  * @author sbondorf
  */
-public class CurveFactory {
-    private static CurveFactoryInterface dnc_factory = new CurveFactory_DNC();
-    private static CurveFactoryInterface mpa_rtc_affine_factory = new CurveFactory_MPARTC_PwAffine();
+public class CurvePwAffineFactory {
+    private static CurvePwAffineFactoryInterface dnc_factory = new CurveFactory_DNC();
+    private static CurvePwAffineFactoryInterface mpa_rtc_affine_factory = new CurveFactory_MPARTC_PwAffine();
 
-    private static CurveFactoryInterface factory = getCurveFactory();
+    private static CurvePwAffineFactoryInterface factory = getCurveFactory();
 
-    private static CurveFactoryInterface getCurveFactory() {
+    private static CurvePwAffineFactoryInterface getCurveFactory() {
         switch (CalculatorConfig.getCurveClass()) {
             case MPA_RTC:
                 return mpa_rtc_affine_factory;

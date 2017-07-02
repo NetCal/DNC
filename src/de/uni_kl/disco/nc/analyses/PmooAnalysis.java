@@ -101,7 +101,7 @@ public class PmooAnalysis extends Analysis {
             i++;
         }
 
-        ServiceCurve beta_total = CurveFactory.createZeroService();
+        ServiceCurve beta_total = CurvePwAffineFactory.createZeroService();
 
         boolean more_combinations = true;
         while (more_combinations) {
@@ -111,7 +111,7 @@ public class PmooAnalysis extends Analysis {
                     cross_flow_substitutes,
                     flow_tb_iter_map,
                     server_rl_iters);
-            if (!beta.equals(CurveFactory.createZeroService())) {
+            if (!beta.equals(CurvePwAffineFactory.createZeroService())) {
                 beta_total = CurvePwAffineUtils.max(beta_total, beta);
             }
 
@@ -191,7 +191,7 @@ public class PmooAnalysis extends Analysis {
 
             // Check for stability constraint violation
             if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-                return CurveFactory.createZeroService();
+                return CurvePwAffineFactory.createZeroService();
             }
 
             // TODO Actually needs to be an affine curve
@@ -215,7 +215,7 @@ public class PmooAnalysis extends Analysis {
             // Compute left-over rate; update min
             Num Ri = NumUtils.sub(current_rl.getUltAffineRate(), sum_r);
             if (Ri.leqZero()) {
-                return CurveFactory.createZeroService();
+                return CurvePwAffineFactory.createZeroService();
             }
             R = NumUtils.min(R, Ri);
 
@@ -240,13 +240,13 @@ public class PmooAnalysis extends Analysis {
         T = NumUtils.add(T, NumUtils.div(NumUtils.add(sum_bursts, sum_latencyterms), R));
 
         if (T == NumFactory.getPositiveInfinity()) {
-            return CurveFactory.createZeroService();
+            return CurvePwAffineFactory.createZeroService();
         }
         if (R == NumFactory.getPositiveInfinity()) {
-            return CurveFactory.createDelayedInfiniteBurst(T);
+            return CurvePwAffineFactory.createDelayedInfiniteBurst(T);
         }
 
-        return CurveFactory.createRateLatency(R, T);
+        return CurvePwAffineFactory.createRateLatency(R, T);
     }
 
     /**
@@ -427,7 +427,7 @@ public class PmooAnalysis extends Analysis {
         });
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(CurveFactory.createZeroService());
+            betas_e2e.add(CurvePwAffineFactory.createZeroService());
         }
         return betas_e2e;
     }
@@ -596,7 +596,7 @@ public class PmooAnalysis extends Analysis {
         }
 
         // Derive the left-over service curves
-        ServiceCurve null_service = CurveFactory.createZeroService();
+        ServiceCurve null_service = CurvePwAffineFactory.createZeroService();
         for (List<Flow> xtx_substitutes : cross_flow_substitutes_set) {
             ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
 
@@ -606,7 +606,7 @@ public class PmooAnalysis extends Analysis {
         }
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(CurveFactory.createZeroService());
+            betas_e2e.add(CurvePwAffineFactory.createZeroService());
         }
         return betas_e2e;
     }

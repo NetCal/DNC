@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.nc.AnalysisConfig;
@@ -96,12 +96,12 @@ public final class LeftOverService {
      * @return The FIFO service curve
      */
     public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-        if (arrival_curve.equals(CurveFactory.createZeroArrivals())
-                || service_curve.equals(CurveFactory.createZeroDelayInfiniteBurst())) {
+        if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())
+                || service_curve.equals(CurvePwAffineFactory.createZeroDelayInfiniteBurst())) {
             return service_curve.copy();
         }
-        if (service_curve.equals(CurveFactory.createZeroService())) {
-            return CurveFactory.createZeroService();
+        if (service_curve.equals(CurvePwAffineFactory.createZeroService())) {
+            return CurvePwAffineFactory.createZeroService();
         }
 
         if (CalculatorConfig.FIFO_MUX_CHECKS) {
@@ -127,15 +127,15 @@ public final class LeftOverService {
             if (arrival_curve.getGradientLimitRight(x_alpha).leq(service_curve.getGradientLimitRight(x_beta))) {
 
                 Num theta = NumUtils.sub(x_beta, x_alpha);
-                ServiceCurve beta_fifo = CurveFactory.createServiceCurve( CurvePwAffineUtils.boundAtXAxis(
-                        CurvePwAffineUtils.min(CurvePwAffineUtils.sub(service_curve, CurvePwAffineUtils.shiftRight(arrival_curve, theta)), CurveFactory.createDelayedInfiniteBurst(x_beta))
+                ServiceCurve beta_fifo = CurvePwAffineFactory.createServiceCurve( CurvePwAffineUtils.boundAtXAxis(
+                        CurvePwAffineUtils.min(CurvePwAffineUtils.sub(service_curve, CurvePwAffineUtils.shiftRight(arrival_curve, theta)), CurvePwAffineFactory.createDelayedInfiniteBurst(x_beta))
                 ));
                 return beta_fifo;
             }
         }
 
         // Reaching this code means that there's no service left-over
-        return CurveFactory.createZeroService();
+        return CurvePwAffineFactory.createZeroService();
     }
 
     public static Set<ServiceCurve> arbMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
@@ -158,14 +158,14 @@ public final class LeftOverService {
      * @return The FIFO service curve
      */
     public static ServiceCurve arbMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-        if (arrival_curve.equals(CurveFactory.createZeroArrivals())
-                || service_curve.equals(CurveFactory.createZeroDelayInfiniteBurst())) {
+        if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())
+                || service_curve.equals(CurvePwAffineFactory.createZeroDelayInfiniteBurst())) {
             return service_curve.copy();
         }
-        if (service_curve.equals(CurveFactory.createZeroService())) {
-            return CurveFactory.createZeroService();
+        if (service_curve.equals(CurvePwAffineFactory.createZeroService())) {
+            return CurvePwAffineFactory.createZeroService();
         }
 
-        return CurveFactory.createServiceCurve(CurvePwAffineUtils.boundAtXAxis(CurvePwAffineUtils.sub(service_curve, arrival_curve)));
+        return CurvePwAffineFactory.createServiceCurve(CurvePwAffineUtils.boundAtXAxis(CurvePwAffineUtils.sub(service_curve, arrival_curve)));
     }
 }

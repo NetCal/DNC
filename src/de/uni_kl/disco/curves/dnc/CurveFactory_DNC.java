@@ -29,14 +29,14 @@ package de.uni_kl.disco.curves.dnc;
 
 import java.util.List;
 
-import de.uni_kl.disco.curves.CurveFactoryInterface;
+import de.uni_kl.disco.curves.CurvePwAffineFactoryInterface;
 import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 
-public class CurveFactory_DNC implements CurveFactoryInterface {
+public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
     protected static CurveFactory_DNC factory_object = new CurveFactory_DNC();
 
 //--------------------------------------------------------------------------------------------------------------

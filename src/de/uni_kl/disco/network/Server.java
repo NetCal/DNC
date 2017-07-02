@@ -28,7 +28,7 @@
 
 package de.uni_kl.disco.network;
 
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.MaxServiceCurve;
 import de.uni_kl.disco.curves.ServiceCurve;
@@ -41,11 +41,11 @@ public class Server {
     private int id;
     private String alias;
 
-    private ServiceCurve service_curve = CurveFactory.createZeroService();
+    private ServiceCurve service_curve = CurvePwAffineFactory.createZeroService();
     /**
      * A zero delay burst curve lets the influence of the maximum service curve vanish
      */
-    private MaxServiceCurve max_service_curve = CurveFactory.createZeroDelayInfiniteBurstMSC();
+    private MaxServiceCurve max_service_curve = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
 
     private boolean max_service_curve_flag = false;
 
@@ -130,7 +130,7 @@ public class Server {
     }
 
     public boolean removeMaxServiceCurve() {
-        max_service_curve = CurveFactory.createZeroDelayInfiniteBurstMSC();
+        max_service_curve = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
 
         max_service_curve_flag = false;
         use_gamma = false;
@@ -155,7 +155,7 @@ public class Server {
      */
     public MaxServiceCurve getGamma() {
         if (use_gamma == false) {
-            return CurveFactory.createZeroDelayInfiniteBurstMSC();
+            return CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
         } else {
             return max_service_curve;
         }
@@ -170,7 +170,7 @@ public class Server {
      */
     public MaxServiceCurve getExtraGamma() {
         if (use_extra_gamma == false) {
-            return CurveFactory.createZeroDelayInfiniteBurstMSC();
+            return CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
         } else {
             return (MaxServiceCurve) CurvePwAffineUtils.removeLatency(max_service_curve);
         }

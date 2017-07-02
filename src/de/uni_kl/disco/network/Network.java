@@ -28,7 +28,7 @@
 
 package de.uni_kl.disco.network;
 
-import static de.uni_kl.disco.curves.CurveFactory.createZeroDelayInfiniteBurstMSC;
+import static de.uni_kl.disco.curves.CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -825,7 +825,7 @@ public class Network {
      * @return An aggregate arrival curve.
      */
     public ArrivalCurve getSourceFlowArrivalCurve(Server source, Set<Flow> source_flows) {
-        ArrivalCurve a_out = CurveFactory.createZeroArrivals();
+        ArrivalCurve a_out = CurvePwAffineFactory.createZeroArrivals();
 
         // Returns an empty set if one of the arguments is null
         Set<Flow> source_flows_internal = SetUtils.getIntersection(map__server__source_flows.get(source), source_flows);

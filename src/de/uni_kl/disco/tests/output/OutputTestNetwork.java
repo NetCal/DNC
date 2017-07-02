@@ -31,7 +31,7 @@ package de.uni_kl.disco.tests.output;
 import java.util.LinkedList;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.MaxServiceCurve;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.nc.AnalysisConfig;
@@ -59,9 +59,9 @@ public class OutputTestNetwork implements NetworkFactory {
         servers = new Server[38];
 
         try {
-            service_curve = CurveFactory.createServiceCurve("SC{(0.0,0.0),10000.0}");
-            max_service_curve = CurveFactory.createMaxServiceCurve("MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}");
-            arrival_curve = CurveFactory.createArrivalCurve("AC{(0.0,0.0),0.0;!(0.0,5.0),5.0}");
+            service_curve = CurvePwAffineFactory.createServiceCurve("SC{(0.0,0.0),10000.0}");
+            max_service_curve = CurvePwAffineFactory.createMaxServiceCurve("MSC{(0.0,0.0),0.0;!(0.0,Infinity),0.0}");
+            arrival_curve = CurvePwAffineFactory.createArrivalCurve("AC{(0.0,0.0),0.0;!(0.0,5.0),5.0}");
 
             network = new Network();
 

@@ -30,7 +30,7 @@ package de.uni_kl.disco.nc;
 
 import java.io.File;
 
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.numbers.NumFactory;
 import de.uni_kl.disco.numbers.NumUtils;
 
@@ -75,7 +75,7 @@ public final class CalculatorConfig {
             }
         }
         CURVE_CLASS = curve_class;
-        CurveFactory.setCurveClass(curve_class);
+        CurvePwAffineFactory.setCurveClass(curve_class);
     }
 
     public static void disableAllChecks() {

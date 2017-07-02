@@ -33,7 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 
 /**
  * Class representing flows through the network.
@@ -42,7 +42,7 @@ import de.uni_kl.disco.curves.CurveFactory;
  * @author Steffen Bondorf
  */
 public class Flow {
-    public static final Flow NULL_FLOW = createDummyFlow("null", CurveFactory.createZeroArrivals(), Path.createEmptyPath());
+    public static final Flow NULL_FLOW = createDummyFlow("null", CurvePwAffineFactory.createZeroArrivals(), Path.createEmptyPath());
 
     /**
      * The flow's ID.

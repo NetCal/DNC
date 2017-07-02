@@ -30,7 +30,7 @@ package de.uni_kl.disco.network;
 
 import java.util.*;
 
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.MaxServiceCurve;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.minplus.Convolution;
@@ -188,7 +188,7 @@ public class Path {
     }
 
     private ServiceCurve getServiceCurve(Collection<Server> servers) {
-        ServiceCurve service_curve_total = CurveFactory.createZeroDelayInfiniteBurstMSC();
+        ServiceCurve service_curve_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             service_curve_total = Convolution.convolve(service_curve_total, s.getServiceCurve());
         }
@@ -211,7 +211,7 @@ public class Path {
     }
 
     private MaxServiceCurve getGamma(Collection<Server> servers) {
-        MaxServiceCurve gamma_total = CurveFactory.createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve gamma_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             gamma_total = Convolution.convolve(gamma_total, s.getGamma());
         }
@@ -234,7 +234,7 @@ public class Path {
     }
 
     private MaxServiceCurve getExtraGamma(Collection<Server> servers) {
-        MaxServiceCurve extra_gamma_total = CurveFactory.createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve extra_gamma_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             extra_gamma_total = Convolution.convolve(extra_gamma_total, s.getExtraGamma());
         }
@@ -258,7 +258,7 @@ public class Path {
     }
 
     private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) {
-        MaxServiceCurve max_service_curve_total = CurveFactory.createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve max_service_curve_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             max_service_curve_total = Convolution.convolve(max_service_curve_total, s.getMaxServiceCurve());
         }

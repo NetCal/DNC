@@ -29,7 +29,7 @@ package de.uni_kl.disco.curves.mpa_rtc_pwaffine;
 
 import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
-import de.uni_kl.disco.curves.CurveFactoryInterface;
+import de.uni_kl.disco.curves.CurvePwAffineFactoryInterface;
 import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.LinearSegment;
@@ -42,7 +42,7 @@ import java.util.List;
 
 //TODO Currently, arrival curves are not enforced to be 0 in the origin
 //		because the RTC toolbox does not allow for such spots as they occur in token bucket constrained arrivals. 
-public class CurveFactory_MPARTC_PwAffine implements CurveFactoryInterface {
+public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterface {
     protected static CurveFactory_MPARTC_PwAffine factory_object = new CurveFactory_MPARTC_PwAffine();
 
 //--------------------------------------------------------------------------------------------------------------

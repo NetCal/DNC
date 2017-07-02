@@ -33,7 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.misc.SetUtils;
@@ -65,7 +65,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
     }
 
     public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest) throws Exception {
-        Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurveFactory.createZeroArrivals()));
+        Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffineFactory.createZeroArrivals()));
         if (f_xfcaller == null || f_xfcaller.isEmpty()) {
             return alphas_xfcaller;
         }
@@ -125,10 +125,10 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
             betas_lo_s = LeftOverService.compute(configuration, server, alphas_xxfcaller_s);
 
             // Check if there's any service left on this path. If not, the set only contains a null-service curve.
-            if (betas_lo_s.size() == 1 && betas_lo_s.iterator().next().equals(CurveFactory.createZeroService())) {
+            if (betas_lo_s.size() == 1 && betas_lo_s.iterator().next().equals(CurvePwAffineFactory.createZeroService())) {
                 System.out.println("No service left over during PBOO arrival bounding!");
                 alphas_xfcaller.clear();
-                alphas_xfcaller.add((ArrivalCurve) CurveFactory.createZeroDelayInfiniteBurst());
+                alphas_xfcaller.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
                 return alphas_xfcaller;
             }
 

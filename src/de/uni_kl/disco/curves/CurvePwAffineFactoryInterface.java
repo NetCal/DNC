@@ -34,7 +34,7 @@ import de.uni_kl.disco.numbers.Num;
 //TODO Regarding Phase II, extension to more general curves with a periodic part:
 //		We need to define out own interfaces for SegmentList etc.
 //		Otherwise, we need to have the RTC toolbox jar in our workspace although we might not use RTC at all.
-public interface CurveFactoryInterface {
+public interface CurvePwAffineFactoryInterface {
 
 //--------------------------------------------------------------------------------------------------------------
 // Curve Constructors

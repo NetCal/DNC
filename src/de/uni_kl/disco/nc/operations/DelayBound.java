@@ -30,7 +30,7 @@
 package de.uni_kl.disco.nc.operations;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveFactory;
+import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.numbers.Num;
@@ -43,7 +43,7 @@ import de.uni_kl.disco.numbers.NumUtils;
  */
 public class DelayBound {
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        if (arrival_curve.equals(CurveFactory.createZeroArrivals())) {
+        if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())) {
             return NumFactory.createZero();
         }
         if (service_curve.getDelayedInfiniteBurst_Property()) {
@@ -51,7 +51,7 @@ public class DelayBound {
             //             Otherwise its sub-additive closure would be zero, i.e., the arrival curve would not be sensible.
             return service_curve.getLatency().copy();
         }
-        if (service_curve.equals(CurveFactory.createZeroService())  // We know from above that the arrivals are not zero.
+        if (service_curve.equals(CurvePwAffineFactory.createZeroService())  // We know from above that the arrivals are not zero.
                 || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
             return NumFactory.createPositiveInfinity();
         }
