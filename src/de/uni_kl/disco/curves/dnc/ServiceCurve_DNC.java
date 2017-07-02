@@ -28,47 +28,43 @@
 
 package de.uni_kl.disco.curves.dnc;
 
-import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveUltAffine;
+import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.nc.CalculatorConfig;
 
 /**
  * @author Frank A. Zdarsky
  * @author Steffen Bondorf
  */
-public class ArrivalCurveDNC extends CurveDNC implements ArrivalCurve {
+public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
     //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-    public ArrivalCurveDNC() {
+    public ServiceCurve_DNC() {
         super();
     }
 
-    public ArrivalCurveDNC(int segment_count) {
+    public ServiceCurve_DNC(int segment_count) {
         super(segment_count);
     }
 
-    public ArrivalCurveDNC(CurveUltAffine curve) {
-        super(curve);
-        forceThroughOrigin();
+    public ServiceCurve_DNC(CurveUltAffine curve) {
+        copy(curve);
 
-        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
-            System.out.println(toString());
-            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+        if (CalculatorConfig.SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }
 
-    public ArrivalCurveDNC(String arrival_curve_str) throws Exception {
-        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest possible string: {(0,0),0}
+    public ServiceCurve_DNC(String service_curve_str) throws Exception {
+        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(arrival_curve_str);
-        forceThroughOrigin();
+        initializeCurve(service_curve_str);
 
-        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
-            System.out.println(toString());
-            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+        if (CalculatorConfig.SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }
 
@@ -77,25 +73,22 @@ public class ArrivalCurveDNC extends CurveDNC implements ArrivalCurve {
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
     @Override
-    public ArrivalCurveDNC copy() {
-        ArrivalCurveDNC ac_copy = new ArrivalCurveDNC();
-        ac_copy.copy(this);
-        return ac_copy;
+    public ServiceCurve_DNC copy() {
+        ServiceCurve_DNC sc_copy = new ServiceCurve_DNC();
+        sc_copy.copy(this);
+        return sc_copy;
     }
 
-    // Does this super.equals part work? It checks for instanceof CurveDNC!
-    // TODO: @Steffen:
-    // Yes it works, because an ArrivalCurve is also a Curve
-    // But Curve.equals(ArrivalCurve) is also true. If this is ok, remove these comments
-    // IMO should be no problem, since we do not work with raw Curves
+    // TODO @Steffen
+    // Same as ArrivalCurve
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof ArrivalCurveDNC) && super.equals(obj);
+        return (obj instanceof ServiceCurve_DNC) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "AC".hashCode() * super.hashCode();
+        return "SC".hashCode() * super.hashCode();
     }
 
     /**
@@ -105,6 +98,6 @@ public class ArrivalCurveDNC extends CurveDNC implements ArrivalCurve {
      */
     @Override
     public String toString() {
-        return "AC" + super.toString();
+        return "SC" + super.toString();
     }
 }

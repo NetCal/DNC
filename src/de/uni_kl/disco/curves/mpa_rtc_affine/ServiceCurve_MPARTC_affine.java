@@ -3,55 +3,55 @@ package de.uni_kl.disco.curves.mpa_rtc_affine;
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.disco.curves.CurveUltAffine;
-import de.uni_kl.disco.curves.MaxServiceCurve;
+import de.uni_kl.disco.curves.ServiceCurve;
 
-public class MaxServiceCurveRTCultAffine extends CurveRTCultAffine implements MaxServiceCurve {
+public class ServiceCurve_MPARTC_affine extends Curve_MPARTC_affine implements ServiceCurve {
     //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-    protected MaxServiceCurveRTCultAffine() {
+    public ServiceCurve_MPARTC_affine() {
         super();
     }
 
-    public MaxServiceCurveRTCultAffine(int segment_count) {
+    public ServiceCurve_MPARTC_affine(int segment_count) {
         super(segment_count);
     }
 
-    public MaxServiceCurveRTCultAffine(CurveUltAffine curve) {
+    public ServiceCurve_MPARTC_affine(CurveUltAffine curve) {
         copy(curve);
     }
 
-    public MaxServiceCurveRTCultAffine(String max_service_curve_str) throws Exception {
-        super.initializeCurve(max_service_curve_str);
+    public ServiceCurve_MPARTC_affine(String service_curve_str) throws Exception {
+        super.initializeCurve(service_curve_str);
     }
 
 
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments) {
+    public ServiceCurve_MPARTC_affine(SegmentList aperSegments) {
         rtc_curve = new Curve(aperSegments);
     }
 
-    public MaxServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy) {
+    public ServiceCurve_MPARTC_affine(SegmentList perSegments, double py0, long period, double pdy) {
         rtc_curve = new Curve(perSegments, py0, period, pdy);
     }
 
-    public MaxServiceCurveRTCultAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
+    public ServiceCurve_MPARTC_affine(SegmentList perSegments, double py0, long period, double pdy, String name) {
         rtc_curve = new Curve(perSegments, py0, period, pdy, name);
     }
 
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
+    public ServiceCurve_MPARTC_affine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
         rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
     }
 
 
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
+    public ServiceCurve_MPARTC_affine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
         rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
     }
 
-    public MaxServiceCurveRTCultAffine(SegmentList aperSegments, String name) {
+    public ServiceCurve_MPARTC_affine(SegmentList aperSegments, String name) {
         rtc_curve = new Curve(aperSegments, name);
     }
 
-    public MaxServiceCurveRTCultAffine(Curve c) {
+    public ServiceCurve_MPARTC_affine(Curve c) {
         rtc_curve = c.clone();
     }
 
@@ -59,21 +59,20 @@ public class MaxServiceCurveRTCultAffine extends CurveRTCultAffine implements Ma
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
     @Override
-    public MaxServiceCurveRTCultAffine copy() {
-        MaxServiceCurveRTCultAffine msc_copy = new MaxServiceCurveRTCultAffine();
-        msc_copy.copy(this);
-
-        return msc_copy;
+    public ServiceCurve_MPARTC_affine copy() {
+        ServiceCurve_MPARTC_affine sc_copy = new ServiceCurve_MPARTC_affine();
+        sc_copy.copy(this);
+        return sc_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MaxServiceCurveRTCultAffine) && super.equals(obj);
+        return (obj instanceof ServiceCurve_MPARTC_affine) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "MSC".hashCode() * super.hashCode();
+        return "SC".hashCode() * super.hashCode();
     }
 
     /**
@@ -83,6 +82,6 @@ public class MaxServiceCurveRTCultAffine extends CurveRTCultAffine implements Ma
      */
     @Override
     public String toString() {
-        return "MS" + super.toString();
+        return "S" + super.toString();
     }
 }

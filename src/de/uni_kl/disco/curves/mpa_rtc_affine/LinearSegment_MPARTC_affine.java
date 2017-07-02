@@ -6,20 +6,20 @@ import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 import de.uni_kl.disco.numbers.NumUtils;
 
-public class LinearSegmentRTC implements LinearSegment {
+public class LinearSegment_MPARTC_affine implements LinearSegment {
 
     private ch.ethz.rtc.kernel.Segment rtc_segment;
 
     //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-    public LinearSegmentRTC(double x, double y, double s) {
+    public LinearSegment_MPARTC_affine(double x, double y, double s) {
         rtc_segment = new Segment(x, y, s);
     }
 
-    public LinearSegmentRTC(LinearSegment segment) {
-        if (segment instanceof LinearSegmentRTC) {
-            rtc_segment = ((LinearSegmentRTC) segment).rtc_segment.clone();
+    public LinearSegment_MPARTC_affine(LinearSegment segment) {
+        if (segment instanceof LinearSegment_MPARTC_affine) {
+            rtc_segment = ((LinearSegment_MPARTC_affine) segment).rtc_segment.clone();
         } else {
             rtc_segment = new Segment(segment.getX().doubleValue(),
                     segment.getY().doubleValue(),
@@ -27,11 +27,11 @@ public class LinearSegmentRTC implements LinearSegment {
         }
     }
 
-    public LinearSegmentRTC(Segment segment) {
+    public LinearSegment_MPARTC_affine(Segment segment) {
         rtc_segment = segment.clone();
     }
 
-    public LinearSegmentRTC(String segment_str) {
+    public LinearSegment_MPARTC_affine(String segment_str) {
         rtc_segment = new Segment(segment_str);
     }
 
@@ -100,12 +100,12 @@ public class LinearSegmentRTC implements LinearSegment {
 
     @Override
     public LinearSegment copy() {
-        return new LinearSegmentRTC(rtc_segment);
+        return new LinearSegment_MPARTC_affine(rtc_segment);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegmentRTC)) {
+        if (obj == null || !(obj instanceof LinearSegment_MPARTC_affine)) {
             return false;
         }
         return rtc_segment.equals(obj);

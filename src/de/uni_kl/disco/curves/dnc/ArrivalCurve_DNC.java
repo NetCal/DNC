@@ -2,7 +2,7 @@
  * This file is part of the Disco Deterministic Network Calculator v2.2.6 "Hydra".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2016 Steffen Bondorf
+ * Copyright (C) 2013 - 2016 Steffen Bondorf
  *
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
@@ -28,48 +28,48 @@
 
 package de.uni_kl.disco.curves.dnc;
 
+import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveUltAffine;
-import de.uni_kl.disco.curves.MaxServiceCurve;
 import de.uni_kl.disco.nc.CalculatorConfig;
 
 /**
  * @author Frank A. Zdarsky
  * @author Steffen Bondorf
  */
-public class MaxServiceCurveDNC extends CurveDNC implements MaxServiceCurve {
+public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
     //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-    protected MaxServiceCurveDNC() {
+    public ArrivalCurve_DNC() {
         super();
     }
 
-    public MaxServiceCurveDNC(int segment_count) {
+    public ArrivalCurve_DNC(int segment_count) {
         super(segment_count);
     }
 
-    public MaxServiceCurveDNC(CurveUltAffine curve) {
-        copy(curve);
-
-        if (CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
-            throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
-        }
-
+    public ArrivalCurve_DNC(CurveUltAffine curve) {
+        super(curve);
         forceThroughOrigin();
+
+        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+        }
     }
 
-    public MaxServiceCurveDNC(String max_service_curve_str) throws Exception {
-        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest possible string: {(0,0),0}
+    public ArrivalCurve_DNC(String arrival_curve_str) throws Exception {
+        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(max_service_curve_str);
-
-        if (CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
-            throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
-        }
-
+        initializeCurve(arrival_curve_str);
         forceThroughOrigin();
+
+        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+        }
     }
 
 
@@ -77,24 +77,25 @@ public class MaxServiceCurveDNC extends CurveDNC implements MaxServiceCurve {
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
     @Override
-    public MaxServiceCurveDNC copy() {
-        MaxServiceCurveDNC msc_copy = new MaxServiceCurveDNC();
-        msc_copy.copy(this);
-
-        return msc_copy;
+    public ArrivalCurve_DNC copy() {
+        ArrivalCurve_DNC ac_copy = new ArrivalCurve_DNC();
+        ac_copy.copy(this);
+        return ac_copy;
     }
 
-    // TODO: @Steffen
-    // Same as in ArrivalCurve
     // Does this super.equals part work? It checks for instanceof CurveDNC!
+    // TODO: @Steffen:
+    // Yes it works, because an ArrivalCurve is also a Curve
+    // But Curve.equals(ArrivalCurve) is also true. If this is ok, remove these comments
+    // IMO should be no problem, since we do not work with raw Curves
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MaxServiceCurveDNC) && super.equals(obj);
+        return (obj instanceof ArrivalCurve_DNC) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "MSC".hashCode() * super.hashCode();
+        return "AC".hashCode() * super.hashCode();
     }
 
     /**
@@ -104,6 +105,6 @@ public class MaxServiceCurveDNC extends CurveDNC implements MaxServiceCurve {
      */
     @Override
     public String toString() {
-        return "MSC" + super.toString();
+        return "AC" + super.toString();
     }
 }

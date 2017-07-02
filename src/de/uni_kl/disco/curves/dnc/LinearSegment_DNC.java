@@ -43,7 +43,7 @@ import de.uni_kl.disco.numbers.NumUtils;
  * @author Frank A. Zdarsky
  * @author Steffen Bondorf
  */
-public class LinearSegmentDNC implements LinearSegment {
+public class LinearSegment_DNC implements LinearSegment {
     /**
      * The x-coordinate of the linear segment's starting point.
      */
@@ -72,7 +72,7 @@ public class LinearSegmentDNC implements LinearSegment {
     /**
      * The default constructor.
      */
-    protected LinearSegmentDNC() {
+    protected LinearSegment_DNC() {
         x = NumFactory.createZero();
         y = NumFactory.createZero();
         grad = NumFactory.createZero();
@@ -87,21 +87,21 @@ public class LinearSegmentDNC implements LinearSegment {
      * @param grad     The segments gradient.
      * @param leftopen Set the segment to be left-open.
      */
-    public LinearSegmentDNC(Num x, Num y, Num grad, boolean leftopen) {
+    public LinearSegment_DNC(Num x, Num y, Num grad, boolean leftopen) {
         this.x = x;
         this.y = y;
         this.grad = grad;
         this.leftopen = leftopen;
     }
 
-    public LinearSegmentDNC(LinearSegment segment) {
+    public LinearSegment_DNC(LinearSegment segment) {
         x = segment.getX();
         y = segment.getY();
         grad = segment.getGrad();
         leftopen = segment.isLeftopen();
     }
 
-    public LinearSegmentDNC(String segment_str) throws Exception {
+    public LinearSegment_DNC(String segment_str) throws Exception {
         // Is this segment left-open?
         leftopen = false;
         switch (segment_str.charAt(0)) {
@@ -204,18 +204,18 @@ public class LinearSegmentDNC implements LinearSegment {
      * @return a copy of this instance.
      */
     @Override
-    public LinearSegmentDNC copy() {
-        LinearSegmentDNC copy = new LinearSegmentDNC(x.copy(), y.copy(), grad.copy(), leftopen);
+    public LinearSegment_DNC copy() {
+        LinearSegment_DNC copy = new LinearSegment_DNC(x.copy(), y.copy(), grad.copy(), leftopen);
         return copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegmentDNC)) {
+        if (obj == null || !(obj instanceof LinearSegment_DNC)) {
             return false;
         }
 
-        LinearSegmentDNC other = (LinearSegmentDNC) obj;
+        LinearSegment_DNC other = (LinearSegment_DNC) obj;
         boolean result;
         result = this.x.equals(other.getX());
         result = result && this.y.equals(other.getY());

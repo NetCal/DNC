@@ -2,8 +2,8 @@ package de.uni_kl.disco.curves;
 
 import java.util.List;
 
-import de.uni_kl.disco.curves.dnc.CurveFactoryDNC;
-import de.uni_kl.disco.curves.mpa_rtc_affine.CurveFactoryRTCultAffine;
+import de.uni_kl.disco.curves.dnc.CurveFactory_DNC;
+import de.uni_kl.disco.curves.mpa_rtc_affine.CurveFactory_MPARTC_affine;
 import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.disco.numbers.Num;
@@ -15,8 +15,8 @@ import de.uni_kl.disco.numbers.NumFactory;
  * @author sbondorf
  */
 public class CurveFactory {
-    private static CurveFactoryInterface dnc_factory = new CurveFactoryDNC();
-    private static CurveFactoryInterface rtc_factory = new CurveFactoryRTCultAffine();
+    private static CurveFactoryInterface dnc_factory = new CurveFactory_DNC();
+    private static CurveFactoryInterface rtc_factory = new CurveFactory_MPARTC_affine();
 
     private static CurveFactoryInterface factory = getCurveFactory();
 
