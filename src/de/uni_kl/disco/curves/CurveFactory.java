@@ -22,7 +22,7 @@ public class CurveFactory {
 
     private static CurveFactoryInterface getCurveFactory() {
         switch (CalculatorConfig.getCurveClass()) {
-            case RTC:
+            case MPA_RTC:
                 return rtc_factory;
             case DNC:
             default:
@@ -32,7 +32,7 @@ public class CurveFactory {
 
     public static void setCurveClass(CurveClass curve_class) {
         switch (curve_class) {
-            case RTC:
+            case MPA_RTC:
                 factory = rtc_factory;
                 return;
             case DNC:

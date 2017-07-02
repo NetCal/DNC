@@ -66,7 +66,7 @@ public final class CalculatorConfig {
     }
 
     public static void setCurveClass(CurveClass curve_class) {
-        if (curve_class == CurveClass.RTC) {
+        if (curve_class == CurveClass.MPA_RTC) {
             File f = new File("rtc.jar");
             if (!f.exists() && !f.isDirectory()) {
                 System.out.println("Error: rtc.jar not found.");
@@ -95,5 +95,5 @@ public final class CalculatorConfig {
 
     public enum NumClass {REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER}
 
-    public enum CurveClass {RTC, DNC}
+    public enum CurveClass { DNC, MPA_RTC }
 }

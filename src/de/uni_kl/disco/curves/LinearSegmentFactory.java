@@ -13,7 +13,7 @@ public class LinearSegmentFactory {
 
     public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
         switch (CalculatorConfig.getCurveClass()) {
-            case RTC:
+            case MPA_RTC:
                 return new LinearSegment_MPARTC_affine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
             case DNC:
             default:
@@ -24,7 +24,7 @@ public class LinearSegmentFactory {
 
     public static LinearSegment createZeroSegment() {
         switch (CalculatorConfig.getCurveClass()) {
-            case RTC:
+            case MPA_RTC:
                 return createHorizontalLine(0.0);
             case DNC:
             default:
@@ -35,7 +35,7 @@ public class LinearSegmentFactory {
 
     public static LinearSegment createHorizontalLine(double y) {
         switch (CalculatorConfig.getCurveClass()) {
-            case RTC:
+            case MPA_RTC:
                 return new LinearSegment_MPARTC_affine(0.0, 0.0, 0.0);
             case DNC:
             default:
