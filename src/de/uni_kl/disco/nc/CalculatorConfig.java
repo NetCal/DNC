@@ -39,7 +39,6 @@ import de.uni_kl.disco.numbers.NumUtils;
 public final class CalculatorConfig {
     public static boolean ARRIVAL_CURVE_CHECKS = false;
 
-    ;
     public static boolean SERVICE_CURVE_CHECKS = false;
     public static boolean MAX_SERVICE_CURVE_CHECKS = false;
     public static boolean FIFO_MUX_CHECKS = false;
