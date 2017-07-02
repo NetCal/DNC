@@ -2,7 +2,7 @@ package de.uni_kl.disco.curves.mpa_rtc_affine;
 
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.ServiceCurve;
 
 public class ServiceCurve_MPARTC_affine extends Curve_MPARTC_affine implements ServiceCurve {
@@ -17,7 +17,7 @@ public class ServiceCurve_MPARTC_affine extends Curve_MPARTC_affine implements S
         super(segment_count);
     }
 
-    public ServiceCurve_MPARTC_affine(CurveMultAffine curve) {
+    public ServiceCurve_MPARTC_affine(CurvePwAffine curve) {
         copy(curve);
     }
 

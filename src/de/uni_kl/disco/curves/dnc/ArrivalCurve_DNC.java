@@ -29,7 +29,7 @@
 package de.uni_kl.disco.curves.dnc;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.nc.CalculatorConfig;
 
 /**
@@ -48,7 +48,7 @@ public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
         super(segment_count);
     }
 
-    public ArrivalCurve_DNC(CurveMultAffine curve) {
+    public ArrivalCurve_DNC(CurvePwAffine curve) {
         super(curve);
         forceThroughOrigin();
 

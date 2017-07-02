@@ -3,7 +3,7 @@ package de.uni_kl.disco.curves.dnc;
 import java.util.List;
 
 import de.uni_kl.disco.curves.CurveFactoryInterface;
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.CurveUtils;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.numbers.Num;
@@ -67,7 +67,7 @@ public class CurveFactory_DNC implements CurveFactoryInterface {
         return new ServiceCurve_DNC(service_curve_str);
     }
 
-    public ServiceCurve_DNC createServiceCurve(CurveMultAffine curve) {
+    public ServiceCurve_DNC createServiceCurve(CurvePwAffine curve) {
         return new ServiceCurve_DNC(curve);
     }
 
@@ -159,11 +159,11 @@ public class CurveFactory_DNC implements CurveFactoryInterface {
         return new ArrivalCurve_DNC(arrival_curve_str);
     }
 
-    public ArrivalCurve_DNC createArrivalCurve(CurveMultAffine curve) {
+    public ArrivalCurve_DNC createArrivalCurve(CurvePwAffine curve) {
         return new ArrivalCurve_DNC(curve);
     }
 
-    public ArrivalCurve_DNC createArrivalCurve(CurveMultAffine curve, boolean remove_latency) {
+    public ArrivalCurve_DNC createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
         return createArrivalCurve(CurveUtils.removeLatency(curve));
     }
 
@@ -245,7 +245,7 @@ public class CurveFactory_DNC implements CurveFactoryInterface {
         return new MaxServiceCurve_DNC(max_service_curve_str);
     }
 
-    public MaxServiceCurve_DNC createMaxServiceCurve(CurveMultAffine curve) {
+    public MaxServiceCurve_DNC createMaxServiceCurve(CurvePwAffine curve) {
         return new MaxServiceCurve_DNC(curve);
     }
 

@@ -28,7 +28,7 @@
 
 package de.uni_kl.disco.curves.dnc;
 
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.nc.CalculatorConfig;
 
@@ -48,7 +48,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC(CurveMultAffine curve) {
+    public ServiceCurve_DNC(CurvePwAffine curve) {
         copy(curve);
 
         if (CalculatorConfig.SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()

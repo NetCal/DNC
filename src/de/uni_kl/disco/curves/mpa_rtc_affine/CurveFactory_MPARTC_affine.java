@@ -3,7 +3,7 @@ package de.uni_kl.disco.curves.mpa_rtc_affine;
 import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.disco.curves.CurveFactoryInterface;
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.CurveUtils;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.numbers.Num;
@@ -86,7 +86,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         return new ServiceCurve_MPARTC_affine(service_curve_str);
     }
 
-    public ServiceCurve_MPARTC_affine createServiceCurve(CurveMultAffine curve) {
+    public ServiceCurve_MPARTC_affine createServiceCurve(CurvePwAffine curve) {
         return new ServiceCurve_MPARTC_affine(curve);
     }
 
@@ -180,11 +180,11 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         return new ArrivalCurve_MPARTC_affine(arrival_curve_str);
     }
 
-    public ArrivalCurve_MPARTC_affine createArrivalCurve(CurveMultAffine curve) {
+    public ArrivalCurve_MPARTC_affine createArrivalCurve(CurvePwAffine curve) {
         return new ArrivalCurve_MPARTC_affine(curve);
     }
 
-    public ArrivalCurve_MPARTC_affine createArrivalCurve(CurveMultAffine curve, boolean remove_latency) {
+    public ArrivalCurve_MPARTC_affine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
         return createArrivalCurve(CurveUtils.removeLatency(curve));
     }
 
@@ -266,7 +266,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
         return new MaxServiceCurve_MPARTC_affine(max_service_curve_str);
     }
 
-    public MaxServiceCurve_MPARTC_affine createMaxServiceCurve(CurveMultAffine curve) {
+    public MaxServiceCurve_MPARTC_affine createMaxServiceCurve(CurvePwAffine curve) {
         return new MaxServiceCurve_MPARTC_affine(curve);
     }
 

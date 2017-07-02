@@ -3,7 +3,7 @@ package de.uni_kl.disco.curves.mpa_rtc_affine;
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.disco.curves.ArrivalCurve;
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 
 public class ArrivalCurve_MPARTC_affine extends Curve_MPARTC_affine implements ArrivalCurve {
     //--------------------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ public class ArrivalCurve_MPARTC_affine extends Curve_MPARTC_affine implements A
         super(segment_count);
     }
 
-    public ArrivalCurve_MPARTC_affine(CurveMultAffine curve) {
+    public ArrivalCurve_MPARTC_affine(CurvePwAffine curve) {
         super(curve);
     }
 

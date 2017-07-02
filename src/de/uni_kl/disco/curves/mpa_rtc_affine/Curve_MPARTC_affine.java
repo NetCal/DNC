@@ -1,7 +1,7 @@
 package de.uni_kl.disco.curves.mpa_rtc_affine;
 
 import ch.ethz.rtc.kernel.*;
-import de.uni_kl.disco.curves.CurveMultAffine;
+import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.numbers.Num;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Curve_MPARTC_affine implements CurveMultAffine {
+public class Curve_MPARTC_affine implements CurvePwAffine {
     protected ch.ethz.rtc.kernel.Curve rtc_curve;
 
     protected boolean is_delayed_infinite_burst = false;
@@ -37,7 +37,7 @@ public class Curve_MPARTC_affine implements CurveMultAffine {
         createZeroSegmentsCurve(1);
     }
 
-    public Curve_MPARTC_affine(CurveMultAffine curve) {
+    public Curve_MPARTC_affine(CurvePwAffine curve) {
         copy(curve);
     }
 
@@ -159,9 +159,9 @@ public class Curve_MPARTC_affine implements CurveMultAffine {
                 this.token_buckets.add(((Curve_MPARTC_affine) curve).token_buckets.get(i).copy());
             }
 
-            this.is_delayed_infinite_burst = ((CurveMultAffine) curve).isDelayedInfiniteBurst();
-            this.is_rate_latency = ((CurveMultAffine) curve).isRateLatency();
-            this.is_token_bucket = ((CurveMultAffine) curve).isTokenBucket();
+            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).isDelayedInfiniteBurst();
+            this.is_rate_latency = ((CurvePwAffine) curve).isRateLatency();
+            this.is_token_bucket = ((CurvePwAffine) curve).isTokenBucket();
         } else {
             SegmentList segList_rtc = new SegmentList();
             LinearSegment seg_tmp;
@@ -503,8 +503,8 @@ public class Curve_MPARTC_affine implements CurveMultAffine {
 
     // TODO: See CurveDnc.getRate_Latencies
     @Override
-    public List<CurveMultAffine> getRate_latencies() {
-        List<CurveMultAffine> tmp = new LinkedList<>();
+    public List<CurvePwAffine> getRate_latencies() {
+        List<CurvePwAffine> tmp = new LinkedList<>();
         if (this.is_rate_latency) {
             tmp.add(this.copy());
         } else {
@@ -516,7 +516,7 @@ public class Curve_MPARTC_affine implements CurveMultAffine {
     }
 
     @Override
-    public void setRate_latencies(List<CurveMultAffine> rate_latencies) {
+    public void setRate_latencies(List<CurvePwAffine> rate_latencies) {
         List<Curve_MPARTC_affine> tmp = new LinkedList<>();
         for (int i = 0; i < rate_latencies.size(); i++) {
             tmp.add((Curve_MPARTC_affine) rate_latencies.get(i));
@@ -526,8 +526,8 @@ public class Curve_MPARTC_affine implements CurveMultAffine {
 
     // TODO: See CurveDNC.getRate_Latencies
     @Override
-    public List<CurveMultAffine> getToken_buckets() {
-        List<CurveMultAffine> tmp = new LinkedList<>();
+    public List<CurvePwAffine> getToken_buckets() {
+        List<CurvePwAffine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
             tmp.add(token_buckets.get(i));
         }
@@ -535,7 +535,7 @@ public class Curve_MPARTC_affine implements CurveMultAffine {
     }
 
     @Override
-    public void setToken_buckets(List<CurveMultAffine> token_buckets) {
+    public void setToken_buckets(List<CurvePwAffine> token_buckets) {
         List<Curve_MPARTC_affine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
             tmp.add((Curve_MPARTC_affine) token_buckets.get(i));

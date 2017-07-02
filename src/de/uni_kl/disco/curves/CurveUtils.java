@@ -21,8 +21,8 @@ public class CurveUtils {
      * @param operator Operation to be applied to the curves.
      * @return The resulting curve.
      */
-    private static CurveMultAffine computeResultingCurve(CurveMultAffine curve1, CurveMultAffine curve2, int operator) {
-        CurveMultAffine ZERO_DELAY_INFINITE_BURST = CurveFactory.createZeroDelayInfiniteBurst();
+    private static CurvePwAffine computeResultingCurve(CurvePwAffine curve1, CurvePwAffine curve2, int operator) {
+        CurvePwAffine ZERO_DELAY_INFINITE_BURST = CurveFactory.createZeroDelayInfiniteBurst();
 
         switch (operator) {
             case OPERATOR_ADD:
@@ -120,7 +120,7 @@ public class CurveUtils {
      * @param curve2 input curve 2.
      * @return the pointwise sum of the given curves.
      */
-    public static CurveMultAffine add(CurveMultAffine curve1, CurveMultAffine curve2) {
+    public static CurvePwAffine add(CurvePwAffine curve1, CurvePwAffine curve2) {
         return computeResultingCurve(curve1, curve2, OPERATOR_ADD);
     }
 
@@ -131,7 +131,7 @@ public class CurveUtils {
      * @param curve2 input curve 2.
      * @return the pointwise difference of the given curves, i.e., curve1 - curve2.
      */
-    public static CurveMultAffine sub(CurveMultAffine curve1, CurveMultAffine curve2) {
+    public static CurvePwAffine sub(CurvePwAffine curve1, CurvePwAffine curve2) {
         return computeResultingCurve(curve1, curve2, OPERATOR_SUB);
     }
 
@@ -142,7 +142,7 @@ public class CurveUtils {
      * @param curve2 input curve 2.
      * @return the pointwise minimum of the given curves.
      */
-    public static CurveMultAffine min(CurveMultAffine curve1, CurveMultAffine curve2) {
+    public static CurvePwAffine min(CurvePwAffine curve1, CurvePwAffine curve2) {
         return computeResultingCurve(curve1, curve2, OPERATOR_MIN);
     }
 
@@ -153,7 +153,7 @@ public class CurveUtils {
      * @param curve2 input curve 2.
      * @return the pointwise maximum of the given curves.
      */
-    public static CurveMultAffine max(CurveMultAffine curve1, CurveMultAffine curve2) {
+    public static CurvePwAffine max(CurvePwAffine curve1, CurvePwAffine curve2) {
         return computeResultingCurve(curve1, curve2, OPERATOR_MAX);
     }
 
@@ -163,8 +163,8 @@ public class CurveUtils {
      * @param curve the curve to bound.
      * @return the bounded curve.
      */
-    public static CurveMultAffine boundAtXAxis(CurveMultAffine curve) {
-        CurveMultAffine curve_copy = curve.copy();
+    public static CurvePwAffine boundAtXAxis(CurvePwAffine curve) {
+        CurvePwAffine curve_copy = curve.copy();
 
         ArrayList<LinearSegment> result = new ArrayList<LinearSegment>();
         LinearSegment s;
@@ -208,7 +208,7 @@ public class CurveUtils {
      * @param c2 the second curve.
      * @return the value of the vertical deviation.
      */
-    public static Num getMaxVerticalDeviation(CurveMultAffine c1, CurveMultAffine c2) {
+    public static Num getMaxVerticalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
             return NumFactory.createPositiveInfinity();
         }
@@ -244,7 +244,7 @@ public class CurveUtils {
      * @param c2 the second curve.
      * @return the value of the horizontal deviation.
      */
-    public static Num getMaxHorizontalDeviation(CurveMultAffine c1, CurveMultAffine c2) {
+    public static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
             return NumFactory.createPositiveInfinity();
         }
@@ -276,7 +276,7 @@ public class CurveUtils {
      * @return an <code>ArrayList</code> of <code>Double</code> objects
      * containing the x-coordinates of the respective inflection point.
      */
-    public static ArrayList<Num> computeInflectionPointsX(CurveMultAffine c1, CurveMultAffine c2) {
+    public static ArrayList<Num> computeInflectionPointsX(CurvePwAffine c1, CurvePwAffine c2) {
         ArrayList<Num> xcoords = new ArrayList<Num>();
 
         int i1 = 0;
@@ -310,7 +310,7 @@ public class CurveUtils {
      * @return an <code>ArrayList</code> of <code>Double</code> objects
      * containing the x-coordinates of the respective inflection point.
      */
-    public static ArrayList<Num> computeInflectionPointsY(CurveMultAffine c1, CurveMultAffine c2) {
+    public static ArrayList<Num> computeInflectionPointsY(CurvePwAffine c1, CurvePwAffine c2) {
         ArrayList<Num> ycoords = new ArrayList<Num>();
 
         int i1 = 0;
@@ -343,8 +343,8 @@ public class CurveUtils {
      * @param dy    The offset to shift the curve.
      * @return The shifted curve.
      */
-    public static CurveMultAffine add(CurveMultAffine curve, Num dy) {
-        CurveMultAffine result = curve.copy();
+    public static CurvePwAffine add(CurvePwAffine curve, Num dy) {
+        CurvePwAffine result = curve.copy();
         for (int i = 0; i < curve.getSegmentCount(); i++) {
             result.getSegment(i).setY(NumUtils.add(result.getSegment(i).getY(), dy));
         }
@@ -356,14 +356,14 @@ public class CurveUtils {
     }
 
     public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, Num dy) {
-        return CurveFactory.createMaxServiceCurve(add((CurveMultAffine) max_service_curve_1, dy));
+        return CurveFactory.createMaxServiceCurve(add((CurvePwAffine) max_service_curve_1, dy));
     }
 
     public static MaxServiceCurve min(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
         return CurveFactory.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, OPERATOR_MIN));
     }
 
-    public static Num getXIntersection(CurveMultAffine curve1, CurveMultAffine curve2) {
+    public static Num getXIntersection(CurvePwAffine curve1, CurvePwAffine curve2) {
         Num x_int = NumFactory.getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
 
         for (int i = 0; i < curve1.getSegmentCount(); i++) {
@@ -435,7 +435,7 @@ public class CurveUtils {
     }
 
     public static ArrivalCurve add(ArrivalCurve arrival_curve_1, Num dy) {
-        return CurveFactory.createArrivalCurve(add((CurveMultAffine) arrival_curve_1, dy));
+        return CurveFactory.createArrivalCurve(add((CurvePwAffine) arrival_curve_1, dy));
     }
 
     public static ArrivalCurve min(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
@@ -454,8 +454,8 @@ public class CurveUtils {
      * @param dx    The offset to shift the curve.
      * @return The shifted curve.
      */
-    public static CurveMultAffine shiftRight(CurveMultAffine curve, Num dx) {
-        CurveMultAffine curve_copy = curve.copy();
+    public static CurvePwAffine shiftRight(CurvePwAffine curve, Num dx) {
+        CurvePwAffine curve_copy = curve.copy();
         if (dx.eq(0.0)) {
             return curve_copy;
         }
@@ -489,9 +489,9 @@ public class CurveUtils {
      * @param dx    The offset to shift the curve.
      * @return The shifted curve.
      */
-    public static CurveMultAffine shiftLeftClipping(CurveMultAffine curve, Num dx) {
+    public static CurvePwAffine shiftLeftClipping(CurvePwAffine curve, Num dx) {
         int i = curve.getSegmentDefining(dx);
-        CurveMultAffine result = curve.copy();
+        CurvePwAffine result = curve.copy();
         LinearSegment segment_i = result.getSegment(i);
         if (segment_i.getX().lt(dx)) {
             segment_i.setY(NumUtils.add(segment_i.getY(),
@@ -516,8 +516,8 @@ public class CurveUtils {
      * @param curve The curve to shift.
      * @return A copy of this curve without latency
      */
-    public static CurveMultAffine removeLatency(CurveMultAffine curve) {
-        CurveMultAffine result = curve.copy();
+    public static CurvePwAffine removeLatency(CurvePwAffine curve) {
+        CurvePwAffine result = curve.copy();
 
         if (result.getSegmentCount() == 2
                 && result.getSegment(0).getX().eqZero()

@@ -49,19 +49,19 @@ public class CurveFactory {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public static CurveMultAffine createCurve(List<LinearSegment> segments) {
+    public static CurvePwAffine createCurve(List<LinearSegment> segments) {
         return factory.createCurve(segments);
     }
 
-    public static CurveMultAffine createZeroCurve() {
+    public static CurvePwAffine createZeroCurve() {
         return factory.createZeroCurve();
     }
 
-    public static CurveMultAffine createHorizontal(double y) {
+    public static CurvePwAffine createHorizontal(double y) {
         return factory.createHorizontal(y);
     }
 
-    public static CurveMultAffine createHorizontal(Num y) {
+    public static CurvePwAffine createHorizontal(Num y) {
         return factory.createHorizontal(y);
     }
 
@@ -84,7 +84,7 @@ public class CurveFactory {
         return factory.createServiceCurve(service_curve_str);
     }
 
-    public static ServiceCurve createServiceCurve(CurveMultAffine curve) {
+    public static ServiceCurve createServiceCurve(CurvePwAffine curve) {
         return factory.createServiceCurve(curve);
     }
 
@@ -160,11 +160,11 @@ public class CurveFactory {
         return factory.createArrivalCurve(arrival_curve_str);
     }
 
-    public static ArrivalCurve createArrivalCurve(CurveMultAffine curve) {
+    public static ArrivalCurve createArrivalCurve(CurvePwAffine curve) {
         return factory.createArrivalCurve(curve);
     }
 
-    public static ArrivalCurve createArrivalCurve(CurveMultAffine curve, boolean remove_latency) {
+    public static ArrivalCurve createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
         return factory.createArrivalCurve(curve, remove_latency);
     }
 
@@ -236,7 +236,7 @@ public class CurveFactory {
         return factory.createMaxServiceCurve(max_service_curve_str);
     }
 
-    public static MaxServiceCurve createMaxServiceCurve(CurveMultAffine curve) {
+    public static MaxServiceCurve createMaxServiceCurve(CurvePwAffine curve) {
         return factory.createMaxServiceCurve(curve);
     }
 

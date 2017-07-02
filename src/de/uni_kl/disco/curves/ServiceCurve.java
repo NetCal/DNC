@@ -1,6 +1,6 @@
 package de.uni_kl.disco.curves;
 
-public interface ServiceCurve extends CurveMultAffine {
+public interface ServiceCurve extends CurvePwAffine {
     @Override
     ServiceCurve copy();
 
