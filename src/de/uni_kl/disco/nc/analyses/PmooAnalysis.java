@@ -111,7 +111,7 @@ public class PmooAnalysis extends Analysis {
                     flow_tb_iter_map,
                     server_rl_iters);
             if (!beta.equals(CurveFactory.createZeroService())) {
-                beta_total = CurveUtils.max(beta_total, beta);
+                beta_total = CurvePwAffineUtils.max(beta_total, beta);
             }
 
             // First check whether there are more combinations of flow TBs
@@ -193,7 +193,8 @@ public class PmooAnalysis extends Analysis {
                 return CurveFactory.createZeroService();
             }
 
-            Curve current_rl = service_curves[i].getRLComponent(server_rl_iters[i]);
+            // TODO Actually needs to be an affine curve
+            CurvePwAffine current_rl = service_curves[i].getRLComponent(server_rl_iters[i]);
 
             // Sum up latencies
             T = NumUtils.add(T, current_rl.getLatency());
@@ -202,7 +203,8 @@ public class PmooAnalysis extends Analysis {
             Num sum_r = NumFactory.createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
-                Curve current_tb = bound.getTBComponent(((Integer) flow_tb_iter_map.get(f)).intValue());
+                // TODO Actually needs to be an affine curve
+                CurvePwAffine current_tb = bound.getTBComponent(((Integer) flow_tb_iter_map.get(f)).intValue());
                 sum_r = NumUtils.add(sum_r, current_tb.getSustainedRate());
             }
 
@@ -229,7 +231,8 @@ public class PmooAnalysis extends Analysis {
         // Compute sum of bursts
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
-            Curve current_tb = bound.getTBComponent(((Integer) flow_tb_iter_map.get(f)).intValue());
+            // TODO Actually needs to be an affine curve
+            CurvePwAffine current_tb = bound.getTBComponent(((Integer) flow_tb_iter_map.get(f)).intValue());
             sum_bursts = NumUtils.add(sum_bursts, current_tb.getTBBurst());
         }
 
@@ -567,7 +570,7 @@ public class PmooAnalysis extends Analysis {
             arrival_bounds_link_permutations.clear();
             List<Flow> flow_list_tmp = new LinkedList<Flow>();
             for (ArrivalCurve alpha : alphas_xf_group) {
-                CurveUtils.beautify(alpha);
+                CurvePwAffineUtils.beautify(alpha);
 
                 for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
                     // The new list of cross-flow substitutes = old list plus a new one with one of the derived arrival bounds.

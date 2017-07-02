@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.uni_kl.disco.curves.CurveFactoryInterface;
 import de.uni_kl.disco.curves.CurvePwAffine;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
@@ -164,7 +164,7 @@ public class CurveFactory_DNC implements CurveFactoryInterface {
     }
 
     public ArrivalCurve_DNC createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-        return createArrivalCurve(CurveUtils.removeLatency(curve));
+        return createArrivalCurve(CurvePwAffineUtils.removeLatency(curve));
     }
 
     public ArrivalCurve_DNC createZeroArrivals() {

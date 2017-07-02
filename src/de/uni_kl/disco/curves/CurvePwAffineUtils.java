@@ -7,7 +7,7 @@ import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 import de.uni_kl.disco.numbers.NumUtils;
 
-public class CurveUtils {
+public class CurvePwAffineUtils {
     protected static final int OPERATOR_ADD = 0;
     protected static final int OPERATOR_SUB = 1;
     protected static final int OPERATOR_MIN = 2;
@@ -561,7 +561,7 @@ public class CurveUtils {
         return result;
     }
 
-    public static void beautify(Curve c) {
+    public static void beautify(CurvePwAffine c) {
         //Curve c = curve.copy();
         int i = 0;
         while (i < c.getSegmentCount() - 1) {
@@ -613,6 +613,7 @@ public class CurveUtils {
                 && c.getSegment(1).getY() != NumFactory.getZero()) {
             c.getSegment(0).setGrad(NumFactory.createZero());
         }
+        
         //clearMetaInfo();
         c.setHas_token_bucket_meta_info(false);
         c.setIs_token_bucket(false);

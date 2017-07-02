@@ -35,7 +35,7 @@ import java.util.List;
 
 import de.uni_kl.disco.curves.Curve;
 import de.uni_kl.disco.curves.CurvePwAffine;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.numbers.Num;
@@ -249,7 +249,7 @@ public class Curve_DNC implements CurvePwAffine {
         for (int i = 0; i < segments_to_parse.length; i++) {
             segments[i] = new LinearSegment_DNC(segments_to_parse[i]);
         }
-        CurveUtils.beautify(this);
+        CurvePwAffineUtils.beautify(this);
     }
 
     protected void forceThroughOrigin() {

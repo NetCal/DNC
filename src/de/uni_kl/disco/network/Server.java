@@ -28,7 +28,7 @@
 package de.uni_kl.disco.network;
 
 import de.uni_kl.disco.curves.CurveFactory;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.MaxServiceCurve;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.nc.AnalysisConfig;
@@ -171,7 +171,7 @@ public class Server {
         if (use_extra_gamma == false) {
             return CurveFactory.createZeroDelayInfiniteBurstMSC();
         } else {
-            return (MaxServiceCurve) CurveUtils.removeLatency(max_service_curve);
+            return (MaxServiceCurve) CurvePwAffineUtils.removeLatency(max_service_curve);
         }
     }
 

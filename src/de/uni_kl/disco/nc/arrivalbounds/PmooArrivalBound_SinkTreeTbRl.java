@@ -34,7 +34,7 @@ import java.util.Set;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveFactory;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.minplus.Convolution;
 import de.uni_kl.disco.minplus.Deconvolution;
@@ -157,7 +157,7 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
                 arrival_bound_f = Deconvolution.deconvolve(f.getArrivalCurve(), sc_s_subpath, false); // false -> generic deconvolution
             }
             ab_cache.addEntry(link, f, arrival_bound_f);
-            arrival_bound = CurveUtils.add(arrival_bound, arrival_bound_f);
+            arrival_bound = CurvePwAffineUtils.add(arrival_bound, arrival_bound_f);
         }
 
         result.add(arrival_bound);
@@ -199,7 +199,7 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
                 arrival_bound_f = Deconvolution.deconvolve(f.getArrivalCurve(), sc_s_subpath, true); // true -> tb, rl optimized
             }
             ab_cache.addEntry(link, f, arrival_bound_f);
-            arrival_bound = CurveUtils.add(arrival_bound, arrival_bound_f);
+            arrival_bound = CurvePwAffineUtils.add(arrival_bound, arrival_bound_f);
         }
 
         result.add(arrival_bound);

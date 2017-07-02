@@ -30,7 +30,7 @@ package de.uni_kl.disco.nc.operations;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveFactory;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
@@ -63,7 +63,7 @@ public class DelayBound {
             return result;
         }
 
-        return CurveUtils.getXIntersection(arrival_curve, service_curve);
+        return CurvePwAffineUtils.getXIntersection(arrival_curve, service_curve);
     }
 
     // Single flow to be bound, i.e., fifo per micro flow holds

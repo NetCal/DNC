@@ -88,7 +88,7 @@ public class Convolution {
         }
 
         // Arrival curves are concave curves so we can do a minimum instead of a convolution here.
-        ArrivalCurve convolved_arrival_curve = CurveFactory.createArrivalCurve(CurveUtils.min(arrival_curve_1, arrival_curve_2));
+        ArrivalCurve convolved_arrival_curve = CurveFactory.createArrivalCurve(CurvePwAffineUtils.min(arrival_curve_1, arrival_curve_2));
         return convolved_arrival_curve;
     }
 
@@ -130,10 +130,10 @@ public class Convolution {
 
         // (min,plus)-algebraic proceeding here:
         // Remove latencies, act analog to the convolution of two arrival curves, and the sum of the two latencies.
-        ArrivalCurve ac_intermediate = convolve(CurveFactory.createArrivalCurve(CurveUtils.removeLatency(max_service_curve_1)), CurveFactory.createArrivalCurve(CurveUtils.removeLatency(max_service_curve_2)));
+        ArrivalCurve ac_intermediate = convolve(CurveFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(max_service_curve_1)), CurveFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(max_service_curve_2)));
         MaxServiceCurve result = CurveFactory.createMaxServiceCurve(ac_intermediate);
-        result = (MaxServiceCurve) CurveUtils.shiftRight(result, NumUtils.add(latency_msc_1, latency_msc_2));
-        CurveUtils.beautify(result);
+        result = (MaxServiceCurve) CurvePwAffineUtils.shiftRight(result, NumUtils.add(latency_msc_1, latency_msc_2));
+        CurvePwAffineUtils.beautify(result);
 
         return result;
     }
@@ -255,11 +255,11 @@ public class Convolution {
             }
 
             if (service_curve_1.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
-                return CurveFactory.createServiceCurve(CurveUtils.shiftRight(service_curve_2, service_curve_1.getLatency()));
+                return CurveFactory.createServiceCurve(CurvePwAffineUtils.shiftRight(service_curve_2, service_curve_1.getLatency()));
             }
 
             if (service_curve_2.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
-                return CurveFactory.createServiceCurve(CurveUtils.shiftRight(service_curve_1, service_curve_2.getLatency()));
+                return CurveFactory.createServiceCurve(CurvePwAffineUtils.shiftRight(service_curve_1, service_curve_2.getLatency()));
             }
         }
 
@@ -325,40 +325,40 @@ public class Convolution {
             }
         }
 
-        CurveUtils.beautify(result);
+        CurvePwAffineUtils.beautify(result);
 
         return result;
     }
 
     // The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
-    public static Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve) throws Exception {
+    public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve) throws Exception {
         switch (OperatorInputChecks.inputNullCheck(arrival_curves, maximum_service_curve)) {
             case 1:
-                return new HashSet<Curve>();
+                return new HashSet<CurvePwAffine>();
             case 2:
-                Set<Curve> clone = new HashSet<Curve>();
+                Set<CurvePwAffine> clone = new HashSet<CurvePwAffine>();
 
                 for (ArrivalCurve ac : arrival_curves) {
                     clone.add(ac.copy());
                 }
                 return clone;
             case 3:
-                return new HashSet<Curve>();
+                return new HashSet<CurvePwAffine>();
             case 0:
             default:
                 break;
         }
         if (arrival_curves.isEmpty()) {
-            return new HashSet<Curve>();
+            return new HashSet<CurvePwAffine>();
         }
 
         Num msc_latency = maximum_service_curve.getLatency();
-        Set<Curve> result = new HashSet<Curve>();
+        Set<CurvePwAffine> result = new HashSet<CurvePwAffine>();
 
         // Similar to convolve_ACs_EGamma
-        ArrivalCurve msc_as_ac = CurveFactory.createArrivalCurve(CurveUtils.removeLatency(maximum_service_curve)); // Abuse the ArrivalCurve class here for convenience.
+        ArrivalCurve msc_as_ac = CurveFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(maximum_service_curve)); // Abuse the ArrivalCurve class here for convenience.
         for (ArrivalCurve ac : arrival_curves) {
-            result.add(CurveUtils.shiftRight(convolve(ac, msc_as_ac), msc_latency));
+            result.add(CurvePwAffineUtils.shiftRight(convolve(ac, msc_as_ac), msc_latency));
         }
 
         return result;

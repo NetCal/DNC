@@ -833,7 +833,7 @@ public class Network {
         } else {
             if (source_flows_internal != null) {
                 for (Flow f : source_flows_internal) {
-                    a_out = CurveUtils.add(a_out, f.getArrivalCurve());
+                    a_out = CurvePwAffineUtils.add(a_out, f.getArrivalCurve());
                 }
             }
         }

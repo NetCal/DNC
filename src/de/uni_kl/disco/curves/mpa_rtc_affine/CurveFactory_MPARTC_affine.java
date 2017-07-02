@@ -4,7 +4,7 @@ import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.disco.curves.CurveFactoryInterface;
 import de.uni_kl.disco.curves.CurvePwAffine;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
@@ -185,7 +185,7 @@ public class CurveFactory_MPARTC_affine implements CurveFactoryInterface {
     }
 
     public ArrivalCurve_MPARTC_affine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-        return createArrivalCurve(CurveUtils.removeLatency(curve));
+        return createArrivalCurve(CurvePwAffineUtils.removeLatency(curve));
     }
 
     public ArrivalCurve_MPARTC_affine createZeroArrivals() {

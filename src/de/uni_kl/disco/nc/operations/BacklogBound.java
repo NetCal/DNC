@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveFactory;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.network.Flow;
 import de.uni_kl.disco.network.Network;
@@ -71,7 +71,7 @@ public class BacklogBound {
 
         Num result = arrival_curve.fLimitRight(NumFactory.getZero());
 
-        ArrayList<Num> xcoords = CurveUtils.computeInflectionPointsX(arrival_curve, service_curve);
+        ArrayList<Num> xcoords = CurvePwAffineUtils.computeInflectionPointsX(arrival_curve, service_curve);
         for (int i = 0; i < xcoords.size(); i++) {
             Num ip_x = ((Num) xcoords.get(i));
 

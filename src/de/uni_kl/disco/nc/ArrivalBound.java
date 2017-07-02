@@ -34,7 +34,7 @@ import java.util.Set;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveFactory;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.minplus.Deconvolution;
 import de.uni_kl.disco.misc.SetUtils;
@@ -179,10 +179,10 @@ public class ArrivalBound {
             // * Consider all the permutations of different bounds per in link.
             // * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
             for (ArrivalCurve arrival_bound_link : arrival_bounds_link) {
-                CurveUtils.beautify(arrival_bound_link);
+                CurvePwAffineUtils.beautify(arrival_bound_link);
 
                 for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-                    arrival_bounds_link_permutations.add(CurveUtils.add(arrival_bound_link, arrival_bound_exiting));
+                    arrival_bounds_link_permutations.add(CurvePwAffineUtils.add(arrival_bound_link, arrival_bound_exiting));
                 }
             }
 
@@ -299,7 +299,7 @@ public class ArrivalBound {
 
         for (ArrivalCurve alpha_1 : arrival_curves_1) {
             for (ArrivalCurve alpha_2 : arrival_curves_2) {
-                arrival_bounds_merged.add(CurveUtils.add(alpha_1, alpha_2));
+                arrival_bounds_merged.add(CurvePwAffineUtils.add(alpha_1, alpha_2));
             }
         }
 

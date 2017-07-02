@@ -33,7 +33,7 @@ import java.util.Set;
 
 import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurveFactory;
-import de.uni_kl.disco.curves.CurveUtils;
+import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
 import de.uni_kl.disco.minplus.Convolution;
 import de.uni_kl.disco.misc.SetUtils;
@@ -115,7 +115,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
             Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
             for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
                 for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
-                    alphas_xxfcaller_s.add(CurveUtils.add(arrival_curve_path, arrival_curve_offpath));
+                    alphas_xxfcaller_s.add(CurvePwAffineUtils.add(arrival_curve_path, arrival_curve_offpath));
                 }
             }
 

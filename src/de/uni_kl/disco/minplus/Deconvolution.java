@@ -152,7 +152,7 @@ public class Deconvolution {
         }
     }
 
-    public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves, Set<ServiceCurve> service_curves) {
+    public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves, Set<ServiceCurve> service_curves) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
         switch (OperatorInputChecks.inputNullCheck(curves, service_curves)) {
@@ -181,10 +181,10 @@ public class Deconvolution {
         }
 
         Num latency;
-        for (Curve sc : service_curves) {
-            for (Curve c : curves) {
-                latency = c.getLatency();
-                results.add(CurveFactory.createArrivalCurve(CurveUtils.shiftRight(deconvolve_mTB_mRL(CurveUtils.shiftLeftClipping((CurvePwAffine) c, latency), sc), latency)));
+        for (ServiceCurve sc : service_curves) {
+            for (CurvePwAffine pwa_c : curves) {
+                latency = pwa_c.getLatency();
+                results.add(CurveFactory.createArrivalCurve(CurvePwAffineUtils.shiftRight(deconvolve_mTB_mRL(CurvePwAffineUtils.shiftLeftClipping( pwa_c, latency ), sc), latency)));
             }
         }
 
@@ -225,7 +225,7 @@ public class Deconvolution {
      * @param curve_2 The convex service curve.
      * @return The deconvolved curve, an arrival curve.
      */
-    private static ArrivalCurve deconvolve_mTB_mRL(Curve curve_1, Curve curve_2) {
+    private static ArrivalCurve deconvolve_mTB_mRL(CurvePwAffine curve_1, CurvePwAffine curve_2) {
 //		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
         switch (OperatorInputChecks.inputNullCheck(curve_1, curve_2)) {
             case 0:
@@ -269,7 +269,7 @@ public class Deconvolution {
         for (int i = 1; i < curve_2.getSegmentCount(); i++) { // Start at 1 to skip the arrival curve itself (see above):
 
             x_inflect_beta = curve_2.getSegment(i).getX();
-            candidate_tmp = CurveUtils.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
+            candidate_tmp = CurvePwAffineUtils.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
 
             y_beta = curve_2.f(x_inflect_beta);
             if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
@@ -374,7 +374,7 @@ public class Deconvolution {
         sup_curve = candidates_iter.next();
         while (candidates_iter.hasNext()) {
             additional_curve = candidates_iter.next();
-            sup_curve = CurveUtils.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
+            sup_curve = CurvePwAffineUtils.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
         }
 
         return CurveFactory.createArrivalCurve((CurvePwAffine) sup_curve);
