@@ -18,7 +18,6 @@ public class LinearSegmentFactory {
             case DNC:
             default:
                 return new LinearSegment_DNC(x, y, grad, leftopen);
-
         }
     }
 
@@ -29,7 +28,6 @@ public class LinearSegmentFactory {
             case DNC:
             default:
                 return createHorizontalLine(0.0);
-
         }
     }
 
@@ -40,7 +38,6 @@ public class LinearSegmentFactory {
             case DNC:
             default:
                 return new LinearSegment_DNC(NumFactory.createZero(), NumFactory.createZero(), NumFactory.createZero(), false);
-
         }
     }
 }

@@ -96,7 +96,7 @@ public class PmooAnalysis extends Analysis {
             ServiceCurve service_curve = server.getServiceCurve();
             service_curves[i] = service_curve;
             server_rl_iters[i] = 0;
-            server_rl_counts[i] = service_curve.getRLComponentCount();
+            server_rl_counts[i] = service_curve.getRL_ComponentCount();
             i++;
         }
 
@@ -123,7 +123,7 @@ public class PmooAnalysis extends Analysis {
                 f_bound = f.getArrivalCurve();
 
                 i = flow_tb_iter_map.get(f).intValue();
-                if (i + 1 < f_bound.getTBComponentCount()) {
+                if (i + 1 < f_bound.getTB_ComponentCount()) {
                     flow_tb_iter_map.put(f, Integer.valueOf(i + 1));
                     more_combinations = true;
                     break;
@@ -194,7 +194,7 @@ public class PmooAnalysis extends Analysis {
             }
 
             // TODO Actually needs to be an affine curve
-            CurvePwAffine current_rl = service_curves[i].getRLComponent(server_rl_iters[i]);
+            CurvePwAffine current_rl = service_curves[i].getRL_Component(server_rl_iters[i]);
 
             // Sum up latencies
             T = NumUtils.add(T, current_rl.getLatency());
@@ -204,7 +204,7 @@ public class PmooAnalysis extends Analysis {
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
                 // TODO Actually needs to be an affine curve
-                CurvePwAffine current_tb = bound.getTBComponent(((Integer) flow_tb_iter_map.get(f)).intValue());
+                CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
                 sum_r = NumUtils.add(sum_r, current_tb.getSustainedRate());
             }
 
@@ -232,8 +232,8 @@ public class PmooAnalysis extends Analysis {
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
             // TODO Actually needs to be an affine curve
-            CurvePwAffine current_tb = bound.getTBComponent(((Integer) flow_tb_iter_map.get(f)).intValue());
-            sum_bursts = NumUtils.add(sum_bursts, current_tb.getTBBurst());
+            CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+            sum_bursts = NumUtils.add(sum_bursts, current_tb.getTB_Burst());
         }
 
         T = NumUtils.add(T, NumUtils.div(NumUtils.add(sum_bursts, sum_latencyterms), R));

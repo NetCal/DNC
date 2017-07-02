@@ -23,55 +23,44 @@ public interface CurvePwAffine extends Curve {
 
     // Curve function values
     Num getUltAffineRate();
-
-
-    // Specific piecewise affine curve shapes
-    // Burst delay
-    boolean isDelayedInfiniteBurst();
-
-    // (Multi-)Rate latency
-    boolean isRateLatency();
-
-    int getRLComponentCount();
-
-    CurvePwAffine getRLComponent(int i);
-
-    // (Multi-)Token bucket
-    boolean isTokenBucket();
-
-    int getTBComponentCount();
-
-    CurvePwAffine getTBComponent(int i);
-    
-
-
     Num getSustainedRate();
+
+    // // Specific piecewise affine curve shapes
     
-    Num getTBBurst();
+    // Burst delay
+    boolean getDelayedInfiniteBurst_Property();
 
-    boolean isHas_token_bucket_meta_info();
-
-    void setHas_token_bucket_meta_info(boolean has_token_bucket_meta_info);
-
-    boolean isIs_token_bucket();
-
-    void setIs_token_bucket(boolean is_token_bucket);
-
-    boolean isIs_rate_latency();
-
-    void setIs_rate_latency(boolean is_rate_latency);
-
-    List<CurvePwAffine> getRate_latencies();
-
-    void setRate_latencies(List<CurvePwAffine> rate_latencies);
-
-    List<CurvePwAffine> getToken_buckets();
-
-    void setToken_buckets(List<CurvePwAffine> token_buckets);
-
-    boolean isHas_rate_latency_meta_info();
-
-    void setHas_rate_latency_meta_info(boolean has_rate_latency_meta_info);
     
+    // (Multi-)Rate latency
+    boolean getRL_property();
     
+    void setRL_Property(boolean is_rate_latency);
+
+    void setRL_MetaInfo(boolean has_rl_meta_info);
+
+    int getRL_ComponentCount();
+
+    CurvePwAffine getRL_Component(int i);
+
+    List<CurvePwAffine> getRL_Components();
+
+    void setRL_Components(List<CurvePwAffine> rate_latencies);
+
+    
+    // (Multi-)Token bucket
+    boolean getTB_Property();
+    
+    void setTB_Property(boolean is_token_bucket);
+
+    void setTB_MetaInfo(boolean has_tb_meta_info);
+
+    Num getTB_Burst();
+    
+    int getTB_ComponentCount();
+
+    List<CurvePwAffine> getTB_Components();
+
+    CurvePwAffine getTB_Component(int i);
+
+    void setTB_Components(List<CurvePwAffine> token_buckets);
 }

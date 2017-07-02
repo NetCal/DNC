@@ -98,7 +98,7 @@ public class Curve_DNC implements CurvePwAffine {
         return is_rate_latency;
     }
 
-    public void setIs_rate_latency(boolean is_rate_latency) {
+    public void setRL_Property(boolean is_rate_latency) {
         this.is_rate_latency = is_rate_latency;
     }
 
@@ -106,7 +106,7 @@ public class Curve_DNC implements CurvePwAffine {
         return is_token_bucket;
     }
 
-    public void setIs_token_bucket(boolean is_token_bucket) {
+    public void setTB_Property(boolean is_token_bucket) {
         this.is_token_bucket = is_token_bucket;
     }
 
@@ -114,7 +114,7 @@ public class Curve_DNC implements CurvePwAffine {
         return has_rate_latency_meta_info;
     }
 
-    public void setHas_rate_latency_meta_info(boolean has_rate_latency_meta_info) {
+    public void setRL_MetaInfo(boolean has_rate_latency_meta_info) {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
     }
 
@@ -132,7 +132,7 @@ public class Curve_DNC implements CurvePwAffine {
     // Warning! Can cause runtime exceptions when not handled correctly while calling!
     // There are some cases where RateLatency Curves with is_rate_latency = true are created, but with empty RL list
     // May be fixed now
-    public List<CurvePwAffine> getRate_latencies() {
+    public List<CurvePwAffine> getRL_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
         if (this.is_rate_latency) {
             tmp.add(this.copy());
@@ -144,7 +144,7 @@ public class Curve_DNC implements CurvePwAffine {
         return tmp;
     }
 
-    public void setRate_latencies(List<CurvePwAffine> rate_latencies) {
+    public void setRL_Components(List<CurvePwAffine> rate_latencies) {
         List<Curve_DNC> tmp = new LinkedList<>();
         for (int i = 0; i < rate_latencies.size(); i++) {
             tmp.add((Curve_DNC) rate_latencies.get(i));
@@ -161,12 +161,12 @@ public class Curve_DNC implements CurvePwAffine {
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
 
-    public void setHas_token_bucket_meta_info(boolean has_token_bucket_meta_info) {
+    public void setTB_MetaInfo(boolean has_token_bucket_meta_info) {
         this.has_token_bucket_meta_info = has_token_bucket_meta_info;
     }
 
     // TODO: see getRate_latencies
-    public List<CurvePwAffine> getToken_buckets() {
+    public List<CurvePwAffine> getTB_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
             tmp.add(token_buckets.get(i));
@@ -174,7 +174,7 @@ public class Curve_DNC implements CurvePwAffine {
         return tmp;
     }
 
-    public void setToken_buckets(List<CurvePwAffine> token_buckets) {
+    public void setTB_Components(List<CurvePwAffine> token_buckets) {
         List<Curve_DNC> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
             tmp.add((Curve_DNC) token_buckets.get(i));
@@ -308,9 +308,9 @@ public class Curve_DNC implements CurvePwAffine {
             this.has_token_bucket_meta_info = ((Curve_DNC) curve).has_token_bucket_meta_info;
             this.token_buckets = ((Curve_DNC) curve).token_buckets;
 
-            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).isDelayedInfiniteBurst();
-            this.is_rate_latency = ((CurvePwAffine) curve).isRateLatency();
-            this.is_token_bucket = ((CurvePwAffine) curve).isTokenBucket();
+            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
+            this.is_rate_latency = ((CurvePwAffine) curve).getRL_property();
+            this.is_token_bucket = ((CurvePwAffine) curve).getTB_Property();
         } else {
             for (int i = 0; i < curve.getSegmentCount(); i++) {
                 segments[i] = new LinearSegment_DNC(curve.getSegment(i));
@@ -898,7 +898,7 @@ public class Curve_DNC implements CurvePwAffine {
      *
      * @return the burstiness
      */
-    public Num getTBBurst() {
+    public Num getTB_Burst() {
         if (segments.length == 2) {    // Token Buckets pass through the origin
             return segments[1].getY().copy();
         } else {                        // rate functions have burst 0
@@ -931,13 +931,13 @@ public class Curve_DNC implements CurvePwAffine {
     // Specific curve shapes
     //------------------------------------------------------------
     // Burst delay
-    public boolean isDelayedInfiniteBurst() {
+    public boolean getDelayedInfiniteBurst_Property() {
         return is_delayed_infinite_burst;
     }
 
 
     // Rate latency
-    public boolean isRateLatency() {
+    public boolean getRL_property() {
         decomposeIntoRateLatencies();
         return is_rate_latency;
     }
@@ -947,7 +947,7 @@ public class Curve_DNC implements CurvePwAffine {
      *
      * @return the number of rate latency curves
      */
-    public int getRLComponentCount() {
+    public int getRL_ComponentCount() {
         decomposeIntoRateLatencies();
         return rate_latencies.size();
     }
@@ -959,7 +959,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @param i the number of the rate latency curve
      * @return the rate latency curve
      */
-    public Curve_DNC getRLComponent(int i) {
+    public Curve_DNC getRL_Component(int i) {
         decomposeIntoRateLatencies();
         return rate_latencies.get(i);
     }
@@ -1003,7 +1003,7 @@ public class Curve_DNC implements CurvePwAffine {
 
 
     // Token bucket
-    public boolean isTokenBucket() {
+    public boolean getTB_Property() {
         decomposeIntoTokenBuckets();
         return is_token_bucket;
     }
@@ -1013,7 +1013,7 @@ public class Curve_DNC implements CurvePwAffine {
      *
      * @return the number of token buckets
      */
-    public int getTBComponentCount() {
+    public int getTB_ComponentCount() {
         decomposeIntoTokenBuckets();
         return token_buckets.size();
     }
@@ -1025,7 +1025,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @param i the number of the token bucket
      * @return the token bucket
      */
-    public Curve_DNC getTBComponent(int i) {
+    public Curve_DNC getTB_Component(int i) {
         decomposeIntoTokenBuckets();
         return token_buckets.get(i);
     }

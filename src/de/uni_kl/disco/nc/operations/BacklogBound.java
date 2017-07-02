@@ -50,7 +50,7 @@ public class BacklogBound {
         if (arrival_curve.equals(CurveFactory.createZeroArrivals())) {
             return NumFactory.createZero();
         }
-        if (service_curve.isDelayedInfiniteBurst()) {
+        if (service_curve.getDelayedInfiniteBurst_Property()) {
             return arrival_curve.f(service_curve.getLatency());
         }
         if (service_curve.equals(CurveFactory.createZeroService()) // We know from above that the arrivals are not zero.

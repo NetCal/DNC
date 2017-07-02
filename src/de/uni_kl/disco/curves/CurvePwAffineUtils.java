@@ -562,7 +562,6 @@ public class CurvePwAffineUtils {
     }
 
     public static void beautify(CurvePwAffine c) {
-        //Curve c = curve.copy();
         int i = 0;
         while (i < c.getSegmentCount() - 1) {
             // Remove unreal discontinuity
@@ -614,15 +613,12 @@ public class CurvePwAffineUtils {
             c.getSegment(0).setGrad(NumFactory.createZero());
         }
         
-        //clearMetaInfo();
-        c.setHas_token_bucket_meta_info(false);
-        c.setIs_token_bucket(false);
-        c.setToken_buckets(new LinkedList<>());
+        c.setTB_MetaInfo(false);
+        c.setTB_Property(false);
+        c.setTB_Components(new LinkedList<>());
 
-        c.setHas_rate_latency_meta_info(false);
-        c.setIs_rate_latency(false);
-        c.setRate_latencies(new LinkedList<>());
-
-        //return c;
+        c.setRL_MetaInfo(false);
+        c.setRL_Property(false);
+        c.setRL_Components(new LinkedList<>());
     }
 }

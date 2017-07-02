@@ -112,34 +112,6 @@ public class CurveFactory {
         return factory.createRateLatency(rate, latency);
     }
 
-    // TODO Phase II
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//    public static ServiceCurve createServiceCurve(SegmentList aperSegments) {
-//		return factory.createServiceCurve( aperSegments );
-//	}
-//
-//    public static ServiceCurve createServiceCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		return factory.createServiceCurve( perSegments, py0, period, pdy );
-//	}
-//
-//    public static ServiceCurve createServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		return factory.createServiceCurve( perSegments, py0, period, pdy, name );
-//	}
-//
-//    public static ServiceCurve createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		return factory.createServiceCurve( aperSegments, perSegments, px0, py0, period, pdy );
-//	}
-//
-//    public static ServiceCurve createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		return factory.createServiceCurve( aperSegments, perSegments, px0, py0, period, pdy, name );
-//	}
-//
-//    public static ServiceCurve createServiceCurve(SegmentList aperSegments, java.lang.String name) {
-//		return factory.createServiceCurve( aperSegments, name );
-//	}
-
 
 //--------------------------------------------------------------------------------------------------------------
 // Arrival Curve Constructors
@@ -187,34 +159,6 @@ public class CurveFactory {
     public static ArrivalCurve createTokenBucket(Num rate, Num burst) {
         return factory.createTokenBucket(rate, burst);
     }
-
-    // TODO Phase II
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//	public static ArrivalCurve createArrivalCurve(SegmentList aperSegments) {
-//    	return factory.createArrivalCurve( aperSegments );
-//    }
-//
-//	public static ArrivalCurve createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//    	return factory.createArrivalCurve( perSegments, py0, period, pdy );
-//    }
-//
-//	public static ArrivalCurve createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//    	return factory.createArrivalCurve( perSegments, py0, period, pdy, name );
-//    }
-//
-//	public static ArrivalCurve createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//    	return factory.createArrivalCurve( aperSegments, perSegments, px0, py0, period, pdy );
-//    }
-//
-//	public static ArrivalCurve createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//    	return factory.createArrivalCurve( aperSegments, perSegments, px0, py0, period, pdy, name );
-//    }
-//    
-//	public static ArrivalCurve createArrivalCurve(SegmentList aperSegments, java.lang.String name) {
-//    	return factory.createArrivalCurve( aperSegments, name );
-//    }
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -281,32 +225,4 @@ public class CurveFactory {
             throw new IllegalArgumentException("Maximum service curve cannot be zero.");
         }
     }
-
-    // TODO Phase II
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//	public static MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments) {
-//    	return factory.createMaxServiceCurve();
-//    }
-//
-//	public static MaxServiceCurve createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//    	return factory.createMaxServiceCurve();
-//    }
-//
-//	public static MaxServiceCurve createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//    	return factory.createMaxServiceCurve();
-//    }
-//
-//	public static MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//    	return factory.createMaxServiceCurve();
-//    }
-//
-//	public static MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//    	return factory.createMaxServiceCurve();
-//    }
-//
-//	public static MaxServiceCurve createMaxServiceCurve(SegmentList aperSegments, java.lang.String name) {
-//    	return factory.createMaxServiceCurve();
-//    }
 }

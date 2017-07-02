@@ -136,7 +136,7 @@ public class Deconvolution {
         }
 
         if (service_curve.equals(CurveFactory.createZeroDelayInfiniteBurst())
-                || (service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0)
+                || (service_curve.getDelayedInfiniteBurst_Property() && service_curve.getLatency().doubleValue() == 0.0)
                 || (arrival_curve.equals(CurveFactory.createZeroArrivals()))) {
             return arrival_curve.copy();
         }
@@ -214,7 +214,7 @@ public class Deconvolution {
 
         // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
         return CurveFactory.createTokenBucket(arrival_curve.getSustainedRate().doubleValue(),
-                arrival_curve.getTBBurst().doubleValue() + arrival_curve.getSustainedRate().doubleValue() * service_curve.getLatency().doubleValue());
+                arrival_curve.getTB_Burst().doubleValue() + arrival_curve.getSustainedRate().doubleValue() * service_curve.getLatency().doubleValue());
     }
 
     /**

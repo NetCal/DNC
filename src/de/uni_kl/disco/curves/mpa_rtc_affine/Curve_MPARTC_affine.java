@@ -159,9 +159,9 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
                 this.token_buckets.add(((Curve_MPARTC_affine) curve).token_buckets.get(i).copy());
             }
 
-            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).isDelayedInfiniteBurst();
-            this.is_rate_latency = ((CurvePwAffine) curve).isRateLatency();
-            this.is_token_bucket = ((CurvePwAffine) curve).isTokenBucket();
+            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
+            this.is_rate_latency = ((CurvePwAffine) curve).getRL_property();
+            this.is_token_bucket = ((CurvePwAffine) curve).getTB_Property();
         } else {
             SegmentList segList_rtc = new SegmentList();
             LinearSegment seg_tmp;
@@ -466,44 +466,29 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
         return NumFactory.create(getSegmentRTC(i).s());
     }
 
-    public Num getTBBurst() {
+    public Num getTB_Burst() {
         // RTC Token Buckets cannot pass through the origin
         return NumFactory.create(rtc_curve.y0epsilon());
     }
 
     @Override
-    public boolean isHas_token_bucket_meta_info() {
-        return has_rate_latency_meta_info;
-    }
-
-    @Override
-    public void setHas_token_bucket_meta_info(boolean has_token_bucket_meta_info) {
+    public void setTB_MetaInfo(boolean has_token_bucket_meta_info) {
         this.has_token_bucket_meta_info = has_token_bucket_meta_info;
     }
 
     @Override
-    public boolean isIs_token_bucket() {
-        return is_token_bucket;
-    }
-
-    @Override
-    public void setIs_token_bucket(boolean is_token_bucket) {
+    public void setTB_Property(boolean is_token_bucket) {
         this.is_token_bucket = is_token_bucket;
     }
 
     @Override
-    public boolean isIs_rate_latency() {
-        return is_rate_latency;
-    }
-
-    @Override
-    public void setIs_rate_latency(boolean is_rate_latency) {
+    public void setRL_Property(boolean is_rate_latency) {
         this.is_rate_latency = is_rate_latency;
     }
 
     // TODO: See CurveDnc.getRate_Latencies
     @Override
-    public List<CurvePwAffine> getRate_latencies() {
+    public List<CurvePwAffine> getRL_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
         if (this.is_rate_latency) {
             tmp.add(this.copy());
@@ -516,7 +501,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     }
 
     @Override
-    public void setRate_latencies(List<CurvePwAffine> rate_latencies) {
+    public void setRL_Components(List<CurvePwAffine> rate_latencies) {
         List<Curve_MPARTC_affine> tmp = new LinkedList<>();
         for (int i = 0; i < rate_latencies.size(); i++) {
             tmp.add((Curve_MPARTC_affine) rate_latencies.get(i));
@@ -526,7 +511,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
 
     // TODO: See CurveDNC.getRate_Latencies
     @Override
-    public List<CurvePwAffine> getToken_buckets() {
+    public List<CurvePwAffine> getTB_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
             tmp.add(token_buckets.get(i));
@@ -535,7 +520,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     }
 
     @Override
-    public void setToken_buckets(List<CurvePwAffine> token_buckets) {
+    public void setTB_Components(List<CurvePwAffine> token_buckets) {
         List<Curve_MPARTC_affine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
             tmp.add((Curve_MPARTC_affine) token_buckets.get(i));
@@ -544,12 +529,7 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     }
 
     @Override
-    public boolean isHas_rate_latency_meta_info() {
-        return has_rate_latency_meta_info;
-    }
-
-    @Override
-    public void setHas_rate_latency_meta_info(boolean has_rate_latency_meta_info) {
+    public void setRL_MetaInfo(boolean has_rate_latency_meta_info) {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
     }
 
@@ -584,23 +564,23 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
     // Specific curve shapes
     //------------------------------------------------------------
     // Burst delay
-    public boolean isDelayedInfiniteBurst() {
+    public boolean getDelayedInfiniteBurst_Property() {
         return is_delayed_infinite_burst;
     }
 
 
     // Rate latency
-    public boolean isRateLatency() {
+    public boolean getRL_property() {
         decomposeIntoRateLatencies();
         return is_rate_latency;
     }
 
-    public int getRLComponentCount() {
+    public int getRL_ComponentCount() {
         decomposeIntoRateLatencies();
         return rate_latencies.size();
     }
 
-    public Curve_MPARTC_affine getRLComponent(int i) {
+    public Curve_MPARTC_affine getRL_Component(int i) {
         decomposeIntoRateLatencies();
         // TODO @Steffen: does this fix break anything? This one is like your RateLatency Fix
         if (is_rate_latency) {
@@ -644,17 +624,17 @@ public class Curve_MPARTC_affine implements CurvePwAffine {
 
 
     // Token bucket
-    public boolean isTokenBucket() {
+    public boolean getTB_Property() {
         decomposeIntoTokenBuckets();
         return is_token_bucket;
     }
 
-    public int getTBComponentCount() {
+    public int getTB_ComponentCount() {
         decomposeIntoTokenBuckets();
         return token_buckets.size();
     }
 
-    public Curve_MPARTC_affine getTBComponent(int i) {
+    public Curve_MPARTC_affine getTB_Component(int i) {
         decomposeIntoTokenBuckets();
         return token_buckets.get(i);
     }
