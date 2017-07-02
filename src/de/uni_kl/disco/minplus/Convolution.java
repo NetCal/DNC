@@ -225,7 +225,7 @@ public class Convolution {
         }
 
         return CurveFactory.createRateLatency(
-                Math.min(service_curve_1.getSustainedRate().doubleValue(), service_curve_2.getSustainedRate().doubleValue()),
+                Math.min(service_curve_1.getUltAffineRate().doubleValue(), service_curve_2.getUltAffineRate().doubleValue()),
                 service_curve_1.getLatency().doubleValue() + service_curve_2.getLatency().doubleValue());
     }
 

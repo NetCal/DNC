@@ -50,7 +50,7 @@ public interface CurvePwAffine extends Curve {
 
     // Curve function values
     Num getUltAffineRate();
-    Num getSustainedRate();
+//    Num getSustainedRate();
 
     // // Specific piecewise affine curve shapes
     

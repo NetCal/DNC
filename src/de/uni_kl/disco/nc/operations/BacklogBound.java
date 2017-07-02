@@ -55,7 +55,7 @@ public class BacklogBound {
             return arrival_curve.f(service_curve.getLatency());
         }
         if (service_curve.equals(CurveFactory.createZeroService()) // We know from above that the arrivals are not zero.
-                || arrival_curve.getSustainedRate().gt(service_curve.getSustainedRate())) {
+                || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
             return NumFactory.createPositiveInfinity();
         }
 
@@ -91,7 +91,7 @@ public class BacklogBound {
             for (Server s : f.getSubPath(f.getSource(), root).getServers()) {
                 sum_T = sum_T + s.getServiceCurve().getLatency().doubleValue();
             }
-            bound += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getSustainedRate().doubleValue() * sum_T;
+            bound += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getUltAffineRate().doubleValue() * sum_T;
         }
         return bound;
     }

@@ -100,10 +100,10 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
 
             arrival_bound = ab_cache.getEntry(link, f);
             if (arrival_bound != null) {
-                R = arrival_bound.getSustainedRate().doubleValue();
+                R = arrival_bound.getUltAffineRate().doubleValue();
                 B = arrival_bound.getBurst().doubleValue();
             } else {
-                R = f.getArrivalCurve().getSustainedRate().doubleValue();
+                R = f.getArrivalCurve().getUltAffineRate().doubleValue();
                 B = f.getArrivalCurve().getBurst().doubleValue();
 
                 double sum_T = 0.0;
@@ -234,10 +234,10 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
 
         // There's no need for a cache in this scenario
         for (Flow f : f_xfcaller_server) {
-            sum_R += f.getArrivalCurve().getSustainedRate().doubleValue();
+            sum_R += f.getArrivalCurve().getUltAffineRate().doubleValue();
 
             sum_T = f.getPath().numServers() * f.getSource().getServiceCurve().getLatency().doubleValue();
-            sum_B += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getSustainedRate().doubleValue() * sum_T;
+            sum_B += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getUltAffineRate().doubleValue() * sum_T;
         }
 
         result.add(CurveFactory.createTokenBucket(sum_R, sum_B));

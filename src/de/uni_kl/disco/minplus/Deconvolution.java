@@ -143,7 +143,7 @@ public class Deconvolution {
         }
         if (service_curve.equals(CurveFactory.createZeroService())
                 || service_curve.getLatency().equals(NumFactory.getPositiveInfinity())
-                || (service_curve.getSustainedRate().eqZero() && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
+                || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return CurveFactory.createZeroArrivals();
         }
         if (tb_rl_optimized) {
@@ -209,13 +209,13 @@ public class Deconvolution {
         }
         if (service_curve.equals(CurveFactory.createZeroService())
                 || service_curve.getLatency().equals(NumFactory.getPositiveInfinity())
-                || (service_curve.getSustainedRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
+                || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
             return CurveFactory.createZeroArrivals();
         }
 
         // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
-        return CurveFactory.createTokenBucket(arrival_curve.getSustainedRate().doubleValue(),
-                arrival_curve.getTB_Burst().doubleValue() + arrival_curve.getSustainedRate().doubleValue() * service_curve.getLatency().doubleValue());
+        return CurveFactory.createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
+                arrival_curve.getTB_Burst().doubleValue() + arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
     }
 
     /**
@@ -240,7 +240,7 @@ public class Deconvolution {
         }
 //		}
 
-        if (curve_1.getSustainedRate().gt(curve_2.getSustainedRate())) { // Violation of the sability constraint
+        if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
             return (ArrivalCurve) CurveFactory.createZeroDelayInfiniteBurst();
         }
         if (curve_2.equals(CurveFactory.createZeroDelayInfiniteBurst())) {
@@ -248,7 +248,7 @@ public class Deconvolution {
         }
         if (curve_2.equals(CurveFactory.createZeroService())
                 || curve_2.getLatency().equals(NumFactory.getPositiveInfinity())
-                || (curve_2.getSustainedRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
+                || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return CurveFactory.createZeroArrivals();
         }
         if (CalculatorConfig.DECONVOLUTION_CHECKS) {

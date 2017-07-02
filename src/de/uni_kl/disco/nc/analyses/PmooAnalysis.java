@@ -185,12 +185,12 @@ public class PmooAnalysis extends Analysis {
             for (Flow f : cross_flow_substitutes) {
                 if (f.getPath().getServers().contains(s)) { // The exact path of the substitute does not matter, only the shared servers with the flow of interest do
                     present_flows.add(f);
-                    sum_r_at_s += f.getArrivalCurve().getSustainedRate().doubleValue();
+                    sum_r_at_s += f.getArrivalCurve().getUltAffineRate().doubleValue();
                 }
             }
 
             // Check for stability constraint violation
-            if (sum_r_at_s >= s.getServiceCurve().getSustainedRate().doubleValue()) {
+            if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
                 return CurveFactory.createZeroService();
             }
 
@@ -206,14 +206,14 @@ public class PmooAnalysis extends Analysis {
                 ArrivalCurve bound = f.getArrivalCurve();
                 // TODO Actually needs to be an affine curve
                 CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-                sum_r = NumUtils.add(sum_r, current_tb.getSustainedRate());
+                sum_r = NumUtils.add(sum_r, current_tb.getUltAffineRate());
             }
 
             // Update latency terms (increments)
             sum_latencyterms = NumUtils.add(sum_latencyterms, NumUtils.mult(sum_r, current_rl.getLatency()));
 
             // Compute left-over rate; update min
-            Num Ri = NumUtils.sub(current_rl.getSustainedRate(), sum_r);
+            Num Ri = NumUtils.sub(current_rl.getUltAffineRate(), sum_r);
             if (Ri.leqZero()) {
                 return CurveFactory.createZeroService();
             }

@@ -560,17 +560,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
     }
 
-
-    /**
-     * Returns the sustained rate (the gradient of the last segment).
-     *
-     * @return the sustained rate.
-     */
-    @Override
-    public Num getSustainedRate() {
-        return NumFactory.create(rtc_curve.aperiodicSegments().lastSegment().s());
-    }
-
     public Num getUltAffineRate() {
         return NumFactory.create(rtc_curve.aperiodicSegments().lastSegment().s());
     }
