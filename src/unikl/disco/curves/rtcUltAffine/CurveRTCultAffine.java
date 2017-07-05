@@ -555,16 +555,6 @@ public class CurveRTCultAffine implements CurveUltAffine {
     }
 
 
-    /**
-     * Returns the sustained rate (the gradient of the last segment).
-     *
-     * @return the sustained rate.
-     */
-    @Override
-    public Num getSustainedRate() {
-        return NumFactory.create(rtc_curve.aperiodicSegments().lastSegment().s());
-    }
-
     public Num getUltAffineRate() {
         return NumFactory.create(rtc_curve.aperiodicSegments().lastSegment().s());
     }

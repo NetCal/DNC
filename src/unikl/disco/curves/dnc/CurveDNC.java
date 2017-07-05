@@ -118,16 +118,6 @@ public class CurveDNC implements CurveUltAffine {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
     }
 
-    /**
-     * Returns the sustained rate (the gradient of the last segment).
-     *
-     * @return the sustained rate.
-     */
-    @Override
-    public Num getSustainedRate() {
-        return segments[segments.length-1].grad;
-    }
-
     // TODO: @Steffen
     // Warning! Can cause runtime exceptions when not handled correctly while calling!
     // There are some cases where RateLatency Curves with is_rate_latency = true are created, but with empty RL list
