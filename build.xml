@@ -24,7 +24,7 @@
 			</classpath>
 			<formatter type="brief" usefile="false"/>
 			<batchtest>
-				<fileset dir="src" includes="**/*Test*.java">
+				<fileset dir="src" includes="**/DncTests.java">
 					<exclude name="**/*Config*"/>
 					<exclude name="**/*Results*"/>
 					<exclude name="**/*TestNetwork*"/>
