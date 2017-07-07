@@ -99,7 +99,7 @@ public class TA_2S_2SC_2F_1AC_1P_Test extends DncTests {
 
     @Before
     public void reinitNetwork() {
-        if (!super.reinitilize_numbers) {
+        if (!super.reinitilize_test) {
             return;
         }
 

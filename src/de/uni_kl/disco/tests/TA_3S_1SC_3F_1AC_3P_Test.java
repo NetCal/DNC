@@ -123,7 +123,7 @@ public class TA_3S_1SC_3F_1AC_3P_Test extends DncTests {
 
     @Before
     public void reinitNetwork() {
-        if (!super.reinitilize_numbers) {
+        if (!super.reinitilize_test) {
             return;
         }
 

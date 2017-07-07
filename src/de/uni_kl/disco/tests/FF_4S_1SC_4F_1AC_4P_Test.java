@@ -123,7 +123,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTests {
 
     @Before
     public void reinitNetwork() {
-        if (!super.reinitilize_numbers) {
+        if (!super.reinitilize_test) {
             return;
         }
 
