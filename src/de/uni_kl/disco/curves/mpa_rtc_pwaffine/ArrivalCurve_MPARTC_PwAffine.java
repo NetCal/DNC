@@ -82,6 +82,7 @@ public class ArrivalCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
         rtc_curve = new Curve(aperSegments, name);
     }
 
+    
 //------------------------------------------------------------------------------------------------------------
 // Interface implementations
 //------------------------------------------------------------------------------------------------------------
@@ -104,6 +105,6 @@ public class ArrivalCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
 
     @Override
     public String toString() {
-        return "C" + super.toString();
+        return "AC" + super.toString();
     }
 }
