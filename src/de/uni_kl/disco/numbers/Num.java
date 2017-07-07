@@ -29,9 +29,6 @@
 package de.uni_kl.disco.numbers;
 
 /**
- * Class emulating multiple dispatch (Java only offers single dispatch)
- * in order to allow the user to switch between available number representations.
- *
  * @author Steffen Bondorf
  */
 public interface Num {
