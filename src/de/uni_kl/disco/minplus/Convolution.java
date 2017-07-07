@@ -204,11 +204,11 @@ public class Convolution {
 
     public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2, boolean tb_rl_optimized) {
         // null checks will be done by convolve_SC_SC_RLs( ... ) or convolve_SC_SC_Generic( ... )
-//        if (tb_rl_optimized) {
-//            return convolve_SC_SC_RLs(service_curve_1, service_curve_2);
-//        } else {
+        if (tb_rl_optimized) {
+            return convolve_SC_SC_RLs(service_curve_1, service_curve_2);
+        } else {
             return convolve_SC_SC_Generic(service_curve_1, service_curve_2);
-//        }
+        }
     }
 
     private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
@@ -223,10 +223,27 @@ public class Convolution {
             default:
                 break;
         }
+
+        Num rate;
+        switch (OperatorInputChecks.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+	        case 1:
+	        		rate = service_curve_2.getUltAffineRate();
+	            break;
+	        case 2:
+        			rate = service_curve_1.getUltAffineRate();
+	            break;
+	        case 3:
+	            rate = NumFactory.createPositiveInfinity();
+	            break;
+	        case 0:
+	        default:
+	        		rate = NumUtils.min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+	        		break;
+        }
         
         return CurvePwAffineFactory.createRateLatency(
-                NumUtils.min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate()),
-                NumUtils.min(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                rate,
+                NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
     /**

@@ -58,10 +58,6 @@ public interface CurvePwAffine extends Curve {
 
     
     // // Specific piecewise affine curve shapes
-
-    // Burst delay
-    boolean getDelayedInfiniteBurst_Property();
-
     
     // (Composition of) Rate latency
     boolean getRL_property();

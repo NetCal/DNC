@@ -52,6 +52,10 @@ public interface Curve {
 
 
     // Curve properties
+
+    boolean getDelayedInfiniteBurst_Property();
+    
+    
     boolean isDiscontinuity(int pos);
 
     boolean isRealDiscontinuity(int pos);
