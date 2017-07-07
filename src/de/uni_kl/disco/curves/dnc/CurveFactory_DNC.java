@@ -59,6 +59,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         return new Curve_DNC(); // CurveDNC constructor's default behavior
     }
 
+    // TODO Findbugs: Infinite recursive loop!
     public Curve_DNC createHorizontal(double y) {
         return createHorizontal(y);
     }
