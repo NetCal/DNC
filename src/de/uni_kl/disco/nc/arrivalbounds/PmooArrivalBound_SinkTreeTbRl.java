@@ -54,12 +54,11 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();
 
     @SuppressWarnings("unused")
-    private PmooArrivalBound_SinkTreeTbRl() {
-    }
+    private PmooArrivalBound_SinkTreeTbRl() {}
 
-    public PmooArrivalBound_SinkTreeTbRl(Network network, AnalysisConfig configuration) {
-        this.network = network;
-        this.configuration = configuration;
+    public PmooArrivalBound_SinkTreeTbRl(Network tree) {
+        this.network = tree;
+        this.configuration = new AnalysisConfig();
     }
 
     public void clearCache() {
@@ -218,7 +217,7 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
      * @param flow_of_interest The flow of interest to handle with lowest priority.
      * @return Arrival bounds.
      */
-    public Set<ArrivalCurve> computeArrivalBoundHomogeneous(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest) {
+    public Set<ArrivalCurve> computeArrivalBoundHomogeneous(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest) throws Exception {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         // Get flows of interest
@@ -236,7 +235,7 @@ public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
         for (Flow f : f_xfcaller_server) {
             sum_R += f.getArrivalCurve().getUltAffineRate().doubleValue();
 
-            sum_T = f.getPath().numServers() * f.getSource().getServiceCurve().getLatency().doubleValue();
+            sum_T = f.getSubPath( f.getSource(), link.getSource() ).numServers() * f.getSource().getServiceCurve().getLatency().doubleValue();
             sum_B += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getUltAffineRate().doubleValue() * sum_T;
         }
 

@@ -413,9 +413,16 @@ public class DncTests {
     }
 
     protected void runSinkTreePMOOtest(Network sink_tree, Flow flow_of_interest, DncTestResults expected_bounds) {
-        Num backlog_bound = null;
+        Num backlog_bound_TBRL = null;
+        Num backlog_bound_TBRL_CONV = null;
+        Num backlog_bound_TBRL_CONV_TBRL_DECONV = null;
+        Num backlog_bound_TBRL_HOMO = null;
+        
         try {
-            backlog_bound = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink()));
+            backlog_bound_TBRL = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
+            backlog_bound_TBRL_CONV = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
+            backlog_bound_TBRL_CONV_TBRL_DECONV = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
+            backlog_bound_TBRL_HOMO = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Analysis failed");
@@ -430,11 +437,27 @@ public class DncTests {
 
             System.out.println("--- Result: ---");
 
-            System.out.println("backlog bound   : " + backlog_bound.toString());
+            System.out.println("backlog bound TBRL                  : " + backlog_bound_TBRL.toString());
+            System.out.println("backlog bound TBRL CONV             : " + backlog_bound_TBRL_CONV.toString());
+            System.out.println("backlog bound TBRL CONV TBRL DECONV : " + backlog_bound_TBRL_CONV_TBRL_DECONV.toString());
+            System.out.println("backlog bound RBRL HOMO             : " + backlog_bound_TBRL_HOMO.toString());
             System.out.println();
         }
 
-        assertEquals("PMOO backlog", backlog_bound,
-                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound());
+        assertEquals("PMOO backlog TBRL",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL);
+
+        assertEquals("PMOO backlog TBRL CONV",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL_CONV);
+
+        assertEquals("PMOO backlog TBRL CONV TBRL DECONV",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL_CONV_TBRL_DECONV);
+
+        assertEquals("PMOO backlog RBRL HOMO",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL_HOMO);
     }
 }
