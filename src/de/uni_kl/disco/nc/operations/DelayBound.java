@@ -42,6 +42,8 @@ import de.uni_kl.disco.numbers.NumUtils;
  * @author Steffen Bondorf
  */
 public class DelayBound {
+    private DelayBound() {}
+    
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())) {
             return NumFactory.createZero();
