@@ -52,7 +52,6 @@ public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine imple
         super.initializeCurve(max_service_curve_str);
     }
 
-
     public MaxServiceCurve_MPARTC_PwAffine(SegmentList aperSegments) {
         rtc_curve = new Curve(aperSegments);
     }
@@ -82,6 +81,7 @@ public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine imple
         rtc_curve = c.clone();
     }
 
+    
 //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
@@ -110,6 +110,6 @@ public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine imple
      */
     @Override
     public String toString() {
-        return "MS" + super.toString();
+        return "MSC" + super.toString();
     }
 }
