@@ -677,8 +677,8 @@ public class Curve_DNC implements CurvePwAffine {
         Curve_DNC this_cpy = this.copy();
         Curve_DNC other_cpy = ((Curve_DNC) obj).copy();
 
-        this_cpy.beautify();
-        other_cpy.beautify();
+        CurvePwAffineUtils.beautify(this_cpy);
+        CurvePwAffineUtils.beautify(other_cpy);
 
         if (this_cpy.getLatency() == NumFactory.getPositiveInfinity()) {
             this_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
@@ -834,7 +834,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return the latency of this curve.
      */
     public Num getLatency() {
-        this.beautify();
+    		CurvePwAffineUtils.beautify(this);
         if (segments[0].getY().gt(NumFactory.getZero())) {
             return NumFactory.createZero();
         }
@@ -899,16 +899,6 @@ public class Curve_DNC implements CurvePwAffine {
      */
     public Num getUltAffineRate() {
         return segments[segments.length - 1].getGrad();
-    }
-
-    //------------------------------------------------------------
-    // Curve manipulation
-    //------------------------------------------------------------
-
-    /**
-     * Removes unnecessary segments.
-     */
-    public void beautify() {
     }
 
     //------------------------------------------------------------

@@ -51,7 +51,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         for (int i = 0; i < segments.size(); i++) {
             c_dnc.setSegment(i, segments.get(i));
         }
-        c_dnc.beautify();
+        CurvePwAffineUtils.beautify(c_dnc);
         return c_dnc;
     }
 
