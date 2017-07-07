@@ -38,63 +38,67 @@ import de.uni_kl.disco.numbers.NumUtils;
  * @author Steffen Bondorf
  */
 public final class CalculatorConfig {
-    public static boolean ARRIVAL_CURVE_CHECKS = false;
+	public static boolean ARRIVAL_CURVE_CHECKS = false;
 
-    public static boolean SERVICE_CURVE_CHECKS = false;
-    public static boolean MAX_SERVICE_CURVE_CHECKS = false;
-    public static boolean FIFO_MUX_CHECKS = false;
-    public static boolean DECONVOLUTION_CHECKS = false;
-    private static NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
-    private static CurveClass CURVE_CLASS = CurveClass.DNC;
+	public static boolean SERVICE_CURVE_CHECKS = false;
+	public static boolean MAX_SERVICE_CURVE_CHECKS = false;
+	public static boolean FIFO_MUX_CHECKS = false;
+	public static boolean DECONVOLUTION_CHECKS = false;
+	private static NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
+	private static CurveClass CURVE_CLASS = CurveClass.DNC;
 
-    public static NumClass getNumClass() {
-        return NUM_CLASS;
-    }
+	public static NumClass getNumClass() {
+		return NUM_CLASS;
+	}
 
-    public static boolean setNumClass(NumClass num_class) {
-        if (NUM_CLASS == num_class) {
-            return false;
-        } else {
-            NUM_CLASS = num_class;
-            NumFactory.setNumClass(num_class);
-            NumUtils.setNumClass(num_class);
-            return true;
-        }
-    }
+	public static boolean setNumClass(NumClass num_class) {
+		if (NUM_CLASS == num_class) {
+			return false;
+		} else {
+			NUM_CLASS = num_class;
+			NumFactory.setNumClass(num_class);
+			NumUtils.setNumClass(num_class);
+			return true;
+		}
+	}
 
-    public static CurveClass getCurveClass() {
-        return CURVE_CLASS;
-    }
+	public static CurveClass getCurveClass() {
+		return CURVE_CLASS;
+	}
 
-    public static void setCurveClass(CurveClass curve_class) {
-        if (curve_class == CurveClass.MPA_RTC) {
-            File f = new File("rtc.jar");
-            if (!f.exists() && !f.isDirectory()) {
-                System.out.println("Error: rtc.jar not found.");
-                System.exit(1);
-            }
-        }
-        CURVE_CLASS = curve_class;
-        CurvePwAffineFactory.setCurveClass(curve_class);
-    }
+	public static boolean setCurveClass(CurveClass curve_class) {
+		if (curve_class == CurveClass.MPA_RTC) {
+			File f = new File("lib/rtc.jar");
+			if (!f.exists() && !f.isDirectory()) {
+				System.out.println("Error: rtc.jar not found in directory " + f.getParent() + ".");
+				System.exit(1);
+			}
+		}
+		if (CURVE_CLASS == curve_class) {
+			return false;
+		}
+		CURVE_CLASS = curve_class;
+		CurvePwAffineFactory.setCurveClass(curve_class);
+		return true;
+	}
 
-    public static void disableAllChecks() {
-        ARRIVAL_CURVE_CHECKS = false;
-        SERVICE_CURVE_CHECKS = false;
-        MAX_SERVICE_CURVE_CHECKS = false;
-        FIFO_MUX_CHECKS = false;
-        DECONVOLUTION_CHECKS = false;
-    }
+	public static void disableAllChecks() {
+		ARRIVAL_CURVE_CHECKS = false;
+		SERVICE_CURVE_CHECKS = false;
+		MAX_SERVICE_CURVE_CHECKS = false;
+		FIFO_MUX_CHECKS = false;
+		DECONVOLUTION_CHECKS = false;
+	}
 
-    public static void enableAllChecks() {
-        ARRIVAL_CURVE_CHECKS = true;
-        SERVICE_CURVE_CHECKS = true;
-        MAX_SERVICE_CURVE_CHECKS = true;
-        FIFO_MUX_CHECKS = true;
-        DECONVOLUTION_CHECKS = true;
-    }
+	public static void enableAllChecks() {
+		ARRIVAL_CURVE_CHECKS = true;
+		SERVICE_CURVE_CHECKS = true;
+		MAX_SERVICE_CURVE_CHECKS = true;
+		FIFO_MUX_CHECKS = true;
+		DECONVOLUTION_CHECKS = true;
+	}
 
-    public enum NumClass {REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER}
+	public enum NumClass {REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER}
 
-    public enum CurveClass { DNC, MPA_RTC }
+	public enum CurveClass { DNC, MPA_RTC }
 }
