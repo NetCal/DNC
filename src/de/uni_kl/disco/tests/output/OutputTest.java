@@ -58,8 +58,8 @@ public class OutputTest {
     private static Network network_given;
 
     private static Network network_saved;
-    private static String saved_network_path = "src/unikl/disco/tests/output/";
-    private static String saved_network_package = "unikl.disco.tests.output";
+    private static String saved_network_path = "src/de/uni_kl/disco/tests/output/";
+    private static String saved_network_package = "de.uni_kl.disco.tests.output";
     private static String saved_network_name = "OutputTestNetworkSaved";
 
     @SuppressFBWarnings(value = {"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE", "DE_MIGHT_IGNORE"},
