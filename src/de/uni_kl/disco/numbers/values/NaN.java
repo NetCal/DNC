@@ -32,8 +32,6 @@ import de.uni_kl.disco.numbers.Num;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * Wrapper class around double;
- *
  * @author Steffen Bondorf
  */
 public final class NaN implements Num {

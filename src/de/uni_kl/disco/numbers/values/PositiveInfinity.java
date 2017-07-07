@@ -31,8 +31,6 @@ package de.uni_kl.disco.numbers.values;
 import de.uni_kl.disco.numbers.Num;
 
 /**
- * Wrapper class around double;
- *
  * @author Steffen Bondorf
  */
 public final class PositiveInfinity implements Num {
