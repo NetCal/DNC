@@ -69,7 +69,6 @@ public class ServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
         rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
     }
 
-
     public ServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, String name) {
         rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
     }
@@ -82,7 +81,8 @@ public class ServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
         rtc_curve = c.clone();
     }
 
- //--------------------------------------------------------------------------------------------------------------
+    
+//--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
     @Override
@@ -109,6 +109,6 @@ public class ServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
      */
     @Override
     public String toString() {
-        return "S" + super.toString();
+        return "SC" + super.toString();
     }
 }

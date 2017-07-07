@@ -94,6 +94,7 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterfa
         return createHorizontal(y.doubleValue());
     }
 
+    
 //--------------------------------------------------------------------------------------------------------------
 // Service Curve Constructors
 //--------------------------------------------------------------------------------------------------------------
@@ -152,41 +153,6 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterfa
         return createRateLatency(rate.doubleValue(), latency.doubleValue());
     }
 
-    // TODO Phase II
-    // TODO Throw exceptions instead of returning null
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//    public ServiceCurveRTC createServiceCurve(SegmentList aperSegments) {
-//    	System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//    	return null;
-//	}
-//    
-//	public ServiceCurveRTC createServiceCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveRTC createServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveRTC createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveRTC createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveRTC createServiceCurve(SegmentList aperSegments, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-
 
 //--------------------------------------------------------------------------------------------------------------
 // Arrival Curve Constructors
@@ -239,41 +205,7 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterfa
         return createTokenBucket(rate.doubleValue(), burst.doubleValue());
     }
 
-    // TODO Phase II
-    // TODO Throw exceptions instead of returning null
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//	public ArrivalCurveRTC createArrivalCurve(SegmentList aperSegments) {
-//    	System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//    	return null;
-//	}
-//
-//	public ArrivalCurveRTC createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public ArrivalCurveRTC createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-// 	}
-//
-//	public ArrivalCurveRTC createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public ArrivalCurveRTC createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-// 	public ArrivalCurveRTC createArrivalCurve(SegmentList aperSegments, java.lang.String name) {
-// 		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-// 		return null;
-//	}
-
+    
 //--------------------------------------------------------------------------------------------------------------
 // Maximum Service Curve Constructors
 //--------------------------------------------------------------------------------------------------------------
@@ -327,41 +259,7 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterfa
         return createRateLatencyMSC(rate.doubleValue(), latency.doubleValue());
     }
 
-    // TODO Phase II
-    // TODO Throw exceptions instead of returning null
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//	public MaxServiceCurveRTC createMaxServiceCurve(SegmentList aperSegments) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveRTC createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public MaxServiceCurveRTC createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveRTC createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveRTC createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveRTC createMaxServiceCurve(SegmentList aperSegments, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-
+    
 //--------------------------------------------------------------------------------------------------------------
 // Curve assembly
 //--------------------------------------------------------------------------------------------------------------
