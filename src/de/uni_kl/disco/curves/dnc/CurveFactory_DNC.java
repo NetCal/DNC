@@ -37,7 +37,7 @@ import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 
 public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
-    protected static CurveFactory_DNC factory_object = new CurveFactory_DNC();
+    protected static final CurveFactory_DNC factory_object = new CurveFactory_DNC();
 
 //--------------------------------------------------------------------------------------------------------------
 // Curve Constructors
@@ -59,9 +59,8 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         return new Curve_DNC(); // CurveDNC constructor's default behavior
     }
 
-    // TODO Findbugs: Infinite recursive loop!
     public Curve_DNC createHorizontal(double y) {
-        return createHorizontal(y);
+        return createHorizontal(NumFactory.create(y));
     }
 
     /**
