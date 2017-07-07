@@ -223,10 +223,10 @@ public class Convolution {
             default:
                 break;
         }
-
+        
         return CurvePwAffineFactory.createRateLatency(
-                Math.min(service_curve_1.getUltAffineRate().doubleValue(), service_curve_2.getUltAffineRate().doubleValue()),
-                service_curve_1.getLatency().doubleValue() + service_curve_2.getLatency().doubleValue());
+                NumUtils.min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate()),
+                NumUtils.min(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
     /**
