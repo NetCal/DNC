@@ -92,6 +92,10 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         rtc_curve = new Curve(segList_rtc);
     }
 
+    public Curve getRtc_curve() {
+        return rtc_curve;
+    }
+
     // Accepts string representations of RTC
     // as well as DNC Curve, ArrivalCurve, ServiceCurve, and MaxServiceCurve
     protected void initializeCurve(String curve_str) throws Exception {

@@ -28,11 +28,11 @@
 
 package de.uni_kl.disco.nc;
 
-import java.io.File;
-
 import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.numbers.NumFactory;
 import de.uni_kl.disco.numbers.NumUtils;
+
+import java.io.File;
 
 /**
  * @author Steffen Bondorf
@@ -70,8 +70,11 @@ public final class CalculatorConfig {
         if (curve_class == CurveClass.MPA_RTC) {
             File f = new File("rtc.jar");
             if (!f.exists() && !f.isDirectory()) {
-                System.out.println("Error: rtc.jar not found.");
-                System.exit(1);
+                f = new File("lib/rtc.jar");
+                if (!f.exists() && !f.isDirectory()) {
+                    System.out.println("Error: rtc.jar not found.");
+                    System.exit(1);
+                }
             }
         }
         CURVE_CLASS = curve_class;
@@ -96,5 +99,5 @@ public final class CalculatorConfig {
 
     public enum NumClass {REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER}
 
-    public enum CurveClass { DNC, MPA_RTC }
+    public enum CurveClass {DNC, MPA_RTC}
 }
