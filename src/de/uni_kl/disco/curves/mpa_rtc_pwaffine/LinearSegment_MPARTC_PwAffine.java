@@ -35,8 +35,9 @@ import de.uni_kl.disco.numbers.NumUtils;
 
 public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
 
-private ch.ethz.rtc.kernel.Segment rtc_segment;
+	private ch.ethz.rtc.kernel.Segment rtc_segment;
 
+	
 //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
@@ -67,11 +68,12 @@ private ch.ethz.rtc.kernel.Segment rtc_segment;
         this.rtc_segment = rtc_segment;
     }
 
+    
 //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
     public Num f(Num x) {
-        return NumFactory.create(yAt(x.doubleValue()));
+        return NumFactory.create(rtc_segment.yAt(x.doubleValue()));
     }
 
     public Num getX() {
@@ -106,16 +108,19 @@ private ch.ethz.rtc.kernel.Segment rtc_segment;
         rtc_segment.setS(grad.doubleValue());
     }
 
+    /**
+     * MPA RTC implementation does not allow for user defined continuity.
+     * Left-continuity is assumed by default. 
+     */
     public boolean isLeftopen() {
-        // TODO
-//        System.out.println("LinearSegmentRTC is leftopen by default");
         return true;
     }
 
-    public void setLeftopen(boolean leftopen) {
-        // TODO
-//        System.out.println("LinearSegmentRTC is leftopen by default");
-    }
+    /**
+     * MPA RTC implementation does not allow for user defined continuity.
+     * Left-continuity is assumed by default. 
+     */
+    public void setLeftopen(boolean leftopen) {}
 
     public Num getXIntersectionWith(LinearSegment other) {
         Num y1 = NumFactory.create(rtc_segment.y() - (rtc_segment.x() * rtc_segment.s()));
@@ -135,6 +140,7 @@ private ch.ethz.rtc.kernel.Segment rtc_segment;
         if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
             return false;
         }
+        // TODO Findbugs: EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS
         return rtc_segment.equals(obj);
     }
 
@@ -146,64 +152,5 @@ private ch.ethz.rtc.kernel.Segment rtc_segment;
     @Override
     public int hashCode() {
         return rtc_segment.hashCode();
-    }
-
-//------------------------------------------------------------------------------------------------------------
-// MPA toolbox functionality
-//------------------------------------------------------------------------------------------------------------
-    public Segment getSeg() {
-        return rtc_segment;
-    }
-
-    public void setSeg(Segment seg) {
-        this.rtc_segment = seg;
-    }
-
-    public double yAt(double x0) {
-        return rtc_segment.yAt(x0);
-    }
-
-    public void move(double dx, double dy) {
-        rtc_segment.move(dx, dy);
-    }
-
-    public boolean moveEquals(double dx, double dy, Segment seg) {
-        return rtc_segment.moveEquals(dx, dy, seg);
-    }
-
-    public void round() {
-        rtc_segment.round();
-    }
-
-    public double s() {
-        return rtc_segment.s();
-    }
-
-    public void scaleX(double factor) {
-        rtc_segment.scaleX(factor);
-    }
-
-    public void scaleY(double factor) {
-        rtc_segment.scaleY(factor);
-    }
-
-    public void setS(double s) {
-        rtc_segment.setS(s);
-    }
-
-    public java.lang.String toExportString() {
-        return rtc_segment.toString();
-    }
-
-    public double x() {
-        return rtc_segment.x();
-    }
-
-    public double xAt(double y0) {
-        return rtc_segment.xAt(y0);
-    }
-
-    public double y() {
-        return rtc_segment.y();
     }
 }

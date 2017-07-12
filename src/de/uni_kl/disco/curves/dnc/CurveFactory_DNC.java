@@ -37,7 +37,7 @@ import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 
 public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
-    protected static CurveFactory_DNC factory_object = new CurveFactory_DNC();
+    protected static final CurveFactory_DNC factory_object = new CurveFactory_DNC();
 
 //--------------------------------------------------------------------------------------------------------------
 // Curve Constructors
@@ -51,7 +51,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         for (int i = 0; i < segments.size(); i++) {
             c_dnc.setSegment(i, segments.get(i));
         }
-        c_dnc.beautify();
+        CurvePwAffineUtils.beautify(c_dnc);
         return c_dnc;
     }
 
@@ -60,7 +60,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
     }
 
     public Curve_DNC createHorizontal(double y) {
-        return createHorizontal(y);
+        return createHorizontal(NumFactory.create(y));
     }
 
     /**
@@ -131,41 +131,6 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         return sc_dnc;
     }
 
-    // TODO Phase II
-    // TODO Throw exceptions instead of returning null
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//    public ServiceCurveDNC createServiceCurve(SegmentList aperSegments) {
-//    	System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//    	return null;
-//	}
-//    
-//	public ServiceCurveDNC createServiceCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveDNC createServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveDNC createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveDNC createServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public ServiceCurveDNC createServiceCurve(SegmentList aperSegments, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-
 
 //--------------------------------------------------------------------------------------------------------------
 // Arrival Curve Constructors
@@ -218,41 +183,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         return ac_dnc;
     }
 
-    // TODO Phase II
-    // TODO Throw exceptions instead of returning null
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//	public ArrivalCurveDNC createArrivalCurve(SegmentList aperSegments) {
-//    	System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//    	return null;
-//	}
-//
-//	public ArrivalCurveDNC createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public ArrivalCurveDNC createArrivalCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-// 	}
-//
-//	public ArrivalCurveDNC createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public ArrivalCurveDNC createArrivalCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-// 	public ArrivalCurveDNC createArrivalCurve(SegmentList aperSegments, java.lang.String name) {
-// 		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-// 		return null;
-//	}
-
+    
 //--------------------------------------------------------------------------------------------------------------
 // Maximum Service Curve Constructors
 //--------------------------------------------------------------------------------------------------------------
@@ -304,40 +235,6 @@ public class CurveFactory_DNC implements CurvePwAffineFactoryInterface {
         return msc_dnc;
     }
 
-    // TODO Phase II
-    // TODO Throw exceptions instead of returning null
-    //------------------------------------------------------------
-    // RTC additional constructors
-    //------------------------------------------------------------
-//	public MaxServiceCurveDNC createMaxServiceCurve(SegmentList aperSegments) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveDNC createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//	
-//	public MaxServiceCurveDNC createMaxServiceCurve(SegmentList perSegments, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveDNC createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveDNC createMaxServiceCurve(SegmentList aperSegments, SegmentList perSegments, double px0, double py0, long period, double pdy, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
-//
-//	public MaxServiceCurveDNC createMaxServiceCurve(SegmentList aperSegments, java.lang.String name) {
-//		System.out.println("Constructor with SegmentList not supported for DiscoDNC implementation.");
-//		return null;
-//	}
 
 //--------------------------------------------------------------------------------------------------------------
 // Curve assembly

@@ -46,8 +46,7 @@ import de.uni_kl.disco.network.Path;
 import de.uni_kl.disco.network.Server;
 
 public class OutputBound {
-    private OutputBound() {
-    }
+    private OutputBound() {}
 
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server) throws Exception {
         return compute(configuration, arrival_curves, server, Collections.singleton(server.getServiceCurve()));

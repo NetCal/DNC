@@ -69,7 +69,6 @@ public class LinearSegment_DNC implements LinearSegment {
 //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-
     /**
      * The default constructor.
      */
@@ -139,7 +138,6 @@ public class LinearSegment_DNC implements LinearSegment {
 //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
-
     /**
      * Returns the function value of this linear segment at the given
      * x-coordinate. Note that there is no test whether the function is defined

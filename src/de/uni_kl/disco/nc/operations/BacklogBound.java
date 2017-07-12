@@ -35,7 +35,10 @@ import de.uni_kl.disco.curves.ArrivalCurve;
 import de.uni_kl.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.disco.curves.ServiceCurve;
+import de.uni_kl.disco.nc.AnalysisConfig;
+import de.uni_kl.disco.nc.arrivalbounds.PmooArrivalBound_SinkTreeTbRl;
 import de.uni_kl.disco.network.Flow;
+import de.uni_kl.disco.network.Link;
 import de.uni_kl.disco.network.Network;
 import de.uni_kl.disco.network.Server;
 import de.uni_kl.disco.numbers.Num;
@@ -47,6 +50,8 @@ import de.uni_kl.disco.numbers.NumUtils;
  * @author Steffen Bondorf
  */
 public class BacklogBound {
+	private BacklogBound() {}
+	
     public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())) {
             return NumFactory.createZero();
@@ -82,17 +87,35 @@ public class BacklogBound {
         return result;
     }
 
-    public static double derivePmooSinkTreeTbRl(Network tree, Server root) throws Exception {
-        double bound = 0.0;
-        double sum_T = 0.0;
+    public static double derivePmooSinkTreeTbRl(Network tree, Server root, AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
+    		PmooArrivalBound_SinkTreeTbRl sink_tree_bound = new PmooArrivalBound_SinkTreeTbRl( tree );
+    		ArrivalCurve arrivals_at_root = tree.getSourceFlowArrivalCurve(root);
+    		
+    		for (Link link : tree.getInLinks(root)) {
+	    		switch( sink_tree_ab ) {
+	    			case PMOO_SINKTREE_TBRL_CONV:
+	    				arrivals_at_root = CurvePwAffineUtils.add(arrivals_at_root, 
+	    						sink_tree_bound.computeArrivalBoundDeConvolution(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
+	    				break;
 
-        for (Flow f : tree.getFlows(root)) {
-            sum_T = 0.0;
-            for (Server s : f.getSubPath(f.getSource(), root).getServers()) {
-                sum_T = sum_T + s.getServiceCurve().getLatency().doubleValue();
-            }
-            bound += f.getArrivalCurve().getBurst().doubleValue() + f.getArrivalCurve().getUltAffineRate().doubleValue() * sum_T;
-        }
-        return bound;
+	    			case PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV:
+	    				arrivals_at_root = CurvePwAffineUtils.add(arrivals_at_root, 
+	    						sink_tree_bound.computeArrivalBoundDeConvolutionTBRL(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
+	    				break;
+
+	    			case PMOO_SINKTREE_TBRL_HOMO:
+	    				arrivals_at_root = CurvePwAffineUtils.add(arrivals_at_root, 
+	    						sink_tree_bound.computeArrivalBoundHomogeneous(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
+	    				break;
+	    				
+	    			case PMOO_SINKTREE_TBRL:
+	    			default:
+	    				arrivals_at_root = CurvePwAffineUtils.add(arrivals_at_root, 
+	    						sink_tree_bound.computeArrivalBound(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
+	    				break;
+	    		}
+    		}
+    		
+	    	return CurvePwAffineUtils.getMaxVerticalDeviation( arrivals_at_root, root.getServiceCurve() ).doubleValue();
     }
 }

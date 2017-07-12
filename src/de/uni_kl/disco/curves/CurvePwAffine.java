@@ -32,7 +32,12 @@ import java.util.List;
 import de.uni_kl.disco.numbers.Num;
 
 /**
- * Interface for piecewise affine dnc curves.
+ * 
+ * Interface for piecewise affine curves,
+ * including convenience functions used by Disco's implementation DNC operations.
+ * I.e., in addition to its defining linear segments,
+ * curves may be ascribed as (compositions of) rate-latency and token-bucket functions.
+ * 
  */
 public interface CurvePwAffine extends Curve {
     @Override
@@ -53,12 +58,8 @@ public interface CurvePwAffine extends Curve {
 
     
     // // Specific piecewise affine curve shapes
-
-    // Burst delay
-    boolean getDelayedInfiniteBurst_Property();
-
     
-    // (Multi-)Rate latency
+    // (Composition of) Rate latency
     boolean getRL_property();
     
     void setRL_Property(boolean is_rate_latency);
@@ -74,7 +75,7 @@ public interface CurvePwAffine extends Curve {
     void setRL_Components(List<CurvePwAffine> rate_latencies);
 
     
-    // (Multi-)Token bucket
+    // (Composition of) Token bucket
     boolean getTB_Property();
     
     void setTB_Property(boolean is_token_bucket);

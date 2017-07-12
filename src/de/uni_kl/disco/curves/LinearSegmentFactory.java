@@ -33,11 +33,14 @@ import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.numbers.Num;
 import de.uni_kl.disco.numbers.NumFactory;
 
+/**
+ * 
+ * This class creates linear segments, either with Disco's DNC backend or with the PMA's RTC backend.
+ *
+ */
 public class LinearSegmentFactory {
-
-    // This is a small workaround. In case that more methods are added here, it may be useful to split up this class
-    // and implement a factory like CurveFactroy.
-
+	// In contrast to the similar Curve factory, it does not hold a curve factory instance for each alternative.
+	
     public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
         switch (CalculatorConfig.getCurveClass()) {
             case MPA_RTC:

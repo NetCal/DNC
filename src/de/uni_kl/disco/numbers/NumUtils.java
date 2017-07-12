@@ -35,6 +35,12 @@ import de.uni_kl.disco.numbers.implementations.RationalIntUtils;
 import de.uni_kl.disco.numbers.implementations.RealDoubleUtils;
 import de.uni_kl.disco.numbers.implementations.RealSingleUtils;
 
+/**
+ * Class emulating multiple dispatch (Java only offers single dispatch)
+ * in order to allow the user to switch between available number representations.
+ *
+ * @author Steffen Bondorf
+ */
 public class NumUtils {
     private static NumUtilsInterface utils_realdouble = new RealDoubleUtils();
     private static NumUtilsInterface utils_realsingle = new RealSingleUtils();

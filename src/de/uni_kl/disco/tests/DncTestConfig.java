@@ -31,8 +31,8 @@ package de.uni_kl.disco.tests;
 import java.util.Set;
 
 import de.uni_kl.disco.nc.AnalysisConfig;
-import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.nc.CalculatorConfig.NumClass;
+import de.uni_kl.disco.nc.CalculatorConfig.CurveClass;
 
 public class DncTestConfig extends AnalysisConfig {
     // Functional test specific parameters
@@ -42,6 +42,7 @@ public class DncTestConfig extends AnalysisConfig {
 
     // Calculator parameters
     protected boolean enable_checks = false;
+    protected CurveClass curves;
     protected NumClass numbers;
 
     @SuppressWarnings("unused")
@@ -54,7 +55,8 @@ public class DncTestConfig extends AnalysisConfig {
                          boolean tbrl_deconvolution,
                          AnalysisConfig.Multiplexing mux_discipline,
                          boolean define_multiplexing_globally,
-                         CalculatorConfig.NumClass numbers) {
+                         CurveClass curves,
+                         NumClass numbers ) {
 
         super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
                 GammaFlag.GLOBALLY_OFF,        // Not used, no influence yet.
@@ -67,6 +69,7 @@ public class DncTestConfig extends AnalysisConfig {
 
         this.mux_discipline = mux_discipline;
         this.define_multiplexing_globally = define_multiplexing_globally;
+        this.curves = curves;
         this.numbers = numbers;
     }
 
@@ -76,7 +79,7 @@ public class DncTestConfig extends AnalysisConfig {
 
     @Override
     public String toString() {
-        // AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def
+        // AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def, numbers, curves
         StringBuffer func_test_str = new StringBuffer();
 
         func_test_str.append(arrivalBoundMethods().toString());
@@ -98,6 +101,8 @@ public class DncTestConfig extends AnalysisConfig {
         }
 
         func_test_str.append(", " + numbers.toString());
+
+        func_test_str.append(", " + curves.toString());
 
         return func_test_str.toString();
     }

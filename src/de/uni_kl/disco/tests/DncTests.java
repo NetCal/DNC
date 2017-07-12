@@ -41,6 +41,7 @@ import de.uni_kl.disco.nc.CalculatorConfig;
 import de.uni_kl.disco.nc.Analysis.Analyses;
 import de.uni_kl.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.disco.nc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.disco.nc.CalculatorConfig.NumClass;
 import de.uni_kl.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.disco.nc.analyses.SeparateFlowAnalysis;
@@ -87,7 +88,7 @@ public class DncTests {
     protected static Collection<DncTestConfig> test_configurations = createParameters();
 
     protected DncTestConfig test_config;
-    protected boolean reinitilize_numbers = true;
+    protected boolean reinitilize_test = true;
 
     public DncTests(DncTestConfig test_config) {
         this.test_config = test_config;
@@ -98,12 +99,17 @@ public class DncTests {
             CalculatorConfig.disableAllChecks();
         }
 
-        reinitilize_numbers = CalculatorConfig.setNumClass(test_config.numbers);
+        reinitilize_test = ( CalculatorConfig.setNumClass(test_config.numbers)
+        						|| CalculatorConfig.setCurveClass(test_config.curves) );
     }
 
     @Parameters(name = "{index}: {0}")
     public static Set<DncTestConfig> createParameters() {
         Set<DncTestConfig> test_configurations = new HashSet<DncTestConfig>();
+
+        Set<CurveClass> curves = new HashSet<CurveClass>();
+        curves.add(CurveClass.DNC);
+        curves.add(CurveClass.MPA_RTC);
 
         Set<NumClass> nums = new HashSet<NumClass>();
         nums.add(NumClass.REAL_DOUBLE_PRECISION);
@@ -157,91 +163,93 @@ public class DncTests {
         triplet_arbMux.add(ArrivalBoundMethod.PMOO);
 
 
-        for (NumClass num : nums) {
-            // Parameter configurations for single arrival bounding tests
-            // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
-            for (Set<ArrivalBoundMethod> single_ab : single_abs_allMux) {
-                for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
-                    test_configurations.add(new DncTestConfig(single_ab, false, false, false, mux, false, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, true, false, mux, false, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, false, true, mux, false, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, true, true, mux, false, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, false, false, mux, true, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, true, false, mux, true, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, false, true, mux, true, num));
-                    test_configurations.add(new DncTestConfig(single_ab, false, true, true, mux, true, num));
-                }
-            }
-            for (Set<ArrivalBoundMethod> single_ab : single_abs_arbMux) {
-                test_configurations.add(new DncTestConfig(single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(single_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            }
-
-            // Parameter configurations for "pairs of arrival boundings"-tests
-            // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
-            for (Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux) {
-                for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
-                    test_configurations.add(new DncTestConfig(pair_ab, false, false, false, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, false, false, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, true, false, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, true, false, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, false, true, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, false, true, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, true, true, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, true, true, mux, false, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, false, false, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, false, false, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, true, false, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, true, false, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, false, true, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, false, true, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, false, true, true, mux, true, num));
-                    test_configurations.add(new DncTestConfig(pair_ab, true, true, true, mux, true, num));
-                }
-            }
-            for (Set<ArrivalBoundMethod> pair_ab : pair_abs_arbMux) {
-                test_configurations.add(new DncTestConfig(pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-                test_configurations.add(new DncTestConfig(pair_ab, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            }
-
-            // Parameter configurations for "triplets of arrival boundings"-tests
-            // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
-            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, num));
+        for (CurveClass curve : curves) {
+	        for (NumClass num : nums) {
+	            // Parameter configurations for single arrival bounding tests
+	            // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
+	            for (Set<ArrivalBoundMethod> single_ab : single_abs_allMux) {
+	                for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
+	                    test_configurations.add(new DncTestConfig(single_ab, false, false, false, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, true, false, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, false, true, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, true, true, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, false, false, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, true, false, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, false, true, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(single_ab, false, true, true, mux, true, curve, num));
+	                }
+	            }
+	            for (Set<ArrivalBoundMethod> single_ab : single_abs_arbMux) {
+	                test_configurations.add(new DncTestConfig(single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(single_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            }
+	
+	            // Parameter configurations for "pairs of arrival boundings"-tests
+	            // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
+	            for (Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux) {
+	                for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, false, false, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, false, false, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, true, false, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, true, false, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, false, true, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, false, true, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, true, true, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, true, true, mux, false, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, false, false, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, false, false, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, true, false, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, true, false, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, false, true, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, false, true, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, false, true, true, mux, true, curve, num));
+	                    test_configurations.add(new DncTestConfig(pair_ab, true, true, true, mux, true, curve, num));
+	                }
+	            }
+	            for (Set<ArrivalBoundMethod> pair_ab : pair_abs_arbMux) {
+	                test_configurations.add(new DncTestConfig(pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	                test_configurations.add(new DncTestConfig(pair_ab, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            }
+	
+	            // Parameter configurations for "triplets of arrival boundings"-tests
+	            // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux, global mux def, number class to use
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, false, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, false, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, false, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	            test_configurations.add(new DncTestConfig(triplet_arbMux, true, true, true, AnalysisConfig.Multiplexing.ARBITRARY, true, curve, num));
+	        }
         }
 
         return test_configurations;
@@ -405,9 +413,16 @@ public class DncTests {
     }
 
     protected void runSinkTreePMOOtest(Network sink_tree, Flow flow_of_interest, DncTestResults expected_bounds) {
-        Num backlog_bound = null;
+        Num backlog_bound_TBRL = null;
+        Num backlog_bound_TBRL_CONV = null;
+        Num backlog_bound_TBRL_CONV_TBRL_DECONV = null;
+        Num backlog_bound_TBRL_HOMO = null;
+        
         try {
-            backlog_bound = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink()));
+            backlog_bound_TBRL = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
+            backlog_bound_TBRL_CONV = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
+            backlog_bound_TBRL_CONV_TBRL_DECONV = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
+            backlog_bound_TBRL_HOMO = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Analysis failed");
@@ -422,11 +437,27 @@ public class DncTests {
 
             System.out.println("--- Result: ---");
 
-            System.out.println("backlog bound   : " + backlog_bound.toString());
+            System.out.println("backlog bound TBRL                  : " + backlog_bound_TBRL.toString());
+            System.out.println("backlog bound TBRL CONV             : " + backlog_bound_TBRL_CONV.toString());
+            System.out.println("backlog bound TBRL CONV TBRL DECONV : " + backlog_bound_TBRL_CONV_TBRL_DECONV.toString());
+            System.out.println("backlog bound RBRL HOMO             : " + backlog_bound_TBRL_HOMO.toString());
             System.out.println();
         }
 
-        assertEquals("PMOO backlog", backlog_bound,
-                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound());
+        assertEquals("PMOO backlog TBRL",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL);
+
+        assertEquals("PMOO backlog TBRL CONV",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL_CONV);
+
+        assertEquals("PMOO backlog TBRL CONV TBRL DECONV",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL_CONV_TBRL_DECONV);
+
+        assertEquals("PMOO backlog RBRL HOMO",
+                expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
+                backlog_bound_TBRL_HOMO);
     }
 }

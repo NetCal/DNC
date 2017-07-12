@@ -126,6 +126,7 @@ public class CurvePwAffineUtils {
                     }
                     break;
                 default:
+                		break;
             }
 
             if (x_next1.equals(x_next)) {

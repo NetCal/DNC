@@ -56,7 +56,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //--------------------------------------------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------------------------------------------
-
     /**
      * Creates a <code>Curve</code> instance with a single segment on the x-axis.
      */
@@ -139,6 +138,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
                     Double.parseDouble(s)));
         }
         segList_rtc.simplify();
+        // TODO
         // This removes the first segment if the first spot is in the origin and the second starts at x = 0 -> generic solution needed
         //if (segList_rtc.size() > 1 && ((segList_rtc.get(1).x() == 0) && (segList_rtc.get(0).x() == 0) && (segList_rtc.get(0).y() == 0)) ){
         //   segList_rtc.remove(0);
@@ -160,7 +160,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
-
     /**
      * Returns a copy of this instance.
      *
@@ -209,7 +208,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
             this.rtc_curve = new Curve(segList_rtc);
         }
     }
-
 
     //------------------------------------------------------------
     // Curve's segments
@@ -303,10 +301,10 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         clearMetaInfo();
     }
 
-
     //------------------------------------------------------------
     // Curve properties
     //------------------------------------------------------------
+    
     public boolean isDiscontinuity(int pos) {
         return (pos + 1 < getSegmentCount()
                 && (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x()))
@@ -435,7 +433,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         return true;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof Curve_MPARTC_PwAffine)) {
@@ -455,10 +452,10 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         return rtc_curve.toString();
     }
 
-
     //------------------------------------------------------------
     // Curve function values
     //------------------------------------------------------------
+    
     public Num f(Num x) {
         // Assume left-continuity --> getYmin
         return NumFactory.create(rtc_curve.getYmin(x.doubleValue()));
@@ -475,9 +472,9 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
     public Num f_inv(Num y, boolean rightmost) {
         if (rightmost) {
-            return NumFactory.create(getXmax(y.doubleValue()));
+            return NumFactory.create(rtc_curve.getXmax(y.doubleValue()));
         } else {
-            return NumFactory.create(getXmin(y.doubleValue()));
+            return NumFactory.create(rtc_curve.getXmin(y.doubleValue()));
         }
     }
 
@@ -571,18 +568,20 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //------------------------------------------------------------
     // Curve manipulation
     //------------------------------------------------------------
+    
     public void beautify() {
         if (rtc_curve.aperiodicSegments().size() > 1) {
             if (rtc_curve.aperiodicSegments().get(0).equals(rtc_curve.aperiodicSegments().get(1))) {
                 rtc_curve.aperiodicSegments().remove(0);
             }
         }
-        //simplify();
+        // TODO simplify();
     }
 
     //------------------------------------------------------------
     // Specific curve shapes
     //------------------------------------------------------------
+    
     // Burst delay
     public boolean getDelayedInfiniteBurst_Property() {
         return is_delayed_infinite_burst;
@@ -642,7 +641,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         has_rate_latency_meta_info = true;
     }
 
-
     // Token bucket
     public boolean getTB_Property() {
         decomposeIntoTokenBuckets();
@@ -683,178 +681,4 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
         has_token_bucket_meta_info = true;
     }
-
-
-//--------------------------------------------------------------------------------------------------------------
-// Periodic part methods to be moved into the later implementation that offers this feature.
-//--------------------------------------------------------------------------------------------------------------
-
-    protected double definitionRange() {
-        return rtc_curve.definitionRange();
-    }
-
-    protected double getXmax(double y) {
-        return rtc_curve.getXmax(y);
-    }
-
-    protected double getXmin(double y) {
-        return rtc_curve.getXmin(y);
-    }
-
-    protected double getYmax(double x) {
-        return rtc_curve.getYmax(x);
-    }
-
-    protected double getYmin(double x) {
-        return rtc_curve.getYmin(x);
-    }
-
-    protected boolean hasAperiodicPart() {
-        return rtc_curve.hasAperiodicPart();
-    }
-
-    protected boolean hasPeriodicPart() {
-        return rtc_curve.hasPeriodicPart();
-    }
-
-    protected boolean isConstant() {
-        return rtc_curve.isConstant();
-    }
-
-    protected Segment lowerBound() {
-        return rtc_curve.lowerBound();
-    }
-
-    protected void move(double dx, double dy) {
-        rtc_curve.move(dx, dy);
-    }
-
-    protected java.lang.String name() {
-        return rtc_curve.name();
-    }
-
-    protected double pds() {
-        return rtc_curve.pds();
-    }
-
-    protected double pdx() {
-        return rtc_curve.pdx();
-    }
-
-    protected double pdy() {
-        return rtc_curve.pdy();
-    }
-
-    protected long period() {
-        return rtc_curve.period();
-    }
-
-    protected PeriodicPart periodicPart() {
-        return rtc_curve.periodicPart();
-    }
-
-    protected SegmentList periodicSegments() {
-        return rtc_curve.periodicSegments();
-    }
-
-    protected double px0() {
-        return rtc_curve.px0();
-    }
-
-    protected double py0() {
-        return rtc_curve.py0();
-    }
-
-    protected double pyMax() {
-        return rtc_curve.pyMax();
-    }
-
-    protected double pyMin() {
-        return rtc_curve.pyMin();
-    }
-
-    protected void round() {
-        rtc_curve.round();
-    }
-
-    protected void scaleX(double factor) {
-        rtc_curve.scaleX(factor);
-    }
-
-    protected void scaleY(double factor) {
-        rtc_curve.scaleY(factor);
-    }
-
-    protected CurveSegmentIterator segmentIterator() {
-        return rtc_curve.segmentIterator();
-    }
-
-    protected CurveSegmentIterator segmentIterator(double xMax) {
-        return rtc_curve.segmentIterator(xMax);
-    }
-
-    protected SegmentList segmentsLEQ(double xMax) {
-        return rtc_curve.segmentsLEQ(xMax);
-    }
-
-    protected SegmentList segmentsLT(double xMax) {
-        return rtc_curve.segmentsLT(xMax);
-    }
-
-    protected void setAperiodicPart(AperiodicPart aper) {
-        rtc_curve.setAperiodicPart(aper);
-    }
-
-    protected void setName(java.lang.String name) {
-        rtc_curve.setName(name);
-    }
-
-    protected void setPeriodicPart(PeriodicPart per) {
-        rtc_curve.setPeriodicPart(per);
-    }
-
-    protected void simplify() {
-        rtc_curve.simplify();
-    }
-
-    protected CurveSubSegmentIterator subSegmentIterator(Curve c) {
-        return rtc_curve.subSegmentIterator(c);
-    }
-
-    protected CurveSubSegmentIterator subSegmentIterator(Curve c, double dMax) {
-        return rtc_curve.subSegmentIterator(c, dMax);
-    }
-
-    protected Segment tightLowerBound() {
-        return rtc_curve.tightLowerBound();
-    }
-
-    protected Segment tightUpperBound() {
-        return rtc_curve.tightUpperBound();
-    }
-
-    protected java.lang.String toMatlabString() {
-        return rtc_curve.toMatlabString();
-    }
-
-    protected Segment upperBound() {
-        return rtc_curve.upperBound();
-    }
-
-    protected double y0epsilon() {
-        return rtc_curve.y0epsilon();
-    }
-
-    protected double yAtInfinity() {
-        return rtc_curve.yAtInfinity();
-    }
-
-    protected double yXMinusEpsilon(double x1) {
-        return rtc_curve.yXMinusEpsilon(x1);
-    }
-
-    protected double yXPlusEpsilon(double x1) {
-        return rtc_curve.yXPlusEpsilon(x1);
-    }
-
 }

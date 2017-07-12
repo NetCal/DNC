@@ -224,9 +224,26 @@ public class Convolution {
                 break;
         }
 
+        Num rate;
+        switch (OperatorInputChecks.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+	        case 1:
+	        		rate = service_curve_2.getUltAffineRate();
+	            break;
+	        case 2:
+        			rate = service_curve_1.getUltAffineRate();
+	            break;
+	        case 3:
+	            rate = NumFactory.createPositiveInfinity();
+	            break;
+	        case 0:
+	        default:
+	        		rate = NumUtils.min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+	        		break;
+        }
+        
         return CurvePwAffineFactory.createRateLatency(
-                Math.min(service_curve_1.getUltAffineRate().doubleValue(), service_curve_2.getUltAffineRate().doubleValue()),
-                service_curve_1.getLatency().doubleValue() + service_curve_2.getLatency().doubleValue());
+                rate,
+                NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
     /**

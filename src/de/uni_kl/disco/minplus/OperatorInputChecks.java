@@ -30,6 +30,8 @@ package de.uni_kl.disco.minplus;
 
 import java.util.Set;
 
+import de.uni_kl.disco.curves.Curve;
+
 /**
  * @author Steffen Bondorf
  */
@@ -55,6 +57,28 @@ public class OperatorInputChecks {
         }
         if (obj2 == null) {
             return_value += 2;
+        }
+
+        return return_value;
+    }
+    
+    /**
+     * @param curve_1
+     * @param curve_2
+     * @return 0 == none of the objects is a delayed infinite burst, <br/>
+     * 1 == the first object is a delayed infinite burst, <br/>
+     * 2 == the second object is a delayed infinite burst, <br/>
+     * 3 == both objects are a delayed infinite burst.
+     */
+    public static int inputDelayedInfiniteBurstCheck(Curve curve_1, Curve curve_2) {
+        int return_value = 0;
+    	
+    		if( curve_1.getDelayedInfiniteBurst_Property() ) {
+    			return_value += 1;
+        }
+
+        if( curve_2.getDelayedInfiniteBurst_Property() ) {
+        		return_value += 2;
         }
 
         return return_value;

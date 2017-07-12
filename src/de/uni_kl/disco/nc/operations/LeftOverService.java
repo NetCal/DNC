@@ -49,8 +49,7 @@ import de.uni_kl.disco.numbers.NumUtils;
  * @author Steffen Bondorf
  */
 public final class LeftOverService {
-    private LeftOverService() {
-    }
+    private LeftOverService() {}
 
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, Server server, Set<ArrivalCurve> arrival_curves) {
         if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO

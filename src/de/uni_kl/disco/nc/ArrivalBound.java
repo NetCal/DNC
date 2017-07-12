@@ -45,7 +45,6 @@ import de.uni_kl.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.disco.nc.arrivalbounds.PbooArrivalBound_Concatenation;
 import de.uni_kl.disco.nc.arrivalbounds.PbooArrivalBound_PerHop;
 import de.uni_kl.disco.nc.arrivalbounds.PmooArrivalBound;
-import de.uni_kl.disco.nc.arrivalbounds.PmooArrivalBound_SinkTreeTbRl;
 import de.uni_kl.disco.network.Flow;
 import de.uni_kl.disco.network.Link;
 import de.uni_kl.disco.network.Network;
@@ -220,27 +219,6 @@ public class ArrivalBound {
                 case PMOO:
                     PmooArrivalBound pmoo_arrival_bound = new PmooArrivalBound(network, configuration);
                     arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
-                    break;
-
-                // Functional tests missing
-                case PMOO_SINKTREE_TBRL:
-                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
-                    arrival_bounds_tmp = pmoo_sinktree_tbrl.computeArrivalBound(link, flows_to_bound, flow_of_interest);
-                    break;
-
-                case PMOO_SINKTREE_TBRL_CONV:
-                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_convolution = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
-                    arrival_bounds_tmp = pmoo_sinktree_tbrl_convolution.computeArrivalBoundDeConvolution(link, flows_to_bound, flow_of_interest);
-                    break;
-
-                case PMOO_SINKTREE_TBRL_CONV_TBRL:
-                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_convolution_tbrl = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
-                    arrival_bounds_tmp = pmoo_sinktree_tbrl_convolution_tbrl.computeArrivalBoundDeConvolutionTBRL(link, flows_to_bound, flow_of_interest);
-                    break;
-
-                case PMOO_SINKTREE_TBRL_HOMO:
-                    PmooArrivalBound_SinkTreeTbRl pmoo_sinktree_tbrl_homogeneous = new PmooArrivalBound_SinkTreeTbRl(network, configuration);
-                    arrival_bounds_tmp = pmoo_sinktree_tbrl_homogeneous.computeArrivalBoundHomogeneous(link, flows_to_bound, flow_of_interest);
                     break;
 
                 case PER_FLOW_SFA:

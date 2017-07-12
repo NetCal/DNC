@@ -1198,7 +1198,7 @@ public class Network {
         StringBuffer sb = new StringBuffer();
 
         sb.append("/* \n");
-        sb.append(" * This file is part of the Disco Deterministic Network Calculator >= v2.3.3 \"Centaur\".\n");
+        sb.append(" * This file is part of the Disco Deterministic Network Calculator >= v2.4 \"Chimera\".\n");
         sb.append(" *\n");
         sb.append(" * The Disco Deterministic Network Calculator (DiscoDNC) is free software;\n");
         sb.append(" * you can redistribute it and/or modify it under the terms of the \n");
@@ -1221,15 +1221,13 @@ public class Network {
         sb.append("\n");
         sb.append("import java.util.LinkedList;\n");
         sb.append("\n");
-        sb.append("import unikl.disco.curves.ServiceCurve;\n");
-        sb.append("import unikl.disco.curves.MaxServiceCurve;\n");
-        sb.append("import unikl.disco.curves.ArrivalCurve;\n");
+        sb.append("import de.uni_kl.disco.curves.CurvePwAffineFactory;\n");
         sb.append("\n");
-        sb.append("import unikl.disco.nc.AnalysisConfig.Multiplexing;\n");
+        sb.append("import de.uni_kl.disco.nc.AnalysisConfig.Multiplexing;\n");
         sb.append("\n");
-        sb.append("import unikl.disco.network.Network;\n");
-        sb.append("import unikl.disco.network.NetworkFactory;\n");
-        sb.append("import unikl.disco.network.Server;\n");
+        sb.append("import de.uni_kl.disco.network.Network;\n");
+        sb.append("import de.uni_kl.disco.network.NetworkFactory;\n");
+        sb.append("import de.uni_kl.disco.network.Server;\n");
         sb.append("\n");
 
         sb.append("public class " + file_name + " implements NetworkFactory {");
@@ -1245,8 +1243,8 @@ public class Network {
             sb.append("\t\tservers[" + s.getId() + "] = ");
             sb.append("network.addServer( ");
             sb.append("\"" + s.getAlias() + "\"" + ", ");
-            sb.append("new ServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", ");
-            sb.append("new MaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )" + ", ");
+            sb.append("CurvePwAffineFactory.createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", ");
+            sb.append("CurvePwAffineFactory.createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )" + ", ");
             sb.append("Multiplexing." + s.multiplexingDiscipline() + ", ");
             sb.append(s.useGamma() + ", ");
             sb.append(s.useExtraGamma());
@@ -1309,7 +1307,7 @@ public class Network {
             }
             sb.append("\t\tnetwork.addFlow( ");
             sb.append("\"" + f.getAlias() + "\"" + ", ");
-            sb.append("new ArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", ");
+            sb.append("CurvePwAffineFactory.createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", ");
             sb.append("servers_on_path_s");
             sb.append(" );\n");
             sb.append("\t\tservers_on_path_s.clear();");

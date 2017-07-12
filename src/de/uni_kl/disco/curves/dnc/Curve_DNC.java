@@ -84,7 +84,6 @@ public class Curve_DNC implements CurvePwAffine {
         copy(curve);
     }
 
-
     /**
      * Creates a <code>Curve</code> instance with <code>segment_count</code>
      * empty <code>LinearSegment</code> instances.
@@ -151,7 +150,6 @@ public class Curve_DNC implements CurvePwAffine {
 //--------------------------------------------------------------------------------------------------------------
 // Constructors
 //--------------------------------------------------------------------------------------------------------------
-
     public void setTB_MetaInfo(boolean has_token_bucket_meta_info) {
         this.has_token_bucket_meta_info = has_token_bucket_meta_info;
     }
@@ -268,7 +266,6 @@ public class Curve_DNC implements CurvePwAffine {
 //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
-
     /**
      * Returns a copy of this instance.
      *
@@ -486,7 +483,6 @@ public class Curve_DNC implements CurvePwAffine {
         clearMetaInfo();
     }
 
-
     //------------------------------------------------------------
     // Curve properties
     //------------------------------------------------------------
@@ -681,8 +677,8 @@ public class Curve_DNC implements CurvePwAffine {
         Curve_DNC this_cpy = this.copy();
         Curve_DNC other_cpy = ((Curve_DNC) obj).copy();
 
-        this_cpy.beautify();
-        other_cpy.beautify();
+        CurvePwAffineUtils.beautify(this_cpy);
+        CurvePwAffineUtils.beautify(other_cpy);
 
         if (this_cpy.getLatency() == NumFactory.getPositiveInfinity()) {
             this_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
@@ -728,7 +724,6 @@ public class Curve_DNC implements CurvePwAffine {
         result.append("}");
         return result.toString();
     }
-
 
     //------------------------------------------------------------
     // Curve function values
@@ -839,7 +834,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return the latency of this curve.
      */
     public Num getLatency() {
-        this.beautify();
+    		CurvePwAffineUtils.beautify(this);
         if (segments[0].getY().gt(NumFactory.getZero())) {
             return NumFactory.createZero();
         }
@@ -906,18 +901,6 @@ public class Curve_DNC implements CurvePwAffine {
         return segments[segments.length - 1].getGrad();
     }
 
-
-    //------------------------------------------------------------
-    // Curve manipulation
-    //------------------------------------------------------------
-
-    /**
-     * Removes unnecessary segments.
-     */
-    public void beautify() {
-    }
-
-
     //------------------------------------------------------------
     // Specific curve shapes
     //------------------------------------------------------------
@@ -925,7 +908,6 @@ public class Curve_DNC implements CurvePwAffine {
     public boolean getDelayedInfiniteBurst_Property() {
         return is_delayed_infinite_burst;
     }
-
 
     // Rate latency
     public boolean getRL_property() {
@@ -991,7 +973,6 @@ public class Curve_DNC implements CurvePwAffine {
 
         has_rate_latency_meta_info = true;
     }
-
 
     // Token bucket
     public boolean getTB_Property() {
