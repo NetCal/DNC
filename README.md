@@ -1,2 +1,2 @@
-[![build status](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/badges/master_copy/build.svg)](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/commits/master_copy)
-[![coverage report](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/badges/master_copy/coverage.svg)](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/commits/master_copy)
+[![build status](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/badges/master/build.svg)](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/commits/master)
+[![coverage report](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/badges/master/coverage.svg)](http://valgrind.informatik.uni-kl.de/sbondorf/DiscoDNC-2.2.6NumFactory/commits/master)
