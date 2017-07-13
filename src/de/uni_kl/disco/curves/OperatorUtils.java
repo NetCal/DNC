@@ -7,11 +7,14 @@ import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.disco.minplus.Convolution;
 import de.uni_kl.disco.minplus.Deconvolution;
+import de.uni_kl.disco.minplus.OperatorInputChecks;
 import de.uni_kl.disco.nc.CalculatorConfig;
+import de.uni_kl.disco.numbers.Num;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
+import static de.uni_kl.disco.minplus.Convolution.convolve;
 
 /**
  * Created by philipp on 7/12/17.
@@ -67,7 +70,7 @@ public class OperatorUtils {
     }
 
 
-    //TODO: Denk mal hier drüber nach.....
+    //TODO: Denk mal hier drüber nach..... Sollte funktionieren
     public static ArrivalCurve apply(Set<ArrivalCurve> s1, Operation o) throws Exception {
         if (CalculatorConfig.getCurveClass().equals(CalculatorConfig.CurveClass.MPA_RTC)) {
             if (s1 == null || s1.isEmpty()) {
@@ -93,21 +96,20 @@ public class OperatorUtils {
         }
         switch (o) {
             case convolve:
-                return Convolution.convolve(s1);
+                return convolve(s1);
             default:
                 return null;
         }
     }
 
 
-/*
     public static ArrivalCurve apply(ArrivalCurve a1, ArrivalCurve a2, Operation o) throws Exception {
         if (CalculatorConfig.getCurveClass().equals(CalculatorConfig.CurveClass.MPA_RTC)) {
             return conv_ac((Curve_MPARTC_PwAffine) a1, (Curve_MPARTC_PwAffine) a2);
         }
         switch (o) {
             case convolve:
-                return Convolution.convolve(a1, a2);
+                return convolve(a1, a2);
             default:
                 return null;
         }
@@ -120,7 +122,7 @@ public class OperatorUtils {
         }
         switch (o) {
             case convolve:
-                return Convolution.convolve(s1, s2);
+                return convolve(s1, s2);
             case convolve_SC_SC_Generic:
                 Convolution.convolve_SC_SC_Generic(s1, s2);
             default:
@@ -135,7 +137,7 @@ public class OperatorUtils {
         }
         switch (o) {
             case convolve:
-                return Convolution.convolve(s1, s2, tb_rl_optimized);
+                return convolve(s1, s2, tb_rl_optimized);
             default:
                 return null;
         }
@@ -148,16 +150,51 @@ public class OperatorUtils {
         }
         switch (o) {
             case convolve:
-                return Convolution.convolve(s1, s2);
+                return convolve(s1, s2);
             default:
                 return null;
         }
     }
+/*
+    public static Set<CurvePwAffine> apply(Set<ArrivalCurve> s1, MaxServiceCurve s2, Operation o) throws Exception {
+        if (CalculatorConfig.getCurveClass().equals(CalculatorConfig.CurveClass.MPA_RTC)) {
 
-    public static Set<CurvePwAffine> apply(Set<ArrivalCurve> s1, MaxServiceCurve s2, Operation o) {
+            switch (OperatorInputChecks.inputNullCheck(s1, s2)) {
+                case 1:
+                    return new HashSet<CurvePwAffine>();
+                case 2:
+                    Set<CurvePwAffine> clone = new HashSet<CurvePwAffine>();
 
-        public static Set<CurvePwAffine> convolve_ACs_MSC (Set < ArrivalCurve > arrival_curves, MaxServiceCurve
-        maximum_service_curve) throws Exception
+                    for (ArrivalCurve ac : s1) {
+                        clone.add(ac.copy());
+                    }
+                    return clone;
+                case 3:
+                    return new HashSet<CurvePwAffine>();
+                case 0:
+                default:
+                    break;
+            }
+            if (s1.isEmpty()) {
+                return new HashSet<CurvePwAffine>();
+            }
+
+            Num msc_latency = s2.getLatency();
+            Set<CurvePwAffine> result = new HashSet<CurvePwAffine>();
+
+            ArrivalCurve msc_as_ac = CurvePwAffineFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(s2)); // Abuse the ArrivalCurve class here for convenience.
+            for (ArrivalCurve ac : s1) {
+                result.add(CurvePwAffineUtils.shiftRight(convolve(ac, msc_as_ac), msc_latency));
+            }
+
+            return result;
+        }
+        switch (o) {
+            case convolve_ACs_MSC:
+                return Convolution.convolve_ACs_MSC(s1, s2);
+            default:
+                return null;
+        }
     }
 
 

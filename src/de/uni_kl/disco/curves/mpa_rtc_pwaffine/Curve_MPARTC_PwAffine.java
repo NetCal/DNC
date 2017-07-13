@@ -99,7 +99,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     // as well as DNC Curve, ArrivalCurve, ServiceCurve, and MaxServiceCurve
     protected void initializeCurve(String curve_str) throws Exception {
         if (curve_str.substring(0, 6).equals("Curve(")) { // RTC curve string
-            rtc_curve = new Curve(curve_str);
+            //rtc_curve = new Curve(curve_str);
             return;
         }
 
