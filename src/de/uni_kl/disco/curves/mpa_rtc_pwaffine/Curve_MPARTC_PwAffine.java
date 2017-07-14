@@ -101,6 +101,14 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     // Accepts string representations of RTC
     // as well as DNC Curve, ArrivalCurve, ServiceCurve, and MaxServiceCurve
     protected void initializeCurve(String curve_str) throws Exception {
+        if (curve_str.substring(0, 2).equals("AC") || curve_str.substring(0, 2).equals("SC")) {
+            curve_str = curve_str.substring(2);
+        } else {
+            if (curve_str.substring(0, 3).equals("MSC")) {
+                curve_str = curve_str.substring(3);
+            }
+        }
+
         if (curve_str.substring(0, 6).equals("Curve:")) { // RTC curve string
             String periodic = "";
             // Cut out periodic Part
@@ -119,14 +127,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
             }
             rtc_curve = new Curve(list);
             return;
-        }
-
-        if (curve_str.substring(0, 2).equals("AC") || curve_str.substring(0, 2).equals("SC")) {
-            curve_str = curve_str.substring(2);
-        } else {
-            if (curve_str.substring(0, 3).equals("MSC")) {
-                curve_str = curve_str.substring(3);
-            }
         }
 
         // Must to be a string representation of a "raw" curve object at this location.
