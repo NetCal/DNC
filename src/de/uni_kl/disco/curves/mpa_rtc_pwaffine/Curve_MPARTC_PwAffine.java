@@ -27,7 +27,9 @@
 
 package de.uni_kl.disco.curves.mpa_rtc_pwaffine;
 
-import ch.ethz.rtc.kernel.*;
+import ch.ethz.rtc.kernel.Curve;
+import ch.ethz.rtc.kernel.Segment;
+import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.disco.curves.CurvePwAffine;
 import de.uni_kl.disco.curves.LinearSegment;
 import de.uni_kl.disco.nc.CalculatorConfig;
@@ -56,6 +58,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //--------------------------------------------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a <code>Curve</code> instance with a single segment on the x-axis.
      */
@@ -98,8 +101,23 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     // Accepts string representations of RTC
     // as well as DNC Curve, ArrivalCurve, ServiceCurve, and MaxServiceCurve
     protected void initializeCurve(String curve_str) throws Exception {
-        if (curve_str.substring(0, 6).equals("Curve(")) { // RTC curve string
-            //rtc_curve = new Curve(curve_str);
+        if (curve_str.substring(0, 6).equals("Curve:")) { // RTC curve string
+            String periodic = "";
+            // Cut out periodic Part
+            if(curve_str.contains("PeriodicPart")) {
+                periodic = curve_str.substring(curve_str.indexOf("PeriodicPart"));
+                curve_str = curve_str.substring(0, curve_str.indexOf("PeriodicPart"));
+            }
+            String s = curve_str.substring(27); // cut everything but {...}
+            s = s.substring(1, s.length() - 3); //cut leading and trailing { }
+            s = s.replaceAll("\\(","").replaceAll("\\)"," ");
+            SegmentList list = new SegmentList();
+            String[] sl = s.split(" ");
+            for (int i = 0; i < sl.length; i++){
+                String[] val = sl[i].split(",");
+                list.add(new Segment(Double.parseDouble(val[0]), Double.parseDouble(val[1]), Double.parseDouble(val[2])));
+            }
+            rtc_curve = new Curve(list);
             return;
         }
 
@@ -160,6 +178,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 //--------------------------------------------------------------------------------------------------------------
 // Interface Implementations
 //--------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns a copy of this instance.
      *
@@ -304,7 +323,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //------------------------------------------------------------
     // Curve properties
     //------------------------------------------------------------
-    
+
     public boolean isDiscontinuity(int pos) {
         return (pos + 1 < getSegmentCount()
                 && (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x()))
@@ -455,7 +474,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //------------------------------------------------------------
     // Curve function values
     //------------------------------------------------------------
-    
+
     public Num f(Num x) {
         // Assume left-continuity --> getYmin
         return NumFactory.create(rtc_curve.getYmin(x.doubleValue()));
@@ -568,7 +587,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //------------------------------------------------------------
     // Curve manipulation
     //------------------------------------------------------------
-    
+
     public void beautify() {
         if (rtc_curve.aperiodicSegments().size() > 1) {
             if (rtc_curve.aperiodicSegments().get(0).equals(rtc_curve.aperiodicSegments().get(1))) {
@@ -581,7 +600,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     //------------------------------------------------------------
     // Specific curve shapes
     //------------------------------------------------------------
-    
+
     // Burst delay
     public boolean getDelayedInfiniteBurst_Property() {
         return is_delayed_infinite_burst;
