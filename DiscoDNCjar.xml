@@ -17,17 +17,19 @@
     <target name="jar" depends="compile">
         <jar jarfile="DiscoDNC.jar" includes="*.class" basedir="bin">
             <fileset dir="${classes.dir}">
-                <include name="unikl/disco/curves/"/>
-                <include name="unikl/disco/minplus/"/>
-                <include name="unikl/disco/misc/"/>
-                <include name="unikl/disco/nc/"/>
-                <include name="unikl/disco/nc/analyses/"/>
-                <include name="unikl/disco/nc/arrivalBounds/"/>
-                <include name="unikl/disco/nc/operations/"/>
-                <include name="unikl/disco/network/"/>
-                <include name="unikl/disco/numbers/"/>
-                <include name="unikl/disco/numbers/extraValues/"/>
-                <include name="unikl/disco/numbers/implementations/"/>
+                <include name="de/unikl/cs/disco/curves/"/>
+                <include name="de/unikl/cs/disco/curves/dnc/"/>
+                <include name="de/unikl/cs/disco/curves/mpa_rtc_pwaffine"/>
+                <include name="de/unikl/cs/disco/minplus/"/>
+                <include name="de/unikl/cs/disco/misc/"/>
+                <include name="de/unikl/cs/disco/nc/"/>
+                <include name="de/unikl/cs/disco/nc/analyses/"/>
+                <include name="de/unikl/cs/disco/nc/arrivalbounds/"/>
+                <include name="de/unikl/cs/disco/nc/operations/"/>
+                <include name="de/unikl/cs/disco/network/"/>
+                <include name="de/unikl/cs/disco/numbers/"/>
+                <include name="de/unikl/cs/disco/numbers/implementations/"/>
+                <include name="de/unikl/cs/disco/numbers/values/"/>
             </fileset>
         </jar>
     </target>
