@@ -45,7 +45,7 @@ public class LinearSegmentUtils {
      * @param leftopen Set the segment to be left-open.
      * @return The new linear segment, pointwise sum of the given ones, starting in x.
      */
-    protected static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
+    public static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
         result.setX(x);
         result.setY(NumUtils.add(s1.f(x), s2.f(x)));
