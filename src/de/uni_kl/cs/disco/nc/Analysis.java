@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2008 - 2010 Andreas Kiefer
  * Copyright (C) 2011 - 2017 Steffen Bondorf
@@ -23,7 +23,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -46,8 +46,6 @@ import de.uni_kl.cs.disco.numbers.Num;
  * This class contains all members and methods that are needed for more than one
  * analysis.
  *
- * @author Andreas Kiefer
- * @author Steffen Bondorf
  */
 public abstract class Analysis {
     protected Network network;

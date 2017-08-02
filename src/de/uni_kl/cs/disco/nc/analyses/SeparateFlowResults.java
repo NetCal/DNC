@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
@@ -24,7 +24,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -43,11 +43,6 @@ import de.uni_kl.cs.disco.numbers.Num;
 
 import java.util.Set;
 
-/**
- * @author Frank A. Zdarsky
- * @author Andreas Kiefer
- * @author Steffen Bondorf
- */
 public class SeparateFlowResults extends AnalysisResults {
     protected Set<ServiceCurve> betas_e2e;
     protected Map<Server, Set<ServiceCurve>> map__server__betas_lo;

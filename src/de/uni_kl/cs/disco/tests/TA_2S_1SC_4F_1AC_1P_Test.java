@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2013 - 2017 Steffen Bondorf
  * Copyright (C) 2017 The DiscoDNC contributors
@@ -22,7 +22,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -44,11 +44,6 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 
 @RunWith(value = Parameterized.class)
-/**
- *
- * @author Steffen Bondorf
- *
- */
 public class TA_2S_1SC_4F_1AC_1P_Test extends DncTests {
     protected static final DncTestResults expected_results = new DncTestResults();
     protected static final DncTestResults expected_results_sinktree = new DncTestResults();

@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2013 - 2017 Steffen Bondorf
  * Copyright (C) 2017 The DiscoDNC contributors
@@ -22,7 +22,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -79,11 +79,6 @@ import static org.junit.Assert.fail;
         FF_4S_1SC_4F_1AC_4P_Test.class
 })
 
-/**
- *
- * @author Steffen Bondorf
- *
- */
 public class DncTests {
     protected static Collection<DncTestConfig> test_configurations = createParameters();
 

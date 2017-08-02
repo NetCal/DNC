@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2011 - 2016 Steffen Bondorf
@@ -23,7 +23,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -57,8 +57,6 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
  * All arithmetic operations on a curve return a new instance of class
  * <code>Curve</code>.<br>
  *
- * @author Frank A. Zdarsky
- * @author Steffen Bondorf
  */
 public class Curve_DNC implements CurvePwAffine {
     protected LinearSegment_DNC[] segments;
@@ -118,10 +116,6 @@ public class Curve_DNC implements CurvePwAffine {
         this.has_rate_latency_meta_info = has_rate_latency_meta_info;
     }
 
-    // TODO: @Steffen
-    // Warning! Can cause runtime exceptions when not handled correctly while calling!
-    // There are some cases where RateLatency Curves with is_rate_latency = true are created, but with empty RL list
-    // May be fixed now
     public List<CurvePwAffine> getRL_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
         if (this.is_rate_latency) {
@@ -154,7 +148,6 @@ public class Curve_DNC implements CurvePwAffine {
         this.has_token_bucket_meta_info = has_token_bucket_meta_info;
     }
 
-    // TODO: see getRate_latencies
     public List<CurvePwAffine> getTB_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
         for (int i = 0; i < token_buckets.size(); i++) {
@@ -283,9 +276,6 @@ public class Curve_DNC implements CurvePwAffine {
         LinearSegment_DNC[] segments = new LinearSegment_DNC[curve.getSegmentCount()];
 
         if (curve instanceof Curve_DNC) {
-            // Can System.arraycopy create deep copies? Nope, Arrays.copyOf neither
-            // TODO: @Steffen: but all usages of arraycopy should be safe, since the underlying objects are either
-            // copied or cannot be changed
             for (int i = 0; i < segments.length; i++) {
                 segments[i] = ((Curve_DNC) curve).getSegment(i).copy();
             }

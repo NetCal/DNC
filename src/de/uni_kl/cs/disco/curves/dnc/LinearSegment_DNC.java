@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2012 - 2016 Steffen Bondorf
@@ -23,7 +23,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -40,9 +40,7 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
  * with slope <code>grad</code>. If <code>leftopen</code> is
  * <code>true</code>, the point (<code>x0</code>,<code>y0</code>) is
  * excluded from the segment, otherwise is is included.
- *
- * @author Frank A. Zdarsky
- * @author Steffen Bondorf
+ * 
  */
 public class LinearSegment_DNC implements LinearSegment {
     /**

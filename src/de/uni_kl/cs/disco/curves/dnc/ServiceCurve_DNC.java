@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2013 - 2017 Steffen Bondorf
@@ -23,7 +23,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -33,10 +33,6 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 
-/**
- * @author Frank A. Zdarsky
- * @author Steffen Bondorf
- */
 public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
 //--------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -80,8 +76,6 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         return sc_copy;
     }
 
-    // TODO @Steffen
-    // Same as ArrivalCurve
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof ServiceCurve_DNC) && super.equals(obj);

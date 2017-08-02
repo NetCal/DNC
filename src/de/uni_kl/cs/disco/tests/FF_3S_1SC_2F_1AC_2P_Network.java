@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2013 - 2017 Steffen Bondorf
  * Copyright (C) 2017 The DiscoDNC contributors
@@ -22,7 +22,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -35,9 +35,6 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.network.*;
 
-/**
- * @author Steffen Bondorf
- */
 public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
     private static final int sc_R = 20;
     private static final int sc_T = 20;

@@ -1,9 +1,8 @@
-v2.4.0 "Chimera" (2017-Jul-XY)
-------------------------------
-* Another curve backend for the DiscoDNC:
-  The DiscoDNC (min,+)-operations can work with piecewise affine curves.
-  This release wraps the MPA RTC Toolbox's curve implementation to be used with the DiscoDNC.
-  - Generic and PwAffine interfaces are still a bit intermixed 
+v2.4.0beta1 "Chimera" (2017-Aug-02)
+-----------------------------------
+* An alternative curve backend for the DiscoDNC analyses:
+  This release wraps the MPA RTC Toolbox's curve implementation to be used with the DiscoDNC. It continues the work presented at ECRTS 2017:
+     Philipp Schon and Steffen Bondorf, Towards Unified Tool Support for Real-time Calculus & Deterministic Network Calculus.
 * Package naming now complies with the Java rules. Our domain disco.cs.uni-kl.de translates to the package prefix de.uni_kl.cs.disco. 
 
 v2.3.5 "Centaur" (2017-Jun-25)

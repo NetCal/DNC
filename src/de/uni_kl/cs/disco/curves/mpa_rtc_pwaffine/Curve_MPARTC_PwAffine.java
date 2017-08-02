@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera"
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
  *
  * Copyright (C) 2017 The DiscoDNC contributors
  *
@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 
@@ -80,8 +80,8 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         createZeroSegmentsCurve(segment_count);
     }
 
-    // TODO * Default behavior of the DiscoDNC cannot be reenacted with the RTC
-    //		* creates a curve with segments (segment_count,segment_count,0) instead of (0,0,0)
+    // TODO * Default behavior of the DiscoDNC cannot be reenacted with the RTC.
+    //		* Instead create a curve with segments (segment_count,segment_count,0) instead of (0,0,0)
     // 		  because RTC checks its segments and won't allow multiple ones at (x,y,r)=(0,0,r).
     private void createZeroSegmentsCurve(int segment_count) {
         SegmentList segList_rtc = new SegmentList();
@@ -215,7 +215,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
             SegmentList segList_rtc = new SegmentList();
             LinearSegment seg_tmp;
 
-            // TODO * Might also fail due to a spot in the origin
+            // TODO Might also fail due to a spot in the origin
             for (int i = 0; i < curve.getSegmentCount(); i++) {
                 seg_tmp = curve.getSegment(i);
 
@@ -236,12 +236,9 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
      * Starting at 0 as the RTC SegmentList extends ArrayList.
      */
     public LinearSegment_MPARTC_PwAffine getSegment(int pos) {
-        // IMPORTANT! This is the correct code to prevent update errors
         LinearSegment_MPARTC_PwAffine s = new LinearSegment_MPARTC_PwAffine(0, 0, 0);
         s.setRtc_segment(rtc_curve.aperiodicSegments().get(pos));
         return s;
-        // Old code, bugged because it was not able to update the Segment, like done in various add functions
-        //return new LinearSegmentRTC(rtc_curve.aperiodicSegments().get(pos));
     }
 
     private Segment getSegmentRTC(int pos) {
@@ -288,7 +285,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     protected void initializeWithSegments(SegmentList rtc_segmentList) {
-        //System.out.println(rtc_segmentList.toString());
         rtc_segmentList.simplify();
         rtc_curve = new Curve(rtc_segmentList);
         clearMetaInfo();
@@ -533,7 +529,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         this.is_rate_latency = is_rate_latency;
     }
 
-    // TODO: See CurveDnc.getRate_Latencies
     @Override
     public List<CurvePwAffine> getRL_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
@@ -556,7 +551,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         this.rate_latencies = tmp;
     }
 
-    // TODO: See CurveDNC.getRate_Latencies
     @Override
     public List<CurvePwAffine> getTB_Components() {
         List<CurvePwAffine> tmp = new LinkedList<>();
@@ -594,7 +588,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
                 rtc_curve.aperiodicSegments().remove(0);
             }
         }
-        // TODO simplify();
+        // TODO RTC simplify(); did something else. 
     }
 
     //------------------------------------------------------------
@@ -605,7 +599,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     public boolean getDelayedInfiniteBurst_Property() {
         return is_delayed_infinite_burst;
     }
-
 
     // Rate latency
     public boolean getRL_property() {
@@ -618,10 +611,14 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         return rate_latencies.size();
     }
 
+    /**
+     * 
+     * Returns the rate latency the defined the overall curve's segment i.
+     * 
+     */
     public Curve_MPARTC_PwAffine getRL_Component(int i) {
         decomposeIntoRateLatencies();
-        // TODO @Steffen: does this fix break anything? This one is like your RateLatency Fix
-        if (is_rate_latency) {
+        if (is_rate_latency && i==0) {
             return this.copy();
         }
         return rate_latencies.get(i);
@@ -678,6 +675,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
     private void decomposeIntoTokenBuckets() {
         if (has_token_bucket_meta_info == true) {
+        		// TODO breaks tests
             //return;
         }
 
