@@ -125,7 +125,6 @@ public abstract class Analysis {
 //----------------------------------------------------------------------------------------------------
 // Convenience functions to access the results object.
 //----------------------------------------------------------------------------------------------------
-
     /**
      * Returns the backlog bound of the analysis.
      *
@@ -134,8 +133,6 @@ public abstract class Analysis {
     public Num getBacklogBound() {
         return result.getBacklogBound();
     }
-
-    ;
 
     /**
      * For TFA this is the whole traffic at a server because
@@ -149,8 +146,6 @@ public abstract class Analysis {
     public Map<Server, Set<ArrivalCurve>> getServerAlphasMap() {
         return result.map__server__alphas;
     }
-
-    ;
 
     public String getServerAlphasMapString() {
         return result.getServerAlphasMapString();
