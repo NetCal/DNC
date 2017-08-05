@@ -50,11 +50,9 @@ import de.uni_kl.cs.disco.numbers.Num;
 public abstract class Analysis {
     protected Network network;
 
-    ;
     protected AnalysisConfig configuration;
     protected AnalysisResults result;
-    protected Analysis() {
-    }
+    protected Analysis() {}
 
     protected Analysis(Network network) {
         this.network = network;
