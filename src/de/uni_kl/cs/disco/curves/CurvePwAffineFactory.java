@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta2 "Chimera".
  *
  * Copyright (C) 2017 The DiscoDNC contributors
  *
@@ -39,7 +39,6 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 /**
  * Static access to the methods defined in the CurveFactoryInterface.
  *
- * @author sbondorf
  */
 public class CurvePwAffineFactory {
     private static CurvePwAffineFactoryInterface dnc_factory = new CurveFactory_DNC();

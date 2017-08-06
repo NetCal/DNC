@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta1 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta2 "Chimera".
  *
  * Copyright (C) 2013 - 2017 Steffen Bondorf
  * Copyright (C) 2017 The DiscoDNC contributors
@@ -34,9 +34,6 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 
 import java.io.File;
 
-/**
- * @author Steffen Bondorf
- */
 public final class CalculatorConfig {
 	public static boolean ARRIVAL_CURVE_CHECKS = false;
 
