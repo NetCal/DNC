@@ -151,7 +151,7 @@ public class MinPlusUtils {
             case convolve:
                 return convolve(s1, s2);
             case convolve_SC_SC_Generic:
-                Convolution.convolve_SC_SC_Generic(s1, s2);
+            		return Convolution.convolve_SC_SC_Generic(s1, s2);
             default:
                 return null;
         }
