@@ -28,7 +28,11 @@
 
 package de.uni_kl.cs.disco.network;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
@@ -45,7 +49,6 @@ import de.uni_kl.cs.disco.minplus.Convolution;
  * Otherwise the flow interference pattern of the network will be too pessimistic,
  * yet, the results remain valid.
  *
- * @author Steffen Bondorf
  */
 public class Path {
     private LinkedList<Server> path_servers = new LinkedList<Server>();
