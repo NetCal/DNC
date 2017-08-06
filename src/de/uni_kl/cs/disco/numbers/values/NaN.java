@@ -29,7 +29,6 @@
 package de.uni_kl.cs.disco.numbers.values;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public final class NaN implements Num {
     public NaN() {
@@ -98,7 +97,7 @@ public final class NaN implements Num {
         return false;
     }
 
-    @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to NaN should always return false")
+//    @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to NaN should always return false")
     @Override
     public boolean equals(Object obj) {
         return false;
