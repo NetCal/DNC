@@ -43,7 +43,11 @@ import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
 import de.uni_kl.cs.disco.nc.operations.OutputBound;
-import de.uni_kl.cs.disco.network.*;
+import de.uni_kl.cs.disco.network.Flow;
+import de.uni_kl.cs.disco.network.Link;
+import de.uni_kl.cs.disco.network.Network;
+import de.uni_kl.cs.disco.network.Path;
+import de.uni_kl.cs.disco.network.Server;
 
 public class PmooArrivalBound extends ArrivalBound {
 

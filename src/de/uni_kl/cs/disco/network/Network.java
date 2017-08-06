@@ -33,10 +33,20 @@ import static de.uni_kl.cs.disco.curves.CurvePwAffineFactory.createZeroDelayInfi
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import de.uni_kl.cs.disco.curves.*;
+import de.uni_kl.cs.disco.curves.ArrivalCurve;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.MaxServiceCurve;
+import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 

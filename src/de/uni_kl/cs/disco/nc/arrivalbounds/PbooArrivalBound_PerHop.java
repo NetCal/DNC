@@ -42,7 +42,11 @@ import de.uni_kl.cs.disco.nc.ArrivalBound;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
 import de.uni_kl.cs.disco.nc.operations.OutputBound;
-import de.uni_kl.cs.disco.network.*;
+import de.uni_kl.cs.disco.network.Flow;
+import de.uni_kl.cs.disco.network.Link;
+import de.uni_kl.cs.disco.network.Network;
+import de.uni_kl.cs.disco.network.Path;
+import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 
