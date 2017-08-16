@@ -1,6 +1,8 @@
 v2.4.0beta2 "Chimera" (2017-Aug-XY)
 -----------------------------------
 TODO: Dispatcher for minplus operations
+* Renamed OperatorInputChecks to MinPlusInputChecks.
+* Reworked CalculatorConfig.java to singleton pattern.
 
 v2.4.0beta1 "Chimera" (2017-Aug-02)
 -----------------------------------
