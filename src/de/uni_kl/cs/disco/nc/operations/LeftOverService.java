@@ -99,7 +99,7 @@ public final class LeftOverService {
             return CurvePwAffineFactory.createZeroService();
         }
 
-        if (CalculatorConfig.FIFO_MUX_CHECKS) {
+        if (CalculatorConfig.getInstance().exec_fifo_mux_checks()) {
             if (!arrival_curve.isConcave()) {
                 throw new IllegalArgumentException("Arrival curve must be concave.");
             }

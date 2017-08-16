@@ -49,7 +49,7 @@ public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
         super(curve);
         forceThroughOrigin();
 
-        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
+        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
@@ -63,7 +63,7 @@ public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
         initializeCurve(arrival_curve_str);
         forceThroughOrigin();
 
-        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
+        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }

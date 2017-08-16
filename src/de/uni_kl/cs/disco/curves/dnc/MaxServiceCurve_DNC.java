@@ -48,7 +48,7 @@ public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
     public MaxServiceCurve_DNC(CurvePwAffine curve) {
         copy(curve);
 
-        if (CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
             throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
         }
 
@@ -62,7 +62,7 @@ public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
 
         initializeCurve(max_service_curve_str);
 
-        if (CalculatorConfig.MAX_SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
             throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
         }
 

@@ -47,7 +47,7 @@ import static de.uni_kl.cs.disco.minplus.Deconvolution.deconvolve;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MinPlus {
+public class MinPlus2 {
 
     public enum Operation {deconvolve, deconvolveTB_RL, deconvolve_mTB_mRL, convolve, convolve_SC_SC_RLs, convolve_SC_SC_Generic, convolve_ACs_MSC, convolve_SCs_SCs, deconvolve_almostConcCs_SCs, convolve_ACs_EGamma}
 

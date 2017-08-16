@@ -107,7 +107,7 @@ public class OutputTest {
     @Test
     public void tests() throws Exception {
         // Analysis configurations
-        CalculatorConfig.disableAllChecks();
+    		CalculatorConfig.getInstance().disableAllChecks();
 
         AnalysisConfig base_config = new AnalysisConfig();
 

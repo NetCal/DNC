@@ -49,7 +49,7 @@ public class NumUtils {
     private static NumUtilsInterface utils = getNumUtils();
 
     private static NumUtilsInterface getNumUtils() {
-        switch (CalculatorConfig.getNumClass()) {
+        switch (CalculatorConfig.getInstance().getNumClass()) {
             case REAL_SINGLE_PRECISION:
                 return utils_realsingle;
             case RATIONAL_INTEGER:

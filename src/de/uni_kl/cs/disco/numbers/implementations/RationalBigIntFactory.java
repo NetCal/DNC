@@ -120,7 +120,7 @@ public class RationalBigIntFactory implements NumFactoryInterface {
         boolean double_based = num_str.contains(".");
 
         if (fraction_indicator && double_based) {
-            throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString()
+            throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
                     + ": " + num_str);
         }
 
@@ -133,7 +133,7 @@ public class RationalBigIntFactory implements NumFactoryInterface {
             if (fraction_indicator) {
                 String[] num_den = num_str.split(" / "); // ["num","den"]
                 if (num_den.length != 2) {
-                    throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString()
+                    throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
                             + ": " + num_str);
                 }
 
@@ -149,13 +149,13 @@ public class RationalBigIntFactory implements NumFactoryInterface {
                 return create(Double.parseDouble(num_str));
             }
         } catch (Exception e) {
-            throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString()
+            throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
                     + ": " + num_str);
         }
 
         // This code should not be reachable because all the operations above either succeed such that we can return a number
         // of raise an exception of some kind. Yet, Java does not get this and thus complains if there's no "finalizing statement".
-        throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getNumClass().toString()
+        throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
                 + ": " + num_str);
     }
 }

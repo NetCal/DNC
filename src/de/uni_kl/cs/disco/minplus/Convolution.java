@@ -65,7 +65,7 @@ public class Convolution {
     }
 
     public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-        switch (OperatorInputChecks.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
             case 0:
                 break;
             case 1:
@@ -105,7 +105,7 @@ public class Convolution {
      * @return The convolved maximum service curve.
      */
     public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-        switch (OperatorInputChecks.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
+        switch (MinPlusInputChecks.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
             case 0:
                 break;
             case 1:
@@ -117,7 +117,7 @@ public class Convolution {
             default:
         }
 
-        if (CalculatorConfig.MAX_SERVICE_CURVE_CHECKS &&
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() &&
                 (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
             throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
         }
@@ -154,7 +154,7 @@ public class Convolution {
         // An empty or null set does is not interpreted as a convolution with a null curve.
         // Instead, the other set is return in case it is neither null or empty.
         Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
-        switch (OperatorInputChecks.inputNullCheck(service_curves_1, service_curves_2)) {
+        switch (MinPlusInputChecks.inputNullCheck(service_curves_1, service_curves_2)) {
             case 1:
                 for (ServiceCurve sc : service_curves_2) {
                     clone.add(sc.copy());
@@ -172,7 +172,7 @@ public class Convolution {
             default:
                 break;
         }
-        switch (OperatorInputChecks.inputEmptySetCheck(service_curves_1, service_curves_2)) {
+        switch (MinPlusInputChecks.inputEmptySetCheck(service_curves_1, service_curves_2)) {
             case 1:
                 for (ServiceCurve sc : service_curves_2) {
                     clone.add(sc.copy());
@@ -215,7 +215,7 @@ public class Convolution {
     }
 
     private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        switch (OperatorInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
+        switch (MinPlusInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
             case 2:
@@ -228,7 +228,7 @@ public class Convolution {
         }
 
         Num rate;
-        switch (OperatorInputChecks.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+        switch (MinPlusInputChecks.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
 	        case 1:
 	        		rate = service_curve_2.getUltAffineRate();
 	            break;
@@ -257,7 +257,7 @@ public class Convolution {
      * @return The convolved curve.
      */
     public static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        switch (OperatorInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
+        switch (MinPlusInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
             case 2:
@@ -353,7 +353,7 @@ public class Convolution {
 
     // The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
     public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve) throws Exception {
-        switch (OperatorInputChecks.inputNullCheck(arrival_curves, maximum_service_curve)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curves, maximum_service_curve)) {
             case 1:
                 return new HashSet<CurvePwAffine>();
             case 2:
@@ -386,7 +386,7 @@ public class Convolution {
     }
 
     public static Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve) throws Exception {
-        switch (OperatorInputChecks.inputNullCheck(arrival_curves, extra_gamma_curve)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curves, extra_gamma_curve)) {
             case 0:
                 break;
             case 1:

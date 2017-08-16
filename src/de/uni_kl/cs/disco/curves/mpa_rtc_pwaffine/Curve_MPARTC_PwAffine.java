@@ -629,7 +629,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
             return;
         }
 
-        if (CalculatorConfig.SERVICE_CURVE_CHECKS && !this.isConvex()) {
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
             if (this.equals(CurveFactory_MPARTC_PwAffine.factory_object.createZeroDelayInfiniteBurst())) {
                 rate_latencies = new ArrayList<Curve_MPARTC_PwAffine>();
                 rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(NumFactory.createPositiveInfinity(), NumFactory.createZero()));
@@ -679,7 +679,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
             //return;
         }
 
-        if (CalculatorConfig.ARRIVAL_CURVE_CHECKS && !this.isConcave()) {
+        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !this.isConcave()) {
             throw new RuntimeException("Can only decompose concave arrival curves into token buckets.");
         }
 

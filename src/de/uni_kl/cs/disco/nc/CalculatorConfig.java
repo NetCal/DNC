@@ -35,20 +35,51 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 import java.io.File;
 
 public final class CalculatorConfig {
-	public static boolean ARRIVAL_CURVE_CHECKS = false;
+	private static CalculatorConfig calc_config = null;
+	
+	private boolean ARRIVAL_CURVE_CHECKS = false;
+	private boolean SERVICE_CURVE_CHECKS = false;
+	private boolean MAX_SERVICE_CURVE_CHECKS = false;
+	private boolean FIFO_MUX_CHECKS = false;
+	private boolean DECONVOLUTION_CHECKS = false;
+	
+	private NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
+	private CurveClass CURVE_CLASS = CurveClass.DNC;
 
-	public static boolean SERVICE_CURVE_CHECKS = false;
-	public static boolean MAX_SERVICE_CURVE_CHECKS = false;
-	public static boolean FIFO_MUX_CHECKS = false;
-	public static boolean DECONVOLUTION_CHECKS = false;
-	private static NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
-	private static CurveClass CURVE_CLASS = CurveClass.DNC;
-
-	public static NumClass getNumClass() {
+	protected CalculatorConfig() {} 
+	
+	public static CalculatorConfig getInstance() {
+		if( calc_config == null ) {
+			return new CalculatorConfig();
+		}
+		return calc_config;
+	}
+	
+	public boolean exec_arrival_curve_checks() {
+		return ARRIVAL_CURVE_CHECKS;
+	}
+	
+	public boolean exec_service_curve_checks() {
+		return SERVICE_CURVE_CHECKS;
+	}
+	
+	public boolean exec_max_service_curve_checks() {
+		return MAX_SERVICE_CURVE_CHECKS;
+	}
+	
+	public boolean exec_fifo_mux_checks() {
+		return FIFO_MUX_CHECKS;
+	}
+	
+	public boolean exec_deconvolution_checks() {
+		return DECONVOLUTION_CHECKS;
+	}
+	
+	public NumClass getNumClass() {
 		return NUM_CLASS;
 	}
 
-	public static boolean setNumClass(NumClass num_class) {
+	public boolean setNumClass(NumClass num_class) {
 		if (NUM_CLASS == num_class) {
 			return false;
 		} else {
@@ -59,11 +90,11 @@ public final class CalculatorConfig {
 		}
 	}
 
-	public static CurveClass getCurveClass() {
+	public CurveClass getCurveClass() {
 		return CURVE_CLASS;
 	}
 
-	public static boolean setCurveClass(CurveClass curve_class) {
+	public boolean setCurveClass(CurveClass curve_class) {
 		if (curve_class == CurveClass.MPA_RTC) {
             File f = new File("rtc.jar");
             if (!f.exists() && !f.isDirectory()) {
@@ -81,7 +112,7 @@ public final class CalculatorConfig {
 		return true;
 	}
 
-	public static void disableAllChecks() {
+	public void disableAllChecks() {
 		ARRIVAL_CURVE_CHECKS = false;
 		SERVICE_CURVE_CHECKS = false;
 		MAX_SERVICE_CURVE_CHECKS = false;
@@ -89,13 +120,15 @@ public final class CalculatorConfig {
 		DECONVOLUTION_CHECKS = false;
 	}
 
-	public static void enableAllChecks() {
+	public void enableAllChecks() {
 		ARRIVAL_CURVE_CHECKS = true;
 		SERVICE_CURVE_CHECKS = true;
 		MAX_SERVICE_CURVE_CHECKS = true;
 		FIFO_MUX_CHECKS = true;
 		DECONVOLUTION_CHECKS = true;
 	}
+	
+	// TODO: toString
 
 	public enum NumClass {REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER}
 

@@ -45,7 +45,7 @@ public abstract class NumFactory {
     private static NumFactoryInterface factory = getNumFactory();
 
     private static NumFactoryInterface getNumFactory() {
-        switch (CalculatorConfig.getNumClass()) {
+        switch (CalculatorConfig.getInstance().getNumClass()) {
             case REAL_SINGLE_PRECISION:
                 return realsingle_factory;
             case RATIONAL_INTEGER:

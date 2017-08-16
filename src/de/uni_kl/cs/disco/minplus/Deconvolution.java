@@ -48,7 +48,7 @@ public class Deconvolution {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve, boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
-        switch (OperatorInputChecks.inputNullCheck(arrival_curves, service_curve)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curves, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -80,7 +80,7 @@ public class Deconvolution {
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves, boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        switch (OperatorInputChecks.inputNullCheck(arrival_curves, service_curves)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -92,7 +92,7 @@ public class Deconvolution {
                 return results;
             default:
         }
-        switch (OperatorInputChecks.inputEmptySetCheck(arrival_curves, service_curves)) {
+        switch (MinPlusInputChecks.inputEmptySetCheck(arrival_curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -121,7 +121,7 @@ public class Deconvolution {
     }
 
     public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve, boolean tb_rl_optimized) {
-        switch (OperatorInputChecks.inputNullCheck(arrival_curve, service_curve)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -152,7 +152,7 @@ public class Deconvolution {
     public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves, Set<ServiceCurve> service_curves) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        switch (OperatorInputChecks.inputNullCheck(curves, service_curves)) {
+        switch (MinPlusInputChecks.inputNullCheck(curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -164,7 +164,7 @@ public class Deconvolution {
                 return results;
             default:
         }
-        switch (OperatorInputChecks.inputEmptySetCheck(curves, service_curves)) {
+        switch (MinPlusInputChecks.inputEmptySetCheck(curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -189,7 +189,7 @@ public class Deconvolution {
     }
 
     public static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        switch (OperatorInputChecks.inputNullCheck(arrival_curve, service_curve)) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -224,7 +224,7 @@ public class Deconvolution {
      */
     private static ArrivalCurve deconvolve_mTB_mRL(CurvePwAffine curve_1, CurvePwAffine curve_2) {
 //		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-        switch (OperatorInputChecks.inputNullCheck(curve_1, curve_2)) {
+        switch (MinPlusInputChecks.inputNullCheck(curve_1, curve_2)) {
             case 0:
                 break;
             case 1:
@@ -247,7 +247,7 @@ public class Deconvolution {
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return CurvePwAffineFactory.createZeroArrivals();
         }
-        if (CalculatorConfig.DECONVOLUTION_CHECKS) {
+        if (CalculatorConfig.getInstance().exec_deconvolution_checks()) {
             if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
                 throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
             }

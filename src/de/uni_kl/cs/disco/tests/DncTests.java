@@ -89,13 +89,13 @@ public class DncTests {
         this.test_config = test_config;
 
         if (test_config.enable_checks) {
-            CalculatorConfig.enableAllChecks();
+        	CalculatorConfig.getInstance().enableAllChecks();
         } else {
-            CalculatorConfig.disableAllChecks();
+        	CalculatorConfig.getInstance().disableAllChecks();
         }
 
-        reinitilize_test = ( CalculatorConfig.setNumClass(test_config.numbers)
-        						|| CalculatorConfig.setCurveClass(test_config.curves) );
+        reinitilize_test = ( CalculatorConfig.getInstance().setNumClass(test_config.numbers)
+        						|| CalculatorConfig.getInstance().setCurveClass(test_config.curves) );
     }
 
     @Parameters(name = "{index}: {0}")

@@ -47,7 +47,7 @@ public class CurvePwAffineFactory {
     private static CurvePwAffineFactoryInterface factory = getCurveFactory();
 
     private static CurvePwAffineFactoryInterface getCurveFactory() {
-        switch (CalculatorConfig.getCurveClass()) {
+        switch (CalculatorConfig.getInstance().getCurveClass()) {
             case MPA_RTC:
                 return mpa_rtc_pwaffine_factory;
             case DNC:

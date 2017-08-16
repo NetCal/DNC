@@ -48,7 +48,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
     public ServiceCurve_DNC(CurvePwAffine curve) {
         copy(curve);
 
-        if (CalculatorConfig.SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }
@@ -60,7 +60,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
 
         initializeCurve(service_curve_str);
 
-        if (CalculatorConfig.SERVICE_CURVE_CHECKS && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isConvex()
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }

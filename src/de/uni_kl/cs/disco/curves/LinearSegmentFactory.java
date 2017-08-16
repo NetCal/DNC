@@ -42,7 +42,7 @@ public class LinearSegmentFactory {
 	// In contrast to the similar Curve factory, it does not hold a curve factory instance for each alternative.
 	
     public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        switch (CalculatorConfig.getCurveClass()) {
+        switch (CalculatorConfig.getInstance().getCurveClass()) {
             case MPA_RTC:
                 return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
             case DNC:
@@ -52,7 +52,7 @@ public class LinearSegmentFactory {
     }
 
     public static LinearSegment createZeroSegment() {
-        switch (CalculatorConfig.getCurveClass()) {
+        switch (CalculatorConfig.getInstance().getCurveClass()) {
             case MPA_RTC:
                 return createHorizontalLine(0.0);
             case DNC:
@@ -62,7 +62,7 @@ public class LinearSegmentFactory {
     }
 
     public static LinearSegment createHorizontalLine(double y) {
-        switch (CalculatorConfig.getCurveClass()) {
+        switch (CalculatorConfig.getInstance().getCurveClass()) {
             case MPA_RTC:
                 return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
             case DNC:
