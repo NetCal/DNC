@@ -32,7 +32,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.Curve;
 
-public class MinPlusInputChecks {
+public abstract class MinPlusInputChecks {
     /**
      * @param obj1
      * @param obj2
