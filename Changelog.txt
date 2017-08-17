@@ -1,6 +1,9 @@
-v2.4.0beta2 "Chimera" (2017-Aug-XY)
+v2.4.0beta3 "Chimera" (2017-Sep-XY)
 -----------------------------------
 TODO: Dispatcher for minplus operations
+
+v2.4.0beta2 "Chimera" (2017-Aug-XY)
+-----------------------------------
 * Interface and Dispatcher naming: interfaces do not have a suffix, dispatchers now suffixed with "Dispatch".
   - CurvePwAffineFactory renamed to CurvePwAffineFactoryDispatch 
   - CurvePwAffineFactoryInterface renamed to CurvePwAffineFactory
