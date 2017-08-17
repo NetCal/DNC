@@ -34,10 +34,10 @@ import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.LinearSegment;
-import de.uni_kl.cs.disco.curves.LinearSegmentFactory;
+import de.uni_kl.cs.disco.curves.LinearSegmentFactoryDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
@@ -50,13 +50,13 @@ public class Convolution {
     public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) {
         // Custom null and empty checks for this single argument method.
         if (arrival_curves == null || arrival_curves.isEmpty()) {
-            return CurvePwAffineFactory.createZeroArrivals();
+            return CurvePwAffineFactoryDispatch.createZeroArrivals();
         }
         if (arrival_curves.size() == 1) {
             return arrival_curves.iterator().next().copy();
         }
 
-        ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst();
+        ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
         for (ArrivalCurve arrival_curve_2 : arrival_curves) {
             arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
         }
@@ -73,17 +73,17 @@ public class Convolution {
             case 2:
                 return arrival_curve_1.copy();
             case 3:
-                return CurvePwAffineFactory.createZeroArrivals();
+                return CurvePwAffineFactoryDispatch.createZeroArrivals();
             default:
                 break;
         }
 
-        ArrivalCurve zero_arrival = CurvePwAffineFactory.createZeroArrivals();
+        ArrivalCurve zero_arrival = CurvePwAffineFactoryDispatch.createZeroArrivals();
         if (arrival_curve_1.equals(zero_arrival) || arrival_curve_2.equals(zero_arrival)) {
             return zero_arrival;
         }
 
-        ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst();
+        ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
         if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
             return arrival_curve_2.copy();
         }
@@ -92,7 +92,7 @@ public class Convolution {
         }
 
         // Arrival curves are concave curves so we can do a minimum instead of a convolution here.
-        ArrivalCurve convolved_arrival_curve = CurvePwAffineFactory.createArrivalCurve(CurvePwAffineUtils.min(arrival_curve_1, arrival_curve_2));
+        ArrivalCurve convolved_arrival_curve = CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.min(arrival_curve_1, arrival_curve_2));
         return convolved_arrival_curve;
     }
 
@@ -113,7 +113,7 @@ public class Convolution {
             case 2:
                 return max_service_curve_1.copy();
             case 3:
-                return CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
+                return CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
             default:
         }
 
@@ -134,10 +134,10 @@ public class Convolution {
 
         // (min,plus)-algebraic proceeding here:
         // Remove latencies, act analog to the convolution of two arrival curves, and the sum of the two latencies.
-        ArrivalCurve ac_intermediate = convolve(CurvePwAffineFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(max_service_curve_1)), CurvePwAffineFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(max_service_curve_2)));
-        MaxServiceCurve result = CurvePwAffineFactory.createMaxServiceCurve(ac_intermediate);
-        result = (MaxServiceCurve) CurvePwAffineUtils.shiftRight(result, NumUtils.add(latency_msc_1, latency_msc_2));
-        CurvePwAffineUtils.beautify(result);
+        ArrivalCurve ac_intermediate = convolve(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_1)), CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_2)));
+        MaxServiceCurve result = CurvePwAffineFactoryDispatch.createMaxServiceCurve(ac_intermediate);
+        result = (MaxServiceCurve) CurvePwAffineUtilsDispatch.shiftRight(result, NumUtils.add(latency_msc_1, latency_msc_2));
+        CurvePwAffineUtilsDispatch.beautify(result);
 
         return result;
     }
@@ -166,7 +166,7 @@ public class Convolution {
                 }
                 return clone;
             case 3:
-                results.add(CurvePwAffineFactory.createZeroService());
+                results.add(CurvePwAffineFactoryDispatch.createZeroService());
                 return results;
             case 0:
             default:
@@ -184,7 +184,7 @@ public class Convolution {
                 }
                 return clone;
             case 3:
-                results.add(CurvePwAffineFactory.createZeroService());
+                results.add(CurvePwAffineFactoryDispatch.createZeroService());
                 return results;
             case 0:
             default:
@@ -221,7 +221,7 @@ public class Convolution {
             case 2:
                 return service_curve_1.copy();
             case 3:
-                return CurvePwAffineFactory.createZeroService();
+                return CurvePwAffineFactoryDispatch.createZeroService();
             case 0:
             default:
                 break;
@@ -244,7 +244,7 @@ public class Convolution {
 	        		break;
         }
         
-        return CurvePwAffineFactory.createRateLatency(
+        return CurvePwAffineFactoryDispatch.createRateLatency(
                 rate,
                 NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
@@ -263,7 +263,7 @@ public class Convolution {
             case 2:
                 return service_curve_1.copy();
             case 3:
-                return CurvePwAffineFactory.createZeroService();
+                return CurvePwAffineFactoryDispatch.createZeroService();
             case 0:
             default:
                 break;
@@ -272,29 +272,29 @@ public class Convolution {
         // Shortcut: only go here if there is at least one delayed infinite burst
         if (service_curve_1.getDelayedInfiniteBurst_Property() || service_curve_2.getDelayedInfiniteBurst_Property()) {
             if (service_curve_1.getDelayedInfiniteBurst_Property() && service_curve_2.getDelayedInfiniteBurst_Property()) {
-                return CurvePwAffineFactory.createDelayedInfiniteBurst(NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                return CurvePwAffineFactoryDispatch.createDelayedInfiniteBurst(NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
             }
 
             if (service_curve_1.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
-                return CurvePwAffineFactory.createServiceCurve(CurvePwAffineUtils.shiftRight(service_curve_2, service_curve_1.getLatency()));
+                return CurvePwAffineFactoryDispatch.createServiceCurve(CurvePwAffineUtilsDispatch.shiftRight(service_curve_2, service_curve_1.getLatency()));
             }
 
             if (service_curve_2.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
-                return CurvePwAffineFactory.createServiceCurve(CurvePwAffineUtils.shiftRight(service_curve_1, service_curve_2.getLatency()));
+                return CurvePwAffineFactoryDispatch.createServiceCurve(CurvePwAffineUtilsDispatch.shiftRight(service_curve_1, service_curve_2.getLatency()));
             }
         }
 
-        ServiceCurve zero_service = CurvePwAffineFactory.createZeroService();
+        ServiceCurve zero_service = CurvePwAffineFactoryDispatch.createZeroService();
         if (service_curve_1.equals(zero_service) || service_curve_2.equals(zero_service)) {
             return zero_service;
         }
 
-        ServiceCurve result = CurvePwAffineFactory.createServiceCurve();
+        ServiceCurve result = CurvePwAffineFactoryDispatch.createServiceCurve();
 
         Num x = NumFactory.createZero();
         Num y = NumFactory.createZero(); // Functions pass though the origin
         Num grad = NumFactory.createZero();
-        LinearSegment s = LinearSegmentFactory.createLinearSegment(x, y, grad, false);
+        LinearSegment s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, false);
         result.addSegment(s);
 
         int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
@@ -303,7 +303,7 @@ public class Convolution {
             x = NumFactory.createZero();
             y = NumUtils.add(service_curve_1.fLimitRight(NumFactory.getZero()), service_curve_2.fLimitRight(NumFactory.getZero()));
             grad = NumFactory.createZero();
-            s = LinearSegmentFactory.createLinearSegment(x, y, grad, true);
+            s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
 
             result.addSegment(s);
         }
@@ -320,7 +320,7 @@ public class Convolution {
                 y = NumUtils.add(result.getSegment(result.getSegmentCount() - 1).getY(),
                         (NumUtils.sub(service_curve_1.getSegment(i1 + 1).getY(), service_curve_1.getSegment(i1).getY())));
                 grad = NumFactory.createZero();
-                s = LinearSegmentFactory.createLinearSegment(x, y, grad, true);
+                s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
 
                 result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
                 result.addSegment(s);
@@ -337,7 +337,7 @@ public class Convolution {
                 y = NumUtils.add(result.getSegment(result.getSegmentCount() - 1).getY(),
                         (NumUtils.sub(service_curve_2.getSegment(i2 + 1).getY(), service_curve_2.getSegment(i2).getY())));
                 grad = NumFactory.createZero();
-                s = LinearSegmentFactory.createLinearSegment(x, y, grad, true);
+                s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
 
                 result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
                 result.addSegment(s);
@@ -346,7 +346,7 @@ public class Convolution {
             }
         }
 
-        CurvePwAffineUtils.beautify(result);
+        CurvePwAffineUtilsDispatch.beautify(result);
 
         return result;
     }
@@ -377,9 +377,9 @@ public class Convolution {
         Set<CurvePwAffine> result = new HashSet<CurvePwAffine>();
 
         // Similar to convolve_ACs_EGamma
-        ArrivalCurve msc_as_ac = CurvePwAffineFactory.createArrivalCurve(CurvePwAffineUtils.removeLatency(maximum_service_curve)); // Abuse the ArrivalCurve class here for convenience.
+        ArrivalCurve msc_as_ac = CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(maximum_service_curve)); // Abuse the ArrivalCurve class here for convenience.
         for (ArrivalCurve ac : arrival_curves) {
-            result.add(CurvePwAffineUtils.shiftRight(convolve(ac, msc_as_ac), msc_latency));
+            result.add(CurvePwAffineUtilsDispatch.shiftRight(convolve(ac, msc_as_ac), msc_latency));
         }
 
         return result;
@@ -411,7 +411,7 @@ public class Convolution {
         }
 
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-        ArrivalCurve extra_gamma_as_ac = CurvePwAffineFactory.createArrivalCurve(extra_gamma_curve); // Abuse the ArrivalCurve class here for convenience.
+        ArrivalCurve extra_gamma_as_ac = CurvePwAffineFactoryDispatch.createArrivalCurve(extra_gamma_curve); // Abuse the ArrivalCurve class here for convenience.
         for (ArrivalCurve ac : arrival_curves) {
             result.add(convolve(ac, extra_gamma_as_ac));
         }

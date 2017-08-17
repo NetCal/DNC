@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.Convolution;
@@ -191,7 +191,7 @@ public class Path {
     }
 
     private ServiceCurve getServiceCurve(Collection<Server> servers) {
-        ServiceCurve service_curve_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
+        ServiceCurve service_curve_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             service_curve_total = Convolution.convolve(service_curve_total, s.getServiceCurve());
         }
@@ -214,7 +214,7 @@ public class Path {
     }
 
     private MaxServiceCurve getGamma(Collection<Server> servers) {
-        MaxServiceCurve gamma_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve gamma_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             gamma_total = Convolution.convolve(gamma_total, s.getGamma());
         }
@@ -237,7 +237,7 @@ public class Path {
     }
 
     private MaxServiceCurve getExtraGamma(Collection<Server> servers) {
-        MaxServiceCurve extra_gamma_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve extra_gamma_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             extra_gamma_total = Convolution.convolve(extra_gamma_total, s.getExtraGamma());
         }
@@ -261,7 +261,7 @@ public class Path {
     }
 
     private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) {
-        MaxServiceCurve max_service_curve_total = CurvePwAffineFactory.createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve max_service_curve_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             max_service_curve_total = Convolution.convolve(max_service_curve_total, s.getMaxServiceCurve());
         }

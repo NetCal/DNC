@@ -96,7 +96,7 @@ public class PmooAnalysis extends Analysis {
             i++;
         }
 
-        ServiceCurve beta_total = CurvePwAffineFactory.createZeroService();
+        ServiceCurve beta_total = CurvePwAffineFactoryDispatch.createZeroService();
 
         boolean more_combinations = true;
         while (more_combinations) {
@@ -106,8 +106,8 @@ public class PmooAnalysis extends Analysis {
                     cross_flow_substitutes,
                     flow_tb_iter_map,
                     server_rl_iters);
-            if (!beta.equals(CurvePwAffineFactory.createZeroService())) {
-                beta_total = CurvePwAffineUtils.max(beta_total, beta);
+            if (!beta.equals(CurvePwAffineFactoryDispatch.createZeroService())) {
+                beta_total = CurvePwAffineUtilsDispatch.max(beta_total, beta);
             }
 
             // First check whether there are more combinations of flow TBs
@@ -186,7 +186,7 @@ public class PmooAnalysis extends Analysis {
 
             // Check for stability constraint violation
             if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-                return CurvePwAffineFactory.createZeroService();
+                return CurvePwAffineFactoryDispatch.createZeroService();
             }
 
             // TODO Actually needs to be an affine curve
@@ -210,7 +210,7 @@ public class PmooAnalysis extends Analysis {
             // Compute left-over rate; update min
             Num Ri = NumUtils.sub(current_rl.getUltAffineRate(), sum_r);
             if (Ri.leqZero()) {
-                return CurvePwAffineFactory.createZeroService();
+                return CurvePwAffineFactoryDispatch.createZeroService();
             }
             R = NumUtils.min(R, Ri);
 
@@ -235,13 +235,13 @@ public class PmooAnalysis extends Analysis {
         T = NumUtils.add(T, NumUtils.div(NumUtils.add(sum_bursts, sum_latencyterms), R));
 
         if (T == NumFactory.getPositiveInfinity()) {
-            return CurvePwAffineFactory.createZeroService();
+            return CurvePwAffineFactoryDispatch.createZeroService();
         }
         if (R == NumFactory.getPositiveInfinity()) {
-            return CurvePwAffineFactory.createDelayedInfiniteBurst(T);
+            return CurvePwAffineFactoryDispatch.createDelayedInfiniteBurst(T);
         }
 
-        return CurvePwAffineFactory.createRateLatency(R, T);
+        return CurvePwAffineFactoryDispatch.createRateLatency(R, T);
     }
 
     /**
@@ -422,7 +422,7 @@ public class PmooAnalysis extends Analysis {
         });
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(CurvePwAffineFactory.createZeroService());
+            betas_e2e.add(CurvePwAffineFactoryDispatch.createZeroService());
         }
         return betas_e2e;
     }
@@ -566,7 +566,7 @@ public class PmooAnalysis extends Analysis {
             arrival_bounds_link_permutations.clear();
             List<Flow> flow_list_tmp = new LinkedList<Flow>();
             for (ArrivalCurve alpha : alphas_xf_group) {
-                CurvePwAffineUtils.beautify(alpha);
+                CurvePwAffineUtilsDispatch.beautify(alpha);
 
                 for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
                     // The new list of cross-flow substitutes = old list plus a new one with one of the derived arrival bounds.
@@ -591,7 +591,7 @@ public class PmooAnalysis extends Analysis {
         }
 
         // Derive the left-over service curves
-        ServiceCurve null_service = CurvePwAffineFactory.createZeroService();
+        ServiceCurve null_service = CurvePwAffineFactoryDispatch.createZeroService();
         for (List<Flow> xtx_substitutes : cross_flow_substitutes_set) {
             ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
 
@@ -601,7 +601,7 @@ public class PmooAnalysis extends Analysis {
         }
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(CurvePwAffineFactory.createZeroService());
+            betas_e2e.add(CurvePwAffineFactoryDispatch.createZeroService());
         }
         return betas_e2e;
     }

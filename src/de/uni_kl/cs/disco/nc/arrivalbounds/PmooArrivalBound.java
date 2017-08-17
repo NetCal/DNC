@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -82,7 +82,7 @@ public class PmooArrivalBound extends ArrivalBound {
      * @throws Exception If any of the sanity checks fails.
      */
     public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest) throws Exception {
-        Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffineFactory.createZeroArrivals()));
+        Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffineFactoryDispatch.createZeroArrivals()));
         if (f_xfcaller == null || f_xfcaller.isEmpty()) {
             return alphas_xfcaller;
         }
@@ -117,7 +117,7 @@ public class PmooArrivalBound extends ArrivalBound {
             f_xxfcaller.remove(flow_of_interest);
             Set<ArrivalCurve> alphas_xxfcaller = super.computeArrivalBounds(common_subpath_src, f_xxfcaller, flow_of_interest);
 
-            ServiceCurve null_service = CurvePwAffineFactory.createZeroService();
+            ServiceCurve null_service = CurvePwAffineFactoryDispatch.createZeroService();
 
             for (ServiceCurve beta_loxfcaller_subpath : LeftOverService.arbMux(common_subpath_src.getServiceCurve(), alphas_xxfcaller)) {
                 if (!beta_loxfcaller_subpath.equals(null_service)) {
@@ -133,7 +133,7 @@ public class PmooArrivalBound extends ArrivalBound {
         if (betas_loxfcaller_subpath.isEmpty()) {
             System.out.println("No service left over during PMOO arrival bounding!");
             alphas_xfcaller.clear();
-            alphas_xfcaller.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
+            alphas_xfcaller.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
             return alphas_xfcaller;
         }
 

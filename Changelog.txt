@@ -1,6 +1,11 @@
 v2.4.0beta2 "Chimera" (2017-Aug-XY)
 -----------------------------------
 TODO: Dispatcher for minplus operations
+* Interface and Dispatcher naming: interfaces do not have a suffix, dispatchers now suffixed with "Dispatch".
+  - CurvePwAffineFactory renamed to CurvePwAffineFactoryDispatch 
+  - CurvePwAffineFactoryInterface renamed to CurvePwAffineFactory
+  - CurvePwAffineUtils renamed to CurvePwAffineUtilsDispatch
+  - LinearSegmentFactory renamed to LinearSegmentFactoryDispatch
 * Renamed OperatorInputChecks to MinPlusInputChecks.
 * Reworked CalculatorConfig.java to singleton pattern (improves tests run time considerably).
 

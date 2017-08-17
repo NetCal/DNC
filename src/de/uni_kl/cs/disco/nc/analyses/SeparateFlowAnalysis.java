@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.Convolution;
 import de.uni_kl.cs.disco.misc.SetUtils;
@@ -150,7 +150,7 @@ public class SeparateFlowAnalysis extends Analysis {
                 Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>();
                 for (ArrivalCurve arrival_curve_path : alpha_xfois_path) {
                     for (ArrivalCurve arrival_curve_offpath : alpha_xfois_offpath) {
-                        alpha_xfois.add(CurvePwAffineUtils.add(arrival_curve_path, arrival_curve_offpath));
+                        alpha_xfois.add(CurvePwAffineUtilsDispatch.add(arrival_curve_path, arrival_curve_offpath));
                     }
                 }
 

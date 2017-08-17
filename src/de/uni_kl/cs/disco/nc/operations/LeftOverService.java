@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
@@ -91,12 +91,12 @@ public final class LeftOverService {
      * @return The FIFO service curve
      */
     public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-        if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())
-                || service_curve.equals(CurvePwAffineFactory.createZeroDelayInfiniteBurst())) {
+        if (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals())
+                || service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
             return service_curve.copy();
         }
-        if (service_curve.equals(CurvePwAffineFactory.createZeroService())) {
-            return CurvePwAffineFactory.createZeroService();
+        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())) {
+            return CurvePwAffineFactoryDispatch.createZeroService();
         }
 
         if (CalculatorConfig.getInstance().exec_fifo_mux_checks()) {
@@ -109,7 +109,7 @@ public final class LeftOverService {
             }
         }
 
-        List<Num> ycoords = CurvePwAffineUtils.computeInflectionPointsY(arrival_curve, service_curve);
+        List<Num> ycoords = CurvePwAffineUtilsDispatch.computeInflectionPointsY(arrival_curve, service_curve);
         for (int i = 0; i < ycoords.size(); i++) {
             Num ip_y = (ycoords.get(i));
             if (ip_y.lt(arrival_curve.getBurst())) {
@@ -122,15 +122,15 @@ public final class LeftOverService {
             if (arrival_curve.getGradientLimitRight(x_alpha).leq(service_curve.getGradientLimitRight(x_beta))) {
 
                 Num theta = NumUtils.sub(x_beta, x_alpha);
-                ServiceCurve beta_fifo = CurvePwAffineFactory.createServiceCurve( CurvePwAffineUtils.boundAtXAxis(
-                        CurvePwAffineUtils.min(CurvePwAffineUtils.sub(service_curve, CurvePwAffineUtils.shiftRight(arrival_curve, theta)), CurvePwAffineFactory.createDelayedInfiniteBurst(x_beta))
+                ServiceCurve beta_fifo = CurvePwAffineFactoryDispatch.createServiceCurve( CurvePwAffineUtilsDispatch.boundAtXAxis(
+                        CurvePwAffineUtilsDispatch.min(CurvePwAffineUtilsDispatch.sub(service_curve, CurvePwAffineUtilsDispatch.shiftRight(arrival_curve, theta)), CurvePwAffineFactoryDispatch.createDelayedInfiniteBurst(x_beta))
                 ));
                 return beta_fifo;
             }
         }
 
         // Reaching this code means that there's no service left-over
-        return CurvePwAffineFactory.createZeroService();
+        return CurvePwAffineFactoryDispatch.createZeroService();
     }
 
     public static Set<ServiceCurve> arbMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
@@ -153,14 +153,14 @@ public final class LeftOverService {
      * @return The FIFO service curve
      */
     public static ServiceCurve arbMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-        if (arrival_curve.equals(CurvePwAffineFactory.createZeroArrivals())
-                || service_curve.equals(CurvePwAffineFactory.createZeroDelayInfiniteBurst())) {
+        if (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals())
+                || service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
             return service_curve.copy();
         }
-        if (service_curve.equals(CurvePwAffineFactory.createZeroService())) {
-            return CurvePwAffineFactory.createZeroService();
+        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())) {
+            return CurvePwAffineFactoryDispatch.createZeroService();
         }
 
-        return CurvePwAffineFactory.createServiceCurve(CurvePwAffineUtils.boundAtXAxis(CurvePwAffineUtils.sub(service_curve, arrival_curve)));
+        return CurvePwAffineFactoryDispatch.createServiceCurve(CurvePwAffineUtilsDispatch.boundAtXAxis(CurvePwAffineUtilsDispatch.sub(service_curve, arrival_curve)));
     }
 }

@@ -29,7 +29,7 @@
 package de.uni_kl.cs.disco.demos;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
@@ -55,8 +55,8 @@ public class Demo3 {
     }
 
     public void run() throws Exception {
-        ServiceCurve service_curve = CurvePwAffineFactory.createRateLatency(10.0e6, 0.01);
-        MaxServiceCurve max_service_curve = CurvePwAffineFactory.createRateLatencyMSC(100.0e6, 0.001);
+        ServiceCurve service_curve = CurvePwAffineFactoryDispatch.createRateLatency(10.0e6, 0.01);
+        MaxServiceCurve max_service_curve = CurvePwAffineFactoryDispatch.createRateLatencyMSC(100.0e6, 0.001);
 
         Network network = new Network();
 
@@ -70,7 +70,7 @@ public class Demo3 {
 
         network.addLink(s0, s1);
 
-        ArrivalCurve arrival_curve = CurvePwAffineFactory.createTokenBucket(0.1e6, 0.1 * 0.1e6);
+        ArrivalCurve arrival_curve = CurvePwAffineFactoryDispatch.createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
         network.addFlow(arrival_curve, s0, s1);
         network.addFlow(arrival_curve, s0, s1);

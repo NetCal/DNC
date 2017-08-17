@@ -36,7 +36,7 @@ import java.util.List;
 
 import de.uni_kl.cs.disco.curves.Curve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
@@ -231,7 +231,7 @@ public class Curve_DNC implements CurvePwAffine {
         for (int i = 0; i < segments_to_parse.length; i++) {
             segments[i] = new LinearSegment_DNC(segments_to_parse[i]);
         }
-        CurvePwAffineUtils.beautify(this);
+        CurvePwAffineUtilsDispatch.beautify(this);
     }
 
     protected void forceThroughOrigin() {
@@ -667,8 +667,8 @@ public class Curve_DNC implements CurvePwAffine {
         Curve_DNC this_cpy = this.copy();
         Curve_DNC other_cpy = ((Curve_DNC) obj).copy();
 
-        CurvePwAffineUtils.beautify(this_cpy);
-        CurvePwAffineUtils.beautify(other_cpy);
+        CurvePwAffineUtilsDispatch.beautify(this_cpy);
+        CurvePwAffineUtilsDispatch.beautify(other_cpy);
 
         if (this_cpy.getLatency() == NumFactory.getPositiveInfinity()) {
             this_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
@@ -824,7 +824,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return the latency of this curve.
      */
     public Num getLatency() {
-    		CurvePwAffineUtils.beautify(this);
+    		CurvePwAffineUtilsDispatch.beautify(this);
         if (segments[0].getY().gt(NumFactory.getZero())) {
             return NumFactory.createZero();
         }

@@ -28,7 +28,7 @@
 
 package de.uni_kl.cs.disco.nc;
 
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
@@ -108,7 +108,7 @@ public final class CalculatorConfig {
 			return false;
 		}
 		CURVE_CLASS = curve_class;
-		CurvePwAffineFactory.setCurveClass(curve_class);
+		CurvePwAffineFactoryDispatch.setCurveClass(curve_class);
 		return true;
 	}
 

@@ -33,7 +33,7 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class LinearSegmentUtils {
     public static LinearSegment getXAxis() {
-        return LinearSegmentFactory.createHorizontalLine(0.0);
+        return LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
     }
 
     /**
@@ -46,7 +46,7 @@ public class LinearSegmentUtils {
      * @return The new linear segment, pointwise sum of the given ones, starting in x.
      */
     public static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
-        LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
+        LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
         result.setY(NumUtils.add(s1.f(x), s2.f(x)));
         result.setGrad(NumUtils.add(s1.getGrad(), s2.getGrad()));
@@ -64,7 +64,7 @@ public class LinearSegmentUtils {
      * @return The new linear segment, pointwise difference of the given ones, i.e., s1 - s2, starting in x.
      */
     public static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
-        LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
+        LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
         result.setY(NumUtils.sub(s1.f(x), s2.f(x)));
         result.setGrad(NumUtils.sub(s1.getGrad(), s2.getGrad()));
@@ -87,7 +87,7 @@ public class LinearSegmentUtils {
         Num f1_x = s1.f(x);
         Num f2_x = s2.f(x);
 
-        LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
+        LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
         if (crossed || NumUtils.abs(NumUtils.sub(f1_x, f2_x)).lt(NumFactory.getEpsilon())) {
             result.setY(f1_x);
@@ -118,7 +118,7 @@ public class LinearSegmentUtils {
         Num f1_x = s1.f(x);
         Num f2_x = s2.f(x);
 
-        LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
+        LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
         if (crossed || NumUtils.abs(NumUtils.sub(f1_x, f2_x)).lt(NumFactory.getEpsilon())) {
             result.setY(f1_x);

@@ -29,45 +29,9 @@ package de.uni_kl.cs.disco.curves;
 
 import java.util.List;
 
-import de.uni_kl.cs.disco.curves.dnc.CurveFactory_DNC;
-import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.CurveFactory_MPARTC_PwAffine;
-import de.uni_kl.cs.disco.nc.CalculatorConfig;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
 
-/**
- * Static access to the methods defined in the CurveFactoryInterface.
- *
- */
-public class CurvePwAffineFactory {
-    private static CurvePwAffineFactoryInterface dnc_factory = new CurveFactory_DNC();
-    private static CurvePwAffineFactoryInterface mpa_rtc_pwaffine_factory = new CurveFactory_MPARTC_PwAffine();
-
-    private static CurvePwAffineFactoryInterface factory = getCurveFactory();
-
-    private static CurvePwAffineFactoryInterface getCurveFactory() {
-        switch (CalculatorConfig.getInstance().getCurveClass()) {
-            case MPA_RTC:
-                return mpa_rtc_pwaffine_factory;
-            case DNC:
-            default:
-                return dnc_factory;
-        }
-    }
-
-    public static void setCurveClass(CurveClass curve_class) {
-        switch (curve_class) {
-            case MPA_RTC:
-                factory = mpa_rtc_pwaffine_factory;
-                return;
-            case DNC:
-            default:
-                factory = dnc_factory;
-                return;
-        }
-    }
-
+public interface CurvePwAffineFactory {
 //--------------------------------------------------------------------------------------------------------------
 // Curve Constructors
 //--------------------------------------------------------------------------------------------------------------
@@ -75,21 +39,14 @@ public class CurvePwAffineFactory {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public static CurvePwAffine createCurve(List<LinearSegment> segments) {
-        return factory.createCurve(segments);
-    }
+    CurvePwAffine createCurve(List<LinearSegment> segments);
 
-    public static CurvePwAffine createZeroCurve() {
-        return factory.createZeroCurve();
-    }
+    CurvePwAffine createZeroCurve();
 
-    public static CurvePwAffine createHorizontal(double y) {
-        return factory.createHorizontal(y);
-    }
+    CurvePwAffine createHorizontal(double y);
 
-    public static CurvePwAffine createHorizontal(Num y) {
-        return factory.createHorizontal(y);
-    }
+    CurvePwAffine createHorizontal(Num y);
+
 
 //--------------------------------------------------------------------------------------------------------------
 // Service Curve Constructors
@@ -98,45 +55,25 @@ public class CurvePwAffineFactory {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public static ServiceCurve createServiceCurve() {
-        return factory.createServiceCurve();
-    }
+    ServiceCurve createServiceCurve();
 
-    public static ServiceCurve createServiceCurve(int segment_count) {
-        return factory.createServiceCurve(segment_count);
-    }
+    ServiceCurve createServiceCurve(int segment_count);
 
-    public static ServiceCurve createServiceCurve(String service_curve_str) throws Exception {
-        return factory.createServiceCurve(service_curve_str);
-    }
+    ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
 
-    public static ServiceCurve createServiceCurve(CurvePwAffine curve) {
-        return factory.createServiceCurve(curve);
-    }
+    ServiceCurve createServiceCurve(CurvePwAffine curve);
 
-    public static ServiceCurve createZeroService() {
-        return factory.createZeroService();
-    }
+    ServiceCurve createZeroService();
 
-    public static ServiceCurve createZeroDelayInfiniteBurst() {
-        return factory.createZeroDelayInfiniteBurst();
-    }
+    ServiceCurve createZeroDelayInfiniteBurst();
 
-    public static ServiceCurve createDelayedInfiniteBurst(double delay) {
-        return factory.createDelayedInfiniteBurst(delay);
-    }
+    ServiceCurve createDelayedInfiniteBurst(double delay);
 
-    public static ServiceCurve createDelayedInfiniteBurst(Num delay) {
-        return factory.createDelayedInfiniteBurst(delay);
-    }
+    ServiceCurve createDelayedInfiniteBurst(Num delay);
 
-    public static ServiceCurve createRateLatency(double rate, double latency) {
-        return factory.createRateLatency(rate, latency);
-    }
+    ServiceCurve createRateLatency(double rate, double latency);
 
-    public static ServiceCurve createRateLatency(Num rate, Num latency) {
-        return factory.createRateLatency(rate, latency);
-    }
+    ServiceCurve createRateLatency(Num rate, Num latency);
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -146,45 +83,25 @@ public class CurvePwAffineFactory {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public static ArrivalCurve createArrivalCurve() {
-        return factory.createArrivalCurve();
-    }
+    ArrivalCurve createArrivalCurve();
 
-    public static ArrivalCurve createArrivalCurve(int segment_count) {
-        return factory.createArrivalCurve(segment_count);
-    }
+    ArrivalCurve createArrivalCurve(int segment_count);
 
-    public static ArrivalCurve createArrivalCurve(String arrival_curve_str) throws Exception {
-        return factory.createArrivalCurve(arrival_curve_str);
-    }
+    ArrivalCurve createArrivalCurve(String arrival_curve_str) throws Exception;
 
-    public static ArrivalCurve createArrivalCurve(CurvePwAffine curve) {
-        return factory.createArrivalCurve(curve);
-    }
+    ArrivalCurve createArrivalCurve(CurvePwAffine curve);
 
-    public static ArrivalCurve createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-        return factory.createArrivalCurve(curve, remove_latency);
-    }
+    ArrivalCurve createArrivalCurve(CurvePwAffine curve, boolean remove_latency);
 
-    public static ArrivalCurve createZeroArrivals() {
-        return factory.createZeroArrivals();
-    }
+    ArrivalCurve createZeroArrivals();
 
-    public static ArrivalCurve createPeakArrivalRate(double rate) {
-        return factory.createPeakArrivalRate(rate);
-    }
+    ArrivalCurve createPeakArrivalRate(double rate);
 
-    public static ArrivalCurve createPeakArrivalRate(Num rate) {
-        return factory.createPeakArrivalRate(rate);
-    }
+    ArrivalCurve createPeakArrivalRate(Num rate);
 
-    public static ArrivalCurve createTokenBucket(double rate, double burst) {
-        return factory.createTokenBucket(rate, burst);
-    }
+    ArrivalCurve createTokenBucket(double rate, double burst);
 
-    public static ArrivalCurve createTokenBucket(Num rate, Num burst) {
-        return factory.createTokenBucket(rate, burst);
-    }
+    ArrivalCurve createTokenBucket(Num rate, Num burst);
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -194,61 +111,23 @@ public class CurvePwAffineFactory {
     //------------------------------------------------------------
     // DiscoDNC compliance
     //------------------------------------------------------------
-    public static MaxServiceCurve createMaxServiceCurve() {
-        return factory.createMaxServiceCurve();
-    }
+    MaxServiceCurve createMaxServiceCurve();
 
-    public static MaxServiceCurve createMaxServiceCurve(int segment_count) {
-        return factory.createMaxServiceCurve(segment_count);
-    }
+    MaxServiceCurve createMaxServiceCurve(int segment_count);
 
-    public static MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception {
-        return factory.createMaxServiceCurve(max_service_curve_str);
-    }
+    MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception;
 
-    public static MaxServiceCurve createMaxServiceCurve(CurvePwAffine curve) {
-        return factory.createMaxServiceCurve(curve);
-    }
+    MaxServiceCurve createMaxServiceCurve(CurvePwAffine curve);
 
-    public static MaxServiceCurve createInfiniteMaxService() {
-        return factory.createInfiniteMaxService();
-    }
+    MaxServiceCurve createInfiniteMaxService();
 
-    public static MaxServiceCurve createZeroDelayInfiniteBurstMSC() {
-        return factory.createZeroDelayInfiniteBurstMSC();
-    }
+    MaxServiceCurve createZeroDelayInfiniteBurstMSC();
 
-    public static MaxServiceCurve createDelayedInfiniteBurstMSC(double delay) {
-        checkMSClatency(NumFactory.create(delay));
-        return factory.createDelayedInfiniteBurstMSC(delay);
-    }
+    MaxServiceCurve createDelayedInfiniteBurstMSC(double delay);
 
-    public static MaxServiceCurve createDelayedInfiniteBurstMSC(Num delay) {
-        checkMSClatency(delay);
-        return factory.createDelayedInfiniteBurstMSC(delay);
-    }
+    MaxServiceCurve createDelayedInfiniteBurstMSC(Num delay);
 
-    public static MaxServiceCurve createRateLatencyMSC(double rate, double latency) {
-        checkMSCrate(NumFactory.create(rate));
-        checkMSClatency(NumFactory.create(latency));
-        return factory.createRateLatencyMSC(rate, latency);
-    }
+    MaxServiceCurve createRateLatencyMSC(double rate, double latency);
 
-    public static MaxServiceCurve createRateLatencyMSC(Num rate, Num latency) {
-        checkMSCrate(rate);
-        checkMSClatency(latency);
-        return factory.createRateLatencyMSC(rate, latency);
-    }
-
-    private static void checkMSClatency(Num latency) {
-        if (latency.equals(NumFactory.getPositiveInfinity())) {
-            throw new IllegalArgumentException("Maximum service curve cannot be zero.");
-        }
-    }
-
-    private static void checkMSCrate(Num rate) {
-        if (rate.eqZero()) {
-            throw new IllegalArgumentException("Maximum service curve cannot be zero.");
-        }
-    }
+    MaxServiceCurve createRateLatencyMSC(Num rate, Num latency);
 }

@@ -30,8 +30,8 @@ package de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine;
 import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryInterface;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
@@ -40,7 +40,7 @@ import java.util.List;
 
 //TODO Currently, arrival curves are not enforced to be 0 in the origin
 //		because the RTC toolbox does not allow for such spots as they occur in token bucket constrained arrivals. 
-public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterface {
+public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactory {
     protected static final CurveFactory_MPARTC_PwAffine factory_object = new CurveFactory_MPARTC_PwAffine();
 
 //--------------------------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactoryInterfa
     }
 
     public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-        return createArrivalCurve(CurvePwAffineUtils.removeLatency(curve));
+        return createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(curve));
     }
 
     public ArrivalCurve_MPARTC_PwAffine createZeroArrivals() {

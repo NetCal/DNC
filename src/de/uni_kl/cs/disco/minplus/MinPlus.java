@@ -33,8 +33,8 @@ import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
@@ -53,22 +53,22 @@ public class MinPlus {
 
     private static ArrivalCurve deconv_ac(Curve_MPARTC_PwAffine ac, Curve_MPARTC_PwAffine sc) throws Exception {
         ch.ethz.rtc.kernel.Curve result = CurveMath.minPlusDeconv(ac.getRtc_curve(), sc.getRtc_curve());
-        return CurvePwAffineFactory.createArrivalCurve(result.toString());
+        return CurvePwAffineFactoryDispatch.createArrivalCurve(result.toString());
     }
 
     private static ArrivalCurve conv_ac(Curve_MPARTC_PwAffine ac, Curve_MPARTC_PwAffine sc) throws Exception {
         ch.ethz.rtc.kernel.Curve result = CurveMath.minPlusDeconv(ac.getRtc_curve(), sc.getRtc_curve());
-        return CurvePwAffineFactory.createArrivalCurve(result.toString());
+        return CurvePwAffineFactoryDispatch.createArrivalCurve(result.toString());
     }
 
     private static ServiceCurve conv_sc(Curve_MPARTC_PwAffine ac, Curve_MPARTC_PwAffine sc) throws Exception {
         ch.ethz.rtc.kernel.Curve result = CurveMath.minPlusDeconv(ac.getRtc_curve(), sc.getRtc_curve());
-        return CurvePwAffineFactory.createServiceCurve(result.toString());
+        return CurvePwAffineFactoryDispatch.createServiceCurve(result.toString());
     }
 
     private static MaxServiceCurve conv_msc(Curve_MPARTC_PwAffine ac, Curve_MPARTC_PwAffine sc) throws Exception {
         ch.ethz.rtc.kernel.Curve result = CurveMath.minPlusDeconv(ac.getRtc_curve(), sc.getRtc_curve());
-        return CurvePwAffineFactory.createMaxServiceCurve(result.toString());
+        return CurvePwAffineFactoryDispatch.createMaxServiceCurve(result.toString());
     }
 
     public static ArrivalCurve apply(ArrivalCurve ac, ServiceCurve sc, Operation o) throws Exception {
@@ -101,7 +101,7 @@ public class MinPlus {
     public static ArrivalCurve apply(Set<ArrivalCurve> s1, Operation o) throws Exception {
         if (CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.MPA_RTC)) {
             if (s1 == null || s1.isEmpty()) {
-                return CurvePwAffineFactory.createZeroArrivals();
+                return CurvePwAffineFactoryDispatch.createZeroArrivals();
             }
             if (s1.size() == 1) {
                 return s1.iterator().next().copy();
@@ -112,14 +112,14 @@ public class MinPlus {
             Curve result = new Curve(sl);
             Curve ac2 = null;
             for (ArrivalCurve arrival_curve_2 : s1) {
-                CurvePwAffine result_curves = CurvePwAffineFactory.createArrivalCurve(arrival_curve_2.toString());
+                CurvePwAffine result_curves = CurvePwAffineFactoryDispatch.createArrivalCurve(arrival_curve_2.toString());
                 Curve_MPARTC_PwAffine c = (Curve_MPARTC_PwAffine) result_curves;
                 ac2 = c.getRtc_curve();
 
                 result = CurveMath.minPlusConv(result, ac2);
             }
 
-            return CurvePwAffineFactory.createArrivalCurve(ac2.toString());
+            return CurvePwAffineFactoryDispatch.createArrivalCurve(ac2.toString());
         }
         switch (o) {
             case convolve:
@@ -190,7 +190,7 @@ public class MinPlus {
             Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
             switch (MinPlusInputChecks.inputNullCheck(s1, s2)) {
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroService());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroService());
                     return results;
                 case 0:
                     break;
@@ -199,7 +199,7 @@ public class MinPlus {
             }
             switch (MinPlusInputChecks.inputEmptySetCheck(s1, s2)) {
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroService());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroService());
                     return results;
                 case 0:
                     break;
@@ -211,7 +211,7 @@ public class MinPlus {
                 for (ServiceCurve beta_2 : s2) {
                     Curve_MPARTC_PwAffine s11 = (Curve_MPARTC_PwAffine) beta_1;
                     Curve_MPARTC_PwAffine s12 = (Curve_MPARTC_PwAffine) beta_2;
-                    results.add(CurvePwAffineFactory.createServiceCurve(CurveMath.add(s11.getRtc_curve(), s12.getRtc_curve()).toString()));
+                    results.add(CurvePwAffineFactoryDispatch.createServiceCurve(CurveMath.add(s11.getRtc_curve(), s12.getRtc_curve()).toString()));
                 }
             }
             return results;
@@ -235,10 +235,10 @@ public class MinPlus {
                     break;
                 case 1:
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroArrivals());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
                     return results;
                 case 2:
-                    results.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
+                    results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
                     return results;
                 default:
             }
@@ -247,10 +247,10 @@ public class MinPlus {
                     break;
                 case 1:
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroArrivals());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
                     return results;
                 case 2:
-                    results.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
+                    results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
                     return results;
                 default:
             }
@@ -259,7 +259,7 @@ public class MinPlus {
                 for (ArrivalCurve alpha : s1) {
                     Curve_MPARTC_PwAffine s11 = (Curve_MPARTC_PwAffine) beta;
                     Curve_MPARTC_PwAffine s12 = (Curve_MPARTC_PwAffine) beta;
-                    results.add(CurvePwAffineFactory.createArrivalCurve(CurveMath.add(s11.getRtc_curve(), s12.getRtc_curve()).toString()));
+                    results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(CurveMath.add(s11.getRtc_curve(), s12.getRtc_curve()).toString()));
                 }
             }
 
@@ -293,15 +293,15 @@ public class MinPlus {
                     break;
                 case 1:
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroArrivals());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
                     return results;
                 case 2:
-                    results.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
+                    results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
                     return results;
                 default:
             }
             if (s1.isEmpty()) {
-                results.add(CurvePwAffineFactory.createZeroArrivals());
+                results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
                 return results;
             }
 
@@ -310,7 +310,7 @@ public class MinPlus {
             for (ArrivalCurve alpha : s1) {
                 Curve_MPARTC_PwAffine a = (Curve_MPARTC_PwAffine) alpha;
                 Curve a1 = a.getRtc_curve();
-                results.add(CurvePwAffineFactory.createArrivalCurve(CurveMath.minPlusDeconv(a1 ,s).toString()));
+                results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(CurveMath.minPlusDeconv(a1 ,s).toString()));
             }
 
             return results;
@@ -357,10 +357,10 @@ public class MinPlus {
                     break;
                 case 1:
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroArrivals());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
                     return results;
                 case 2:
-                    results.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
+                    results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
                     return results;
                 default:
             }
@@ -369,10 +369,10 @@ public class MinPlus {
                     break;
                 case 1:
                 case 3:
-                    results.add(CurvePwAffineFactory.createZeroArrivals());
+                    results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
                     return results;
                 case 2:
-                    results.add((ArrivalCurve) CurvePwAffineFactory.createZeroDelayInfiniteBurst());
+                    results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
                     return results;
                 default:
             }
@@ -388,7 +388,7 @@ public class MinPlus {
                     c.move(-latency.doubleValue(), 0);
                     Curve dec = CurveMath.minPlusDeconv(c, sc);
                     dec.move(latency.doubleValue(), 0);
-                    results.add(CurvePwAffineFactory.createArrivalCurve(dec.toString()));
+                    results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(dec.toString()));
                 }
             }
 
@@ -425,14 +425,14 @@ public class MinPlus {
             Set<CurvePwAffine> result = new HashSet<CurvePwAffine>();
 
             //TODO: won't work
-            Curve_MPARTC_PwAffine msc_as_ac = (Curve_MPARTC_PwAffine) CurvePwAffineUtils.removeLatency(s2); // Abuse the ArrivalCurve class here for convenience.
+            Curve_MPARTC_PwAffine msc_as_ac = (Curve_MPARTC_PwAffine) CurvePwAffineUtilsDispatch.removeLatency(s2); // Abuse the ArrivalCurve class here for convenience.
             Curve c = msc_as_ac.getRtc_curve();
             for (ArrivalCurve ac : s1) {
                 Curve_MPARTC_PwAffine a = (Curve_MPARTC_PwAffine) ac;
                 Curve c2 = a.getRtc_curve();
                 Curve curve = CurveMath.minPlusConv(c2, c);
                 curve.move(msc_latency.doubleValue(), 0);
-                result.add(CurvePwAffineFactory.createArrivalCurve(c.toString()));
+                result.add(CurvePwAffineFactoryDispatch.createArrivalCurve(c.toString()));
             }
 
             return result;
@@ -473,12 +473,12 @@ public class MinPlus {
             }
 
             Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-            Curve_MPARTC_PwAffine extra_gamma_as_ac = (Curve_MPARTC_PwAffine) CurvePwAffineFactory.createArrivalCurve(s2); // Abuse the ArrivalCurve class here for convenience.
+            Curve_MPARTC_PwAffine extra_gamma_as_ac = (Curve_MPARTC_PwAffine) CurvePwAffineFactoryDispatch.createArrivalCurve(s2); // Abuse the ArrivalCurve class here for convenience.
             Curve c = extra_gamma_as_ac.getRtc_curve();
             for (ArrivalCurve ac : s1) {
                 Curve_MPARTC_PwAffine curve2 = (Curve_MPARTC_PwAffine) ac;
                 Curve cs = curve2.getRtc_curve();
-                result.add(CurvePwAffineFactory.createArrivalCurve(CurveMath.minPlusConv(c, cs).toString()));
+                result.add(CurvePwAffineFactoryDispatch.createArrivalCurve(CurveMath.minPlusConv(c, cs).toString()));
             }
 
             return result;
