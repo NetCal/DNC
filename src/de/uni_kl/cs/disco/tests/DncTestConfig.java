@@ -41,12 +41,7 @@ public class DncTestConfig extends AnalysisConfig {
     protected AnalysisConfig.Multiplexing mux_discipline;
     protected boolean console_output = false;
 
-//    // Calculator parameters
-//    protected boolean enable_checks = false;
-//    protected CurveClass curves;
-//    protected NumClass numbers;
-
-    // Calculator config
+    // Calculator configUuration
 	protected boolean enable_checks = false;
     protected CalculatorConfig calc_config = CalculatorConfig.getInstance();
 
