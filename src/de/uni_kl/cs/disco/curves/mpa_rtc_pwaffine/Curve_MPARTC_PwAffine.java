@@ -34,7 +34,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 import de.uni_kl.cs.disco.numbers.implementations.RealDouble;
 
 import java.util.ArrayList;
@@ -265,7 +265,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     public int getSegmentLimitRight(Num x) {
-        if (x.equals(NumFactory.getPositiveInfinity())) {
+        if (x.equals(NumFactoryDispatch.getPositiveInfinity())) {
             return getSegmentCount();
         }
 
@@ -354,7 +354,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     public boolean isConvex() {
-        return isConvexIn(NumFactory.getZero(), NumFactory.getPositiveInfinity());
+        return isConvexIn(NumFactoryDispatch.getZero(), NumFactoryDispatch.getPositiveInfinity());
     }
 
     public boolean isConvexIn(Num a, Num b) {
@@ -386,7 +386,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     public boolean isConcave() {
-        return isConcaveIn(NumFactory.getZero(), NumFactory.getPositiveInfinity());
+        return isConcaveIn(NumFactoryDispatch.getZero(), NumFactoryDispatch.getPositiveInfinity());
     }
 
     /**
@@ -473,12 +473,12 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
     public Num f(Num x) {
         // Assume left-continuity --> getYmin
-        return NumFactory.create(rtc_curve.getYmin(x.doubleValue()));
+        return NumFactoryDispatch.create(rtc_curve.getYmin(x.doubleValue()));
     }
 
     public Num fLimitRight(Num x) {
         // Assume left-continuity --> getYmin
-        return NumFactory.create(rtc_curve.getYmin(x.doubleValue()));
+        return NumFactoryDispatch.create(rtc_curve.getYmin(x.doubleValue()));
     }
 
     public Num f_inv(Num y) {
@@ -487,31 +487,31 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
     public Num f_inv(Num y, boolean rightmost) {
         if (rightmost) {
-            return NumFactory.create(rtc_curve.getXmax(y.doubleValue()));
+            return NumFactoryDispatch.create(rtc_curve.getXmax(y.doubleValue()));
         } else {
-            return NumFactory.create(rtc_curve.getXmin(y.doubleValue()));
+            return NumFactoryDispatch.create(rtc_curve.getXmin(y.doubleValue()));
         }
     }
 
     public Num getLatency() {
-        return NumFactory.create(rtc_curve.getXmax(0.0));
+        return NumFactoryDispatch.create(rtc_curve.getXmax(0.0));
     }
 
     public Num getBurst() {
-        return NumFactory.create(rtc_curve.y0epsilon());
+        return NumFactoryDispatch.create(rtc_curve.y0epsilon());
     }
 
     public Num getGradientLimitRight(Num x) {
         int i = getSegmentLimitRight(x);
         if (i < 0) {
-            return NumFactory.createNaN();
+            return NumFactoryDispatch.createNaN();
         }
-        return NumFactory.create(getSegmentRTC(i).s());
+        return NumFactoryDispatch.create(getSegmentRTC(i).s());
     }
 
     public Num getTB_Burst() {
         // RTC Token Buckets cannot pass through the origin
-        return NumFactory.create(rtc_curve.y0epsilon());
+        return NumFactoryDispatch.create(rtc_curve.y0epsilon());
     }
 
     @Override
@@ -575,7 +575,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     public Num getUltAffineRate() {
-        return NumFactory.create(rtc_curve.aperiodicSegments().lastSegment().s());
+        return NumFactoryDispatch.create(rtc_curve.aperiodicSegments().lastSegment().s());
     }
 
     //------------------------------------------------------------
@@ -632,7 +632,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
             if (this.equals(CurveFactory_MPARTC_PwAffine.factory_object.createZeroDelayInfiniteBurst())) {
                 rate_latencies = new ArrayList<Curve_MPARTC_PwAffine>();
-                rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(NumFactory.createPositiveInfinity(), NumFactory.createZero()));
+                rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(NumFactoryDispatch.createPositiveInfinity(), NumFactoryDispatch.createZero()));
             } else {
                 throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
             }

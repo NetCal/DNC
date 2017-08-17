@@ -6,6 +6,10 @@ TODO: Dispatcher for minplus operations
   - CurvePwAffineFactoryInterface renamed to CurvePwAffineFactory
   - CurvePwAffineUtils renamed to CurvePwAffineUtilsDispatch
   - LinearSegmentFactory renamed to LinearSegmentFactoryDispatch
+  - NumFactory renamed to NumFactoryDispatch
+  - NumFactoryInterface renamed to NumFactory
+  - NumUtils renamed to NumUtilsDispatch
+  - NumUtilsInterface renamed to NumUtils
 * Renamed OperatorInputChecks to MinPlusInputChecks.
 * Made LinearSegmentUtils an abstract class (it only provides static methods). 
 * Reworked CalculatorConfig.java to singleton pattern (improves tests run time considerably).

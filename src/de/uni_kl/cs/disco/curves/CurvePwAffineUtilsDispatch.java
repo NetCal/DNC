@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 public class CurvePwAffineUtilsDispatch {
     protected static final int OPERATOR_ADD = 0;
@@ -79,7 +79,7 @@ public class CurvePwAffineUtilsDispatch {
         }
 
         ArrayList<LinearSegment> result = new ArrayList<LinearSegment>();
-        Num x = NumFactory.createZero();
+        Num x = NumFactoryDispatch.createZero();
         Num x_cross;
         boolean leftopen;
 
@@ -87,10 +87,10 @@ public class CurvePwAffineUtilsDispatch {
         int i2 = 0;
         while (i1 < curve1.getSegmentCount() || i2 < curve2.getSegmentCount()) {
             Num x_next1 = (i1 + 1 < curve1.getSegmentCount()) ?
-                    curve1.getSegment(i1 + 1).getX() : NumFactory.createPositiveInfinity();
+                    curve1.getSegment(i1 + 1).getX() : NumFactoryDispatch.createPositiveInfinity();
             Num x_next2 = (i2 + 1 < curve2.getSegmentCount()) ?
-                    curve2.getSegment(i2 + 1).getX() : NumFactory.createPositiveInfinity();
-            Num x_next = NumUtils.min(x_next1, x_next2);
+                    curve2.getSegment(i2 + 1).getX() : NumFactoryDispatch.createPositiveInfinity();
+            Num x_next = NumUtilsDispatch.min(x_next1, x_next2);
 
             leftopen = curve1.getSegment(i1).isLeftopen() || curve2.getSegment(i2).isLeftopen();
 
@@ -103,8 +103,8 @@ public class CurvePwAffineUtilsDispatch {
                     break;
                 case OPERATOR_MIN:
                     x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
-                    if (x_cross.equals(NumFactory.getNaN())) {
-                        x_cross = NumFactory.createPositiveInfinity();
+                    if (x_cross.equals(NumFactoryDispatch.getNaN())) {
+                        x_cross = NumFactoryDispatch.createPositiveInfinity();
                     }
                     if (x.lt(x_cross) && x_cross.lt(x_next)) {
                         result.add(LinearSegmentUtils.min(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
@@ -115,8 +115,8 @@ public class CurvePwAffineUtilsDispatch {
                     break;
                 case OPERATOR_MAX:
                     x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
-                    if (x_cross.equals(NumFactory.getNaN())) {
-                        x_cross = NumFactory.createPositiveInfinity();
+                    if (x_cross.equals(NumFactoryDispatch.getNaN())) {
+                        x_cross = NumFactoryDispatch.createPositiveInfinity();
                     }
                     if (x.lt(x_cross) && x_cross.lt(x_next)) {
                         result.add(LinearSegmentUtils.max(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
@@ -238,7 +238,7 @@ public class CurvePwAffineUtilsDispatch {
      */
     public static Num getMaxVerticalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-            return NumFactory.createPositiveInfinity();
+            return NumFactoryDispatch.createPositiveInfinity();
         }
         // The computeInflectionPoints based method does not work for
         // single rate service curves (without latency)
@@ -251,16 +251,16 @@ public class CurvePwAffineUtilsDispatch {
         // Solution:
         // Start with the burst as minimum of all possible solutions for the deviation instead of negative infinity.
 
-        Num burst_c1 = c1.fLimitRight(NumFactory.getZero());
-        Num burst_c2 = c2.fLimitRight(NumFactory.getZero());
-        Num result = NumUtils.diff(burst_c1, burst_c2);
+        Num burst_c1 = c1.fLimitRight(NumFactoryDispatch.getZero());
+        Num burst_c2 = c2.fLimitRight(NumFactoryDispatch.getZero());
+        Num result = NumUtilsDispatch.diff(burst_c1, burst_c2);
 
         ArrayList<Num> xcoords = computeInflectionPointsX(c1, c2);
         for (int i = 0; i < xcoords.size(); i++) {
             Num ip_x = xcoords.get(i);
 
-            Num backlog = NumUtils.sub(c1.f(ip_x), c2.f(ip_x));
-            result = NumUtils.max(result, backlog);
+            Num backlog = NumUtilsDispatch.sub(c1.f(ip_x), c2.f(ip_x));
+            result = NumUtilsDispatch.max(result, backlog);
         }
         return result;
     }
@@ -274,21 +274,21 @@ public class CurvePwAffineUtilsDispatch {
      */
     public static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-            return NumFactory.createPositiveInfinity();
+            return NumFactoryDispatch.createPositiveInfinity();
         }
 
-        Num result = NumFactory.createNegativeInfinity();
+        Num result = NumFactoryDispatch.createNegativeInfinity();
         for (int i = 0; i < c1.getSegmentCount(); i++) {
             Num ip_y = c1.getSegment(i).getY();
 
-            Num delay = NumUtils.sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = NumUtils.max(result, delay);
+            Num delay = NumUtilsDispatch.sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+            result = NumUtilsDispatch.max(result, delay);
         }
         for (int i = 0; i < c2.getSegmentCount(); i++) {
             Num ip_y = c2.getSegment(i).getY();
 
-            Num delay = NumUtils.sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = NumUtils.max(result, delay);
+            Num delay = NumUtilsDispatch.sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+            result = NumUtilsDispatch.max(result, delay);
         }
         return result;
     }
@@ -311,9 +311,9 @@ public class CurvePwAffineUtilsDispatch {
         int i2 = 0;
         while (i1 < c1.getSegmentCount() || i2 < c2.getSegmentCount()) {
             Num x1 = (i1 < c1.getSegmentCount()) ?
-                    c1.getSegment(i1).getX() : NumFactory.createPositiveInfinity();
+                    c1.getSegment(i1).getX() : NumFactoryDispatch.createPositiveInfinity();
             Num x2 = (i2 < c2.getSegmentCount()) ?
-                    c2.getSegment(i2).getX() : NumFactory.createPositiveInfinity();
+                    c2.getSegment(i2).getX() : NumFactoryDispatch.createPositiveInfinity();
             if (x1.lt(x2)) {
                 xcoords.add(x1.copy());
                 i1++;
@@ -345,9 +345,9 @@ public class CurvePwAffineUtilsDispatch {
         int i2 = 0;
         while (i1 < c1.getSegmentCount() || i2 < c2.getSegmentCount()) {
             Num y1 = (i1 < c1.getSegmentCount()) ?
-                    c1.getSegment(i1).getY() : NumFactory.createPositiveInfinity();
+                    c1.getSegment(i1).getY() : NumFactoryDispatch.createPositiveInfinity();
             Num y2 = (i2 < c2.getSegmentCount()) ?
-                    c2.getSegment(i2).getY() : NumFactory.createPositiveInfinity();
+                    c2.getSegment(i2).getY() : NumFactoryDispatch.createPositiveInfinity();
             if (y1.lt(y2)) {
                 ycoords.add(y1.copy());
                 i1++;
@@ -374,7 +374,7 @@ public class CurvePwAffineUtilsDispatch {
     public static CurvePwAffine add(CurvePwAffine curve, Num dy) {
         CurvePwAffine result = curve.copy();
         for (int i = 0; i < curve.getSegmentCount(); i++) {
-            result.getSegment(i).setY(NumUtils.add(result.getSegment(i).getY(), dy));
+            result.getSegment(i).setY(NumUtilsDispatch.add(result.getSegment(i).getY(), dy));
         }
         return result;
     }
@@ -392,7 +392,7 @@ public class CurvePwAffineUtilsDispatch {
     }
 
     public static Num getXIntersection(CurvePwAffine curve1, CurvePwAffine curve2) {
-        Num x_int = NumFactory.getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
+        Num x_int = NumFactoryDispatch.getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
 
         for (int i = 0; i < curve1.getSegmentCount(); i++) {
             boolean curve1_last = (i == curve1.getSegmentCount() - 1);
@@ -402,7 +402,7 @@ public class CurvePwAffineUtilsDispatch {
 
                 Num x_int_tmp = curve1.getSegment(i).getXIntersectionWith(curve2.getSegment(j));
 
-                if (x_int_tmp.equals(NumFactory.getNaN())) {
+                if (x_int_tmp.equals(NumFactoryDispatch.getNaN())) {
                     break;
                 }
 
@@ -500,7 +500,7 @@ public class CurvePwAffineUtilsDispatch {
         }
 
         for (int i = 1; i < curve_copy.getSegmentCount(); i++) {
-            curve_copy.getSegment(i).setX(NumUtils.add(curve_copy.getSegment(i).getX(), dx));
+            curve_copy.getSegment(i).setX(NumUtilsDispatch.add(curve_copy.getSegment(i).getX(), dx));
         }
 
         beautify(curve_copy);
@@ -521,8 +521,8 @@ public class CurvePwAffineUtilsDispatch {
         CurvePwAffine result = curve.copy();
         LinearSegment segment_i = result.getSegment(i);
         if (segment_i.getX().lt(dx)) {
-            segment_i.setY(NumUtils.add(segment_i.getY(),
-                    NumUtils.mult(NumUtils.sub(dx, segment_i.getX()), segment_i.getGrad())));
+            segment_i.setY(NumUtilsDispatch.add(segment_i.getY(),
+                    NumUtilsDispatch.mult(NumUtilsDispatch.sub(dx, segment_i.getX()), segment_i.getGrad())));
             segment_i.setX(dx);
             segment_i.setLeftopen(false);
         }
@@ -530,7 +530,7 @@ public class CurvePwAffineUtilsDispatch {
             result.removeSegment(0);
         }
         for (i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(NumUtils.sub(result.getSegment(i).getX(), dx));
+            result.getSegment(i).setX(NumUtilsDispatch.sub(result.getSegment(i).getX(), dx));
         }
 
         return result;
@@ -579,7 +579,7 @@ public class CurvePwAffineUtilsDispatch {
         // Shift remaining segments left by latency
         Num L = result.getSegment(0).getX();
         for (int i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(NumUtils.sub(result.getSegment(i).getX(), L));
+            result.getSegment(i).setX(NumUtilsDispatch.sub(result.getSegment(i).getX(), L));
         }
         if (result.getSegment(0).isLeftopen()) {
             result.addSegment(0, LinearSegmentFactoryDispatch.createHorizontalLine(0.0));
@@ -603,22 +603,22 @@ public class CurvePwAffineUtilsDispatch {
         i = 0;
         while (i < c.getSegmentCount() - 1) {
             // Join colinear segments
-            Num firstArg = NumUtils.sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
+            Num firstArg = NumUtilsDispatch.sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
 
-            Num secondArg = NumUtils.sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
-            secondArg = NumUtils.mult(secondArg, c.getSegment(i).getGrad());
-            secondArg = NumUtils.add(c.getSegment(i).getY(), secondArg);
-            secondArg = NumUtils.sub(c.getSegment(i + 1).getY(), secondArg);
+            Num secondArg = NumUtilsDispatch.sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+            secondArg = NumUtilsDispatch.mult(secondArg, c.getSegment(i).getGrad());
+            secondArg = NumUtilsDispatch.add(c.getSegment(i).getY(), secondArg);
+            secondArg = NumUtilsDispatch.sub(c.getSegment(i + 1).getY(), secondArg);
 
-            if (NumUtils.abs(firstArg).lt(NumFactory.getEpsilon())
-                    && NumUtils.abs(secondArg).lt(NumFactory.getEpsilon())) {
+            if (NumUtilsDispatch.abs(firstArg).lt(NumFactoryDispatch.getEpsilon())
+                    && NumUtilsDispatch.abs(secondArg).lt(NumFactoryDispatch.getEpsilon())) {
 
                 c.removeSegment(i + 1);
                 if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
-                    Num resultPt1 = NumUtils.sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
-                    Num resultPt2 = NumUtils.sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+                    Num resultPt1 = NumUtilsDispatch.sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
+                    Num resultPt2 = NumUtilsDispatch.sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
 
-                    c.getSegment(i).setGrad(NumUtils.div(resultPt1, resultPt2));
+                    c.getSegment(i).setGrad(NumUtilsDispatch.div(resultPt1, resultPt2));
                 }
                 continue;
             }
@@ -627,17 +627,17 @@ public class CurvePwAffineUtilsDispatch {
 
         for (i = 0; i < c.getSegmentCount() - 1; i++) {
             if (c.getSegment(i).getX().equals(c.getSegment(i + 1).getX())) {
-                c.getSegment(i).setGrad(NumFactory.createZero());
+                c.getSegment(i).setGrad(NumFactoryDispatch.createZero());
             }
         }
 
         // Remove rate of tb arrival curves' first segment
         if (c.getSegmentCount() > 1
-                && c.getSegment(0).getX() == NumFactory.getZero()
-                && c.getSegment(0).getY() != NumFactory.getZero()
-                && c.getSegment(1).getX() == NumFactory.getZero()
-                && c.getSegment(1).getY() != NumFactory.getZero()) {
-            c.getSegment(0).setGrad(NumFactory.createZero());
+                && c.getSegment(0).getX() == NumFactoryDispatch.getZero()
+                && c.getSegment(0).getY() != NumFactoryDispatch.getZero()
+                && c.getSegment(1).getX() == NumFactoryDispatch.getZero()
+                && c.getSegment(1).getY() != NumFactoryDispatch.getZero()) {
+            c.getSegment(0).setGrad(NumFactoryDispatch.createZero());
         }
         
         c.setTB_MetaInfo(false);

@@ -29,9 +29,9 @@
 package de.uni_kl.cs.disco.numbers.implementations;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumUtilsInterface;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
-public class RealSingleUtils implements NumUtilsInterface {
+public class RealSingleUtils implements NumUtils {
     public Num add(Num num1, Num num2) {
         return RealSingle.add((RealSingle) num1, (RealSingle) num2);
     }

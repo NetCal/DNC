@@ -30,12 +30,12 @@ package de.uni_kl.cs.disco.numbers.implementations;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryInterface;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.values.NaN;
 import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
-public class RationalBigIntFactory implements NumFactoryInterface {
+public class RationalBigIntFactory implements NumFactory {
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
     private Num NaN = createNaN();

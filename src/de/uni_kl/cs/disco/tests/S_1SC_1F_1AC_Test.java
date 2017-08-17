@@ -41,7 +41,7 @@ import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 @RunWith(value = Parameterized.class)
 public class S_1SC_1F_1AC_Test extends DncTests {
@@ -69,20 +69,20 @@ public class S_1SC_1F_1AC_Test extends DncTests {
         expected_results.clear();
 
         // TFA
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.create(12.5), NumFactory.create(75));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create(12.5), NumFactory.create(75));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactoryDispatch.create(12.5), NumFactoryDispatch.create(75));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(12.5), NumFactoryDispatch.create(75));
 
         // SFA
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.create(12.5), NumFactory.create(75));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.create(12.5), NumFactory.create(75));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactoryDispatch.create(12.5), NumFactoryDispatch.create(75));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(12.5), NumFactoryDispatch.create(75));
 
         // PMOO
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.create(12.5), NumFactory.create(75));
+        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(12.5), NumFactoryDispatch.create(75));
 
         // Sink-Tree PMOO at sink
         expected_results_sinktree.clear();
 
-        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, NumFactory.create(75));
+        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, NumFactoryDispatch.create(75));
     }
 
     @Before

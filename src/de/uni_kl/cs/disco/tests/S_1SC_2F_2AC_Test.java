@@ -41,7 +41,7 @@ import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 @RunWith(value = Parameterized.class)
 public class S_1SC_2F_2AC_Test extends DncTests {
@@ -70,26 +70,26 @@ public class S_1SC_2F_2AC_Test extends DncTests {
         expected_results.clear();
 
         // TFA
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.create(13.5), NumFactory.create(125));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, NumFactory.create(13.5), NumFactory.create(125));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create(135), NumFactory.create(125));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactory.create(135), NumFactory.create(125));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactoryDispatch.create(13.5), NumFactoryDispatch.create(125));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, NumFactoryDispatch.create(13.5), NumFactoryDispatch.create(125));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(135), NumFactoryDispatch.create(125));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactoryDispatch.create(135), NumFactoryDispatch.create(125));
 
         // SFA
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.create(29, 2), NumFactory.create(60));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, NumFactory.create(91, 6), NumFactory.create(80));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.create(27), NumFactory.create(110));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactory.create(22.5), NumFactory.create(350, 3));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactoryDispatch.create(29, 2), NumFactoryDispatch.create(60));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, NumFactoryDispatch.create(91, 6), NumFactoryDispatch.create(80));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(27), NumFactoryDispatch.create(110));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactoryDispatch.create(22.5), NumFactoryDispatch.create(350, 3));
 
         // PMOO
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.create(27), NumFactory.create(110));
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactory.create(22.5), NumFactory.create(350, 3));
+        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(27), NumFactoryDispatch.create(110));
+        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactoryDispatch.create(22.5), NumFactoryDispatch.create(350, 3));
 
         // Sink-Tree PMOO at sink
         expected_results_sinktree.clear();
 
-        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, NumFactory.create(125));
-        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, NumFactory.create(125));
+        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, NumFactoryDispatch.create(125));
+        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, NumFactoryDispatch.create(125));
     }
 
     @Before

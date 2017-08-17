@@ -29,12 +29,12 @@
 package de.uni_kl.cs.disco.numbers.implementations;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumUtilsInterface;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 import de.uni_kl.cs.disco.numbers.values.NaN;
 import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
-public class RationalIntUtils implements NumUtilsInterface {
+public class RationalIntUtils implements NumUtils {
     public Num add(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN
                 || (num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity)

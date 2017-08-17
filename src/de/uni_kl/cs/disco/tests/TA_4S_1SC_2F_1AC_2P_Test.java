@@ -42,7 +42,7 @@ import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 @RunWith(value = Parameterized.class)
 public class TA_4S_1SC_2F_1AC_2P_Test extends DncTests {
@@ -72,33 +72,33 @@ public class TA_4S_1SC_2F_1AC_2P_Test extends DncTests {
         expected_results.clear();
 
         // TFA
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.create(7985, 64), NumFactory.create(550));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, NumFactory.create(65), NumFactory.create(550));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create(2335, 12), NumFactory.create(1700, 3));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactory.create(130), NumFactory.create(550));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactoryDispatch.create(7985, 64), NumFactoryDispatch.create(550));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, NumFactoryDispatch.create(65), NumFactoryDispatch.create(550));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(2335, 12), NumFactoryDispatch.create(1700, 3));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, NumFactoryDispatch.create(130), NumFactoryDispatch.create(550));
 
         // SFA
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.create(535, 6), NumFactory.create(925, 2));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, NumFactory.create(355, 6), NumFactory.create(625, 2));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.create(105), NumFactory.create(1625, 3));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactory.create(235, 3), NumFactory.create(1225, 3));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactoryDispatch.create(535, 6), NumFactoryDispatch.create(925, 2));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, NumFactoryDispatch.create(355, 6), NumFactoryDispatch.create(625, 2));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(105), NumFactoryDispatch.create(1625, 3));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, NumFactoryDispatch.create(235, 3), NumFactoryDispatch.create(1225, 3));
 
         // PMOO
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.create(290, 3), NumFactory.create(500));
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactory.create(190, 3), NumFactory.create(1000, 3));
+        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(290, 3), NumFactoryDispatch.create(500));
+        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, NumFactoryDispatch.create(190, 3), NumFactoryDispatch.create(1000, 3));
 
 
         // PMOO Arrival Bounding may yield cross-traffic arrivals!
         expected_results_PMOOAB.clear();
 
         // TFA
-        expected_results_PMOOAB.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.create(765, 4), NumFactory.create(550));
+        expected_results_PMOOAB.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactoryDispatch.create(765, 4), NumFactoryDispatch.create(550));
 
 
         // Sink-Tree PMOO at sink
         expected_results_sinktree.clear();
 
-        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, NumFactory.create(550));
+        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, NumFactoryDispatch.create(550));
     }
 
     @Before

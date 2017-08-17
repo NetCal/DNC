@@ -31,8 +31,8 @@ package de.uni_kl.cs.disco.curves.dnc;
 
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 /**
  * Class representing linear segments of a curve. A linear segments starts at
@@ -71,9 +71,9 @@ public class LinearSegment_DNC implements LinearSegment {
      * The default constructor.
      */
     protected LinearSegment_DNC() {
-        x = NumFactory.createZero();
-        y = NumFactory.createZero();
-        grad = NumFactory.createZero();
+        x = NumFactoryDispatch.createZero();
+        y = NumFactoryDispatch.createZero();
+        grad = NumFactoryDispatch.createZero();
         leftopen = false;
     }
 
@@ -127,9 +127,9 @@ public class LinearSegment_DNC implements LinearSegment {
             throw new RuntimeException("Invalid string representation of a linear segment.");
         }
 
-        x = NumFactory.create(x_y[0]);
-        y = NumFactory.create(x_y[1]);
-        grad = NumFactory.create(xy_r[1]);
+        x = NumFactoryDispatch.create(x_y[0]);
+        y = NumFactoryDispatch.create(x_y[1]);
+        grad = NumFactoryDispatch.create(xy_r[1]);
     }
 
 
@@ -145,7 +145,7 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return the function value
      */
     public Num f(Num x) {
-        return NumUtils.add(NumUtils.mult(NumUtils.sub(x, this.x), grad), y);
+        return NumUtilsDispatch.add(NumUtilsDispatch.mult(NumUtilsDispatch.sub(x, this.x), grad), y);
     }
 
     public Num getX() {
@@ -188,11 +188,11 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return the x-coordinate at which the segments cross or NaN of they are parallel
      */
     public Num getXIntersectionWith(LinearSegment other) {
-        Num y1 = NumUtils.sub(this.y, NumUtils.mult(x, this.grad));
-        Num y2 = NumUtils.sub(other.getY(), NumUtils.mult(other.getX(), other.getGrad()));
+        Num y1 = NumUtilsDispatch.sub(this.y, NumUtilsDispatch.mult(x, this.grad));
+        Num y2 = NumUtilsDispatch.sub(other.getY(), NumUtilsDispatch.mult(other.getX(), other.getGrad()));
 
         // returns NaN if lines are parallel
-        return NumUtils.div(NumUtils.sub(y2, y1), NumUtils.sub(this.grad, other.getGrad()));
+        return NumUtilsDispatch.div(NumUtilsDispatch.sub(y2, y1), NumUtilsDispatch.sub(this.grad, other.getGrad()));
     }
 
     /**

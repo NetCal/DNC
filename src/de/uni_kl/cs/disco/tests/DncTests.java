@@ -51,7 +51,7 @@ import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 import java.util.*;
 
@@ -414,10 +414,10 @@ public class DncTests {
         Num backlog_bound_TBRL_HOMO = null;
         
         try {
-            backlog_bound_TBRL = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
-            backlog_bound_TBRL_CONV = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
-            backlog_bound_TBRL_CONV_TBRL_DECONV = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
-            backlog_bound_TBRL_HOMO = NumFactory.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
+            backlog_bound_TBRL = NumFactoryDispatch.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
+            backlog_bound_TBRL_CONV = NumFactoryDispatch.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
+            backlog_bound_TBRL_CONV_TBRL_DECONV = NumFactoryDispatch.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
+            backlog_bound_TBRL_HOMO = NumFactoryDispatch.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
         } catch (Exception e) {
             e.printStackTrace();
             fail("Analysis failed");

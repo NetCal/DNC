@@ -29,8 +29,8 @@
 package de.uni_kl.cs.disco.nc;
 
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 import java.io.File;
 
@@ -84,8 +84,8 @@ public final class CalculatorConfig {
 			return false;
 		} else {
 			NUM_CLASS = num_class;
-			NumFactory.setNumClass(num_class);
-			NumUtils.setNumClass(num_class);
+			NumFactoryDispatch.setNumClass(num_class);
+			NumUtilsDispatch.setNumClass(num_class);
 			return true;
 		}
 	}

@@ -49,7 +49,7 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 public class PbooArrivalBound_Concatenation extends ArrivalBound {
 
@@ -148,7 +148,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
             tfa.deriveBoundsAtServer(last_hop_xtx);
 
             Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
-            Num tfa_backlog_bound_min = NumFactory.getPositiveInfinity();
+            Num tfa_backlog_bound_min = NumFactoryDispatch.getPositiveInfinity();
 
             for (Num tfa_backlog_bound : tfa_backlog_bounds) {
                 if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {

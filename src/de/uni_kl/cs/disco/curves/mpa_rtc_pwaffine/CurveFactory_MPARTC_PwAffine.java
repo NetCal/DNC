@@ -34,7 +34,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 import java.util.List;
 
@@ -228,7 +228,7 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactory {
     }
 
     public MaxServiceCurve_MPARTC_PwAffine createInfiniteMaxService() {
-        return createDelayedInfiniteBurstMSC(NumFactory.createZero());
+        return createDelayedInfiniteBurstMSC(NumFactoryDispatch.createZero());
     }
 
     public MaxServiceCurve_MPARTC_PwAffine createZeroDelayInfiniteBurstMSC() {

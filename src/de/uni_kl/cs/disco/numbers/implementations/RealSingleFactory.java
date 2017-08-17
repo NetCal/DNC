@@ -30,9 +30,9 @@ package de.uni_kl.cs.disco.numbers.implementations;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryInterface;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 
-public class RealSingleFactory implements NumFactoryInterface {
+public class RealSingleFactory implements NumFactory {
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
     private Num NaN = createNaN();

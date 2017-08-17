@@ -31,7 +31,7 @@ import de.uni_kl.cs.disco.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.LinearSegment_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
 /**
  * 
@@ -67,7 +67,7 @@ public class LinearSegmentFactoryDispatch {
                 return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
             case DNC:
             default:
-                return new LinearSegment_DNC(NumFactory.createZero(), NumFactory.createZero(), NumFactory.createZero(), false);
+                return new LinearSegment_DNC(NumFactoryDispatch.createZero(), NumFactoryDispatch.createZero(), NumFactoryDispatch.createZero(), false);
         }
     }
 }

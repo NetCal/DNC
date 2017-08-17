@@ -42,8 +42,8 @@ import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
+import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 public class Convolution {
 
@@ -125,10 +125,10 @@ public class Convolution {
         Num latency_msc_1 = max_service_curve_1.getLatency();
         Num latency_msc_2 = max_service_curve_2.getLatency();
 
-        if (latency_msc_1.equals(NumFactory.getPositiveInfinity())) {
+        if (latency_msc_1.equals(NumFactoryDispatch.getPositiveInfinity())) {
             return max_service_curve_2.copy();
         }
-        if (latency_msc_2.equals(NumFactory.getPositiveInfinity())) {
+        if (latency_msc_2.equals(NumFactoryDispatch.getPositiveInfinity())) {
             return max_service_curve_1.copy();
         }
 
@@ -136,7 +136,7 @@ public class Convolution {
         // Remove latencies, act analog to the convolution of two arrival curves, and the sum of the two latencies.
         ArrivalCurve ac_intermediate = convolve(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_1)), CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_2)));
         MaxServiceCurve result = CurvePwAffineFactoryDispatch.createMaxServiceCurve(ac_intermediate);
-        result = (MaxServiceCurve) CurvePwAffineUtilsDispatch.shiftRight(result, NumUtils.add(latency_msc_1, latency_msc_2));
+        result = (MaxServiceCurve) CurvePwAffineUtilsDispatch.shiftRight(result, NumUtilsDispatch.add(latency_msc_1, latency_msc_2));
         CurvePwAffineUtilsDispatch.beautify(result);
 
         return result;
@@ -236,17 +236,17 @@ public class Convolution {
         			rate = service_curve_1.getUltAffineRate();
 	            break;
 	        case 3:
-	            rate = NumFactory.createPositiveInfinity();
+	            rate = NumFactoryDispatch.createPositiveInfinity();
 	            break;
 	        case 0:
 	        default:
-	        		rate = NumUtils.min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+	        		rate = NumUtilsDispatch.min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
 	        		break;
         }
         
         return CurvePwAffineFactoryDispatch.createRateLatency(
                 rate,
-                NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                NumUtilsDispatch.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
     /**
@@ -272,7 +272,7 @@ public class Convolution {
         // Shortcut: only go here if there is at least one delayed infinite burst
         if (service_curve_1.getDelayedInfiniteBurst_Property() || service_curve_2.getDelayedInfiniteBurst_Property()) {
             if (service_curve_1.getDelayedInfiniteBurst_Property() && service_curve_2.getDelayedInfiniteBurst_Property()) {
-                return CurvePwAffineFactoryDispatch.createDelayedInfiniteBurst(NumUtils.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                return CurvePwAffineFactoryDispatch.createDelayedInfiniteBurst(NumUtilsDispatch.add(service_curve_1.getLatency(), service_curve_2.getLatency()));
             }
 
             if (service_curve_1.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
@@ -291,18 +291,18 @@ public class Convolution {
 
         ServiceCurve result = CurvePwAffineFactoryDispatch.createServiceCurve();
 
-        Num x = NumFactory.createZero();
-        Num y = NumFactory.createZero(); // Functions pass though the origin
-        Num grad = NumFactory.createZero();
+        Num x = NumFactoryDispatch.createZero();
+        Num y = NumFactoryDispatch.createZero(); // Functions pass though the origin
+        Num grad = NumFactoryDispatch.createZero();
         LinearSegment s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, false);
         result.addSegment(s);
 
         int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
         int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
         if (i1 > 0 || i2 > 0) {
-            x = NumFactory.createZero();
-            y = NumUtils.add(service_curve_1.fLimitRight(NumFactory.getZero()), service_curve_2.fLimitRight(NumFactory.getZero()));
-            grad = NumFactory.createZero();
+            x = NumFactoryDispatch.createZero();
+            y = NumUtilsDispatch.add(service_curve_1.fLimitRight(NumFactoryDispatch.getZero()), service_curve_2.fLimitRight(NumFactoryDispatch.getZero()));
+            grad = NumFactoryDispatch.createZero();
             s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
 
             result.addSegment(s);
@@ -315,11 +315,11 @@ public class Convolution {
                     break;
                 }
 
-                x = NumUtils.add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (NumUtils.sub(service_curve_1.getSegment(i1 + 1).getX(), service_curve_1.getSegment(i1).getX())));
-                y = NumUtils.add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (NumUtils.sub(service_curve_1.getSegment(i1 + 1).getY(), service_curve_1.getSegment(i1).getY())));
-                grad = NumFactory.createZero();
+                x = NumUtilsDispatch.add(result.getSegment(result.getSegmentCount() - 1).getX(),
+                        (NumUtilsDispatch.sub(service_curve_1.getSegment(i1 + 1).getX(), service_curve_1.getSegment(i1).getX())));
+                y = NumUtilsDispatch.add(result.getSegment(result.getSegmentCount() - 1).getY(),
+                        (NumUtilsDispatch.sub(service_curve_1.getSegment(i1 + 1).getY(), service_curve_1.getSegment(i1).getY())));
+                grad = NumFactoryDispatch.createZero();
                 s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
 
                 result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
@@ -332,11 +332,11 @@ public class Convolution {
                     break;
                 }
 
-                x = NumUtils.add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (NumUtils.sub(service_curve_2.getSegment(i2 + 1).getX(), service_curve_2.getSegment(i2).getX())));
-                y = NumUtils.add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (NumUtils.sub(service_curve_2.getSegment(i2 + 1).getY(), service_curve_2.getSegment(i2).getY())));
-                grad = NumFactory.createZero();
+                x = NumUtilsDispatch.add(result.getSegment(result.getSegmentCount() - 1).getX(),
+                        (NumUtilsDispatch.sub(service_curve_2.getSegment(i2 + 1).getX(), service_curve_2.getSegment(i2).getX())));
+                y = NumUtilsDispatch.add(result.getSegment(result.getSegmentCount() - 1).getY(),
+                        (NumUtilsDispatch.sub(service_curve_2.getSegment(i2 + 1).getY(), service_curve_2.getSegment(i2).getY())));
+                grad = NumFactoryDispatch.createZero();
                 s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
 
                 result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
