@@ -1,10 +1,15 @@
 v2.4.0beta3 "Chimera" (2017-Sep-XY)
 -----------------------------------
-* Split ArrivalBound.java into three parts:
+* Split Analysis.java into three parts:
+  - The minimal Analysis interface.
+  - The abstract class AnalysisDispatch provides convenient methods to create and run an analysis.
+  - The abstract class AbstractAnalysis holds member variables for the network, the configurations and the results.
+  All analyses in de.uni_kl.cs.disco.nc.analyses extend AbstractAnalysis and implement Analysis.
+ * Split ArrivalBound.java into three parts:
   - The minimal ArrivalBound interface.
   - The abstract class ArrivalBoundDispatch that applies the configured arrival boundings.
-  - The abstract class ArrivalBound holds member variables for the network and the configurations.
- All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound. 
+  - The abstract class AbstractArrivalBound holds member variables for the network and the configurations.
+  All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound. 
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------

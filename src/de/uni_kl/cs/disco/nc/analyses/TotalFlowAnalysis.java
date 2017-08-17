@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.misc.Pair;
+import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
@@ -51,18 +52,19 @@ import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 
-public class TotalFlowAnalysis extends Analysis {
+public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
-    private TotalFlowAnalysis() {
-    }
+    private TotalFlowAnalysis() {}
 
     public TotalFlowAnalysis(Network network) {
-        super(network);
+        super.network = network;
+        super.configuration = new AnalysisConfig();
         super.result = new TotalFlowResults();
     }
 
     public TotalFlowAnalysis(Network network, AnalysisConfig configuration) {
-        super(network, configuration);
+        super.network = network;
+        super.configuration = configuration;
         super.result = new TotalFlowResults();
     }
 

@@ -33,6 +33,7 @@ package de.uni_kl.cs.disco.nc.analyses;
 import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.disco.curves.*;
+import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
@@ -47,18 +48,19 @@ import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class PmooAnalysis extends Analysis {
+public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
-    private PmooAnalysis() {
-    }
+    private PmooAnalysis() {}
 
     public PmooAnalysis(Network network) {
-        super(network);
+        super.network = network;
+        super.configuration = new AnalysisConfig();
         super.result = new PmooResults();
     }
 
     public PmooAnalysis(Network network, AnalysisConfig configuration) {
-        super(network, configuration);
+        super.network = network;
+        super.configuration = configuration;
         super.result = new PmooResults();
     }
 

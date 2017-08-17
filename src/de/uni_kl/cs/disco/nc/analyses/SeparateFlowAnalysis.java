@@ -40,6 +40,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.Convolution;
 import de.uni_kl.cs.disco.misc.SetUtils;
+import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
@@ -50,18 +51,19 @@ import de.uni_kl.cs.disco.network.*;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
-public class SeparateFlowAnalysis extends Analysis {
+public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
-    private SeparateFlowAnalysis() {
-    }
+    private SeparateFlowAnalysis() {}
 
     public SeparateFlowAnalysis(Network network) {
-        super(network);
+        super.network = network;
+        super.configuration = new AnalysisConfig();
         super.result = new SeparateFlowResults();
     }
 
     public SeparateFlowAnalysis(Network network, AnalysisConfig configuration) {
-        super(network, configuration);
+        super.network = network;
+        super.configuration = configuration;
         super.result = new SeparateFlowResults();
     }
 
