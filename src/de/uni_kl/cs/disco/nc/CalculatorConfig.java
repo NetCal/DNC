@@ -94,14 +94,13 @@ public final class CalculatorConfig {
 		return CURVE_CLASS;
 	}
 
-	public boolean setCurveClass(CurveClass curve_class) {
+	public boolean setCurveClass(CurveClass curve_class) throws RuntimeException {
 		if (curve_class == CurveClass.MPA_RTC) {
             File f = new File("rtc.jar");
             if (!f.exists() && !f.isDirectory()) {
 			f = new File("lib/rtc.jar");
 			if (!f.exists() && !f.isDirectory()) {
-				System.out.println("Error: rtc.jar not found in directory " + f.getParent() + ".");
-				System.exit(1);
+				throw new RuntimeException( "Error: rtc.jar not found in directory " + f.getParent() + "." );
 			}
 	    }}
 		if (CURVE_CLASS == curve_class) {
