@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta2 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta3 "Chimera".
  *
  * Copyright (C) 2014 - 2017 Steffen Bondorf
  * Copyright (C) 2017 The DiscoDNC contributors
