@@ -79,7 +79,7 @@ public class DncTestConfig extends AnalysisConfig {
 
     @Override
     public String toString() {
-        // AB, ab cache, convolve ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def, numbers, curves
+        // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, mux, global mux def, numbers, curves
         StringBuffer func_test_str = new StringBuffer();
 
         func_test_str.append(arrivalBoundMethods().toString());
