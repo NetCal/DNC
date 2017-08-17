@@ -31,7 +31,7 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
-public class LinearSegmentUtils {
+public abstract class LinearSegmentUtils {
     public static LinearSegment getXAxis() {
         return LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
     }
