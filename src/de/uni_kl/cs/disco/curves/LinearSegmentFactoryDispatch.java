@@ -38,7 +38,7 @@ import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
  * This class creates linear segments, either with Disco's DNC backend or with the PMA's RTC backend.
  *
  */
-public class LinearSegmentFactoryDispatch {
+public abstract class LinearSegmentFactoryDispatch {
 	// In contrast to the similar Curve factory, it does not hold a curve factory instance for each alternative.
 	
     public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {

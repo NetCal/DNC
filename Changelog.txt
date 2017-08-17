@@ -10,6 +10,7 @@ TODO: Dispatcher for minplus operations
   - NumFactoryInterface renamed to NumFactory
   - NumUtils renamed to NumUtilsDispatch
   - NumUtilsInterface renamed to NumUtils
+* Dispatch classes are all abstract now.
 * Renamed OperatorInputChecks to MinPlusInputChecks.
 * Made LinearSegmentUtils an abstract class (it only provides static methods). 
 * Reworked CalculatorConfig.java to singleton pattern (improves tests run time considerably).

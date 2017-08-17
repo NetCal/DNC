@@ -40,7 +40,7 @@ import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
  * Static access to the methods defined in the CurveFactoryInterface.
  *
  */
-public class CurvePwAffineFactoryDispatch {
+public abstract class CurvePwAffineFactoryDispatch {
     private static CurvePwAffineFactory dnc_factory = new CurveFactory_DNC();
     private static CurvePwAffineFactory mpa_rtc_pwaffine_factory = new CurveFactory_MPARTC_PwAffine();
 

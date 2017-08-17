@@ -40,7 +40,7 @@ import de.uni_kl.cs.disco.numbers.implementations.RealSingleUtils;
  * in order to allow the user to switch between available number representations.
  *
  */
-public class NumUtilsDispatch {
+public abstract class NumUtilsDispatch {
     private static NumUtils utils_realdouble = new RealDoubleUtils();
     private static NumUtils utils_realsingle = new RealSingleUtils();
     private static NumUtils utils_rationalint = new RationalIntUtils();
