@@ -37,7 +37,7 @@ import java.util.Set;
 import de.uni_kl.cs.disco.misc.Pair;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.ArrivalBound;
+import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.operations.BacklogBound;
 import de.uni_kl.cs.disco.nc.operations.DelayBound;
@@ -88,7 +88,7 @@ public class TotalFlowAnalysis extends Analysis {
     public Pair<Num> deriveBoundsAtServer(Server server) throws Exception {
         // Here's the difference to SFA:
         // TFA needs the arrival bound of all flows at the server, including the flow of interest.
-        Set<ArrivalCurve> alphas_server = ArrivalBound.computeArrivalBounds(network, configuration, server);
+        Set<ArrivalCurve> alphas_server = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server);
         // Although the TFA has a flow of interest, DO NOT call
         // computeArrivalBounds( Network network, AnalysisConfig configuration, Server server, Set<Flow> flows_to_bound, Flow flow_of_interest ).
 

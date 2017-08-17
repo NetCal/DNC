@@ -38,8 +38,10 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.Convolution;
 import de.uni_kl.cs.disco.misc.SetUtils;
+import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBound;
+import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
 import de.uni_kl.cs.disco.nc.operations.OutputBound;
@@ -51,11 +53,10 @@ import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
-public class PbooArrivalBound_Concatenation extends ArrivalBound {
+public class PbooArrivalBound_Concatenation extends AbstractArrivalBound implements ArrivalBound {
 
     @SuppressWarnings("unused")
-    private PbooArrivalBound_Concatenation() {
-    }
+    private PbooArrivalBound_Concatenation() {}
 
     public PbooArrivalBound_Concatenation(Network network, AnalysisConfig configuration) {
         this.network = network;
@@ -111,8 +112,8 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
             f_xxfcaller_server.removeAll(f_xxfcaller_server_path);
 
             // If we are off the path of interest, flow_of_interest is Flow.NULL_FLOW already.
-            Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBound.computeArrivalBounds(network, configuration, server, f_xxfcaller_server_path, flow_of_interest);
-            Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBound.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
+            Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server_path, flow_of_interest);
+            Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
 
             Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
             for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
@@ -139,7 +140,7 @@ public class PbooArrivalBound_Concatenation extends ArrivalBound {
         // Next we need to know the arrival bound of f_xfcaller at the server 'common_subpath_src', i.e., at the above sub-path's source
         // in order to deconvolve it with beta_lo_s to get the arrival bound of the sub-path
         // Note that flows f_xfcaller that originate in 'common_subpath_src' are covered by this call of computeArrivalBound
-        Set<ArrivalCurve> alpha_xfcaller_src = super.computeArrivalBounds(common_subpath_src, f_xfcaller, flow_of_interest);
+        Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, common_subpath_src, f_xfcaller, flow_of_interest);
         alphas_xfcaller = OutputBound.compute(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
         if (configuration.abConsiderTFANodeBacklog()) {

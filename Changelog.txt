@@ -1,6 +1,10 @@
 v2.4.0beta3 "Chimera" (2017-Sep-XY)
 -----------------------------------
-TODO: Dispatcher for minplus operations
+* Split ArrivalBound.java into three parts:
+  - The minimal ArrivalBound interface.
+  - The abstract class ArrivalBoundDispatch that applies the configured arrival boundings.
+  - The abstract class ArrivalBound holds member variables for the network and the configurations.
+ All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound. 
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------

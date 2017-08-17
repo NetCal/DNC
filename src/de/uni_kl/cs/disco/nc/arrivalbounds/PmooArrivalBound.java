@@ -37,8 +37,10 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
+import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBound;
+import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
@@ -49,11 +51,10 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 
-public class PmooArrivalBound extends ArrivalBound {
+public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBound {
 
     @SuppressWarnings("unused")
-    private PmooArrivalBound() {
-    }
+    private PmooArrivalBound() {}
 
     public PmooArrivalBound(Network network, AnalysisConfig configuration) {
         this.network = network;
@@ -115,7 +116,7 @@ public class PmooArrivalBound extends ArrivalBound {
             Set<Flow> f_xxfcaller = network.getFlows(common_subpath_src);
             f_xxfcaller.removeAll(f_xfcaller_loi);
             f_xxfcaller.remove(flow_of_interest);
-            Set<ArrivalCurve> alphas_xxfcaller = super.computeArrivalBounds(common_subpath_src, f_xxfcaller, flow_of_interest);
+            Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, common_subpath_src, f_xxfcaller, flow_of_interest);
 
             ServiceCurve null_service = CurvePwAffineFactoryDispatch.createZeroService();
 
@@ -141,7 +142,7 @@ public class PmooArrivalBound extends ArrivalBound {
         // We need to know the arrival bound of f_xfcaller at the server 'common_subpath_src', i.e., at the above sub-path's source
         // in order to deconvolve it with beta_loxfcaller_subpath to get the arrival bound of the sub-path
         // Note that flows f_xfcaller that originate in 'common_subpath_src' are covered by this call of computeArrivalBound
-        Set<ArrivalCurve> alpha_xfcaller_src = super.computeArrivalBounds(common_subpath_src, f_xfcaller, flow_of_interest);
+        Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, common_subpath_src, f_xfcaller, flow_of_interest);
         alphas_xfcaller = OutputBound.compute(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 
         return alphas_xfcaller;

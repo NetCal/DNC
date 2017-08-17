@@ -42,7 +42,7 @@ import de.uni_kl.cs.disco.minplus.Convolution;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.ArrivalBound;
+import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.operations.BacklogBound;
 import de.uni_kl.cs.disco.nc.operations.DelayBound;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
@@ -144,8 +144,8 @@ public class SeparateFlowAnalysis extends Analysis {
             if (f_xfoi_server.isEmpty() && f_xfoi_server_path.isEmpty()) {
                 betas_lofoi_s.add(beta_lofoi);
             } else {                                                            // network, server, flows_to_bound, flows_lower_priority
-                Set<ArrivalCurve> alpha_xfois_path = ArrivalBound.computeArrivalBounds(network, configuration, server, f_xfoi_server_path, flow_of_interest);
-                Set<ArrivalCurve> alpha_xfois_offpath = ArrivalBound.computeArrivalBounds(network, configuration, server, f_xfoi_server, Flow.NULL_FLOW);
+                Set<ArrivalCurve> alpha_xfois_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xfoi_server_path, flow_of_interest);
+                Set<ArrivalCurve> alpha_xfois_offpath = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xfoi_server, Flow.NULL_FLOW);
 
                 Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>();
                 for (ArrivalCurve arrival_curve_path : alpha_xfois_path) {

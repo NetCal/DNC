@@ -35,7 +35,7 @@ import org.apache.commons.math3.util.Pair;
 import de.uni_kl.cs.disco.curves.*;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.ArrivalBound;
+import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.operations.BacklogBound;
 import de.uni_kl.cs.disco.nc.operations.DelayBound;
@@ -553,7 +553,7 @@ public class PmooAnalysis extends Analysis {
             substitute_flow_alias = substitute_flow_alias.concat("}");
 
             // Derive the substitute flow's arrival bound
-            Set<ArrivalCurve> alphas_xf_group = ArrivalBound.computeArrivalBounds(network, configuration, entry.getKey().getSource(), entry.getValue(), Flow.NULL_FLOW);
+            Set<ArrivalCurve> alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, entry.getKey().getSource(), entry.getValue(), Flow.NULL_FLOW);
             // entry.getKey().getSource() because entry.getKey() is the common subpath of path (above variable), i.e., start of interference on path.
             // We are leaving the flow_of_interest's path with this arrival bounding. Therefore, worst-case arbitrary multiplexing cannot be modeled with
             //   by assigning lowest prioritization to the flow of interest anymore (cf. rejoining flows) and we call computeArrivalBounds with Flow.NULL_FLOW instead of flow_of_interest.

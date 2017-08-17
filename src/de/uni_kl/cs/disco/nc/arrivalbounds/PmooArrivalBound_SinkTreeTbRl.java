@@ -40,14 +40,14 @@ import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.Convolution;
 import de.uni_kl.cs.disco.minplus.Deconvolution;
 import de.uni_kl.cs.disco.misc.SetUtils;
+import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.ArrivalBound;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Link;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 
-public class PmooArrivalBound_SinkTreeTbRl extends ArrivalBound {
+public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();
 
     @SuppressWarnings("unused")

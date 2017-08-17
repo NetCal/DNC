@@ -37,8 +37,10 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
+import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBound;
+import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
 import de.uni_kl.cs.disco.nc.operations.OutputBound;
@@ -50,11 +52,10 @@ import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 
-public class PbooArrivalBound_PerHop extends ArrivalBound {
+public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements ArrivalBound {
 
     @SuppressWarnings("unused")
-    private PbooArrivalBound_PerHop() {
-    }
+    private PbooArrivalBound_PerHop() {}
 
     public PbooArrivalBound_PerHop(Network network, AnalysisConfig configuration) {
         this.network = network;
@@ -88,7 +89,7 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
         Flow f_representative = f_xfcaller_loi.iterator().next();
         Path common_subpath = f_representative.getSubPath(common_subpath_src, common_subpath_dest);
 
-        alphas_xfcaller = super.computeArrivalBounds(common_subpath_src, f_xfcaller, flow_of_interest);
+        alphas_xfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, common_subpath_src, f_xfcaller, flow_of_interest);
 
         // Calculate the left-over service curves for ever server on the sub-path and convolve the cross-traffics arrival with it
         Link link_from_prev_s;
@@ -112,8 +113,8 @@ public class PbooArrivalBound_PerHop extends ArrivalBound {
             f_xxfcaller_server.removeAll(f_xxfcaller_server_path);
 
             // If we are off the path of interest, flow_of_interest is Flow.NULL_FLOW already.
-            Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBound.computeArrivalBounds(network, configuration, server, f_xxfcaller_server_path, flow_of_interest);
-            Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBound.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
+            Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server_path, flow_of_interest);
+            Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
 
             Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
             for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
