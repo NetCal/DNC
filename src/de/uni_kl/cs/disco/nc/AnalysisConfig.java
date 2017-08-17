@@ -193,26 +193,26 @@ public class AnalysisConfig {
 
     @Override
     public String toString() {
-        StringBuffer func_test_str = new StringBuffer();
+        StringBuffer analysis_config_str = new StringBuffer();
 
-        func_test_str.append(multiplexingDiscipline().toString());
-        func_test_str.append(", ");
-        func_test_str.append(arrivalBoundMethods().toString());
+        analysis_config_str.append(multiplexingDiscipline().toString());
+        analysis_config_str.append(", ");
+        analysis_config_str.append(arrivalBoundMethods().toString());
 
         if (removeDuplicateArrivalBounds()) {
-            func_test_str.append(", ");
-            func_test_str.append("remove duplicate ABs");
+            analysis_config_str.append(", ");
+            analysis_config_str.append("remove duplicate ABs");
         }
         if (tbrlConvolution()) {
-            func_test_str.append(", ");
-            func_test_str.append("TbRl Conv");
+            analysis_config_str.append(", ");
+            analysis_config_str.append("TbRl Conv");
         }
         if (tbrlDeconvolution()) {
-            func_test_str.append(", ");
-            func_test_str.append("TbRl Deconv");
+            analysis_config_str.append(", ");
+            analysis_config_str.append("TbRl Deconv");
         }
 
-        return func_test_str.toString();
+        return analysis_config_str.toString();
     }
 
     public static enum Multiplexing {ARBITRARY, FIFO}
