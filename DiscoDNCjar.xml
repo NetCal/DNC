@@ -21,6 +21,7 @@
                 <include name="de/unikl/cs/disco/curves/dnc/"/>
                 <include name="de/unikl/cs/disco/curves/mpa_rtc_pwaffine"/>
                 <include name="de/unikl/cs/disco/minplus/"/>
+                <include name="de/unikl/cs/disco/minplus/dnc/"/>
                 <include name="de/unikl/cs/disco/misc/"/>
                 <include name="de/unikl/cs/disco/nc/"/>
                 <include name="de/unikl/cs/disco/nc/analyses/"/>

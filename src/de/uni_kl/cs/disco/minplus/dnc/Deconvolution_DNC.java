@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.disco.minplus;
+package de.uni_kl.cs.disco.minplus.dnc;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,12 +35,14 @@ import java.util.Iterator;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.*;
+import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
-public class Deconvolution {
+public abstract class Deconvolution_DNC {
+	
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
         // null and empty checks will be done by deconvolve( ... )
         return deconvolve(arrival_curves, service_curve, false);

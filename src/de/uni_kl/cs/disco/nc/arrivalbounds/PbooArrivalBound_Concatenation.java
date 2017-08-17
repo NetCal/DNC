@@ -36,7 +36,7 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.Convolution;
+import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -134,7 +134,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
             }
 
             // Combine into the sub-path's left-over service curve
-            betas_lo_subpath = Convolution.convolve_SCs_SCs(betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution());
+            betas_lo_subpath = MinPlusDispatch.convolve_SCs_SCs(betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution());
         }
 
         // Next we need to know the arrival bound of f_xfcaller at the server 'common_subpath_src', i.e., at the above sub-path's source

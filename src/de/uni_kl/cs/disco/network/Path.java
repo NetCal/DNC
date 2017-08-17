@@ -37,7 +37,7 @@ import java.util.List;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.Convolution;
+import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
 
 /**
  * A flows path is a sequence of crossed buffers -- either represented by
@@ -184,16 +184,17 @@ public class Path {
      * Just convolves the service curves on the path and returns the result.
      *
      * @return The convolved curve
+     * @throws Exception 
      */
-    public ServiceCurve getServiceCurve() {
+    public ServiceCurve getServiceCurve() throws Exception {
         Collection<Server> servers = getServers();
         return getServiceCurve(servers);
     }
 
-    private ServiceCurve getServiceCurve(Collection<Server> servers) {
+    private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
         ServiceCurve service_curve_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            service_curve_total = Convolution.convolve(service_curve_total, s.getServiceCurve());
+            service_curve_total = MinPlusDispatch.convolve(service_curve_total, s.getServiceCurve());
         }
 
         return service_curve_total;
@@ -207,16 +208,17 @@ public class Path {
      * i.e., the zero delay burst curve, so the result will not be influenced.
      *
      * @return The convolved curve
+     * @throws Exception 
      */
-    public MaxServiceCurve getGamma() {
+    public MaxServiceCurve getGamma() throws Exception {
         Collection<Server> servers = getServers();
         return getGamma(servers);
     }
 
-    private MaxServiceCurve getGamma(Collection<Server> servers) {
+    private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
         MaxServiceCurve gamma_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            gamma_total = Convolution.convolve(gamma_total, s.getGamma());
+            gamma_total = MinPlusDispatch.convolve(gamma_total, s.getGamma());
         }
 
         return gamma_total;
@@ -230,16 +232,17 @@ public class Path {
      * i.e., the zero delay burst curve, so the result will not be influenced.
      *
      * @return The convolved curve
+     * @throws Exception 
      */
-    public MaxServiceCurve getExtraGamma() {
+    public MaxServiceCurve getExtraGamma() throws Exception {
         Collection<Server> servers = getServers();
         return getExtraGamma(servers);
     }
 
-    private MaxServiceCurve getExtraGamma(Collection<Server> servers) {
+    private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
         MaxServiceCurve extra_gamma_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            extra_gamma_total = Convolution.convolve(extra_gamma_total, s.getExtraGamma());
+            extra_gamma_total = MinPlusDispatch.convolve(extra_gamma_total, s.getExtraGamma());
         }
 //		extra_gamma_total.removeLatency(); // Already done by s.getExtraGamma()
 
@@ -254,16 +257,17 @@ public class Path {
      * so the result will not be influenced.
      *
      * @return The convolved curve
+     * @throws Exception 
      */
-    public MaxServiceCurve getMaxServiceCurve() {
+    public MaxServiceCurve getMaxServiceCurve() throws Exception {
         Collection<Server> servers = getServers();
         return getMaxServiceCurve(servers);
     }
 
-    private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) {
+    private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
         MaxServiceCurve max_service_curve_total = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            max_service_curve_total = Convolution.convolve(max_service_curve_total, s.getMaxServiceCurve());
+            max_service_curve_total = MinPlusDispatch.convolve(max_service_curve_total, s.getMaxServiceCurve());
         }
 
         return max_service_curve_total;

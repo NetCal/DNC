@@ -34,8 +34,8 @@ import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.Convolution;
-import de.uni_kl.cs.disco.minplus.Deconvolution;
+import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.dnc.Deconvolution_DNC;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.GammaFlag;
 import de.uni_kl.cs.disco.network.Path;
@@ -52,13 +52,13 @@ public class OutputBound {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
-            result = Deconvolution.deconvolve_almostConcCs_SCs(Convolution.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
+            result = Deconvolution_DNC.deconvolve_almostConcCs_SCs(MinPlusDispatch.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
         } else {
-            result = Deconvolution.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+            result = Deconvolution_DNC.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
         }
 
         if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
-            result = Convolution.convolve_ACs_EGamma(result, server.getExtraGamma());
+            result = MinPlusDispatch.convolve_ACs_EGamma(result, server.getExtraGamma());
         }
 
         return result;
@@ -68,13 +68,13 @@ public class OutputBound {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
-            result = Deconvolution.deconvolve_almostConcCs_SCs(Convolution.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
+            result = Deconvolution_DNC.deconvolve_almostConcCs_SCs(MinPlusDispatch.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
         } else {
-            result = Deconvolution.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+            result = Deconvolution_DNC.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
         }
 
         if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
-            result = Convolution.convolve_ACs_EGamma(result, path.getExtraGamma());
+            result = MinPlusDispatch.convolve_ACs_EGamma(result, path.getExtraGamma());
         }
 
         return result;

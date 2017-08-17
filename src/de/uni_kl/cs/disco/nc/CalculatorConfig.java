@@ -36,9 +36,14 @@ import java.io.File;
 
 public final class CalculatorConfig {
 	private static CalculatorConfig calc_config = null;
+
+	public enum NumClass { REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER }
+	public enum CurveClass { DNC, MPA_RTC }
+	public enum OperationClass { DNC, NATIVE }
 	
 	private NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
 	private CurveClass CURVE_CLASS = CurveClass.DNC;
+	private OperationClass OPERATION_CLASS = OperationClass.DNC;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -74,21 +79,34 @@ public final class CalculatorConfig {
 		return CURVE_CLASS;
 	}
 
-	public boolean setCurveClass(CurveClass curve_class) throws RuntimeException {
-		if (curve_class == CurveClass.MPA_RTC) {
-            File f = new File("rtc.jar");
-            if (!f.exists() && !f.isDirectory()) {
+	private void checkMPARTC() throws RuntimeException {
+		File f = new File("rtc.jar");
+		if (!f.exists() && !f.isDirectory()) {
 			f = new File("lib/rtc.jar");
 			if (!f.exists() && !f.isDirectory()) {
 				throw new RuntimeException( "Error: rtc.jar not found in directory " + f.getParent() + "." );
 			}
-	    }}
+		}
+	}
+	
+	public boolean setCurveClass(CurveClass curve_class)  {
+		checkMPARTC();
+		
 		if (CURVE_CLASS == curve_class) {
 			return false;
 		}
 		CURVE_CLASS = curve_class;
 		CurvePwAffineFactoryDispatch.setCurveClass(curve_class);
 		return true;
+	}
+
+	public OperationClass getOperationClass() {
+		return OPERATION_CLASS;
+	}
+	
+	public void setOperationClass(OperationClass operation_class)  {
+		checkMPARTC();
+		OPERATION_CLASS = operation_class;
 	}
 
 	public void disableAllChecks() {
@@ -158,8 +176,4 @@ public final class CalculatorConfig {
 
         return calculator_config_str.toString();
     }
-
-	public enum NumClass {REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER}
-
-	public enum CurveClass { DNC, MPA_RTC }
 }

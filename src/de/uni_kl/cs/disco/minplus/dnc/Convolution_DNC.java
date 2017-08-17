@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.disco.minplus;
+package de.uni_kl.cs.disco.minplus.dnc;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,166 +40,17 @@ import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.curves.LinearSegmentFactoryDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
+import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
-public class Convolution {
+public abstract class Convolution_DNC {
 
-    public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) {
-        // Custom null and empty checks for this single argument method.
-        if (arrival_curves == null || arrival_curves.isEmpty()) {
-            return CurvePwAffineFactoryDispatch.createZeroArrivals();
-        }
-        if (arrival_curves.size() == 1) {
-            return arrival_curves.iterator().next().copy();
-        }
-
-        ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
-        for (ArrivalCurve arrival_curve_2 : arrival_curves) {
-            arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
-        }
-
-        return arrival_curve_result;
-    }
-
-    public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-        switch (MinPlusInputChecks.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
-            case 0:
-                break;
-            case 1:
-                return arrival_curve_2.copy();
-            case 2:
-                return arrival_curve_1.copy();
-            case 3:
-                return CurvePwAffineFactoryDispatch.createZeroArrivals();
-            default:
-                break;
-        }
-
-        ArrivalCurve zero_arrival = CurvePwAffineFactoryDispatch.createZeroArrivals();
-        if (arrival_curve_1.equals(zero_arrival) || arrival_curve_2.equals(zero_arrival)) {
-            return zero_arrival;
-        }
-
-        ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
-        if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
-            return arrival_curve_2.copy();
-        }
-        if (arrival_curve_2.equals(zero_delay_infinite_burst)) {
-            return arrival_curve_1.copy();
-        }
-
-        // Arrival curves are concave curves so we can do a minimum instead of a convolution here.
-        ArrivalCurve convolved_arrival_curve = CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.min(arrival_curve_1, arrival_curve_2));
-        return convolved_arrival_curve;
-    }
-
-    /**
-     * Returns the convolution of this curve, which must be (almost) concave, and
-     * the given curve, which must also be (almost) concave.
-     *
-     * @param max_service_curve_1 The fist maximum service curve in the convolution.
-     * @param max_service_curve_2 The second maximum service curve in the convolution.
-     * @return The convolved maximum service curve.
-     */
-    public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-        switch (MinPlusInputChecks.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
-            case 0:
-                break;
-            case 1:
-                return max_service_curve_2.copy();
-            case 2:
-                return max_service_curve_1.copy();
-            case 3:
-                return CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
-            default:
-        }
-
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() &&
-                (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
-            throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
-        }
-
-        Num latency_msc_1 = max_service_curve_1.getLatency();
-        Num latency_msc_2 = max_service_curve_2.getLatency();
-
-        if (latency_msc_1.equals(NumFactoryDispatch.getPositiveInfinity())) {
-            return max_service_curve_2.copy();
-        }
-        if (latency_msc_2.equals(NumFactoryDispatch.getPositiveInfinity())) {
-            return max_service_curve_1.copy();
-        }
-
-        // (min,plus)-algebraic proceeding here:
-        // Remove latencies, act analog to the convolution of two arrival curves, and the sum of the two latencies.
-        ArrivalCurve ac_intermediate = convolve(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_1)), CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_2)));
-        MaxServiceCurve result = CurvePwAffineFactoryDispatch.createMaxServiceCurve(ac_intermediate);
-        result = (MaxServiceCurve) CurvePwAffineUtilsDispatch.shiftRight(result, NumUtilsDispatch.add(latency_msc_1, latency_msc_2));
-        CurvePwAffineUtilsDispatch.beautify(result);
-
-        return result;
-    }
-
-    // Java won't let me call this method "convolve" because it does not care about the Sets' types; tells that there's already another method taking the same arguments.
-    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2) {
-        // null and empty checks will be done by convolve_SCs_SCs( ... )
-        return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
-    }
-
-    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) {
-        Set<ServiceCurve> results = new HashSet<ServiceCurve>();
-
-        // An empty or null set does is not interpreted as a convolution with a null curve.
-        // Instead, the other set is return in case it is neither null or empty.
-        Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
-        switch (MinPlusInputChecks.inputNullCheck(service_curves_1, service_curves_2)) {
-            case 1:
-                for (ServiceCurve sc : service_curves_2) {
-                    clone.add(sc.copy());
-                }
-                return clone;
-            case 2:
-                for (ServiceCurve sc : service_curves_1) {
-                    clone.add(sc.copy());
-                }
-                return clone;
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroService());
-                return results;
-            case 0:
-            default:
-                break;
-        }
-        switch (MinPlusInputChecks.inputEmptySetCheck(service_curves_1, service_curves_2)) {
-            case 1:
-                for (ServiceCurve sc : service_curves_2) {
-                    clone.add(sc.copy());
-                }
-                return clone;
-            case 2:
-                for (ServiceCurve sc : service_curves_1) {
-                    clone.add(sc.copy());
-                }
-                return clone;
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroService());
-                return results;
-            case 0:
-            default:
-                break;
-        }
-
-        for (ServiceCurve beta_1 : service_curves_1) {
-            for (ServiceCurve beta_2 : service_curves_2) {
-                results.add(convolve(beta_1, beta_2, tb_rl_optimized));
-            }
-        }
-
-        return results;
-    }
-
+    //------------------------------------------------------------
+    // Service Curves
+    //------------------------------------------------------------
     public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
         // null checks will be done by convolve( ... )
         return convolve(service_curve_1, service_curve_2, false);
@@ -256,7 +107,7 @@ public class Convolution {
      * @param service_curve_2 The second curve to convolve with.
      * @return The convolved curve.
      */
-    public static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+    private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
         switch (MinPlusInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
@@ -351,6 +202,168 @@ public class Convolution {
         return result;
     }
 
+    // Java won't let me call this method "convolve" because it does not care about the Sets' types; tells that there's already another method taking the same arguments.
+    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2) {
+        // null and empty checks will be done by convolve_SCs_SCs( ... )
+        return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
+    }
+
+    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) {
+        Set<ServiceCurve> results = new HashSet<ServiceCurve>();
+
+        // An empty or null set does is not interpreted as a convolution with a null curve.
+        // Instead, the other set is return in case it is neither null or empty.
+        Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
+        switch (MinPlusInputChecks.inputNullCheck(service_curves_1, service_curves_2)) {
+            case 1:
+                for (ServiceCurve sc : service_curves_2) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 2:
+                for (ServiceCurve sc : service_curves_1) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 3:
+                results.add(CurvePwAffineFactoryDispatch.createZeroService());
+                return results;
+            case 0:
+            default:
+                break;
+        }
+        switch (MinPlusInputChecks.inputEmptySetCheck(service_curves_1, service_curves_2)) {
+            case 1:
+                for (ServiceCurve sc : service_curves_2) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 2:
+                for (ServiceCurve sc : service_curves_1) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 3:
+                results.add(CurvePwAffineFactoryDispatch.createZeroService());
+                return results;
+            case 0:
+            default:
+                break;
+        }
+
+        for (ServiceCurve beta_1 : service_curves_1) {
+            for (ServiceCurve beta_2 : service_curves_2) {
+                results.add(convolve(beta_1, beta_2, tb_rl_optimized));
+            }
+        }
+
+        return results;
+    }
+
+    //------------------------------------------------------------
+    // Arrival Curves
+    //------------------------------------------------------------
+    public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
+        switch (MinPlusInputChecks.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
+            case 0:
+                break;
+            case 1:
+                return arrival_curve_2.copy();
+            case 2:
+                return arrival_curve_1.copy();
+            case 3:
+                return CurvePwAffineFactoryDispatch.createZeroArrivals();
+            default:
+                break;
+        }
+
+        ArrivalCurve zero_arrival = CurvePwAffineFactoryDispatch.createZeroArrivals();
+        if (arrival_curve_1.equals(zero_arrival) || arrival_curve_2.equals(zero_arrival)) {
+            return zero_arrival;
+        }
+
+        ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+        if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
+            return arrival_curve_2.copy();
+        }
+        if (arrival_curve_2.equals(zero_delay_infinite_burst)) {
+            return arrival_curve_1.copy();
+        }
+
+        // Arrival curves are concave curves so we can do a minimum instead of a convolution here.
+        ArrivalCurve convolved_arrival_curve = CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.min(arrival_curve_1, arrival_curve_2));
+        return convolved_arrival_curve;
+    }
+    
+    public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) {
+        // Custom null and empty checks for this single argument method.
+        if (arrival_curves == null || arrival_curves.isEmpty()) {
+            return CurvePwAffineFactoryDispatch.createZeroArrivals();
+        }
+        if (arrival_curves.size() == 1) {
+            return arrival_curves.iterator().next().copy();
+        }
+
+        ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+        for (ArrivalCurve arrival_curve_2 : arrival_curves) {
+            arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
+        }
+
+        return arrival_curve_result;
+    }
+
+    //------------------------------------------------------------
+    // Maximum Service Curves
+    //------------------------------------------------------------
+    /**
+     * Returns the convolution of this curve, which must be (almost) concave, and
+     * the given curve, which must also be (almost) concave.
+     *
+     * @param max_service_curve_1 The fist maximum service curve in the convolution.
+     * @param max_service_curve_2 The second maximum service curve in the convolution.
+     * @return The convolved maximum service curve.
+     */
+    public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
+        switch (MinPlusInputChecks.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
+            case 0:
+                break;
+            case 1:
+                return max_service_curve_2.copy();
+            case 2:
+                return max_service_curve_1.copy();
+            case 3:
+                return CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC();
+            default:
+        }
+
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() &&
+                (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
+            throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
+        }
+
+        Num latency_msc_1 = max_service_curve_1.getLatency();
+        Num latency_msc_2 = max_service_curve_2.getLatency();
+
+        if (latency_msc_1.equals(NumFactoryDispatch.getPositiveInfinity())) {
+            return max_service_curve_2.copy();
+        }
+        if (latency_msc_2.equals(NumFactoryDispatch.getPositiveInfinity())) {
+            return max_service_curve_1.copy();
+        }
+
+        // (min,plus)-algebraic proceeding here:
+        // Remove latencies, act analog to the convolution of two arrival curves, and the sum of the two latencies.
+        ArrivalCurve ac_intermediate = convolve(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_1)), CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_2)));
+        MaxServiceCurve result = CurvePwAffineFactoryDispatch.createMaxServiceCurve(ac_intermediate);
+        result = (MaxServiceCurve) CurvePwAffineUtilsDispatch.shiftRight(result, NumUtilsDispatch.add(latency_msc_1, latency_msc_2));
+        CurvePwAffineUtilsDispatch.beautify(result);
+
+        return result;
+    }
+
+    //------------------------------------------------------------
+    // Arrival Curves and Max Service Curves
+    //------------------------------------------------------------
     // The result is used like an arrival curve, yet it is not really one. This inconsistency occurs because we need to consider MSC and SC in some order during the output bound computation.
     public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve) throws Exception {
         switch (MinPlusInputChecks.inputNullCheck(arrival_curves, maximum_service_curve)) {
