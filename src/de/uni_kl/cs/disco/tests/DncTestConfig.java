@@ -31,6 +31,7 @@ package de.uni_kl.cs.disco.tests;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
+import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.NumClass;
 
@@ -40,10 +41,14 @@ public class DncTestConfig extends AnalysisConfig {
     protected AnalysisConfig.Multiplexing mux_discipline;
     protected boolean console_output = false;
 
-    // Calculator parameters
-    protected boolean enable_checks = false;
-    protected CurveClass curves;
-    protected NumClass numbers;
+//    // Calculator parameters
+//    protected boolean enable_checks = false;
+//    protected CurveClass curves;
+//    protected NumClass numbers;
+
+    // Calculator config
+	protected boolean enable_checks = false;
+    protected CalculatorConfig calc_config = CalculatorConfig.getInstance();
 
     @SuppressWarnings("unused")
     private DncTestConfig() {
@@ -69,12 +74,21 @@ public class DncTestConfig extends AnalysisConfig {
 
         this.mux_discipline = mux_discipline;
         this.define_multiplexing_globally = define_multiplexing_globally;
-        this.curves = curves;
-        this.numbers = numbers;
+        
+        calc_config.setNumClass(numbers);
+        calc_config.setCurveClass(curves);
     }
 
     public boolean fullConsoleOutput() { // false == Exceptions only
         return console_output;
+    }
+    
+    protected NumClass getNumClass() {
+    		return calc_config.getNumClass();
+    }
+    
+    protected CurveClass getCurveClass() {
+    		return calc_config.getCurveClass();
     }
 
     @Override
@@ -100,9 +114,9 @@ public class DncTestConfig extends AnalysisConfig {
             func_test_str.append(", " + "MUX global");
         }
 
-        func_test_str.append(", " + numbers.toString());
+        func_test_str.append(", " + calc_config.getNumClass().toString());
 
-        func_test_str.append(", " + curves.toString());
+        func_test_str.append(", " + calc_config.getCurveClass().toString());
 
         return func_test_str.toString();
     }

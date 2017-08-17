@@ -89,13 +89,13 @@ public class DncTests {
         this.test_config = test_config;
 
         if (test_config.enable_checks) {
-        	CalculatorConfig.getInstance().enableAllChecks();
+        		CalculatorConfig.getInstance().enableAllChecks();
         } else {
-        	CalculatorConfig.getInstance().disableAllChecks();
+        		CalculatorConfig.getInstance().disableAllChecks();
         }
 
-        reinitilize_test = ( CalculatorConfig.getInstance().setNumClass(test_config.numbers)
-        						|| CalculatorConfig.getInstance().setCurveClass(test_config.curves) );
+        reinitilize_test = ( CalculatorConfig.getInstance().setNumClass(test_config.getNumClass())
+        						|| CalculatorConfig.getInstance().setCurveClass(test_config.getCurveClass()) );
     }
 
     @Parameters(name = "{index}: {0}")
@@ -255,7 +255,7 @@ public class DncTests {
         if (test_config.console_output) {
             System.out.println("--------------------------------------------------------------");
             System.out.println();
-            System.out.println("Number representation:\t" + test_config.numbers.toString());
+            System.out.println("Number representation:\t" + test_config.getNumClass().toString());
             System.out.println("Arrival Boundings:\t" + test_config.arrivalBoundMethods().toString());
             System.out.println("Remove duplicate ABs:\t" + Boolean.toString(test_config.removeDuplicateArrivalBounds()));
             System.out.println("TB,RL convolution:\t" + Boolean.toString(test_config.tbrlConvolution()));
