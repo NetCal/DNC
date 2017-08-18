@@ -35,7 +35,7 @@ import java.util.Set;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.curves.LinearSegmentFactoryDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
@@ -133,12 +133,12 @@ public abstract class Convolution_DNC {
 
 			if (service_curve_1.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
 				return CurvePwAffineFactory.getCurveFactory().createServiceCurve(
-						CurvePwAffineUtilsDispatch.shiftRight(service_curve_2, service_curve_1.getLatency()));
+						CurvePwAffineUtils.shiftRight(service_curve_2, service_curve_1.getLatency()));
 			}
 
 			if (service_curve_2.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
 				return CurvePwAffineFactory.getCurveFactory().createServiceCurve(
-						CurvePwAffineUtilsDispatch.shiftRight(service_curve_1, service_curve_2.getLatency()));
+						CurvePwAffineUtils.shiftRight(service_curve_1, service_curve_2.getLatency()));
 			}
 		}
 
@@ -209,7 +209,7 @@ public abstract class Convolution_DNC {
 			}
 		}
 
-		CurvePwAffineUtilsDispatch.beautify(result);
+		CurvePwAffineUtils.beautify(result);
 
 		return result;
 	}
@@ -311,7 +311,7 @@ public abstract class Convolution_DNC {
 		// Arrival curves are concave curves so we can do a minimum instead of a
 		// convolution here.
 		ArrivalCurve convolved_arrival_curve = CurvePwAffineFactory.getCurveFactory()
-				.createArrivalCurve(CurvePwAffineUtilsDispatch.min(arrival_curve_1, arrival_curve_2));
+				.createArrivalCurve(CurvePwAffineUtils.min(arrival_curve_1, arrival_curve_2));
 		return convolved_arrival_curve;
 	}
 
@@ -378,13 +378,13 @@ public abstract class Convolution_DNC {
 		// the sum of the two latencies.
 		ArrivalCurve ac_intermediate = convolve(
 				CurvePwAffineFactory.getCurveFactory()
-						.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_1)),
+						.createArrivalCurve(CurvePwAffineUtils.removeLatency(max_service_curve_1)),
 				CurvePwAffineFactory.getCurveFactory()
-						.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(max_service_curve_2)));
+						.createArrivalCurve(CurvePwAffineUtils.removeLatency(max_service_curve_2)));
 		MaxServiceCurve result = CurvePwAffineFactory.getCurveFactory().createMaxServiceCurve(ac_intermediate);
-		result = (MaxServiceCurve) CurvePwAffineUtilsDispatch.shiftRight(result,
+		result = (MaxServiceCurve) CurvePwAffineUtils.shiftRight(result,
 				NumUtils.getNumUtils().add(latency_msc_1, latency_msc_2));
-		CurvePwAffineUtilsDispatch.beautify(result);
+		CurvePwAffineUtils.beautify(result);
 
 		return result;
 	}
@@ -422,13 +422,13 @@ public abstract class Convolution_DNC {
 
 		// Similar to convolve_ACs_EGamma
 		ArrivalCurve msc_as_ac = CurvePwAffineFactory.getCurveFactory()
-				.createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(maximum_service_curve)); // Abuse the
+				.createArrivalCurve(CurvePwAffineUtils.removeLatency(maximum_service_curve)); // Abuse the
 																										// ArrivalCurve
 																										// class here
 																										// for
 																										// convenience.
 		for (ArrivalCurve ac : arrival_curves) {
-			result.add(CurvePwAffineUtilsDispatch.shiftRight(convolve(ac, msc_as_ac), msc_latency));
+			result.add(CurvePwAffineUtils.shiftRight(convolve(ac, msc_as_ac), msc_latency));
 		}
 
 		return result;

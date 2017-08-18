@@ -38,7 +38,7 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.Curve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
@@ -193,8 +193,8 @@ public abstract class Deconvolution_DNC {
 		for (ServiceCurve sc : service_curves) {
 			for (CurvePwAffine pwa_c : curves) {
 				latency = pwa_c.getLatency();
-				results.add(CurvePwAffineFactory.getCurveFactory().createArrivalCurve(CurvePwAffineUtilsDispatch.shiftRight(
-						deconvolve_mTB_mRL(CurvePwAffineUtilsDispatch.shiftLeftClipping(pwa_c, latency), sc),
+				results.add(CurvePwAffineFactory.getCurveFactory().createArrivalCurve(CurvePwAffineUtils.shiftRight(
+						deconvolve_mTB_mRL(CurvePwAffineUtils.shiftLeftClipping(pwa_c, latency), sc),
 						latency)));
 			}
 		}
@@ -285,7 +285,7 @@ public abstract class Deconvolution_DNC {
 																// above):
 
 			x_inflect_beta = curve_2.getSegment(i).getX();
-			candidate_tmp = CurvePwAffineUtilsDispatch.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
+			candidate_tmp = CurvePwAffineUtils.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
 
 			y_beta = curve_2.f(x_inflect_beta);
 			if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
@@ -410,7 +410,7 @@ public abstract class Deconvolution_DNC {
 		sup_curve = candidates_iter.next();
 		while (candidates_iter.hasNext()) {
 			additional_curve = candidates_iter.next();
-			sup_curve = CurvePwAffineUtilsDispatch.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
+			sup_curve = CurvePwAffineUtils.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
 		}
 
 		return CurvePwAffineFactory.getCurveFactory().createArrivalCurve((CurvePwAffine) sup_curve);

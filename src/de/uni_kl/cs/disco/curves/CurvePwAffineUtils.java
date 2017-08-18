@@ -34,7 +34,7 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
-public class CurvePwAffineUtilsDispatch {
+public abstract class CurvePwAffineUtils {
 	protected static final int OPERATOR_ADD = 0;
 	protected static final int OPERATOR_SUB = 1;
 	protected static final int OPERATOR_MIN = 2;

@@ -35,7 +35,7 @@ import org.apache.commons.math3.util.Pair;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
@@ -119,7 +119,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 			ServiceCurve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
 					flow_tb_iter_map, server_rl_iters);
 			if (!beta.equals(CurvePwAffineFactory.getCurveFactory().createZeroService())) {
-				beta_total = CurvePwAffineUtilsDispatch.max(beta_total, beta);
+				beta_total = CurvePwAffineUtils.max(beta_total, beta);
 			}
 
 			// First check whether there are more combinations of flow TBs
@@ -633,7 +633,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 			arrival_bounds_link_permutations.clear();
 			List<Flow> flow_list_tmp = new LinkedList<Flow>();
 			for (ArrivalCurve alpha : alphas_xf_group) {
-				CurvePwAffineUtilsDispatch.beautify(alpha);
+				CurvePwAffineUtils.beautify(alpha);
 
 				for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
 					// The new list of cross-flow substitutes = old list plus a new one with one of

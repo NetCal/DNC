@@ -31,7 +31,7 @@ import java.util.List;
 
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
@@ -58,7 +58,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
 		for (int i = 0; i < segments.size(); i++) {
 			c_dnc.setSegment(i, segments.get(i));
 		}
-		CurvePwAffineUtilsDispatch.beautify(c_dnc);
+		CurvePwAffineUtils.beautify(c_dnc);
 		return c_dnc;
 	}
 
@@ -163,7 +163,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
 	}
 
 	public ArrivalCurve_DNC createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-		return createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(curve));
+		return createArrivalCurve(CurvePwAffineUtils.removeLatency(curve));
 	}
 
 	public ArrivalCurve_DNC createZeroArrivals() {

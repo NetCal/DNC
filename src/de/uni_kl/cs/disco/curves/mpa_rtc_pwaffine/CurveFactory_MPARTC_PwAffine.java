@@ -31,7 +31,7 @@ import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
@@ -177,7 +177,7 @@ public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactory {
 	}
 
 	public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-		return createArrivalCurve(CurvePwAffineUtilsDispatch.removeLatency(curve));
+		return createArrivalCurve(CurvePwAffineUtils.removeLatency(curve));
 	}
 
 	public ArrivalCurve_MPARTC_PwAffine createZeroArrivals() {

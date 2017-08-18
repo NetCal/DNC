@@ -23,6 +23,9 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - Separate rationals (requiring the valies NaN, +infty, -infty) and reals.
   - Drop the "Rational" and "Real" class prefixes.
   - Double/Single also renamed to DoublePrecision/SinglePrecision.
+* CurvePwAffineUtilsDispatch was not a dispatcher but an utils class:
+  - Renamed to CurvePwAffineUtils.
+  - Made it an abstract class. 
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------

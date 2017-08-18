@@ -35,7 +35,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
@@ -115,7 +115,7 @@ public final class LeftOverService {
 			}
 		}
 
-		List<Num> ycoords = CurvePwAffineUtilsDispatch.computeInflectionPointsY(arrival_curve, service_curve);
+		List<Num> ycoords = CurvePwAffineUtils.computeInflectionPointsY(arrival_curve, service_curve);
 		for (int i = 0; i < ycoords.size(); i++) {
 			Num ip_y = (ycoords.get(i));
 			if (ip_y.lt(arrival_curve.getBurst())) {
@@ -129,9 +129,9 @@ public final class LeftOverService {
 
 				Num theta = NumUtils.getNumUtils().sub(x_beta, x_alpha);
 				ServiceCurve beta_fifo = CurvePwAffineFactory.getCurveFactory()
-						.createServiceCurve(CurvePwAffineUtilsDispatch.boundAtXAxis(CurvePwAffineUtilsDispatch.min(
-								CurvePwAffineUtilsDispatch.sub(service_curve,
-										CurvePwAffineUtilsDispatch.shiftRight(arrival_curve, theta)),
+						.createServiceCurve(CurvePwAffineUtils.boundAtXAxis(CurvePwAffineUtils.min(
+								CurvePwAffineUtils.sub(service_curve,
+										CurvePwAffineUtils.shiftRight(arrival_curve, theta)),
 								CurvePwAffineFactory.getCurveFactory().createDelayedInfiniteBurst(x_beta))));
 				return beta_fifo;
 			}
@@ -172,6 +172,6 @@ public final class LeftOverService {
 		}
 
 		return CurvePwAffineFactory.getCurveFactory().createServiceCurve(
-				CurvePwAffineUtilsDispatch.boundAtXAxis(CurvePwAffineUtilsDispatch.sub(service_curve, arrival_curve)));
+				CurvePwAffineUtils.boundAtXAxis(CurvePwAffineUtils.sub(service_curve, arrival_curve)));
 	}
 }

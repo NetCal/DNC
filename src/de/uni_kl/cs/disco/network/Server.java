@@ -29,7 +29,7 @@
 package de.uni_kl.cs.disco.network;
 
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -180,7 +180,7 @@ public class Server {
 		if (use_extra_gamma == false) {
 			return CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
 		} else {
-			return (MaxServiceCurve) CurvePwAffineUtilsDispatch.removeLatency(max_service_curve);
+			return (MaxServiceCurve) CurvePwAffineUtils.removeLatency(max_service_curve);
 		}
 	}
 

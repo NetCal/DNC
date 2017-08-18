@@ -42,7 +42,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
@@ -917,7 +917,7 @@ public class Network {
 		} else {
 			if (source_flows_internal != null) {
 				for (Flow f : source_flows_internal) {
-					a_out = CurvePwAffineUtilsDispatch.add(a_out, f.getArrivalCurve());
+					a_out = CurvePwAffineUtils.add(a_out, f.getArrivalCurve());
 				}
 			}
 		}
