@@ -40,6 +40,8 @@ import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.minplus.dnc.Convolution_DNC;
 import de.uni_kl.cs.disco.minplus.dnc.Deconvolution_DNC;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationClass;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,17 +58,10 @@ public abstract class MinPlusDispatch {
 
 	public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
 			boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve(service_curve_1, service_curve_2, tb_rl_optimized);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -88,17 +83,10 @@ public abstract class MinPlusDispatch {
 
 	public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
 			Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve_SCs_SCs(service_curves_1, service_curves_2, tb_rl_optimized);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -121,17 +109,10 @@ public abstract class MinPlusDispatch {
 
 	// Arrival Curves
 	public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve(arrival_curve_1, arrival_curve_2);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -144,17 +125,10 @@ public abstract class MinPlusDispatch {
 	}
 
 	public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve(arrival_curves);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -187,17 +161,10 @@ public abstract class MinPlusDispatch {
 	// Maximum Service Curves
 	public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2)
 			throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve(max_service_curve_1, max_service_curve_2);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -212,17 +179,10 @@ public abstract class MinPlusDispatch {
 	// Arrival Curves and Max Service Curves
 	public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve maximum_service_curve) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve_ACs_MSC(arrival_curves, maximum_service_curve);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -242,17 +202,10 @@ public abstract class MinPlusDispatch {
 
 	public static Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve extra_gamma_curve) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Convolution_DNC.convolve_ACs_EGamma(arrival_curves, extra_gamma_curve);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -279,17 +232,10 @@ public abstract class MinPlusDispatch {
 
 	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
 			boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Deconvolution_DNC.deconvolve(arrival_curves, service_curve, tb_rl_optimized);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -313,17 +259,10 @@ public abstract class MinPlusDispatch {
 
 	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves,
 			boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Deconvolution_DNC.deconvolve(arrival_curves, service_curves, tb_rl_optimized);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -347,17 +286,10 @@ public abstract class MinPlusDispatch {
 
 	public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
 			boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Deconvolution_DNC.deconvolve(arrival_curve, service_curve);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
@@ -371,17 +303,10 @@ public abstract class MinPlusDispatch {
 
 	public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves,
 			Set<ServiceCurve> service_curves) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationClass().equals(CalculatorConfig.OperationClass.DNC) // DNC
-																											// operations
-																											// work with
-																											// DNC and
-																											// MPA_RTC
-																											// curves
-				|| CalculatorConfig.getInstance().getCurveClass().equals(CalculatorConfig.CurveClass.DNC)) { // NATIVE
-																												// operation
-																												// on
-																												// DNC
-																												// curves
+		if (CalculatorConfig.getInstance().getOperationClass().equals(OperationClass.DNC) // DNC operations work with
+																							// DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals(CurveClass.DNC)) { // NATIVE operation on 
+																							// DNC curves
 			return Deconvolution_DNC.deconvolve_almostConcCs_SCs(curves, service_curves);
 
 		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
