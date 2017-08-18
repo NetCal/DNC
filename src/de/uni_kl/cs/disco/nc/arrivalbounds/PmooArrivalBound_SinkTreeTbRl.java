@@ -37,7 +37,7 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -159,11 +159,11 @@ public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
 			if (arrival_bound_f == null) {
 				sc_s_subpath = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 				for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
-					sc_s_subpath = MinPlusDispatch.convolve(sc_s_subpath, s.getServiceCurve(), false); // false ->
+					sc_s_subpath = MinPlus.convolve(sc_s_subpath, s.getServiceCurve(), false); // false ->
 																										// generic
 																										// convolution
 				}
-				arrival_bound_f = MinPlusDispatch.deconvolve(f.getArrivalCurve(), sc_s_subpath, false); // false ->
+				arrival_bound_f = MinPlus.deconvolve(f.getArrivalCurve(), sc_s_subpath, false); // false ->
 																										// generic
 																										// deconvolution
 			}
@@ -211,10 +211,10 @@ public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
 			if (arrival_bound_f == null) {
 				sc_s_subpath = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 				for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
-					sc_s_subpath = MinPlusDispatch.convolve(sc_s_subpath, s.getServiceCurve(), true); // true -> tb, rl
+					sc_s_subpath = MinPlus.convolve(sc_s_subpath, s.getServiceCurve(), true); // true -> tb, rl
 																										// optimized
 				}
-				arrival_bound_f = MinPlusDispatch.deconvolve(f.getArrivalCurve(), sc_s_subpath, true); // true -> tb, rl
+				arrival_bound_f = MinPlus.deconvolve(f.getArrivalCurve(), sc_s_subpath, true); // true -> tb, rl
 																										// optimized
 			}
 			ab_cache.addEntry(link, f, arrival_bound_f);

@@ -27,6 +27,7 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - Renamed to CurvePwAffineUtils.
   - Made it an abstract class.
 * LinearSegmentFactoryDispatch is not dispatching but a factory itself; renamed to LinearSegmentFactory.
+* Merge of MinPlusInputChecks and MinPlusDispatch to MinPlus.
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------

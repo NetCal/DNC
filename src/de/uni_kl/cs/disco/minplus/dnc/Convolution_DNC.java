@@ -40,7 +40,7 @@ import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.curves.LinearSegmentFactory;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
@@ -68,7 +68,7 @@ public abstract class Convolution_DNC {
 	}
 
 	private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-		switch (MinPlusInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
+		switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
 		case 1:
 			return service_curve_2.copy();
 		case 2:
@@ -81,7 +81,7 @@ public abstract class Convolution_DNC {
 		}
 
 		Num rate;
-		switch (MinPlusInputChecks.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+		switch (MinPlus.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
 		case 1:
 			rate = service_curve_2.getUltAffineRate();
 			break;
@@ -111,7 +111,7 @@ public abstract class Convolution_DNC {
 	 * @return The convolved curve.
 	 */
 	private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-		switch (MinPlusInputChecks.inputNullCheck(service_curve_1, service_curve_2)) {
+		switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
 		case 1:
 			return service_curve_2.copy();
 		case 2:
@@ -231,7 +231,7 @@ public abstract class Convolution_DNC {
 		// curve.
 		// Instead, the other set is return in case it is neither null or empty.
 		Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
-		switch (MinPlusInputChecks.inputNullCheck(service_curves_1, service_curves_2)) {
+		switch (MinPlus.inputNullCheck(service_curves_1, service_curves_2)) {
 		case 1:
 			for (ServiceCurve sc : service_curves_2) {
 				clone.add(sc.copy());
@@ -249,7 +249,7 @@ public abstract class Convolution_DNC {
 		default:
 			break;
 		}
-		switch (MinPlusInputChecks.inputEmptySetCheck(service_curves_1, service_curves_2)) {
+		switch (MinPlus.inputEmptySetCheck(service_curves_1, service_curves_2)) {
 		case 1:
 			for (ServiceCurve sc : service_curves_2) {
 				clone.add(sc.copy());
@@ -281,7 +281,7 @@ public abstract class Convolution_DNC {
 	// Arrival Curves
 	// ------------------------------------------------------------
 	public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-		switch (MinPlusInputChecks.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
+		switch (MinPlus.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
 		case 0:
 			break;
 		case 1:
@@ -346,7 +346,7 @@ public abstract class Convolution_DNC {
 	 * @return The convolved maximum service curve.
 	 */
 	public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-		switch (MinPlusInputChecks.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
+		switch (MinPlus.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
 		case 0:
 			break;
 		case 1:
@@ -397,7 +397,7 @@ public abstract class Convolution_DNC {
 	// during the output bound computation.
 	public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve maximum_service_curve) throws Exception {
-		switch (MinPlusInputChecks.inputNullCheck(arrival_curves, maximum_service_curve)) {
+		switch (MinPlus.inputNullCheck(arrival_curves, maximum_service_curve)) {
 		case 1:
 			return new HashSet<CurvePwAffine>();
 		case 2:
@@ -436,7 +436,7 @@ public abstract class Convolution_DNC {
 
 	public static Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve extra_gamma_curve) throws Exception {
-		switch (MinPlusInputChecks.inputNullCheck(arrival_curves, extra_gamma_curve)) {
+		switch (MinPlus.inputNullCheck(arrival_curves, extra_gamma_curve)) {
 		case 0:
 			break;
 		case 1:

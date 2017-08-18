@@ -37,7 +37,7 @@ import java.util.List;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 
 /**
  * A flows path is a sequence of crossed buffers -- either represented by the
@@ -196,7 +196,7 @@ public class Path {
 	private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
 		ServiceCurve service_curve_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
-			service_curve_total = MinPlusDispatch.convolve(service_curve_total, s.getServiceCurve());
+			service_curve_total = MinPlus.convolve(service_curve_total, s.getServiceCurve());
 		}
 
 		return service_curve_total;
@@ -220,7 +220,7 @@ public class Path {
 	private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
 		MaxServiceCurve gamma_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
-			gamma_total = MinPlusDispatch.convolve(gamma_total, s.getGamma());
+			gamma_total = MinPlus.convolve(gamma_total, s.getGamma());
 		}
 
 		return gamma_total;
@@ -244,7 +244,7 @@ public class Path {
 	private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
 		MaxServiceCurve extra_gamma_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
-			extra_gamma_total = MinPlusDispatch.convolve(extra_gamma_total, s.getExtraGamma());
+			extra_gamma_total = MinPlus.convolve(extra_gamma_total, s.getExtraGamma());
 		}
 		// extra_gamma_total.removeLatency(); // Already done by s.getExtraGamma()
 
@@ -269,7 +269,7 @@ public class Path {
 	private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
 		MaxServiceCurve max_service_curve_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
-			max_service_curve_total = MinPlusDispatch.convolve(max_service_curve_total, s.getMaxServiceCurve());
+			max_service_curve_total = MinPlus.convolve(max_service_curve_total, s.getMaxServiceCurve());
 		}
 
 		return max_service_curve_total;

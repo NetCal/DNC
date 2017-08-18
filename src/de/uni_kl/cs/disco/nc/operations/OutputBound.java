@@ -34,7 +34,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.GammaFlag;
 import de.uni_kl.cs.disco.network.Path;
@@ -54,14 +54,14 @@ public class OutputBound {
 		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
 		if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlusDispatch.deconvolve_almostConcCs_SCs(
-					MinPlusDispatch.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
+			result = MinPlus.deconvolve_almostConcCs_SCs(
+					MinPlus.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
 		} else {
-			result = MinPlusDispatch.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+			result = MinPlus.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
 		}
 
 		if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlusDispatch.convolve_ACs_EGamma(result, server.getExtraGamma());
+			result = MinPlus.convolve_ACs_EGamma(result, server.getExtraGamma());
 		}
 
 		return result;
@@ -72,14 +72,14 @@ public class OutputBound {
 		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
 		if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlusDispatch.deconvolve_almostConcCs_SCs(
-					MinPlusDispatch.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
+			result = MinPlus.deconvolve_almostConcCs_SCs(
+					MinPlus.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
 		} else {
-			result = MinPlusDispatch.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+			result = MinPlus.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
 		}
 
 		if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlusDispatch.convolve_ACs_EGamma(result, path.getExtraGamma());
+			result = MinPlus.convolve_ACs_EGamma(result, path.getExtraGamma());
 		}
 
 		return result;

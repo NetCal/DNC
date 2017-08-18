@@ -36,7 +36,7 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -147,7 +147,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 			}
 
 			// Combine into the sub-path's left-over service curve
-			betas_lo_subpath = MinPlusDispatch.convolve_SCs_SCs(betas_lo_subpath, betas_lo_s,
+			betas_lo_subpath = MinPlus.convolve_SCs_SCs(betas_lo_subpath, betas_lo_s,
 					configuration.tbrlConvolution());
 		}
 

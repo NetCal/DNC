@@ -37,7 +37,7 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
@@ -210,7 +210,7 @@ public abstract class ArrivalBoundDispatch {
 
 		// All permutations of single flow results
 		for (ServiceCurve beta_lo : betas_lo) {
-			arrival_bounds_f.add(MinPlusDispatch.deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
+			arrival_bounds_f.add(MinPlus.deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
 		}
 
 		return arrival_bounds_f;

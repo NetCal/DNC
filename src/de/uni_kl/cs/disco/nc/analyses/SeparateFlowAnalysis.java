@@ -38,7 +38,7 @@ import java.util.Set;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
+import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
@@ -177,7 +177,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 			}
 			((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lofoi_s);
 
-			betas_lofoi_path = MinPlusDispatch.convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
+			betas_lofoi_path = MinPlus.convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
 					configuration.tbrlConvolution());
 		}
 		return betas_lofoi_path;
