@@ -36,7 +36,7 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 /**
  * 
  * This class creates linear segments, either with Disco's DNC backend or with
- * the PMA's RTC backend.
+ * the MPA's RTC backend.
  *
  */
 public abstract class LinearSegmentFactory {
