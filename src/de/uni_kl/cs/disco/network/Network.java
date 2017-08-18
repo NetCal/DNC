@@ -41,8 +41,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
+import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
@@ -163,17 +162,17 @@ public class Network {
 	// --------------------------------------------------------------------------------------------
 	// Without given maximum service curve
 	public Server addServer(ServiceCurve service_curve) {
-		return addServer(service_curve, CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC(),
+		return addServer(service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
 				AnalysisConfig.Multiplexing.ARBITRARY, false, false);
 	}
 
 	public Server addServer(ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing) {
-		return addServer(service_curve, CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC(),
+		return addServer(service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
 				multiplexing, true, true);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve) {
-		return addServer(alias, service_curve, CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC(),
+		return addServer(alias, service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
 				AnalysisConfig.Multiplexing.ARBITRARY, false, false);
 	}
 
@@ -908,7 +907,7 @@ public class Network {
 	 * @return An aggregate arrival curve.
 	 */
 	public ArrivalCurve getSourceFlowArrivalCurve(Server source, Set<Flow> source_flows) {
-		ArrivalCurve a_out = CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
+		ArrivalCurve a_out = CurvePwAffine.getFactory().createZeroArrivals();
 
 		// Returns an empty set if one of the arguments is null
 		Set<Flow> source_flows_internal = SetUtils.getIntersection(map__server__source_flows.get(source), source_flows);
@@ -917,7 +916,7 @@ public class Network {
 		} else {
 			if (source_flows_internal != null) {
 				for (Flow f : source_flows_internal) {
-					a_out = CurvePwAffineUtils.add(a_out, f.getArrivalCurve());
+					a_out = CurvePwAffine.add(a_out, f.getArrivalCurve());
 				}
 			}
 		}
@@ -1319,7 +1318,7 @@ public class Network {
 		sb.append("\n");
 		sb.append("import java.util.LinkedList;\n");
 		sb.append("\n");
-		sb.append("import de.uni_kl.disco.curves.CurvePwAffineFactory;\n");
+		sb.append("import de.uni_kl.disco.curves.CurvePwAffine;\n");
 		sb.append("\n");
 		sb.append("import de.uni_kl.disco.nc.AnalysisConfig.Multiplexing;\n");
 		sb.append("\n");
@@ -1341,8 +1340,8 @@ public class Network {
 			sb.append("\t\tservers[" + s.getId() + "] = ");
 			sb.append("network.addServer( ");
 			sb.append("\"" + s.getAlias() + "\"" + ", ");
-			sb.append("CurvePwAffineFactory.createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", ");
-			sb.append("CurvePwAffineFactory.createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )"
+			sb.append("CurvePwAffine.createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", ");
+			sb.append("CurvePwAffine.createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )"
 					+ ", ");
 			sb.append("Multiplexing." + s.multiplexingDiscipline() + ", ");
 			sb.append(s.useGamma() + ", ");
@@ -1406,7 +1405,7 @@ public class Network {
 			}
 			sb.append("\t\tnetwork.addFlow( ");
 			sb.append("\"" + f.getAlias() + "\"" + ", ");
-			sb.append("CurvePwAffineFactory.createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", ");
+			sb.append("CurvePwAffine.createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", ");
 			sb.append("servers_on_path_s");
 			sb.append(" );\n");
 			sb.append("\t\tservers_on_path_s.clear();");

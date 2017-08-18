@@ -29,7 +29,7 @@
 package de.uni_kl.cs.disco.demos;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -57,10 +57,10 @@ public class Demo1 {
 	}
 
 	public void run() throws Exception {
-		ArrivalCurve arrival_curve = CurvePwAffineFactory.getCurveFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
+		ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
-		ServiceCurve service_curve = CurvePwAffineFactory.getCurveFactory().createRateLatency(10.0e6, 0.01);
-		MaxServiceCurve max_service_curve = CurvePwAffineFactory.getCurveFactory().createRateLatencyMSC(100.0e6, 0.001);
+		ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(10.0e6, 0.01);
+		MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
 		Network network = new Network();
 		AnalysisConfig configuration = new AnalysisConfig();

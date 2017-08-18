@@ -34,8 +34,6 @@ import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
@@ -111,15 +109,15 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 			i++;
 		}
 
-		ServiceCurve beta_total = CurvePwAffineFactory.getCurveFactory().createZeroService();
+		ServiceCurve beta_total = CurvePwAffine.getFactory().createZeroService();
 
 		boolean more_combinations = true;
 		while (more_combinations) {
 			// Compute service curve for this combination
 			ServiceCurve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
 					flow_tb_iter_map, server_rl_iters);
-			if (!beta.equals(CurvePwAffineFactory.getCurveFactory().createZeroService())) {
-				beta_total = CurvePwAffineUtils.max(beta_total, beta);
+			if (!beta.equals(CurvePwAffine.getFactory().createZeroService())) {
+				beta_total = CurvePwAffine.max(beta_total, beta);
 			}
 
 			// First check whether there are more combinations of flow TBs
@@ -203,7 +201,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
 			// Check for stability constraint violation
 			if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-				return CurvePwAffineFactory.getCurveFactory().createZeroService();
+				return CurvePwAffine.getFactory().createZeroService();
 			}
 
 			// TODO Actually needs to be an affine curve
@@ -228,7 +226,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 			// Compute left-over rate; update min
 			Num Ri = NumUtils.getNumUtils().sub(current_rl.getUltAffineRate(), sum_r);
 			if (Ri.leqZero()) {
-				return CurvePwAffineFactory.getCurveFactory().createZeroService();
+				return CurvePwAffine.getFactory().createZeroService();
 			}
 			R = NumUtils.getNumUtils().min(R, Ri);
 
@@ -254,13 +252,13 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 				NumUtils.getNumUtils().div(NumUtils.getNumUtils().add(sum_bursts, sum_latencyterms), R));
 
 		if (T == NumFactory.getNumFactory().getPositiveInfinity()) {
-			return CurvePwAffineFactory.getCurveFactory().createZeroService();
+			return CurvePwAffine.getFactory().createZeroService();
 		}
 		if (R == NumFactory.getNumFactory().getPositiveInfinity()) {
-			return CurvePwAffineFactory.getCurveFactory().createDelayedInfiniteBurst(T);
+			return CurvePwAffine.getFactory().createDelayedInfiniteBurst(T);
 		}
 
-		return CurvePwAffineFactory.getCurveFactory().createRateLatency(R, T);
+		return CurvePwAffine.getFactory().createRateLatency(R, T);
 	}
 
 	/**
@@ -471,7 +469,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 		});
 
 		if (betas_e2e.isEmpty()) {
-			betas_e2e.add(CurvePwAffineFactory.getCurveFactory().createZeroService());
+			betas_e2e.add(CurvePwAffine.getFactory().createZeroService());
 		}
 		return betas_e2e;
 	}
@@ -633,7 +631,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 			arrival_bounds_link_permutations.clear();
 			List<Flow> flow_list_tmp = new LinkedList<Flow>();
 			for (ArrivalCurve alpha : alphas_xf_group) {
-				CurvePwAffineUtils.beautify(alpha);
+				CurvePwAffine.beautify(alpha);
 
 				for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
 					// The new list of cross-flow substitutes = old list plus a new one with one of
@@ -662,7 +660,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 		}
 
 		// Derive the left-over service curves
-		ServiceCurve null_service = CurvePwAffineFactory.getCurveFactory().createZeroService();
+		ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
 		for (List<Flow> xtx_substitutes : cross_flow_substitutes_set) {
 			ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
 
@@ -672,7 +670,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 		}
 
 		if (betas_e2e.isEmpty()) {
-			betas_e2e.add(CurvePwAffineFactory.getCurveFactory().createZeroService());
+			betas_e2e.add(CurvePwAffine.getFactory().createZeroService());
 		}
 		return betas_e2e;
 	}

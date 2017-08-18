@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlus;
@@ -194,7 +194,7 @@ public class Path {
 	}
 
 	private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
-		ServiceCurve service_curve_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
+		ServiceCurve service_curve_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
 			service_curve_total = MinPlus.convolve(service_curve_total, s.getServiceCurve());
 		}
@@ -218,7 +218,7 @@ public class Path {
 	}
 
 	private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
-		MaxServiceCurve gamma_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
+		MaxServiceCurve gamma_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
 			gamma_total = MinPlus.convolve(gamma_total, s.getGamma());
 		}
@@ -242,7 +242,7 @@ public class Path {
 	}
 
 	private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
-		MaxServiceCurve extra_gamma_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
+		MaxServiceCurve extra_gamma_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
 			extra_gamma_total = MinPlus.convolve(extra_gamma_total, s.getExtraGamma());
 		}
@@ -267,7 +267,7 @@ public class Path {
 	}
 
 	private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
-		MaxServiceCurve max_service_curve_total = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC();
+		MaxServiceCurve max_service_curve_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
 		for (Server s : servers) {
 			max_service_curve_total = MinPlus.convolve(max_service_curve_total, s.getMaxServiceCurve());
 		}

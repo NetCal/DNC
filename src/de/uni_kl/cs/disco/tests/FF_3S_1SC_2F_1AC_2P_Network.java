@@ -31,7 +31,7 @@ package de.uni_kl.cs.disco.tests;
 import java.util.LinkedList;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.network.*;
 
@@ -43,8 +43,8 @@ public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	protected Server s0, s1, s2;
 	protected Link l_s0_s1, l_s1_s2;
 	protected Flow f0, f1;
-	private ServiceCurve service_curve = CurvePwAffineFactory.getCurveFactory().createRateLatency(sc_R, sc_T);
-	private ArrivalCurve arrival_curve = CurvePwAffineFactory.getCurveFactory().createTokenBucket(ac_r, ac_b);
+	private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
+	private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
 	private Network network;
 
 	public FF_3S_1SC_2F_1AC_2P_Network() {
@@ -87,12 +87,12 @@ public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	}
 
 	public void reinitializeCurves() {
-		service_curve = CurvePwAffineFactory.getCurveFactory().createRateLatency(sc_R, sc_T);
+		service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
 		for (Server server : network.getServers()) {
 			server.setServiceCurve(service_curve);
 		}
 
-		arrival_curve = CurvePwAffineFactory.getCurveFactory().createTokenBucket(ac_r, ac_b);
+		arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
 		for (Flow flow : network.getFlows()) {
 			flow.setArrivalCurve(arrival_curve);
 		}

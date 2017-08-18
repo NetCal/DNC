@@ -36,7 +36,6 @@ import java.util.List;
 
 import de.uni_kl.cs.disco.curves.Curve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
@@ -57,6 +56,8 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
  *
  */
 public class Curve_DNC implements CurvePwAffine {
+	private static Curve_DNC instance = new Curve_DNC(); 
+	
 	protected LinearSegment_DNC[] segments;
 
 	protected boolean is_delayed_infinite_burst = false;
@@ -69,14 +70,18 @@ public class Curve_DNC implements CurvePwAffine {
 	protected boolean has_token_bucket_meta_info = false;
 	protected List<Curve_DNC> token_buckets = new LinkedList<Curve_DNC>();
 
+	public static Curve_DNC getFactory() {
+		return instance;
+	}
+	
 	/**
 	 * Creates a <code>CurveDNC</code> instance with a single segment on the x-axis.
 	 */
-	public Curve_DNC() {
+	protected Curve_DNC() {
 		createNewCurve(1, false);
 	}
 
-	public Curve_DNC(CurvePwAffine curve) {
+	protected Curve_DNC(CurvePwAffine curve) {
 		copy(curve);
 	}
 
@@ -87,9 +92,13 @@ public class Curve_DNC implements CurvePwAffine {
 	 * @param segment_count
 	 *            the number of segments
 	 */
-	public Curve_DNC(int segment_count) {
+	protected Curve_DNC(int segment_count) {
 		createNewCurve(segment_count, false);
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------
+	// Interface Implementations
+	// --------------------------------------------------------------------------------------------------------------
 
 	public boolean isIs_rate_latency() {
 		return is_rate_latency;
@@ -139,9 +148,6 @@ public class Curve_DNC implements CurvePwAffine {
 		return has_token_bucket_meta_info;
 	}
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Constructors
-	// --------------------------------------------------------------------------------------------------------------
 	public void setTB_MetaInfo(boolean has_token_bucket_meta_info) {
 		this.has_token_bucket_meta_info = has_token_bucket_meta_info;
 	}
@@ -220,7 +226,7 @@ public class Curve_DNC implements CurvePwAffine {
 		for (int i = 0; i < segments_to_parse.length; i++) {
 			segments[i] = new LinearSegment_DNC(segments_to_parse[i]);
 		}
-		CurvePwAffineUtils.beautify(this);
+		CurvePwAffine.beautify(this);
 	}
 
 	protected void forceThroughOrigin() {
@@ -664,14 +670,14 @@ public class Curve_DNC implements CurvePwAffine {
 		Curve_DNC this_cpy = this.copy();
 		Curve_DNC other_cpy = ((Curve_DNC) obj).copy();
 
-		CurvePwAffineUtils.beautify(this_cpy);
-		CurvePwAffineUtils.beautify(other_cpy);
+		CurvePwAffine.beautify(this_cpy);
+		CurvePwAffine.beautify(other_cpy);
 
 		if (this_cpy.getLatency() == NumFactory.getNumFactory().getPositiveInfinity()) {
-			this_cpy = CurveFactory_DNC.getInstance().createZeroCurve();
+			this_cpy = this.createZeroCurve();
 		}
 		if (other_cpy.getLatency() == NumFactory.getNumFactory().getPositiveInfinity()) {
-			other_cpy = CurveFactory_DNC.getInstance().createZeroCurve();
+			other_cpy = this.createZeroCurve();
 		}
 
 		int this_segment_length = this_cpy.segments.length;
@@ -830,7 +836,7 @@ public class Curve_DNC implements CurvePwAffine {
 	 * @return the latency of this curve.
 	 */
 	public Num getLatency() {
-		CurvePwAffineUtils.beautify(this);
+		CurvePwAffine.beautify(this);
 		if (segments[0].getY().gt(NumFactory.getNumFactory().getZero())) {
 			return NumFactory.getNumFactory().createZero();
 		}
@@ -946,9 +952,9 @@ public class Curve_DNC implements CurvePwAffine {
 		}
 
 		if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
-			if (this.equals(CurveFactory_DNC.getInstance().createZeroDelayInfiniteBurst())) {
+			if (this.equals(this.createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_DNC>();
-				rate_latencies.add(CurveFactory_DNC.getInstance().createRateLatency(
+				rate_latencies.add(this.createRateLatency(
 						NumFactory.getNumFactory().createPositiveInfinity(), NumFactory.getNumFactory().createZero()));
 			} else {
 				throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
@@ -965,7 +971,7 @@ public class Curve_DNC implements CurvePwAffine {
 				if (latency.ltZero()) {
 					continue;
 				}
-				rate_latencies.add(CurveFactory_DNC.getInstance().createRateLatency(rate, latency));
+				rate_latencies.add(this.createRateLatency(rate, latency));
 			}
 		}
 
@@ -1025,11 +1031,309 @@ public class Curve_DNC implements CurvePwAffine {
 			Num rate = segments[i].getGrad();
 			Num burst = NumUtils.getNumUtils().sub(segments[i].getY(),
 					NumUtils.getNumUtils().mult(segments[i].getX(), segments[i].getGrad()));
-			token_buckets.add(CurveFactory_DNC.getInstance().createTokenBucket(rate, burst));
+			token_buckets.add(this.createTokenBucket(rate, burst));
 		}
 
 		is_token_bucket = token_buckets.size() == 1;
 
 		has_token_bucket_meta_info = true;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------
+	// Factory Implementation
+	// --------------------------------------------------------------------------------------------------------------
+	
+	// ------------------------------------------------------------------------------
+	// Curve Constructors
+	// ------------------------------------------------------------------------------
+
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	public Curve_DNC createCurve(List<LinearSegment> segments) {
+		Curve_DNC c_dnc = new Curve_DNC(segments.size());
+		for (int i = 0; i < segments.size(); i++) {
+			c_dnc.setSegment(i, segments.get(i));
+		}
+		CurvePwAffine.beautify(c_dnc);
+		return c_dnc;
+	}
+
+	public Curve_DNC createZeroCurve() {
+		return new Curve_DNC(); // CurveDNC constructor's default behavior
+	}
+
+	public Curve_DNC createHorizontal(double y) {
+		return createHorizontal(NumFactory.getNumFactory().create(y));
+	}
+
+	/**
+	 * Creates a horizontal curve.
+	 *
+	 * @param y
+	 *            the y-intercept of the curve
+	 * @return a <code>Curve</code> instance
+	 */
+	public Curve_DNC createHorizontal(Num y) {
+		Curve_DNC c_dnc = new Curve_DNC();
+		makeHorizontal(c_dnc, y);
+		return c_dnc;
+	}
+
+	// ------------------------------------------------------------------------------
+	// Service Curve Constructors
+	// ------------------------------------------------------------------------------
+
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	public ServiceCurve_DNC createServiceCurve() {
+		return new ServiceCurve_DNC();
+	}
+
+	public ServiceCurve_DNC createServiceCurve(int segment_count) {
+		return new ServiceCurve_DNC(segment_count);
+	}
+
+	public ServiceCurve_DNC createServiceCurve(String service_curve_str) throws Exception {
+		return new ServiceCurve_DNC(service_curve_str);
+	}
+
+	public ServiceCurve_DNC createServiceCurve(CurvePwAffine curve) {
+		return new ServiceCurve_DNC(curve);
+	}
+
+	public ServiceCurve_DNC createZeroService() {
+		return new ServiceCurve_DNC(); // ServiceCurveDNC constructor's default behavior
+	}
+
+	/**
+	 * Creates an infinite burst curve with zero delay.
+	 *
+	 * @return a <code>ServiceCurve</code> instance
+	 */
+	public ServiceCurve_DNC createZeroDelayInfiniteBurst() {
+		return createDelayedInfiniteBurst(NumFactory.getNumFactory().createZero());
+	}
+
+	public ServiceCurve_DNC createDelayedInfiniteBurst(double delay) {
+		return createDelayedInfiniteBurst(NumFactory.getNumFactory().create(delay));
+	}
+
+	public ServiceCurve_DNC createDelayedInfiniteBurst(Num delay) {
+		ServiceCurve_DNC sc_dnc = new ServiceCurve_DNC();
+		makeDelayedInfiniteBurst(sc_dnc, delay);
+		return sc_dnc;
+	}
+
+	public ServiceCurve_DNC createRateLatency(double rate, double latency) {
+		return createRateLatency(NumFactory.getNumFactory().create(rate), NumFactory.getNumFactory().create(latency));
+	}
+
+	public ServiceCurve_DNC createRateLatency(Num rate, Num latency) {
+		ServiceCurve_DNC sc_dnc = new ServiceCurve_DNC();
+		makeRateLatency(sc_dnc, rate, latency);
+		return sc_dnc;
+	}
+
+	// ------------------------------------------------------------------------------
+	// Arrival Curve Constructors
+	// ------------------------------------------------------------------------------
+
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	public ArrivalCurve_DNC createArrivalCurve() {
+		return new ArrivalCurve_DNC();
+	}
+
+	public ArrivalCurve_DNC createArrivalCurve(int segment_count) {
+		return new ArrivalCurve_DNC(segment_count);
+	}
+
+	public ArrivalCurve_DNC createArrivalCurve(String arrival_curve_str) throws Exception {
+		return new ArrivalCurve_DNC(arrival_curve_str);
+	}
+
+	public ArrivalCurve_DNC createArrivalCurve(CurvePwAffine curve) {
+		return new ArrivalCurve_DNC(curve);
+	}
+
+	public ArrivalCurve_DNC createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
+		return createArrivalCurve(CurvePwAffine.removeLatency(curve));
+	}
+
+	public ArrivalCurve_DNC createZeroArrivals() {
+		return new ArrivalCurve_DNC(); // ArrivalCurveDNC constructor's default behavior
+	}
+
+	public ArrivalCurve_DNC createPeakArrivalRate(double rate) {
+		return createPeakArrivalRate(NumFactory.getNumFactory().create(rate));
+	}
+
+	public ArrivalCurve_DNC createPeakArrivalRate(Num rate) {
+		ArrivalCurve_DNC ac_dnc = new ArrivalCurve_DNC();
+		makePeakRate(ac_dnc, rate);
+		return ac_dnc;
+	}
+
+	public ArrivalCurve_DNC createTokenBucket(double rate, double burst) {
+		return createTokenBucket(NumFactory.getNumFactory().create(rate), NumFactory.getNumFactory().create(burst));
+	}
+
+	public ArrivalCurve_DNC createTokenBucket(Num rate, Num burst) {
+		ArrivalCurve_DNC ac_dnc = new ArrivalCurve_DNC();
+		makeTokenBucket(ac_dnc, rate, burst);
+		return ac_dnc;
+	}
+
+	// ------------------------------------------------------------------------------
+	// Maximum Service Curve Constructors
+	// ------------------------------------------------------------------------------
+
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	public MaxServiceCurve_DNC createMaxServiceCurve() {
+		return new MaxServiceCurve_DNC();
+	}
+
+	public MaxServiceCurve_DNC createMaxServiceCurve(int segment_count) {
+		return new MaxServiceCurve_DNC(segment_count);
+	}
+
+	public MaxServiceCurve_DNC createMaxServiceCurve(String max_service_curve_str) throws Exception {
+		return new MaxServiceCurve_DNC(max_service_curve_str);
+	}
+
+	public MaxServiceCurve_DNC createMaxServiceCurve(CurvePwAffine curve) {
+		return new MaxServiceCurve_DNC(curve);
+	}
+
+	public MaxServiceCurve_DNC createInfiniteMaxService() {
+		return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().createZero());
+	}
+
+	public MaxServiceCurve_DNC createZeroDelayInfiniteBurstMSC() {
+		return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().createZero());
+	}
+
+	public MaxServiceCurve_DNC createDelayedInfiniteBurstMSC(double delay) {
+		return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().create(delay));
+	}
+
+	public MaxServiceCurve_DNC createDelayedInfiniteBurstMSC(Num delay) {
+		MaxServiceCurve_DNC msc_dnc = new MaxServiceCurve_DNC();
+		makeDelayedInfiniteBurst(msc_dnc, delay);
+		return msc_dnc;
+	}
+
+	public MaxServiceCurve_DNC createRateLatencyMSC(double rate, double latency) {
+		return createRateLatencyMSC(NumFactory.getNumFactory().create(rate),
+				NumFactory.getNumFactory().create(latency));
+	}
+
+	public MaxServiceCurve_DNC createRateLatencyMSC(Num rate, Num latency) {
+		MaxServiceCurve_DNC msc_dnc = new MaxServiceCurve_DNC();
+		makeRateLatency(msc_dnc, rate, latency);
+		return msc_dnc;
+	}
+
+	// ------------------------------------------------------------------------------
+	// Curve assembly
+	// ------------------------------------------------------------------------------
+	private void makeHorizontal(Curve_DNC c_dnc, Num y) {
+		LinearSegment_DNC segment = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(), y,
+				NumFactory.getNumFactory().createZero(), false);
+		c_dnc.setSegments(new LinearSegment_DNC[] { segment });
+	}
+
+	private void makeDelayedInfiniteBurst(Curve_DNC c_dnc, Num delay) {
+		if (delay.ltZero()) {
+			throw new IllegalArgumentException("Delayed infinite burst curve must have delay >= 0.0");
+		}
+
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
+
+		segments[0] = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
+				NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
+
+		segments[1] = new LinearSegment_DNC(delay, NumFactory.getNumFactory().createPositiveInfinity(),
+				NumFactory.getNumFactory().createZero(), true);
+
+		c_dnc.setSegments(segments);
+		c_dnc.is_delayed_infinite_burst = true;
+	}
+
+	private void makePeakRate(Curve_DNC c_dnc, Num rate) {
+		if (rate.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+			throw new IllegalArgumentException(
+					"Peak rate with rate infinity equals a delayed infinite burst curve with delay < 0.0");
+		}
+		if (rate.eqZero()) {
+			makeHorizontal(c_dnc, NumFactory.getNumFactory().createZero());
+			return;
+		}
+
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[1];
+
+		segments[0] = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
+				NumFactory.getNumFactory().createZero(), rate, false);
+
+		c_dnc.setSegments(segments);
+		// TODO Is it a RL with L=0 (in the PMOO's point of view)
+	}
+
+	private void makeRateLatency(Curve_DNC c_dnc, Num rate, Num latency) {
+		if (rate.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+			makeDelayedInfiniteBurst(c_dnc, latency);
+			return;
+		}
+		if (rate.eqZero() || latency.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+			makeHorizontal(c_dnc, NumFactory.getNumFactory().createZero());
+			return;
+		}
+		if (latency.leqZero()) {
+			makePeakRate(c_dnc, rate);
+			return;
+		}
+
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
+
+		segments[0] = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
+				NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
+
+		segments[1] = new LinearSegment_DNC(latency, NumFactory.getNumFactory().createZero(), rate, true);
+
+		c_dnc.setSegments(segments);
+		// TODO: Do decomposition for PMOO?
+		c_dnc.is_rate_latency = true;
+	}
+
+	private void makeTokenBucket(Curve_DNC c_dnc, Num rate, Num burst) {
+		if (rate.equals(NumFactory.getNumFactory().getPositiveInfinity())
+				|| burst.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+			makeDelayedInfiniteBurst(c_dnc, NumFactory.getNumFactory().createZero());
+			return;
+		}
+		if (rate.eqZero()) { // burst is finite
+			makeHorizontal(c_dnc, burst);
+			return;
+		}
+		if (burst.eqZero()) {
+			makePeakRate(c_dnc, rate);
+			return;
+		}
+
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
+
+		segments[0] = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
+				NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
+
+		segments[1] = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(), burst, rate, true);
+
+		c_dnc.setSegments(segments);
+		// TODO: Do decomposition for PMOO?
+		c_dnc.is_token_bucket = true;
 	}
 }

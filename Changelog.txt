@@ -28,6 +28,9 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - Made it an abstract class.
 * LinearSegmentFactoryDispatch is not dispatching but a factory itself; renamed to LinearSegmentFactory.
 * Merge of MinPlusInputChecks and MinPlusDispatch to MinPlus.
+* Merge Interface, Factory and Utils classes where possible:
+  - CurvePwAffine, incl. DNC and MPA_RTC Curves.
+  - LinearSegments.
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------
