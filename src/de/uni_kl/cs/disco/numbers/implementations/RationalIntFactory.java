@@ -36,11 +36,22 @@ import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public class RationalIntFactory implements NumFactory {
+	private static RationalIntFactory instance;
+	
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
     private Num NaN = createNaN();
     private Num ZERO = createZero();
     private Num EPSILON = createEpsilon();
+
+    protected RationalIntFactory() {} 
+	
+	public static RationalIntFactory getInstance() {
+		if( instance == null ) {
+			return new RationalIntFactory();
+		}
+		return instance;
+	}
 
     public Num getPositiveInfinity() {
         return POSITIVE_INFINITY;

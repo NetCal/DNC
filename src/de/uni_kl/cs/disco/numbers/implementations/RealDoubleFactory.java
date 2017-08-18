@@ -33,12 +33,23 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 
 public class RealDoubleFactory implements NumFactory {
+	private static RealDoubleFactory instance;
+	
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
     private Num NaN = createNaN();
     private Num ZERO = createZero();
     private Num EPSILON = createEpsilon();
 
+    protected RealDoubleFactory() {} 
+	
+	public static RealDoubleFactory getInstance() {
+		if( instance == null ) {
+			return new RealDoubleFactory();
+		}
+		return instance;
+	}
+    
     public Num getPositiveInfinity() {
         return POSITIVE_INFINITY;
     }

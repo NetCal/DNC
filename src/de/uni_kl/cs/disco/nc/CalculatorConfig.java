@@ -29,13 +29,12 @@
 package de.uni_kl.cs.disco.nc;
 
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 import java.io.File;
 
 public final class CalculatorConfig {
-	private static CalculatorConfig calc_config = null;
+	private static CalculatorConfig instance = new CalculatorConfig();
 
 	public enum NumClass { REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER }
 	public enum CurveClass { DNC, MPA_RTC }
@@ -54,10 +53,7 @@ public final class CalculatorConfig {
 	protected CalculatorConfig() {} 
 	
 	public static CalculatorConfig getInstance() {
-		if( calc_config == null ) {
-			return new CalculatorConfig();
-		}
-		return calc_config;
+		return instance;
 	}
 
 	public NumClass getNumClass() {
@@ -69,7 +65,6 @@ public final class CalculatorConfig {
 			return false;
 		} else {
 			NUM_CLASS = num_class;
-			NumFactoryDispatch.setNumClass(num_class);
 			NumUtilsDispatch.setNumClass(num_class);
 			return true;
 		}

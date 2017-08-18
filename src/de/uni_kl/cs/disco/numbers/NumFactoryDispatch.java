@@ -29,102 +29,75 @@
 package de.uni_kl.cs.disco.numbers;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.NumClass;
 import de.uni_kl.cs.disco.numbers.implementations.RationalBigIntFactory;
 import de.uni_kl.cs.disco.numbers.implementations.RationalIntFactory;
 import de.uni_kl.cs.disco.numbers.implementations.RealDoubleFactory;
 import de.uni_kl.cs.disco.numbers.implementations.RealSingleFactory;
 
-
-public abstract class NumFactoryDispatch {
-    private static NumFactory realdouble_factory = new RealDoubleFactory();
-    private static NumFactory realsingle_factory = new RealSingleFactory();
-    private static NumFactory rationalint_factory = new RationalIntFactory();
-    private static NumFactory rationalbigint_factory = new RationalBigIntFactory();
-
-    private static NumFactory factory = getNumFactory();
-
-    private static NumFactory getNumFactory() {
+public interface NumFactoryDispatch {
+    public static NumFactory getNumFactory() {
         switch (CalculatorConfig.getInstance().getNumClass()) {
             case REAL_SINGLE_PRECISION:
-                return realsingle_factory;
+            		return RealSingleFactory.getInstance();
             case RATIONAL_INTEGER:
-                return rationalint_factory;
+            		return RationalIntFactory.getInstance();
             case RATIONAL_BIGINTEGER:
-                return rationalbigint_factory;
+            		return RationalBigIntFactory.getInstance();
             case REAL_DOUBLE_PRECISION:
             default:
-                return realdouble_factory;
-        }
-    }
-
-    public static void setNumClass(NumClass num_class) {
-        switch (num_class) {
-            case REAL_SINGLE_PRECISION:
-                factory = realsingle_factory;
-                return;
-            case RATIONAL_INTEGER:
-                factory = rationalint_factory;
-                return;
-            case RATIONAL_BIGINTEGER:
-                factory = rationalbigint_factory;
-                return;
-            case REAL_DOUBLE_PRECISION:
-            default:
-                factory = realdouble_factory;
-                return;
+            		return RealDoubleFactory.getInstance();
         }
     }
 
     public static Num getPositiveInfinity() {
-        return factory.getPositiveInfinity();
+        return getNumFactory().getPositiveInfinity();
     }
 
     public static Num createPositiveInfinity() {
-        return factory.createPositiveInfinity();
+        return getNumFactory().createPositiveInfinity();
     }
 
     public static Num getNegativeInfinity() {
-        return factory.getNegativeInfinity();
+        return getNumFactory().getNegativeInfinity();
     }
 
     public static Num createNegativeInfinity() {
-        return factory.createNegativeInfinity();
+        return getNumFactory().createNegativeInfinity();
     }
 
     public static Num getNaN() {
-        return factory.getNaN();
+        return getNumFactory().getNaN();
     }
 
     public static Num createNaN() {
-        return factory.createNaN();
+        return getNumFactory().createNaN();
     }
 
     public static Num getZero() {
-        return factory.getZero();
+        return getNumFactory().getZero();
     }
 
     public static Num createZero() {
-        return factory.createZero();
+        return getNumFactory().createZero();
     }
 
     public static Num getEpsilon() {
-        return factory.getEpsilon();
+        return getNumFactory().getEpsilon();
     }
 
     public static Num createEpsilon() {
-        return factory.createEpsilon();
+        return getNumFactory().createEpsilon();
     }
 
     public static Num create(double value) {
-        return factory.create(value);
+        return getNumFactory().create(value);
     }
 
     public static Num create(int num, int den) {
-        return factory.create(num, den);
+        return getNumFactory().create(num, den);
     }
 
     public static Num create(String num_str) throws Exception {
-        return factory.create(num_str);
+        return getNumFactory().create(num_str);
     }
 }

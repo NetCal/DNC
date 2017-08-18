@@ -9,11 +9,12 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - The minimal ArrivalBound interface.
   - The abstract class ArrivalBoundDispatch that applies the configured arrival boundings.
   - The abstract class AbstractArrivalBound holds member variables for the network and the configurations.
-  All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound. 
+  All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound.
+* Streamlined the NumFactoryDispatch code. 
 * Disco (min,+)-algebraic operations:
   - Moved to new package de.uni_kl.cs.disco.minplus.dnc
   - All convolutions are called via a dispatcher, MinPlusDispatch.java. 
-  - Extension to manipulate MPA RTC curves with their native operations is not yet tested. 
+  - Extension to manipulate MPA RTC curves with their native operations is not yet tested.
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------
