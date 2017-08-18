@@ -37,7 +37,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtils;
 import de.uni_kl.cs.disco.curves.LinearSegment;
-import de.uni_kl.cs.disco.curves.LinearSegmentFactoryDispatch;
+import de.uni_kl.cs.disco.curves.LinearSegmentFactory;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
@@ -152,7 +152,7 @@ public abstract class Convolution_DNC {
 		Num x = NumFactory.getNumFactory().createZero();
 		Num y = NumFactory.getNumFactory().createZero(); // Functions pass though the origin
 		Num grad = NumFactory.getNumFactory().createZero();
-		LinearSegment s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, false);
+		LinearSegment s = LinearSegmentFactory.createLinearSegment(x, y, grad, false);
 		result.addSegment(s);
 
 		int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
@@ -162,7 +162,7 @@ public abstract class Convolution_DNC {
 			y = NumUtils.getNumUtils().add(service_curve_1.fLimitRight(NumFactory.getNumFactory().getZero()),
 					service_curve_2.fLimitRight(NumFactory.getNumFactory().getZero()));
 			grad = NumFactory.getNumFactory().createZero();
-			s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
+			s = LinearSegmentFactory.createLinearSegment(x, y, grad, true);
 
 			result.addSegment(s);
 		}
@@ -181,7 +181,7 @@ public abstract class Convolution_DNC {
 						(NumUtils.getNumUtils().sub(service_curve_1.getSegment(i1 + 1).getY(),
 								service_curve_1.getSegment(i1).getY())));
 				grad = NumFactory.getNumFactory().createZero();
-				s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
+				s = LinearSegmentFactory.createLinearSegment(x, y, grad, true);
 
 				result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
 				result.addSegment(s);
@@ -200,7 +200,7 @@ public abstract class Convolution_DNC {
 						(NumUtils.getNumUtils().sub(service_curve_2.getSegment(i2 + 1).getY(),
 								service_curve_2.getSegment(i2).getY())));
 				grad = NumFactory.getNumFactory().createZero();
-				s = LinearSegmentFactoryDispatch.createLinearSegment(x, y, grad, true);
+				s = LinearSegmentFactory.createLinearSegment(x, y, grad, true);
 
 				result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
 				result.addSegment(s);

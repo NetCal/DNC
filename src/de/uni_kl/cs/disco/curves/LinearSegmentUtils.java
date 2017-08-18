@@ -33,7 +33,7 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public abstract class LinearSegmentUtils {
 	public static LinearSegment getXAxis() {
-		return LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+		return LinearSegmentFactory.createHorizontalLine(0.0);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public abstract class LinearSegmentUtils {
 	 *         x.
 	 */
 	public static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
-		LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+		LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
 		result.setX(x);
 		result.setY(NumUtils.getNumUtils().add(s1.f(x), s2.f(x)));
 		result.setGrad(NumUtils.getNumUtils().add(s1.getGrad(), s2.getGrad()));
@@ -76,7 +76,7 @@ public abstract class LinearSegmentUtils {
 	 *         s1 - s2, starting in x.
 	 */
 	public static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
-		LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+		LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
 		result.setX(x);
 		result.setY(NumUtils.getNumUtils().sub(s1.f(x), s2.f(x)));
 		result.setGrad(NumUtils.getNumUtils().sub(s1.getGrad(), s2.getGrad()));
@@ -106,7 +106,7 @@ public abstract class LinearSegmentUtils {
 		Num f1_x = s1.f(x);
 		Num f2_x = s2.f(x);
 
-		LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+		LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
 		result.setX(x);
 		if (crossed || NumUtils.getNumUtils().abs(NumUtils.getNumUtils().sub(f1_x, f2_x))
 				.lt(NumFactory.getNumFactory().getEpsilon())) {
@@ -144,7 +144,7 @@ public abstract class LinearSegmentUtils {
 		Num f1_x = s1.f(x);
 		Num f2_x = s2.f(x);
 
-		LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+		LinearSegment result = LinearSegmentFactory.createHorizontalLine(0.0);
 		result.setX(x);
 		if (crossed || NumUtils.getNumUtils().abs(NumUtils.getNumUtils().sub(f1_x, f2_x))
 				.lt(NumFactory.getNumFactory().getEpsilon())) {

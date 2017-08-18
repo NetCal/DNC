@@ -222,13 +222,13 @@ public abstract class CurvePwAffineUtils {
 				if (curve_copy.getSegment(i).getGrad().ltZero()) {
 					Num x_cross = curve_copy.getSegment(i).getXIntersectionWith(LinearSegmentUtils.getXAxis());
 					if (i + 1 >= curve_copy.getSegmentCount() || x_cross.lt(curve_copy.getSegment(i + 1).getX())) {
-						s = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+						s = LinearSegmentFactory.createHorizontalLine(0.0);
 						s.setX(x_cross);
 						result.add(s);
 					}
 				}
 			} else {
-				s = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+				s = LinearSegmentFactory.createHorizontalLine(0.0);
 				s.setX(curve_copy.getSegment(i).getX());
 				s.setLeftopen(curve_copy.getSegment(i).isLeftopen());
 				result.add(s);
@@ -236,7 +236,7 @@ public abstract class CurvePwAffineUtils {
 				if (curve_copy.getSegment(i).getGrad().gtZero()) {
 					Num x_cross = curve_copy.getSegment(i).getXIntersectionWith(LinearSegmentUtils.getXAxis());
 					if (i + 1 >= curve_copy.getSegmentCount() || x_cross.lt(curve_copy.getSegment(i + 1).getX())) {
-						s = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
+						s = LinearSegmentFactory.createHorizontalLine(0.0);
 						s.setX(x_cross);
 						s.setGrad(curve_copy.getSegment(i).getGrad());
 						result.add(s);
@@ -531,7 +531,7 @@ public abstract class CurvePwAffineUtils {
 
 		if (current_segment.getGrad().gtZero() || current_segment.getY().gtZero()) {
 			// Add a zero segment at the front
-			curve_copy.addSegment(0, LinearSegmentFactoryDispatch.createZeroSegment());
+			curve_copy.addSegment(0, LinearSegmentFactory.createZeroSegment());
 		}
 
 		for (int i = 1; i < curve_copy.getSegmentCount(); i++) {
@@ -620,7 +620,7 @@ public abstract class CurvePwAffineUtils {
 			result.getSegment(i).setX(NumUtils.getNumUtils().sub(result.getSegment(i).getX(), L));
 		}
 		if (result.getSegment(0).isLeftopen()) {
-			result.addSegment(0, LinearSegmentFactoryDispatch.createHorizontalLine(0.0));
+			result.addSegment(0, LinearSegmentFactory.createHorizontalLine(0.0));
 		}
 
 		return result;

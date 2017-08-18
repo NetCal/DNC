@@ -39,9 +39,8 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
  * the PMA's RTC backend.
  *
  */
-public abstract class LinearSegmentFactoryDispatch {
-	// In contrast to the similar Curve factory, it does not hold a curve factory
-	// instance for each alternative.
+public abstract class LinearSegmentFactory {
+	// In contrast to the Curve factory, it does not dispatch to other factories.
 
 	public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
 		switch (CalculatorConfig.getInstance().getCurveClass()) {

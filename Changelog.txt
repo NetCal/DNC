@@ -25,7 +25,8 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - Double/Single also renamed to DoublePrecision/SinglePrecision.
 * CurvePwAffineUtilsDispatch was not a dispatcher but an utils class:
   - Renamed to CurvePwAffineUtils.
-  - Made it an abstract class. 
+  - Made it an abstract class.
+* LinearSegmentFactoryDispatch is not dispatching but a factory itself; renamed to LinearSegmentFactory.
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------
