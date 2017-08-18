@@ -34,7 +34,7 @@ import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.CurveFactory_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 
 /**
  * Static access to the methods defined in the CurveFactoryInterface.
@@ -219,7 +219,7 @@ public abstract class CurvePwAffineFactoryDispatch {
     }
 
     public static MaxServiceCurve createDelayedInfiniteBurstMSC(double delay) {
-        checkMSClatency(NumFactoryDispatch.create(delay));
+        checkMSClatency(NumFactory.getNumFactory().create(delay));
         return factory.createDelayedInfiniteBurstMSC(delay);
     }
 
@@ -229,8 +229,8 @@ public abstract class CurvePwAffineFactoryDispatch {
     }
 
     public static MaxServiceCurve createRateLatencyMSC(double rate, double latency) {
-        checkMSCrate(NumFactoryDispatch.create(rate));
-        checkMSClatency(NumFactoryDispatch.create(latency));
+        checkMSCrate(NumFactory.getNumFactory().create(rate));
+        checkMSClatency(NumFactory.getNumFactory().create(latency));
         return factory.createRateLatencyMSC(rate, latency);
     }
 
@@ -241,7 +241,7 @@ public abstract class CurvePwAffineFactoryDispatch {
     }
 
     private static void checkMSClatency(Num latency) {
-        if (latency.equals(NumFactoryDispatch.getPositiveInfinity())) {
+        if (latency.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
             throw new IllegalArgumentException("Maximum service curve cannot be zero.");
         }
     }

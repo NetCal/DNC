@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 
 import java.util.Set;
 
@@ -46,8 +46,8 @@ public class AnalysisResults {
     protected Num backlog_bound;
 
     public AnalysisResults() {
-        this.delay_bound = NumFactoryDispatch.createNaN();
-        this.backlog_bound = NumFactoryDispatch.createNaN();
+        this.delay_bound = NumFactory.getNumFactory().createNaN();
+        this.backlog_bound = NumFactory.getNumFactory().createNaN();
         this.map__server__alphas = new HashMap<Server, Set<ArrivalCurve>>();
     }
 

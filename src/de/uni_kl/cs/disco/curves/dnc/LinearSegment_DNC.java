@@ -31,7 +31,7 @@ package de.uni_kl.cs.disco.curves.dnc;
 
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 /**
@@ -71,9 +71,9 @@ public class LinearSegment_DNC implements LinearSegment {
      * The default constructor.
      */
     protected LinearSegment_DNC() {
-        x = NumFactoryDispatch.createZero();
-        y = NumFactoryDispatch.createZero();
-        grad = NumFactoryDispatch.createZero();
+        x = NumFactory.getNumFactory().createZero();
+        y = NumFactory.getNumFactory().createZero();
+        grad = NumFactory.getNumFactory().createZero();
         leftopen = false;
     }
 
@@ -127,9 +127,9 @@ public class LinearSegment_DNC implements LinearSegment {
             throw new RuntimeException("Invalid string representation of a linear segment.");
         }
 
-        x = NumFactoryDispatch.create(x_y[0]);
-        y = NumFactoryDispatch.create(x_y[1]);
-        grad = NumFactoryDispatch.create(xy_r[1]);
+        x = NumFactory.getNumFactory().create(x_y[0]);
+        y = NumFactory.getNumFactory().create(x_y[1]);
+        grad = NumFactory.getNumFactory().create(xy_r[1]);
     }
 
 

@@ -34,7 +34,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 public class DelayBound {
@@ -42,7 +42,7 @@ public class DelayBound {
     
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals())) {
-            return NumFactoryDispatch.createZero();
+            return NumFactory.getNumFactory().createZero();
         }
         if (service_curve.getDelayedInfiniteBurst_Property()) {
             // Assumption: the arrival curve does not have an initial latency.
@@ -51,7 +51,7 @@ public class DelayBound {
         }
         if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())  // We know from above that the arrivals are not zero.
                 || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-            return NumFactoryDispatch.createPositiveInfinity();
+            return NumFactory.getNumFactory().createPositiveInfinity();
         }
         return null;
     }
@@ -73,7 +73,7 @@ public class DelayBound {
             return result;
         }
 
-        result = NumFactoryDispatch.createNegativeInfinity();
+        result = NumFactory.getNumFactory().createNegativeInfinity();
         for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
             Num ip_y = arrival_curve.getSegment(i).getY();
 
@@ -87,6 +87,6 @@ public class DelayBound {
             result = NumUtilsDispatch.max(result, delay);
         }
 
-        return NumUtilsDispatch.max(NumFactoryDispatch.getZero(), result);
+        return NumUtilsDispatch.max(NumFactory.getNumFactory().getZero(), result);
     }
 }

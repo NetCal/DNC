@@ -28,7 +28,7 @@
 package de.uni_kl.cs.disco.curves;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 public abstract class LinearSegmentUtils {
@@ -89,7 +89,7 @@ public abstract class LinearSegmentUtils {
 
         LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
-        if (crossed || NumUtilsDispatch.abs(NumUtilsDispatch.sub(f1_x, f2_x)).lt(NumFactoryDispatch.getEpsilon())) {
+        if (crossed || NumUtilsDispatch.abs(NumUtilsDispatch.sub(f1_x, f2_x)).lt(NumFactory.getNumFactory().getEpsilon())) {
             result.setY(f1_x);
             result.setGrad(NumUtilsDispatch.min(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.lt(f2_x)) {
@@ -120,7 +120,7 @@ public abstract class LinearSegmentUtils {
 
         LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
-        if (crossed || NumUtilsDispatch.abs(NumUtilsDispatch.sub(f1_x, f2_x)).lt(NumFactoryDispatch.getEpsilon())) {
+        if (crossed || NumUtilsDispatch.abs(NumUtilsDispatch.sub(f1_x, f2_x)).lt(NumFactory.getNumFactory().getEpsilon())) {
             result.setY(f1_x);
             result.setGrad(NumUtilsDispatch.max(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.gt(f2_x)) {

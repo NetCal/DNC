@@ -38,7 +38,7 @@ import de.uni_kl.cs.disco.curves.*;
 import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 public abstract class Deconvolution_DNC {
@@ -140,7 +140,7 @@ public abstract class Deconvolution_DNC {
             return arrival_curve.copy();
         }
         if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
-                || service_curve.getLatency().equals(NumFactoryDispatch.getPositiveInfinity())
+                || service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return CurvePwAffineFactoryDispatch.createZeroArrivals();
         }
@@ -206,7 +206,7 @@ public abstract class Deconvolution_DNC {
             return arrival_curve.copy();
         }
         if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
-                || service_curve.getLatency().equals(NumFactoryDispatch.getPositiveInfinity())
+                || service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
             return CurvePwAffineFactoryDispatch.createZeroArrivals();
         }
@@ -245,7 +245,7 @@ public abstract class Deconvolution_DNC {
             return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) curve_1);
         }
         if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroService())
-                || curve_2.getLatency().equals(NumFactoryDispatch.getPositiveInfinity())
+                || curve_2.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return CurvePwAffineFactoryDispatch.createZeroArrivals();
         }
@@ -315,7 +315,7 @@ public abstract class Deconvolution_DNC {
                 candidate_tmp = CurvePwAffineFactoryDispatch.createArrivalCurve(segment_count);    // Consists of zero segments (x,y),r = (0,0),0 only.
                 // The origin (first segment, id 0) stays as is, the remainder needs to be constructed.
                 // Compute the second segment
-                Num next_x_coord = NumFactoryDispatch.createZero();
+                Num next_x_coord = NumFactory.getNumFactory().createZero();
                 Num next_y_coord = results_cand_burst;
 
                 LinearSegment current_candidate_segment = candidate_tmp.getSegment(1);

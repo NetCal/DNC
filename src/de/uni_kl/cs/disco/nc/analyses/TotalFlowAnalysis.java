@@ -47,7 +47,7 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
@@ -73,8 +73,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        Num delay_bound = NumFactoryDispatch.createZero();
-        Num backlog_bound = NumFactoryDispatch.createZero();
+        Num delay_bound = NumFactory.getNumFactory().createZero();
+        Num backlog_bound = NumFactory.getNumFactory().createZero();
 
         for (Server server : path.getServers()) {
             Pair<Num> min_D_B = deriveBoundsAtServer(server);
@@ -97,8 +97,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         Set<Num> delay_bounds_server = new HashSet<Num>();
         Set<Num> backlog_bounds_server = new HashSet<Num>();
 
-        Num delay_bound_s__min = NumFactoryDispatch.getPositiveInfinity();
-        Num backlog_bound_s__min = NumFactoryDispatch.getPositiveInfinity();
+        Num delay_bound_s__min = NumFactory.getNumFactory().getPositiveInfinity();
+        Num backlog_bound_s__min = NumFactory.getNumFactory().getPositiveInfinity();
         for (ArrivalCurve alpha_candidate : alphas_server) {
             // According to the call of computeOutputBound there's no left-over service curve calculation
             ServiceCurve beta_server = server.getServiceCurve();

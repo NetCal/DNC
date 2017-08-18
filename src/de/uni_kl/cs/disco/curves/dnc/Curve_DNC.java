@@ -40,7 +40,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 /**
@@ -171,15 +171,15 @@ public class Curve_DNC implements CurvePwAffine {
             segments = new LinearSegment_DNC[segment_count];
             // Initialize Elements of array, not only array itself
             segments[0] = new LinearSegment_DNC(
-                    NumFactoryDispatch.createZero(),
-                    NumFactoryDispatch.createZero(),
-                    NumFactoryDispatch.createZero(),
+                    NumFactory.getNumFactory().createZero(),
+                    NumFactory.getNumFactory().createZero(),
+                    NumFactory.getNumFactory().createZero(),
                     false);
 
             for (int i = 1; i < segment_count; i++) {
-                segments[i] = new LinearSegment_DNC(NumFactoryDispatch.createZero(),
-                        NumFactoryDispatch.createZero(),
-                        NumFactoryDispatch.createZero(),
+                segments[i] = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
+                        NumFactory.getNumFactory().createZero(),
+                        NumFactory.getNumFactory().createZero(),
                         true);
             }
         }
@@ -193,16 +193,16 @@ public class Curve_DNC implements CurvePwAffine {
         }
 
         segments[0] = new LinearSegment_DNC(
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
                 false);
 
         for (int i = 1; i < segment_count; i++) {
             segments[i] = new LinearSegment_DNC(
-                    NumFactoryDispatch.createZero(),
-                    NumFactoryDispatch.createZero(),
-                    NumFactoryDispatch.createZero(),
+                    NumFactory.getNumFactory().createZero(),
+                    NumFactory.getNumFactory().createZero(),
+                    NumFactory.getNumFactory().createZero(),
                     true);
         }
     }
@@ -237,9 +237,9 @@ public class Curve_DNC implements CurvePwAffine {
     protected void forceThroughOrigin() {
         if (getSegment(0).getY().gtZero()) {
             addSegment(0, new LinearSegment_DNC(
-                    NumFactoryDispatch.createZero(),
-                    NumFactoryDispatch.createZero(),
-                    NumFactoryDispatch.createZero(),
+                    NumFactory.getNumFactory().createZero(),
+                    NumFactory.getNumFactory().createZero(),
+                    NumFactory.getNumFactory().createZero(),
                     false));
 
             getSegment(1).setLeftopen(true);
@@ -363,7 +363,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return the index of the segment into the array.
      */
     public int getSegmentLimitRight(Num x) {
-        if (x.equals(NumFactoryDispatch.getPositiveInfinity())) {
+        if (x.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
             return getSegmentCount();
         }
 
@@ -489,7 +489,7 @@ public class Curve_DNC implements CurvePwAffine {
                 NumUtilsDispatch.sub(
                         segments[pos + 1].getX(), segments[pos].getX()
                 )
-        )).lt(NumFactoryDispatch.getEpsilon())
+        )).lt(NumFactory.getNumFactory().getEpsilon())
         );
     }
 
@@ -506,7 +506,7 @@ public class Curve_DNC implements CurvePwAffine {
                 NumUtilsDispatch.sub(
                         segments[pos + 1].getY(), segments[pos].getY()
                 )
-        )).geq(NumFactoryDispatch.getEpsilon())
+        )).geq(NumFactory.getNumFactory().getEpsilon())
         );
     }
 
@@ -524,7 +524,7 @@ public class Curve_DNC implements CurvePwAffine {
                 NumUtilsDispatch.sub(
                         segments[pos + 1].getY(), segments[pos].getY()
                 )
-        )).lt(NumFactoryDispatch.getEpsilon())
+        )).lt(NumFactory.getNumFactory().getEpsilon())
         );
     }
 
@@ -534,9 +534,9 @@ public class Curve_DNC implements CurvePwAffine {
      * @return whether the curve is wide-sense increasing.
      */
     public boolean isWideSenseIncreasing() {
-        Num y = NumFactoryDispatch.getNegativeInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
+        Num y = NumFactory.getNumFactory().getNegativeInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
         for (int i = 0; i < segments.length; i++) {
-            if (segments[i].getY().lt(y) || segments[i].getGrad().lt(NumFactoryDispatch.getZero())) {
+            if (segments[i].getY().lt(y) || segments[i].getGrad().lt(NumFactory.getNumFactory().getZero())) {
                 return false;
             }
             y = segments[i].getY();
@@ -550,7 +550,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return whether the curve is convex.
      */
     public boolean isConvex() {
-        return isConvexIn(NumFactoryDispatch.getZero(), NumFactoryDispatch.getPositiveInfinity());
+        return isConvexIn(NumFactory.getNumFactory().getZero(), NumFactory.getNumFactory().getPositiveInfinity());
     }
 
     /**
@@ -561,7 +561,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return whether the curve is convex
      */
     public boolean isConvexIn(Num a, Num b) {
-        Num last_gradient = NumFactoryDispatch.getNegativeInfinity();  // No need to create an object as this value is only set for initial comparison in the loop.
+        Num last_gradient = NumFactory.getNumFactory().getNegativeInfinity();  // No need to create an object as this value is only set for initial comparison in the loop.
 
         int i_start = getSegmentDefining(a);
         int i_end = getSegmentDefining(b);
@@ -593,7 +593,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return whether the curve is concave.
      */
     public boolean isConcave() {
-        return isConcaveIn(NumFactoryDispatch.getZero(), NumFactoryDispatch.getPositiveInfinity());
+        return isConcaveIn(NumFactory.getNumFactory().getZero(), NumFactory.getNumFactory().getPositiveInfinity());
     }
 
     /**
@@ -604,7 +604,7 @@ public class Curve_DNC implements CurvePwAffine {
      * @return whether the curve is concave.
      */
     public boolean isConcaveIn(Num a, Num b) {
-        Num last_gradient = NumFactoryDispatch.getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
+        Num last_gradient = NumFactory.getNumFactory().getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
 
         int i_start = getSegmentDefining(a);
         int i_end = getSegmentDefining(b);
@@ -635,11 +635,11 @@ public class Curve_DNC implements CurvePwAffine {
      * @return whether the curve is almost concave.
      */
     public boolean isAlmostConcave() {
-        Num last_gradient = NumFactoryDispatch.getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
+        Num last_gradient = NumFactory.getNumFactory().getPositiveInfinity(); // No need to create an object as this value is only set for initial comparison in the loop.
 
         for (int i = 0; i < segments.length; i++) {
             // Skip the horizontal part at the beginning
-            if (last_gradient.equals(NumFactoryDispatch.getPositiveInfinity()) && segments[i].getGrad().equals(NumFactoryDispatch.getZero())) {
+            if (last_gradient.equals(NumFactory.getNumFactory().getPositiveInfinity()) && segments[i].getGrad().equals(NumFactory.getNumFactory().getZero())) {
                 continue;
             }
 
@@ -670,10 +670,10 @@ public class Curve_DNC implements CurvePwAffine {
         CurvePwAffineUtilsDispatch.beautify(this_cpy);
         CurvePwAffineUtilsDispatch.beautify(other_cpy);
 
-        if (this_cpy.getLatency() == NumFactoryDispatch.getPositiveInfinity()) {
+        if (this_cpy.getLatency() == NumFactory.getNumFactory().getPositiveInfinity()) {
             this_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
         }
-        if (other_cpy.getLatency() == NumFactoryDispatch.getPositiveInfinity()) {
+        if (other_cpy.getLatency() == NumFactory.getNumFactory().getPositiveInfinity()) {
             other_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
         }
 
@@ -729,7 +729,7 @@ public class Curve_DNC implements CurvePwAffine {
     public Num f(Num x) {
         int i = getSegmentDefining(x);
         if (i < 0) {
-            return NumFactoryDispatch.createNaN();
+            return NumFactory.getNumFactory().createNaN();
         }
         return NumUtilsDispatch.add(NumUtilsDispatch.mult(NumUtilsDispatch.sub(x, segments[i].getX()), segments[i].getGrad()), segments[i].getY());
     }
@@ -745,7 +745,7 @@ public class Curve_DNC implements CurvePwAffine {
     public Num fLimitRight(Num x) {
         int i = getSegmentLimitRight(x);
         if (i < 0) {
-            return NumFactoryDispatch.createNaN();
+            return NumFactory.getNumFactory().createNaN();
         }
         return NumUtilsDispatch.add(NumUtilsDispatch.mult(NumUtilsDispatch.sub(x, segments[i].getX()), segments[i].getGrad()), segments[i].getY());
     }
@@ -774,17 +774,17 @@ public class Curve_DNC implements CurvePwAffine {
     public Num f_inv(Num y, boolean rightmost) {
         int i = getSegmentFirstAtValue(y);
         if (i < 0) {
-            return NumFactoryDispatch.createNaN();
+            return NumFactory.getNumFactory().createNaN();
         }
         if (rightmost) {
-            while (i < segments.length && segments[i].getGrad().equals(NumFactoryDispatch.getZero())) {
+            while (i < segments.length && segments[i].getGrad().equals(NumFactory.getNumFactory().getZero())) {
                 i++;
             }
             if (i >= segments.length) {
-                return NumFactoryDispatch.createPositiveInfinity();
+                return NumFactory.getNumFactory().createPositiveInfinity();
             }
         }
-        if (!segments[i].getGrad().equals(NumFactoryDispatch.getZero())) {
+        if (!segments[i].getGrad().equals(NumFactory.getNumFactory().getZero())) {
             return NumUtilsDispatch.add(segments[i].getX(), NumUtilsDispatch.div(NumUtilsDispatch.sub(y, segments[i].getY()), segments[i].getGrad()));
         } else {
             return segments[i].getX();
@@ -809,7 +809,7 @@ public class Curve_DNC implements CurvePwAffine {
                     return i;
                 }
             } else {
-                if (segments[i].getGrad().gt(NumFactoryDispatch.getZero())) {
+                if (segments[i].getGrad().gt(NumFactory.getNumFactory().getZero())) {
                     return i;
                 }
             }
@@ -825,30 +825,30 @@ public class Curve_DNC implements CurvePwAffine {
      */
     public Num getLatency() {
     		CurvePwAffineUtilsDispatch.beautify(this);
-        if (segments[0].getY().gt(NumFactoryDispatch.getZero())) {
-            return NumFactoryDispatch.createZero();
+        if (segments[0].getY().gt(NumFactory.getNumFactory().getZero())) {
+            return NumFactory.getNumFactory().createZero();
         }
         for (int i = 0; i < segments.length; i++) {
             Num y0 = segments[i].getY();
-            if (y0.lt(NumFactoryDispatch.getZero()) && y0.gt(NumUtilsDispatch.negate(NumFactoryDispatch.getEpsilon()))) {
-                y0 = NumFactoryDispatch.createZero();
+            if (y0.lt(NumFactory.getNumFactory().getZero()) && y0.gt(NumUtilsDispatch.negate(NumFactory.getNumFactory().getEpsilon()))) {
+                y0 = NumFactory.getNumFactory().createZero();
             }
-            if (y0.gt(NumFactoryDispatch.getZero())
-                    || (y0.geq(NumFactoryDispatch.getZero()) && segments[i].getGrad().gt(NumFactoryDispatch.getZero()))
+            if (y0.gt(NumFactory.getNumFactory().getZero())
+                    || (y0.geq(NumFactory.getNumFactory().getZero()) && segments[i].getGrad().gt(NumFactory.getNumFactory().getZero()))
                     ) {
                 return segments[i].getX();
             }
-            if (y0.lt(NumFactoryDispatch.getZero()) || segments[i].getGrad().lt(NumFactoryDispatch.getZero())) {
+            if (y0.lt(NumFactory.getNumFactory().getZero()) || segments[i].getGrad().lt(NumFactory.getNumFactory().getZero())) {
                 System.out.println("RemoveLatency of " + this.toString());
                 throw new RuntimeException("Should have avoided neg. gradients elsewhere...");
             }
         }
 
-        return NumFactoryDispatch.createPositiveInfinity();
+        return NumFactory.getNumFactory().createPositiveInfinity();
     }
 
     public Num getBurst() {
-        return fLimitRight(NumFactoryDispatch.getZero());
+        return fLimitRight(NumFactory.getNumFactory().getZero());
     }
 
     /**
@@ -862,7 +862,7 @@ public class Curve_DNC implements CurvePwAffine {
     public Num getGradientLimitRight(Num x) {
         int i = getSegmentLimitRight(x);
         if (i < 0) {
-            return NumFactoryDispatch.createNaN();
+            return NumFactory.getNumFactory().createNaN();
         }
         return segments[i].getGrad();
     }
@@ -878,7 +878,7 @@ public class Curve_DNC implements CurvePwAffine {
         if (segments.length == 2) {    // Token Buckets pass through the origin
             return segments[1].getY().copy();
         } else {                        // rate functions have burst 0
-            return NumFactoryDispatch.createZero();
+            return NumFactory.getNumFactory().createZero();
         }
     }
 
@@ -940,7 +940,7 @@ public class Curve_DNC implements CurvePwAffine {
         if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
             if (this.equals(CurveFactory_DNC.factory_object.createZeroDelayInfiniteBurst())) {
                 rate_latencies = new ArrayList<Curve_DNC>();
-                rate_latencies.add(CurveFactory_DNC.factory_object.createRateLatency(NumFactoryDispatch.createPositiveInfinity(), NumFactoryDispatch.createZero()));
+                rate_latencies.add(CurveFactory_DNC.factory_object.createRateLatency(NumFactory.getNumFactory().createPositiveInfinity(), NumFactory.getNumFactory().createZero()));
             } else {
                 throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
             }

@@ -42,7 +42,7 @@ import de.uni_kl.cs.disco.nc.operations.BacklogBound;
 import de.uni_kl.cs.disco.nc.operations.DelayBound;
 import de.uni_kl.cs.disco.network.*;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 import java.util.*;
@@ -167,10 +167,10 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                                                                  List<Flow> cross_flow_substitutes,
                                                                  Map<Flow, Integer> flow_tb_iter_map,
                                                                  int[] server_rl_iters) {
-        Num T = NumFactoryDispatch.createZero();
-        Num R = NumFactoryDispatch.createPositiveInfinity();
-        Num sum_bursts = NumFactoryDispatch.createZero();
-        Num sum_latencyterms = NumFactoryDispatch.createZero();
+        Num T = NumFactory.getNumFactory().createZero();
+        Num R = NumFactory.getNumFactory().createPositiveInfinity();
+        Num sum_bursts = NumFactory.getNumFactory().createZero();
+        Num sum_latencyterms = NumFactory.getNumFactory().createZero();
 
         double sum_r_at_s;
 
@@ -198,7 +198,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             T = NumUtilsDispatch.add(T, current_rl.getLatency());
 
             // Compute and store sum of rates of all passing flows
-            Num sum_r = NumFactoryDispatch.createZero();
+            Num sum_r = NumFactory.getNumFactory().createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
                 // TODO Actually needs to be an affine curve
@@ -236,10 +236,10 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         T = NumUtilsDispatch.add(T, NumUtilsDispatch.div(NumUtilsDispatch.add(sum_bursts, sum_latencyterms), R));
 
-        if (T == NumFactoryDispatch.getPositiveInfinity()) {
+        if (T == NumFactory.getNumFactory().getPositiveInfinity()) {
             return CurvePwAffineFactoryDispatch.createZeroService();
         }
-        if (R == NumFactoryDispatch.getPositiveInfinity()) {
+        if (R == NumFactory.getNumFactory().getPositiveInfinity()) {
             return CurvePwAffineFactoryDispatch.createDelayedInfiniteBurst(T);
         }
 
@@ -265,8 +265,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((PmooResults) result).setDelayBound(NumFactoryDispatch.createPositiveInfinity());
-        ((PmooResults) result).setBacklogBound(NumFactoryDispatch.createPositiveInfinity());
+        ((PmooResults) result).setDelayBound(NumFactory.getNumFactory().createPositiveInfinity());
+        ((PmooResults) result).setBacklogBound(NumFactory.getNumFactory().createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
             delay_bound__beta_e2e = DelayBound.deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // Single flow of interest, i.e., fifo per micro flow holds

@@ -34,7 +34,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactoryDispatch;
+import de.uni_kl.cs.disco.numbers.NumFactory;
 
 public class CurveFactory_DNC implements CurvePwAffineFactory {
     protected static final CurveFactory_DNC factory_object = new CurveFactory_DNC();
@@ -60,7 +60,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     public Curve_DNC createHorizontal(double y) {
-        return createHorizontal(NumFactoryDispatch.create(y));
+        return createHorizontal(NumFactory.getNumFactory().create(y));
     }
 
     /**
@@ -108,11 +108,11 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
      * @return a <code>ServiceCurve</code> instance
      */
     public ServiceCurve_DNC createZeroDelayInfiniteBurst() {
-        return createDelayedInfiniteBurst(NumFactoryDispatch.createZero());
+        return createDelayedInfiniteBurst(NumFactory.getNumFactory().createZero());
     }
 
     public ServiceCurve_DNC createDelayedInfiniteBurst(double delay) {
-        return createDelayedInfiniteBurst(NumFactoryDispatch.create(delay));
+        return createDelayedInfiniteBurst(NumFactory.getNumFactory().create(delay));
     }
 
     public ServiceCurve_DNC createDelayedInfiniteBurst(Num delay) {
@@ -122,7 +122,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     public ServiceCurve_DNC createRateLatency(double rate, double latency) {
-        return createRateLatency(NumFactoryDispatch.create(rate), NumFactoryDispatch.create(latency));
+        return createRateLatency(NumFactory.getNumFactory().create(rate), NumFactory.getNumFactory().create(latency));
     }
 
     public ServiceCurve_DNC createRateLatency(Num rate, Num latency) {
@@ -164,7 +164,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     public ArrivalCurve_DNC createPeakArrivalRate(double rate) {
-        return createPeakArrivalRate(NumFactoryDispatch.create(rate));
+        return createPeakArrivalRate(NumFactory.getNumFactory().create(rate));
     }
 
     public ArrivalCurve_DNC createPeakArrivalRate(Num rate) {
@@ -174,7 +174,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     public ArrivalCurve_DNC createTokenBucket(double rate, double burst) {
-        return createTokenBucket(NumFactoryDispatch.create(rate), NumFactoryDispatch.create(burst));
+        return createTokenBucket(NumFactory.getNumFactory().create(rate), NumFactory.getNumFactory().create(burst));
     }
 
     public ArrivalCurve_DNC createTokenBucket(Num rate, Num burst) {
@@ -208,15 +208,15 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     public MaxServiceCurve_DNC createInfiniteMaxService() {
-        return createDelayedInfiniteBurstMSC(NumFactoryDispatch.createZero());
+        return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().createZero());
     }
 
     public MaxServiceCurve_DNC createZeroDelayInfiniteBurstMSC() {
-        return createDelayedInfiniteBurstMSC(NumFactoryDispatch.createZero());
+        return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().createZero());
     }
 
     public MaxServiceCurve_DNC createDelayedInfiniteBurstMSC(double delay) {
-        return createDelayedInfiniteBurstMSC(NumFactoryDispatch.create(delay));
+        return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().create(delay));
     }
 
     public MaxServiceCurve_DNC createDelayedInfiniteBurstMSC(Num delay) {
@@ -226,7 +226,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     public MaxServiceCurve_DNC createRateLatencyMSC(double rate, double latency) {
-        return createRateLatencyMSC(NumFactoryDispatch.create(rate), NumFactoryDispatch.create(latency));
+        return createRateLatencyMSC(NumFactory.getNumFactory().create(rate), NumFactory.getNumFactory().create(latency));
     }
 
     public MaxServiceCurve_DNC createRateLatencyMSC(Num rate, Num latency) {
@@ -240,7 +240,7 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
 // Curve assembly
 //--------------------------------------------------------------------------------------------------------------
     private void makeHorizontal(Curve_DNC c_dnc, Num y) {
-        LinearSegment_DNC segment = new LinearSegment_DNC(NumFactoryDispatch.createZero(), y, NumFactoryDispatch.createZero(), false);
+        LinearSegment_DNC segment = new LinearSegment_DNC(NumFactory.getNumFactory().createZero(), y, NumFactory.getNumFactory().createZero(), false);
         c_dnc.setSegments(new LinearSegment_DNC[]{segment});
     }
 
@@ -252,15 +252,15 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
         LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
         segments[0] = new LinearSegment_DNC(
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
                 false);
 
         segments[1] = new LinearSegment_DNC(
                 delay,
-                NumFactoryDispatch.createPositiveInfinity(),
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createPositiveInfinity(),
+                NumFactory.getNumFactory().createZero(),
                 true);
 
         c_dnc.setSegments(segments);
@@ -268,19 +268,19 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     private void makePeakRate(Curve_DNC c_dnc, Num rate) {
-        if (rate.equals(NumFactoryDispatch.getPositiveInfinity())) {
+        if (rate.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
             throw new IllegalArgumentException("Peak rate with rate infinity equals a delayed infinite burst curve with delay < 0.0");
         }
         if (rate.eqZero()) {
-            makeHorizontal(c_dnc, NumFactoryDispatch.createZero());
+            makeHorizontal(c_dnc, NumFactory.getNumFactory().createZero());
             return;
         }
 
         LinearSegment_DNC[] segments = new LinearSegment_DNC[1];
 
         segments[0] = new LinearSegment_DNC(
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
                 rate,
                 false);
 
@@ -289,12 +289,12 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     private void makeRateLatency(Curve_DNC c_dnc, Num rate, Num latency) {
-        if (rate.equals(NumFactoryDispatch.getPositiveInfinity())) {
+        if (rate.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
             makeDelayedInfiniteBurst(c_dnc, latency);
             return;
         }
-        if (rate.eqZero() || latency.equals(NumFactoryDispatch.getPositiveInfinity())) {
-            makeHorizontal(c_dnc, NumFactoryDispatch.createZero());
+        if (rate.eqZero() || latency.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+            makeHorizontal(c_dnc, NumFactory.getNumFactory().createZero());
             return;
         }
         if (latency.leqZero()) {
@@ -305,14 +305,14 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
         LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
         segments[0] = new LinearSegment_DNC(
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
                 false);
 
         segments[1] = new LinearSegment_DNC(
                 latency,
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
                 rate,
                 true);
 
@@ -322,9 +322,9 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
     }
 
     private void makeTokenBucket(Curve_DNC c_dnc, Num rate, Num burst) {
-        if (rate.equals(NumFactoryDispatch.getPositiveInfinity())
-                || burst.equals(NumFactoryDispatch.getPositiveInfinity())) {
-            makeDelayedInfiniteBurst(c_dnc, NumFactoryDispatch.createZero());
+        if (rate.equals(NumFactory.getNumFactory().getPositiveInfinity())
+                || burst.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+            makeDelayedInfiniteBurst(c_dnc, NumFactory.getNumFactory().createZero());
             return;
         }
         if (rate.eqZero()) { // burst is finite
@@ -339,13 +339,13 @@ public class CurveFactory_DNC implements CurvePwAffineFactory {
         LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
         segments[0] = new LinearSegment_DNC(
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
+                NumFactory.getNumFactory().createZero(),
                 false);
 
         segments[1] = new LinearSegment_DNC(
-                NumFactoryDispatch.createZero(),
+                NumFactory.getNumFactory().createZero(),
                 burst,
                 rate,
                 true);
