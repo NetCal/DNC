@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
@@ -114,13 +114,13 @@ public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
 				}
 				B += R * sum_T;
 
-				ab_cache.addEntry(link, f, CurvePwAffineFactoryDispatch.createTokenBucket(R, B));
+				ab_cache.addEntry(link, f, CurvePwAffineFactory.getCurveFactory().createTokenBucket(R, B));
 			}
 			sum_R += R;
 			sum_B += B;
 		}
 
-		result.add(CurvePwAffineFactoryDispatch.createTokenBucket(sum_R, sum_B));
+		result.add(CurvePwAffineFactory.getCurveFactory().createTokenBucket(sum_R, sum_B));
 		return result;
 	}
 
@@ -151,13 +151,13 @@ public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
 			return result;
 		}
 
-		ArrivalCurve arrival_bound = CurvePwAffineFactoryDispatch.createZeroArrivals();
-		ArrivalCurve arrival_bound_f = CurvePwAffineFactoryDispatch.createZeroArrivals();
-		ServiceCurve sc_s_subpath = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		ArrivalCurve arrival_bound = CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
+		ArrivalCurve arrival_bound_f = CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
+		ServiceCurve sc_s_subpath = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 		for (Flow f : f_xfcaller_server) {
 			arrival_bound_f = ab_cache.getEntry(link, f);
 			if (arrival_bound_f == null) {
-				sc_s_subpath = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+				sc_s_subpath = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 				for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
 					sc_s_subpath = MinPlusDispatch.convolve(sc_s_subpath, s.getServiceCurve(), false); // false ->
 																										// generic
@@ -203,13 +203,13 @@ public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
 			return result;
 		}
 
-		ArrivalCurve arrival_bound = CurvePwAffineFactoryDispatch.createZeroArrivals();
-		ArrivalCurve arrival_bound_f = CurvePwAffineFactoryDispatch.createZeroArrivals();
-		ServiceCurve sc_s_subpath = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		ArrivalCurve arrival_bound = CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
+		ArrivalCurve arrival_bound_f = CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
+		ServiceCurve sc_s_subpath = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 		for (Flow f : f_xfcaller_server) {
 			arrival_bound_f = ab_cache.getEntry(link, f);
 			if (arrival_bound_f == null) {
-				sc_s_subpath = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+				sc_s_subpath = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 				for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
 					sc_s_subpath = MinPlusDispatch.convolve(sc_s_subpath, s.getServiceCurve(), true); // true -> tb, rl
 																										// optimized
@@ -266,7 +266,7 @@ public class PmooArrivalBound_SinkTreeTbRl extends AbstractArrivalBound {
 					+ f.getArrivalCurve().getUltAffineRate().doubleValue() * sum_T;
 		}
 
-		result.add(CurvePwAffineFactoryDispatch.createTokenBucket(sum_R, sum_B));
+		result.add(CurvePwAffineFactory.getCurveFactory().createTokenBucket(sum_R, sum_B));
 		return result;
 	}
 }

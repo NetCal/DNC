@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AbstractArrivalBound;
@@ -89,7 +89,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffineFactoryDispatch.createZeroArrivals()));
+				Collections.singleton(CurvePwAffineFactory.getCurveFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
 			return alphas_xfcaller;
 		}
@@ -126,7 +126,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 					common_subpath_src, f_xxfcaller, flow_of_interest);
 
-			ServiceCurve null_service = CurvePwAffineFactoryDispatch.createZeroService();
+			ServiceCurve null_service = CurvePwAffineFactory.getCurveFactory().createZeroService();
 
 			for (ServiceCurve beta_loxfcaller_subpath : LeftOverService.arbMux(common_subpath_src.getServiceCurve(),
 					alphas_xxfcaller)) {
@@ -145,7 +145,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 		if (betas_loxfcaller_subpath.isEmpty()) {
 			System.out.println("No service left over during PMOO arrival bounding!");
 			alphas_xfcaller.clear();
-			alphas_xfcaller.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			alphas_xfcaller.add((ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst());
 			return alphas_xfcaller;
 		}
 

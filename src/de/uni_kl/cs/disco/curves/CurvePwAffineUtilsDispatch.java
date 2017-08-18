@@ -52,7 +52,7 @@ public class CurvePwAffineUtilsDispatch {
 	 * @return The resulting curve.
 	 */
 	private static CurvePwAffine computeResultingCurve(CurvePwAffine curve1, CurvePwAffine curve2, int operator) {
-		CurvePwAffine ZERO_DELAY_INFINITE_BURST = CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		CurvePwAffine ZERO_DELAY_INFINITE_BURST = CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 
 		switch (operator) {
 		case OPERATOR_ADD:
@@ -147,7 +147,7 @@ public class CurvePwAffineUtilsDispatch {
 			x = x_next;
 		}
 
-		return CurvePwAffineFactoryDispatch.createCurve(result);
+		return CurvePwAffineFactory.getCurveFactory().createCurve(result);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class CurvePwAffineUtilsDispatch {
 			}
 		}
 
-		return CurvePwAffineFactoryDispatch.createCurve(result);
+		return CurvePwAffineFactory.getCurveFactory().createCurve(result);
 	}
 
 	/**
@@ -410,16 +410,16 @@ public class CurvePwAffineUtilsDispatch {
 	}
 
 	public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-		return CurvePwAffineFactoryDispatch
+		return CurvePwAffineFactory.getCurveFactory()
 				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, OPERATOR_ADD));
 	}
 
 	public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, Num dy) {
-		return CurvePwAffineFactoryDispatch.createMaxServiceCurve(add((CurvePwAffine) max_service_curve_1, dy));
+		return CurvePwAffineFactory.getCurveFactory().createMaxServiceCurve(add((CurvePwAffine) max_service_curve_1, dy));
 	}
 
 	public static MaxServiceCurve min(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-		return CurvePwAffineFactoryDispatch
+		return CurvePwAffineFactory.getCurveFactory()
 				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, OPERATOR_MIN));
 	}
 
@@ -473,37 +473,37 @@ public class CurvePwAffineUtilsDispatch {
 	}
 
 	public static ServiceCurve add(ServiceCurve c1, ServiceCurve c2) {
-		return CurvePwAffineFactoryDispatch.createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_ADD));
+		return CurvePwAffineFactory.getCurveFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_ADD));
 	}
 
 	public static ServiceCurve sub(ServiceCurve c1, ArrivalCurve c2) {
-		return CurvePwAffineFactoryDispatch.createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_SUB));
+		return CurvePwAffineFactory.getCurveFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_SUB));
 	}
 
 	public static ServiceCurve min(ServiceCurve c1, ServiceCurve c2) {
-		return CurvePwAffineFactoryDispatch.createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_MIN));
+		return CurvePwAffineFactory.getCurveFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_MIN));
 	}
 
 	public static ServiceCurve max(ServiceCurve c1, ServiceCurve c2) {
-		return CurvePwAffineFactoryDispatch.createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_MAX));
+		return CurvePwAffineFactory.getCurveFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_MAX));
 	}
 
 	public static ArrivalCurve add(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-		return CurvePwAffineFactoryDispatch
+		return CurvePwAffineFactory.getCurveFactory()
 				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, OPERATOR_ADD));
 	}
 
 	public static ArrivalCurve add(ArrivalCurve arrival_curve_1, Num dy) {
-		return CurvePwAffineFactoryDispatch.createArrivalCurve(add((CurvePwAffine) arrival_curve_1, dy));
+		return CurvePwAffineFactory.getCurveFactory().createArrivalCurve(add((CurvePwAffine) arrival_curve_1, dy));
 	}
 
 	public static ArrivalCurve min(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-		return CurvePwAffineFactoryDispatch
+		return CurvePwAffineFactory.getCurveFactory()
 				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, OPERATOR_MIN));
 	}
 
 	public static ArrivalCurve max(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-		return CurvePwAffineFactoryDispatch
+		return CurvePwAffineFactory.getCurveFactory()
 				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, OPERATOR_MAX));
 	}
 
@@ -611,7 +611,7 @@ public class CurvePwAffineUtilsDispatch {
 		// In case that we've removed everything, the curve had infinite latency, so
 		// return the NULL curve.
 		if (result.getSegmentCount() == 0) {
-			return CurvePwAffineFactoryDispatch.createZeroCurve();
+			return CurvePwAffineFactory.getCurveFactory().createZeroCurve();
 		}
 
 		// Shift remaining segments left by latency

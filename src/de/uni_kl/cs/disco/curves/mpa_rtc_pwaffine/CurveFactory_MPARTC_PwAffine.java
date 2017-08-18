@@ -41,7 +41,14 @@ import java.util.List;
 //TODO Currently, arrival curves are not enforced to be 0 in the origin
 //		because the RTC toolbox does not allow for such spots as they occur in token bucket constrained arrivals. 
 public class CurveFactory_MPARTC_PwAffine implements CurvePwAffineFactory {
-	protected static final CurveFactory_MPARTC_PwAffine factory_object = new CurveFactory_MPARTC_PwAffine();
+	protected static final CurveFactory_MPARTC_PwAffine instance = new CurveFactory_MPARTC_PwAffine();
+
+	protected CurveFactory_MPARTC_PwAffine() {
+	}
+
+	public static CurveFactory_MPARTC_PwAffine getInstance() {
+		return instance;
+	}
 
 	// --------------------------------------------------------------------------------------------------------------
 	// Curve Constructors

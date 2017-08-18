@@ -29,7 +29,7 @@
 package de.uni_kl.cs.disco.tests;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
@@ -45,9 +45,9 @@ public class TA_2S_2SC_1F_1AC_1P_Network implements NetworkFactory {
 	private static final int ac_b = 25;
 	protected Server s0, s1;
 	protected Flow f0;
-	private ServiceCurve service_curve_0 = CurvePwAffineFactoryDispatch.createRateLatency(sc_R_0, sc_T_0);
-	private ServiceCurve service_curve_1 = CurvePwAffineFactoryDispatch.createRateLatency(sc_R_1, sc_T_1);
-	private ArrivalCurve arrival_curve = CurvePwAffineFactoryDispatch.createTokenBucket(ac_r, ac_b);
+	private ServiceCurve service_curve_0 = CurvePwAffineFactory.getCurveFactory().createRateLatency(sc_R_0, sc_T_0);
+	private ServiceCurve service_curve_1 = CurvePwAffineFactory.getCurveFactory().createRateLatency(sc_R_1, sc_T_1);
+	private ArrivalCurve arrival_curve = CurvePwAffineFactory.getCurveFactory().createTokenBucket(ac_r, ac_b);
 	private Network network;
 
 	public TA_2S_2SC_1F_1AC_1P_Network() {
@@ -87,13 +87,13 @@ public class TA_2S_2SC_1F_1AC_1P_Network implements NetworkFactory {
 	}
 
 	public void reinitializeCurves() {
-		service_curve_0 = CurvePwAffineFactoryDispatch.createRateLatency(sc_R_0, sc_T_0);
+		service_curve_0 = CurvePwAffineFactory.getCurveFactory().createRateLatency(sc_R_0, sc_T_0);
 		s0.setServiceCurve(service_curve_0);
 
-		service_curve_1 = CurvePwAffineFactoryDispatch.createRateLatency(sc_R_1, sc_T_1);
+		service_curve_1 = CurvePwAffineFactory.getCurveFactory().createRateLatency(sc_R_1, sc_T_1);
 		s1.setServiceCurve(service_curve_1);
 
-		arrival_curve = CurvePwAffineFactoryDispatch.createTokenBucket(ac_r, ac_b);
+		arrival_curve = CurvePwAffineFactory.getCurveFactory().createTokenBucket(ac_r, ac_b);
 		f0.setArrivalCurve(arrival_curve);
 	}
 }

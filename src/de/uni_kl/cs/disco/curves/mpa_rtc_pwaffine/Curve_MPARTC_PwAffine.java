@@ -620,9 +620,9 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		}
 
 		if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
-			if (this.equals(CurveFactory_MPARTC_PwAffine.factory_object.createZeroDelayInfiniteBurst())) {
+			if (this.equals(CurveFactory_MPARTC_PwAffine.getInstance().createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_MPARTC_PwAffine>();
-				rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(
+				rate_latencies.add(CurveFactory_MPARTC_PwAffine.getInstance().createRateLatency(
 						NumFactory.getNumFactory().createPositiveInfinity(), NumFactory.getNumFactory().createZero()));
 			} else {
 				throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
@@ -638,7 +638,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 				if (latency < 0.0) {
 					continue;
 				}
-				rate_latencies.add(CurveFactory_MPARTC_PwAffine.factory_object.createRateLatency(rate, latency));
+				rate_latencies.add(CurveFactory_MPARTC_PwAffine.getInstance().createRateLatency(rate, latency));
 			}
 		}
 
@@ -680,7 +680,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 			}
 			double rate = getSegmentRTC(i).s();
 			double burst = getSegmentRTC(i).y() - (getSegmentRTC(i).x() * getSegmentRTC(i).s());
-			token_buckets.add(CurveFactory_MPARTC_PwAffine.factory_object.createTokenBucket(rate, burst));
+			token_buckets.add(CurveFactory_MPARTC_PwAffine.getInstance().createTokenBucket(rate, burst));
 		}
 
 		is_token_bucket = token_buckets.size() == 1;

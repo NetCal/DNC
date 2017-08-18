@@ -28,8 +28,6 @@
 
 package de.uni_kl.cs.disco.network;
 
-import static de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurstMSC;
-
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -43,7 +41,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
@@ -165,17 +163,18 @@ public class Network {
 	// --------------------------------------------------------------------------------------------
 	// Without given maximum service curve
 	public Server addServer(ServiceCurve service_curve) {
-		return addServer(service_curve, createZeroDelayInfiniteBurstMSC(), AnalysisConfig.Multiplexing.ARBITRARY, false,
-				false);
+		return addServer(service_curve, CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC(),
+				AnalysisConfig.Multiplexing.ARBITRARY, false, false);
 	}
 
 	public Server addServer(ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing) {
-		return addServer(service_curve, createZeroDelayInfiniteBurstMSC(), multiplexing, true, true);
+		return addServer(service_curve, CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC(),
+				multiplexing, true, true);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve) {
-		return addServer(alias, service_curve, createZeroDelayInfiniteBurstMSC(), AnalysisConfig.Multiplexing.ARBITRARY,
-				false, false);
+		return addServer(alias, service_curve, CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurstMSC(),
+				AnalysisConfig.Multiplexing.ARBITRARY, false, false);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing) {
@@ -909,7 +908,7 @@ public class Network {
 	 * @return An aggregate arrival curve.
 	 */
 	public ArrivalCurve getSourceFlowArrivalCurve(Server source, Set<Flow> source_flows) {
-		ArrivalCurve a_out = CurvePwAffineFactoryDispatch.createZeroArrivals();
+		ArrivalCurve a_out = CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 
 		// Returns an empty set if one of the arguments is null
 		Set<Flow> source_flows_internal = SetUtils.getIntersection(map__server__source_flows.get(source), source_flows);

@@ -37,7 +37,14 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 
 public class CurveFactory_DNC implements CurvePwAffineFactory {
-	protected static final CurveFactory_DNC factory_object = new CurveFactory_DNC();
+	private static final CurveFactory_DNC instance = new CurveFactory_DNC();
+
+	protected CurveFactory_DNC() {
+	}
+
+	public static CurveFactory_DNC getInstance() {
+		return instance;
+	}
 
 	// --------------------------------------------------------------------------------------------------------------
 	// Curve Constructors

@@ -668,10 +668,10 @@ public class Curve_DNC implements CurvePwAffine {
 		CurvePwAffineUtilsDispatch.beautify(other_cpy);
 
 		if (this_cpy.getLatency() == NumFactory.getNumFactory().getPositiveInfinity()) {
-			this_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
+			this_cpy = CurveFactory_DNC.getInstance().createZeroCurve();
 		}
 		if (other_cpy.getLatency() == NumFactory.getNumFactory().getPositiveInfinity()) {
-			other_cpy = CurveFactory_DNC.factory_object.createZeroCurve();
+			other_cpy = CurveFactory_DNC.getInstance().createZeroCurve();
 		}
 
 		int this_segment_length = this_cpy.segments.length;
@@ -946,9 +946,9 @@ public class Curve_DNC implements CurvePwAffine {
 		}
 
 		if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
-			if (this.equals(CurveFactory_DNC.factory_object.createZeroDelayInfiniteBurst())) {
+			if (this.equals(CurveFactory_DNC.getInstance().createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_DNC>();
-				rate_latencies.add(CurveFactory_DNC.factory_object.createRateLatency(
+				rate_latencies.add(CurveFactory_DNC.getInstance().createRateLatency(
 						NumFactory.getNumFactory().createPositiveInfinity(), NumFactory.getNumFactory().createZero()));
 			} else {
 				throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
@@ -965,7 +965,7 @@ public class Curve_DNC implements CurvePwAffine {
 				if (latency.ltZero()) {
 					continue;
 				}
-				rate_latencies.add(CurveFactory_DNC.factory_object.createRateLatency(rate, latency));
+				rate_latencies.add(CurveFactory_DNC.getInstance().createRateLatency(rate, latency));
 			}
 		}
 
@@ -1025,7 +1025,7 @@ public class Curve_DNC implements CurvePwAffine {
 			Num rate = segments[i].getGrad();
 			Num burst = NumUtils.getNumUtils().sub(segments[i].getY(),
 					NumUtils.getNumUtils().mult(segments[i].getX(), segments[i].getGrad()));
-			token_buckets.add(CurveFactory_DNC.factory_object.createTokenBucket(rate, burst));
+			token_buckets.add(CurveFactory_DNC.getInstance().createTokenBucket(rate, burst));
 		}
 
 		is_token_bucket = token_buckets.size() == 1;

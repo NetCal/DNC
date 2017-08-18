@@ -33,14 +33,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 
 /**
  * Class representing flows through the network.
  *
  */
 public class Flow {
-	public static final Flow NULL_FLOW = createDummyFlow("null", CurvePwAffineFactoryDispatch.createZeroArrivals(),
+	public static final Flow NULL_FLOW = createDummyFlow("null", CurvePwAffineFactory.getCurveFactory().createZeroArrivals(),
 			Path.createEmptyPath());
 
 	/**

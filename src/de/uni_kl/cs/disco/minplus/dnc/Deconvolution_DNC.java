@@ -34,7 +34,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import de.uni_kl.cs.disco.curves.*;
+import de.uni_kl.cs.disco.curves.ArrivalCurve;
+import de.uni_kl.cs.disco.curves.Curve;
+import de.uni_kl.cs.disco.curves.CurvePwAffine;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
+import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
+import de.uni_kl.cs.disco.curves.LinearSegment;
+import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
@@ -56,15 +62,15 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			results.add(CurvePwAffineFactory.getCurveFactory().createZeroArrivals());
 			return results;
 		case 2:
-			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			results.add((ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst());
 			return results;
 		default:
 		}
 		if (arrival_curves.isEmpty()) {
-			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			results.add(CurvePwAffineFactory.getCurveFactory().createZeroArrivals());
 			return results;
 		}
 
@@ -89,10 +95,10 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			results.add(CurvePwAffineFactory.getCurveFactory().createZeroArrivals());
 			return results;
 		case 2:
-			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			results.add((ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst());
 			return results;
 		default:
 		}
@@ -101,10 +107,10 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			results.add(CurvePwAffineFactory.getCurveFactory().createZeroArrivals());
 			return results;
 		case 2:
-			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			results.add((ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst());
 			return results;
 		default:
 		}
@@ -130,22 +136,22 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+			return CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 		case 2:
-			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+			return (ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 		default:
 		}
 
-		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())
+		if (service_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst())
 				|| (service_curve.getDelayedInfiniteBurst_Property() && service_curve.getLatency().doubleValue() == 0.0)
-				|| (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals()))) {
+				|| (arrival_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroArrivals()))) {
 			return arrival_curve.copy();
 		}
-		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
+		if (service_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroService())
 				|| service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
 				|| (service_curve.getUltAffineRate().eqZero()
 						&& service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
-			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+			return CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 		}
 		if (tb_rl_optimized) {
 			return deconvolveTB_RL(arrival_curve, service_curve);
@@ -163,10 +169,10 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			results.add(CurvePwAffineFactory.getCurveFactory().createZeroArrivals());
 			return results;
 		case 2:
-			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			results.add((ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst());
 			return results;
 		default:
 		}
@@ -175,10 +181,10 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			results.add(CurvePwAffineFactory.getCurveFactory().createZeroArrivals());
 			return results;
 		case 2:
-			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			results.add((ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst());
 			return results;
 		default:
 		}
@@ -187,7 +193,7 @@ public abstract class Deconvolution_DNC {
 		for (ServiceCurve sc : service_curves) {
 			for (CurvePwAffine pwa_c : curves) {
 				latency = pwa_c.getLatency();
-				results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.shiftRight(
+				results.add(CurvePwAffineFactory.getCurveFactory().createArrivalCurve(CurvePwAffineUtilsDispatch.shiftRight(
 						deconvolve_mTB_mRL(CurvePwAffineUtilsDispatch.shiftLeftClipping(pwa_c, latency), sc),
 						latency)));
 			}
@@ -202,23 +208,23 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+			return CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 		case 2:
-			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+			return (ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 		default:
 		}
 
-		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
+		if (service_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst())) {
 			return arrival_curve.copy();
 		}
-		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
+		if (service_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroService())
 				|| service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
 				|| (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
-			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+			return CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 		}
 
 		// Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
-		return CurvePwAffineFactoryDispatch.createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
+		return CurvePwAffineFactory.getCurveFactory().createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
 				arrival_curve.getTB_Burst().doubleValue()
 						+ arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
 	}
@@ -240,23 +246,23 @@ public abstract class Deconvolution_DNC {
 			break;
 		case 1:
 		case 3:
-			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+			return CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 		case 2:
-			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+			return (ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 		default:
 		}
 		// }
 
 		if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
-			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+			return (ArrivalCurve) CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst();
 		}
-		if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
-			return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) curve_1);
+		if (curve_2.equals(CurvePwAffineFactory.getCurveFactory().createZeroDelayInfiniteBurst())) {
+			return CurvePwAffineFactory.getCurveFactory().createArrivalCurve((CurvePwAffine) curve_1);
 		}
-		if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroService())
+		if (curve_2.equals(CurvePwAffineFactory.getCurveFactory().createZeroService())
 				|| curve_2.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
 				|| (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
-			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+			return CurvePwAffineFactory.getCurveFactory().createZeroArrivals();
 		}
 		if (CalculatorConfig.getInstance().exec_deconvolution_checks()) {
 			if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
@@ -328,7 +334,7 @@ public abstract class Deconvolution_DNC {
 				// the end.
 
 				int segment_count = j + 3; // At least 2 (the origin and and a burst followed by rate 0)
-				candidate_tmp = CurvePwAffineFactoryDispatch.createArrivalCurve(segment_count); // Consists of zero
+				candidate_tmp = CurvePwAffineFactory.getCurveFactory().createArrivalCurve(segment_count); // Consists of zero
 																								// segments (x,y),r =
 																								// (0,0),0 only.
 				// The origin (first segment, id 0) stays as is, the remainder needs to be
@@ -407,6 +413,6 @@ public abstract class Deconvolution_DNC {
 			sup_curve = CurvePwAffineUtilsDispatch.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
 		}
 
-		return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) sup_curve);
+		return CurvePwAffineFactory.getCurveFactory().createArrivalCurve((CurvePwAffine) sup_curve);
 	}
 }

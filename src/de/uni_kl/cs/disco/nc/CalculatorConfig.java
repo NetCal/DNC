@@ -28,8 +28,6 @@
 
 package de.uni_kl.cs.disco.nc;
 
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
-
 import java.io.File;
 
 public final class CalculatorConfig {
@@ -98,7 +96,6 @@ public final class CalculatorConfig {
 			return false;
 		}
 		CURVE_CLASS = curve_class;
-		CurvePwAffineFactoryDispatch.setCurveClass(curve_class);
 		return true;
 	}
 

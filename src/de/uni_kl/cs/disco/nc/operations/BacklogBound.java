@@ -32,7 +32,7 @@ package de.uni_kl.cs.disco.nc.operations;
 import java.util.ArrayList;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
+import de.uni_kl.cs.disco.curves.CurvePwAffineFactory;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -50,13 +50,13 @@ public class BacklogBound {
 	}
 
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-		if (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals())) {
+		if (arrival_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroArrivals())) {
 			return NumFactory.getNumFactory().createZero();
 		}
 		if (service_curve.getDelayedInfiniteBurst_Property()) {
 			return arrival_curve.f(service_curve.getLatency());
 		}
-		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService()) // We know from above that the
+		if (service_curve.equals(CurvePwAffineFactory.getCurveFactory().createZeroService()) // We know from above that the
 																					// arrivals are not zero.
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
 			return NumFactory.getNumFactory().createPositiveInfinity();

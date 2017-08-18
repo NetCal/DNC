@@ -29,9 +29,22 @@ package de.uni_kl.cs.disco.curves;
 
 import java.util.List;
 
+import de.uni_kl.cs.disco.curves.dnc.CurveFactory_DNC;
+import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.CurveFactory_MPARTC_PwAffine;
+import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public interface CurvePwAffineFactory {
+	static CurvePwAffineFactory getCurveFactory() {
+		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		case MPA_RTC:
+			return CurveFactory_MPARTC_PwAffine.getInstance();
+		case DNC:
+		default:
+			return CurveFactory_DNC.getInstance();
+		}
+	}
+	
 	// --------------------------------------------------------------------------------------------------------------
 	// Curve Constructors
 	// --------------------------------------------------------------------------------------------------------------
