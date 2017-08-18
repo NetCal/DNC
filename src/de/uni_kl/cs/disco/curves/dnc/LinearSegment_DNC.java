@@ -32,7 +32,7 @@ package de.uni_kl.cs.disco.curves.dnc;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 /**
  * Class representing linear segments of a curve. A linear segments starts at
@@ -145,7 +145,7 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return the function value
      */
     public Num f(Num x) {
-        return NumUtilsDispatch.add(NumUtilsDispatch.mult(NumUtilsDispatch.sub(x, this.x), grad), y);
+        return NumUtils.getNumUtils().add(NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(x, this.x), grad), y);
     }
 
     public Num getX() {
@@ -188,11 +188,11 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return the x-coordinate at which the segments cross or NaN of they are parallel
      */
     public Num getXIntersectionWith(LinearSegment other) {
-        Num y1 = NumUtilsDispatch.sub(this.y, NumUtilsDispatch.mult(x, this.grad));
-        Num y2 = NumUtilsDispatch.sub(other.getY(), NumUtilsDispatch.mult(other.getX(), other.getGrad()));
+        Num y1 = NumUtils.getNumUtils().sub(this.y, NumUtils.getNumUtils().mult(x, this.grad));
+        Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
 
         // returns NaN if lines are parallel
-        return NumUtilsDispatch.div(NumUtilsDispatch.sub(y2, y1), NumUtilsDispatch.sub(this.grad, other.getGrad()));
+        return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1), NumUtils.getNumUtils().sub(this.grad, other.getGrad()));
     }
 
     /**

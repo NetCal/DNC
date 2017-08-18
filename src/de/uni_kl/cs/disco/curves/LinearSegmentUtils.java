@@ -29,7 +29,7 @@ package de.uni_kl.cs.disco.curves;
 
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public abstract class LinearSegmentUtils {
     public static LinearSegment getXAxis() {
@@ -48,8 +48,8 @@ public abstract class LinearSegmentUtils {
     public static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
-        result.setY(NumUtilsDispatch.add(s1.f(x), s2.f(x)));
-        result.setGrad(NumUtilsDispatch.add(s1.getGrad(), s2.getGrad()));
+        result.setY(NumUtils.getNumUtils().add(s1.f(x), s2.f(x)));
+        result.setGrad(NumUtils.getNumUtils().add(s1.getGrad(), s2.getGrad()));
         result.setLeftopen(leftopen);
         return result;
     }
@@ -66,8 +66,8 @@ public abstract class LinearSegmentUtils {
     public static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
-        result.setY(NumUtilsDispatch.sub(s1.f(x), s2.f(x)));
-        result.setGrad(NumUtilsDispatch.sub(s1.getGrad(), s2.getGrad()));
+        result.setY(NumUtils.getNumUtils().sub(s1.f(x), s2.f(x)));
+        result.setGrad(NumUtils.getNumUtils().sub(s1.getGrad(), s2.getGrad()));
         result.setLeftopen(leftopen);
         return result;
     }
@@ -89,9 +89,9 @@ public abstract class LinearSegmentUtils {
 
         LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
-        if (crossed || NumUtilsDispatch.abs(NumUtilsDispatch.sub(f1_x, f2_x)).lt(NumFactory.getNumFactory().getEpsilon())) {
+        if (crossed || NumUtils.getNumUtils().abs(NumUtils.getNumUtils().sub(f1_x, f2_x)).lt(NumFactory.getNumFactory().getEpsilon())) {
             result.setY(f1_x);
-            result.setGrad(NumUtilsDispatch.min(s1.getGrad(), s2.getGrad()));
+            result.setGrad(NumUtils.getNumUtils().min(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.lt(f2_x)) {
             result.setY(f1_x);
             result.setGrad(s1.getGrad());
@@ -120,9 +120,9 @@ public abstract class LinearSegmentUtils {
 
         LinearSegment result = LinearSegmentFactoryDispatch.createHorizontalLine(0.0);
         result.setX(x);
-        if (crossed || NumUtilsDispatch.abs(NumUtilsDispatch.sub(f1_x, f2_x)).lt(NumFactory.getNumFactory().getEpsilon())) {
+        if (crossed || NumUtils.getNumUtils().abs(NumUtils.getNumUtils().sub(f1_x, f2_x)).lt(NumFactory.getNumFactory().getEpsilon())) {
             result.setY(f1_x);
-            result.setGrad(NumUtilsDispatch.max(s1.getGrad(), s2.getGrad()));
+            result.setGrad(NumUtils.getNumUtils().max(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.gt(f2_x)) {
             result.setY(f1_x);
             result.setGrad(s1.getGrad());

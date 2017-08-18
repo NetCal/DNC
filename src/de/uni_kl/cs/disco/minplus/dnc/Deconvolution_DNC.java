@@ -39,7 +39,7 @@ import de.uni_kl.cs.disco.minplus.MinPlusInputChecks;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public abstract class Deconvolution_DNC {
 	
@@ -275,7 +275,7 @@ public abstract class Deconvolution_DNC {
                 for (int j = 0; j < candidate_tmp.getSegmentCount(); j++) {
                     LinearSegment lin_seg = candidate_tmp.getSegment(j);
                     y_alpha = lin_seg.getY();
-                    candidate_tmp.getSegment(j).setY(NumUtilsDispatch.sub(y_alpha, y_beta));
+                    candidate_tmp.getSegment(j).setY(NumUtils.getNumUtils().sub(y_alpha, y_beta));
                 }
             }
             result_candidates.add(candidate_tmp);
@@ -292,7 +292,7 @@ public abstract class Deconvolution_DNC {
             x_inflect_alpha = curve_1.getSegment(i).getX();
             y_alpha = curve_1.f(x_inflect_alpha);
             y_beta = curve_2.f(x_inflect_alpha);
-            results_cand_burst = NumUtilsDispatch.sub(y_alpha, y_beta);
+            results_cand_burst = NumUtils.getNumUtils().sub(y_alpha, y_beta);
 
             if (x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero curve.
                     || results_cand_burst.ltZero()) { // At the inflection point, the service curve is larger than the arrival curve.
@@ -326,8 +326,8 @@ public abstract class Deconvolution_DNC {
                 current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
                 // The length of this segment is defined by the following one's y-coordinate:
-                next_x_coord = NumUtilsDispatch.sub(x_inflect_alpha, x_inflect_beta);
-                next_y_coord = NumUtilsDispatch.add(results_cand_burst, NumUtilsDispatch.mult(next_x_coord, current_beta_segment.getGrad()));
+                next_x_coord = NumUtils.getNumUtils().sub(x_inflect_alpha, x_inflect_beta);
+                next_y_coord = NumUtils.getNumUtils().add(results_cand_burst, NumUtils.getNumUtils().mult(next_x_coord, current_beta_segment.getGrad()));
 
                 LinearSegment prev_beta_segment;
                 Num current_segment_length;
@@ -345,9 +345,9 @@ public abstract class Deconvolution_DNC {
                     current_candidate_segment.setY(next_y_coord);
                     current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
-                    current_segment_length = NumUtilsDispatch.sub(prev_beta_segment.getX(), current_beta_segment.getX());
-                    next_x_coord = NumUtilsDispatch.add(next_x_coord, current_segment_length); // Prev > current because we iterate j in decreasing order.
-                    next_y_coord = NumUtilsDispatch.add(current_candidate_segment.getY(), NumUtilsDispatch.mult(current_segment_length, current_beta_segment.getGrad()));
+                    current_segment_length = NumUtils.getNumUtils().sub(prev_beta_segment.getX(), current_beta_segment.getX());
+                    next_x_coord = NumUtils.getNumUtils().add(next_x_coord, current_segment_length); // Prev > current because we iterate j in decreasing order.
+                    next_y_coord = NumUtils.getNumUtils().add(current_candidate_segment.getY(), NumUtils.getNumUtils().mult(current_segment_length, current_beta_segment.getGrad()));
                 }
 
                 // Add a horizontal line at the end.

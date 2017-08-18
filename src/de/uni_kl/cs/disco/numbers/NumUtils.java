@@ -28,7 +28,28 @@
 
 package de.uni_kl.cs.disco.numbers;
 
+import de.uni_kl.cs.disco.nc.CalculatorConfig;
+import de.uni_kl.cs.disco.numbers.implementations.RealDoubleUtils;
+import de.uni_kl.cs.disco.numbers.implementations.RealSingleUtils;
+import de.uni_kl.cs.disco.numbers.implementations.RationalIntUtils;
+import de.uni_kl.cs.disco.numbers.implementations.RationalBigIntUtils;
+
 public interface NumUtils {
+
+	public static NumUtils getNumUtils() {
+        switch (CalculatorConfig.getInstance().getNumClass()) {
+            case REAL_SINGLE_PRECISION:
+            		return RealSingleUtils.getInstance();
+            case RATIONAL_INTEGER:
+            		return RationalIntUtils.getInstance();
+            case RATIONAL_BIGINTEGER:
+            		return RationalBigIntUtils.getInstance();
+            case REAL_DOUBLE_PRECISION:
+            default:
+            		return RealDoubleUtils.getInstance();
+        }
+    }
+	
     Num add(Num num1, Num num2);
 
     Num sub(Num num1, Num num2);

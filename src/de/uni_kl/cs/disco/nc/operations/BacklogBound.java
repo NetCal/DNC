@@ -43,7 +43,7 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class BacklogBound {
 	private BacklogBound() {}
@@ -77,8 +77,8 @@ public class BacklogBound {
         for (int i = 0; i < xcoords.size(); i++) {
             Num ip_x = ((Num) xcoords.get(i));
 
-            Num backlog = NumUtilsDispatch.sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
-            result = NumUtilsDispatch.max(result, backlog);
+            Num backlog = NumUtils.getNumUtils().sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
+            result = NumUtils.getNumUtils().max(result, backlog);
         }
         return result;
     }

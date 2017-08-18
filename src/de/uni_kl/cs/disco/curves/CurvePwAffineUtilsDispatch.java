@@ -32,7 +32,7 @@ import java.util.LinkedList;
 
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class CurvePwAffineUtilsDispatch {
     protected static final int OPERATOR_ADD = 0;
@@ -90,7 +90,7 @@ public class CurvePwAffineUtilsDispatch {
                     curve1.getSegment(i1 + 1).getX() : NumFactory.getNumFactory().createPositiveInfinity();
             Num x_next2 = (i2 + 1 < curve2.getSegmentCount()) ?
                     curve2.getSegment(i2 + 1).getX() : NumFactory.getNumFactory().createPositiveInfinity();
-            Num x_next = NumUtilsDispatch.min(x_next1, x_next2);
+            Num x_next = NumUtils.getNumUtils().min(x_next1, x_next2);
 
             leftopen = curve1.getSegment(i1).isLeftopen() || curve2.getSegment(i2).isLeftopen();
 
@@ -253,14 +253,14 @@ public class CurvePwAffineUtilsDispatch {
 
         Num burst_c1 = c1.fLimitRight(NumFactory.getNumFactory().getZero());
         Num burst_c2 = c2.fLimitRight(NumFactory.getNumFactory().getZero());
-        Num result = NumUtilsDispatch.diff(burst_c1, burst_c2);
+        Num result = NumUtils.getNumUtils().diff(burst_c1, burst_c2);
 
         ArrayList<Num> xcoords = computeInflectionPointsX(c1, c2);
         for (int i = 0; i < xcoords.size(); i++) {
             Num ip_x = xcoords.get(i);
 
-            Num backlog = NumUtilsDispatch.sub(c1.f(ip_x), c2.f(ip_x));
-            result = NumUtilsDispatch.max(result, backlog);
+            Num backlog = NumUtils.getNumUtils().sub(c1.f(ip_x), c2.f(ip_x));
+            result = NumUtils.getNumUtils().max(result, backlog);
         }
         return result;
     }
@@ -281,14 +281,14 @@ public class CurvePwAffineUtilsDispatch {
         for (int i = 0; i < c1.getSegmentCount(); i++) {
             Num ip_y = c1.getSegment(i).getY();
 
-            Num delay = NumUtilsDispatch.sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = NumUtilsDispatch.max(result, delay);
+            Num delay = NumUtils.getNumUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+            result = NumUtils.getNumUtils().max(result, delay);
         }
         for (int i = 0; i < c2.getSegmentCount(); i++) {
             Num ip_y = c2.getSegment(i).getY();
 
-            Num delay = NumUtilsDispatch.sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = NumUtilsDispatch.max(result, delay);
+            Num delay = NumUtils.getNumUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+            result = NumUtils.getNumUtils().max(result, delay);
         }
         return result;
     }
@@ -374,7 +374,7 @@ public class CurvePwAffineUtilsDispatch {
     public static CurvePwAffine add(CurvePwAffine curve, Num dy) {
         CurvePwAffine result = curve.copy();
         for (int i = 0; i < curve.getSegmentCount(); i++) {
-            result.getSegment(i).setY(NumUtilsDispatch.add(result.getSegment(i).getY(), dy));
+            result.getSegment(i).setY(NumUtils.getNumUtils().add(result.getSegment(i).getY(), dy));
         }
         return result;
     }
@@ -500,7 +500,7 @@ public class CurvePwAffineUtilsDispatch {
         }
 
         for (int i = 1; i < curve_copy.getSegmentCount(); i++) {
-            curve_copy.getSegment(i).setX(NumUtilsDispatch.add(curve_copy.getSegment(i).getX(), dx));
+            curve_copy.getSegment(i).setX(NumUtils.getNumUtils().add(curve_copy.getSegment(i).getX(), dx));
         }
 
         beautify(curve_copy);
@@ -521,8 +521,8 @@ public class CurvePwAffineUtilsDispatch {
         CurvePwAffine result = curve.copy();
         LinearSegment segment_i = result.getSegment(i);
         if (segment_i.getX().lt(dx)) {
-            segment_i.setY(NumUtilsDispatch.add(segment_i.getY(),
-                    NumUtilsDispatch.mult(NumUtilsDispatch.sub(dx, segment_i.getX()), segment_i.getGrad())));
+            segment_i.setY(NumUtils.getNumUtils().add(segment_i.getY(),
+                    NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(dx, segment_i.getX()), segment_i.getGrad())));
             segment_i.setX(dx);
             segment_i.setLeftopen(false);
         }
@@ -530,7 +530,7 @@ public class CurvePwAffineUtilsDispatch {
             result.removeSegment(0);
         }
         for (i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(NumUtilsDispatch.sub(result.getSegment(i).getX(), dx));
+            result.getSegment(i).setX(NumUtils.getNumUtils().sub(result.getSegment(i).getX(), dx));
         }
 
         return result;
@@ -579,7 +579,7 @@ public class CurvePwAffineUtilsDispatch {
         // Shift remaining segments left by latency
         Num L = result.getSegment(0).getX();
         for (int i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(NumUtilsDispatch.sub(result.getSegment(i).getX(), L));
+            result.getSegment(i).setX(NumUtils.getNumUtils().sub(result.getSegment(i).getX(), L));
         }
         if (result.getSegment(0).isLeftopen()) {
             result.addSegment(0, LinearSegmentFactoryDispatch.createHorizontalLine(0.0));
@@ -603,22 +603,22 @@ public class CurvePwAffineUtilsDispatch {
         i = 0;
         while (i < c.getSegmentCount() - 1) {
             // Join colinear segments
-            Num firstArg = NumUtilsDispatch.sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
+            Num firstArg = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
 
-            Num secondArg = NumUtilsDispatch.sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
-            secondArg = NumUtilsDispatch.mult(secondArg, c.getSegment(i).getGrad());
-            secondArg = NumUtilsDispatch.add(c.getSegment(i).getY(), secondArg);
-            secondArg = NumUtilsDispatch.sub(c.getSegment(i + 1).getY(), secondArg);
+            Num secondArg = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+            secondArg = NumUtils.getNumUtils().mult(secondArg, c.getSegment(i).getGrad());
+            secondArg = NumUtils.getNumUtils().add(c.getSegment(i).getY(), secondArg);
+            secondArg = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getY(), secondArg);
 
-            if (NumUtilsDispatch.abs(firstArg).lt(NumFactory.getNumFactory().getEpsilon())
-                    && NumUtilsDispatch.abs(secondArg).lt(NumFactory.getNumFactory().getEpsilon())) {
+            if (NumUtils.getNumUtils().abs(firstArg).lt(NumFactory.getNumFactory().getEpsilon())
+                    && NumUtils.getNumUtils().abs(secondArg).lt(NumFactory.getNumFactory().getEpsilon())) {
 
                 c.removeSegment(i + 1);
                 if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
-                    Num resultPt1 = NumUtilsDispatch.sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
-                    Num resultPt2 = NumUtilsDispatch.sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+                    Num resultPt1 = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
+                    Num resultPt2 = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
 
-                    c.getSegment(i).setGrad(NumUtilsDispatch.div(resultPt1, resultPt2));
+                    c.getSegment(i).setGrad(NumUtils.getNumUtils().div(resultPt1, resultPt2));
                 }
                 continue;
             }

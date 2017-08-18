@@ -48,7 +48,7 @@ import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 
@@ -79,8 +79,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         for (Server server : path.getServers()) {
             Pair<Num> min_D_B = deriveBoundsAtServer(server);
 
-            delay_bound = NumUtilsDispatch.add(delay_bound, min_D_B.getFirst());
-            backlog_bound = NumUtilsDispatch.max(backlog_bound, min_D_B.getSecond());
+            delay_bound = NumUtils.getNumUtils().add(delay_bound, min_D_B.getFirst());
+            backlog_bound = NumUtils.getNumUtils().max(backlog_bound, min_D_B.getSecond());
         }
 
         ((TotalFlowResults) result).setDelayBound(delay_bound);

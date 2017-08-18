@@ -31,7 +31,7 @@ import ch.ethz.rtc.kernel.Segment;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
 
@@ -124,10 +124,10 @@ public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
 
     public Num getXIntersectionWith(LinearSegment other) {
         Num y1 = NumFactory.getNumFactory().create(rtc_segment.y() - (rtc_segment.x() * rtc_segment.s()));
-        Num y2 = NumUtilsDispatch.sub(other.getY(), NumUtilsDispatch.mult(other.getX(), other.getGrad()));
+        Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
 
         // returns NaN if lines are parallel
-        return NumUtilsDispatch.div(NumUtilsDispatch.sub(y2, y1), NumUtilsDispatch.sub(this.getGrad(), other.getGrad()));
+        return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1), NumUtils.getNumUtils().sub(this.getGrad(), other.getGrad()));
     }
 
     @Override

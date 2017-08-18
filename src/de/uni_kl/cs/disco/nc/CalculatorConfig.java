@@ -29,7 +29,6 @@
 package de.uni_kl.cs.disco.nc;
 
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
 
 import java.io.File;
 
@@ -65,7 +64,6 @@ public final class CalculatorConfig {
 			return false;
 		} else {
 			NUM_CLASS = num_class;
-			NumUtilsDispatch.setNumUtils(num_class);
 			return true;
 		}
 	}

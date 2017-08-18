@@ -35,7 +35,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class DelayBound {
     private DelayBound() {}
@@ -77,16 +77,16 @@ public class DelayBound {
         for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
             Num ip_y = arrival_curve.getSegment(i).getY();
 
-            Num delay = NumUtilsDispatch.sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-            result = NumUtilsDispatch.max(result, delay);
+            Num delay = NumUtils.getNumUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+            result = NumUtils.getNumUtils().max(result, delay);
         }
         for (int i = 0; i < service_curve.getSegmentCount(); i++) {
             Num ip_y = service_curve.getSegment(i).getY();
 
-            Num delay = NumUtilsDispatch.sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-            result = NumUtilsDispatch.max(result, delay);
+            Num delay = NumUtils.getNumUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+            result = NumUtils.getNumUtils().max(result, delay);
         }
 
-        return NumUtilsDispatch.max(NumFactory.getNumFactory().getZero(), result);
+        return NumUtils.getNumUtils().max(NumFactory.getNumFactory().getZero(), result);
     }
 }

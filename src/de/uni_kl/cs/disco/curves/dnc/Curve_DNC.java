@@ -41,7 +41,7 @@ import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtilsDispatch;
+import de.uni_kl.cs.disco.numbers.NumUtils;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>
@@ -485,8 +485,8 @@ public class Curve_DNC implements CurvePwAffine {
      */
     public boolean isDiscontinuity(int pos) {
         return (pos + 1 < segments.length
-                && (NumUtilsDispatch.abs(
-                NumUtilsDispatch.sub(
+                && (NumUtils.getNumUtils().abs(
+                NumUtils.getNumUtils().sub(
                         segments[pos + 1].getX(), segments[pos].getX()
                 )
         )).lt(NumFactory.getNumFactory().getEpsilon())
@@ -502,8 +502,8 @@ public class Curve_DNC implements CurvePwAffine {
      */
     public boolean isRealDiscontinuity(int pos) {
         return (isDiscontinuity(pos)
-                && (NumUtilsDispatch.abs(
-                NumUtilsDispatch.sub(
+                && (NumUtils.getNumUtils().abs(
+                NumUtils.getNumUtils().sub(
                         segments[pos + 1].getY(), segments[pos].getY()
                 )
         )).geq(NumFactory.getNumFactory().getEpsilon())
@@ -520,8 +520,8 @@ public class Curve_DNC implements CurvePwAffine {
      */
     public boolean isUnrealDiscontinuity(int pos) {
         return (isDiscontinuity(pos)
-                && (NumUtilsDispatch.abs(
-                NumUtilsDispatch.sub(
+                && (NumUtils.getNumUtils().abs(
+                NumUtils.getNumUtils().sub(
                         segments[pos + 1].getY(), segments[pos].getY()
                 )
         )).lt(NumFactory.getNumFactory().getEpsilon())
@@ -574,8 +574,8 @@ public class Curve_DNC implements CurvePwAffine {
             }
             Num gradient;
             if (i < segments.length - 1) {
-                gradient = NumUtilsDispatch.div(NumUtilsDispatch.sub(segments[i + 1].getY(), segments[i].getY()),
-                        NumUtilsDispatch.sub(segments[i + 1].getX(), segments[i].getX()));
+                gradient = NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(segments[i + 1].getY(), segments[i].getY()),
+                        NumUtils.getNumUtils().sub(segments[i + 1].getX(), segments[i].getX()));
             } else {
                 gradient = segments[i].getGrad();
             }
@@ -615,8 +615,8 @@ public class Curve_DNC implements CurvePwAffine {
             Num gradient;
             // Handles discontinuities
             if (i < segments.length - 1) {
-                gradient = NumUtilsDispatch.div(NumUtilsDispatch.sub(segments[i + 1].getY(), segments[i].getY()),
-                        NumUtilsDispatch.sub(segments[i + 1].getX(), segments[i].getX()));
+                gradient = NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(segments[i + 1].getY(), segments[i].getY()),
+                        NumUtils.getNumUtils().sub(segments[i + 1].getX(), segments[i].getX()));
             } else {
                 gradient = segments[i].getGrad();
             }
@@ -645,8 +645,8 @@ public class Curve_DNC implements CurvePwAffine {
 
             Num gradient;
             if (i < segments.length - 1) {
-                gradient = NumUtilsDispatch.div(NumUtilsDispatch.sub(segments[i + 1].getY(), segments[i].getY()),
-                        NumUtilsDispatch.sub(segments[i + 1].getX(), segments[i].getX()));
+                gradient = NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(segments[i + 1].getY(), segments[i].getY()),
+                        NumUtils.getNumUtils().sub(segments[i + 1].getX(), segments[i].getX()));
             } else {
                 gradient = segments[i].getGrad();
             }
@@ -731,7 +731,7 @@ public class Curve_DNC implements CurvePwAffine {
         if (i < 0) {
             return NumFactory.getNumFactory().createNaN();
         }
-        return NumUtilsDispatch.add(NumUtilsDispatch.mult(NumUtilsDispatch.sub(x, segments[i].getX()), segments[i].getGrad()), segments[i].getY());
+        return NumUtils.getNumUtils().add(NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(x, segments[i].getX()), segments[i].getGrad()), segments[i].getY());
     }
 
     /**
@@ -747,7 +747,7 @@ public class Curve_DNC implements CurvePwAffine {
         if (i < 0) {
             return NumFactory.getNumFactory().createNaN();
         }
-        return NumUtilsDispatch.add(NumUtilsDispatch.mult(NumUtilsDispatch.sub(x, segments[i].getX()), segments[i].getGrad()), segments[i].getY());
+        return NumUtils.getNumUtils().add(NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(x, segments[i].getX()), segments[i].getGrad()), segments[i].getY());
     }
 
     /**
@@ -785,7 +785,7 @@ public class Curve_DNC implements CurvePwAffine {
             }
         }
         if (!segments[i].getGrad().equals(NumFactory.getNumFactory().getZero())) {
-            return NumUtilsDispatch.add(segments[i].getX(), NumUtilsDispatch.div(NumUtilsDispatch.sub(y, segments[i].getY()), segments[i].getGrad()));
+            return NumUtils.getNumUtils().add(segments[i].getX(), NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y, segments[i].getY()), segments[i].getGrad()));
         } else {
             return segments[i].getX();
         }
@@ -830,7 +830,7 @@ public class Curve_DNC implements CurvePwAffine {
         }
         for (int i = 0; i < segments.length; i++) {
             Num y0 = segments[i].getY();
-            if (y0.lt(NumFactory.getNumFactory().getZero()) && y0.gt(NumUtilsDispatch.negate(NumFactory.getNumFactory().getEpsilon()))) {
+            if (y0.lt(NumFactory.getNumFactory().getZero()) && y0.gt(NumUtils.getNumUtils().negate(NumFactory.getNumFactory().getEpsilon()))) {
                 y0 = NumFactory.getNumFactory().createZero();
             }
             if (y0.gt(NumFactory.getNumFactory().getZero())
@@ -951,7 +951,7 @@ public class Curve_DNC implements CurvePwAffine {
                     continue;
                 }
                 Num rate = segments[i].getGrad();
-                Num latency = NumUtilsDispatch.sub(segments[i].getX(), NumUtilsDispatch.div(segments[i].getY(), segments[i].getGrad()));
+                Num latency = NumUtils.getNumUtils().sub(segments[i].getX(), NumUtils.getNumUtils().div(segments[i].getY(), segments[i].getGrad()));
                 if (latency.ltZero()) {
                     continue;
                 }
@@ -1012,7 +1012,7 @@ public class Curve_DNC implements CurvePwAffine {
                 continue;
             }
             Num rate = segments[i].getGrad();
-            Num burst = NumUtilsDispatch.sub(segments[i].getY(), NumUtilsDispatch.mult(segments[i].getX(), segments[i].getGrad()));
+            Num burst = NumUtils.getNumUtils().sub(segments[i].getY(), NumUtils.getNumUtils().mult(segments[i].getX(), segments[i].getGrad()));
             token_buckets.add(CurveFactory_DNC.factory_object.createTokenBucket(rate, burst));
         }
 

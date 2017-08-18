@@ -35,6 +35,17 @@ import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public class RationalIntUtils implements NumUtils {
+	private static RationalIntUtils instance;
+
+    protected RationalIntUtils() {} 
+	
+	public static RationalIntUtils getInstance() {
+		if( instance == null ) {
+			return new RationalIntUtils();
+		}
+		return instance;
+	}
+	
     public Num add(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN
                 || (num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity)

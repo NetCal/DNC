@@ -32,6 +32,17 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class RealDoubleUtils implements NumUtils {
+	private static RealDoubleUtils instance;
+
+    protected RealDoubleUtils() {} 
+	
+	public static RealDoubleUtils getInstance() {
+		if( instance == null ) {
+			return new RealDoubleUtils();
+		}
+		return instance;
+	}
+	
     public Num add(Num num1, Num num2) {
         return RealDouble.add((RealDouble) num1, (RealDouble) num2);
     }
