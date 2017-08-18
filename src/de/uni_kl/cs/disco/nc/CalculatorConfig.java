@@ -65,7 +65,7 @@ public final class CalculatorConfig {
 			return false;
 		} else {
 			NUM_CLASS = num_class;
-			NumUtilsDispatch.setNumClass(num_class);
+			NumUtilsDispatch.setNumUtils(num_class);
 			return true;
 		}
 	}

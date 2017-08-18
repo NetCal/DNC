@@ -62,7 +62,7 @@ public abstract class NumUtilsDispatch {
         }
     }
 
-    public static void setNumClass(NumClass num_class) {
+    public static void setNumUtils(NumClass num_class) {
         switch (num_class) {
             case REAL_SINGLE_PRECISION:
                 utils = utils_realsingle;

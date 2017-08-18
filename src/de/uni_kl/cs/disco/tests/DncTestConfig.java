@@ -31,7 +31,6 @@ package de.uni_kl.cs.disco.tests;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.NumClass;
 
@@ -41,9 +40,10 @@ public class DncTestConfig extends AnalysisConfig {
     protected AnalysisConfig.Multiplexing mux_discipline;
     protected boolean console_output = false;
 
-    // Calculator configUuration
+    // Calculator configuration
 	protected boolean enable_checks = false;
-    protected CalculatorConfig calc_config = CalculatorConfig.getInstance();
+	protected NumClass num_class;
+	protected CurveClass curve_class;
 
     @SuppressWarnings("unused")
     private DncTestConfig() {
@@ -70,8 +70,13 @@ public class DncTestConfig extends AnalysisConfig {
         this.mux_discipline = mux_discipline;
         this.define_multiplexing_globally = define_multiplexing_globally;
         
-        calc_config.setNumClass(numbers);
-        calc_config.setCurveClass(curves);
+        // Will not work. Num class and curve class need to be stored locally as the singleton pattern will cause overwriting this setting in CalculatorConfig.
+//        CalculatorConfig calc_config = CalculatorConfig.getInstance();
+//        calc_config.setNumClass(numbers);
+//        calc_config.setCurveClass(curves);
+        
+        num_class = numbers;
+        curve_class = curves;
     }
 
     public boolean fullConsoleOutput() { // false == Exceptions only
@@ -79,11 +84,11 @@ public class DncTestConfig extends AnalysisConfig {
     }
     
     protected NumClass getNumClass() {
-    		return calc_config.getNumClass();
+    		return num_class;
     }
     
     protected CurveClass getCurveClass() {
-    		return calc_config.getCurveClass();
+    		return curve_class;
     }
 
     @Override
@@ -109,9 +114,9 @@ public class DncTestConfig extends AnalysisConfig {
             func_test_str.append(", " + "MUX global");
         }
 
-        func_test_str.append(", " + calc_config.getNumClass().toString());
+        func_test_str.append(", " + num_class.toString());
 
-        func_test_str.append(", " + calc_config.getCurveClass().toString());
+        func_test_str.append(", " + curve_class.toString());
 
         return func_test_str.toString();
     }

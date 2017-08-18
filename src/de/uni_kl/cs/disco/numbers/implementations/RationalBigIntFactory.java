@@ -31,10 +31,16 @@ package de.uni_kl.cs.disco.numbers.implementations;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.values.NaN;
+import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
+import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public class RationalBigIntFactory implements NumFactory {
 	private static RationalBigIntFactory instance;
-	
+
+    private Num POSITIVE_INFINITY = createPositiveInfinity();
+    private Num NEGATIVE_INFINITY = createNegativeInfinity();
+    private Num NaN = createNaN();
     private Num ZERO = createZero();
     private Num EPSILON = createEpsilon();
 
@@ -46,7 +52,31 @@ public class RationalBigIntFactory implements NumFactory {
 		}
 		return instance;
 	}
-    
+	
+    public Num getPositiveInfinity() {
+        return POSITIVE_INFINITY;
+    }
+
+    public Num createPositiveInfinity() {
+        return new PositiveInfinity();
+    }
+
+    public Num getNegativeInfinity() {
+        return NEGATIVE_INFINITY;
+    }
+
+    public Num createNegativeInfinity() {
+        return new NegativeInfinity();
+    }
+
+    public Num getNaN() {
+        return NaN;
+    }
+
+    public Num createNaN() {
+        return new NaN();
+    }
+
     public Num getZero() {
         return ZERO;
     }

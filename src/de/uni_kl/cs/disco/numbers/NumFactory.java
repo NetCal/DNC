@@ -55,30 +55,18 @@ public interface NumFactory {
             		return RealDoubleFactory.getInstance();
         }
     }
+	
+    Num getPositiveInfinity();
 
-    default Num getPositiveInfinity() {
-    		return POSITIVE_INFINITY;
-    }
+    Num createPositiveInfinity();
 
-    default Num createPositiveInfinity() {
-        return new NegativeInfinity();
-    }
+    Num getNegativeInfinity();
 
-    default Num getNegativeInfinity() {
-        return NEGATIVE_INFINITY;
-    }
+    Num createNegativeInfinity();
 
-    default Num createNegativeInfinity() {
-        return new NegativeInfinity();
-    }
+    Num getNaN();
 
-    default Num getNaN() {
-        return NaN;
-    }
-
-    default Num createNaN() {
-        return new NaN();
-    }
+    Num createNaN();
 
     Num getZero();
 
