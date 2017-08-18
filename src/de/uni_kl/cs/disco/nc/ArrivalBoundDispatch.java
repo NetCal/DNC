@@ -37,7 +37,7 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffineFactoryDispatch;
 import de.uni_kl.cs.disco.curves.CurvePwAffineUtilsDispatch;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
-import de.uni_kl.cs.disco.minplus.dnc.Deconvolution_DNC;
+import de.uni_kl.cs.disco.minplus.MinPlusDispatch;
 import de.uni_kl.cs.disco.misc.SetUtils;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
@@ -189,12 +189,12 @@ public abstract class ArrivalBoundDispatch {
         return arrival_bounds_xfcaller;
     }
 
-    private static Set<ArrivalCurve> singleFlowABs(AnalysisConfig configuration, ArrivalCurve alpha, Set<ServiceCurve> betas_lo) {
+    private static Set<ArrivalCurve> singleFlowABs(AnalysisConfig configuration, ArrivalCurve alpha, Set<ServiceCurve> betas_lo) throws Exception {
         Set<ArrivalCurve> arrival_bounds_f = new HashSet<ArrivalCurve>();
 
         // All permutations of single flow results
         for (ServiceCurve beta_lo : betas_lo) {
-            arrival_bounds_f.add(Deconvolution_DNC.deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
+            arrival_bounds_f.add(MinPlusDispatch.deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
         }
 
         return arrival_bounds_f;

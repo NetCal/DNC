@@ -116,7 +116,6 @@ public abstract class Deconvolution_DNC {
         return results;
     }
 
-
     public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         // null checks will be done by deconvolve( ... )
         return deconvolve(arrival_curve, service_curve, false);
@@ -190,7 +189,7 @@ public abstract class Deconvolution_DNC {
         return results;
     }
 
-    public static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+    private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;

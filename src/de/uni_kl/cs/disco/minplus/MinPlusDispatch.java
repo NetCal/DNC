@@ -188,7 +188,6 @@ public abstract class MinPlusDispatch {
 
             Curve_MPARTC_PwAffine egamma_mpa_rtc = (Curve_MPARTC_PwAffine) extra_gamma_curve;
             for (ArrivalCurve alpha_tmp : arrival_curves) {
-            		// Do not mind the semantics "Service Curve"
                 results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(
                 		CurveMath.minPlusConv( ((Curve_MPARTC_PwAffine) alpha_tmp).getRtc_curve(), egamma_mpa_rtc.getRtc_curve() ).toString())
                 		);
@@ -198,9 +197,58 @@ public abstract class MinPlusDispatch {
     }
     
     //------------------------------------------------------------
-    // Deconvolution TODO
+    // Deconvolution
     //------------------------------------------------------------
+    public static Set<ArrivalCurve> deconvolve( Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve ) throws Exception {
+    		return deconvolve( arrival_curves, service_curve, false );
+    }
+    
+    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve, boolean tb_rl_optimized) throws Exception {
+    		if ( CalculatorConfig.getInstance().getOperationClass().equals( CalculatorConfig.OperationClass.DNC )  	// DNC operations work with DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals( CalculatorConfig.CurveClass.DNC ) ) {	// NATIVE operation on DNC curves
+			return Deconvolution_DNC.deconvolve( arrival_curves, service_curve, tb_rl_optimized );
+			
+		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
+			
+			Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
+
+            Curve_MPARTC_PwAffine beta_mpa_rtc = (Curve_MPARTC_PwAffine) service_curve;
+            for (ArrivalCurve alpha_tmp : arrival_curves) {
+                results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(
+                		CurveMath.minPlusDeconv( ((Curve_MPARTC_PwAffine) alpha_tmp).getRtc_curve(), beta_mpa_rtc.getRtc_curve() ).toString()) );
+            }
+            return results;
+		}
+    }
+
+    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves) throws Exception {
+    		return deconvolve(arrival_curves, service_curves, false);
+    }
+    
+	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves, boolean tb_rl_optimized) throws Exception {
+		if ( CalculatorConfig.getInstance().getOperationClass().equals( CalculatorConfig.OperationClass.DNC )  	// DNC operations work with DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals( CalculatorConfig.CurveClass.DNC ) ) {	// NATIVE operation on DNC curves
+			return Deconvolution_DNC.deconvolve( arrival_curves, service_curves, tb_rl_optimized );
+			
+		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
+			
+			Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
+
+            for(ServiceCurve beta_tmp : service_curves) {
+	            for (ArrivalCurve alpha_tmp : arrival_curves) {
+	                results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(
+	                		CurveMath.minPlusDeconv( ((Curve_MPARTC_PwAffine) alpha_tmp).getRtc_curve(), ((Curve_MPARTC_PwAffine) beta_tmp).getRtc_curve() ).toString()) );
+	            }
+            }
+            return results;
+		}
+    }
+        
     public static ArrivalCurve deconvolve( ArrivalCurve arrival_curve, ServiceCurve service_curve ) throws Exception {
+    		return deconvolve( arrival_curve, service_curve, false );
+    }
+    
+    public static ArrivalCurve deconvolve( ArrivalCurve arrival_curve, ServiceCurve service_curve, boolean tb_rl_optimized ) throws Exception {
 		if ( CalculatorConfig.getInstance().getOperationClass().equals( CalculatorConfig.OperationClass.DNC )		// DNC operations work with DNC and MPA_RTC curves
 				|| CalculatorConfig.getInstance().getCurveClass().equals( CalculatorConfig.CurveClass.DNC ) ) {	// NATIVE operation on DNC curves
 			return Deconvolution_DNC.deconvolve( arrival_curve, service_curve );
@@ -210,6 +258,26 @@ public abstract class MinPlusDispatch {
 					((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve(), ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve() );
 			
 			return CurvePwAffineFactoryDispatch.createArrivalCurve( result.toString() );
+		}
+    }
+    
+    public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves, Set<ServiceCurve> service_curves) throws Exception {
+    		if ( CalculatorConfig.getInstance().getOperationClass().equals( CalculatorConfig.OperationClass.DNC )  	// DNC operations work with DNC and MPA_RTC curves
+				|| CalculatorConfig.getInstance().getCurveClass().equals( CalculatorConfig.CurveClass.DNC ) ) {	// NATIVE operation on DNC curves
+			return Deconvolution_DNC.deconvolve_almostConcCs_SCs( curves, service_curves );
+			
+		} else { // Must be CurveClass.MPA_RTC + OpertionClass.NATIVE
+			
+			Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
+
+			for(ServiceCurve beta_tmp : service_curves) {
+	            for (CurvePwAffine c_tmp : curves) {
+            			// Do not mind the semantics "Arrival Curve"
+	                results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(
+	                		CurveMath.minPlusDeconv( ((Curve_MPARTC_PwAffine) c_tmp).getRtc_curve(), ((Curve_MPARTC_PwAffine) beta_tmp).getRtc_curve() ).toString()) );
+	            }
+            }
+            return results;
 		}
     }
 }
