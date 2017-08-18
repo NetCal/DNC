@@ -26,65 +26,65 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.real;
 
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
-public class RealSingleUtils implements NumUtils {
-	private static RealSingleUtils instance = new RealSingleUtils();
+public class SinglePrecisionUtils implements NumUtils {
+	private static SinglePrecisionUtils instance = new SinglePrecisionUtils();
 
-    protected RealSingleUtils() {} 
+    protected SinglePrecisionUtils() {} 
 	
-	public static RealSingleUtils getInstance() {
+	public static SinglePrecisionUtils getInstance() {
 		return instance;
 	}
 	
     public Num add(Num num1, Num num2) {
-        return RealSingle.add((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.add((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num sub(Num num1, Num num2) {
-        return RealSingle.sub((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.sub((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num mult(Num num1, Num num2) {
-        return RealSingle.mult((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.mult((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num div(Num num1, Num num2) {
-        return RealSingle.div((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.div((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num abs(Num num) {
-        return RealSingle.abs((RealSingle) num);
+        return SinglePrecision.abs((SinglePrecision) num);
     }
 
     public Num diff(Num num1, Num num2) {
-        return RealSingle.diff((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.diff((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num max(Num num1, Num num2) {
-        return RealSingle.max((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.max((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num min(Num num1, Num num2) {
-        return RealSingle.min((RealSingle) num1, (RealSingle) num2);
+        return SinglePrecision.min((SinglePrecision) num1, (SinglePrecision) num2);
     }
 
     public Num negate(Num num) {
-        return RealSingle.negate((RealSingle) num);
+        return SinglePrecision.negate((SinglePrecision) num);
     }
 
     public boolean isFinite(Num num) {
-        return ((RealSingle) num).isFinite();
+        return ((SinglePrecision) num).isFinite();
     }
 
     public boolean isInfinite(Num num) {
-        return ((RealSingle) num).isInfinite();
+        return ((SinglePrecision) num).isInfinite();
     }
 
     public boolean isNaN(Num num) {
-        return ((RealSingle) num).isNaN();
+        return ((SinglePrecision) num).isNaN();
     }
 }

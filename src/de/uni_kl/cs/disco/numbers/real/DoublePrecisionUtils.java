@@ -26,65 +26,65 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.real;
 
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
-public class RealDoubleUtils implements NumUtils {
-	private static RealDoubleUtils instance = new RealDoubleUtils();
+public class DoublePrecisionUtils implements NumUtils {
+	private static DoublePrecisionUtils instance = new DoublePrecisionUtils();
 
-    protected RealDoubleUtils() {} 
+    protected DoublePrecisionUtils() {} 
 	
-	public static RealDoubleUtils getInstance() {
+	public static DoublePrecisionUtils getInstance() {
 		return instance;
 	}
 	
     public Num add(Num num1, Num num2) {
-        return RealDouble.add((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.add((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num sub(Num num1, Num num2) {
-        return RealDouble.sub((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.sub((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num mult(Num num1, Num num2) {
-        return RealDouble.mult((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.mult((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num div(Num num1, Num num2) {
-        return RealDouble.div((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.div((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num abs(Num num) {
-        return RealDouble.abs((RealDouble) num);
+        return DoublePrecision.abs((DoublePrecision) num);
     }
 
     public Num diff(Num num1, Num num2) {
-        return RealDouble.diff((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.diff((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num max(Num num1, Num num2) {
-        return RealDouble.max((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.max((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num min(Num num1, Num num2) {
-        return RealDouble.min((RealDouble) num1, (RealDouble) num2);
+        return DoublePrecision.min((DoublePrecision) num1, (DoublePrecision) num2);
     }
 
     public Num negate(Num num) {
-        return RealDouble.negate((RealDouble) num);
+        return DoublePrecision.negate((DoublePrecision) num);
     }
 
     public boolean isFinite(Num num) {
-        return ((RealDouble) num).isFinite();
+        return ((DoublePrecision) num).isFinite();
     }
 
     public boolean isInfinite(Num num) {
-        return ((RealDouble) num).isInfinite();
+        return ((DoublePrecision) num).isInfinite();
     }
 
     public boolean isNaN(Num num) {
-        return ((RealDouble) num).isNaN();
+        return ((DoublePrecision) num).isNaN();
     }
 }

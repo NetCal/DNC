@@ -29,24 +29,24 @@
 package de.uni_kl.cs.disco.numbers;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
-import de.uni_kl.cs.disco.numbers.implementations.RealDoubleUtils;
-import de.uni_kl.cs.disco.numbers.implementations.RealSingleUtils;
-import de.uni_kl.cs.disco.numbers.implementations.RationalIntUtils;
-import de.uni_kl.cs.disco.numbers.implementations.RationalBigIntUtils;
+import de.uni_kl.cs.disco.numbers.rational.BigIntUtils;
+import de.uni_kl.cs.disco.numbers.rational.IntUtils;
+import de.uni_kl.cs.disco.numbers.real.DoublePrecisionUtils;
+import de.uni_kl.cs.disco.numbers.real.SinglePrecisionUtils;
 
 public interface NumUtils {
 
 	public static NumUtils getNumUtils() {
         switch (CalculatorConfig.getInstance().getNumClass()) {
             case REAL_SINGLE_PRECISION:
-            		return RealSingleUtils.getInstance();
+            		return SinglePrecisionUtils.getInstance();
             case RATIONAL_INTEGER:
-            		return RationalIntUtils.getInstance();
+            		return IntUtils.getInstance();
             case RATIONAL_BIGINTEGER:
-            		return RationalBigIntUtils.getInstance();
+            		return BigIntUtils.getInstance();
             case REAL_DOUBLE_PRECISION:
             default:
-            		return RealDoubleUtils.getInstance();
+            		return DoublePrecisionUtils.getInstance();
         }
     }
 	

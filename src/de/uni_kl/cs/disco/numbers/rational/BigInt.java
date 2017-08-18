@@ -26,14 +26,12 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.rational;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.values.NaN;
-import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
-import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
+import de.uni_kl.cs.disco.numbers.real.DoublePrecision;
 
 import java.math.BigInteger;
 
@@ -47,73 +45,73 @@ import java.math.BigInteger;
  * to BigFraction objects, copy by value semantic are is applied.
  *
  */
-public class RationalBigInt implements Num {
+public class BigInt implements Num {
     // Unfortunately you cannot give the constructor the double value 0.0000001
     private static final BigFraction EPSILON = new BigFraction(1, 1000000);
     private static final BigFraction ZERO_BIGFRACTION = new BigFraction(0);
     private BigFraction value = new BigFraction(0.0);
 
-    private RationalBigInt() {
+    private BigInt() {
     }
 
-    public RationalBigInt(double value) {
+    public BigInt(double value) {
         this.value = new BigFraction(value);
     }
 
-    public RationalBigInt(int num) {
+    public BigInt(int num) {
         value = new BigFraction(num);
     }
 
-    public RationalBigInt(int num, int den) {
+    public BigInt(int num, int den) {
         value = new BigFraction(num, den);
     }
 
-    public RationalBigInt(BigInteger num, BigInteger den) {
+    public BigInt(BigInteger num, BigInteger den) {
         value = new BigFraction(num, den);
     }
 
-    public RationalBigInt(RationalBigInt num) {
+    public BigInt(BigInt num) {
         value = new BigFraction(num.value.getNumerator(), num.value.getDenominator());
     }
 
-    private RationalBigInt(BigFraction frac) {
+    private BigInt(BigFraction frac) {
         value = new BigFraction(frac.getNumerator(), frac.getDenominator());
     }
 
-    public static RationalBigInt createZero() {
-        RationalBigInt zero = new RationalBigInt();
+    public static BigInt createZero() {
+        BigInt zero = new BigInt();
         zero.instantiateZero();
         return zero;
     }
 
-    public static RationalBigInt createEpsilon() {
-        return new RationalBigInt(EPSILON);
+    public static BigInt createEpsilon() {
+        return new BigInt(EPSILON);
     }
 
-    public static RationalBigInt add(RationalBigInt num1, RationalBigInt num2) {
+    public static BigInt add(BigInt num1, BigInt num2) {
         // May still throw MathArithmeticException due to integer overflow
-        return new RationalBigInt(num1.value.add(num2.value));
+        return new BigInt(num1.value.add(num2.value));
     }
 
-    public static RationalBigInt sub(RationalBigInt num1, RationalBigInt num2) {
+    public static BigInt sub(BigInt num1, BigInt num2) {
         // May still throw MathArithmeticException due to integer overflow
-        return new RationalBigInt(num1.value.subtract(num2.value));
+        return new BigInt(num1.value.subtract(num2.value));
     }
 
-    public static RationalBigInt mult(RationalBigInt num1, RationalBigInt num2) {
+    public static BigInt mult(BigInt num1, BigInt num2) {
         // May throw MathArithmeticException due to integer overflow
-        return new RationalBigInt(num1.value.multiply(num2.value));
+        return new BigInt(num1.value.multiply(num2.value));
     }
 
-    public static RationalBigInt div(RationalBigInt num1, RationalBigInt num2) {
-        return new RationalBigInt(num1.value.divide(num2.value));
+    public static BigInt div(BigInt num1, BigInt num2) {
+        return new BigInt(num1.value.divide(num2.value));
     }
 
-    public static RationalBigInt diff(RationalBigInt num1, RationalBigInt num2) {
+    public static BigInt diff(BigInt num1, BigInt num2) {
         return sub(max(num1, num2), min(num1, num2));
     }
 
-    public static RationalBigInt max(RationalBigInt num1, RationalBigInt num2) {
+    public static BigInt max(BigInt num1, BigInt num2) {
         if (num1.value.compareTo(num2.value) >= 0) {
             return num1;
         } else {
@@ -121,7 +119,7 @@ public class RationalBigInt implements Num {
         }
     }
 
-    public static RationalBigInt min(RationalBigInt num1, RationalBigInt num2) {
+    public static BigInt min(BigInt num1, BigInt num2) {
         if (num1.value.compareTo(num2.value) <= 0) {
             return num1;
         } else {
@@ -129,12 +127,12 @@ public class RationalBigInt implements Num {
         }
     }
 
-    public static RationalBigInt abs(RationalBigInt num) {
-        return new RationalBigInt(num.value.abs());
+    public static BigInt abs(BigInt num) {
+        return new BigInt(num.value.abs());
     }
 
-    public static RationalBigInt negate(RationalBigInt num) {
-        return new RationalBigInt(num.value.negate());
+    public static BigInt negate(BigInt num) {
+        return new BigInt(num.value.negate());
     }
 
     private void instantiateZero() {
@@ -156,7 +154,7 @@ public class RationalBigInt implements Num {
             return true;
         }
 
-        if (this.value.compareTo(((RationalBigInt) num).value) > 0) {
+        if (this.value.compareTo(((BigInt) num).value) > 0) {
             return true;
         } else {
             return false;
@@ -182,7 +180,7 @@ public class RationalBigInt implements Num {
             return true;
         }
 
-        if (this.value.compareTo(((RationalBigInt) num).value) >= 0) {
+        if (this.value.compareTo(((BigInt) num).value) >= 0) {
             return true;
         } else {
             return false;
@@ -208,7 +206,7 @@ public class RationalBigInt implements Num {
             return false;
         }
 
-        if (this.value.compareTo(((RationalBigInt) num).value) < 0) {
+        if (this.value.compareTo(((BigInt) num).value) < 0) {
             return true;
         } else {
             return false;
@@ -234,7 +232,7 @@ public class RationalBigInt implements Num {
             return false;
         }
 
-        if (this.value.compareTo(((RationalBigInt) num).value) <= 0) {
+        if (this.value.compareTo(((BigInt) num).value) <= 0) {
             return true;
         } else {
             return false;
@@ -268,15 +266,15 @@ public class RationalBigInt implements Num {
 
     @Override
     public Num copy() {
-        return new RationalBigInt(this.value.getNumerator(), this.value.getDenominator());
+        return new BigInt(this.value.getNumerator(), this.value.getDenominator());
     }
 
     @Override
     public boolean eq(double num) {
-        return this.doubleValue() - num <= RealDouble.createEpsilon().doubleValue();
+        return this.doubleValue() - num <= DoublePrecision.createEpsilon().doubleValue();
     }
 
-    public boolean equals(RationalBigInt num) {
+    public boolean equals(BigInt num) {
         if (this.value.compareTo(num.value) == 0) {
             return true;
         } else {
@@ -287,10 +285,10 @@ public class RationalBigInt implements Num {
     @Override
     public boolean equals(Object obj) {
         if (obj == null
-                || !(obj instanceof RationalBigInt)) {
+                || !(obj instanceof BigInt)) {
             return false;
         } else {
-            return equals(((RationalBigInt) obj));
+            return equals(((BigInt) obj));
         }
     }
 

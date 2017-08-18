@@ -26,14 +26,14 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.real;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 
-public class RealSingleFactory implements NumFactory {
-	private static RealSingleFactory instance = new RealSingleFactory();
+public class DoublePrecisionFactory implements NumFactory {
+	private static DoublePrecisionFactory instance = new DoublePrecisionFactory();
 	
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
@@ -41,18 +41,18 @@ public class RealSingleFactory implements NumFactory {
     private Num ZERO = createZero();
     private Num EPSILON = createEpsilon();
 
-    protected RealSingleFactory() {} 
+    protected DoublePrecisionFactory() {} 
 	
-	public static RealSingleFactory getInstance() {
+	public static DoublePrecisionFactory getInstance() {
 		return instance;
 	}
-
+    
     public Num getPositiveInfinity() {
         return POSITIVE_INFINITY;
     }
 
     public Num createPositiveInfinity() {
-        return new RealSingle(Float.POSITIVE_INFINITY);
+        return new DoublePrecision(Double.POSITIVE_INFINITY);
     }
 
     public Num getNegativeInfinity() {
@@ -60,7 +60,7 @@ public class RealSingleFactory implements NumFactory {
     }
 
     public Num createNegativeInfinity() {
-        return new RealSingle(Float.NEGATIVE_INFINITY);
+        return new DoublePrecision(Double.NEGATIVE_INFINITY);
     }
 
     public Num getNaN() {
@@ -68,7 +68,7 @@ public class RealSingleFactory implements NumFactory {
     }
 
     public Num createNaN() {
-        return new RealSingle(Float.NaN);
+        return new DoublePrecision(Double.NaN);
     }
 
     public Num getZero() {
@@ -76,7 +76,7 @@ public class RealSingleFactory implements NumFactory {
     }
 
     public Num createZero() {
-        return new RealSingle(0);
+        return new DoublePrecision(0);
     }
 
     public Num getEpsilon() {
@@ -84,15 +84,18 @@ public class RealSingleFactory implements NumFactory {
     }
 
     public Num createEpsilon() {
-        return RealSingle.createEpsilon();
+        return DoublePrecision.createEpsilon();
     }
 
     public Num create(double value) {
-        return new RealSingle(value);
+        return new DoublePrecision(value);
     }
 
     public Num create(int num, int den) {
-        return new RealSingle(num, den);
+        if (den == 0) { // division by integer 0 throws an arithmetic exception
+            throw new ArithmeticException("/ by zero");
+        }
+        return new DoublePrecision(num, den);
     }
 
     public Num create(String num_str) throws Exception {

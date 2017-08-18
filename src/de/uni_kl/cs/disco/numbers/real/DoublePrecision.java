@@ -26,78 +26,78 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.real;
 
 import de.uni_kl.cs.disco.numbers.Num;
 
-public class RealDouble implements Num {
+public class DoublePrecision implements Num {
     private static final double EPSILON = Double.parseDouble("5E-10");
     private static boolean comparison_epsilon = false;
     private double value;
 
     @SuppressWarnings("unused")
-    private RealDouble() {
+    private DoublePrecision() {
     }
 
-    public RealDouble(double value) {
+    public DoublePrecision(double value) {
         this.value = value;
     }
 
-    public RealDouble(int num) {
+    public DoublePrecision(int num) {
         value = (double) num;
     }
 
-    public RealDouble(int num, int den) {
+    public DoublePrecision(int num, int den) {
         value = ((double) num) / ((double) den);
     }
 
-    public RealDouble(RealDouble num) {
+    public DoublePrecision(DoublePrecision num) {
         value = num.value;
     }
 
     public static Num createEpsilon() {
-        return new RealDouble(EPSILON);
+        return new DoublePrecision(EPSILON);
     }
 
-    public static Num add(RealDouble num1, RealDouble num2) {
-        return new RealDouble(num1.value + num2.value);
+    public static Num add(DoublePrecision num1, DoublePrecision num2) {
+        return new DoublePrecision(num1.value + num2.value);
     }
 
-    public static Num sub(RealDouble num1, RealDouble num2) {
+    public static Num sub(DoublePrecision num1, DoublePrecision num2) {
         double result = num1.value - num2.value;
         if (Math.abs(result) <= EPSILON) {
             result = 0;
         }
-        return new RealDouble(result);
+        return new DoublePrecision(result);
     }
 
-    public static Num mult(RealDouble num1, RealDouble num2) {
-        return new RealDouble(num1.value * num2.value);
+    public static Num mult(DoublePrecision num1, DoublePrecision num2) {
+        return new DoublePrecision(num1.value * num2.value);
     }
 
-    public static Num div(RealDouble num1, RealDouble num2) {
-        return new RealDouble(num1.value / num2.value);
+    public static Num div(DoublePrecision num1, DoublePrecision num2) {
+        return new DoublePrecision(num1.value / num2.value);
     }
 
-    public static Num diff(RealDouble num1, RealDouble num2) {
-        return new RealDouble(Math.max(num1.value, num2.value)
+    public static Num diff(DoublePrecision num1, DoublePrecision num2) {
+        return new DoublePrecision(Math.max(num1.value, num2.value)
                 - Math.min(num1.value, num2.value));
     }
 
-    public static Num max(RealDouble num1, RealDouble num2) {
-        return new RealDouble(Math.max(num1.value, num2.value));
+    public static Num max(DoublePrecision num1, DoublePrecision num2) {
+        return new DoublePrecision(Math.max(num1.value, num2.value));
     }
 
-    public static Num min(RealDouble num1, RealDouble num2) {
-        return new RealDouble(Math.min(num1.value, num2.value));
+    public static Num min(DoublePrecision num1, DoublePrecision num2) {
+        return new DoublePrecision(Math.min(num1.value, num2.value));
     }
 
-    public static Num abs(RealDouble num) {
-        return new RealDouble(Math.abs(num.value));
+    public static Num abs(DoublePrecision num) {
+        return new DoublePrecision(Math.abs(num.value));
     }
 
-    public static Num negate(RealDouble num) {
-        return new RealDouble(num.value * -1);
+    public static Num negate(DoublePrecision num) {
+        return new DoublePrecision(num.value * -1);
     }
 
     public boolean eqZero() {
@@ -191,7 +191,7 @@ public class RealDouble implements Num {
 
     @Override
     public Num copy() {
-        return new RealDouble(value);
+        return new DoublePrecision(value);
     }
 
     @Override
@@ -211,17 +211,17 @@ public class RealDouble implements Num {
         }
     }
 
-    public boolean equals(RealDouble num) {
+    public boolean equals(DoublePrecision num) {
         return eq(num.value);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj == null
-                || !(obj instanceof RealDouble)) {
+                || !(obj instanceof DoublePrecision)) {
             return false;
         } else {
-            return eq(((RealDouble) obj).value);
+            return eq(((DoublePrecision) obj).value);
         }
     }
 

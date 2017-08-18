@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.values;
+package de.uni_kl.cs.disco.numbers.rational;
 
 import de.uni_kl.cs.disco.numbers.Num;
 

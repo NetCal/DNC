@@ -26,14 +26,11 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.rational;
 
 import org.apache.commons.math3.fraction.Fraction;
 
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.values.NaN;
-import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
-import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 /**
  * Wrapper class around org.apache.commons.math3.fraction.Fraction
@@ -45,69 +42,69 @@ import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
  * to Fraction objects, copy by value semantic are is applied.
  *
  */
-public class RationalInt implements Num {
+public class Int implements Num {
     // Unfortunately you cannot give the constructor the double value 0.0000001
     private static final Fraction EPSILON = new Fraction(1, 1000000);
     private static final Fraction ZERO_FRACTION = new Fraction(0);
     private Fraction value;
 
-    private RationalInt() {
+    private Int() {
     }
 
-    public RationalInt(double value) {
+    public Int(double value) {
         this.value = new Fraction(value);
     }
 
-    public RationalInt(int num) {
+    public Int(int num) {
         value = new Fraction(num);
     }
 
-    public RationalInt(int num, int den) {
+    public Int(int num, int den) {
         value = new Fraction(num, den);
     }
 
-    public RationalInt(RationalInt num) {
+    public Int(Int num) {
         value = new Fraction(num.value.getNumerator(), num.value.getDenominator());
     }
 
-    private RationalInt(Fraction frac) {
+    private Int(Fraction frac) {
         value = new Fraction(frac.getNumerator(), frac.getDenominator());
     }
 
-    public static RationalInt createZero() {
-        RationalInt zero = new RationalInt();
+    public static Int createZero() {
+        Int zero = new Int();
         zero.instantiateZero();
         return zero;
     }
 
-    public static RationalInt createEpsilon() {
-        return new RationalInt(EPSILON);
+    public static Int createEpsilon() {
+        return new Int(EPSILON);
     }
 
-    public static RationalInt add(RationalInt num1, RationalInt num2) {
+    public static Int add(Int num1, Int num2) {
         // May still throw MathArithmeticException due to integer overflow
-        return new RationalInt(num1.value.add(num2.value));
+        return new Int(num1.value.add(num2.value));
     }
 
-    public static RationalInt sub(RationalInt num1, RationalInt num2) {
+    public static Int sub(Int num1, Int num2) {
         // May still throw MathArithmeticException due to integer overflow
-        return new RationalInt(num1.value.subtract(num2.value));
+        return new Int(num1.value.subtract(num2.value));
     }
 
-    public static RationalInt mult(RationalInt num1, RationalInt num2) {
+    public static Int mult(Int num1, Int num2) {
         // May throw MathArithmeticException due to integer overflow
-        return new RationalInt(num1.value.multiply(num2.value));
+        return new Int(num1.value.multiply(num2.value));
     }
 
-    public static RationalInt div(RationalInt num1, RationalInt num2) {
-        return new RationalInt(num1.value.divide(num2.value));
+    public static Int div(Int num1, Int num2) {
+        return new Int(num1.value.divide(num2.value));
     }
 
-    public static RationalInt diff(RationalInt num1, RationalInt num2) {
+    public static Int diff(Int num1, Int num2) {
         return sub(max(num1, num2), min(num1, num2));
     }
 
-    public static RationalInt max(RationalInt num1, RationalInt num2) {
+    public static Int max(Int num1, Int num2) {
         if (num1.value.compareTo(num2.value) >= 0) {
             return num1;
         } else {
@@ -115,7 +112,7 @@ public class RationalInt implements Num {
         }
     }
 
-    public static RationalInt min(RationalInt num1, RationalInt num2) {
+    public static Int min(Int num1, Int num2) {
         if (num1.value.compareTo(num2.value) <= 0) {
             return num1;
         } else {
@@ -123,12 +120,12 @@ public class RationalInt implements Num {
         }
     }
 
-    public static RationalInt abs(RationalInt num) {
-        return new RationalInt(num.value.abs());
+    public static Int abs(Int num) {
+        return new Int(num.value.abs());
     }
 
-    public static RationalInt negate(RationalInt num) {
-        return new RationalInt(num.value.negate());
+    public static Int negate(Int num) {
+        return new Int(num.value.negate());
     }
 
     private void instantiateZero() {
@@ -150,7 +147,7 @@ public class RationalInt implements Num {
             return true;
         }
 
-        if (this.value.compareTo(((RationalInt) num).value) > 0) {
+        if (this.value.compareTo(((Int) num).value) > 0) {
             return true;
         } else {
             return false;
@@ -176,7 +173,7 @@ public class RationalInt implements Num {
             return true;
         }
 
-        if (this.value.compareTo(((RationalInt) num).value) >= 0) {
+        if (this.value.compareTo(((Int) num).value) >= 0) {
             return true;
         } else {
             return false;
@@ -202,7 +199,7 @@ public class RationalInt implements Num {
             return false;
         }
 
-        if (this.value.compareTo(((RationalInt) num).value) < 0) {
+        if (this.value.compareTo(((Int) num).value) < 0) {
             return true;
         } else {
             return false;
@@ -228,7 +225,7 @@ public class RationalInt implements Num {
             return false;
         }
 
-        if (this.value.compareTo(((RationalInt) num).value) <= 0) {
+        if (this.value.compareTo(((Int) num).value) <= 0) {
             return true;
         } else {
             return false;
@@ -262,15 +259,15 @@ public class RationalInt implements Num {
 
     @Override
     public Num copy() {
-        return new RationalInt(this.value.getNumerator(), this.value.getDenominator());
+        return new Int(this.value.getNumerator(), this.value.getDenominator());
     }
 
     @Override
     public boolean eq(double num) {
-        return equals(new RationalInt(num));
+        return equals(new Int(num));
     }
 
-    public boolean equals(RationalInt num) {
+    public boolean equals(Int num) {
         if (this.value.compareTo(num.value) == 0) {
             return true;
         } else {
@@ -281,10 +278,10 @@ public class RationalInt implements Num {
     @Override
     public boolean equals(Object obj) {
         if (obj == null
-                || !(obj instanceof RationalInt)) {
+                || !(obj instanceof Int)) {
             return false;
         } else {
-            return equals(((RationalInt) obj));
+            return equals(((Int) obj));
         }
     }
 

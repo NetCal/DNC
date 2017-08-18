@@ -29,13 +29,13 @@
 package de.uni_kl.cs.disco.numbers;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
-import de.uni_kl.cs.disco.numbers.implementations.RationalBigIntFactory;
-import de.uni_kl.cs.disco.numbers.implementations.RationalIntFactory;
-import de.uni_kl.cs.disco.numbers.implementations.RealDoubleFactory;
-import de.uni_kl.cs.disco.numbers.implementations.RealSingleFactory;
-import de.uni_kl.cs.disco.numbers.values.NaN;
-import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
-import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
+import de.uni_kl.cs.disco.numbers.rational.NaN;
+import de.uni_kl.cs.disco.numbers.rational.NegativeInfinity;
+import de.uni_kl.cs.disco.numbers.rational.PositiveInfinity;
+import de.uni_kl.cs.disco.numbers.rational.BigIntFactory;
+import de.uni_kl.cs.disco.numbers.rational.IntFactory;
+import de.uni_kl.cs.disco.numbers.real.DoublePrecisionFactory;
+import de.uni_kl.cs.disco.numbers.real.SinglePrecisionFactory;
 
 public interface NumFactory {
 	final Num NaN = new NaN();
@@ -45,14 +45,14 @@ public interface NumFactory {
 	public static NumFactory getNumFactory() {
         switch (CalculatorConfig.getInstance().getNumClass()) {
             case REAL_SINGLE_PRECISION:
-            		return RealSingleFactory.getInstance();
+            		return SinglePrecisionFactory.getInstance();
             case RATIONAL_INTEGER:
-            		return RationalIntFactory.getInstance();
+            		return IntFactory.getInstance();
             case RATIONAL_BIGINTEGER:
-            		return RationalBigIntFactory.getInstance();
+            		return BigIntFactory.getInstance();
             case REAL_DOUBLE_PRECISION:
             default:
-            		return RealDoubleFactory.getInstance();
+            		return DoublePrecisionFactory.getInstance();
         }
     }
 	

@@ -35,7 +35,7 @@ import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.implementations.RealDouble;
+import de.uni_kl.cs.disco.numbers.real.DoublePrecision;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -323,21 +323,21 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     public boolean isDiscontinuity(int pos) {
         return (pos + 1 < getSegmentCount()
                 && (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x()))
-                < RealDouble.createEpsilon().doubleValue()
+                < DoublePrecision.createEpsilon().doubleValue()
         );
     }
 
     public boolean isRealDiscontinuity(int pos) {
         return (isDiscontinuity(pos)
                 && (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y()))
-                >= RealDouble.createEpsilon().doubleValue()
+                >= DoublePrecision.createEpsilon().doubleValue()
         );
     }
 
     public boolean isUnrealDiscontinuity(int pos) {
         return (isDiscontinuity(pos)
                 && (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y()))
-                < RealDouble.createEpsilon().doubleValue()
+                < DoublePrecision.createEpsilon().doubleValue()
         );
     }
 

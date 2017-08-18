@@ -26,17 +26,14 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.rational;
 
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.values.NaN;
-import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
-import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
-public class RationalIntFactory implements NumFactory {
-	private static RationalIntFactory instance = new RationalIntFactory();
+public class BigIntFactory implements NumFactory {
+	private static BigIntFactory instance = new BigIntFactory();
 
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
@@ -44,12 +41,12 @@ public class RationalIntFactory implements NumFactory {
     private Num ZERO = createZero();
     private Num EPSILON = createEpsilon();
 
-    protected RationalIntFactory() {} 
+    protected BigIntFactory() {} 
 	
-	public static RationalIntFactory getInstance() {
+	public static BigIntFactory getInstance() {
 		return instance;
 	}
-
+	
     public Num getPositiveInfinity() {
         return POSITIVE_INFINITY;
     }
@@ -74,13 +71,12 @@ public class RationalIntFactory implements NumFactory {
         return new NaN();
     }
 
-	
     public Num getZero() {
         return ZERO;
     }
 
     public Num createZero() {
-        return new RationalInt(0);
+        return new BigInt(0);
     }
 
     public Num getEpsilon() {
@@ -88,7 +84,7 @@ public class RationalIntFactory implements NumFactory {
     }
 
     public Num createEpsilon() {
-        return RationalInt.createEpsilon();
+        return BigInt.createEpsilon();
     }
 
     public Num create(double value) {
@@ -103,7 +99,7 @@ public class RationalIntFactory implements NumFactory {
             return createNaN();
         }
 
-        return new RationalInt(value);
+        return new BigInt(value);
     }
 
     public Num create(int num, int den) {
@@ -111,7 +107,7 @@ public class RationalIntFactory implements NumFactory {
             throw new ArithmeticException("/ by zero");
         }
 
-        return new RationalInt(num, den);
+        return new BigInt(num, den);
     }
 
     public Num create(String num_str) throws Exception {

@@ -26,20 +26,17 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.rational;
 
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumUtils;
-import de.uni_kl.cs.disco.numbers.values.NaN;
-import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
-import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
-public class RationalIntUtils implements NumUtils {
-	private static RationalIntUtils instance = new RationalIntUtils();
+public class IntUtils implements NumUtils {
+	private static IntUtils instance = new IntUtils();
 
-    protected RationalIntUtils() {} 
+    protected IntUtils() {} 
 	
-	public static RationalIntUtils getInstance() {
+	public static IntUtils getInstance() {
 		return instance;
 	}
 	
@@ -56,7 +53,7 @@ public class RationalIntUtils implements NumUtils {
             return new NegativeInfinity();
         }
 
-        return RationalInt.add((RationalInt) num1, (RationalInt) num2);
+        return Int.add((Int) num1, (Int) num2);
     }
 
     public Num sub(Num num1, Num num2) {
@@ -78,7 +75,7 @@ public class RationalIntUtils implements NumUtils {
             return new NegativeInfinity();
         }
 
-        return RationalInt.sub((RationalInt) num1, (RationalInt) num2);
+        return Int.sub((Int) num1, (Int) num2);
     }
 
     public Num mult(Num num1, Num num2) {
@@ -114,7 +111,7 @@ public class RationalIntUtils implements NumUtils {
             }
         }
 
-        return RationalInt.mult((RationalInt) num1, (RationalInt) num2);
+        return Int.mult((Int) num1, (Int) num2);
     }
 
     public Num div(Num num1, Num num2) {
@@ -138,13 +135,13 @@ public class RationalIntUtils implements NumUtils {
             }
         }
         if (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity) { // finite value divided by infinity
-            return new RationalInt(0);
+            return new Int(0);
         }
 
-        if (((RationalInt) num2).eqZero()) {
+        if (((Int) num2).eqZero()) {
             return new PositiveInfinity();
         } else {
-            return RationalInt.div((RationalInt) num1, (RationalInt) num2);
+            return Int.div((Int) num1, (Int) num2);
         }
     }
 
@@ -156,7 +153,7 @@ public class RationalIntUtils implements NumUtils {
             return new PositiveInfinity();
         }
 
-        return RationalInt.abs((RationalInt) num);
+        return Int.abs((Int) num);
     }
 
     public Num diff(Num num1, Num num2) {
@@ -168,7 +165,7 @@ public class RationalIntUtils implements NumUtils {
             return new PositiveInfinity();
         }
 
-        return RationalInt.diff((RationalInt) num1, (RationalInt) num2);
+        return Int.diff((Int) num1, (Int) num2);
     }
 
     public Num max(Num num1, Num num2) {
@@ -185,7 +182,7 @@ public class RationalIntUtils implements NumUtils {
             return num1.copy();
         }
 
-        return RationalInt.max((RationalInt) num1, (RationalInt) num2);
+        return Int.max((Int) num1, (Int) num2);
     }
 
     public Num min(Num num1, Num num2) {
@@ -202,7 +199,7 @@ public class RationalIntUtils implements NumUtils {
             return num1.copy();
         }
 
-        return RationalInt.min((RationalInt) num1, (RationalInt) num2);
+        return Int.min((Int) num1, (Int) num2);
     }
 
     public Num negate(Num num) {
@@ -216,11 +213,11 @@ public class RationalIntUtils implements NumUtils {
             return new PositiveInfinity();
         }
 
-        return RationalInt.negate((RationalInt) num);
+        return Int.negate((Int) num);
     }
 
     public boolean isFinite(Num num) {
-        if (num instanceof RationalInt) { // Only stores finite values
+        if (num instanceof Int) { // Only stores finite values
             return true;
         } else {
             return false; // NaN is neither finite nor infinite

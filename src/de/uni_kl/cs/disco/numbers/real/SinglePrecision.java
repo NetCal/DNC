@@ -26,78 +26,78 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.real;
 
 import de.uni_kl.cs.disco.numbers.Num;
 
-public class RealSingle implements Num {
+public class SinglePrecision implements Num {
     private static final float EPSILON = 0.00016f; // Maximum rounding error observed in the functional tests
     private static boolean comparison_epsilon = false;
     private float value;
 
     @SuppressWarnings("unused")
-    private RealSingle() {
+    private SinglePrecision() {
     }
 
-    public RealSingle(double value) {
+    public SinglePrecision(double value) {
         this.value = (float) value;
     }
 
-    public RealSingle(int num) {
+    public SinglePrecision(int num) {
         value = (float) num;
     }
 
-    public RealSingle(int num, int den) {
+    public SinglePrecision(int num, int den) {
         value = ((float) num) / ((float) den);
     }
 
-    public RealSingle(RealSingle num) {
+    public SinglePrecision(SinglePrecision num) {
         value = num.value;
     }
 
     public static Num createEpsilon() {
-        return new RealSingle(EPSILON);
+        return new SinglePrecision(EPSILON);
     }
 
-    public static Num add(RealSingle num1, RealSingle num2) {
-        return new RealSingle(num1.value + num2.value);
+    public static Num add(SinglePrecision num1, SinglePrecision num2) {
+        return new SinglePrecision(num1.value + num2.value);
     }
 
-    public static Num sub(RealSingle num1, RealSingle num2) {
+    public static Num sub(SinglePrecision num1, SinglePrecision num2) {
         float result = num1.value - num2.value;
         if (comparison_epsilon && Math.abs(result) <= EPSILON) {
             result = 0;
         }
-        return new RealSingle(result);
+        return new SinglePrecision(result);
     }
 
-    public static Num mult(RealSingle num1, RealSingle num2) {
-        return new RealSingle(num1.value * num2.value);
+    public static Num mult(SinglePrecision num1, SinglePrecision num2) {
+        return new SinglePrecision(num1.value * num2.value);
     }
 
-    public static Num div(RealSingle num1, RealSingle num2) {
-        return new RealSingle(num1.value / num2.value);
+    public static Num div(SinglePrecision num1, SinglePrecision num2) {
+        return new SinglePrecision(num1.value / num2.value);
     }
 
-    public static Num diff(RealSingle num1, RealSingle num2) {
-        return new RealSingle(Math.max(num1.value, num2.value)
+    public static Num diff(SinglePrecision num1, SinglePrecision num2) {
+        return new SinglePrecision(Math.max(num1.value, num2.value)
                 - Math.min(num1.value, num2.value));
     }
 
-    public static Num max(RealSingle num1, RealSingle num2) {
-        return new RealSingle(Math.max(num1.value, num2.value));
+    public static Num max(SinglePrecision num1, SinglePrecision num2) {
+        return new SinglePrecision(Math.max(num1.value, num2.value));
     }
 
-    public static Num min(RealSingle num1, RealSingle num2) {
-        return new RealSingle(Math.min(num1.value, num2.value));
+    public static Num min(SinglePrecision num1, SinglePrecision num2) {
+        return new SinglePrecision(Math.min(num1.value, num2.value));
     }
 
-    public static Num abs(RealSingle num) {
-        return new RealSingle(Math.abs(num.value));
+    public static Num abs(SinglePrecision num) {
+        return new SinglePrecision(Math.abs(num.value));
     }
 
-    public static Num negate(RealSingle num) {
-        return new RealSingle(num.value * -1);
+    public static Num negate(SinglePrecision num) {
+        return new SinglePrecision(num.value * -1);
     }
 
     public boolean eqZero() {
@@ -199,7 +199,7 @@ public class RealSingle implements Num {
 
     @Override
     public Num copy() {
-        return new RealSingle(value);
+        return new SinglePrecision(value);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class RealSingle implements Num {
         }
     }
 
-    public boolean equals(RealSingle num) {
+    public boolean equals(SinglePrecision num) {
         return equals(num.value);
     }
 
@@ -236,10 +236,10 @@ public class RealSingle implements Num {
     @Override
     public boolean equals(Object obj) {
         if (obj == null
-                || !(obj instanceof RealSingle)) {
+                || !(obj instanceof SinglePrecision)) {
             return false;
         } else {
-            return equals(((RealSingle) obj).value);
+            return equals(((SinglePrecision) obj).value);
         }
     }
 

@@ -26,20 +26,17 @@
  *
  */
 
-package de.uni_kl.cs.disco.numbers.implementations;
+package de.uni_kl.cs.disco.numbers.rational;
 
 import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumUtils;
-import de.uni_kl.cs.disco.numbers.values.NaN;
-import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
-import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
-public class RationalBigIntUtils implements NumUtils {
-	private static RationalBigIntUtils instance = new RationalBigIntUtils();
+public class BigIntUtils implements NumUtils {
+	private static BigIntUtils instance = new BigIntUtils();
 
-    protected RationalBigIntUtils() {} 
+    protected BigIntUtils() {} 
 	
-	public static RationalBigIntUtils getInstance() {
+	public static BigIntUtils getInstance() {
 		return instance;
 	}
 	
@@ -56,7 +53,7 @@ public class RationalBigIntUtils implements NumUtils {
             return new NegativeInfinity();
         }
 
-        return RationalBigInt.add((RationalBigInt) num1, (RationalBigInt) num2);
+        return BigInt.add((BigInt) num1, (BigInt) num2);
     }
 
     public Num sub(Num num1, Num num2) {
@@ -78,7 +75,7 @@ public class RationalBigIntUtils implements NumUtils {
             return new NegativeInfinity();
         }
 
-        return RationalBigInt.sub((RationalBigInt) num1, (RationalBigInt) num2);
+        return BigInt.sub((BigInt) num1, (BigInt) num2);
     }
 
     public Num mult(Num num1, Num num2) {
@@ -114,7 +111,7 @@ public class RationalBigIntUtils implements NumUtils {
             }
         }
 
-        return RationalBigInt.mult((RationalBigInt) num1, (RationalBigInt) num2);
+        return BigInt.mult((BigInt) num1, (BigInt) num2);
     }
 
     public Num div(Num num1, Num num2) {
@@ -138,13 +135,13 @@ public class RationalBigIntUtils implements NumUtils {
             }
         }
         if (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity) { // finite value divided by infinity
-            return new RationalBigInt(0);
+            return new BigInt(0);
         }
 
-        if (((RationalBigInt) num2).eqZero()) {
+        if (((BigInt) num2).eqZero()) {
             return new PositiveInfinity();
         } else {
-            return RationalBigInt.div((RationalBigInt) num1, (RationalBigInt) num2);
+            return BigInt.div((BigInt) num1, (BigInt) num2);
         }
     }
 
@@ -156,7 +153,7 @@ public class RationalBigIntUtils implements NumUtils {
             return new PositiveInfinity();
         }
 
-        return RationalBigInt.abs((RationalBigInt) num);
+        return BigInt.abs((BigInt) num);
     }
 
     public Num diff(Num num1, Num num2) {
@@ -168,7 +165,7 @@ public class RationalBigIntUtils implements NumUtils {
             return new PositiveInfinity();
         }
 
-        return RationalBigInt.diff((RationalBigInt) num1, (RationalBigInt) num2);
+        return BigInt.diff((BigInt) num1, (BigInt) num2);
     }
 
     public Num max(Num num1, Num num2) {
@@ -185,7 +182,7 @@ public class RationalBigIntUtils implements NumUtils {
             return num1.copy();
         }
 
-        return RationalBigInt.max((RationalBigInt) num1, (RationalBigInt) num2);
+        return BigInt.max((BigInt) num1, (BigInt) num2);
     }
 
     public Num min(Num num1, Num num2) {
@@ -202,7 +199,7 @@ public class RationalBigIntUtils implements NumUtils {
             return num1.copy();
         }
 
-        return RationalBigInt.min((RationalBigInt) num1, (RationalBigInt) num2);
+        return BigInt.min((BigInt) num1, (BigInt) num2);
     }
 
     public Num negate(Num num) {
@@ -216,11 +213,11 @@ public class RationalBigIntUtils implements NumUtils {
             return new PositiveInfinity();
         }
 
-        return RationalBigInt.negate((RationalBigInt) num);
+        return BigInt.negate((BigInt) num);
     }
 
     public boolean isFinite(Num num) {
-        if (num instanceof RationalBigInt) { // Only stores finite values
+        if (num instanceof BigInt) { // Only stores finite values
             return true;
         } else {
             return false; // NaN is neither finite nor infinite
