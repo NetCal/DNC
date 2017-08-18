@@ -20,7 +20,7 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - All convolutions and deconvolutions are called via a dispatcher, MinPlusDispatch.java. 
   - Extension to manipulate MPA RTC curves with their native operations is not yet tested.
 * Num packages: new structure, reordering.
-  - Separate rationals (requiring the valies NaN, +infty, -infty) and reals.
+  - Separate rationals (requiring the values NaN, +infty, -infty) and reals.
   - Drop the "Rational" and "Real" class prefixes.
   - Double/Single also renamed to DoublePrecision/SinglePrecision.
 * CurvePwAffineUtilsDispatch was not a dispatcher but an utils class:
