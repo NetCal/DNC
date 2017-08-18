@@ -67,23 +67,25 @@ public class TA_2S_1SC_1F_1AC_1P_Test extends DncTests {
 
     private static void initializeBounds() {
         expected_results.clear();
+        
+        NumFactory factory = NumFactory.getNumFactory();
 
         // TFA
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, NumFactory.getNumFactory().create(30), NumFactory.getNumFactory().create(125));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, NumFactory.getNumFactory().create(30), NumFactory.getNumFactory().create(125));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, factory.create(30), factory.create(125));
+        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(30), factory.create(125));
 
         // SFA
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, NumFactory.getNumFactory().create(22.5), NumFactory.getNumFactory().create(125));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, NumFactory.getNumFactory().create(22.5), NumFactory.getNumFactory().create(125));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, factory.create(22.5), factory.create(125));
+        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(22.5), factory.create(125));
 
         // PMOO
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, NumFactory.getNumFactory().create(22.5), NumFactory.getNumFactory().create(125));
+        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(22.5), factory.create(125));
 
 
         // Sink-Tree PMOO at sink
         expected_results_sinktree.clear();
 
-        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, NumFactory.getNumFactory().create(125));
+        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, factory.create(125));
     }
 
     @Before
