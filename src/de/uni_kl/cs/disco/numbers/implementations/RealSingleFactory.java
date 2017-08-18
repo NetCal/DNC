@@ -33,7 +33,7 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumFactory;
 
 public class RealSingleFactory implements NumFactory {
-	private static RealSingleFactory instance;
+	private static RealSingleFactory instance = new RealSingleFactory();
 	
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
@@ -44,9 +44,6 @@ public class RealSingleFactory implements NumFactory {
     protected RealSingleFactory() {} 
 	
 	public static RealSingleFactory getInstance() {
-		if( instance == null ) {
-			return new RealSingleFactory();
-		}
 		return instance;
 	}
 

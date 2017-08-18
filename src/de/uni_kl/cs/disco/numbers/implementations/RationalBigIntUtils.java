@@ -35,14 +35,11 @@ import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public class RationalBigIntUtils implements NumUtils {
-	private static RationalBigIntUtils instance;
+	private static RationalBigIntUtils instance = new RationalBigIntUtils();
 
     protected RationalBigIntUtils() {} 
 	
 	public static RationalBigIntUtils getInstance() {
-		if( instance == null ) {
-			return new RationalBigIntUtils();
-		}
 		return instance;
 	}
 	

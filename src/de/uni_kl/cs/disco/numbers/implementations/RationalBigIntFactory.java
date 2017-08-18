@@ -36,7 +36,7 @@ import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public class RationalBigIntFactory implements NumFactory {
-	private static RationalBigIntFactory instance;
+	private static RationalBigIntFactory instance = new RationalBigIntFactory();
 
     private Num POSITIVE_INFINITY = createPositiveInfinity();
     private Num NEGATIVE_INFINITY = createNegativeInfinity();
@@ -47,9 +47,6 @@ public class RationalBigIntFactory implements NumFactory {
     protected RationalBigIntFactory() {} 
 	
 	public static RationalBigIntFactory getInstance() {
-		if( instance == null ) {
-			return new RationalBigIntFactory();
-		}
 		return instance;
 	}
 	

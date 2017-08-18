@@ -32,14 +32,11 @@ import de.uni_kl.cs.disco.numbers.Num;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class RealDoubleUtils implements NumUtils {
-	private static RealDoubleUtils instance;
+	private static RealDoubleUtils instance = new RealDoubleUtils();
 
     protected RealDoubleUtils() {} 
 	
 	public static RealDoubleUtils getInstance() {
-		if( instance == null ) {
-			return new RealDoubleUtils();
-		}
 		return instance;
 	}
 	
