@@ -44,7 +44,7 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MinPlusDispatch {
+public abstract class MinPlusDispatch {
     //------------------------------------------------------------
     // Convolution
     //------------------------------------------------------------
