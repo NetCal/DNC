@@ -45,81 +45,81 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 
 @RunWith(value = Parameterized.class)
 public class TA_2S_1SC_1F_1AC_1P_Test extends DncTests {
-    protected static final DncTestResults expected_results = new DncTestResults();
-    protected static final DncTestResults expected_results_sinktree = new DncTestResults();
-    private static TA_2S_1SC_1F_1AC_1P_Network test_network;
-    private static Network network;
-    private static Flow f0;
+	protected static final DncTestResults expected_results = new DncTestResults();
+	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
+	private static TA_2S_1SC_1F_1AC_1P_Network test_network;
+	private static Network network;
+	private static Flow f0;
 
-    public TA_2S_1SC_1F_1AC_1P_Test(DncTestConfig test_config) {
-        super(test_config);
-    }
+	public TA_2S_1SC_1F_1AC_1P_Test(DncTestConfig test_config) {
+		super(test_config);
+	}
 
-    @BeforeClass
-    public static void createNetwork() {
-        test_network = new TA_2S_1SC_1F_1AC_1P_Network();
-        f0 = test_network.f0;
+	@BeforeClass
+	public static void createNetwork() {
+		test_network = new TA_2S_1SC_1F_1AC_1P_Network();
+		f0 = test_network.f0;
 
-        network = test_network.getNetwork();
+		network = test_network.getNetwork();
 
-        initializeBounds();
-    }
+		initializeBounds();
+	}
 
-    private static void initializeBounds() {
-        expected_results.clear();
-        
-        NumFactory factory = NumFactory.getNumFactory();
+	private static void initializeBounds() {
+		expected_results.clear();
 
-        // TFA
-        expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, factory.create(30), factory.create(125));
-        expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(30), factory.create(125));
+		NumFactory factory = NumFactory.getNumFactory();
 
-        // SFA
-        expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, factory.create(22.5), factory.create(125));
-        expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(22.5), factory.create(125));
+		// TFA
+		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, factory.create(30), factory.create(125));
+		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(30), factory.create(125));
 
-        // PMOO
-        expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(22.5), factory.create(125));
+		// SFA
+		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, factory.create(22.5), factory.create(125));
+		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(22.5), factory.create(125));
 
+		// PMOO
+		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(22.5),
+				factory.create(125));
 
-        // Sink-Tree PMOO at sink
-        expected_results_sinktree.clear();
+		// Sink-Tree PMOO at sink
+		expected_results_sinktree.clear();
 
-        expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, factory.create(125));
-    }
+		expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, factory.create(125));
+	}
 
-    @Before
-    public void reinitNetwork() {
-        if (!super.reinitilize_test) {
-            return;
-        }
+	@Before
+	public void reinitNetwork() {
+		if (!super.reinitilize_test) {
+			return;
+		}
 
-        test_network.reinitializeCurves();
-        initializeBounds();
-    }
+		test_network.reinitializeCurves();
+		initializeBounds();
+	}
 
-    //--------------------Flow 0--------------------
-    @Test
-    public void f0_tfa() {
-        setMux(network.getServers());
-        super.runTFAtest(new TotalFlowAnalysis(network, test_config), f0, expected_results);
-    }
+	// --------------------Flow 0--------------------
+	@Test
+	public void f0_tfa() {
+		setMux(network.getServers());
+		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f0, expected_results);
+	}
 
-    @Test
-    public void f0_sfa() {
-        setMux(network.getServers());
-        super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f0, expected_results);
-    }
+	@Test
+	public void f0_sfa() {
+		setMux(network.getServers());
+		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f0, expected_results);
+	}
 
-    @Test
-    public void f0_pmoo_arbMux() {
-        setArbitraryMux(network.getServers());
-        super.runPMOOtest(new PmooAnalysis(network, test_config), f0, expected_results);
-    }
+	@Test
+	public void f0_pmoo_arbMux() {
+		setArbitraryMux(network.getServers());
+		super.runPMOOtest(new PmooAnalysis(network, test_config), f0, expected_results);
+	}
 
-    @Test
-    public void f0_sinktree_arbMux() {
-        setArbitraryMux(network.getServers());
-        super.runSinkTreePMOOtest(network, f0, expected_results_sinktree);
-    }
+	@Test
+	public void f0_sinktree_arbMux() {
+		setArbitraryMux(network.getServers());
+		super.runSinkTreePMOOtest(network, f0, expected_results_sinktree);
+	}
 }

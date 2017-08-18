@@ -34,118 +34,121 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 
 public class SinglePrecisionFactory implements NumFactory {
 	private static SinglePrecisionFactory instance = new SinglePrecisionFactory();
-	
-    private Num POSITIVE_INFINITY = createPositiveInfinity();
-    private Num NEGATIVE_INFINITY = createNegativeInfinity();
-    private Num NaN = createNaN();
-    private Num ZERO = createZero();
-    private Num EPSILON = createEpsilon();
 
-    protected SinglePrecisionFactory() {} 
-	
+	private Num POSITIVE_INFINITY = createPositiveInfinity();
+	private Num NEGATIVE_INFINITY = createNegativeInfinity();
+	private Num NaN = createNaN();
+	private Num ZERO = createZero();
+	private Num EPSILON = createEpsilon();
+
+	protected SinglePrecisionFactory() {
+	}
+
 	public static SinglePrecisionFactory getInstance() {
 		return instance;
 	}
 
-    public Num getPositiveInfinity() {
-        return POSITIVE_INFINITY;
-    }
+	public Num getPositiveInfinity() {
+		return POSITIVE_INFINITY;
+	}
 
-    public Num createPositiveInfinity() {
-        return new SinglePrecision(Float.POSITIVE_INFINITY);
-    }
+	public Num createPositiveInfinity() {
+		return new SinglePrecision(Float.POSITIVE_INFINITY);
+	}
 
-    public Num getNegativeInfinity() {
-        return NEGATIVE_INFINITY;
-    }
+	public Num getNegativeInfinity() {
+		return NEGATIVE_INFINITY;
+	}
 
-    public Num createNegativeInfinity() {
-        return new SinglePrecision(Float.NEGATIVE_INFINITY);
-    }
+	public Num createNegativeInfinity() {
+		return new SinglePrecision(Float.NEGATIVE_INFINITY);
+	}
 
-    public Num getNaN() {
-        return NaN;
-    }
+	public Num getNaN() {
+		return NaN;
+	}
 
-    public Num createNaN() {
-        return new SinglePrecision(Float.NaN);
-    }
+	public Num createNaN() {
+		return new SinglePrecision(Float.NaN);
+	}
 
-    public Num getZero() {
-        return ZERO;
-    }
+	public Num getZero() {
+		return ZERO;
+	}
 
-    public Num createZero() {
-        return new SinglePrecision(0);
-    }
+	public Num createZero() {
+		return new SinglePrecision(0);
+	}
 
-    public Num getEpsilon() {
-        return EPSILON;
-    }
+	public Num getEpsilon() {
+		return EPSILON;
+	}
 
-    public Num createEpsilon() {
-        return SinglePrecision.createEpsilon();
-    }
+	public Num createEpsilon() {
+		return SinglePrecision.createEpsilon();
+	}
 
-    public Num create(double value) {
-        return new SinglePrecision(value);
-    }
+	public Num create(double value) {
+		return new SinglePrecision(value);
+	}
 
-    public Num create(int num, int den) {
-        return new SinglePrecision(num, den);
-    }
+	public Num create(int num, int den) {
+		return new SinglePrecision(num, den);
+	}
 
-    public Num create(String num_str) throws Exception {
-        if (num_str.equals("Infinity")) {
-            return createPositiveInfinity();
-        }
-        if (num_str.equals("-Infinity")) {
-            return createNegativeInfinity();
-        }
-        if (num_str.equals("NaN") || num_str.equals("NA")) {
-            return createNaN();
-        }
+	public Num create(String num_str) throws Exception {
+		if (num_str.equals("Infinity")) {
+			return createPositiveInfinity();
+		}
+		if (num_str.equals("-Infinity")) {
+			return createNegativeInfinity();
+		}
+		if (num_str.equals("NaN") || num_str.equals("NA")) {
+			return createNaN();
+		}
 
-        boolean fraction_indicator = num_str.contains(" / ");
-        boolean double_based = num_str.contains(".");
+		boolean fraction_indicator = num_str.contains(" / ");
+		boolean double_based = num_str.contains(".");
 
-        if (fraction_indicator && double_based) {
-            throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
-                    + ": " + num_str);
-        }
+		if (fraction_indicator && double_based) {
+			throw new Exception("Invalid string representation of a number based on "
+					+ CalculatorConfig.getInstance().getNumClass().toString() + ": " + num_str);
+		}
 
-        try {
-            // either an integer of something strange
-            if (!fraction_indicator && !double_based) {
-                return create(Integer.parseInt(num_str));
-            }
+		try {
+			// either an integer of something strange
+			if (!fraction_indicator && !double_based) {
+				return create(Integer.parseInt(num_str));
+			}
 
-            if (fraction_indicator) {
-                String[] num_den = num_str.split(" / "); // ["num","den"]
-                if (num_den.length != 2) {
-                    throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
-                            + ": " + num_str);
-                }
+			if (fraction_indicator) {
+				String[] num_den = num_str.split(" / "); // ["num","den"]
+				if (num_den.length != 2) {
+					throw new Exception("Invalid string representation of a number based on "
+							+ CalculatorConfig.getInstance().getNumClass().toString() + ": " + num_str);
+				}
 
-                int den = Integer.parseInt(num_den[1]);
-                if (den != 0) {
-                    return create(Integer.parseInt(num_den[0]), den);
-                } else {
-                    return createNaN();
-                }
-            }
+				int den = Integer.parseInt(num_den[1]);
+				if (den != 0) {
+					return create(Integer.parseInt(num_den[0]), den);
+				} else {
+					return createNaN();
+				}
+			}
 
-            if (double_based) {
-                return create(Double.parseDouble(num_str));
-            }
-        } catch (Exception e) {
-            throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
-                    + ": " + num_str);
-        }
+			if (double_based) {
+				return create(Double.parseDouble(num_str));
+			}
+		} catch (Exception e) {
+			throw new Exception("Invalid string representation of a number based on "
+					+ CalculatorConfig.getInstance().getNumClass().toString() + ": " + num_str);
+		}
 
-        // This code should not be reachable because all the operations above either succeed such that we can return a number
-        // of raise an exception of some kind. Yet, Java does not get this and thus complains if there's no "finalizing statement".
-        throw new Exception("Invalid string representation of a number based on " + CalculatorConfig.getInstance().getNumClass().toString()
-                + ": " + num_str);
-    }
+		// This code should not be reachable because all the operations above either
+		// succeed such that we can return a number
+		// of raise an exception of some kind. Yet, Java does not get this and thus
+		// complains if there's no "finalizing statement".
+		throw new Exception("Invalid string representation of a number based on "
+				+ CalculatorConfig.getInstance().getNumClass().toString() + ": " + num_str);
+	}
 }

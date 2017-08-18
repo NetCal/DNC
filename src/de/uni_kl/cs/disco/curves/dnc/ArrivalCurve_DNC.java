@@ -34,69 +34,75 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 
 public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
-//--------------------------------------------------------------------------------------------------------------
-// Constructors
-//--------------------------------------------------------------------------------------------------------------
-    public ArrivalCurve_DNC() {
-        super();
-    }
+	// --------------------------------------------------------------------------------------------------------------
+	// Constructors
+	// --------------------------------------------------------------------------------------------------------------
+	public ArrivalCurve_DNC() {
+		super();
+	}
 
-    public ArrivalCurve_DNC(int segment_count) {
-        super(segment_count);
-    }
+	public ArrivalCurve_DNC(int segment_count) {
+		super(segment_count);
+	}
 
-    public ArrivalCurve_DNC(CurvePwAffine curve) {
-        super(curve);
-        forceThroughOrigin();
+	public ArrivalCurve_DNC(CurvePwAffine curve) {
+		super(curve);
+		forceThroughOrigin();
 
-        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
-            System.out.println(toString());
-            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
-        }
-    }
+		if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
+																										// requirement:
+																										// !isConcave()
+			System.out.println(toString());
+			throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+		}
+	}
 
-    public ArrivalCurve_DNC(String arrival_curve_str) throws Exception {
-        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest possible string: {(0,0),0}
-            throw new RuntimeException("Invalid string representation of a service curve.");
-        }
+	public ArrivalCurve_DNC(String arrival_curve_str) throws Exception {
+		if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest
+																											// possible
+																											// string:
+																											// {(0,0),0}
+			throw new RuntimeException("Invalid string representation of a service curve.");
+		}
 
-        initializeCurve(arrival_curve_str);
-        forceThroughOrigin();
+		initializeCurve(arrival_curve_str);
+		forceThroughOrigin();
 
-        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isConcave()
-            System.out.println(toString());
-            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
-        }
-    }
+		if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
+																										// requirement:
+																										// !isConcave()
+			System.out.println(toString());
+			throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+		}
+	}
 
+	// --------------------------------------------------------------------------------------------------------------
+	// Interface Implementations
+	// --------------------------------------------------------------------------------------------------------------
+	@Override
+	public ArrivalCurve_DNC copy() {
+		ArrivalCurve_DNC ac_copy = new ArrivalCurve_DNC();
+		ac_copy.copy(this);
+		return ac_copy;
+	}
 
-//--------------------------------------------------------------------------------------------------------------
-// Interface Implementations
-//--------------------------------------------------------------------------------------------------------------
-    @Override
-    public ArrivalCurve_DNC copy() {
-        ArrivalCurve_DNC ac_copy = new ArrivalCurve_DNC();
-        ac_copy.copy(this);
-        return ac_copy;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof ArrivalCurve_DNC) && super.equals(obj);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof ArrivalCurve_DNC) && super.equals(obj);
-    }
+	@Override
+	public int hashCode() {
+		return "AC".hashCode() * super.hashCode();
+	}
 
-    @Override
-    public int hashCode() {
-        return "AC".hashCode() * super.hashCode();
-    }
-
-    /**
-     * Returns a string representation of this curve.
-     *
-     * @return the curve represented as a string.
-     */
-    @Override
-    public String toString() {
-        return "AC" + super.toString();
-    }
+	/**
+	 * Returns a string representation of this curve.
+	 *
+	 * @return the curve represented as a string.
+	 */
+	@Override
+	public String toString() {
+		return "AC" + super.toString();
+	}
 }

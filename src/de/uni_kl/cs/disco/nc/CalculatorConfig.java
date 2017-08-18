@@ -35,22 +35,31 @@ import java.io.File;
 public final class CalculatorConfig {
 	private static CalculatorConfig instance = new CalculatorConfig();
 
-	public enum NumClass { REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER }
-	public enum CurveClass { DNC, MPA_RTC }
-	public enum OperationClass { DNC, NATIVE }
-	
+	public enum NumClass {
+		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
+	}
+
+	public enum CurveClass {
+		DNC, MPA_RTC
+	}
+
+	public enum OperationClass {
+		DNC, NATIVE
+	}
+
 	private NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
 	private CurveClass CURVE_CLASS = CurveClass.DNC;
 	private OperationClass OPERATION_CLASS = OperationClass.DNC;
-	
+
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
 	private boolean MAX_SERVICE_CURVE_CHECKS = false;
 	private boolean FIFO_MUX_CHECKS = false;
 	private boolean DECONVOLUTION_CHECKS = false;
 
-	protected CalculatorConfig() {} 
-	
+	protected CalculatorConfig() {
+	}
+
 	public static CalculatorConfig getInstance() {
 		return instance;
 	}
@@ -77,14 +86,14 @@ public final class CalculatorConfig {
 		if (!f.exists() && !f.isDirectory()) {
 			f = new File("lib/rtc.jar");
 			if (!f.exists() && !f.isDirectory()) {
-				throw new RuntimeException( "Error: rtc.jar not found in directory " + f.getParent() + "." );
+				throw new RuntimeException("Error: rtc.jar not found in directory " + f.getParent() + ".");
 			}
 		}
 	}
-	
-	public boolean setCurveClass(CurveClass curve_class)  {
+
+	public boolean setCurveClass(CurveClass curve_class) {
 		checkMPARTC();
-		
+
 		if (CURVE_CLASS == curve_class) {
 			return false;
 		}
@@ -96,8 +105,8 @@ public final class CalculatorConfig {
 	public OperationClass getOperationClass() {
 		return OPERATION_CLASS;
 	}
-	
-	public void setOperationClass(OperationClass operation_class)  {
+
+	public void setOperationClass(OperationClass operation_class) {
 		checkMPARTC();
 		OPERATION_CLASS = operation_class;
 	}
@@ -117,56 +126,56 @@ public final class CalculatorConfig {
 		FIFO_MUX_CHECKS = true;
 		DECONVOLUTION_CHECKS = true;
 	}
-	
+
 	public boolean exec_arrival_curve_checks() {
 		return ARRIVAL_CURVE_CHECKS;
 	}
-	
+
 	public boolean exec_service_curve_checks() {
 		return SERVICE_CURVE_CHECKS;
 	}
-	
+
 	public boolean exec_max_service_curve_checks() {
 		return MAX_SERVICE_CURVE_CHECKS;
 	}
-	
+
 	public boolean exec_fifo_mux_checks() {
 		return FIFO_MUX_CHECKS;
 	}
-	
+
 	public boolean exec_deconvolution_checks() {
 		return DECONVOLUTION_CHECKS;
 	}
-	
+
 	@Override
-    public String toString() {
-        StringBuffer calculator_config_str = new StringBuffer();
+	public String toString() {
+		StringBuffer calculator_config_str = new StringBuffer();
 
-        calculator_config_str.append( getNumClass().toString());
-        calculator_config_str.append(", ");
-        calculator_config_str.append( getCurveClass().toString());
+		calculator_config_str.append(getNumClass().toString());
+		calculator_config_str.append(", ");
+		calculator_config_str.append(getCurveClass().toString());
 
-        if (exec_arrival_curve_checks()) {
-            calculator_config_str.append(", ");
-            calculator_config_str.append("AC checks");
-        }
-        if (exec_service_curve_checks()) {
-            calculator_config_str.append(", ");
-            calculator_config_str.append("SC checks");
-        }
-        if (exec_max_service_curve_checks()) {
-            calculator_config_str.append(", ");
-            calculator_config_str.append("MSC checks");
-        }
-        if (exec_fifo_mux_checks()) {
-            calculator_config_str.append(", ");
-            calculator_config_str.append("FIFO checks");
-        }
-        if (exec_deconvolution_checks()) {
-            calculator_config_str.append(", ");
-            calculator_config_str.append("deconv checks");
-        }
+		if (exec_arrival_curve_checks()) {
+			calculator_config_str.append(", ");
+			calculator_config_str.append("AC checks");
+		}
+		if (exec_service_curve_checks()) {
+			calculator_config_str.append(", ");
+			calculator_config_str.append("SC checks");
+		}
+		if (exec_max_service_curve_checks()) {
+			calculator_config_str.append(", ");
+			calculator_config_str.append("MSC checks");
+		}
+		if (exec_fifo_mux_checks()) {
+			calculator_config_str.append(", ");
+			calculator_config_str.append("FIFO checks");
+		}
+		if (exec_deconvolution_checks()) {
+			calculator_config_str.append(", ");
+			calculator_config_str.append("deconv checks");
+		}
 
-        return calculator_config_str.toString();
-    }
+		return calculator_config_str.toString();
+	}
 }

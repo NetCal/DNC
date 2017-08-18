@@ -44,123 +44,124 @@ import de.uni_kl.cs.disco.network.Server;
 
 public class Demo4 {
 
-    public Demo4() {
-    }
+	public Demo4() {
+	}
 
-    public static void main(String[] args) {
-        Demo4 demo = new Demo4();
+	public static void main(String[] args) {
+		Demo4 demo = new Demo4();
 
-        try {
-            demo.run();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }
+		try {
+			demo.run();
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+	}
 
-    public void run() throws Exception {
-        ServiceCurve service_curve = CurvePwAffineFactoryDispatch.createRateLatency(10.0e6, 0.01);
-        MaxServiceCurve max_service_curve = CurvePwAffineFactoryDispatch.createRateLatencyMSC(100.0e6, 0.001);
+	public void run() throws Exception {
+		ServiceCurve service_curve = CurvePwAffineFactoryDispatch.createRateLatency(10.0e6, 0.01);
+		MaxServiceCurve max_service_curve = CurvePwAffineFactoryDispatch.createRateLatencyMSC(100.0e6, 0.001);
 
-        Network network = new Network();
+		Network network = new Network();
 
-        int numServers = 9;
-        Server[] servers = new Server[numServers];
+		int numServers = 9;
+		Server[] servers = new Server[numServers];
 
-        for (int i = 1; i < numServers; i++) {
-            servers[i] = network.addServer(service_curve, max_service_curve);
-            servers[i].setUseGamma(false);
-            servers[i].setUseExtraGamma(false);
-        }
+		for (int i = 1; i < numServers; i++) {
+			servers[i] = network.addServer(service_curve, max_service_curve);
+			servers[i].setUseGamma(false);
+			servers[i].setUseExtraGamma(false);
+		}
 
-        network.addLink(servers[1], servers[2]);
-        Link l_1_3 = network.addLink(servers[1], servers[3]);
-        Link l_2_4 = network.addLink(servers[2], servers[4]);
-        Link l_3_4 = network.addLink(servers[3], servers[4]);
-        Link l_4_5 = network.addLink(servers[4], servers[5]);
-        Link l_5_6 = network.addLink(servers[5], servers[6]);
-        Link l_6_7 = network.addLink(servers[6], servers[7]);
-        Link l_7_8 = network.addLink(servers[7], servers[8]);
+		network.addLink(servers[1], servers[2]);
+		Link l_1_3 = network.addLink(servers[1], servers[3]);
+		Link l_2_4 = network.addLink(servers[2], servers[4]);
+		Link l_3_4 = network.addLink(servers[3], servers[4]);
+		Link l_4_5 = network.addLink(servers[4], servers[5]);
+		Link l_5_6 = network.addLink(servers[5], servers[6]);
+		Link l_6_7 = network.addLink(servers[6], servers[7]);
+		Link l_7_8 = network.addLink(servers[7], servers[8]);
 
-        ArrivalCurve arrival_curve = CurvePwAffineFactoryDispatch.createTokenBucket(0.1e6, 0.1 * 0.1e6);
+		ArrivalCurve arrival_curve = CurvePwAffineFactoryDispatch.createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
-        LinkedList<Link> path0 = new LinkedList<Link>();
+		LinkedList<Link> path0 = new LinkedList<Link>();
 
-//		Links need to be ordered from source server to sink server when defining a path manually
-        path0.add(l_2_4);
-        path0.add(l_4_5);
-        path0.add(l_5_6);
-        path0.add(l_6_7);
-        path0.add(l_7_8);
+		// Links need to be ordered from source server to sink server when defining a
+		// path manually
+		path0.add(l_2_4);
+		path0.add(l_4_5);
+		path0.add(l_5_6);
+		path0.add(l_6_7);
+		path0.add(l_7_8);
 
-        network.addFlow(arrival_curve, path0);
+		network.addFlow(arrival_curve, path0);
 
-        LinkedList<Link> path1 = new LinkedList<Link>();
-        path1.add(l_1_3);
-        path1.add(l_3_4);
-        path1.add(l_4_5);
-        path1.add(l_5_6);
+		LinkedList<Link> path1 = new LinkedList<Link>();
+		path1.add(l_1_3);
+		path1.add(l_3_4);
+		path1.add(l_4_5);
+		path1.add(l_5_6);
 
-        network.addFlow(arrival_curve, path1);
+		network.addFlow(arrival_curve, path1);
 
-        for (Flow flow_of_interest : network.getFlows()) {
+		for (Flow flow_of_interest : network.getFlows()) {
 
-            System.out.println("Flow of interest : " + flow_of_interest.toString());
-            System.out.println();
+			System.out.println("Flow of interest : " + flow_of_interest.toString());
+			System.out.println();
 
-//			Analyze the network	
-//			TFA
-            System.out.println("--- Total Flow Analysis ---");
-            TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
+			// Analyze the network
+			// TFA
+			System.out.println("--- Total Flow Analysis ---");
+			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
 
-            try {
-                tfa.performAnalysis(flow_of_interest);
-                System.out.println("delay bound     : " + tfa.getDelayBound());
-                System.out.println("     per server : " + tfa.getServerDelayBoundMapString());
-                System.out.println("backlog bound   : " + tfa.getBacklogBound());
-                System.out.println("     per server : " + tfa.getServerBacklogBoundMapString());
-                System.out.println("alpha per server: " + tfa.getServerAlphasMapString());
-            } catch (Exception e) {
-                System.out.println("TFA analysis failed");
-                System.out.println(e.toString());
-            }
+			try {
+				tfa.performAnalysis(flow_of_interest);
+				System.out.println("delay bound     : " + tfa.getDelayBound());
+				System.out.println("     per server : " + tfa.getServerDelayBoundMapString());
+				System.out.println("backlog bound   : " + tfa.getBacklogBound());
+				System.out.println("     per server : " + tfa.getServerBacklogBoundMapString());
+				System.out.println("alpha per server: " + tfa.getServerAlphasMapString());
+			} catch (Exception e) {
+				System.out.println("TFA analysis failed");
+				System.out.println(e.toString());
+			}
 
-            System.out.println();
+			System.out.println();
 
-//			SFA
-            System.out.println("--- Separated Flow Analysis ---");
-            SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
+			// SFA
+			System.out.println("--- Separated Flow Analysis ---");
+			SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
 
-            try {
-                sfa.performAnalysis(flow_of_interest);
-                System.out.println("e2e SFA SCs     : " + sfa.getLeftOverServiceCurves());
-                System.out.println("     per server : " + sfa.getServerLeftOverBetasMapString());
-                System.out.println("xtx per server  : " + sfa.getServerAlphasMapString());
-                System.out.println("delay bound     : " + sfa.getDelayBound());
-                System.out.println("backlog bound   : " + sfa.getBacklogBound());
-            } catch (Exception e) {
-                System.out.println("SFA analysis failed");
-                System.out.println(e.toString());
-            }
+			try {
+				sfa.performAnalysis(flow_of_interest);
+				System.out.println("e2e SFA SCs     : " + sfa.getLeftOverServiceCurves());
+				System.out.println("     per server : " + sfa.getServerLeftOverBetasMapString());
+				System.out.println("xtx per server  : " + sfa.getServerAlphasMapString());
+				System.out.println("delay bound     : " + sfa.getDelayBound());
+				System.out.println("backlog bound   : " + sfa.getBacklogBound());
+			} catch (Exception e) {
+				System.out.println("SFA analysis failed");
+				System.out.println(e.toString());
+			}
 
-            System.out.println();
+			System.out.println();
 
-//			PMOO
-            System.out.println("--- PMOO Analysis ---");
-            PmooAnalysis pmoo = new PmooAnalysis(network);
+			// PMOO
+			System.out.println("--- PMOO Analysis ---");
+			PmooAnalysis pmoo = new PmooAnalysis(network);
 
-            try {
-                pmoo.performAnalysis(flow_of_interest);
-                System.out.println("e2e PMOO SCs    : " + pmoo.getLeftOverServiceCurves());
-                System.out.println("xtx per server  : " + pmoo.getServerAlphasMapString());
-                System.out.println("delay bound     : " + pmoo.getDelayBound());
-                System.out.println("backlog bound   : " + pmoo.getBacklogBound());
-            } catch (Exception e) {
-                System.out.println("PMOO analysis failed");
-                System.out.println(e.toString());
-            }
+			try {
+				pmoo.performAnalysis(flow_of_interest);
+				System.out.println("e2e PMOO SCs    : " + pmoo.getLeftOverServiceCurves());
+				System.out.println("xtx per server  : " + pmoo.getServerAlphasMapString());
+				System.out.println("delay bound     : " + pmoo.getDelayBound());
+				System.out.println("backlog bound   : " + pmoo.getBacklogBound());
+			} catch (Exception e) {
+				System.out.println("PMOO analysis failed");
+				System.out.println(e.toString());
+			}
 
-            System.out.println();
-            System.out.println();
-        }
-    }
+			System.out.println();
+			System.out.println();
+		}
+	}
 }

@@ -31,207 +31,205 @@ package de.uni_kl.cs.disco.numbers.real;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public class DoublePrecision implements Num {
-    private static final double EPSILON = Double.parseDouble("5E-10");
-    private static boolean comparison_epsilon = false;
-    private double value;
+	private static final double EPSILON = Double.parseDouble("5E-10");
+	private static boolean comparison_epsilon = false;
+	private double value;
 
-    @SuppressWarnings("unused")
-    private DoublePrecision() {
-    }
+	@SuppressWarnings("unused")
+	private DoublePrecision() {
+	}
 
-    public DoublePrecision(double value) {
-        this.value = value;
-    }
+	public DoublePrecision(double value) {
+		this.value = value;
+	}
 
-    public DoublePrecision(int num) {
-        value = (double) num;
-    }
+	public DoublePrecision(int num) {
+		value = (double) num;
+	}
 
-    public DoublePrecision(int num, int den) {
-        value = ((double) num) / ((double) den);
-    }
+	public DoublePrecision(int num, int den) {
+		value = ((double) num) / ((double) den);
+	}
 
-    public DoublePrecision(DoublePrecision num) {
-        value = num.value;
-    }
+	public DoublePrecision(DoublePrecision num) {
+		value = num.value;
+	}
 
-    public static Num createEpsilon() {
-        return new DoublePrecision(EPSILON);
-    }
+	public static Num createEpsilon() {
+		return new DoublePrecision(EPSILON);
+	}
 
-    public static Num add(DoublePrecision num1, DoublePrecision num2) {
-        return new DoublePrecision(num1.value + num2.value);
-    }
+	public static Num add(DoublePrecision num1, DoublePrecision num2) {
+		return new DoublePrecision(num1.value + num2.value);
+	}
 
-    public static Num sub(DoublePrecision num1, DoublePrecision num2) {
-        double result = num1.value - num2.value;
-        if (Math.abs(result) <= EPSILON) {
-            result = 0;
-        }
-        return new DoublePrecision(result);
-    }
+	public static Num sub(DoublePrecision num1, DoublePrecision num2) {
+		double result = num1.value - num2.value;
+		if (Math.abs(result) <= EPSILON) {
+			result = 0;
+		}
+		return new DoublePrecision(result);
+	}
 
-    public static Num mult(DoublePrecision num1, DoublePrecision num2) {
-        return new DoublePrecision(num1.value * num2.value);
-    }
+	public static Num mult(DoublePrecision num1, DoublePrecision num2) {
+		return new DoublePrecision(num1.value * num2.value);
+	}
 
-    public static Num div(DoublePrecision num1, DoublePrecision num2) {
-        return new DoublePrecision(num1.value / num2.value);
-    }
+	public static Num div(DoublePrecision num1, DoublePrecision num2) {
+		return new DoublePrecision(num1.value / num2.value);
+	}
 
-    public static Num diff(DoublePrecision num1, DoublePrecision num2) {
-        return new DoublePrecision(Math.max(num1.value, num2.value)
-                - Math.min(num1.value, num2.value));
-    }
+	public static Num diff(DoublePrecision num1, DoublePrecision num2) {
+		return new DoublePrecision(Math.max(num1.value, num2.value) - Math.min(num1.value, num2.value));
+	}
 
-    public static Num max(DoublePrecision num1, DoublePrecision num2) {
-        return new DoublePrecision(Math.max(num1.value, num2.value));
-    }
+	public static Num max(DoublePrecision num1, DoublePrecision num2) {
+		return new DoublePrecision(Math.max(num1.value, num2.value));
+	}
 
-    public static Num min(DoublePrecision num1, DoublePrecision num2) {
-        return new DoublePrecision(Math.min(num1.value, num2.value));
-    }
+	public static Num min(DoublePrecision num1, DoublePrecision num2) {
+		return new DoublePrecision(Math.min(num1.value, num2.value));
+	}
 
-    public static Num abs(DoublePrecision num) {
-        return new DoublePrecision(Math.abs(num.value));
-    }
+	public static Num abs(DoublePrecision num) {
+		return new DoublePrecision(Math.abs(num.value));
+	}
 
-    public static Num negate(DoublePrecision num) {
-        return new DoublePrecision(num.value * -1);
-    }
+	public static Num negate(DoublePrecision num) {
+		return new DoublePrecision(num.value * -1);
+	}
 
-    public boolean eqZero() {
-        if (comparison_epsilon) {
-            return (value <= EPSILON) && (value >= -EPSILON);
-        } else {
-            return value == 0.0;
-        }
-    }
+	public boolean eqZero() {
+		if (comparison_epsilon) {
+			return (value <= EPSILON) && (value >= -EPSILON);
+		} else {
+			return value == 0.0;
+		}
+	}
 
-    public boolean gt(Num num) {
-        if (comparison_epsilon) {
-            return value > (num.doubleValue() + EPSILON);
-        } else {
-            return value > num.doubleValue();
-        }
-    }
+	public boolean gt(Num num) {
+		if (comparison_epsilon) {
+			return value > (num.doubleValue() + EPSILON);
+		} else {
+			return value > num.doubleValue();
+		}
+	}
 
-    public boolean gtZero() {
-        if (comparison_epsilon) {
-            return value > EPSILON;
-        } else {
-            return value > 0.0;
-        }
-    }
+	public boolean gtZero() {
+		if (comparison_epsilon) {
+			return value > EPSILON;
+		} else {
+			return value > 0.0;
+		}
+	}
 
-    public boolean geq(Num num) {
-        if (comparison_epsilon) {
-            return value >= (num.doubleValue() + EPSILON);
-        } else {
-            return value >= num.doubleValue();
-        }
-    }
+	public boolean geq(Num num) {
+		if (comparison_epsilon) {
+			return value >= (num.doubleValue() + EPSILON);
+		} else {
+			return value >= num.doubleValue();
+		}
+	}
 
-    public boolean geqZero() {
-        if (comparison_epsilon) {
-            return value >= EPSILON;
-        } else {
-            return value >= 0.0;
-        }
-    }
+	public boolean geqZero() {
+		if (comparison_epsilon) {
+			return value >= EPSILON;
+		} else {
+			return value >= 0.0;
+		}
+	}
 
-    public boolean lt(Num num) {
-        if (comparison_epsilon) {
-            return value < (num.doubleValue() - EPSILON);
-        } else {
-            return value < num.doubleValue();
-        }
-    }
+	public boolean lt(Num num) {
+		if (comparison_epsilon) {
+			return value < (num.doubleValue() - EPSILON);
+		} else {
+			return value < num.doubleValue();
+		}
+	}
 
-    public boolean ltZero() {
-        if (comparison_epsilon) {
-            return value < -EPSILON;
-        } else {
-            return value < 0.0;
-        }
-    }
+	public boolean ltZero() {
+		if (comparison_epsilon) {
+			return value < -EPSILON;
+		} else {
+			return value < 0.0;
+		}
+	}
 
-    public boolean leq(Num num) {
-        if (comparison_epsilon) {
-            return value <= (num.doubleValue() - EPSILON);
-        } else {
-            return value <= num.doubleValue();
-        }
-    }
+	public boolean leq(Num num) {
+		if (comparison_epsilon) {
+			return value <= (num.doubleValue() - EPSILON);
+		} else {
+			return value <= num.doubleValue();
+		}
+	}
 
-    public boolean leqZero() {
-        if (comparison_epsilon) {
-            return value <= -EPSILON;
-        } else {
-            return value <= 0.0;
-        }
-    }
+	public boolean leqZero() {
+		if (comparison_epsilon) {
+			return value <= -EPSILON;
+		} else {
+			return value <= 0.0;
+		}
+	}
 
-    public boolean isFinite() {
-        return Double.isFinite(value);
-    }
+	public boolean isFinite() {
+		return Double.isFinite(value);
+	}
 
-    public boolean isInfinite() {
-        return Double.isInfinite(value);
-    }
+	public boolean isInfinite() {
+		return Double.isInfinite(value);
+	}
 
-    public boolean isNaN() {
-        return Double.isNaN(value);
-    }
+	public boolean isNaN() {
+		return Double.isNaN(value);
+	}
 
-    @Override
-    public double doubleValue() {
-        return value;
-    }
+	@Override
+	public double doubleValue() {
+		return value;
+	}
 
-    @Override
-    public Num copy() {
-        return new DoublePrecision(value);
-    }
+	@Override
+	public Num copy() {
+		return new DoublePrecision(value);
+	}
 
-    @Override
-    public boolean eq(double num) {
-//		if( ( this.value == Double.POSITIVE_INFINITY && num == Double.POSITIVE_INFINITY ) 
-//				|| ( this.value == Double.NEGATIVE_INFINITY && num == Double.NEGATIVE_INFINITY ) ) {
-        if (Double.isInfinite(this.value)
-                && Double.isInfinite(num)
-                && (Double.compare(this.value, num) == 0)) {
-            return true;
-        }
+	@Override
+	public boolean eq(double num) {
+		// if( ( this.value == Double.POSITIVE_INFINITY && num ==
+		// Double.POSITIVE_INFINITY )
+		// || ( this.value == Double.NEGATIVE_INFINITY && num ==
+		// Double.NEGATIVE_INFINITY ) ) {
+		if (Double.isInfinite(this.value) && Double.isInfinite(num) && (Double.compare(this.value, num) == 0)) {
+			return true;
+		}
 
-        if (Math.abs(value - num) <= EPSILON) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+		if (Math.abs(value - num) <= EPSILON) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    public boolean equals(DoublePrecision num) {
-        return eq(num.value);
-    }
+	public boolean equals(DoublePrecision num) {
+		return eq(num.value);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null
-                || !(obj instanceof DoublePrecision)) {
-            return false;
-        } else {
-            return eq(((DoublePrecision) obj).value);
-        }
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof DoublePrecision)) {
+			return false;
+		} else {
+			return eq(((DoublePrecision) obj).value);
+		}
+	}
 
-    @Override
-    public int hashCode() {
-        return Double.hashCode(value);
-    }
+	@Override
+	public int hashCode() {
+		return Double.hashCode(value);
+	}
 
-    @Override
-    public String toString() {
-        return Double.toString(value);
-    }
+	@Override
+	public String toString() {
+		return Double.toString(value);
+	}
 }

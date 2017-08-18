@@ -34,70 +34,80 @@ import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 
 public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
-//--------------------------------------------------------------------------------------------------------------
-// Constructors
-//--------------------------------------------------------------------------------------------------------------
-    protected MaxServiceCurve_DNC() {
-        super();
-    }
+	// --------------------------------------------------------------------------------------------------------------
+	// Constructors
+	// --------------------------------------------------------------------------------------------------------------
+	protected MaxServiceCurve_DNC() {
+		super();
+	}
 
-    public MaxServiceCurve_DNC(int segment_count) {
-        super(segment_count);
-    }
+	public MaxServiceCurve_DNC(int segment_count) {
+		super(segment_count);
+	}
 
-    public MaxServiceCurve_DNC(CurvePwAffine curve) {
-        copy(curve);
+	public MaxServiceCurve_DNC(CurvePwAffine curve) {
+		copy(curve);
 
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
-            throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
-        }
+		if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+																											// requirement:
+																											// !isAlmostConcave()
+																											// ) {
+			throw new RuntimeException(
+					"Maximum service curves can only be created from wide-sense increasing functions.");
+		}
 
-        forceThroughOrigin();
-    }
+		forceThroughOrigin();
+	}
 
-    public MaxServiceCurve_DNC(String max_service_curve_str) throws Exception {
-        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest possible string: {(0,0),0}
-            throw new RuntimeException("Invalid string representation of a service curve.");
-        }
+	public MaxServiceCurve_DNC(String max_service_curve_str) throws Exception {
+		if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest
+																														// possible
+																														// string:
+																														// {(0,0),0}
+			throw new RuntimeException("Invalid string representation of a service curve.");
+		}
 
-        initializeCurve(max_service_curve_str);
+		initializeCurve(max_service_curve_str);
 
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong requirement: !isAlmostConcave() ) {
-            throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
-        }
+		if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+																											// requirement:
+																											// !isAlmostConcave()
+																											// ) {
+			throw new RuntimeException(
+					"Maximum service curves can only be created from wide-sense increasing functions.");
+		}
 
-        forceThroughOrigin();
-    }
+		forceThroughOrigin();
+	}
 
+	// --------------------------------------------------------------------------------------------------------------
+	// Interface Implementations
+	// --------------------------------------------------------------------------------------------------------------
+	@Override
+	public MaxServiceCurve_DNC copy() {
+		MaxServiceCurve_DNC msc_copy = new MaxServiceCurve_DNC();
+		msc_copy.copy(this);
 
-//--------------------------------------------------------------------------------------------------------------
-// Interface Implementations
-//--------------------------------------------------------------------------------------------------------------
-    @Override
-    public MaxServiceCurve_DNC copy() {
-        MaxServiceCurve_DNC msc_copy = new MaxServiceCurve_DNC();
-        msc_copy.copy(this);
+		return msc_copy;
+	}
 
-        return msc_copy;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof MaxServiceCurve_DNC) && super.equals(obj);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof MaxServiceCurve_DNC) && super.equals(obj);
-    }
+	@Override
+	public int hashCode() {
+		return "MSC".hashCode() * super.hashCode();
+	}
 
-    @Override
-    public int hashCode() {
-        return "MSC".hashCode() * super.hashCode();
-    }
-
-    /**
-     * Returns a string representation of this curve.
-     *
-     * @return the curve represented as a string.
-     */
-    @Override
-    public String toString() {
-        return "MSC" + super.toString();
-    }
+	/**
+	 * Returns a string representation of this curve.
+	 *
+	 * @return the curve represented as a string.
+	 */
+	@Override
+	public String toString() {
+		return "MSC" + super.toString();
+	}
 }

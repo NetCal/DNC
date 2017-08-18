@@ -33,9 +33,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({
-        TR_3S_1SC_2F_1AC_2P_Test.class,
-        TR_7S_1SC_3F_1AC_3P_Test.class
-})
+@SuiteClasses({ TR_3S_1SC_2F_1AC_2P_Test.class, TR_7S_1SC_3F_1AC_3P_Test.class })
 
-public class TR_Tests {}
+public class TR_Tests {
+}

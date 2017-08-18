@@ -33,62 +33,60 @@ import de.uni_kl.cs.disco.numbers.Num;
 
 /**
  * 
- * Interface for piecewise affine curves,
- * including convenience functions used by Disco's implementation DNC operations.
- * I.e., in addition to its defining linear segments,
- * curves may be ascribed as (compositions of) rate-latency and token-bucket functions.
+ * Interface for piecewise affine curves, including convenience functions used
+ * by Disco's implementation DNC operations. I.e., in addition to its defining
+ * linear segments, curves may be ascribed as (compositions of) rate-latency and
+ * token-bucket functions.
  * 
  */
 public interface CurvePwAffine extends Curve {
-    @Override
-    CurvePwAffine copy();
+	@Override
+	CurvePwAffine copy();
 
-    @Override
-    void copy(Curve curve);
+	@Override
+	void copy(Curve curve);
 
-    // Curve properties
-    boolean isConvex();
+	// Curve properties
+	boolean isConvex();
 
-    boolean isConcave();
+	boolean isConcave();
 
-    boolean isAlmostConcave();
+	boolean isAlmostConcave();
 
-    // Curve function values
-    Num getUltAffineRate();
+	// Curve function values
+	Num getUltAffineRate();
 
-    
-    // // Specific piecewise affine curve shapes
-    
-    // (Composition of) Rate latency
-    boolean getRL_property();
-    
-    void setRL_Property(boolean is_rate_latency);
+	// // Specific piecewise affine curve shapes
 
-    void setRL_MetaInfo(boolean has_rl_meta_info);
+	// (Composition of) Rate latency
+	boolean getRL_property();
 
-    int getRL_ComponentCount();
+	void setRL_Property(boolean is_rate_latency);
 
-    CurvePwAffine getRL_Component(int i);
+	void setRL_MetaInfo(boolean has_rl_meta_info);
 
-    List<CurvePwAffine> getRL_Components();
+	int getRL_ComponentCount();
 
-    void setRL_Components(List<CurvePwAffine> rate_latencies);
+	CurvePwAffine getRL_Component(int i);
 
-    
-    // (Composition of) Token bucket
-    boolean getTB_Property();
-    
-    void setTB_Property(boolean is_token_bucket);
+	List<CurvePwAffine> getRL_Components();
 
-    void setTB_MetaInfo(boolean has_tb_meta_info);
+	void setRL_Components(List<CurvePwAffine> rate_latencies);
 
-    Num getTB_Burst();
-    
-    int getTB_ComponentCount();
+	// (Composition of) Token bucket
+	boolean getTB_Property();
 
-    List<CurvePwAffine> getTB_Components();
+	void setTB_Property(boolean is_token_bucket);
 
-    CurvePwAffine getTB_Component(int i);
+	void setTB_MetaInfo(boolean has_tb_meta_info);
 
-    void setTB_Components(List<CurvePwAffine> token_buckets);
+	Num getTB_Burst();
+
+	int getTB_ComponentCount();
+
+	List<CurvePwAffine> getTB_Components();
+
+	CurvePwAffine getTB_Component(int i);
+
+	void setTB_Components(List<CurvePwAffine> token_buckets);
 }

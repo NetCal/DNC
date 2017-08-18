@@ -36,213 +36,217 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 
 /**
  * Class representing linear segments of a curve. A linear segments starts at
- * point (<code>x0</code>, <code>y0</code>) and continues to the right
- * with slope <code>grad</code>. If <code>leftopen</code> is
- * <code>true</code>, the point (<code>x0</code>,<code>y0</code>) is
- * excluded from the segment, otherwise is is included.
+ * point (<code>x0</code>, <code>y0</code>) and continues to the right with
+ * slope <code>grad</code>. If <code>leftopen</code> is <code>true</code>, the
+ * point (<code>x0</code>,<code>y0</code>) is excluded from the segment,
+ * otherwise is is included.
  * 
  */
 public class LinearSegment_DNC implements LinearSegment {
-    /**
-     * The x-coordinate of the linear segment's starting point.
-     */
-    protected Num x;
+	/**
+	 * The x-coordinate of the linear segment's starting point.
+	 */
+	protected Num x;
 
-    /**
-     * The y-coordinate of the linear segment's starting point.
-     */
-    protected Num y;
+	/**
+	 * The y-coordinate of the linear segment's starting point.
+	 */
+	protected Num y;
 
-    /**
-     * The gradient of the linear segment
-     */
-    protected Num grad;
+	/**
+	 * The gradient of the linear segment
+	 */
+	protected Num grad;
 
-    /**
-     * Whether the point (<code>x0</code>, <code>y0</code>) is part of the segment or not.
-     */
-    protected boolean leftopen;
+	/**
+	 * Whether the point (<code>x0</code>, <code>y0</code>) is part of the segment
+	 * or not.
+	 */
+	protected boolean leftopen;
 
+	// --------------------------------------------------------------------------------------------------------------
+	// Constructors
+	// --------------------------------------------------------------------------------------------------------------
+	/**
+	 * The default constructor.
+	 */
+	protected LinearSegment_DNC() {
+		x = NumFactory.getNumFactory().createZero();
+		y = NumFactory.getNumFactory().createZero();
+		grad = NumFactory.getNumFactory().createZero();
+		leftopen = false;
+	}
 
-//--------------------------------------------------------------------------------------------------------------
-// Constructors
-//--------------------------------------------------------------------------------------------------------------
-    /**
-     * The default constructor.
-     */
-    protected LinearSegment_DNC() {
-        x = NumFactory.getNumFactory().createZero();
-        y = NumFactory.getNumFactory().createZero();
-        grad = NumFactory.getNumFactory().createZero();
-        leftopen = false;
-    }
+	/**
+	 * A convenient constructor.
+	 *
+	 * @param x
+	 *            The x-coordinate this segments starts at.
+	 * @param y
+	 *            The y-coordinate this segments starts at.
+	 * @param grad
+	 *            The segments gradient.
+	 * @param leftopen
+	 *            Set the segment to be left-open.
+	 */
+	public LinearSegment_DNC(Num x, Num y, Num grad, boolean leftopen) {
+		this.x = x;
+		this.y = y;
+		this.grad = grad;
+		this.leftopen = leftopen;
+	}
 
-    /**
-     * A convenient constructor.
-     *
-     * @param x        The x-coordinate this segments starts at.
-     * @param y        The y-coordinate this segments starts at.
-     * @param grad     The segments gradient.
-     * @param leftopen Set the segment to be left-open.
-     */
-    public LinearSegment_DNC(Num x, Num y, Num grad, boolean leftopen) {
-        this.x = x;
-        this.y = y;
-        this.grad = grad;
-        this.leftopen = leftopen;
-    }
+	public LinearSegment_DNC(LinearSegment segment) {
+		x = segment.getX();
+		y = segment.getY();
+		grad = segment.getGrad();
+		leftopen = segment.isLeftopen();
+	}
 
-    public LinearSegment_DNC(LinearSegment segment) {
-        x = segment.getX();
-        y = segment.getY();
-        grad = segment.getGrad();
-        leftopen = segment.isLeftopen();
-    }
+	public LinearSegment_DNC(String segment_str) throws Exception {
+		// Is this segment left-open?
+		leftopen = false;
+		switch (segment_str.charAt(0)) {
+		case '!':
+			leftopen = true;
+			segment_str = segment_str.substring(1);
+			break;
+		case '(':
+			// Formatting seems to be ok (for now at least)
+			break;
+		default:
+			throw new RuntimeException("Invalid string representation of a linear segment.");
+		}
 
-    public LinearSegment_DNC(String segment_str) throws Exception {
-        // Is this segment left-open?
-        leftopen = false;
-        switch (segment_str.charAt(0)) {
-            case '!':
-                leftopen = true;
-                segment_str = segment_str.substring(1);
-                break;
-            case '(':
-                // Formatting seems to be ok (for now at least)
-                break;
-            default:
-                throw new RuntimeException("Invalid string representation of a linear segment.");
-        }
+		// Remove the bracket at the front
+		segment_str = segment_str.substring(1);
 
-        // Remove the bracket at the front
-        segment_str = segment_str.substring(1);
+		String[] xy_r = segment_str.split("\\),"); // ["x,y","grad"]
+		if (xy_r.length != 2) {
+			throw new RuntimeException("Invalid string representation of a linear segment.");
+		}
 
-        String[] xy_r = segment_str.split("\\),"); // ["x,y","grad"]
-        if (xy_r.length != 2) {
-            throw new RuntimeException("Invalid string representation of a linear segment.");
-        }
+		String[] x_y = xy_r[0].split(",");
+		if (x_y.length != 2) {
+			throw new RuntimeException("Invalid string representation of a linear segment.");
+		}
 
-        String[] x_y = xy_r[0].split(",");
-        if (x_y.length != 2) {
-            throw new RuntimeException("Invalid string representation of a linear segment.");
-        }
+		x = NumFactory.getNumFactory().create(x_y[0]);
+		y = NumFactory.getNumFactory().create(x_y[1]);
+		grad = NumFactory.getNumFactory().create(xy_r[1]);
+	}
 
-        x = NumFactory.getNumFactory().create(x_y[0]);
-        y = NumFactory.getNumFactory().create(x_y[1]);
-        grad = NumFactory.getNumFactory().create(xy_r[1]);
-    }
+	// --------------------------------------------------------------------------------------------------------------
+	// Interface Implementations
+	// --------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the function value of this linear segment at the given x-coordinate.
+	 * Note that there is no test whether the function is defined at this location,
+	 * but simply returns the the value of the co-linear line.
+	 *
+	 * @param x
+	 *            the coordinate whose function value shall be returned
+	 * @return the function value
+	 */
+	public Num f(Num x) {
+		return NumUtils.getNumUtils().add(NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(x, this.x), grad), y);
+	}
 
+	public Num getX() {
+		return x.copy();
+	}
 
-//--------------------------------------------------------------------------------------------------------------
-// Interface Implementations
-//--------------------------------------------------------------------------------------------------------------
-    /**
-     * Returns the function value of this linear segment at the given
-     * x-coordinate. Note that there is no test whether the function is defined
-     * at this location, but simply returns the the value of the co-linear line.
-     *
-     * @param x the coordinate whose function value shall be returned
-     * @return the function value
-     */
-    public Num f(Num x) {
-        return NumUtils.getNumUtils().add(NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(x, this.x), grad), y);
-    }
+	public void setX(Num x) {
+		this.x = x.copy();
+	}
 
-    public Num getX() {
-        return x.copy();
-    }
+	public Num getY() {
+		return y.copy();
+	}
 
-    public void setX(Num x) {
-        this.x = x.copy();
-    }
+	public void setY(Num y) {
+		this.y = y.copy();
+	}
 
-    public Num getY() {
-        return y.copy();
-    }
+	public Num getGrad() {
+		return grad.copy();
+	}
 
-    public void setY(Num y) {
-        this.y = y.copy();
-    }
+	public void setGrad(Num grad) {
+		this.grad = grad.copy();
+	}
 
-    public Num getGrad() {
-        return grad.copy();
-    }
+	public boolean isLeftopen() {
+		return leftopen;
+	}
 
-    public void setGrad(Num grad) {
-        this.grad = grad.copy();
-    }
+	public void setLeftopen(boolean leftopen) {
+		this.leftopen = leftopen;
+	}
 
-    public boolean isLeftopen() {
-        return leftopen;
-    }
+	/**
+	 * Returns the x-coordinate at which a co-linear line through this segment
+	 * intersects a co-linear line through the segment <code>other</code>.
+	 *
+	 * @param other
+	 *            the other segment
+	 * @return the x-coordinate at which the segments cross or NaN of they are
+	 *         parallel
+	 */
+	public Num getXIntersectionWith(LinearSegment other) {
+		Num y1 = NumUtils.getNumUtils().sub(this.y, NumUtils.getNumUtils().mult(x, this.grad));
+		Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
 
-    public void setLeftopen(boolean leftopen) {
-        this.leftopen = leftopen;
-    }
+		// returns NaN if lines are parallel
+		return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1),
+				NumUtils.getNumUtils().sub(this.grad, other.getGrad()));
+	}
 
-    /**
-     * Returns the x-coordinate at which a co-linear line through this segment
-     * intersects a co-linear line through the segment <code>other</code>.
-     *
-     * @param other the other segment
-     * @return the x-coordinate at which the segments cross or NaN of they are parallel
-     */
-    public Num getXIntersectionWith(LinearSegment other) {
-        Num y1 = NumUtils.getNumUtils().sub(this.y, NumUtils.getNumUtils().mult(x, this.grad));
-        Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
+	/**
+	 * Returns a copy of this instance.
+	 *
+	 * @return a copy of this instance.
+	 */
+	@Override
+	public LinearSegment_DNC copy() {
+		LinearSegment_DNC copy = new LinearSegment_DNC(x.copy(), y.copy(), grad.copy(), leftopen);
+		return copy;
+	}
 
-        // returns NaN if lines are parallel
-        return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1), NumUtils.getNumUtils().sub(this.grad, other.getGrad()));
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof LinearSegment_DNC)) {
+			return false;
+		}
 
-    /**
-     * Returns a copy of this instance.
-     *
-     * @return a copy of this instance.
-     */
-    @Override
-    public LinearSegment_DNC copy() {
-        LinearSegment_DNC copy = new LinearSegment_DNC(x.copy(), y.copy(), grad.copy(), leftopen);
-        return copy;
-    }
+		LinearSegment_DNC other = (LinearSegment_DNC) obj;
+		boolean result;
+		result = this.x.equals(other.getX());
+		result = result && this.y.equals(other.getY());
+		result = result && this.grad.equals(other.getGrad());
+		result = result && (this.leftopen == other.isLeftopen());
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegment_DNC)) {
-            return false;
-        }
+		return result;
+	}
 
-        LinearSegment_DNC other = (LinearSegment_DNC) obj;
-        boolean result;
-        result = this.x.equals(other.getX());
-        result = result && this.y.equals(other.getY());
-        result = result && this.grad.equals(other.getGrad());
-        result = result && (this.leftopen == other.isLeftopen());
+	@Override
+	public int hashCode() {
+		return x.hashCode() * y.hashCode() * grad.hashCode() * Boolean.hashCode(leftopen);
+	}
 
-        return result;
-    }
+	/**
+	 * Returns a string representation of this linear segment.
+	 *
+	 * @return the linear segment represented as a string.
+	 */
+	@Override
+	public String toString() {
+		String result = "";
+		if (this.leftopen) {
+			result = "!";
+		}
+		result += "(" + x.toString() + "," + y.toString() + ")," + grad.toString();
 
-    @Override
-    public int hashCode() {
-        return x.hashCode() *
-                y.hashCode() *
-                grad.hashCode() *
-                Boolean.hashCode(leftopen);
-    }
-
-    /**
-     * Returns a string representation of this linear segment.
-     *
-     * @return the linear segment represented as a string.
-     */
-    @Override
-    public String toString() {
-        String result = "";
-        if (this.leftopen) {
-            result = "!";
-        }
-        result += "(" + x.toString() + "," + y.toString() + ")," + grad.toString();
-
-        return result;
-    }
+		return result;
+	}
 }

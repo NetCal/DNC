@@ -33,61 +33,59 @@ import de.uni_kl.cs.disco.numbers.Num;
  * Interface for wide-sense increasing, plain curves.
  */
 public interface Curve {
-    Curve copy();
+	Curve copy();
 
-    void copy(Curve curve);
+	void copy(Curve curve);
 
-    // Curve's segments (incl. manipulation)
-    LinearSegment getSegment(int pos);
+	// Curve's segments (incl. manipulation)
+	LinearSegment getSegment(int pos);
 
-    int getSegmentCount();
+	int getSegmentCount();
 
-    int getSegmentDefining(Num x);
+	int getSegmentDefining(Num x);
 
-    void addSegment(LinearSegment s);
+	void addSegment(LinearSegment s);
 
-    void addSegment(int pos, LinearSegment s);
+	void addSegment(int pos, LinearSegment s);
 
-    void removeSegment(int pos);
+	void removeSegment(int pos);
 
+	// Curve properties
+	boolean getDelayedInfiniteBurst_Property();
 
-    // Curve properties
-    boolean getDelayedInfiniteBurst_Property();
-    
-    boolean isDiscontinuity(int pos);
+	boolean isDiscontinuity(int pos);
 
-    boolean isRealDiscontinuity(int pos);
+	boolean isRealDiscontinuity(int pos);
 
-    boolean isUnrealDiscontinuity(int pos);
+	boolean isUnrealDiscontinuity(int pos);
 
-    boolean isWideSenseIncreasing();
+	boolean isWideSenseIncreasing();
 
-    boolean isConcaveIn(Num a, Num b);
+	boolean isConcaveIn(Num a, Num b);
 
-    boolean isConvexIn(Num a, Num b);
+	boolean isConvexIn(Num a, Num b);
 
-    @Override
-    boolean equals(Object obj);
+	@Override
+	boolean equals(Object obj);
 
-    @Override
-    int hashCode();
+	@Override
+	int hashCode();
 
-    @Override
-    String toString();
+	@Override
+	String toString();
 
+	// Curve function values
+	Num f(Num x);
 
-    // Curve function values
-    Num f(Num x);
+	Num fLimitRight(Num x);
 
-    Num fLimitRight(Num x);
+	Num f_inv(Num y);
 
-    Num f_inv(Num y);
+	Num f_inv(Num y, boolean rightmost);
 
-    Num f_inv(Num y, boolean rightmost);
+	Num getLatency();
 
-    Num getLatency();
+	Num getBurst();
 
-    Num getBurst();
-
-    Num getGradientLimitRight(Num x);
+	Num getGradientLimitRight(Num x);
 }

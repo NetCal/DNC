@@ -41,44 +41,44 @@ public interface NumFactory {
 	final Num NaN = new NaN();
 	final Num NEGATIVE_INFINITY = new NegativeInfinity();
 	final Num POSITIVE_INFINITY = new PositiveInfinity();
-	
+
 	public static NumFactory getNumFactory() {
-        switch (CalculatorConfig.getInstance().getNumClass()) {
-            case REAL_SINGLE_PRECISION:
-            		return SinglePrecisionFactory.getInstance();
-            case RATIONAL_INTEGER:
-            		return IntFactory.getInstance();
-            case RATIONAL_BIGINTEGER:
-            		return BigIntFactory.getInstance();
-            case REAL_DOUBLE_PRECISION:
-            default:
-            		return DoublePrecisionFactory.getInstance();
-        }
-    }
-	
-    Num getPositiveInfinity();
+		switch (CalculatorConfig.getInstance().getNumClass()) {
+		case REAL_SINGLE_PRECISION:
+			return SinglePrecisionFactory.getInstance();
+		case RATIONAL_INTEGER:
+			return IntFactory.getInstance();
+		case RATIONAL_BIGINTEGER:
+			return BigIntFactory.getInstance();
+		case REAL_DOUBLE_PRECISION:
+		default:
+			return DoublePrecisionFactory.getInstance();
+		}
+	}
 
-    Num createPositiveInfinity();
+	Num getPositiveInfinity();
 
-    Num getNegativeInfinity();
+	Num createPositiveInfinity();
 
-    Num createNegativeInfinity();
+	Num getNegativeInfinity();
 
-    Num getNaN();
+	Num createNegativeInfinity();
 
-    Num createNaN();
+	Num getNaN();
 
-    Num getZero();
+	Num createNaN();
 
-    Num createZero();
+	Num getZero();
 
-    Num getEpsilon();
+	Num createZero();
 
-    Num createEpsilon();
+	Num getEpsilon();
 
-    Num create(double value);
+	Num createEpsilon();
 
-    Num create(int num, int den);
+	Num create(double value);
 
-    Num create(String num_str) throws Exception;
+	Num create(int num, int den);
+
+	Num create(String num_str) throws Exception;
 }

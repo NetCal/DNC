@@ -37,120 +37,119 @@ public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
 
 	private ch.ethz.rtc.kernel.Segment rtc_segment;
 
-	
-//--------------------------------------------------------------------------------------------------------------
-// Constructors
-//--------------------------------------------------------------------------------------------------------------
-    public LinearSegment_MPARTC_PwAffine(double x, double y, double s) {
-        rtc_segment = new Segment(x, y, s);
-    }
+	// --------------------------------------------------------------------------------------------------------------
+	// Constructors
+	// --------------------------------------------------------------------------------------------------------------
+	public LinearSegment_MPARTC_PwAffine(double x, double y, double s) {
+		rtc_segment = new Segment(x, y, s);
+	}
 
-    public LinearSegment_MPARTC_PwAffine(LinearSegment segment) {
-        if (segment instanceof LinearSegment_MPARTC_PwAffine) {
-            rtc_segment = ((LinearSegment_MPARTC_PwAffine) segment).rtc_segment.clone();
-        } else {
-            rtc_segment = new Segment(segment.getX().doubleValue(),
-                    segment.getY().doubleValue(),
-                    segment.getGrad().doubleValue());
-        }
-    }
+	public LinearSegment_MPARTC_PwAffine(LinearSegment segment) {
+		if (segment instanceof LinearSegment_MPARTC_PwAffine) {
+			rtc_segment = ((LinearSegment_MPARTC_PwAffine) segment).rtc_segment.clone();
+		} else {
+			rtc_segment = new Segment(segment.getX().doubleValue(), segment.getY().doubleValue(),
+					segment.getGrad().doubleValue());
+		}
+	}
 
-    public LinearSegment_MPARTC_PwAffine(Segment segment) {
-        rtc_segment = segment.clone();
-    }
+	public LinearSegment_MPARTC_PwAffine(Segment segment) {
+		rtc_segment = segment.clone();
+	}
 
-    public LinearSegment_MPARTC_PwAffine(String segment_str) {
-        rtc_segment = new Segment(segment_str);
-    }
+	public LinearSegment_MPARTC_PwAffine(String segment_str) {
+		rtc_segment = new Segment(segment_str);
+	}
 
-    // Setter in order to prevent copy bug
-    protected void setRtc_segment(Segment rtc_segment) {
-        this.rtc_segment = rtc_segment;
-    }
+	// Setter in order to prevent copy bug
+	protected void setRtc_segment(Segment rtc_segment) {
+		this.rtc_segment = rtc_segment;
+	}
 
-    
-//--------------------------------------------------------------------------------------------------------------
-// Interface Implementations
-//--------------------------------------------------------------------------------------------------------------
-    public Num f(Num x) {
-        return NumFactory.getNumFactory().create(rtc_segment.yAt(x.doubleValue()));
-    }
+	// --------------------------------------------------------------------------------------------------------------
+	// Interface Implementations
+	// --------------------------------------------------------------------------------------------------------------
+	public Num f(Num x) {
+		return NumFactory.getNumFactory().create(rtc_segment.yAt(x.doubleValue()));
+	}
 
-    public Num getX() {
-        return NumFactory.getNumFactory().create(rtc_segment.x());
-    }
+	public Num getX() {
+		return NumFactory.getNumFactory().create(rtc_segment.x());
+	}
 
-    public void setX(double x) {
-        rtc_segment.setX(x);
-    }
+	public void setX(double x) {
+		rtc_segment.setX(x);
+	}
 
-    public void setX(Num x) {
-        rtc_segment.setX(x.doubleValue());
-    }
+	public void setX(Num x) {
+		rtc_segment.setX(x.doubleValue());
+	}
 
-    public Num getY() {
-        return NumFactory.getNumFactory().create(rtc_segment.y());
-    }
+	public Num getY() {
+		return NumFactory.getNumFactory().create(rtc_segment.y());
+	}
 
-    public void setY(double y) {
-        rtc_segment.setY(y);
-    }
+	public void setY(double y) {
+		rtc_segment.setY(y);
+	}
 
-    public void setY(Num y) {
-        rtc_segment.setY(y.doubleValue());
-    }
+	public void setY(Num y) {
+		rtc_segment.setY(y.doubleValue());
+	}
 
-    public Num getGrad() {
-        return NumFactory.getNumFactory().create(rtc_segment.s());
-    }
+	public Num getGrad() {
+		return NumFactory.getNumFactory().create(rtc_segment.s());
+	}
 
-    public void setGrad(Num grad) {
-        rtc_segment.setS(grad.doubleValue());
-    }
+	public void setGrad(Num grad) {
+		rtc_segment.setS(grad.doubleValue());
+	}
 
-    /**
-     * MPA RTC implementation does not allow for user defined continuity.
-     * Left-continuity is assumed by default. 
-     */
-    public boolean isLeftopen() {
-        return true;
-    }
+	/**
+	 * MPA RTC implementation does not allow for user defined continuity.
+	 * Left-continuity is assumed by default.
+	 */
+	public boolean isLeftopen() {
+		return true;
+	}
 
-    /**
-     * MPA RTC implementation does not allow for user defined continuity.
-     * Left-continuity is assumed by default. 
-     */
-    public void setLeftopen(boolean leftopen) {}
+	/**
+	 * MPA RTC implementation does not allow for user defined continuity.
+	 * Left-continuity is assumed by default.
+	 */
+	public void setLeftopen(boolean leftopen) {
+	}
 
-    public Num getXIntersectionWith(LinearSegment other) {
-        Num y1 = NumFactory.getNumFactory().create(rtc_segment.y() - (rtc_segment.x() * rtc_segment.s()));
-        Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
+	public Num getXIntersectionWith(LinearSegment other) {
+		Num y1 = NumFactory.getNumFactory().create(rtc_segment.y() - (rtc_segment.x() * rtc_segment.s()));
+		Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
 
-        // returns NaN if lines are parallel
-        return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1), NumUtils.getNumUtils().sub(this.getGrad(), other.getGrad()));
-    }
+		// returns NaN if lines are parallel
+		return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1),
+				NumUtils.getNumUtils().sub(this.getGrad(), other.getGrad()));
+	}
 
-    @Override
-    public LinearSegment copy() {
-        return new LinearSegment_MPARTC_PwAffine(rtc_segment);
-    }
+	@Override
+	public LinearSegment copy() {
+		return new LinearSegment_MPARTC_PwAffine(rtc_segment);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
-            return false;
-        }
-        // TODO Findbugs: EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS
-        return rtc_segment.equals(obj);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
+			return false;
+		}
+		// TODO Findbugs: EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS
+		return rtc_segment.equals(obj);
+	}
 
-    @Override
-    public String toString() {
-        return rtc_segment.toString();
-    }
+	@Override
+	public String toString() {
+		return rtc_segment.toString();
+	}
 
-    @Override
-    public int hashCode() {
-        return rtc_segment.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return rtc_segment.hashCode();
+	}
 }

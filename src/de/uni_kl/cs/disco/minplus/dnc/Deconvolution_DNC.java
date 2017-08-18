@@ -42,339 +42,371 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public abstract class Deconvolution_DNC {
-	
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
-        // null and empty checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curves, service_curve, false);
-    }
 
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve, boolean tb_rl_optimized) {
-        Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
-        switch (MinPlusInputChecks.inputNullCheck(arrival_curves, service_curve)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
-                return results;
-            case 2:
-                results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
-                return results;
-            default:
-        }
-        if (arrival_curves.isEmpty()) {
-            results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
-            return results;
-        }
+	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
+		// null and empty checks will be done by deconvolve( ... )
+		return deconvolve(arrival_curves, service_curve, false);
+	}
 
-        for (ArrivalCurve alpha : arrival_curves) {
-            results.add(deconvolve(alpha, service_curve, tb_rl_optimized));
-        }
+	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
+			boolean tb_rl_optimized) {
+		Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
+		switch (MinPlusInputChecks.inputNullCheck(arrival_curves, service_curve)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			return results;
+		case 2:
+			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			return results;
+		default:
+		}
+		if (arrival_curves.isEmpty()) {
+			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			return results;
+		}
 
-        return results;
-    }
+		for (ArrivalCurve alpha : arrival_curves) {
+			results.add(deconvolve(alpha, service_curve, tb_rl_optimized));
+		}
 
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves) {
-        // null and empty checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curves, service_curves, false);
-    }
+		return results;
+	}
 
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves, boolean tb_rl_optimized) {
-        Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
+	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves) {
+		// null and empty checks will be done by deconvolve( ... )
+		return deconvolve(arrival_curves, service_curves, false);
+	}
 
-        switch (MinPlusInputChecks.inputNullCheck(arrival_curves, service_curves)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
-                return results;
-            case 2:
-                results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
-                return results;
-            default:
-        }
-        switch (MinPlusInputChecks.inputEmptySetCheck(arrival_curves, service_curves)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
-                return results;
-            case 2:
-                results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
-                return results;
-            default:
-        }
+	public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves,
+			boolean tb_rl_optimized) {
+		Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        for (ServiceCurve beta : service_curves) {
-            for (ArrivalCurve alpha : arrival_curves) {
-                results.add(deconvolve(alpha, beta, tb_rl_optimized));
-            }
-        }
+		switch (MinPlusInputChecks.inputNullCheck(arrival_curves, service_curves)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			return results;
+		case 2:
+			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			return results;
+		default:
+		}
+		switch (MinPlusInputChecks.inputEmptySetCheck(arrival_curves, service_curves)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			return results;
+		case 2:
+			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			return results;
+		default:
+		}
 
-        return results;
-    }
+		for (ServiceCurve beta : service_curves) {
+			for (ArrivalCurve alpha : arrival_curves) {
+				results.add(deconvolve(alpha, beta, tb_rl_optimized));
+			}
+		}
 
-    public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        // null checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curve, service_curve, false);
-    }
+		return results;
+	}
 
-    public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve, boolean tb_rl_optimized) {
-        switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                return CurvePwAffineFactoryDispatch.createZeroArrivals();
-            case 2:
-                return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
-            default:
-        }
+	public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+		// null checks will be done by deconvolve( ... )
+		return deconvolve(arrival_curve, service_curve, false);
+	}
 
-        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())
-                || (service_curve.getDelayedInfiniteBurst_Property() && service_curve.getLatency().doubleValue() == 0.0)
-                || (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals()))) {
-            return arrival_curve.copy();
-        }
-        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
-                || service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
-                || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
-            return CurvePwAffineFactoryDispatch.createZeroArrivals();
-        }
-        if (tb_rl_optimized) {
-            return deconvolveTB_RL(arrival_curve, service_curve);
-        } else {
-            return deconvolve_mTB_mRL(arrival_curve, service_curve);
-        }
-    }
+	public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
+			boolean tb_rl_optimized) {
+		switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+		case 2:
+			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		default:
+		}
 
-    public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves, Set<ServiceCurve> service_curves) {
-        Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
+		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())
+				|| (service_curve.getDelayedInfiniteBurst_Property() && service_curve.getLatency().doubleValue() == 0.0)
+				|| (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals()))) {
+			return arrival_curve.copy();
+		}
+		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
+				|| service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
+				|| (service_curve.getUltAffineRate().eqZero()
+						&& service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
+			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+		}
+		if (tb_rl_optimized) {
+			return deconvolveTB_RL(arrival_curve, service_curve);
+		} else {
+			return deconvolve_mTB_mRL(arrival_curve, service_curve);
+		}
+	}
 
-        switch (MinPlusInputChecks.inputNullCheck(curves, service_curves)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
-                return results;
-            case 2:
-                results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
-                return results;
-            default:
-        }
-        switch (MinPlusInputChecks.inputEmptySetCheck(curves, service_curves)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
-                return results;
-            case 2:
-                results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
-                return results;
-            default:
-        }
+	public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves,
+			Set<ServiceCurve> service_curves) {
+		Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        Num latency;
-        for (ServiceCurve sc : service_curves) {
-            for (CurvePwAffine pwa_c : curves) {
-                latency = pwa_c.getLatency();
-                results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.shiftRight(deconvolve_mTB_mRL(CurvePwAffineUtilsDispatch.shiftLeftClipping( pwa_c, latency ), sc), latency)));
-            }
-        }
+		switch (MinPlusInputChecks.inputNullCheck(curves, service_curves)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			return results;
+		case 2:
+			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			return results;
+		default:
+		}
+		switch (MinPlusInputChecks.inputEmptySetCheck(curves, service_curves)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			results.add(CurvePwAffineFactoryDispatch.createZeroArrivals());
+			return results;
+		case 2:
+			results.add((ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst());
+			return results;
+		default:
+		}
 
-        return results;
-    }
+		Num latency;
+		for (ServiceCurve sc : service_curves) {
+			for (CurvePwAffine pwa_c : curves) {
+				latency = pwa_c.getLatency();
+				results.add(CurvePwAffineFactoryDispatch.createArrivalCurve(CurvePwAffineUtilsDispatch.shiftRight(
+						deconvolve_mTB_mRL(CurvePwAffineUtilsDispatch.shiftLeftClipping(pwa_c, latency), sc),
+						latency)));
+			}
+		}
 
-    private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                return CurvePwAffineFactoryDispatch.createZeroArrivals();
-            case 2:
-                return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
-            default:
-        }
+		return results;
+	}
 
-        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
-            return arrival_curve.copy();
-        }
-        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
-                || service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
-                || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
-            return CurvePwAffineFactoryDispatch.createZeroArrivals();
-        }
+	private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+		switch (MinPlusInputChecks.inputNullCheck(arrival_curve, service_curve)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+		case 2:
+			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		default:
+		}
 
-        // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
-        return CurvePwAffineFactoryDispatch.createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
-                arrival_curve.getTB_Burst().doubleValue() + arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
-    }
+		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
+			return arrival_curve.copy();
+		}
+		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService())
+				|| service_curve.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
+				|| (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
+			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+		}
 
-    /**
-     * Returns the deconvolution of an (almost) concave arrival curve and
-     * a convex service curve.
-     *
-     * @param curve_1 The (almost) concave arrival curve.
-     * @param curve_2 The convex service curve.
-     * @return The deconvolved curve, an arrival curve.
-     */
-    private static ArrivalCurve deconvolve_mTB_mRL(CurvePwAffine curve_1, CurvePwAffine curve_2) {
-//		if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-        switch (MinPlusInputChecks.inputNullCheck(curve_1, curve_2)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                return CurvePwAffineFactoryDispatch.createZeroArrivals();
-            case 2:
-                return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
-            default:
-        }
-//		}
+		// Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
+		return CurvePwAffineFactoryDispatch.createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
+				arrival_curve.getTB_Burst().doubleValue()
+						+ arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
+	}
 
-        if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
-            return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
-        }
-        if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
-            return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) curve_1);
-        }
-        if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroService())
-                || curve_2.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
-                || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
-            return CurvePwAffineFactoryDispatch.createZeroArrivals();
-        }
-        if (CalculatorConfig.getInstance().exec_deconvolution_checks()) {
-            if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
-                throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
-            }
-            if (!((CurvePwAffine) curve_2).isConvex()) {
-                throw new IllegalArgumentException("Service curve of deconvolution must be convex.");
-            }
-        }
+	/**
+	 * Returns the deconvolution of an (almost) concave arrival curve and a convex
+	 * service curve.
+	 *
+	 * @param curve_1
+	 *            The (almost) concave arrival curve.
+	 * @param curve_2
+	 *            The convex service curve.
+	 * @return The deconvolved curve, an arrival curve.
+	 */
+	private static ArrivalCurve deconvolve_mTB_mRL(CurvePwAffine curve_1, CurvePwAffine curve_2) {
+		// if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
+		switch (MinPlusInputChecks.inputNullCheck(curve_1, curve_2)) {
+		case 0:
+			break;
+		case 1:
+		case 3:
+			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+		case 2:
+			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		default:
+		}
+		// }
 
-        // The arrival curve itself is in the candidates set.
-        Set<Curve> result_candidates = new HashSet<Curve>(Collections.singleton(curve_1.copy()));
+		if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
+			return (ArrivalCurve) CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst();
+		}
+		if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroDelayInfiniteBurst())) {
+			return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) curve_1);
+		}
+		if (curve_2.equals(CurvePwAffineFactoryDispatch.createZeroService())
+				|| curve_2.getLatency().equals(NumFactory.getNumFactory().getPositiveInfinity())
+				|| (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
+			return CurvePwAffineFactoryDispatch.createZeroArrivals();
+		}
+		if (CalculatorConfig.getInstance().exec_deconvolution_checks()) {
+			if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
+				throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
+			}
+			if (!((CurvePwAffine) curve_2).isConvex()) {
+				throw new IllegalArgumentException("Service curve of deconvolution must be convex.");
+			}
+		}
 
-        // Candidates resulting from the service curve's inflection points (curve_2).
-        // It's simply the vertical deviation at the inflection point followed by the arrival curve's segments (lowered by beta(inflection)).
-        Curve candidate_tmp;
-        Num x_inflect_beta, y_beta, y_alpha;
-        for (int i = 1; i < curve_2.getSegmentCount(); i++) { // Start at 1 to skip the arrival curve itself (see above):
+		// The arrival curve itself is in the candidates set.
+		Set<Curve> result_candidates = new HashSet<Curve>(Collections.singleton(curve_1.copy()));
 
-            x_inflect_beta = curve_2.getSegment(i).getX();
-            candidate_tmp = CurvePwAffineUtilsDispatch.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
+		// Candidates resulting from the service curve's inflection points (curve_2).
+		// It's simply the vertical deviation at the inflection point followed by the
+		// arrival curve's segments (lowered by beta(inflection)).
+		Curve candidate_tmp;
+		Num x_inflect_beta, y_beta, y_alpha;
+		for (int i = 1; i < curve_2.getSegmentCount(); i++) { // Start at 1 to skip the arrival curve itself (see
+																// above):
 
-            y_beta = curve_2.f(x_inflect_beta);
-            if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
-                for (int j = 0; j < candidate_tmp.getSegmentCount(); j++) {
-                    LinearSegment lin_seg = candidate_tmp.getSegment(j);
-                    y_alpha = lin_seg.getY();
-                    candidate_tmp.getSegment(j).setY(NumUtils.getNumUtils().sub(y_alpha, y_beta));
-                }
-            }
-            result_candidates.add(candidate_tmp);
-        }
+			x_inflect_beta = curve_2.getSegment(i).getX();
+			candidate_tmp = CurvePwAffineUtilsDispatch.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
 
-        // Candidates resulting from the arrival curve's inflection points (curve_1)
-        // Take the vertical deviation at the alpha inflection point as burstiness,
-        // then go over the beta inflection points smaller than the alpha inflection point in reverse order
-        // and add a linear segment that resembeles the beta's one
-        // (The first one might be cut off by the alpha inflection point).
-        Num x_inflect_alpha, results_cand_burst;
+			y_beta = curve_2.f(x_inflect_beta);
+			if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
+				for (int j = 0; j < candidate_tmp.getSegmentCount(); j++) {
+					LinearSegment lin_seg = candidate_tmp.getSegment(j);
+					y_alpha = lin_seg.getY();
+					candidate_tmp.getSegment(j).setY(NumUtils.getNumUtils().sub(y_alpha, y_beta));
+				}
+			}
+			result_candidates.add(candidate_tmp);
+		}
 
-        for (int i = curve_1.getSegmentCount() - 1; i >= 0; i--) {
-            x_inflect_alpha = curve_1.getSegment(i).getX();
-            y_alpha = curve_1.f(x_inflect_alpha);
-            y_beta = curve_2.f(x_inflect_alpha);
-            results_cand_burst = NumUtils.getNumUtils().sub(y_alpha, y_beta);
+		// Candidates resulting from the arrival curve's inflection points (curve_1)
+		// Take the vertical deviation at the alpha inflection point as burstiness,
+		// then go over the beta inflection points smaller than the alpha inflection
+		// point in reverse order
+		// and add a linear segment that resembeles the beta's one
+		// (The first one might be cut off by the alpha inflection point).
+		Num x_inflect_alpha, results_cand_burst;
 
-            if (x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero curve.
-                    || results_cand_burst.ltZero()) { // At the inflection point, the service curve is larger than the arrival curve.
-                continue;
-            }
+		for (int i = curve_1.getSegmentCount() - 1; i >= 0; i--) {
+			x_inflect_alpha = curve_1.getSegment(i).getX();
+			y_alpha = curve_1.f(x_inflect_alpha);
+			y_beta = curve_2.f(x_inflect_alpha);
+			results_cand_burst = NumUtils.getNumUtils().sub(y_alpha, y_beta);
 
-            // Found a valid inflection point of the arrival curve.
-            // => Start constructing the candidate based on the service curve's first inflection points.
-            for (int j = curve_2.getSegmentCount() - 1; j >= 0; j--) {
-                x_inflect_beta = curve_2.getSegment(j).getX();
-                if (x_inflect_beta.gt(x_inflect_alpha)) {
-                    continue;
-                }
+			if (x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero
+											// curve.
+					|| results_cand_burst.ltZero()) { // At the inflection point, the service curve is larger than the
+														// arrival curve.
+				continue;
+			}
 
-                // Found the first inflection point of beta to work with,
-                // i.e., we now know the resulting curve's amount of segments:
-                // The origin, j+1 segments (we start counting j at 0), and a horizontal line at the end.
+			// Found a valid inflection point of the arrival curve.
+			// => Start constructing the candidate based on the service curve's first
+			// inflection points.
+			for (int j = curve_2.getSegmentCount() - 1; j >= 0; j--) {
+				x_inflect_beta = curve_2.getSegment(j).getX();
+				if (x_inflect_beta.gt(x_inflect_alpha)) {
+					continue;
+				}
 
-                int segment_count = j + 3; // At least 2 (the origin and and a burst followed by rate 0)
-                candidate_tmp = CurvePwAffineFactoryDispatch.createArrivalCurve(segment_count);    // Consists of zero segments (x,y),r = (0,0),0 only.
-                // The origin (first segment, id 0) stays as is, the remainder needs to be constructed.
-                // Compute the second segment
-                Num next_x_coord = NumFactory.getNumFactory().createZero();
-                Num next_y_coord = results_cand_burst;
+				// Found the first inflection point of beta to work with,
+				// i.e., we now know the resulting curve's amount of segments:
+				// The origin, j+1 segments (we start counting j at 0), and a horizontal line at
+				// the end.
 
-                LinearSegment current_candidate_segment = candidate_tmp.getSegment(1);
-                LinearSegment current_beta_segment = curve_2.getSegment(j);
+				int segment_count = j + 3; // At least 2 (the origin and and a burst followed by rate 0)
+				candidate_tmp = CurvePwAffineFactoryDispatch.createArrivalCurve(segment_count); // Consists of zero
+																								// segments (x,y),r =
+																								// (0,0),0 only.
+				// The origin (first segment, id 0) stays as is, the remainder needs to be
+				// constructed.
+				// Compute the second segment
+				Num next_x_coord = NumFactory.getNumFactory().createZero();
+				Num next_y_coord = results_cand_burst;
 
-                current_candidate_segment.setX(next_x_coord);
-                current_candidate_segment.setY(next_y_coord);
-                current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
+				LinearSegment current_candidate_segment = candidate_tmp.getSegment(1);
+				LinearSegment current_beta_segment = curve_2.getSegment(j);
 
-                // The length of this segment is defined by the following one's y-coordinate:
-                next_x_coord = NumUtils.getNumUtils().sub(x_inflect_alpha, x_inflect_beta);
-                next_y_coord = NumUtils.getNumUtils().add(results_cand_burst, NumUtils.getNumUtils().mult(next_x_coord, current_beta_segment.getGrad()));
+				current_candidate_segment.setX(next_x_coord);
+				current_candidate_segment.setY(next_y_coord);
+				current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
-                LinearSegment prev_beta_segment;
-                Num current_segment_length;
+				// The length of this segment is defined by the following one's y-coordinate:
+				next_x_coord = NumUtils.getNumUtils().sub(x_inflect_alpha, x_inflect_beta);
+				next_y_coord = NumUtils.getNumUtils().add(results_cand_burst,
+						NumUtils.getNumUtils().mult(next_x_coord, current_beta_segment.getGrad()));
 
-                // The remaining service curve segments in reverse order
-                int j_new = j; // Alpha's inflection point is above beta's segment j. Now we need to continue decreasing j (renamed to j_new although there is no concurrent modification with primitive int).
-                for (int k = 2; k < segment_count - 1; k++) { // < segment_count-1 because the count is max{index}+1 and the last segment will be a horizontal line (added after this loop).
-                    j_new--;
+				LinearSegment prev_beta_segment;
+				Num current_segment_length;
 
-                    current_candidate_segment = candidate_tmp.getSegment(k);
-                    prev_beta_segment = current_beta_segment;
-                    current_beta_segment = curve_2.getSegment(j_new);
+				// The remaining service curve segments in reverse order
+				int j_new = j; // Alpha's inflection point is above beta's segment j. Now we need to continue
+								// decreasing j (renamed to j_new although there is no concurrent modification
+								// with primitive int).
+				for (int k = 2; k < segment_count - 1; k++) { // < segment_count-1 because the count is max{index}+1 and
+																// the last segment will be a horizontal line (added
+																// after this loop).
+					j_new--;
 
-                    current_candidate_segment.setX(next_x_coord);
-                    current_candidate_segment.setY(next_y_coord);
-                    current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
+					current_candidate_segment = candidate_tmp.getSegment(k);
+					prev_beta_segment = current_beta_segment;
+					current_beta_segment = curve_2.getSegment(j_new);
 
-                    current_segment_length = NumUtils.getNumUtils().sub(prev_beta_segment.getX(), current_beta_segment.getX());
-                    next_x_coord = NumUtils.getNumUtils().add(next_x_coord, current_segment_length); // Prev > current because we iterate j in decreasing order.
-                    next_y_coord = NumUtils.getNumUtils().add(current_candidate_segment.getY(), NumUtils.getNumUtils().mult(current_segment_length, current_beta_segment.getGrad()));
-                }
+					current_candidate_segment.setX(next_x_coord);
+					current_candidate_segment.setY(next_y_coord);
+					current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
-                // Add a horizontal line at the end.
-                current_candidate_segment = candidate_tmp.getSegment(segment_count - 1);
-                current_candidate_segment.setX(next_x_coord);
-                current_candidate_segment.setY(next_y_coord);
-                // Gradient (rate) will remain zero.
+					current_segment_length = NumUtils.getNumUtils().sub(prev_beta_segment.getX(),
+							current_beta_segment.getX());
+					next_x_coord = NumUtils.getNumUtils().add(next_x_coord, current_segment_length); // Prev > current
+																										// because we
+																										// iterate j in
+																										// decreasing
+																										// order.
+					next_y_coord = NumUtils.getNumUtils().add(current_candidate_segment.getY(),
+							NumUtils.getNumUtils().mult(current_segment_length, current_beta_segment.getGrad()));
+				}
 
-                // Done with this alpha inflection, beta combination. Store the curve and go to next alpha inflection point.
-                result_candidates.add(candidate_tmp);
-                break;
-            }
-        }
+				// Add a horizontal line at the end.
+				current_candidate_segment = candidate_tmp.getSegment(segment_count - 1);
+				current_candidate_segment.setX(next_x_coord);
+				current_candidate_segment.setY(next_y_coord);
+				// Gradient (rate) will remain zero.
 
-        Iterator<Curve> candidates_iter = result_candidates.iterator();
-        Curve sup_curve, additional_curve;
+				// Done with this alpha inflection, beta combination. Store the curve and go to
+				// next alpha inflection point.
+				result_candidates.add(candidate_tmp);
+				break;
+			}
+		}
 
-        if (!candidates_iter.hasNext()) {
-            System.out.println("Deconvolution of " + curve_1.toString() + "\nand " + curve_2.toString() + " failed.");
-            System.exit(0);
-        }
+		Iterator<Curve> candidates_iter = result_candidates.iterator();
+		Curve sup_curve, additional_curve;
 
-        sup_curve = candidates_iter.next();
-        while (candidates_iter.hasNext()) {
-            additional_curve = candidates_iter.next();
-            sup_curve = CurvePwAffineUtilsDispatch.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
-        }
+		if (!candidates_iter.hasNext()) {
+			System.out.println("Deconvolution of " + curve_1.toString() + "\nand " + curve_2.toString() + " failed.");
+			System.exit(0);
+		}
 
-        return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) sup_curve);
-    }
+		sup_curve = candidates_iter.next();
+		while (candidates_iter.hasNext()) {
+			additional_curve = candidates_iter.next();
+			sup_curve = CurvePwAffineUtilsDispatch.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
+		}
+
+		return CurvePwAffineFactoryDispatch.createArrivalCurve((CurvePwAffine) sup_curve);
+	}
 }

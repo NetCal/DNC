@@ -33,8 +33,11 @@ import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Path;
 
 public interface Analysis {
-    public enum Analyses {TFA, SFA, PMOO}
-    
-    public abstract void performAnalysis(Flow flow_of_interest) throws Exception;
-    public abstract void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
+	public enum Analyses {
+		TFA, SFA, PMOO
+	}
+
+	public abstract void performAnalysis(Flow flow_of_interest) throws Exception;
+
+	public abstract void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
 }

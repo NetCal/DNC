@@ -32,102 +32,99 @@ import java.util.List;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public interface CurvePwAffineFactory {
-//--------------------------------------------------------------------------------------------------------------
-// Curve Constructors
-//--------------------------------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------------------------
+	// Curve Constructors
+	// --------------------------------------------------------------------------------------------------------------
 
-    //------------------------------------------------------------
-    // DiscoDNC compliance
-    //------------------------------------------------------------
-    CurvePwAffine createCurve(List<LinearSegment> segments);
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	CurvePwAffine createCurve(List<LinearSegment> segments);
 
-    CurvePwAffine createZeroCurve();
+	CurvePwAffine createZeroCurve();
 
-    CurvePwAffine createHorizontal(double y);
+	CurvePwAffine createHorizontal(double y);
 
-    CurvePwAffine createHorizontal(Num y);
+	CurvePwAffine createHorizontal(Num y);
 
+	// --------------------------------------------------------------------------------------------------------------
+	// Service Curve Constructors
+	// --------------------------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------------------
-// Service Curve Constructors
-//--------------------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	ServiceCurve createServiceCurve();
 
-    //------------------------------------------------------------
-    // DiscoDNC compliance
-    //------------------------------------------------------------
-    ServiceCurve createServiceCurve();
+	ServiceCurve createServiceCurve(int segment_count);
 
-    ServiceCurve createServiceCurve(int segment_count);
+	ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
 
-    ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
+	ServiceCurve createServiceCurve(CurvePwAffine curve);
 
-    ServiceCurve createServiceCurve(CurvePwAffine curve);
+	ServiceCurve createZeroService();
 
-    ServiceCurve createZeroService();
+	ServiceCurve createZeroDelayInfiniteBurst();
 
-    ServiceCurve createZeroDelayInfiniteBurst();
+	ServiceCurve createDelayedInfiniteBurst(double delay);
 
-    ServiceCurve createDelayedInfiniteBurst(double delay);
+	ServiceCurve createDelayedInfiniteBurst(Num delay);
 
-    ServiceCurve createDelayedInfiniteBurst(Num delay);
+	ServiceCurve createRateLatency(double rate, double latency);
 
-    ServiceCurve createRateLatency(double rate, double latency);
+	ServiceCurve createRateLatency(Num rate, Num latency);
 
-    ServiceCurve createRateLatency(Num rate, Num latency);
+	// --------------------------------------------------------------------------------------------------------------
+	// Arrival Curve Constructors
+	// --------------------------------------------------------------------------------------------------------------
 
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	ArrivalCurve createArrivalCurve();
 
-//--------------------------------------------------------------------------------------------------------------
-// Arrival Curve Constructors
-//--------------------------------------------------------------------------------------------------------------
+	ArrivalCurve createArrivalCurve(int segment_count);
 
-    //------------------------------------------------------------
-    // DiscoDNC compliance
-    //------------------------------------------------------------
-    ArrivalCurve createArrivalCurve();
+	ArrivalCurve createArrivalCurve(String arrival_curve_str) throws Exception;
 
-    ArrivalCurve createArrivalCurve(int segment_count);
+	ArrivalCurve createArrivalCurve(CurvePwAffine curve);
 
-    ArrivalCurve createArrivalCurve(String arrival_curve_str) throws Exception;
+	ArrivalCurve createArrivalCurve(CurvePwAffine curve, boolean remove_latency);
 
-    ArrivalCurve createArrivalCurve(CurvePwAffine curve);
+	ArrivalCurve createZeroArrivals();
 
-    ArrivalCurve createArrivalCurve(CurvePwAffine curve, boolean remove_latency);
+	ArrivalCurve createPeakArrivalRate(double rate);
 
-    ArrivalCurve createZeroArrivals();
+	ArrivalCurve createPeakArrivalRate(Num rate);
 
-    ArrivalCurve createPeakArrivalRate(double rate);
+	ArrivalCurve createTokenBucket(double rate, double burst);
 
-    ArrivalCurve createPeakArrivalRate(Num rate);
+	ArrivalCurve createTokenBucket(Num rate, Num burst);
 
-    ArrivalCurve createTokenBucket(double rate, double burst);
+	// --------------------------------------------------------------------------------------------------------------
+	// Maximum Service Curve Constructors
+	// --------------------------------------------------------------------------------------------------------------
 
-    ArrivalCurve createTokenBucket(Num rate, Num burst);
+	// ------------------------------------------------------------
+	// DiscoDNC compliance
+	// ------------------------------------------------------------
+	MaxServiceCurve createMaxServiceCurve();
 
+	MaxServiceCurve createMaxServiceCurve(int segment_count);
 
-//--------------------------------------------------------------------------------------------------------------
-// Maximum Service Curve Constructors
-//--------------------------------------------------------------------------------------------------------------
+	MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception;
 
-    //------------------------------------------------------------
-    // DiscoDNC compliance
-    //------------------------------------------------------------
-    MaxServiceCurve createMaxServiceCurve();
+	MaxServiceCurve createMaxServiceCurve(CurvePwAffine curve);
 
-    MaxServiceCurve createMaxServiceCurve(int segment_count);
+	MaxServiceCurve createInfiniteMaxService();
 
-    MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception;
+	MaxServiceCurve createZeroDelayInfiniteBurstMSC();
 
-    MaxServiceCurve createMaxServiceCurve(CurvePwAffine curve);
+	MaxServiceCurve createDelayedInfiniteBurstMSC(double delay);
 
-    MaxServiceCurve createInfiniteMaxService();
+	MaxServiceCurve createDelayedInfiniteBurstMSC(Num delay);
 
-    MaxServiceCurve createZeroDelayInfiniteBurstMSC();
+	MaxServiceCurve createRateLatencyMSC(double rate, double latency);
 
-    MaxServiceCurve createDelayedInfiniteBurstMSC(double delay);
-
-    MaxServiceCurve createDelayedInfiniteBurstMSC(Num delay);
-
-    MaxServiceCurve createRateLatencyMSC(double rate, double latency);
-
-    MaxServiceCurve createRateLatencyMSC(Num rate, Num latency);
+	MaxServiceCurve createRateLatencyMSC(Num rate, Num latency);
 }

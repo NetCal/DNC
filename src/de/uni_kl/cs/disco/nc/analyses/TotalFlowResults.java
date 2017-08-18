@@ -42,80 +42,77 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import java.util.Set;
 
 public class TotalFlowResults extends AnalysisResults {
-    protected Map<Server, Set<Num>> map__server__D_server;
-    protected Map<Server, Set<Num>> map__server__B_server;
+	protected Map<Server, Set<Num>> map__server__D_server;
+	protected Map<Server, Set<Num>> map__server__B_server;
 
-    protected TotalFlowResults() {
-        super();
-        map__server__D_server = new HashMap<Server, Set<Num>>();
-        map__server__B_server = new HashMap<Server, Set<Num>>();
-    }
+	protected TotalFlowResults() {
+		super();
+		map__server__D_server = new HashMap<Server, Set<Num>>();
+		map__server__B_server = new HashMap<Server, Set<Num>>();
+	}
 
-    protected TotalFlowResults(Num delay_bound,
-                               Map<Server, Set<Num>> map__server__D_server,
-                               Num backlog_bound,
-                               Map<Server, Set<Num>> map__server__B_server,
-                               Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+	protected TotalFlowResults(Num delay_bound, Map<Server, Set<Num>> map__server__D_server, Num backlog_bound,
+			Map<Server, Set<Num>> map__server__B_server, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
 
-        super(delay_bound, backlog_bound, map__server__alphas);
+		super(delay_bound, backlog_bound, map__server__alphas);
 
-        this.map__server__D_server = map__server__D_server;
-        this.map__server__B_server = map__server__B_server;
-    }
+		this.map__server__D_server = map__server__D_server;
+		this.map__server__B_server = map__server__B_server;
+	}
 
-    public String getServerDelayBoundMapString() {
-        if (map__server__D_server.isEmpty()) {
-            return "{}";
-        }
+	public String getServerDelayBoundMapString() {
+		if (map__server__D_server.isEmpty()) {
+			return "{}";
+		}
 
-        StringBuffer result_str = new StringBuffer("{");
-        for (Entry<Server, Set<Num>> entry : map__server__D_server.entrySet()) {
-            result_str.append(entry.getKey().toShortString());
-            result_str.append("={");
-            for (Num delay_bound : entry.getValue()) {
-                result_str.append(delay_bound.toString());
-                result_str.append(",");
-            }
-            result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
-            result_str.append("}");
-            result_str.append(", ");
-        }
-        result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
-        result_str.append("}");
+		StringBuffer result_str = new StringBuffer("{");
+		for (Entry<Server, Set<Num>> entry : map__server__D_server.entrySet()) {
+			result_str.append(entry.getKey().toShortString());
+			result_str.append("={");
+			for (Num delay_bound : entry.getValue()) {
+				result_str.append(delay_bound.toString());
+				result_str.append(",");
+			}
+			result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
+			result_str.append("}");
+			result_str.append(", ");
+		}
+		result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
+		result_str.append("}");
 
-        return result_str.toString();
-    }
+		return result_str.toString();
+	}
 
-    @Override
-    protected void setDelayBound(Num delay_bound) {
-        super.setDelayBound(delay_bound);
-    }
+	@Override
+	protected void setDelayBound(Num delay_bound) {
+		super.setDelayBound(delay_bound);
+	}
 
-    @Override
-    protected void setBacklogBound(Num backlog_bound) {
-        super.setBacklogBound(backlog_bound);
-    }
+	@Override
+	protected void setBacklogBound(Num backlog_bound) {
+		super.setBacklogBound(backlog_bound);
+	}
 
-    public String getServerBacklogBoundMapString() {
-        if (map__server__B_server.isEmpty()) {
-            return "{}";
-        }
+	public String getServerBacklogBoundMapString() {
+		if (map__server__B_server.isEmpty()) {
+			return "{}";
+		}
 
-        StringBuffer result_str = new StringBuffer("{");
-        for (Entry<Server, Set<Num>> entry : map__server__B_server.entrySet()) {
-            result_str.append(entry.getKey().toShortString());
-            result_str.append("={");
-            for (Num delay_bound : entry.getValue()) {
-                result_str.append(delay_bound.toString());
-                result_str.append(",");
-            }
-            result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
-            result_str.append("}");
-            result_str.append(", ");
-        }
-        result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
-        result_str.append("}");
+		StringBuffer result_str = new StringBuffer("{");
+		for (Entry<Server, Set<Num>> entry : map__server__B_server.entrySet()) {
+			result_str.append(entry.getKey().toShortString());
+			result_str.append("={");
+			for (Num delay_bound : entry.getValue()) {
+				result_str.append(delay_bound.toString());
+				result_str.append(",");
+			}
+			result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
+			result_str.append("}");
+			result_str.append(", ");
+		}
+		result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
+		result_str.append("}");
 
-        return result_str.toString();
-    }
+		return result_str.toString();
+	}
 }

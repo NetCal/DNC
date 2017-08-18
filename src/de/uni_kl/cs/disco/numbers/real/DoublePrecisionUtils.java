@@ -34,57 +34,58 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 public class DoublePrecisionUtils implements NumUtils {
 	private static DoublePrecisionUtils instance = new DoublePrecisionUtils();
 
-    protected DoublePrecisionUtils() {} 
-	
+	protected DoublePrecisionUtils() {
+	}
+
 	public static DoublePrecisionUtils getInstance() {
 		return instance;
 	}
-	
-    public Num add(Num num1, Num num2) {
-        return DoublePrecision.add((DoublePrecision) num1, (DoublePrecision) num2);
-    }
 
-    public Num sub(Num num1, Num num2) {
-        return DoublePrecision.sub((DoublePrecision) num1, (DoublePrecision) num2);
-    }
+	public Num add(Num num1, Num num2) {
+		return DoublePrecision.add((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public Num mult(Num num1, Num num2) {
-        return DoublePrecision.mult((DoublePrecision) num1, (DoublePrecision) num2);
-    }
+	public Num sub(Num num1, Num num2) {
+		return DoublePrecision.sub((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public Num div(Num num1, Num num2) {
-        return DoublePrecision.div((DoublePrecision) num1, (DoublePrecision) num2);
-    }
+	public Num mult(Num num1, Num num2) {
+		return DoublePrecision.mult((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public Num abs(Num num) {
-        return DoublePrecision.abs((DoublePrecision) num);
-    }
+	public Num div(Num num1, Num num2) {
+		return DoublePrecision.div((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public Num diff(Num num1, Num num2) {
-        return DoublePrecision.diff((DoublePrecision) num1, (DoublePrecision) num2);
-    }
+	public Num abs(Num num) {
+		return DoublePrecision.abs((DoublePrecision) num);
+	}
 
-    public Num max(Num num1, Num num2) {
-        return DoublePrecision.max((DoublePrecision) num1, (DoublePrecision) num2);
-    }
+	public Num diff(Num num1, Num num2) {
+		return DoublePrecision.diff((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public Num min(Num num1, Num num2) {
-        return DoublePrecision.min((DoublePrecision) num1, (DoublePrecision) num2);
-    }
+	public Num max(Num num1, Num num2) {
+		return DoublePrecision.max((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public Num negate(Num num) {
-        return DoublePrecision.negate((DoublePrecision) num);
-    }
+	public Num min(Num num1, Num num2) {
+		return DoublePrecision.min((DoublePrecision) num1, (DoublePrecision) num2);
+	}
 
-    public boolean isFinite(Num num) {
-        return ((DoublePrecision) num).isFinite();
-    }
+	public Num negate(Num num) {
+		return DoublePrecision.negate((DoublePrecision) num);
+	}
 
-    public boolean isInfinite(Num num) {
-        return ((DoublePrecision) num).isInfinite();
-    }
+	public boolean isFinite(Num num) {
+		return ((DoublePrecision) num).isFinite();
+	}
 
-    public boolean isNaN(Num num) {
-        return ((DoublePrecision) num).isNaN();
-    }
+	public boolean isInfinite(Num num) {
+		return ((DoublePrecision) num).isInfinite();
+	}
+
+	public boolean isNaN(Num num) {
+		return ((DoublePrecision) num).isNaN();
+	}
 }

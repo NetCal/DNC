@@ -30,34 +30,34 @@ package de.uni_kl.cs.disco.curves;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public interface LinearSegment {
-    Num f(Num x);
+	Num f(Num x);
 
-    Num getX();
+	Num getX();
 
-    void setX(Num x);
+	void setX(Num x);
 
-    Num getY();
+	Num getY();
 
-    void setY(Num y);
+	void setY(Num y);
 
-    Num getGrad();
+	Num getGrad();
 
-    void setGrad(Num grad);
+	void setGrad(Num grad);
 
-    boolean isLeftopen();
+	boolean isLeftopen();
 
-    void setLeftopen(boolean leftopen);
+	void setLeftopen(boolean leftopen);
 
-    Num getXIntersectionWith(LinearSegment other);
+	Num getXIntersectionWith(LinearSegment other);
 
-    LinearSegment copy();
+	LinearSegment copy();
 
-    @Override
-    boolean equals(Object obj);
+	@Override
+	boolean equals(Object obj);
 
-    @Override
-    int hashCode();
+	@Override
+	int hashCode();
 
-    @Override
-    String toString();
+	@Override
+	String toString();
 }

@@ -29,33 +29,33 @@
 package de.uni_kl.cs.disco.numbers;
 
 public interface Num {
-    double doubleValue();
+	double doubleValue();
 
-    boolean eq(double num);
+	boolean eq(double num);
 
-    boolean eqZero();
+	boolean eqZero();
 
-    boolean gt(Num num);
+	boolean gt(Num num);
 
-    boolean gtZero();
+	boolean gtZero();
 
-    boolean geq(Num num);
+	boolean geq(Num num);
 
-    boolean geqZero();
+	boolean geqZero();
 
-    boolean lt(Num num);
+	boolean lt(Num num);
 
-    boolean ltZero();
+	boolean ltZero();
 
-    boolean leq(Num num);
+	boolean leq(Num num);
 
-    boolean leqZero();
+	boolean leqZero();
 
-    boolean isFinite();
+	boolean isFinite();
 
-    boolean isInfinite();
+	boolean isInfinite();
 
-    boolean isNaN();
+	boolean isNaN();
 
-    Num copy();
+	Num copy();
 }

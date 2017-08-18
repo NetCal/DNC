@@ -35,39 +35,42 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 
 /**
  * 
- * This class creates linear segments, either with Disco's DNC backend or with the PMA's RTC backend.
+ * This class creates linear segments, either with Disco's DNC backend or with
+ * the PMA's RTC backend.
  *
  */
 public abstract class LinearSegmentFactoryDispatch {
-	// In contrast to the similar Curve factory, it does not hold a curve factory instance for each alternative.
-	
-    public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        switch (CalculatorConfig.getInstance().getCurveClass()) {
-            case MPA_RTC:
-                return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
-            case DNC:
-            default:
-                return new LinearSegment_DNC(x, y, grad, leftopen);
-        }
-    }
+	// In contrast to the similar Curve factory, it does not hold a curve factory
+	// instance for each alternative.
 
-    public static LinearSegment createZeroSegment() {
-        switch (CalculatorConfig.getInstance().getCurveClass()) {
-            case MPA_RTC:
-                return createHorizontalLine(0.0);
-            case DNC:
-            default:
-                return createHorizontalLine(0.0);
-        }
-    }
+	public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		case MPA_RTC:
+			return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
+		case DNC:
+		default:
+			return new LinearSegment_DNC(x, y, grad, leftopen);
+		}
+	}
 
-    public static LinearSegment createHorizontalLine(double y) {
-        switch (CalculatorConfig.getInstance().getCurveClass()) {
-            case MPA_RTC:
-                return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
-            case DNC:
-            default:
-                return new LinearSegment_DNC(NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
-        }
-    }
+	public static LinearSegment createZeroSegment() {
+		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		case MPA_RTC:
+			return createHorizontalLine(0.0);
+		case DNC:
+		default:
+			return createHorizontalLine(0.0);
+		}
+	}
+
+	public static LinearSegment createHorizontalLine(double y) {
+		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		case MPA_RTC:
+			return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
+		case DNC:
+		default:
+			return new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
+					NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
+		}
+	}
 }

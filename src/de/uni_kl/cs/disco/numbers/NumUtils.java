@@ -37,40 +37,40 @@ import de.uni_kl.cs.disco.numbers.real.SinglePrecisionUtils;
 public interface NumUtils {
 
 	public static NumUtils getNumUtils() {
-        switch (CalculatorConfig.getInstance().getNumClass()) {
-            case REAL_SINGLE_PRECISION:
-            		return SinglePrecisionUtils.getInstance();
-            case RATIONAL_INTEGER:
-            		return IntUtils.getInstance();
-            case RATIONAL_BIGINTEGER:
-            		return BigIntUtils.getInstance();
-            case REAL_DOUBLE_PRECISION:
-            default:
-            		return DoublePrecisionUtils.getInstance();
-        }
-    }
-	
-    Num add(Num num1, Num num2);
+		switch (CalculatorConfig.getInstance().getNumClass()) {
+		case REAL_SINGLE_PRECISION:
+			return SinglePrecisionUtils.getInstance();
+		case RATIONAL_INTEGER:
+			return IntUtils.getInstance();
+		case RATIONAL_BIGINTEGER:
+			return BigIntUtils.getInstance();
+		case REAL_DOUBLE_PRECISION:
+		default:
+			return DoublePrecisionUtils.getInstance();
+		}
+	}
 
-    Num sub(Num num1, Num num2);
+	Num add(Num num1, Num num2);
 
-    Num mult(Num num1, Num num2);
+	Num sub(Num num1, Num num2);
 
-    Num div(Num num1, Num num2);
+	Num mult(Num num1, Num num2);
 
-    Num abs(Num num);
+	Num div(Num num1, Num num2);
 
-    Num diff(Num num1, Num num2);
+	Num abs(Num num);
 
-    Num max(Num num1, Num num2);
+	Num diff(Num num1, Num num2);
 
-    Num min(Num num1, Num num2);
+	Num max(Num num1, Num num2);
 
-    Num negate(Num num);
+	Num min(Num num1, Num num2);
 
-    boolean isFinite(Num num);
+	Num negate(Num num);
 
-    boolean isInfinite(Num num);
+	boolean isFinite(Num num);
 
-    boolean isNaN(Num num);
+	boolean isInfinite(Num num);
+
+	boolean isNaN(Num num);
 }

@@ -46,72 +46,87 @@ import de.uni_kl.cs.disco.numbers.NumFactory;
 import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class BacklogBound {
-	private BacklogBound() {}
-	
-    public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        if (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals())) {
-            return NumFactory.getNumFactory().createZero();
-        }
-        if (service_curve.getDelayedInfiniteBurst_Property()) {
-            return arrival_curve.f(service_curve.getLatency());
-        }
-        if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService()) // We know from above that the arrivals are not zero.
-                || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-            return NumFactory.getNumFactory().createPositiveInfinity();
-        }
+	private BacklogBound() {
+	}
 
-        // The computeInflectionPoints based method does not work for
-        // single rate service curves (without latency)
-        // in conjunction with token bucket arrival curves
-        // because their common inflection point is in zero,
-        // where the arrival curve is 0.0 by definition.
-        // This leads to a vertical deviation of 0 the arrival curve's burst
-        // (or infinity which is already handled by the first if-statement)
+	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+		if (arrival_curve.equals(CurvePwAffineFactoryDispatch.createZeroArrivals())) {
+			return NumFactory.getNumFactory().createZero();
+		}
+		if (service_curve.getDelayedInfiniteBurst_Property()) {
+			return arrival_curve.f(service_curve.getLatency());
+		}
+		if (service_curve.equals(CurvePwAffineFactoryDispatch.createZeroService()) // We know from above that the
+																					// arrivals are not zero.
+				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
+			return NumFactory.getNumFactory().createPositiveInfinity();
+		}
 
-        // Solution:
-        // Start with the burst as minimum vertical deviation
+		// The computeInflectionPoints based method does not work for
+		// single rate service curves (without latency)
+		// in conjunction with token bucket arrival curves
+		// because their common inflection point is in zero,
+		// where the arrival curve is 0.0 by definition.
+		// This leads to a vertical deviation of 0 the arrival curve's burst
+		// (or infinity which is already handled by the first if-statement)
 
-        Num result = arrival_curve.fLimitRight(NumFactory.getNumFactory().getZero());
+		// Solution:
+		// Start with the burst as minimum vertical deviation
 
-        ArrayList<Num> xcoords = CurvePwAffineUtilsDispatch.computeInflectionPointsX(arrival_curve, service_curve);
-        for (int i = 0; i < xcoords.size(); i++) {
-            Num ip_x = ((Num) xcoords.get(i));
+		Num result = arrival_curve.fLimitRight(NumFactory.getNumFactory().getZero());
 
-            Num backlog = NumUtils.getNumUtils().sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
-            result = NumUtils.getNumUtils().max(result, backlog);
-        }
-        return result;
-    }
+		ArrayList<Num> xcoords = CurvePwAffineUtilsDispatch.computeInflectionPointsX(arrival_curve, service_curve);
+		for (int i = 0; i < xcoords.size(); i++) {
+			Num ip_x = ((Num) xcoords.get(i));
 
-    public static double derivePmooSinkTreeTbRl(Network tree, Server root, AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
-    		PmooArrivalBound_SinkTreeTbRl sink_tree_bound = new PmooArrivalBound_SinkTreeTbRl( tree );
-    		ArrivalCurve arrivals_at_root = tree.getSourceFlowArrivalCurve(root);
-    		
-    		for (Link link : tree.getInLinks(root)) {
-	    		switch( sink_tree_ab ) {
-	    			case PMOO_SINKTREE_TBRL_CONV:
-	    				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, 
-	    						sink_tree_bound.computeArrivalBoundDeConvolution(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
-	    				break;
+			Num backlog = NumUtils.getNumUtils().sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
+			result = NumUtils.getNumUtils().max(result, backlog);
+		}
+		return result;
+	}
 
-	    			case PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV:
-	    				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, 
-	    						sink_tree_bound.computeArrivalBoundDeConvolutionTBRL(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
-	    				break;
+	public static double derivePmooSinkTreeTbRl(Network tree, Server root,
+			AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
+		PmooArrivalBound_SinkTreeTbRl sink_tree_bound = new PmooArrivalBound_SinkTreeTbRl(tree);
+		ArrivalCurve arrivals_at_root = tree.getSourceFlowArrivalCurve(root);
 
-	    			case PMOO_SINKTREE_TBRL_HOMO:
-	    				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, 
-	    						sink_tree_bound.computeArrivalBoundHomogeneous(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
-	    				break;
-	    				
-	    			case PMOO_SINKTREE_TBRL:
-	    			default:
-	    				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, 
-	    						sink_tree_bound.computeArrivalBound(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only be one curve
-	    				break;
-	    		}
-    		}
-    		
-	    	return CurvePwAffineUtilsDispatch.getMaxVerticalDeviation( arrivals_at_root, root.getServiceCurve() ).doubleValue();
-    }
+		for (Link link : tree.getInLinks(root)) {
+			switch (sink_tree_ab) {
+			case PMOO_SINKTREE_TBRL_CONV:
+				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, sink_tree_bound
+						.computeArrivalBoundDeConvolution(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will
+																															// only
+																															// be
+																															// one
+																															// curve
+				break;
+
+			case PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV:
+				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root,
+						sink_tree_bound.computeArrivalBoundDeConvolutionTBRL(link, tree.getFlows(link), Flow.NULL_FLOW)
+								.iterator().next()); // will only be one curve
+				break;
+
+			case PMOO_SINKTREE_TBRL_HOMO:
+				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, sink_tree_bound
+						.computeArrivalBoundHomogeneous(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will
+																														// only
+																														// be
+																														// one
+																														// curve
+				break;
+
+			case PMOO_SINKTREE_TBRL:
+			default:
+				arrivals_at_root = CurvePwAffineUtilsDispatch.add(arrivals_at_root, sink_tree_bound
+						.computeArrivalBound(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next()); // will only
+																											// be one
+																											// curve
+				break;
+			}
+		}
+
+		return CurvePwAffineUtilsDispatch.getMaxVerticalDeviation(arrivals_at_root, root.getServiceCurve())
+				.doubleValue();
+	}
 }

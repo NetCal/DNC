@@ -28,15 +28,15 @@
 package de.uni_kl.cs.disco.curves;
 
 public interface ArrivalCurve extends CurvePwAffine {
-    @Override
-    ArrivalCurve copy();
+	@Override
+	ArrivalCurve copy();
 
-    @Override
-    boolean equals(Object obj);
+	@Override
+	boolean equals(Object obj);
 
-    @Override
-    int hashCode();
+	@Override
+	int hashCode();
 
-    @Override
-    String toString();
+	@Override
+	String toString();
 }

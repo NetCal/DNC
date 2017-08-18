@@ -44,59 +44,56 @@ import de.uni_kl.cs.disco.numbers.Num;
 import java.util.Set;
 
 public class SeparateFlowResults extends AnalysisResults {
-    protected Set<ServiceCurve> betas_e2e;
-    protected Map<Server, Set<ServiceCurve>> map__server__betas_lo;
+	protected Set<ServiceCurve> betas_e2e;
+	protected Map<Server, Set<ServiceCurve>> map__server__betas_lo;
 
-    protected SeparateFlowResults() {
-        super();
-        betas_e2e = new HashSet<ServiceCurve>();
-        map__server__betas_lo = new HashMap<Server, Set<ServiceCurve>>();
-    }
+	protected SeparateFlowResults() {
+		super();
+		betas_e2e = new HashSet<ServiceCurve>();
+		map__server__betas_lo = new HashMap<Server, Set<ServiceCurve>>();
+	}
 
-    protected SeparateFlowResults(Num delay_bound,
-                                  Num backlog_bound,
-                                  Set<ServiceCurve> betas_e2e,
-                                  Map<Server, Set<ServiceCurve>> map__server__betas_lo,
-                                  Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+	protected SeparateFlowResults(Num delay_bound, Num backlog_bound, Set<ServiceCurve> betas_e2e,
+			Map<Server, Set<ServiceCurve>> map__server__betas_lo, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
 
-        super(delay_bound, backlog_bound, map__server__alphas);
+		super(delay_bound, backlog_bound, map__server__alphas);
 
-        this.betas_e2e = betas_e2e;
-        this.map__server__betas_lo = map__server__betas_lo;
-    }
+		this.betas_e2e = betas_e2e;
+		this.map__server__betas_lo = map__server__betas_lo;
+	}
 
-    @Override
-    protected void setDelayBound(Num delay_bound) {
-        super.setDelayBound(delay_bound);
-    }
+	@Override
+	protected void setDelayBound(Num delay_bound) {
+		super.setDelayBound(delay_bound);
+	}
 
-    @Override
-    protected void setBacklogBound(Num backlog_bound) {
-        super.setBacklogBound(backlog_bound);
-    }
+	@Override
+	protected void setBacklogBound(Num backlog_bound) {
+		super.setBacklogBound(backlog_bound);
+	}
 
-    public String getServerLeftOverBetasMapString() {
-        if (map__server__betas_lo.isEmpty()) {
-            return "{}";
-        }
+	public String getServerLeftOverBetasMapString() {
+		if (map__server__betas_lo.isEmpty()) {
+			return "{}";
+		}
 
-        StringBuffer result_str = new StringBuffer("{");
+		StringBuffer result_str = new StringBuffer("{");
 
-        for (Entry<Server, Set<ServiceCurve>> entry : map__server__betas_lo.entrySet()) {
-            result_str.append(entry.getKey().toShortString());
-            result_str.append("={");
-            for (ServiceCurve beta_lo : entry.getValue()) {
-                result_str.append(beta_lo.toString());
-                result_str.append(",");
-            }
-            result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
-            result_str.append("}");
-            result_str.append(", ");
-        }
-        result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
+		for (Entry<Server, Set<ServiceCurve>> entry : map__server__betas_lo.entrySet()) {
+			result_str.append(entry.getKey().toShortString());
+			result_str.append("={");
+			for (ServiceCurve beta_lo : entry.getValue()) {
+				result_str.append(beta_lo.toString());
+				result_str.append(",");
+			}
+			result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
+			result_str.append("}");
+			result_str.append(", ");
+		}
+		result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
 
-        result_str.append("}");
+		result_str.append("}");
 
-        return result_str.toString();
-    }
+		return result_str.toString();
+	}
 }

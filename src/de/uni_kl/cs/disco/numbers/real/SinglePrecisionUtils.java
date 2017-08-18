@@ -34,57 +34,58 @@ import de.uni_kl.cs.disco.numbers.NumUtils;
 public class SinglePrecisionUtils implements NumUtils {
 	private static SinglePrecisionUtils instance = new SinglePrecisionUtils();
 
-    protected SinglePrecisionUtils() {} 
-	
+	protected SinglePrecisionUtils() {
+	}
+
 	public static SinglePrecisionUtils getInstance() {
 		return instance;
 	}
-	
-    public Num add(Num num1, Num num2) {
-        return SinglePrecision.add((SinglePrecision) num1, (SinglePrecision) num2);
-    }
 
-    public Num sub(Num num1, Num num2) {
-        return SinglePrecision.sub((SinglePrecision) num1, (SinglePrecision) num2);
-    }
+	public Num add(Num num1, Num num2) {
+		return SinglePrecision.add((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public Num mult(Num num1, Num num2) {
-        return SinglePrecision.mult((SinglePrecision) num1, (SinglePrecision) num2);
-    }
+	public Num sub(Num num1, Num num2) {
+		return SinglePrecision.sub((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public Num div(Num num1, Num num2) {
-        return SinglePrecision.div((SinglePrecision) num1, (SinglePrecision) num2);
-    }
+	public Num mult(Num num1, Num num2) {
+		return SinglePrecision.mult((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public Num abs(Num num) {
-        return SinglePrecision.abs((SinglePrecision) num);
-    }
+	public Num div(Num num1, Num num2) {
+		return SinglePrecision.div((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public Num diff(Num num1, Num num2) {
-        return SinglePrecision.diff((SinglePrecision) num1, (SinglePrecision) num2);
-    }
+	public Num abs(Num num) {
+		return SinglePrecision.abs((SinglePrecision) num);
+	}
 
-    public Num max(Num num1, Num num2) {
-        return SinglePrecision.max((SinglePrecision) num1, (SinglePrecision) num2);
-    }
+	public Num diff(Num num1, Num num2) {
+		return SinglePrecision.diff((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public Num min(Num num1, Num num2) {
-        return SinglePrecision.min((SinglePrecision) num1, (SinglePrecision) num2);
-    }
+	public Num max(Num num1, Num num2) {
+		return SinglePrecision.max((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public Num negate(Num num) {
-        return SinglePrecision.negate((SinglePrecision) num);
-    }
+	public Num min(Num num1, Num num2) {
+		return SinglePrecision.min((SinglePrecision) num1, (SinglePrecision) num2);
+	}
 
-    public boolean isFinite(Num num) {
-        return ((SinglePrecision) num).isFinite();
-    }
+	public Num negate(Num num) {
+		return SinglePrecision.negate((SinglePrecision) num);
+	}
 
-    public boolean isInfinite(Num num) {
-        return ((SinglePrecision) num).isInfinite();
-    }
+	public boolean isFinite(Num num) {
+		return ((SinglePrecision) num).isFinite();
+	}
 
-    public boolean isNaN(Num num) {
-        return ((SinglePrecision) num).isNaN();
-    }
+	public boolean isInfinite(Num num) {
+		return ((SinglePrecision) num).isInfinite();
+	}
+
+	public boolean isNaN(Num num) {
+		return ((SinglePrecision) num).isNaN();
+	}
 }

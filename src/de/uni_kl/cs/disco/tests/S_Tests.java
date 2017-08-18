@@ -33,11 +33,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({
-        S_1SC_1F_1AC_Test.class,
-        S_1SC_2F_1AC_Test.class,
-        S_1SC_2F_2AC_Test.class,
-        S_1SC_10F_10AC_Test.class
-})
+@SuiteClasses({ S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class })
 
-public class S_Tests {}
+public class S_Tests {
+}

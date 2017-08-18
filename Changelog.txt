@@ -21,7 +21,7 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
 * Num packages: new structure, reordering.
   - Separate rationals (requiring the valies NaN, +infty, -infty) and reals.
   - Drop the "Rational" and "Real" class prefixes.
-  - Double/Single also renamed to DoublePrecision/SinglePrecision 
+  - Double/Single also renamed to DoublePrecision/SinglePrecision.
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------

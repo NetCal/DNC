@@ -31,84 +31,86 @@ package de.uni_kl.cs.disco.numbers.rational;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public final class NaN implements Num {
-    public NaN() {}
+	public NaN() {
+	}
 
-    public boolean eqZero() {
-        return false;
-    }
+	public boolean eqZero() {
+		return false;
+	}
 
-    public boolean gt(Num num) {
-        return false;
-    }
+	public boolean gt(Num num) {
+		return false;
+	}
 
-    public boolean gtZero() {
-        return false;
-    }
+	public boolean gtZero() {
+		return false;
+	}
 
-    public boolean geq(Num num) {
-        return false;
-    }
+	public boolean geq(Num num) {
+		return false;
+	}
 
-    public boolean geqZero() {
-        return false;
-    }
+	public boolean geqZero() {
+		return false;
+	}
 
-    public boolean lt(Num num) {
-        return false;
-    }
+	public boolean lt(Num num) {
+		return false;
+	}
 
-    public boolean ltZero() {
-        return false;
-    }
+	public boolean ltZero() {
+		return false;
+	}
 
-    public boolean leq(Num num) {
-        return false;
-    }
+	public boolean leq(Num num) {
+		return false;
+	}
 
-    public boolean leqZero() {
-        return false;
-    }
+	public boolean leqZero() {
+		return false;
+	}
 
-    public boolean isFinite() {
-        return false;
-    }
+	public boolean isFinite() {
+		return false;
+	}
 
-    public boolean isInfinite() {
-        return false;
-    }
+	public boolean isInfinite() {
+		return false;
+	}
 
-    public boolean isNaN() {
-        return true;
-    }
+	public boolean isNaN() {
+		return true;
+	}
 
-    @Override
-    public double doubleValue() {
-        return Double.NaN;
-    }
+	@Override
+	public double doubleValue() {
+		return Double.NaN;
+	}
 
-    @Override
-    public Num copy() {
-        return new NaN();
-    }
+	@Override
+	public Num copy() {
+		return new NaN();
+	}
 
-    @Override
-    public boolean eq(double num) {
-        return false;
-    }
+	@Override
+	public boolean eq(double num) {
+		return false;
+	}
 
-//    @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to NaN should always return false")
-    @Override
-    public boolean equals(Object obj) {
-        return false;
-    }
+	// @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to
+	// NaN should always return false")
+	@Override
+	public boolean equals(Object obj) {
+		return false;
+	}
 
-    @Override
-    public int hashCode() {
-        return Double.hashCode(Double.NaN);
-    }
+	@Override
+	public int hashCode() {
+		return Double.hashCode(Double.NaN);
+	}
 
-    @Override
-    public String toString() {
-        return Double.toString(Double.NaN);
-    }
+	@Override
+	public String toString() {
+		return Double.toString(Double.NaN);
+	}
 }
