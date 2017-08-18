@@ -31,8 +31,7 @@ package de.uni_kl.cs.disco.numbers.values;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public final class NaN implements Num {
-    public NaN() {
-    }
+    public NaN() {}
 
     public boolean eqZero() {
         return false;

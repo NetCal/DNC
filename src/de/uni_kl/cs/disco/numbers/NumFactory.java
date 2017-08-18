@@ -33,8 +33,15 @@ import de.uni_kl.cs.disco.numbers.implementations.RationalBigIntFactory;
 import de.uni_kl.cs.disco.numbers.implementations.RationalIntFactory;
 import de.uni_kl.cs.disco.numbers.implementations.RealDoubleFactory;
 import de.uni_kl.cs.disco.numbers.implementations.RealSingleFactory;
+import de.uni_kl.cs.disco.numbers.values.NaN;
+import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
+import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public interface NumFactory {
+	final Num NaN = new NaN();
+	final Num NEGATIVE_INFINITY = new NegativeInfinity();
+	final Num POSITIVE_INFINITY = new PositiveInfinity();
+	
 	public static NumFactory getNumFactory() {
         switch (CalculatorConfig.getInstance().getNumClass()) {
             case REAL_SINGLE_PRECISION:
@@ -50,54 +57,40 @@ public interface NumFactory {
     }
 
     default Num getPositiveInfinity() {
-        return getNumFactory().getPositiveInfinity();
+    		return POSITIVE_INFINITY;
     }
 
     default Num createPositiveInfinity() {
-        return getNumFactory().createPositiveInfinity();
+        return new NegativeInfinity();
     }
 
     default Num getNegativeInfinity() {
-        return getNumFactory().getNegativeInfinity();
+        return NEGATIVE_INFINITY;
     }
 
     default Num createNegativeInfinity() {
-        return getNumFactory().createNegativeInfinity();
+        return new NegativeInfinity();
     }
 
     default Num getNaN() {
-        return getNumFactory().getNaN();
+        return NaN;
     }
 
     default Num createNaN() {
-        return getNumFactory().createNaN();
+        return new NaN();
     }
 
-    default Num getZero() {
-        return getNumFactory().getZero();
-    }
+    Num getZero();
 
-    default Num createZero() {
-        return getNumFactory().createZero();
-    }
+    Num createZero();
 
-    default Num getEpsilon() {
-        return getNumFactory().getEpsilon();
-    }
+    Num getEpsilon();
 
-    default Num createEpsilon() {
-        return getNumFactory().createEpsilon();
-    }
+    Num createEpsilon();
 
-    default Num create(double value) {
-        return getNumFactory().create(value);
-    }
+    Num create(double value);
 
-    default Num create(int num, int den) {
-        return getNumFactory().create(num, den);
-    }
+    Num create(int num, int den);
 
-    default Num create(String num_str) throws Exception {
-        return getNumFactory().create(num_str);
-    }
+    Num create(String num_str) throws Exception;
 }

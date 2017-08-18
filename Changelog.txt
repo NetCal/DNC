@@ -10,7 +10,8 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
   - The abstract class ArrivalBoundDispatch that applies the configured arrival boundings.
   - The abstract class AbstractArrivalBound holds member variables for the network and the configurations.
   All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound.
-* Dispatching to the right Num factory is now handled by the NumFactory interface, NumFactoryDispatch was removed. 
+* Dispatching to the right Num factory is now handled by the NumFactory interface, NumFactoryDispatch was removed.
+* The NumFactory Interface provides default methods for creation of NaN as well as positive and negative infinity (Currently used by the rational implementations only). 
 * Disco (min,+)-algebraic operations:
   - Moved to new package de.uni_kl.cs.disco.minplus.dnc
   - All convolutions are called via a dispatcher, MinPlusDispatch.java. 

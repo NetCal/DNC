@@ -31,8 +31,7 @@ package de.uni_kl.cs.disco.numbers.values;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public final class PositiveInfinity implements Num {
-    public PositiveInfinity() {
-    }
+    public PositiveInfinity() {}
 
     public boolean eqZero() {
         return false;
