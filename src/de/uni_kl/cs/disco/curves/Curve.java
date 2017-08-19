@@ -33,6 +33,10 @@ import de.uni_kl.cs.disco.numbers.Num;
  * Interface for wide-sense increasing, plain curves.
  */
 public interface Curve {
+	// --------------------------------------------------------------------------------------------------------------
+	// Interface
+	// --------------------------------------------------------------------------------------------------------------
+
 	Curve copy();
 
 	void copy(Curve curve);
@@ -88,4 +92,19 @@ public interface Curve {
 	Num getBurst();
 
 	Num getGradientLimitRight(Num x);
+
+	// --------------------------------------------------------------------------------------------------------------
+	// Utils
+	// --------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Create and return a linear segment that lies on the x axis of the Cartesian
+	 * coordinate system.
+	 * 
+	 * @return
+	 */
+	static LinearSegment getXAxis() {
+		// Need to create it anew as the number representation might have changed.
+		return LinearSegment.createHorizontalLine(0.0);
+	}
 }

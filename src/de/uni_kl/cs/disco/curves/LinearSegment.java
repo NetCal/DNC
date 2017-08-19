@@ -104,14 +104,10 @@ public interface LinearSegment {
 					NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
 		}
 	}
-
+	
 	// --------------------------------------------------------------------------------------------------------------
 	// Utils
 	// --------------------------------------------------------------------------------------------------------------
-
-	public static LinearSegment getXAxis() {
-		return createHorizontalLine(0.0);
-	}
 
 	/**
 	 * Helper creating a new segment starting at x that is the sum of the given

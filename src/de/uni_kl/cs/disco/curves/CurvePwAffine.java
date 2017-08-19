@@ -383,12 +383,13 @@ public interface CurvePwAffine extends Curve {
 
 		ArrayList<LinearSegment> result = new ArrayList<LinearSegment>();
 		LinearSegment s;
+		LinearSegment x_axis = Curve.getXAxis();
 		for (int i = 0; i < curve_copy.getSegmentCount(); i++) {
 			if (curve_copy.getSegment(i).getY().gtZero()) {
 				result.add(curve_copy.getSegment(i));
 
 				if (curve_copy.getSegment(i).getGrad().ltZero()) {
-					Num x_cross = curve_copy.getSegment(i).getXIntersectionWith(LinearSegment.getXAxis());
+					Num x_cross = curve_copy.getSegment(i).getXIntersectionWith(x_axis);
 					if (i + 1 >= curve_copy.getSegmentCount() || x_cross.lt(curve_copy.getSegment(i + 1).getX())) {
 						s = LinearSegment.createHorizontalLine(0.0);
 						s.setX(x_cross);
@@ -402,7 +403,7 @@ public interface CurvePwAffine extends Curve {
 				result.add(s);
 
 				if (curve_copy.getSegment(i).getGrad().gtZero()) {
-					Num x_cross = curve_copy.getSegment(i).getXIntersectionWith(LinearSegment.getXAxis());
+					Num x_cross = curve_copy.getSegment(i).getXIntersectionWith(x_axis);
 					if (i + 1 >= curve_copy.getSegmentCount() || x_cross.lt(curve_copy.getSegment(i + 1).getX())) {
 						s = LinearSegment.createHorizontalLine(0.0);
 						s.setX(x_cross);
