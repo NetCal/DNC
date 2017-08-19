@@ -1,5 +1,6 @@
 v2.4.0beta3 "Chimera" (2017-Sep-XY)
 -----------------------------------
+Simplifications to the code structure and performance improvements:
 * CalculatorConfig singleton: fix execution of all tests, run time back to previous level.
 * Split Analysis.java into three parts:
   - The minimal Analysis interface.
