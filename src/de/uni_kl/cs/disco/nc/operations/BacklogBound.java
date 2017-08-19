@@ -41,8 +41,6 @@ import de.uni_kl.cs.disco.network.Link;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class BacklogBound {
 	private BacklogBound() {
@@ -50,7 +48,7 @@ public class BacklogBound {
 
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 		if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
-			return NumFactory.getNumFactory().createZero();
+			return Num.getFactory().createZero();
 		}
 		if (service_curve.getDelayedInfiniteBurst_Property()) {
 			return arrival_curve.f(service_curve.getLatency());
@@ -58,7 +56,7 @@ public class BacklogBound {
 		if (service_curve.equals(CurvePwAffine.getFactory().createZeroService()) // We know from above that the
 																					// arrivals are not zero.
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-			return NumFactory.getNumFactory().createPositiveInfinity();
+			return Num.getFactory().createPositiveInfinity();
 		}
 
 		// The computeInflectionPoints based method does not work for
@@ -72,14 +70,14 @@ public class BacklogBound {
 		// Solution:
 		// Start with the burst as minimum vertical deviation
 
-		Num result = arrival_curve.fLimitRight(NumFactory.getNumFactory().getZero());
+		Num result = arrival_curve.fLimitRight(Num.getFactory().getZero());
 
 		ArrayList<Num> xcoords = CurvePwAffine.computeInflectionPointsX(arrival_curve, service_curve);
 		for (int i = 0; i < xcoords.size(); i++) {
 			Num ip_x = ((Num) xcoords.get(i));
 
-			Num backlog = NumUtils.getNumUtils().sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
-			result = NumUtils.getNumUtils().max(result, backlog);
+			Num backlog = Num.getUtils().sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
+			result = Num.getUtils().max(result, backlog);
 		}
 		return result;
 	}

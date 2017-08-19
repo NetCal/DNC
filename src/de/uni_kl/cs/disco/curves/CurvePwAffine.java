@@ -34,8 +34,6 @@ import de.uni_kl.cs.disco.curves.dnc.Curve_DNC;
 import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 
 /**
  * 
@@ -256,7 +254,7 @@ public interface CurvePwAffine extends Curve {
 		}
 
 		ArrayList<LinearSegment> result = new ArrayList<LinearSegment>();
-		Num x = NumFactory.getNumFactory().createZero();
+		Num x = Num.getFactory().createZero();
 		Num x_cross;
 		boolean leftopen;
 
@@ -264,10 +262,10 @@ public interface CurvePwAffine extends Curve {
 		int i2 = 0;
 		while (i1 < curve1.getSegmentCount() || i2 < curve2.getSegmentCount()) {
 			Num x_next1 = (i1 + 1 < curve1.getSegmentCount()) ? curve1.getSegment(i1 + 1).getX()
-					: NumFactory.getNumFactory().createPositiveInfinity();
+					: Num.getFactory().createPositiveInfinity();
 			Num x_next2 = (i2 + 1 < curve2.getSegmentCount()) ? curve2.getSegment(i2 + 1).getX()
-					: NumFactory.getNumFactory().createPositiveInfinity();
-			Num x_next = NumUtils.getNumUtils().min(x_next1, x_next2);
+					: Num.getFactory().createPositiveInfinity();
+			Num x_next = Num.getUtils().min(x_next1, x_next2);
 
 			leftopen = curve1.getSegment(i1).isLeftopen() || curve2.getSegment(i2).isLeftopen();
 
@@ -280,8 +278,8 @@ public interface CurvePwAffine extends Curve {
 				break;
 			case MIN:
 				x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
-				if (x_cross.equals(NumFactory.getNumFactory().getNaN())) {
-					x_cross = NumFactory.getNumFactory().createPositiveInfinity();
+				if (x_cross.equals(Num.getFactory().getNaN())) {
+					x_cross = Num.getFactory().createPositiveInfinity();
 				}
 				if (x.lt(x_cross) && x_cross.lt(x_next)) {
 					result.add(LinearSegment.min(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
@@ -292,8 +290,8 @@ public interface CurvePwAffine extends Curve {
 				break;
 			case MAX:
 				x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
-				if (x_cross.equals(NumFactory.getNumFactory().getNaN())) {
-					x_cross = NumFactory.getNumFactory().createPositiveInfinity();
+				if (x_cross.equals(Num.getFactory().getNaN())) {
+					x_cross = Num.getFactory().createPositiveInfinity();
 				}
 				if (x.lt(x_cross) && x_cross.lt(x_next)) {
 					result.add(LinearSegment.max(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
@@ -428,7 +426,7 @@ public interface CurvePwAffine extends Curve {
 	 */
 	public static Num getMaxVerticalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
 		if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-			return NumFactory.getNumFactory().createPositiveInfinity();
+			return Num.getFactory().createPositiveInfinity();
 		}
 		// The computeInflectionPoints based method does not work for
 		// single rate service curves (without latency)
@@ -442,16 +440,16 @@ public interface CurvePwAffine extends Curve {
 		// Start with the burst as minimum of all possible solutions for the deviation
 		// instead of negative infinity.
 
-		Num burst_c1 = c1.fLimitRight(NumFactory.getNumFactory().getZero());
-		Num burst_c2 = c2.fLimitRight(NumFactory.getNumFactory().getZero());
-		Num result = NumUtils.getNumUtils().diff(burst_c1, burst_c2);
+		Num burst_c1 = c1.fLimitRight(Num.getFactory().getZero());
+		Num burst_c2 = c2.fLimitRight(Num.getFactory().getZero());
+		Num result = Num.getUtils().diff(burst_c1, burst_c2);
 
 		ArrayList<Num> xcoords = computeInflectionPointsX(c1, c2);
 		for (int i = 0; i < xcoords.size(); i++) {
 			Num ip_x = xcoords.get(i);
 
-			Num backlog = NumUtils.getNumUtils().sub(c1.f(ip_x), c2.f(ip_x));
-			result = NumUtils.getNumUtils().max(result, backlog);
+			Num backlog = Num.getUtils().sub(c1.f(ip_x), c2.f(ip_x));
+			result = Num.getUtils().max(result, backlog);
 		}
 		return result;
 	}
@@ -467,21 +465,21 @@ public interface CurvePwAffine extends Curve {
 	 */
 	public static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
 		if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-			return NumFactory.getNumFactory().createPositiveInfinity();
+			return Num.getFactory().createPositiveInfinity();
 		}
 
-		Num result = NumFactory.getNumFactory().createNegativeInfinity();
+		Num result = Num.getFactory().createNegativeInfinity();
 		for (int i = 0; i < c1.getSegmentCount(); i++) {
 			Num ip_y = c1.getSegment(i).getY();
 
-			Num delay = NumUtils.getNumUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-			result = NumUtils.getNumUtils().max(result, delay);
+			Num delay = Num.getUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+			result = Num.getUtils().max(result, delay);
 		}
 		for (int i = 0; i < c2.getSegmentCount(); i++) {
 			Num ip_y = c2.getSegment(i).getY();
 
-			Num delay = NumUtils.getNumUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-			result = NumUtils.getNumUtils().max(result, delay);
+			Num delay = Num.getUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+			result = Num.getUtils().max(result, delay);
 		}
 		return result;
 	}
@@ -506,9 +504,9 @@ public interface CurvePwAffine extends Curve {
 		int i2 = 0;
 		while (i1 < c1.getSegmentCount() || i2 < c2.getSegmentCount()) {
 			Num x1 = (i1 < c1.getSegmentCount()) ? c1.getSegment(i1).getX()
-					: NumFactory.getNumFactory().createPositiveInfinity();
+					: Num.getFactory().createPositiveInfinity();
 			Num x2 = (i2 < c2.getSegmentCount()) ? c2.getSegment(i2).getX()
-					: NumFactory.getNumFactory().createPositiveInfinity();
+					: Num.getFactory().createPositiveInfinity();
 			if (x1.lt(x2)) {
 				xcoords.add(x1.copy());
 				i1++;
@@ -542,9 +540,9 @@ public interface CurvePwAffine extends Curve {
 		int i2 = 0;
 		while (i1 < c1.getSegmentCount() || i2 < c2.getSegmentCount()) {
 			Num y1 = (i1 < c1.getSegmentCount()) ? c1.getSegment(i1).getY()
-					: NumFactory.getNumFactory().createPositiveInfinity();
+					: Num.getFactory().createPositiveInfinity();
 			Num y2 = (i2 < c2.getSegmentCount()) ? c2.getSegment(i2).getY()
-					: NumFactory.getNumFactory().createPositiveInfinity();
+					: Num.getFactory().createPositiveInfinity();
 			if (y1.lt(y2)) {
 				ycoords.add(y1.copy());
 				i1++;
@@ -573,7 +571,7 @@ public interface CurvePwAffine extends Curve {
 	public static CurvePwAffine add(CurvePwAffine curve, Num dy) {
 		CurvePwAffine result = curve.copy();
 		for (int i = 0; i < curve.getSegmentCount(); i++) {
-			result.getSegment(i).setY(NumUtils.getNumUtils().add(result.getSegment(i).getY(), dy));
+			result.getSegment(i).setY(Num.getUtils().add(result.getSegment(i).getY(), dy));
 		}
 		return result;
 	}
@@ -593,7 +591,7 @@ public interface CurvePwAffine extends Curve {
 	}
 
 	public static Num getXIntersection(CurvePwAffine curve1, CurvePwAffine curve2) {
-		Num x_int = NumFactory.getNumFactory().getPositiveInfinity(); // No need to create an object as this value is
+		Num x_int = Num.getFactory().getPositiveInfinity(); // No need to create an object as this value is
 																		// only set for initial comparison in the loop.
 
 		for (int i = 0; i < curve1.getSegmentCount(); i++) {
@@ -604,7 +602,7 @@ public interface CurvePwAffine extends Curve {
 
 				Num x_int_tmp = curve1.getSegment(i).getXIntersectionWith(curve2.getSegment(j));
 
-				if (x_int_tmp.equals(NumFactory.getNumFactory().getNaN())) {
+				if (x_int_tmp.equals(Num.getFactory().getNaN())) {
 					break;
 				}
 
@@ -704,7 +702,7 @@ public interface CurvePwAffine extends Curve {
 		}
 
 		for (int i = 1; i < curve_copy.getSegmentCount(); i++) {
-			curve_copy.getSegment(i).setX(NumUtils.getNumUtils().add(curve_copy.getSegment(i).getX(), dx));
+			curve_copy.getSegment(i).setX(Num.getUtils().add(curve_copy.getSegment(i).getX(), dx));
 		}
 
 		beautify(curve_copy);
@@ -727,8 +725,8 @@ public interface CurvePwAffine extends Curve {
 		CurvePwAffine result = curve.copy();
 		LinearSegment segment_i = result.getSegment(i);
 		if (segment_i.getX().lt(dx)) {
-			segment_i.setY(NumUtils.getNumUtils().add(segment_i.getY(), NumUtils.getNumUtils()
-					.mult(NumUtils.getNumUtils().sub(dx, segment_i.getX()), segment_i.getGrad())));
+			segment_i.setY(Num.getUtils().add(segment_i.getY(), Num.getUtils()
+					.mult(Num.getUtils().sub(dx, segment_i.getX()), segment_i.getGrad())));
 			segment_i.setX(dx);
 			segment_i.setLeftopen(false);
 		}
@@ -736,7 +734,7 @@ public interface CurvePwAffine extends Curve {
 			result.removeSegment(0);
 		}
 		for (i = 0; i < result.getSegmentCount(); i++) {
-			result.getSegment(i).setX(NumUtils.getNumUtils().sub(result.getSegment(i).getX(), dx));
+			result.getSegment(i).setX(Num.getUtils().sub(result.getSegment(i).getX(), dx));
 		}
 
 		return result;
@@ -786,7 +784,7 @@ public interface CurvePwAffine extends Curve {
 		// Shift remaining segments left by latency
 		Num L = result.getSegment(0).getX();
 		for (int i = 0; i < result.getSegmentCount(); i++) {
-			result.getSegment(i).setX(NumUtils.getNumUtils().sub(result.getSegment(i).getX(), L));
+			result.getSegment(i).setX(Num.getUtils().sub(result.getSegment(i).getX(), L));
 		}
 		if (result.getSegment(0).isLeftopen()) {
 			result.addSegment(0, LinearSegment.createHorizontalLine(0.0));
@@ -810,22 +808,22 @@ public interface CurvePwAffine extends Curve {
 		i = 0;
 		while (i < c.getSegmentCount() - 1) {
 			// Join colinear segments
-			Num firstArg = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
+			Num firstArg = Num.getUtils().sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
 
-			Num secondArg = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
-			secondArg = NumUtils.getNumUtils().mult(secondArg, c.getSegment(i).getGrad());
-			secondArg = NumUtils.getNumUtils().add(c.getSegment(i).getY(), secondArg);
-			secondArg = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getY(), secondArg);
+			Num secondArg = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+			secondArg = Num.getUtils().mult(secondArg, c.getSegment(i).getGrad());
+			secondArg = Num.getUtils().add(c.getSegment(i).getY(), secondArg);
+			secondArg = Num.getUtils().sub(c.getSegment(i + 1).getY(), secondArg);
 
-			if (NumUtils.getNumUtils().abs(firstArg).lt(NumFactory.getNumFactory().getEpsilon())
-					&& NumUtils.getNumUtils().abs(secondArg).lt(NumFactory.getNumFactory().getEpsilon())) {
+			if (Num.getUtils().abs(firstArg).lt(Num.getFactory().getEpsilon())
+					&& Num.getUtils().abs(secondArg).lt(Num.getFactory().getEpsilon())) {
 
 				c.removeSegment(i + 1);
 				if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
-					Num resultPt1 = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
-					Num resultPt2 = NumUtils.getNumUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+					Num resultPt1 = Num.getUtils().sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
+					Num resultPt2 = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
 
-					c.getSegment(i).setGrad(NumUtils.getNumUtils().div(resultPt1, resultPt2));
+					c.getSegment(i).setGrad(Num.getUtils().div(resultPt1, resultPt2));
 				}
 				continue;
 			}
@@ -834,16 +832,16 @@ public interface CurvePwAffine extends Curve {
 
 		for (i = 0; i < c.getSegmentCount() - 1; i++) {
 			if (c.getSegment(i).getX().equals(c.getSegment(i + 1).getX())) {
-				c.getSegment(i).setGrad(NumFactory.getNumFactory().createZero());
+				c.getSegment(i).setGrad(Num.getFactory().createZero());
 			}
 		}
 
 		// Remove rate of tb arrival curves' first segment
-		if (c.getSegmentCount() > 1 && c.getSegment(0).getX() == NumFactory.getNumFactory().getZero()
-				&& c.getSegment(0).getY() != NumFactory.getNumFactory().getZero()
-				&& c.getSegment(1).getX() == NumFactory.getNumFactory().getZero()
-				&& c.getSegment(1).getY() != NumFactory.getNumFactory().getZero()) {
-			c.getSegment(0).setGrad(NumFactory.getNumFactory().createZero());
+		if (c.getSegmentCount() > 1 && c.getSegment(0).getX() == Num.getFactory().getZero()
+				&& c.getSegment(0).getY() != Num.getFactory().getZero()
+				&& c.getSegment(1).getX() == Num.getFactory().getZero()
+				&& c.getSegment(1).getY() != Num.getFactory().getZero()) {
+			c.getSegment(0).setGrad(Num.getFactory().createZero());
 		}
 
 		c.setTB_MetaInfo(false);

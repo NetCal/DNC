@@ -31,8 +31,6 @@ package de.uni_kl.cs.disco.curves.dnc;
 
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 
 /**
  * Class representing linear segments of a curve. A linear segments starts at
@@ -71,9 +69,9 @@ public class LinearSegment_DNC implements LinearSegment {
 	 * The default constructor.
 	 */
 	protected LinearSegment_DNC() {
-		x = NumFactory.getNumFactory().createZero();
-		y = NumFactory.getNumFactory().createZero();
-		grad = NumFactory.getNumFactory().createZero();
+		x = Num.getFactory().createZero();
+		y = Num.getFactory().createZero();
+		grad = Num.getFactory().createZero();
 		leftopen = false;
 	}
 
@@ -131,9 +129,9 @@ public class LinearSegment_DNC implements LinearSegment {
 			throw new RuntimeException("Invalid string representation of a linear segment.");
 		}
 
-		x = NumFactory.getNumFactory().create(x_y[0]);
-		y = NumFactory.getNumFactory().create(x_y[1]);
-		grad = NumFactory.getNumFactory().create(xy_r[1]);
+		x = Num.getFactory().create(x_y[0]);
+		y = Num.getFactory().create(x_y[1]);
+		grad = Num.getFactory().create(xy_r[1]);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------
@@ -149,7 +147,7 @@ public class LinearSegment_DNC implements LinearSegment {
 	 * @return the function value
 	 */
 	public Num f(Num x) {
-		return NumUtils.getNumUtils().add(NumUtils.getNumUtils().mult(NumUtils.getNumUtils().sub(x, this.x), grad), y);
+		return Num.getUtils().add(Num.getUtils().mult(Num.getUtils().sub(x, this.x), grad), y);
 	}
 
 	public Num getX() {
@@ -194,12 +192,12 @@ public class LinearSegment_DNC implements LinearSegment {
 	 *         parallel
 	 */
 	public Num getXIntersectionWith(LinearSegment other) {
-		Num y1 = NumUtils.getNumUtils().sub(this.y, NumUtils.getNumUtils().mult(x, this.grad));
-		Num y2 = NumUtils.getNumUtils().sub(other.getY(), NumUtils.getNumUtils().mult(other.getX(), other.getGrad()));
+		Num y1 = Num.getUtils().sub(this.y, Num.getUtils().mult(x, this.grad));
+		Num y2 = Num.getUtils().sub(other.getY(), Num.getUtils().mult(other.getX(), other.getGrad()));
 
 		// returns NaN if lines are parallel
-		return NumUtils.getNumUtils().div(NumUtils.getNumUtils().sub(y2, y1),
-				NumUtils.getNumUtils().sub(this.grad, other.getGrad()));
+		return Num.getUtils().div(Num.getUtils().sub(y2, y1),
+				Num.getUtils().sub(this.grad, other.getGrad()));
 	}
 
 	/**

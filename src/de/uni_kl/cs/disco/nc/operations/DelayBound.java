@@ -33,8 +33,6 @@ import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public class DelayBound {
 	private DelayBound() {
@@ -42,7 +40,7 @@ public class DelayBound {
 
 	private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 		if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
-			return NumFactory.getNumFactory().createZero();
+			return Num.getFactory().createZero();
 		}
 		if (service_curve.getDelayedInfiniteBurst_Property()) {
 			// Assumption: the arrival curve does not have an initial latency.
@@ -53,7 +51,7 @@ public class DelayBound {
 		if (service_curve.equals(CurvePwAffine.getFactory().createZeroService()) // We know from above that the
 																					// arrivals are not zero.
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-			return NumFactory.getNumFactory().createPositiveInfinity();
+			return Num.getFactory().createPositiveInfinity();
 		}
 		return null;
 	}
@@ -75,20 +73,20 @@ public class DelayBound {
 			return result;
 		}
 
-		result = NumFactory.getNumFactory().createNegativeInfinity();
+		result = Num.getFactory().createNegativeInfinity();
 		for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
 			Num ip_y = arrival_curve.getSegment(i).getY();
 
-			Num delay = NumUtils.getNumUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-			result = NumUtils.getNumUtils().max(result, delay);
+			Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+			result = Num.getUtils().max(result, delay);
 		}
 		for (int i = 0; i < service_curve.getSegmentCount(); i++) {
 			Num ip_y = service_curve.getSegment(i).getY();
 
-			Num delay = NumUtils.getNumUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-			result = NumUtils.getNumUtils().max(result, delay);
+			Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+			result = Num.getUtils().max(result, delay);
 		}
 
-		return NumUtils.getNumUtils().max(NumFactory.getNumFactory().getZero(), result);
+		return Num.getUtils().max(Num.getFactory().getZero(), result);
 	}
 }

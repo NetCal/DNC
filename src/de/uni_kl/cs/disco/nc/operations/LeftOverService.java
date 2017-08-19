@@ -41,7 +41,6 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public final class LeftOverService {
 	private LeftOverService() {
@@ -126,7 +125,7 @@ public final class LeftOverService {
 
 			if (arrival_curve.getGradientLimitRight(x_alpha).leq(service_curve.getGradientLimitRight(x_beta))) {
 
-				Num theta = NumUtils.getNumUtils().sub(x_beta, x_alpha);
+				Num theta = Num.getUtils().sub(x_beta, x_alpha);
 				ServiceCurve beta_fifo = CurvePwAffine.getFactory()
 						.createServiceCurve(CurvePwAffine.boundAtXAxis(CurvePwAffine.min(
 								CurvePwAffine.sub(service_curve,

@@ -34,8 +34,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.real.DoublePrecision;
+import de.uni_kl.cs.disco.numbers.implementations.RealDoublePrecision;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -270,7 +269,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	public int getSegmentLimitRight(Num x) {
-		if (x.equals(NumFactory.getNumFactory().getPositiveInfinity())) {
+		if (x.equals(Num.getFactory().getPositiveInfinity())) {
 			return getSegmentCount();
 		}
 
@@ -324,19 +323,19 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
 	public boolean isDiscontinuity(int pos) {
 		return (pos + 1 < getSegmentCount()
-				&& (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x())) < DoublePrecision.createEpsilon()
+				&& (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x())) < RealDoublePrecision.getInstance().createEpsilon()
 						.doubleValue());
 	}
 
 	public boolean isRealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
-				&& (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y())) >= DoublePrecision.createEpsilon()
+				&& (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y())) >= RealDoublePrecision.getInstance().createEpsilon()
 						.doubleValue());
 	}
 
 	public boolean isUnrealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
-				&& (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y())) < DoublePrecision.createEpsilon()
+				&& (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y())) < RealDoublePrecision.getInstance().createEpsilon()
 						.doubleValue());
 	}
 
@@ -353,7 +352,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	public boolean isConvex() {
-		return isConvexIn(NumFactory.getNumFactory().getZero(), NumFactory.getNumFactory().getPositiveInfinity());
+		return isConvexIn(Num.getFactory().getZero(), Num.getFactory().getPositiveInfinity());
 	}
 
 	public boolean isConvexIn(Num a, Num b) {
@@ -385,7 +384,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	public boolean isConcave() {
-		return isConcaveIn(NumFactory.getNumFactory().getZero(), NumFactory.getNumFactory().getPositiveInfinity());
+		return isConcaveIn(Num.getFactory().getZero(), Num.getFactory().getPositiveInfinity());
 	}
 
 	/**
@@ -473,12 +472,12 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
 	public Num f(Num x) {
 		// Assume left-continuity --> getYmin
-		return NumFactory.getNumFactory().create(rtc_curve.getYmin(x.doubleValue()));
+		return Num.getFactory().create(rtc_curve.getYmin(x.doubleValue()));
 	}
 
 	public Num fLimitRight(Num x) {
 		// Assume left-continuity --> getYmin
-		return NumFactory.getNumFactory().create(rtc_curve.getYmin(x.doubleValue()));
+		return Num.getFactory().create(rtc_curve.getYmin(x.doubleValue()));
 	}
 
 	public Num f_inv(Num y) {
@@ -487,31 +486,31 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
 	public Num f_inv(Num y, boolean rightmost) {
 		if (rightmost) {
-			return NumFactory.getNumFactory().create(rtc_curve.getXmax(y.doubleValue()));
+			return Num.getFactory().create(rtc_curve.getXmax(y.doubleValue()));
 		} else {
-			return NumFactory.getNumFactory().create(rtc_curve.getXmin(y.doubleValue()));
+			return Num.getFactory().create(rtc_curve.getXmin(y.doubleValue()));
 		}
 	}
 
 	public Num getLatency() {
-		return NumFactory.getNumFactory().create(rtc_curve.getXmax(0.0));
+		return Num.getFactory().create(rtc_curve.getXmax(0.0));
 	}
 
 	public Num getBurst() {
-		return NumFactory.getNumFactory().create(rtc_curve.y0epsilon());
+		return Num.getFactory().create(rtc_curve.y0epsilon());
 	}
 
 	public Num getGradientLimitRight(Num x) {
 		int i = getSegmentLimitRight(x);
 		if (i < 0) {
-			return NumFactory.getNumFactory().createNaN();
+			return Num.getFactory().createNaN();
 		}
-		return NumFactory.getNumFactory().create(getSegmentRTC(i).s());
+		return Num.getFactory().create(getSegmentRTC(i).s());
 	}
 
 	public Num getTB_Burst() {
 		// RTC Token Buckets cannot pass through the origin
-		return NumFactory.getNumFactory().create(rtc_curve.y0epsilon());
+		return Num.getFactory().create(rtc_curve.y0epsilon());
 	}
 
 	@Override
@@ -575,7 +574,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	public Num getUltAffineRate() {
-		return NumFactory.getNumFactory().create(rtc_curve.aperiodicSegments().lastSegment().s());
+		return Num.getFactory().create(rtc_curve.aperiodicSegments().lastSegment().s());
 	}
 
 	// ------------------------------------------------------------
@@ -633,7 +632,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 			if (this.equals(this.createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_MPARTC_PwAffine>();
 				rate_latencies.add(this.createRateLatency(
-						NumFactory.getNumFactory().createPositiveInfinity(), NumFactory.getNumFactory().createZero()));
+						Num.getFactory().createPositiveInfinity(), Num.getFactory().createZero()));
 			} else {
 				throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
 			}
@@ -883,7 +882,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	public MaxServiceCurve_MPARTC_PwAffine createInfiniteMaxService() {
-		return createDelayedInfiniteBurstMSC(NumFactory.getNumFactory().createZero());
+		return createDelayedInfiniteBurstMSC(Num.getFactory().createZero());
 	}
 
 	public MaxServiceCurve_MPARTC_PwAffine createZeroDelayInfiniteBurstMSC() {

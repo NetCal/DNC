@@ -28,7 +28,20 @@
 
 package de.uni_kl.cs.disco.numbers;
 
+import de.uni_kl.cs.disco.nc.CalculatorConfig;
+import de.uni_kl.cs.disco.numbers.implementations.RationalBigInt;
+import de.uni_kl.cs.disco.numbers.implementations.RationalInt;
+import de.uni_kl.cs.disco.numbers.implementations.RealDoublePrecision;
+import de.uni_kl.cs.disco.numbers.implementations.RealSinglePrecision;
+import de.uni_kl.cs.disco.numbers.values.NaN;
+import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
+import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
+
 public interface Num {
+	// --------------------------------------------------------------------------------------------------------------
+	// Num Interface
+	// --------------------------------------------------------------------------------------------------------------
+	
 	double doubleValue();
 
 	boolean eq(double num);
@@ -58,4 +71,96 @@ public interface Num {
 	boolean isNaN();
 
 	Num copy();
+
+	// --------------------------------------------------------------------------------------------------------------
+	// Factory Interface
+	// --------------------------------------------------------------------------------------------------------------
+	
+	final Num NaN = new NaN();
+	final Num NEGATIVE_INFINITY = new NegativeInfinity();
+	final Num POSITIVE_INFINITY = new PositiveInfinity();
+
+	public static Num getFactory() {
+		switch (CalculatorConfig.getInstance().getNumClass()) {
+		case REAL_SINGLE_PRECISION:
+			return RealSinglePrecision.getInstance();
+		case RATIONAL_INTEGER:
+			return RationalInt.getInstance();
+		case RATIONAL_BIGINTEGER:
+			return RationalBigInt.getInstance();
+		case REAL_DOUBLE_PRECISION:
+		default:
+			return RealDoublePrecision.getInstance();
+		}
+	}
+
+	Num getPositiveInfinity();
+
+	Num createPositiveInfinity();
+
+	Num getNegativeInfinity();
+
+	Num createNegativeInfinity();
+
+	Num getNaN();
+
+	Num createNaN();
+
+	Num getZero();
+
+	Num createZero();
+
+	Num getEpsilon();
+
+	Num createEpsilon();
+
+	Num create(int num);
+	
+	Num create(double value);
+
+	Num create(int num, int den);
+
+	Num create(String num_str) throws Exception;
+
+	// --------------------------------------------------------------------------------------------------------------
+	// Utils Interface
+	// --------------------------------------------------------------------------------------------------------------
+
+	public static Num getUtils() {
+		switch (CalculatorConfig.getInstance().getNumClass()) {
+		case REAL_SINGLE_PRECISION:
+			return RealSinglePrecision.getInstance();
+		case RATIONAL_INTEGER:
+			return RationalInt.getInstance();
+		case RATIONAL_BIGINTEGER:
+			return RationalBigInt.getInstance();
+		case REAL_DOUBLE_PRECISION:
+		default:
+			return RealDoublePrecision.getInstance();
+		}
+	}
+
+	Num add(Num num1, Num num2);
+
+	Num sub(Num num1, Num num2);
+
+	Num mult(Num num1, Num num2);
+
+	Num div(Num num1, Num num2);
+
+	Num abs(Num num);
+
+	Num diff(Num num1, Num num2);
+
+	Num max(Num num1, Num num2);
+
+	Num min(Num num1, Num num2);
+
+	Num negate(Num num);
+
+	boolean isFinite(Num num);
+
+	boolean isInfinite(Num num);
+
+	boolean isNaN(Num num);
 }

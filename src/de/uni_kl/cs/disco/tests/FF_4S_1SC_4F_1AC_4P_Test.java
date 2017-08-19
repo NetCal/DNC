@@ -42,7 +42,7 @@ import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
-import de.uni_kl.cs.disco.numbers.NumFactory;
+import de.uni_kl.cs.disco.numbers.Num;
 
 @RunWith(value = Parameterized.class)
 public class FF_4S_1SC_4F_1AC_4P_Test extends DncTests {
@@ -72,7 +72,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTests {
 	private static void initializeBounds() {
 		expected_results.clear();
 
-		NumFactory factory = NumFactory.getNumFactory();
+		Num factory = Num.getFactory();
 
 		// TFA
 		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, factory.create(3735, 32), factory.create(975));

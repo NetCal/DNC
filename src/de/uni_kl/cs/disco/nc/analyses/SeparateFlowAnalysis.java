@@ -49,7 +49,6 @@ import de.uni_kl.cs.disco.nc.operations.DelayBound;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
 import de.uni_kl.cs.disco.network.*;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
 
 public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 	@SuppressWarnings("unused")
@@ -97,8 +96,8 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 		Num delay_bound__beta_e2e;
 		Num backlog_bound__beta_e2e;
 
-		((SeparateFlowResults) result).setDelayBound(NumFactory.getNumFactory().createPositiveInfinity());
-		((SeparateFlowResults) result).setBacklogBound(NumFactory.getNumFactory().createPositiveInfinity());
+		((SeparateFlowResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
+		((SeparateFlowResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
 
 		for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
 			delay_bound__beta_e2e = DelayBound.deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // single flow

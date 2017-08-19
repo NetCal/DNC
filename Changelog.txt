@@ -1,6 +1,6 @@
 v2.4.0beta3 "Chimera" (2017-Sep-XY)
 -----------------------------------
-Simplifications to the code structure and performance improvements:
+Simplifications to the code structure for streamlined use. This work requires Java 8+ as it relies on static methods in interfaces.
 * CalculatorConfig singleton: fix execution of all tests, run time back to previous level.
 * Split Analysis.java into three parts:
   - The minimal Analysis interface.
@@ -12,26 +12,19 @@ Simplifications to the code structure and performance improvements:
   - The abstract class ArrivalBoundDispatch that applies the configured arrival boundings.
   - The abstract class AbstractArrivalBound holds member variables for the network and the configurations.
   All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound.
-* Combined interfaces and (singleton) dispatchers:
-  - NumFactory dispatches, NumFactoryDispatch was removed.
-  - NumUtils dispatches, NumUtilsDispatch was removed.
-  - CurvePwAffineFactory dispatches, CurvePwAffineFactoryDispatch was removed.
+* Merge Interface, Factory and Utils classes where possible:
+  - CurvePwAffine, incl. DNC and MPA_RTC Curves.
+  - LinearSegments.
+  - Num and all its implementations.
 * Disco (min,+)-algebraic operations:
   - Moved to new package de.uni_kl.cs.disco.minplus.dnc
   - All convolutions and deconvolutions are called via a dispatcher, MinPlusDispatch.java. 
   - Extension to manipulate MPA RTC curves with their native operations is not yet tested.
-* Num packages: new structure, reordering.
-  - Separate rationals (requiring the values NaN, +infty, -infty) and reals.
-  - Drop the "Rational" and "Real" class prefixes.
-  - Double/Single also renamed to DoublePrecision/SinglePrecision.
 * CurvePwAffineUtilsDispatch was not a dispatcher but an utils class:
   - Renamed to CurvePwAffineUtils.
   - Made it an abstract class.
 * LinearSegmentFactoryDispatch is not dispatching but a factory itself; renamed to LinearSegmentFactory.
 * Merge of MinPlusInputChecks and MinPlusDispatch to MinPlus.
-* Merge Interface, Factory and Utils classes where possible:
-  - CurvePwAffine, incl. DNC and MPA_RTC Curves.
-  - LinearSegments.
 
 v2.4.0beta2 "Chimera" (2017-Aug-17)
 -----------------------------------

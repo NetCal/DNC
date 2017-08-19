@@ -47,8 +47,6 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 
@@ -74,14 +72,14 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
 	}
 
 	public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-		Num delay_bound = NumFactory.getNumFactory().createZero();
-		Num backlog_bound = NumFactory.getNumFactory().createZero();
+		Num delay_bound = Num.getFactory().createZero();
+		Num backlog_bound = Num.getFactory().createZero();
 
 		for (Server server : path.getServers()) {
 			Pair<Num> min_D_B = deriveBoundsAtServer(server);
 
-			delay_bound = NumUtils.getNumUtils().add(delay_bound, min_D_B.getFirst());
-			backlog_bound = NumUtils.getNumUtils().max(backlog_bound, min_D_B.getSecond());
+			delay_bound = Num.getUtils().add(delay_bound, min_D_B.getFirst());
+			backlog_bound = Num.getUtils().max(backlog_bound, min_D_B.getSecond());
 		}
 
 		((TotalFlowResults) result).setDelayBound(delay_bound);
@@ -100,8 +98,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
 		Set<Num> delay_bounds_server = new HashSet<Num>();
 		Set<Num> backlog_bounds_server = new HashSet<Num>();
 
-		Num delay_bound_s__min = NumFactory.getNumFactory().getPositiveInfinity();
-		Num backlog_bound_s__min = NumFactory.getNumFactory().getPositiveInfinity();
+		Num delay_bound_s__min = Num.getFactory().getPositiveInfinity();
+		Num backlog_bound_s__min = Num.getFactory().getPositiveInfinity();
 		for (ArrivalCurve alpha_candidate : alphas_server) {
 			// According to the call of computeOutputBound there's no left-over service
 			// curve calculation

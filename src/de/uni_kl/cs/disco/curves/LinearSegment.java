@@ -31,8 +31,6 @@ import de.uni_kl.cs.disco.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.LinearSegment_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
-import de.uni_kl.cs.disco.numbers.NumFactory;
-import de.uni_kl.cs.disco.numbers.NumUtils;
 
 public interface LinearSegment {
 	// --------------------------------------------------------------------------------------------------------------
@@ -90,8 +88,8 @@ public interface LinearSegment {
 			return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
 		case DNC:
 		default:
-			return new LinearSegment_DNC(NumFactory.getNumFactory().createZero(),
-					NumFactory.getNumFactory().createZero(), NumFactory.getNumFactory().createZero(), false);
+			return new LinearSegment_DNC(Num.getFactory().createZero(),
+					Num.getFactory().createZero(), Num.getFactory().createZero(), false);
 		}
 	}
 	
@@ -117,8 +115,8 @@ public interface LinearSegment {
 	public static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
 		LinearSegment result = createHorizontalLine(0.0);
 		result.setX(x);
-		result.setY(NumUtils.getNumUtils().add(s1.f(x), s2.f(x)));
-		result.setGrad(NumUtils.getNumUtils().add(s1.getGrad(), s2.getGrad()));
+		result.setY(Num.getUtils().add(s1.f(x), s2.f(x)));
+		result.setGrad(Num.getUtils().add(s1.getGrad(), s2.getGrad()));
 		result.setLeftopen(leftopen);
 		return result;
 	}
@@ -141,8 +139,8 @@ public interface LinearSegment {
 	public static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
 		LinearSegment result = createHorizontalLine(0.0);
 		result.setX(x);
-		result.setY(NumUtils.getNumUtils().sub(s1.f(x), s2.f(x)));
-		result.setGrad(NumUtils.getNumUtils().sub(s1.getGrad(), s2.getGrad()));
+		result.setY(Num.getUtils().sub(s1.f(x), s2.f(x)));
+		result.setGrad(Num.getUtils().sub(s1.getGrad(), s2.getGrad()));
 		result.setLeftopen(leftopen);
 		return result;
 	}
@@ -171,10 +169,10 @@ public interface LinearSegment {
 
 		LinearSegment result = createHorizontalLine(0.0);
 		result.setX(x);
-		if (crossed || NumUtils.getNumUtils().abs(NumUtils.getNumUtils().sub(f1_x, f2_x))
-				.lt(NumFactory.getNumFactory().getEpsilon())) {
+		if (crossed || Num.getUtils().abs(Num.getUtils().sub(f1_x, f2_x))
+				.lt(Num.getFactory().getEpsilon())) {
 			result.setY(f1_x);
-			result.setGrad(NumUtils.getNumUtils().min(s1.getGrad(), s2.getGrad()));
+			result.setGrad(Num.getUtils().min(s1.getGrad(), s2.getGrad()));
 		} else if (f1_x.lt(f2_x)) {
 			result.setY(f1_x);
 			result.setGrad(s1.getGrad());
@@ -209,10 +207,10 @@ public interface LinearSegment {
 
 		LinearSegment result = createHorizontalLine(0.0);
 		result.setX(x);
-		if (crossed || NumUtils.getNumUtils().abs(NumUtils.getNumUtils().sub(f1_x, f2_x))
-				.lt(NumFactory.getNumFactory().getEpsilon())) {
+		if (crossed || Num.getUtils().abs(Num.getUtils().sub(f1_x, f2_x))
+				.lt(Num.getFactory().getEpsilon())) {
 			result.setY(f1_x);
-			result.setGrad(NumUtils.getNumUtils().max(s1.getGrad(), s2.getGrad()));
+			result.setGrad(Num.getUtils().max(s1.getGrad(), s2.getGrad()));
 		} else if (f1_x.gt(f2_x)) {
 			result.setY(f1_x);
 			result.setGrad(s1.getGrad());
