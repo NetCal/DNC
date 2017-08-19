@@ -700,7 +700,7 @@ public interface CurvePwAffine extends Curve {
 
 		if (current_segment.getGrad().gtZero() || current_segment.getY().gtZero()) {
 			// Add a zero segment at the front
-			curve_copy.addSegment(0, LinearSegment.createZeroSegment());
+			curve_copy.addSegment(0, Curve.getXAxis());
 		}
 
 		for (int i = 1; i < curve_copy.getSegmentCount(); i++) {

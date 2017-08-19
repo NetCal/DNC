@@ -84,16 +84,6 @@ public interface LinearSegment {
 		}
 	}
 
-	public static LinearSegment createZeroSegment() {
-		switch (CalculatorConfig.getInstance().getCurveClass()) {
-		case MPA_RTC:
-			return createHorizontalLine(0.0);
-		case DNC:
-		default:
-			return createHorizontalLine(0.0);
-		}
-	}
-
 	public static LinearSegment createHorizontalLine(double y) {
 		switch (CalculatorConfig.getInstance().getCurveClass()) {
 		case MPA_RTC:
