@@ -37,7 +37,6 @@ import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.MaxServiceCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
