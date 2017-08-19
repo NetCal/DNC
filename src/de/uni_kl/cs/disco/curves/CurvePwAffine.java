@@ -30,7 +30,6 @@ package de.uni_kl.cs.disco.curves;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import de.uni_kl.cs.disco.curves.dnc.Curve_DNC;
 import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
@@ -213,10 +212,7 @@ public interface CurvePwAffine extends Curve {
 	// --------------------------------------------------------------------------------------------------------------
 	// Utils
 	// --------------------------------------------------------------------------------------------------------------
-	static final int OPERATOR_ADD = 0;
-	static final int OPERATOR_SUB = 1;
-	static final int OPERATOR_MIN = 2;
-	static final int OPERATOR_MAX = 3;
+	enum CurveOperation { ADD, SUB, MIN, MAX }
 
 	/**
 	 * Common helper for computing a new curve.
@@ -229,21 +225,21 @@ public interface CurvePwAffine extends Curve {
 	 *            Operation to be applied to the curves.
 	 * @return The resulting curve.
 	 */
-	static CurvePwAffine computeResultingCurve(CurvePwAffine curve1, CurvePwAffine curve2, int operator) {
+	static CurvePwAffine computeResultingCurve(CurvePwAffine curve1, CurvePwAffine curve2, CurveOperation operator) {
 		CurvePwAffine ZERO_DELAY_INFINITE_BURST = CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
 
 		switch (operator) {
-		case OPERATOR_ADD:
+		case ADD:
 			if (curve1.equals(ZERO_DELAY_INFINITE_BURST) || curve2.equals(ZERO_DELAY_INFINITE_BURST)) {
 				return ZERO_DELAY_INFINITE_BURST;
 			}
 			break;
-		case OPERATOR_SUB:
+		case SUB:
 			if (curve1.equals(ZERO_DELAY_INFINITE_BURST) || curve2.equals(ZERO_DELAY_INFINITE_BURST)) {
 				return ZERO_DELAY_INFINITE_BURST;
 			}
 			break;
-		case OPERATOR_MIN:
+		case MIN:
 			if (curve1.equals(ZERO_DELAY_INFINITE_BURST)) {
 				return curve2.copy();
 			}
@@ -251,7 +247,7 @@ public interface CurvePwAffine extends Curve {
 				return curve1.copy();
 			}
 			break;
-		case OPERATOR_MAX:
+		case MAX:
 			if (curve1.equals(ZERO_DELAY_INFINITE_BURST) || curve2.equals(ZERO_DELAY_INFINITE_BURST)) {
 				return ZERO_DELAY_INFINITE_BURST;
 			}
@@ -276,13 +272,13 @@ public interface CurvePwAffine extends Curve {
 			leftopen = curve1.getSegment(i1).isLeftopen() || curve2.getSegment(i2).isLeftopen();
 
 			switch (operator) {
-			case OPERATOR_ADD:
+			case ADD:
 				result.add(LinearSegment.add(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen));
 				break;
-			case OPERATOR_SUB:
+			case SUB:
 				result.add(LinearSegment.sub(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen));
 				break;
-			case OPERATOR_MIN:
+			case MIN:
 				x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
 				if (x_cross.equals(NumFactory.getNumFactory().getNaN())) {
 					x_cross = NumFactory.getNumFactory().createPositiveInfinity();
@@ -294,7 +290,7 @@ public interface CurvePwAffine extends Curve {
 					result.add(LinearSegment.min(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
 				}
 				break;
-			case OPERATOR_MAX:
+			case MAX:
 				x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
 				if (x_cross.equals(NumFactory.getNumFactory().getNaN())) {
 					x_cross = NumFactory.getNumFactory().createPositiveInfinity();
@@ -332,7 +328,7 @@ public interface CurvePwAffine extends Curve {
 	 * @return the pointwise sum of the given curves.
 	 */
 	public static CurvePwAffine add(CurvePwAffine curve1, CurvePwAffine curve2) {
-		return computeResultingCurve(curve1, curve2, OPERATOR_ADD);
+		return computeResultingCurve(curve1, curve2, CurveOperation.ADD);
 	}
 
 	/**
@@ -346,7 +342,7 @@ public interface CurvePwAffine extends Curve {
 	 * @return the pointwise difference of the given curves, i.e., curve1 - curve2.
 	 */
 	public static CurvePwAffine sub(CurvePwAffine curve1, CurvePwAffine curve2) {
-		return computeResultingCurve(curve1, curve2, OPERATOR_SUB);
+		return computeResultingCurve(curve1, curve2, CurveOperation.SUB);
 	}
 
 	/**
@@ -359,7 +355,7 @@ public interface CurvePwAffine extends Curve {
 	 * @return the pointwise minimum of the given curves.
 	 */
 	public static CurvePwAffine min(CurvePwAffine curve1, CurvePwAffine curve2) {
-		return computeResultingCurve(curve1, curve2, OPERATOR_MIN);
+		return computeResultingCurve(curve1, curve2, CurveOperation.MIN);
 	}
 
 	/**
@@ -372,7 +368,7 @@ public interface CurvePwAffine extends Curve {
 	 * @return the pointwise maximum of the given curves.
 	 */
 	public static CurvePwAffine max(CurvePwAffine curve1, CurvePwAffine curve2) {
-		return computeResultingCurve(curve1, curve2, OPERATOR_MAX);
+		return computeResultingCurve(curve1, curve2, CurveOperation.MAX);
 	}
 
 	/**
@@ -583,7 +579,7 @@ public interface CurvePwAffine extends Curve {
 
 	public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
 		return CurvePwAffine.getFactory()
-				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, OPERATOR_ADD));
+				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, CurveOperation.ADD));
 	}
 
 	public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, Num dy) {
@@ -592,7 +588,7 @@ public interface CurvePwAffine extends Curve {
 
 	public static MaxServiceCurve min(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
 		return CurvePwAffine.getFactory()
-				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, OPERATOR_MIN));
+				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, CurveOperation.MIN));
 	}
 
 	public static Num getXIntersection(CurvePwAffine curve1, CurvePwAffine curve2) {
@@ -645,24 +641,24 @@ public interface CurvePwAffine extends Curve {
 	}
 
 	public static ServiceCurve add(ServiceCurve c1, ServiceCurve c2) {
-		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_ADD));
+		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.ADD));
 	}
 
 	public static ServiceCurve sub(ServiceCurve c1, ArrivalCurve c2) {
-		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_SUB));
+		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.SUB));
 	}
 
 	public static ServiceCurve min(ServiceCurve c1, ServiceCurve c2) {
-		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_MIN));
+		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.MIN));
 	}
 
 	public static ServiceCurve max(ServiceCurve c1, ServiceCurve c2) {
-		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, OPERATOR_MAX));
+		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.MAX));
 	}
 
 	public static ArrivalCurve add(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
 		return CurvePwAffine.getFactory()
-				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, OPERATOR_ADD));
+				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, CurveOperation.ADD));
 	}
 
 	public static ArrivalCurve add(ArrivalCurve arrival_curve_1, Num dy) {
@@ -671,12 +667,12 @@ public interface CurvePwAffine extends Curve {
 
 	public static ArrivalCurve min(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
 		return CurvePwAffine.getFactory()
-				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, OPERATOR_MIN));
+				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, CurveOperation.MIN));
 	}
 
 	public static ArrivalCurve max(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
 		return CurvePwAffine.getFactory()
-				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, OPERATOR_MAX));
+				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, CurveOperation.MAX));
 	}
 
 	/**
