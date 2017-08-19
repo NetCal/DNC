@@ -12,6 +12,7 @@ Simplifications to the code structure for streamlined use. This work requires Ja
   - The abstract class ArrivalBoundDispatch that applies the configured arrival boundings.
   - The abstract class AbstractArrivalBound holds member variables for the network and the configurations.
   All arrival bounds in de.uni_kl.cs.disco.nc.arrivalbounds extend AbstractArrivalBound, all but the sink-tree version also implement ArrivalBound.
+  - Reworked the arrival bound dispatcher to reuse a single object per arrival bound alternative instead of creating a new one for every call.
 * Merge Interface, Factory and Utils classes where possible:
   - CurvePwAffine, incl. DNC and MPA_RTC Curves.
   - LinearSegments.

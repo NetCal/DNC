@@ -52,8 +52,12 @@ import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 
 public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBound {
+	private static PmooArrivalBound instance = new PmooArrivalBound();
+	
+	public static PmooArrivalBound getInstance() {
+		return instance;
+	}
 
-	@SuppressWarnings("unused")
 	private PmooArrivalBound() {
 	}
 

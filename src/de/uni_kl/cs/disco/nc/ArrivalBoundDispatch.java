@@ -50,6 +50,10 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 
 public abstract class ArrivalBoundDispatch {
+	// --------------------------------------------------------------------------------------------------------------
+	// Arrival Bound Dispatching
+	// --------------------------------------------------------------------------------------------------------------
+	
 	public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Server server)
 			throws Exception {
 		return computeArrivalBounds(network, configuration, server, network.getFlows(server), Flow.NULL_FLOW);
@@ -154,18 +158,23 @@ public abstract class ArrivalBoundDispatch {
 
 			switch (arrival_bound_method) {
 			case PBOO_PER_HOP:
-				PbooArrivalBound_PerHop pboo_per_hop = new PbooArrivalBound_PerHop(network, configuration);
+				PbooArrivalBound_PerHop pboo_per_hop = PbooArrivalBound_PerHop.getInstance();
+				pboo_per_hop.setNetwork(network);
+				pboo_per_hop.setConfiguration(configuration);
 				arrival_bounds_tmp = pboo_per_hop.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
 			case PBOO_CONCATENATION:
-				PbooArrivalBound_Concatenation pboo_concatenation = new PbooArrivalBound_Concatenation(network,
-						configuration);
+				PbooArrivalBound_Concatenation pboo_concatenation = PbooArrivalBound_Concatenation.getInstance();
+				pboo_concatenation.setNetwork(network);
+				pboo_concatenation.setConfiguration(configuration);
 				arrival_bounds_tmp = pboo_concatenation.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
 			case PMOO:
-				PmooArrivalBound pmoo_arrival_bound = new PmooArrivalBound(network, configuration);
+				PmooArrivalBound pmoo_arrival_bound = PmooArrivalBound.getInstance();
+				pmoo_arrival_bound.setNetwork(network);
+				pmoo_arrival_bound.setConfiguration(configuration);
 				arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 

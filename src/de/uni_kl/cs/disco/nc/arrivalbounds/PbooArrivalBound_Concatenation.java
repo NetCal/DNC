@@ -52,8 +52,12 @@ import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public class PbooArrivalBound_Concatenation extends AbstractArrivalBound implements ArrivalBound {
+	private static PbooArrivalBound_Concatenation instance = new PbooArrivalBound_Concatenation();
+	
+	public static PbooArrivalBound_Concatenation getInstance() {
+		return instance;
+	}
 
-	@SuppressWarnings("unused")
 	private PbooArrivalBound_Concatenation() {
 	}
 

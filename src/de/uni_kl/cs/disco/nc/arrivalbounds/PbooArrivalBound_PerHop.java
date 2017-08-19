@@ -51,8 +51,12 @@ import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements ArrivalBound {
+	private static PbooArrivalBound_PerHop instance = new PbooArrivalBound_PerHop();
+	
+	public static PbooArrivalBound_PerHop getInstance() {
+		return instance;
+	}
 
-	@SuppressWarnings("unused")
 	private PbooArrivalBound_PerHop() {
 	}
 
