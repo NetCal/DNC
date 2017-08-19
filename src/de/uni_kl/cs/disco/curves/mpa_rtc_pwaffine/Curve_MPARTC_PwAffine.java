@@ -217,7 +217,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 			}
 
 			this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
-			this.is_rate_latency = ((CurvePwAffine) curve).getRL_property();
+			this.is_rate_latency = ((CurvePwAffine) curve).getRL_Property();
 			this.is_token_bucket = ((CurvePwAffine) curve).getTB_Property();
 		} else {
 			SegmentList segList_rtc = new SegmentList();
@@ -601,7 +601,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	// Rate latency
-	public boolean getRL_property() {
+	public boolean getRL_Property() {
 		decomposeIntoRateLatencies();
 		return is_rate_latency;
 	}

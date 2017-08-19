@@ -68,7 +68,7 @@ public interface CurvePwAffine extends Curve {
 	// // Specific piecewise affine curve shapes
 
 	// (Composition of) Rate latency
-	boolean getRL_property();
+	boolean getRL_Property();
 
 	void setRL_Property(boolean is_rate_latency);
 

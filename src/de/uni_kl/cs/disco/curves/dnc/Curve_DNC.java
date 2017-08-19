@@ -279,7 +279,7 @@ public class Curve_DNC implements CurvePwAffine {
 			this.token_buckets = ((Curve_DNC) curve).token_buckets;
 
 			this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
-			this.is_rate_latency = ((CurvePwAffine) curve).getRL_property();
+			this.is_rate_latency = ((CurvePwAffine) curve).getRL_Property();
 			this.is_token_bucket = ((CurvePwAffine) curve).getTB_Property();
 		} else {
 			for (int i = 0; i < curve.getSegmentCount(); i++) {
@@ -913,7 +913,7 @@ public class Curve_DNC implements CurvePwAffine {
 	}
 
 	// Rate latency
-	public boolean getRL_property() {
+	public boolean getRL_Property() {
 		decomposeIntoRateLatencies();
 		return is_rate_latency;
 	}
