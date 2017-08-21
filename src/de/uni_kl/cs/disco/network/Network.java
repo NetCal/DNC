@@ -701,7 +701,7 @@ public class Network {
 
 		Set<Flow> flows = map__link__flows.get(l);
 		if (flows != null) {
-			return new HashSet<Flow>(map__link__flows.get(l));
+			return new HashSet<Flow>(flows);
 		} else {
 			return new HashSet<Flow>();
 		}
