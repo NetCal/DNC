@@ -72,7 +72,7 @@ public interface LinearSegment {
 	// --------------------------------------------------------------------------------------------------------------
 	// In contrast to the Curve factory, it does not dispatch to other factories.
 
-	public static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+	static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
 		switch (CalculatorConfig.getInstance().getCurveClass()) {
 		case MPA_RTC:
 			return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
@@ -82,7 +82,7 @@ public interface LinearSegment {
 		}
 	}
 
-	public static LinearSegment createHorizontalLine(double y) {
+	static LinearSegment createHorizontalLine(double y) {
 		switch (CalculatorConfig.getInstance().getCurveClass()) {
 		case MPA_RTC:
 			return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
@@ -112,7 +112,7 @@ public interface LinearSegment {
 	 * @return The new linear segment, pointwise sum of the given ones, starting in
 	 *         x.
 	 */
-	public static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
+	static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
 		LinearSegment result = createHorizontalLine(0.0);
 		result.setX(x);
 		result.setY(Num.getUtils().add(s1.f(x), s2.f(x)));
@@ -136,7 +136,7 @@ public interface LinearSegment {
 	 * @return The new linear segment, pointwise difference of the given ones, i.e.,
 	 *         s1 - s2, starting in x.
 	 */
-	public static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
+	static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
 		LinearSegment result = createHorizontalLine(0.0);
 		result.setX(x);
 		result.setY(Num.getUtils().sub(s1.f(x), s2.f(x)));
@@ -163,7 +163,7 @@ public interface LinearSegment {
 	 * @return The new linear segment, pointwise minimum of the given ones, starting
 	 *         in x.
 	 */
-	public static LinearSegment min(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen, boolean crossed) {
+	static LinearSegment min(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen, boolean crossed) {
 		Num f1_x = s1.f(x);
 		Num f2_x = s2.f(x);
 
@@ -201,7 +201,7 @@ public interface LinearSegment {
 	 * @return The new linear segment, pointwise maximum of the given ones, starting
 	 *         in x.
 	 */
-	public static LinearSegment max(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen, boolean crossed) {
+	static LinearSegment max(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen, boolean crossed) {
 		Num f1_x = s1.f(x);
 		Num f2_x = s2.f(x);
 
