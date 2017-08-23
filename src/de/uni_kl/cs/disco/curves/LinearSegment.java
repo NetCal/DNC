@@ -73,7 +73,7 @@ public interface LinearSegment {
 	// In contrast to the Curve factory, it does not dispatch to other factories.
 
 	static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		switch (CalculatorConfig.getInstance().getCurveImpl()) {
 		case MPA_RTC:
 			return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
 		case DNC:
@@ -83,7 +83,7 @@ public interface LinearSegment {
 	}
 
 	static LinearSegment createHorizontalLine(double y) {
-		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		switch (CalculatorConfig.getInstance().getCurveImpl()) {
 		case MPA_RTC:
 			return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
 		case DNC:

@@ -33,21 +33,21 @@ import java.io.File;
 public final class CalculatorConfig {
 	private static CalculatorConfig instance = new CalculatorConfig();
 
-	public enum NumClass {
+	public enum NumImpl {
 		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
 	}
 
-	public enum CurveClass {
+	public enum CurveImpl {
 		DNC, MPA_RTC
 	}
 
-	public enum OperationClass {
+	public enum OperationImpl {
 		DNC, NATIVE
 	}
 
-	private NumClass NUM_CLASS = NumClass.REAL_DOUBLE_PRECISION;
-	private CurveClass CURVE_CLASS = CurveClass.DNC;
-	private OperationClass OPERATION_CLASS = OperationClass.DNC;
+	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
+	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
+	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
 
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -62,21 +62,21 @@ public final class CalculatorConfig {
 		return instance;
 	}
 
-	public NumClass getNumClass() {
-		return NUM_CLASS;
+	public NumImpl getNumImpl() {
+		return NUM_IMPLEMENTATION;
 	}
 
-	public boolean setNumClass(NumClass num_class) {
-		if (NUM_CLASS == num_class) {
+	public boolean setNumImpl(NumImpl num_impl) {
+		if (NUM_IMPLEMENTATION == num_impl) {
 			return false;
 		} else {
-			NUM_CLASS = num_class;
+			NUM_IMPLEMENTATION = num_impl;
 			return true;
 		}
 	}
 
-	public CurveClass getCurveClass() {
-		return CURVE_CLASS;
+	public CurveImpl getCurveImpl() {
+		return CURVE_IMPLEMENTATION;
 	}
 
 	private void checkMPARTC() throws RuntimeException {
@@ -89,23 +89,23 @@ public final class CalculatorConfig {
 		}
 	}
 
-	public boolean setCurveClass(CurveClass curve_class) {
+	public boolean setCurveImpl(CurveImpl curve_impl) {
 		checkMPARTC();
 
-		if (CURVE_CLASS == curve_class) {
+		if (CURVE_IMPLEMENTATION == curve_impl) {
 			return false;
 		}
-		CURVE_CLASS = curve_class;
+		CURVE_IMPLEMENTATION = curve_impl;
 		return true;
 	}
 
-	public OperationClass getOperationClass() {
-		return OPERATION_CLASS;
+	public OperationImpl getOperationImpl() {
+		return OPERATION_IMPLEMENTATION;
 	}
 
-	public void setOperationClass(OperationClass operation_class) {
+	public void setOperationImpl(OperationImpl operation_impl) {
 		checkMPARTC();
-		OPERATION_CLASS = operation_class;
+		OPERATION_IMPLEMENTATION = operation_impl;
 	}
 
 	public void disableAllChecks() {
@@ -148,9 +148,9 @@ public final class CalculatorConfig {
 	public String toString() {
 		StringBuffer calculator_config_str = new StringBuffer();
 
-		calculator_config_str.append(getNumClass().toString());
+		calculator_config_str.append(getNumImpl().toString());
 		calculator_config_str.append(", ");
-		calculator_config_str.append(getCurveClass().toString());
+		calculator_config_str.append(getCurveImpl().toString());
 
 		if (exec_arrival_curve_checks()) {
 			calculator_config_str.append(", ");

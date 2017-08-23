@@ -41,8 +41,8 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.nc.Analysis.Analyses;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.NumClass;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveImpl;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.NumImpl;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
@@ -80,23 +80,23 @@ public class DncTests {
 			CalculatorConfig.getInstance().disableAllChecks();
 		}
 
-		reinitilize_test = (CalculatorConfig.getInstance().setNumClass(test_config.getNumClass())
-				|| CalculatorConfig.getInstance().setCurveClass(test_config.getCurveClass()));
+		reinitilize_test = (CalculatorConfig.getInstance().setNumImpl(test_config.getNumClass())
+				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveClass()));
 	}
 
 	@Parameters(name = "{index}: {0}")
 	public static Set<DncTestConfig> createParameters() {
 		Set<DncTestConfig> test_configurations = new HashSet<DncTestConfig>();
 
-		Set<CurveClass> curves = new HashSet<CurveClass>();
-		curves.add(CurveClass.DNC);
-		curves.add(CurveClass.MPA_RTC);
+		Set<CurveImpl> curves = new HashSet<CurveImpl>();
+		curves.add(CurveImpl.DNC);
+		curves.add(CurveImpl.MPA_RTC);
 
-		Set<NumClass> nums = new HashSet<NumClass>();
-		nums.add(NumClass.REAL_DOUBLE_PRECISION);
-		nums.add(NumClass.REAL_SINGLE_PRECISION);
-		nums.add(NumClass.RATIONAL_INTEGER);
-		nums.add(NumClass.RATIONAL_BIGINTEGER);
+		Set<NumImpl> nums = new HashSet<NumImpl>();
+		nums.add(NumImpl.REAL_DOUBLE_PRECISION);
+		nums.add(NumImpl.REAL_SINGLE_PRECISION);
+		nums.add(NumImpl.RATIONAL_INTEGER);
+		nums.add(NumImpl.RATIONAL_BIGINTEGER);
 
 		Set<AnalysisConfig.Multiplexing> mux_disciplines = new HashSet<AnalysisConfig.Multiplexing>();
 		mux_disciplines.add(AnalysisConfig.Multiplexing.ARBITRARY);
@@ -139,8 +139,8 @@ public class DncTests {
 		triplet_arbMux.add(ArrivalBoundMethod.PBOO_CONCATENATION);
 		triplet_arbMux.add(ArrivalBoundMethod.PMOO);
 
-		for (CurveClass curve : curves) {
-			for (NumClass num : nums) {
+		for (CurveImpl curve : curves) {
+			for (NumImpl num : nums) {
 				// Parameter configurations for single arrival bounding tests
 				// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
 				// global mux def, number class to use

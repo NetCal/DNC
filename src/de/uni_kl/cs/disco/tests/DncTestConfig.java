@@ -31,8 +31,8 @@ package de.uni_kl.cs.disco.tests;
 import java.util.Set;
 
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveClass;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.NumClass;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveImpl;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.NumImpl;
 
 public class DncTestConfig extends AnalysisConfig {
 	// Functional test specific parameters
@@ -42,8 +42,8 @@ public class DncTestConfig extends AnalysisConfig {
 
 	// Calculator configuration
 	protected boolean enable_checks = false;
-	protected NumClass num_class;
-	protected CurveClass curve_class;
+	protected NumImpl num_class;
+	protected CurveImpl curve_class;
 
 	@SuppressWarnings("unused")
 	private DncTestConfig() {
@@ -51,7 +51,7 @@ public class DncTestConfig extends AnalysisConfig {
 
 	public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
 			boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
-			boolean define_multiplexing_globally, CurveClass curves, NumClass numbers) {
+			boolean define_multiplexing_globally, CurveImpl curves, NumImpl numbers) {
 
 		super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
@@ -75,11 +75,11 @@ public class DncTestConfig extends AnalysisConfig {
 		return console_output;
 	}
 
-	protected NumClass getNumClass() {
+	protected NumImpl getNumClass() {
 		return num_class;
 	}
 
-	protected CurveClass getCurveClass() {
+	protected CurveImpl getCurveClass() {
 		return curve_class;
 	}
 

@@ -81,7 +81,7 @@ public interface Num {
 	final Num POSITIVE_INFINITY = new PositiveInfinity();
 
 	public static Num getFactory() {
-		switch (CalculatorConfig.getInstance().getNumClass()) {
+		switch (CalculatorConfig.getInstance().getNumImpl()) {
 		case REAL_SINGLE_PRECISION:
 			return RealSinglePrecision.getInstance();
 		case RATIONAL_INTEGER:
@@ -127,7 +127,7 @@ public interface Num {
 	// --------------------------------------------------------------------------------------------------------------
 
 	public static Num getUtils() {
-		switch (CalculatorConfig.getInstance().getNumClass()) {
+		switch (CalculatorConfig.getInstance().getNumImpl()) {
 		case REAL_SINGLE_PRECISION:
 			return RealSinglePrecision.getInstance();
 		case RATIONAL_INTEGER:

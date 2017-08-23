@@ -24,7 +24,7 @@ public class Debug {
     }
 
     public static void null_curve() throws Exception {
-        CalculatorConfig.getInstance().setCurveClass(CalculatorConfig.CurveClass.MPA_RTC);
+        CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
 
 
         ArrivalCurve_DNC c1 = new ArrivalCurve_DNC();
@@ -49,7 +49,7 @@ public class Debug {
     public static void conv_test() throws Exception {
         if(true) return;
         System.out.println("RTC\n");
-        CalculatorConfig.getInstance().setCurveClass(CalculatorConfig.CurveClass.MPA_RTC);
+        CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
 
         ServiceCurve s1 = CurvePwAffine.getFactory().createServiceCurve("SCCurve: \n" +
                 "  AperiodicPart  = {(0.0,0.0,0.0)(20.0,0.0,20.0)} \n");
@@ -62,7 +62,7 @@ public class Debug {
         System.out.println("Output:" + MinPlus.convolve(s1,s2, false).toString());
 
         System.out.println("\nDNC\n");
-        CalculatorConfig.getInstance().setCurveClass(CalculatorConfig.CurveClass.DNC);
+        CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.DNC);
         s1 = CurvePwAffine.getFactory().createServiceCurve(2);
         s2 = CurvePwAffine.getFactory().createServiceCurve(2);
         s1.getSegment(1).setX(Num.getFactory().create(20));
@@ -156,9 +156,9 @@ public class Debug {
         Result: It works
      */
     public static void mix(){
-        CalculatorConfig.getInstance().setCurveClass(CalculatorConfig.CurveClass.DNC);
+        CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.DNC);
         ServiceCurve a1 = CurvePwAffine.getFactory().createRateLatency(6,10);
-        CalculatorConfig.getInstance().setCurveClass(CalculatorConfig.CurveClass.MPA_RTC);
+        CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
         ServiceCurve a2 = CurvePwAffine.getFactory().createRateLatency(1,2);
         try {
             System.out.println("Output:" + MinPlus.convolve(a1,a2, true).toString());

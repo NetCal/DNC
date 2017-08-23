@@ -102,7 +102,7 @@ public interface CurvePwAffine extends Curve {
 	// --------------------------------------------------------------------------------------------------------------
 
 	static CurvePwAffine getFactory() {
-		switch (CalculatorConfig.getInstance().getCurveClass()) {
+		switch (CalculatorConfig.getInstance().getCurveImpl()) {
 		case MPA_RTC:
 			return Curve_MPARTC_PwAffine.getFactory();
 		case DNC:
