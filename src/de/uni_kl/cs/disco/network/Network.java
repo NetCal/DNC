@@ -1279,6 +1279,7 @@ public class Network {
 		return network_new;
 	}
 
+	// TODO Adapt to new structure
 	public void saveAs(String output_path, String file_name) throws Exception {
 		saveAs(output_path, file_name, "default");
 	}
