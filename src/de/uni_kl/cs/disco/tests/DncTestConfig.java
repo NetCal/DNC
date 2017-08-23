@@ -42,8 +42,8 @@ public class DncTestConfig extends AnalysisConfig {
 
 	// Calculator configuration
 	protected boolean enable_checks = false;
-	protected NumImpl num_class;
-	protected CurveImpl curve_class;
+	protected NumImpl num_implementation;
+	protected CurveImpl curve_implementation;
 
 	@SuppressWarnings("unused")
 	private DncTestConfig() {
@@ -61,26 +61,24 @@ public class DncTestConfig extends AnalysisConfig {
 		this.mux_discipline = mux_discipline;
 		this.define_multiplexing_globally = define_multiplexing_globally;
 
-		// Will not work. Num class and curve class need to be stored locally as the
-		// singleton pattern will cause overwriting this setting in CalculatorConfig.
-		// CalculatorConfig calc_config = CalculatorConfig.getInstance();
-		// calc_config.setNumClass(numbers);
-		// calc_config.setCurveClass(curves);
+		// Will not work. Num implementation and curve implementation need to be stored
+		// locally as the singleton pattern will cause overwriting this setting in
+		// CalculatorConfig.
 
-		num_class = numbers;
-		curve_class = curves;
+		num_implementation = numbers;
+		curve_implementation = curves;
 	}
 
 	public boolean fullConsoleOutput() { // false == Exceptions only
 		return console_output;
 	}
 
-	protected NumImpl getNumClass() {
-		return num_class;
+	protected NumImpl getNumImpl() {
+		return num_implementation;
 	}
 
-	protected CurveImpl getCurveClass() {
-		return curve_class;
+	protected CurveImpl getCurveImpl() {
+		return curve_implementation;
 	}
 
 	@Override
@@ -107,9 +105,9 @@ public class DncTestConfig extends AnalysisConfig {
 			func_test_str.append(", " + "MUX global");
 		}
 
-		func_test_str.append(", " + num_class.toString());
+		func_test_str.append(", " + num_implementation.toString());
 
-		func_test_str.append(", " + curve_class.toString());
+		func_test_str.append(", " + curve_implementation.toString());
 
 		return func_test_str.toString();
 	}

@@ -80,8 +80,8 @@ public class DncTests {
 			CalculatorConfig.getInstance().disableAllChecks();
 		}
 
-		reinitilize_test = (CalculatorConfig.getInstance().setNumImpl(test_config.getNumClass())
-				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveClass()));
+		reinitilize_test = (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
+				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl()));
 	}
 
 	@Parameters(name = "{index}: {0}")
@@ -287,8 +287,8 @@ public class DncTests {
 		if (test_config.console_output) {
 			System.out.println("--------------------------------------------------------------");
 			System.out.println();
-			System.out.println("Number representation:\t" + test_config.getNumClass().toString());
-			System.out.println("Curve representation:\t" + test_config.getCurveClass().toString());
+			System.out.println("Number representation:\t" + test_config.getNumImpl().toString());
+			System.out.println("Curve representation:\t" + test_config.getCurveImpl().toString());
 			System.out.println("Arrival Boundings:\t" + test_config.arrivalBoundMethods().toString());
 			System.out
 					.println("Remove duplicate ABs:\t" + Boolean.toString(test_config.removeDuplicateArrivalBounds()));
