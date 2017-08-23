@@ -62,8 +62,6 @@ public class Path {
 		this.path_links = new LinkedList<Link>(path_links);
 	}
 
-	;
-
 	protected Path(Path path) {
 		this.path_servers = path.getServers();
 		this.path_links = path.getLinks();
