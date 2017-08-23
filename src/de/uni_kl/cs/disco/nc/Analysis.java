@@ -29,15 +29,59 @@
 
 package de.uni_kl.cs.disco.nc;
 
+import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
+import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
+import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Path;
 
 public interface Analysis {
-	public enum Analyses {
+	enum Analyses {
 		TFA, SFA, PMOO
 	}
 
-	public abstract void performAnalysis(Flow flow_of_interest) throws Exception;
+	abstract void performAnalysis(Flow flow_of_interest) throws Exception;
 
-	public abstract void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
+	abstract void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
+	
+
+	static TotalFlowAnalysis performTfaEnd2End(Network network, Flow flow_of_interest) throws Exception {
+		TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
+		tfa.performAnalysis(flow_of_interest);
+		return tfa;
+	}
+
+	static TotalFlowAnalysis performTfaEnd2End(Network network, AnalysisConfig configuration,
+			Flow flow_of_interest) throws Exception {
+		TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+		tfa.performAnalysis(flow_of_interest);
+		return tfa;
+	}
+
+	static SeparateFlowAnalysis performSfaEnd2End(Network network, Flow flow_of_interest) throws Exception {
+		SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
+		sfa.performAnalysis(flow_of_interest);
+		return sfa;
+	}
+
+	static SeparateFlowAnalysis performSfaEnd2End(Network network, AnalysisConfig configuration,
+			Flow flow_of_interest) throws Exception {
+		SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
+		sfa.performAnalysis(flow_of_interest);
+		return sfa;
+	}
+
+	static PmooAnalysis performPmooEnd2End(Network network, Flow flow_of_interest) throws Exception {
+		PmooAnalysis pmoo = new PmooAnalysis(network);
+		pmoo.performAnalysis(flow_of_interest);
+		return pmoo;
+	}
+
+	static PmooAnalysis performPmooEnd2End(Network network, AnalysisConfig configuration, Flow flow_of_interest)
+			throws Exception {
+		PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+		pmoo.performAnalysis(flow_of_interest);
+		return pmoo;
+	}
 }

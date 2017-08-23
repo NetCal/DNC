@@ -3,8 +3,7 @@ v2.4.0beta3 "Chimera" (2017-Sep-XY)
 Simplifications to the code structure for streamlined use. This work requires Java 8+ as it relies on static methods in interfaces.
 * CalculatorConfig singleton: fix execution of all tests, run time back to previous level.
 * Split Analysis.java into three parts:
-  - The minimal Analysis interface.
-  - The abstract class AnalysisDispatch provides convenient methods to create and run an analysis.
+  - The Analysis interface that also provides static methods for simple execution of analyses.
   - The abstract class AbstractAnalysis holds member variables for the network, the configurations and the results.
   All analyses in de.uni_kl.cs.disco.nc.analyses extend AbstractAnalysis and implement Analysis.
  * Split ArrivalBound.java into three parts:
