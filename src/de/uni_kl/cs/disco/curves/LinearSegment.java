@@ -85,11 +85,11 @@ public interface LinearSegment {
 	static LinearSegment createHorizontalLine(double y) {
 		switch (CalculatorConfig.getInstance().getCurveImpl()) {
 		case MPA_RTC:
-			return new LinearSegment_MPARTC_PwAffine(0.0, 0.0, 0.0);
+			return new LinearSegment_MPARTC_PwAffine(0.0, y, 0.0);
 		case DNC:
 		default:
 			return new LinearSegment_DNC(Num.getFactory().createZero(),
-					Num.getFactory().createZero(), Num.getFactory().createZero(), false);
+					Num.getFactory().create(y), Num.getFactory().createZero(), false);
 		}
 	}
 	
