@@ -8,6 +8,7 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.LinearSegment;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.curves.dnc.ArrivalCurve_DNC;
+import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
@@ -19,8 +20,9 @@ public class Debug {
     public static void main(String args[]) throws Exception {
         //null_curve();
         //conv_test();
-        equ();
+        //equ();
         //mix();
+        string();
     }
 
     public static void null_curve() throws Exception {
@@ -32,11 +34,11 @@ public class Debug {
         ArrivalCurve_DNC c2 = new ArrivalCurve_DNC(c1.toString());
         System.out.println(c2.toString());
 
-        Segment s = new Segment(0,0,0);
+        Segment s = new Segment(0, 0, 0);
         SegmentList sl = new SegmentList();
         sl.add(s);
-        sl.add(new Segment(1,1,1));
-        sl.add(new Segment(5,2,7));
+        sl.add(new Segment(1, 1, 1));
+        sl.add(new Segment(5, 2, 7));
         Curve c = new Curve(sl);
         System.out.println(c.toString());
         System.out.println(c.toString().indexOf("{"));
@@ -47,7 +49,7 @@ public class Debug {
     }
 
     public static void conv_test() throws Exception {
-        if(true) return;
+        if (true) return;
         System.out.println("RTC\n");
         CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
 
@@ -58,8 +60,8 @@ public class Debug {
 
         System.out.println(s1.toString());
         System.out.println(s2.toString());
-        System.out.println("Output:" + MinPlus.convolve(s1,s2, true).toString());
-        System.out.println("Output:" + MinPlus.convolve(s1,s2, false).toString());
+        System.out.println("Output:" + MinPlus.convolve(s1, s2, true).toString());
+        System.out.println("Output:" + MinPlus.convolve(s1, s2, false).toString());
 
         System.out.println("\nDNC\n");
         CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.DNC);
@@ -74,8 +76,8 @@ public class Debug {
 
         System.out.println(s1.toString());
         System.out.println(s2.toString());
-        System.out.println("Output:" + MinPlus.convolve(s1,s2, true).toString());
-        System.out.println("Output:" + MinPlus.convolve(s1,s2, false).toString());
+        System.out.println("Output:" + MinPlus.convolve(s1, s2, true).toString());
+        System.out.println("Output:" + MinPlus.convolve(s1, s2, false).toString());
 
     }
 
@@ -155,16 +157,54 @@ public class Debug {
         Test if it is possible to mix RTC and DNC Curves
         Result: It works
      */
-    public static void mix(){
+    public static void mix() {
         CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.DNC);
-        ServiceCurve a1 = CurvePwAffine.getFactory().createRateLatency(6,10);
+        ServiceCurve a1 = CurvePwAffine.getFactory().createRateLatency(6, 10);
         CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
-        ServiceCurve a2 = CurvePwAffine.getFactory().createRateLatency(1,2);
+        ServiceCurve a2 = CurvePwAffine.getFactory().createRateLatency(1, 2);
         try {
-            System.out.println("Output:" + MinPlus.convolve(a1,a2, true).toString());
+            System.out.println("Output:" + MinPlus.convolve(a1, a2, true).toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    /*
+        Check for compabilities of string representations and different constructors of the RTC implementation
+     */
+    public static void string() {
+        CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
+        System.out.println("Creating RTC Segments");
+        Segment s1 = new Segment(0,0,0);
+        Segment s = new Segment(1, 1, 1);
+        SegmentList sl = new SegmentList();
+        sl.add(s1);
+        sl.add(s);
+        System.out.println("Done\n");
+        System.out.println("Creating RTC Curve with Segments from above using RTC constructor:");
+        Curve a = new Curve(sl);
+        String as = a.toString();
+        System.out.println("Curve String:\n"+ as);
+
+        System.out.println("\nCreating RTC Curve from String above using RTC constructor:");
+        Curve b;
+        try {
+            b = new Curve(as);
+            System.out.println(b.toString());
+        } catch (Exception e){
+            System.out.println("Failed");
+        }
+
+        System.out.println("\nCreating RTC Curve from String above using DNC wrapper constructor:");
+        CurvePwAffine c = null;
+        try {
+            c = CurvePwAffine.getFactory().createArrivalCurve(as);
+            System.out.println(c.toString());
+        } catch (Exception e) {
+            System.out.println("Failed.");
+        }
+
+        System.out.println("\nRemoving wrapper:\n" + ((Curve_MPARTC_PwAffine) c).getRtc_curve().toString());
     }
 }
