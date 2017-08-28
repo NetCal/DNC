@@ -33,6 +33,7 @@ import java.util.Set;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveImpl;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.NumImpl;
+import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationImpl;
 
 public class DncTestConfig extends AnalysisConfig {
 	// Functional test specific parameters
@@ -44,6 +45,7 @@ public class DncTestConfig extends AnalysisConfig {
 	protected boolean enable_checks = false;
 	protected NumImpl num_implementation;
 	protected CurveImpl curve_implementation;
+	protected OperationImpl operation_implementation;
 
 	@SuppressWarnings("unused")
 	private DncTestConfig() {
@@ -51,7 +53,7 @@ public class DncTestConfig extends AnalysisConfig {
 
 	public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
 			boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
-			boolean define_multiplexing_globally, CurveImpl curves, NumImpl numbers) {
+			boolean define_multiplexing_globally, NumImpl numbers, CurveImpl curves, OperationImpl operations) {
 
 		super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
@@ -67,6 +69,7 @@ public class DncTestConfig extends AnalysisConfig {
 
 		num_implementation = numbers;
 		curve_implementation = curves;
+		operation_implementation = operations;
 	}
 
 	public boolean fullConsoleOutput() { // false == Exceptions only
@@ -79,6 +82,10 @@ public class DncTestConfig extends AnalysisConfig {
 
 	protected CurveImpl getCurveImpl() {
 		return curve_implementation;
+	}
+
+	protected OperationImpl getOperationImpl() {
+		return operation_implementation;
 	}
 
 	@Override
@@ -105,9 +112,11 @@ public class DncTestConfig extends AnalysisConfig {
 			func_test_str.append(", " + "MUX global");
 		}
 
-		func_test_str.append(", " + num_implementation.toString());
+		func_test_str.append(", NUM_" + num_implementation.toString());
 
-		func_test_str.append(", " + curve_implementation.toString());
+		func_test_str.append(", C_" + curve_implementation.toString());
+
+		func_test_str.append(", OP_" + operation_implementation.toString());
 
 		return func_test_str.toString();
 	}
