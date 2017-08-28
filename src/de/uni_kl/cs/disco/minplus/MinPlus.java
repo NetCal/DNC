@@ -90,6 +90,10 @@ public abstract class MinPlus {
 
 	public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
 			Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) throws Exception {
+		
+		if( service_curves_1.isEmpty() ) { return service_curves_2; }
+		if( service_curves_2.isEmpty() ) { return service_curves_1; }
+		
 		if (CalculatorConfig.getInstance().getOperationImpl().equals(OperationImpl.DNC) // DNC operations work with
 																							// DNC and MPA_RTC curves
 				|| CalculatorConfig.getInstance().getCurveImpl().equals(CurveImpl.DNC)) { // NATIVE operation on
