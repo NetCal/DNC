@@ -146,12 +146,12 @@ public class DncTests {
 		triplet_arbMux.add(ArrivalBoundMethod.PBOO_CONCATENATION);
 		triplet_arbMux.add(ArrivalBoundMethod.PMOO);
 
+		// Parameter configurations for single arrival bounding tests
+		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
+		// global mux def, number class to use, curve class to use, operations class to use
 		for (CurveImpl curve : curves) {
 			for (OperationImpl operation : operations) {
 				for (NumImpl num : nums) {
-					// Parameter configurations for single arrival bounding tests
-					// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
-					// global mux def, number class to use
 					for (Set<ArrivalBoundMethod> single_ab : single_abs_allMux) {
 						for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
 							test_configurations
@@ -189,10 +189,7 @@ public class DncTests {
 						test_configurations.add(new DncTestConfig(single_ab, false, true, true,
 								AnalysisConfig.Multiplexing.ARBITRARY, true, num, curve, operation));
 					}
-	
-					// Parameter configurations for "pairs of arrival boundings"-tests
-					// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
-					// global mux def, number class to use
+
 					for (Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux) {
 						for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
 							test_configurations
@@ -249,9 +246,6 @@ public class DncTests {
 								AnalysisConfig.Multiplexing.ARBITRARY, true, num, curve, operation));
 					}
 	
-					// Parameter configurations for "triplets of arrival boundings"-tests
-					// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
-					// global mux def, number class to use
 					test_configurations.add(new DncTestConfig(triplet_arbMux, false, false, false,
 							AnalysisConfig.Multiplexing.ARBITRARY, false, num, curve, operation));
 					test_configurations.add(new DncTestConfig(triplet_arbMux, true, false, false,
