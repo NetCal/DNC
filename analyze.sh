@@ -6,6 +6,7 @@ lastupdate="$(sed -n '/.*upgrade.*/{x;p;d;q}; x' /var/log/apt/history.log)" #<- 
 lastupdate=${lastupdate##*Start-Date: }
 timestamp="$(date +"%d-%m-%Y %H:%M:%S")"
 sum=$(awk '{sum+=$1}END{ print sum/NR}' runtimes)
+numtests=$(head -n 1 num_tests)
 
 #echo $sum
 #echo $uname
@@ -13,6 +14,6 @@ sum=$(awk '{sum+=$1}END{ print sum/NR}' runtimes)
 #echo $timestamp
 #echo $lastupdate
 
-output="$timestamp,$sum,$uname,$java,$lastupdate"
+output="$timestamp,$sum,$numtests,$uname,$java,$lastupdate"
 echo $output
 echo "$output" >> "statistics"

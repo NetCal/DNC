@@ -13,6 +13,7 @@ import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 
@@ -25,7 +26,7 @@ public class OperationDispatcher {
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return BacklogBound.derive(arrival_curve,service_curve);
         }
-        return BacklogBound.derive(arrival_curve,service_curve);
+        //return BacklogBound.derive(arrival_curve,service_curve);
 
         //TODO: does not work:
         /*
@@ -47,6 +48,24 @@ public class OperationDispatcher {
 
         return Num.getFactory().create(result);
         */
+        Curve a = ((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve();
+        Curve b = ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve();
+
+        double result = a.yXPlusEpsilon(0);
+
+        //TODO: RTC equivalent for inflection points? There should be a better way
+        ArrayList<Num> xcoords2 = CurvePwAffine.computeInflectionPointsX(arrival_curve, service_curve);
+        ArrayList<Double> xcoords = new ArrayList<>();
+        for (int i = 0; i < xcoords2.size(); i++){
+            xcoords.add(xcoords2.get(i).doubleValue());
+        }
+        for (int i = 0; i < xcoords.size(); i++) {
+            double ip_x = xcoords.get(i);
+
+            double backlog = a.yXPlusEpsilon(ip_x) - b.yXPlusEpsilon(ip_x);
+            result = Math.max(result, backlog);
+        }
+        return Num.getFactory().create(result);
     }
 
     public static double bl_derivePmooSinkTreeTbRl(Network tree, Server root,
@@ -55,6 +74,7 @@ public class OperationDispatcher {
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return BacklogBound.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
         }
+        //TODO: not relevant for RTC?
         return BacklogBound.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
     }
 

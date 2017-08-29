@@ -46,8 +46,8 @@ public final class CalculatorConfig {
 	}
 
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
-	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
+	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.MPA_RTC;
+	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.NATIVE;
 
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;

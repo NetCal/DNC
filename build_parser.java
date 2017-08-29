@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 
@@ -39,6 +36,9 @@ public class build_parser {
             //System.out.println(result);
             String out = "" + result;
             System.out.println("(" + out.substring(0, Math.min(5, out.length())) + "%) covered");
+	    PrintWriter w = new PrintWriter("num_tests", "UTF-8");
+	    w.println(tests);
+	    w.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
