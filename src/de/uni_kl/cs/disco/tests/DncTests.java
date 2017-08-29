@@ -475,16 +475,10 @@ public class DncTests {
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
 			backlog_bound_TBRL_CONV = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
-<<<<<<< HEAD
 			backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory()
 					.create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),
 							AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
 			backlog_bound_TBRL_HOMO = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
-=======
-			backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory().create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree,
-					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
-			backlog_bound_TBRL_HOMO = Num.getFactory().create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree,
->>>>>>> origin/master
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
 		} catch (Exception e) {
 			e.printStackTrace();
