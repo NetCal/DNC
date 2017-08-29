@@ -42,6 +42,7 @@ import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.operations.BacklogBound;
 import de.uni_kl.cs.disco.nc.operations.DelayBound;
+import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Path;
@@ -105,7 +106,7 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
 			// curve calculation
 			ServiceCurve beta_server = server.getServiceCurve();
 
-			Num backlog_bound_server_alpha = BacklogBound.derive(alpha_candidate, beta_server);
+			Num backlog_bound_server_alpha = OperationDispatcher.bl_derive(alpha_candidate, beta_server);
 			backlog_bounds_server.add(backlog_bound_server_alpha);
 
 			if (backlog_bound_server_alpha.leq(backlog_bound_s__min)) {
@@ -123,9 +124,9 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
 					|| (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
 							&& server.multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO)
 					|| fifo_per_micro_flow) {
-				delay_bound_server_alpha = DelayBound.deriveFIFO(alpha_candidate, beta_server);
+				delay_bound_server_alpha = OperationDispatcher.db_deriveFIFO(alpha_candidate, beta_server);
 			} else {
-				delay_bound_server_alpha = DelayBound.deriveARB(alpha_candidate, beta_server);
+				delay_bound_server_alpha = OperationDispatcher.db_deriveARB(alpha_candidate, beta_server);
 			}
 			delay_bounds_server.add(delay_bound_server_alpha);
 

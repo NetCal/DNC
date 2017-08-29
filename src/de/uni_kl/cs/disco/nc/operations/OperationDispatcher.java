@@ -1,0 +1,178 @@
+package de.uni_kl.cs.disco.nc.operations;
+
+import ch.ethz.rtc.kernel.Curve;
+import ch.ethz.rtc.kernel.CurveMath;
+import de.uni_kl.cs.disco.curves.ArrivalCurve;
+import de.uni_kl.cs.disco.curves.CurvePwAffine;
+import de.uni_kl.cs.disco.curves.ServiceCurve;
+import de.uni_kl.cs.disco.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
+import de.uni_kl.cs.disco.nc.AnalysisConfig;
+import de.uni_kl.cs.disco.nc.CalculatorConfig;
+import de.uni_kl.cs.disco.network.Network;
+import de.uni_kl.cs.disco.network.Path;
+import de.uni_kl.cs.disco.network.Server;
+import de.uni_kl.cs.disco.numbers.Num;
+
+import java.util.Set;
+
+
+public class OperationDispatcher {
+    private OperationDispatcher(){
+    }
+
+    public static Num bl_derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return BacklogBound.derive(arrival_curve,service_curve);
+        }
+        return BacklogBound.derive(arrival_curve,service_curve);
+
+        //TODO: does not work:
+        /*
+        if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
+            return Num.getFactory().createZero();
+        }
+        if (service_curve.getDelayedInfiniteBurst_Property()) {
+            return arrival_curve.f(service_curve.getLatency());
+        }
+        if (service_curve.equals(CurvePwAffine.getFactory().createZeroService())
+                || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
+            return Num.getFactory().createPositiveInfinity();
+        }
+
+        Curve a = ((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve();
+        Curve b = ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve();
+
+        double result = CurveMath.maxVDist(a,b);
+
+        return Num.getFactory().create(result);
+        */
+    }
+
+    public static double bl_derivePmooSinkTreeTbRl(Network tree, Server root,
+                                                 AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return BacklogBound.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
+        }
+        return BacklogBound.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
+    }
+
+
+    //TODO: RTC equivalent?
+    public static Num db_deriveARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return DelayBound.deriveARB(arrival_curve, service_curve);
+        }
+        return DelayBound.deriveARB(arrival_curve, service_curve);
+
+        //TODO: doesn work?
+        //return CurvePwAffine.getXIntersection(arrival_curve, service_curve);
+        //Curve a = ((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve();
+        //Curve b = ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve();
+
+        //double result = CurveMath.maxHDist(a,b);
+
+        //return Num.getFactory().create(result);
+    }
+
+
+    //TODO: RTC capable of this?
+    public static Num db_deriveFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return DelayBound.deriveFIFO(arrival_curve, service_curve);
+        }
+        return DelayBound.deriveFIFO(arrival_curve, service_curve);
+        //TODO: does not work
+        //Curve a = ((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve();
+        //Curve b = ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve();
+
+        //double result = CurveMath.maxHDist(a,b);
+
+        //return Num.getFactory().create(result);
+    }
+
+
+    //TODO: What am I doing here?
+    public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, Server server,
+                                            Set<ArrivalCurve> arrival_curves) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return LeftOverService.compute(configuration, server, arrival_curves);
+        }
+        return LeftOverService.compute(configuration, server, arrival_curves);
+    }
+
+    public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, ServiceCurve service_curve,
+                                            Set<ArrivalCurve> arrival_curves) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return LeftOverService.compute(configuration, service_curve, arrival_curves);
+        }
+        return LeftOverService.compute(configuration, service_curve, arrival_curves);
+
+    }
+
+    public static Set<ServiceCurve> lo_fifoMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return LeftOverService.fifoMux(service_curve, arrival_curves);
+        }
+        return LeftOverService.fifoMux(service_curve, arrival_curves);
+    }
+
+    public static ServiceCurve lo_fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return LeftOverService.fifoMux(service_curve, arrival_curve);
+        }
+
+        return LeftOverService.fifoMux(service_curve, arrival_curve);
+    }
+
+    public static Set<ServiceCurve> lo_arbMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return LeftOverService.arbMux(service_curve, arrival_curves);
+        }
+        return LeftOverService.arbMux(service_curve, arrival_curves);
+    }
+    public static ServiceCurve lo_arbMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return LeftOverService.arbMux(service_curve, arrival_curve);
+        }
+        return LeftOverService.arbMux(service_curve, arrival_curve);
+    }
+
+
+
+    public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
+                                            Server server) throws Exception {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return OutputBound.compute(configuration, arrival_curves, server);
+        }
+        return OutputBound.compute(configuration, arrival_curves, server);
+    }
+
+    public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
+                                            Server server, Set<ServiceCurve> betas_lo) throws Exception {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return OutputBound.compute(configuration, arrival_curves, server, betas_lo);
+        }
+        return OutputBound.compute(configuration, arrival_curves, server, betas_lo);
+    }
+
+    public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
+                                            Set<ServiceCurve> betas_lo) throws Exception {
+        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
+                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
+            return OutputBound.compute(configuration, arrival_curves, path, betas_lo);
+        }
+        return OutputBound.compute(configuration, arrival_curves, path, betas_lo);
+    }
+}

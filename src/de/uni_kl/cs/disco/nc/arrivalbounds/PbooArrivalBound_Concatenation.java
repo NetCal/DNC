@@ -43,6 +43,7 @@ import de.uni_kl.cs.disco.nc.ArrivalBound;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.nc.operations.LeftOverService;
+import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import de.uni_kl.cs.disco.nc.operations.OutputBound;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Link;
@@ -136,7 +137,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 			}
 
 			// Calculate the left-over service curve for this single server
-			betas_lo_s = LeftOverService.compute(configuration, server, alphas_xxfcaller_s);
+			betas_lo_s = OperationDispatcher.lo_compute(configuration, server, alphas_xxfcaller_s);
 
 			// Check if there's any service left on this path. If not, the set only contains
 			// a null-service curve.
@@ -161,7 +162,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		// by this call of computeArrivalBound
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
-		alphas_xfcaller = OutputBound.compute(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
+		alphas_xfcaller = OperationDispatcher.ob_compute(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
 		if (configuration.abConsiderTFANodeBacklog()) {
 			Server last_hop_xtx = link.getSource();

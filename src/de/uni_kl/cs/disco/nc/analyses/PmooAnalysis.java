@@ -30,6 +30,7 @@
 
 package de.uni_kl.cs.disco.nc.analyses;
 
+import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
@@ -285,7 +286,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 		((PmooResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
 
 		for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
-			delay_bound__beta_e2e = DelayBound.deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // Single flow
+			delay_bound__beta_e2e = OperationDispatcher.db_deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // Single flow
 																											// of
 																											// interest,
 																											// i.e.,
@@ -297,7 +298,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 				((PmooResults) result).setDelayBound(delay_bound__beta_e2e);
 			}
 
-			backlog_bound__beta_e2e = BacklogBound.derive(flow_of_interest.getArrivalCurve(), beta_e2e);
+			backlog_bound__beta_e2e = OperationDispatcher.bl_derive(flow_of_interest.getArrivalCurve(), beta_e2e);
 			if (backlog_bound__beta_e2e.leq(result.getBacklogBound())) {
 				((PmooResults) result).setBacklogBound(backlog_bound__beta_e2e);
 			}

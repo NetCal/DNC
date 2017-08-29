@@ -28,6 +28,7 @@
 
 package de.uni_kl.cs.disco.tests;
 
+import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -459,14 +460,14 @@ public class DncTests {
 		Num backlog_bound_TBRL_HOMO = null;
 
 		try {
-			backlog_bound_TBRL = Num.getFactory().create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree,
+			backlog_bound_TBRL = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
-			backlog_bound_TBRL_CONV = Num.getFactory().create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree,
+			backlog_bound_TBRL_CONV = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
 			backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory()
-					.create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),
+					.create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),
 							AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
-			backlog_bound_TBRL_HOMO = Num.getFactory().create(BacklogBound.derivePmooSinkTreeTbRl(sink_tree,
+			backlog_bound_TBRL_HOMO = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
 		} catch (Exception e) {
 			e.printStackTrace();

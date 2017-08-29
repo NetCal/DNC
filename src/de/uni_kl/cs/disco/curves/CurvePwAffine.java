@@ -43,7 +43,7 @@ import de.uni_kl.cs.disco.numbers.Num;
  * token-bucket functions.
  * 
  */
-public interface CurvePwAffine extends Curve {
+ public interface CurvePwAffine extends Curve {
 	// --------------------------------------------------------------------------------------------------------------
 	// Interface
 	// --------------------------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ public interface CurvePwAffine extends Curve {
 	 *            input curve 2.
 	 * @return the pointwise sum of the given curves.
 	 */
-	public static CurvePwAffine add(CurvePwAffine curve1, CurvePwAffine curve2) {
+	 static CurvePwAffine add(CurvePwAffine curve1, CurvePwAffine curve2) {
 		return computeResultingCurve(curve1, curve2, CurveOperation.ADD);
 	}
 
@@ -339,7 +339,7 @@ public interface CurvePwAffine extends Curve {
 	 *            input curve 2.
 	 * @return the pointwise difference of the given curves, i.e., curve1 - curve2.
 	 */
-	public static CurvePwAffine sub(CurvePwAffine curve1, CurvePwAffine curve2) {
+	 static CurvePwAffine sub(CurvePwAffine curve1, CurvePwAffine curve2) {
 		return computeResultingCurve(curve1, curve2, CurveOperation.SUB);
 	}
 
@@ -352,7 +352,7 @@ public interface CurvePwAffine extends Curve {
 	 *            input curve 2.
 	 * @return the pointwise minimum of the given curves.
 	 */
-	public static CurvePwAffine min(CurvePwAffine curve1, CurvePwAffine curve2) {
+	 static CurvePwAffine min(CurvePwAffine curve1, CurvePwAffine curve2) {
 		return computeResultingCurve(curve1, curve2, CurveOperation.MIN);
 	}
 
@@ -365,7 +365,7 @@ public interface CurvePwAffine extends Curve {
 	 *            input curve 2.
 	 * @return the pointwise maximum of the given curves.
 	 */
-	public static CurvePwAffine max(CurvePwAffine curve1, CurvePwAffine curve2) {
+	 static CurvePwAffine max(CurvePwAffine curve1, CurvePwAffine curve2) {
 		return computeResultingCurve(curve1, curve2, CurveOperation.MAX);
 	}
 
@@ -376,7 +376,7 @@ public interface CurvePwAffine extends Curve {
 	 *            the curve to bound.
 	 * @return the bounded curve.
 	 */
-	public static CurvePwAffine boundAtXAxis(CurvePwAffine curve) {
+	 static CurvePwAffine boundAtXAxis(CurvePwAffine curve) {
 		CurvePwAffine curve_copy = curve.copy();
 
 		ArrayList<LinearSegment> result = new ArrayList<LinearSegment>();
@@ -424,7 +424,7 @@ public interface CurvePwAffine extends Curve {
 	 *            the second curve.
 	 * @return the value of the vertical deviation.
 	 */
-	public static Num getMaxVerticalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
+	 static Num getMaxVerticalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
 		if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
 			return Num.getFactory().createPositiveInfinity();
 		}
@@ -463,7 +463,7 @@ public interface CurvePwAffine extends Curve {
 	 *            the second curve.
 	 * @return the value of the horizontal deviation.
 	 */
-	public static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
+	 static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
 		if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
 			return Num.getFactory().createPositiveInfinity();
 		}
@@ -497,7 +497,7 @@ public interface CurvePwAffine extends Curve {
 	 * @return an <code>ArrayList</code> of <code>Double</code> objects containing
 	 *         the x-coordinates of the respective inflection point.
 	 */
-	public static ArrayList<Num> computeInflectionPointsX(CurvePwAffine c1, CurvePwAffine c2) {
+	 static ArrayList<Num> computeInflectionPointsX(CurvePwAffine c1, CurvePwAffine c2) {
 		ArrayList<Num> xcoords = new ArrayList<Num>();
 
 		int i1 = 0;
@@ -533,7 +533,7 @@ public interface CurvePwAffine extends Curve {
 	 * @return an <code>ArrayList</code> of <code>Double</code> objects containing
 	 *         the x-coordinates of the respective inflection point.
 	 */
-	public static ArrayList<Num> computeInflectionPointsY(CurvePwAffine c1, CurvePwAffine c2) {
+	 static ArrayList<Num> computeInflectionPointsY(CurvePwAffine c1, CurvePwAffine c2) {
 		ArrayList<Num> ycoords = new ArrayList<Num>();
 
 		int i1 = 0;
@@ -568,7 +568,7 @@ public interface CurvePwAffine extends Curve {
 	 *            The offset to shift the curve.
 	 * @return The shifted curve.
 	 */
-	public static CurvePwAffine add(CurvePwAffine curve, Num dy) {
+	 static CurvePwAffine add(CurvePwAffine curve, Num dy) {
 		CurvePwAffine result = curve.copy();
 		for (int i = 0; i < curve.getSegmentCount(); i++) {
 			result.getSegment(i).setY(Num.getUtils().add(result.getSegment(i).getY(), dy));
@@ -576,21 +576,21 @@ public interface CurvePwAffine extends Curve {
 		return result;
 	}
 
-	public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
+	 static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
 		return CurvePwAffine.getFactory()
 				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, CurveOperation.ADD));
 	}
 
-	public static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, Num dy) {
+	 static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, Num dy) {
 		return CurvePwAffine.getFactory().createMaxServiceCurve(add((CurvePwAffine) max_service_curve_1, dy));
 	}
 
-	public static MaxServiceCurve min(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
+	 static MaxServiceCurve min(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
 		return CurvePwAffine.getFactory()
 				.createMaxServiceCurve(computeResultingCurve(max_service_curve_1, max_service_curve_2, CurveOperation.MIN));
 	}
 
-	public static Num getXIntersection(CurvePwAffine curve1, CurvePwAffine curve2) {
+	 static Num getXIntersection(CurvePwAffine curve1, CurvePwAffine curve2) {
 		Num x_int = Num.getFactory().getPositiveInfinity(); // No need to create an object as this value is
 																		// only set for initial comparison in the loop.
 
@@ -639,37 +639,37 @@ public interface CurvePwAffine extends Curve {
 		return x_int;
 	}
 
-	public static ServiceCurve add(ServiceCurve c1, ServiceCurve c2) {
+	 static ServiceCurve add(ServiceCurve c1, ServiceCurve c2) {
 		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.ADD));
 	}
 
-	public static ServiceCurve sub(ServiceCurve c1, ArrivalCurve c2) {
+	 static ServiceCurve sub(ServiceCurve c1, ArrivalCurve c2) {
 		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.SUB));
 	}
 
-	public static ServiceCurve min(ServiceCurve c1, ServiceCurve c2) {
+	 static ServiceCurve min(ServiceCurve c1, ServiceCurve c2) {
 		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.MIN));
 	}
 
-	public static ServiceCurve max(ServiceCurve c1, ServiceCurve c2) {
+	 static ServiceCurve max(ServiceCurve c1, ServiceCurve c2) {
 		return CurvePwAffine.getFactory().createServiceCurve(computeResultingCurve(c1, c2, CurveOperation.MAX));
 	}
 
-	public static ArrivalCurve add(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
+	 static ArrivalCurve add(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
 		return CurvePwAffine.getFactory()
 				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, CurveOperation.ADD));
 	}
 
-	public static ArrivalCurve add(ArrivalCurve arrival_curve_1, Num dy) {
+	 static ArrivalCurve add(ArrivalCurve arrival_curve_1, Num dy) {
 		return CurvePwAffine.getFactory().createArrivalCurve(add((CurvePwAffine) arrival_curve_1, dy));
 	}
 
-	public static ArrivalCurve min(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
+	 static ArrivalCurve min(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
 		return CurvePwAffine.getFactory()
 				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, CurveOperation.MIN));
 	}
 
-	public static ArrivalCurve max(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
+	 static ArrivalCurve max(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
 		return CurvePwAffine.getFactory()
 				.createArrivalCurve(computeResultingCurve(arrival_curve_1, arrival_curve_2, CurveOperation.MAX));
 	}
@@ -684,7 +684,7 @@ public interface CurvePwAffine extends Curve {
 	 *            The offset to shift the curve.
 	 * @return The shifted curve.
 	 */
-	public static CurvePwAffine shiftRight(CurvePwAffine curve, Num dx) {
+	 static CurvePwAffine shiftRight(CurvePwAffine curve, Num dx) {
 		CurvePwAffine curve_copy = curve.copy();
 		if (dx.eq(0.0)) {
 			return curve_copy;
@@ -720,7 +720,7 @@ public interface CurvePwAffine extends Curve {
 	 *            The offset to shift the curve.
 	 * @return The shifted curve.
 	 */
-	public static CurvePwAffine shiftLeftClipping(CurvePwAffine curve, Num dx) {
+	 static CurvePwAffine shiftLeftClipping(CurvePwAffine curve, Num dx) {
 		int i = curve.getSegmentDefining(dx);
 		CurvePwAffine result = curve.copy();
 		LinearSegment segment_i = result.getSegment(i);
@@ -748,7 +748,7 @@ public interface CurvePwAffine extends Curve {
 	 *            The curve to shift.
 	 * @return A copy of this curve without latency
 	 */
-	public static CurvePwAffine removeLatency(CurvePwAffine curve) {
+	 static CurvePwAffine removeLatency(CurvePwAffine curve) {
 		CurvePwAffine result = curve.copy();
 
 		if (result.getSegmentCount() == 2 && result.getSegment(0).getX().eqZero()
@@ -793,7 +793,7 @@ public interface CurvePwAffine extends Curve {
 		return result;
 	}
 
-	public static void beautify(CurvePwAffine c) {
+	 static void beautify(CurvePwAffine c) {
 		int i = 0;
 		while (i < c.getSegmentCount() - 1) {
 			// Remove unreal discontinuity
