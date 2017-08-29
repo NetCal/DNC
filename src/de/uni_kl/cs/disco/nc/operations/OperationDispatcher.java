@@ -79,7 +79,6 @@ public class OperationDispatcher {
     }
 
 
-    //TODO: RTC equivalent?
     public static Num db_deriveARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -115,7 +114,6 @@ public class OperationDispatcher {
     }
 
 
-    //TODO: What am I doing here?
     public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, Server server,
                                             Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
