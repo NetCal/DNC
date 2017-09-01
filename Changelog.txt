@@ -1,4 +1,8 @@
-v2.4.0beta3 "Chimera" (2017-Sep-XY)
+v2.4.0beta4 "Chimera" (2017-Sep-XY)
+-----------------------------------
+* All DNC boundings in de.uni_kl.cs.disco.operations (delay, backlog, output, left-over) are called via a dispatcher, OperationDispatcher.java. 
+
+v2.4.0beta3 "Chimera" (2017-Sep-01)
 -----------------------------------
 Simplifications to the code structure for streamlined use. This work requires Java 8+ as it relies on static methods in interfaces.
 * CalculatorConfig singleton: fix execution of all tests, run time back to previous level.
