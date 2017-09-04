@@ -43,7 +43,6 @@ import de.uni_kl.cs.disco.numbers.Num;
 import java.util.ArrayList;
 import java.util.Set;
 
-
 public class OperationDispatcher {
     private OperationDispatcher(){
     }
