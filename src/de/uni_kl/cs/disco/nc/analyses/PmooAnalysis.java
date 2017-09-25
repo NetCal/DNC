@@ -39,11 +39,7 @@ import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
-import de.uni_kl.cs.disco.network.Flow;
-import de.uni_kl.cs.disco.network.Link;
-import de.uni_kl.cs.disco.network.Network;
-import de.uni_kl.cs.disco.network.Path;
-import de.uni_kl.cs.disco.network.Server;
+import de.uni_kl.cs.disco.network.*;
 import de.uni_kl.cs.disco.numbers.Num;
 import org.apache.commons.math3.util.Pair;
 
