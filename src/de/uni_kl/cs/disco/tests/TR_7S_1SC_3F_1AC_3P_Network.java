@@ -37,68 +37,68 @@ import de.uni_kl.cs.disco.network.NetworkFactory;
 import de.uni_kl.cs.disco.network.Server;
 
 public class TR_7S_1SC_3F_1AC_3P_Network implements NetworkFactory {
-	private static final int sc_R = 20;
-	private static final int sc_T = 20;
-	private static final int ac_r = 5;
-	private static final int ac_b = 25;
-	protected Server s0, s1, s2, s3, s4, s5, s6;
-	protected Flow f0, f1, f2;
-	private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
-	private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
-	private Network network;
+    private static final int sc_R = 20;
+    private static final int sc_T = 20;
+    private static final int ac_r = 5;
+    private static final int ac_b = 25;
+    protected Server s0, s1, s2, s3, s4, s5, s6;
+    protected Flow f0, f1, f2;
+    private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
+    private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
+    private Network network;
 
-	public TR_7S_1SC_3F_1AC_3P_Network() {
-		network = createNetwork();
-	}
+    public TR_7S_1SC_3F_1AC_3P_Network() {
+        network = createNetwork();
+    }
 
-	public Network getNetwork() {
-		return network;
-	}
+    public Network getNetwork() {
+        return network;
+    }
 
-	public Network createNetwork() {
-		network = new Network();
+    public Network createNetwork() {
+        network = new Network();
 
-		s0 = network.addServer(service_curve);
-		s1 = network.addServer(service_curve);
-		s2 = network.addServer(service_curve);
-		s3 = network.addServer(service_curve);
-		s4 = network.addServer(service_curve);
-		s5 = network.addServer(service_curve);
-		s6 = network.addServer(service_curve);
+        s0 = network.addServer(service_curve);
+        s1 = network.addServer(service_curve);
+        s2 = network.addServer(service_curve);
+        s3 = network.addServer(service_curve);
+        s4 = network.addServer(service_curve);
+        s5 = network.addServer(service_curve);
+        s6 = network.addServer(service_curve);
 
-		try {
-			network.addLink(s0, s1);
-			network.addLink(s1, s2);
-			network.addLink(s2, s5);
-			network.addLink(s3, s4);
-			network.addLink(s4, s5);
-			network.addLink(s5, s6);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+        try {
+            network.addLink(s0, s1);
+            network.addLink(s1, s2);
+            network.addLink(s2, s5);
+            network.addLink(s3, s4);
+            network.addLink(s4, s5);
+            network.addLink(s5, s6);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
-		try {
-			f0 = network.addFlow(arrival_curve, s1, s6);
-			f1 = network.addFlow(arrival_curve, s0, s6);
-			f2 = network.addFlow(arrival_curve, s3, s6);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+        try {
+            f0 = network.addFlow(arrival_curve, s1, s6);
+            f1 = network.addFlow(arrival_curve, s0, s6);
+            f2 = network.addFlow(arrival_curve, s3, s6);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
-		return network;
-	}
+        return network;
+    }
 
-	public void reinitializeCurves() {
-		service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
-		for (Server server : network.getServers()) {
-			server.setServiceCurve(service_curve);
-		}
+    public void reinitializeCurves() {
+        service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
+        for (Server server : network.getServers()) {
+            server.setServiceCurve(service_curve);
+        }
 
-		arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
-		for (Flow flow : network.getFlows()) {
-			flow.setArrivalCurve(arrival_curve);
-		}
-	}
+        arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
+        for (Flow flow : network.getFlows()) {
+            flow.setArrivalCurve(arrival_curve);
+        }
+    }
 }

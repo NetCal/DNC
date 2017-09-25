@@ -29,63 +29,64 @@
 
 package de.uni_kl.cs.disco.nc;
 
-import java.util.Map;
-import java.util.Set;
-
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 
+import java.util.Map;
+import java.util.Set;
+
 public abstract class AbstractAnalysis {
-	protected Network network;
-	protected AnalysisConfig configuration;
-	protected AnalysisResults result;
+    protected Network network;
+    protected AnalysisConfig configuration;
+    protected AnalysisResults result;
 
-	public Network getNetwork() {
-		return network;
-	}
+    public Network getNetwork() {
+        return network;
+    }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 
-	// ----------------------------------------------------------------------------------------------------
-	// Convenience functions to access the results object.
-	// ----------------------------------------------------------------------------------------------------
-	/**
-	 * Returns the delay bound of the analysis.
-	 *
-	 * @return the delay bound
-	 */
-	public Num getDelayBound() {
-		return result.getDelayBound();
-	}
+    // ----------------------------------------------------------------------------------------------------
+    // Convenience functions to access the results object.
+    // ----------------------------------------------------------------------------------------------------
 
-	/**
-	 * Returns the backlog bound of the analysis.
-	 *
-	 * @return the backlog bound
-	 */
-	public Num getBacklogBound() {
-		return result.getBacklogBound();
-	}
+    /**
+     * Returns the delay bound of the analysis.
+     *
+     * @return the delay bound
+     */
+    public Num getDelayBound() {
+        return result.getDelayBound();
+    }
 
-	/**
-	 * For TFA this is the whole traffic at a server because you do not separate the
-	 * flow of interest during analysis.
-	 * <p>
-	 * For SFA and PMOO you will get the arrival bounds of the cross-traffic at
-	 * every server.
-	 *
-	 * @return Mapping from the server to the server's arrival bound
-	 */
-	public Map<Server, Set<ArrivalCurve>> getServerAlphasMap() {
-		return result.map__server__alphas;
-	}
+    /**
+     * Returns the backlog bound of the analysis.
+     *
+     * @return the backlog bound
+     */
+    public Num getBacklogBound() {
+        return result.getBacklogBound();
+    }
 
-	public String getServerAlphasMapString() {
-		return result.getServerAlphasMapString();
-	}
+    /**
+     * For TFA this is the whole traffic at a server because you do not separate the
+     * flow of interest during analysis.
+     * <p>
+     * For SFA and PMOO you will get the arrival bounds of the cross-traffic at
+     * every server.
+     *
+     * @return Mapping from the server to the server's arrival bound
+     */
+    public Map<Server, Set<ArrivalCurve>> getServerAlphasMap() {
+        return result.map__server__alphas;
+    }
+
+    public String getServerAlphasMapString() {
+        return result.getServerAlphasMapString();
+    }
 }

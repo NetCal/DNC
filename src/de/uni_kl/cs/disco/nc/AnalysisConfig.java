@@ -33,192 +33,190 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AnalysisConfig {
-	public enum Multiplexing {
-		ARBITRARY, FIFO
-	}
+    private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
+    /**
+     * Whether to use maximum service curves in output bound computation
+     */
+    private GammaFlag use_gamma = GammaFlag.SERVER_LOCAL;
+    /**
+     * Whether to constrain the output bound further through convolution with the
+     * maximum service curve's rate as the server cannot output data faster than
+     * this rate.
+     */
+    private GammaFlag use_extra_gamma = GammaFlag.SERVER_LOCAL;
+    private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
+            Collections.singleton(ArrivalBoundMethod.PBOO_CONCATENATION));
+    private boolean remove_duplicate_arrival_bounds = true;
+    private boolean tbrl_convolution = false;
+    private boolean tbrl_deconvolution = false;
+    private boolean flow_prolongation = false;
+    private boolean ab_consider_tfa_nodeBacklog = false;
+    public AnalysisConfig() {
+    }
+    public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
+                          Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
+                          boolean tbrl_convolution, boolean tbrl_deconvolution, boolean ab_consider_tfa_nodeBacklog) {
+        this.multiplexing_discipline = multiplexing_discipline;
+        this.use_gamma = use_gamma;
+        this.use_extra_gamma = use_extra_gamma;
+        this.arrival_bound_methods.addAll(arrival_bound_methods);
 
-	public enum MuxDiscipline {
-		SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
-	}
+        this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
+        this.tbrl_convolution = tbrl_convolution;
+        this.tbrl_deconvolution = tbrl_deconvolution;
+        this.ab_consider_tfa_nodeBacklog = ab_consider_tfa_nodeBacklog;
+    }
 
-	public enum GammaFlag {
-		SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
-	}
+    public MuxDiscipline multiplexingDiscipline() {
+        return multiplexing_discipline;
+    }
 
-	public enum ArrivalBoundMethod {
-		PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, PER_FLOW_SFA, PER_FLOW_PMOO, PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
-	}
-	
-	private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
-	/**
-	 * Whether to use maximum service curves in output bound computation
-	 */
-	private GammaFlag use_gamma = GammaFlag.SERVER_LOCAL;
-	/**
-	 * Whether to constrain the output bound further through convolution with the
-	 * maximum service curve's rate as the server cannot output data faster than
-	 * this rate.
-	 */
-	private GammaFlag use_extra_gamma = GammaFlag.SERVER_LOCAL;
-	private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
-			Collections.singleton(ArrivalBoundMethod.PBOO_CONCATENATION));
-	private boolean remove_duplicate_arrival_bounds = true;
-	private boolean tbrl_convolution = false;
-	private boolean tbrl_deconvolution = false;
-	private boolean flow_prolongation = false;
-	private boolean ab_consider_tfa_nodeBacklog = false;
+    public void setMultiplexingDiscipline(MuxDiscipline mux_discipline) {
+        multiplexing_discipline = mux_discipline;
+    }
 
-	public AnalysisConfig() {
-	}
+    public GammaFlag useGamma() {
+        return use_gamma;
+    }
 
-	public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
-			Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
-			boolean tbrl_convolution, boolean tbrl_deconvolution, boolean ab_consider_tfa_nodeBacklog) {
-		this.multiplexing_discipline = multiplexing_discipline;
-		this.use_gamma = use_gamma;
-		this.use_extra_gamma = use_extra_gamma;
-		this.arrival_bound_methods.addAll(arrival_bound_methods);
+    public void setUseGamma(GammaFlag use_gamma_flag) {
+        use_gamma = use_gamma_flag;
+    }
 
-		this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
-		this.tbrl_convolution = tbrl_convolution;
-		this.tbrl_deconvolution = tbrl_deconvolution;
-		this.ab_consider_tfa_nodeBacklog = ab_consider_tfa_nodeBacklog;
-	}
+    public GammaFlag useExtraGamma() {
+        return use_extra_gamma;
+    }
 
-	public MuxDiscipline multiplexingDiscipline() {
-		return multiplexing_discipline;
-	}
+    public void setUseExtraGamma(GammaFlag use_extra_gamma_flag) {
+        use_extra_gamma = use_extra_gamma_flag;
+    }
 
-	public void setMultiplexingDiscipline(MuxDiscipline mux_discipline) {
-		multiplexing_discipline = mux_discipline;
-	}
+    public void defaultArrivalBoundMethods() {
+        clearArrivalBoundMethods();
+        arrival_bound_methods.add(ArrivalBoundMethod.PBOO_CONCATENATION);
+    }
 
-	public GammaFlag useGamma() {
-		return use_gamma;
-	}
+    public void clearArrivalBoundMethods() {
+        arrival_bound_methods.clear();
+    }
 
-	public void setUseGamma(GammaFlag use_gamma_flag) {
-		use_gamma = use_gamma_flag;
-	}
+    public void setArrivalBoundMethod(ArrivalBoundMethod arrival_bound_method) {
+        clearArrivalBoundMethods();
+        arrival_bound_methods.add(arrival_bound_method);
+    }
 
-	public GammaFlag useExtraGamma() {
-		return use_extra_gamma;
-	}
+    public Set<ArrivalBoundMethod> arrivalBoundMethods() {
+        return new HashSet<ArrivalBoundMethod>(arrival_bound_methods);
+    }
 
-	public void setUseExtraGamma(GammaFlag use_extra_gamma_flag) {
-		use_extra_gamma = use_extra_gamma_flag;
-	}
+    public void setArrivalBoundMethods(Set<ArrivalBoundMethod> arrival_bound_methods_set) {
+        clearArrivalBoundMethods();
+        arrival_bound_methods.addAll(arrival_bound_methods_set);
+    }
 
-	public void defaultArrivalBoundMethods() {
-		clearArrivalBoundMethods();
-		arrival_bound_methods.add(ArrivalBoundMethod.PBOO_CONCATENATION);
-	}
+    public void addArrivalBoundMethod(ArrivalBoundMethod arrival_bound_method) {
+        arrival_bound_methods.add(arrival_bound_method);
+    }
 
-	public void clearArrivalBoundMethods() {
-		arrival_bound_methods.clear();
-	}
+    public void addArrivalBoundMethods(Set<ArrivalBoundMethod> arrival_bound_methods_set) {
+        arrival_bound_methods.addAll(arrival_bound_methods_set);
+    }
 
-	public void setArrivalBoundMethod(ArrivalBoundMethod arrival_bound_method) {
-		clearArrivalBoundMethods();
-		arrival_bound_methods.add(arrival_bound_method);
-	}
+    public boolean removeArrivalBoundMethod(ArrivalBoundMethod arrival_bound_method) {
+        if (arrival_bound_methods.size() == 1) {
+            return false;
+        } else {
+            return arrival_bound_methods.remove(arrival_bound_method);
+        }
+    }
 
-	public Set<ArrivalBoundMethod> arrivalBoundMethods() {
-		return new HashSet<ArrivalBoundMethod>(arrival_bound_methods);
-	}
+    public boolean removeDuplicateArrivalBounds() {
+        return remove_duplicate_arrival_bounds;
+    }
 
-	public void setArrivalBoundMethods(Set<ArrivalBoundMethod> arrival_bound_methods_set) {
-		clearArrivalBoundMethods();
-		arrival_bound_methods.addAll(arrival_bound_methods_set);
-	}
+    public void setRemoveDuplicateArrivalBounds(boolean remove_duplicate_arrival_bounds_flag) {
+        remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds_flag;
+    }
 
-	public void addArrivalBoundMethod(ArrivalBoundMethod arrival_bound_method) {
-		arrival_bound_methods.add(arrival_bound_method);
-	}
+    public boolean tbrlConvolution() {
+        return tbrl_convolution;
+    }
 
-	public void addArrivalBoundMethods(Set<ArrivalBoundMethod> arrival_bound_methods_set) {
-		arrival_bound_methods.addAll(arrival_bound_methods_set);
-	}
+    public void setUseTbrlConvolution(boolean optimized_code_path) {
+        tbrl_convolution = optimized_code_path;
+    }
 
-	public boolean removeArrivalBoundMethod(ArrivalBoundMethod arrival_bound_method) {
-		if (arrival_bound_methods.size() == 1) {
-			return false;
-		} else {
-			return arrival_bound_methods.remove(arrival_bound_method);
-		}
-	}
+    public boolean tbrlDeconvolution() {
+        return tbrl_deconvolution;
+    }
 
-	public boolean removeDuplicateArrivalBounds() {
-		return remove_duplicate_arrival_bounds;
-	}
+    public void setUseTbrlDeconvolution(boolean optimized_code_path) {
+        tbrl_deconvolution = optimized_code_path;
+    }
 
-	public void setRemoveDuplicateArrivalBounds(boolean remove_duplicate_arrival_bounds_flag) {
-		remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds_flag;
-	}
+    public boolean abConsiderTFANodeBacklog() {
+        return ab_consider_tfa_nodeBacklog;
+    }
 
-	public boolean tbrlConvolution() {
-		return tbrl_convolution;
-	}
+    public boolean useFlowProlongation() {
+        return flow_prolongation;
+    }
 
-	public void setUseTbrlConvolution(boolean optimized_code_path) {
-		tbrl_convolution = optimized_code_path;
-	}
+    public void setUseFlowProlongation(boolean prolong_flows) {
+        flow_prolongation = prolong_flows;
+    }
 
-	public boolean tbrlDeconvolution() {
-		return tbrl_deconvolution;
-	}
+    public void setAbConsiderTFANodeBacklog(boolean consider_backlog_bound) {
+        ab_consider_tfa_nodeBacklog = consider_backlog_bound;
+    }
 
-	public void setUseTbrlDeconvolution(boolean optimized_code_path) {
-		tbrl_deconvolution = optimized_code_path;
-	}
+    /**
+     * Returns a deep copy of this analysis configuration.
+     *
+     * @return The copy.
+     */
+    public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
+        return new AnalysisConfig(multiplexing_discipline, use_gamma, use_extra_gamma, arrival_bound_methods,
+                remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, ab_consider_tfa_nodeBacklog);
+    }
 
-	public boolean abConsiderTFANodeBacklog() {
-		return ab_consider_tfa_nodeBacklog;
-	}
+    @Override
+    public String toString() {
+        StringBuffer analysis_config_str = new StringBuffer();
 
-	public boolean useFlowProlongation() {
-		return flow_prolongation;
-	}
+        analysis_config_str.append(multiplexingDiscipline().toString());
+        analysis_config_str.append(", ");
+        analysis_config_str.append(arrivalBoundMethods().toString());
 
-	public void setUseFlowProlongation(boolean prolong_flows) {
-		flow_prolongation = prolong_flows;
-	}
+        if (removeDuplicateArrivalBounds()) {
+            analysis_config_str.append(", ");
+            analysis_config_str.append("remove duplicate ABs");
+        }
+        if (tbrlConvolution()) {
+            analysis_config_str.append(", ");
+            analysis_config_str.append("TbRl Conv");
+        }
+        if (tbrlDeconvolution()) {
+            analysis_config_str.append(", ");
+            analysis_config_str.append("TbRl Deconv");
+        }
 
-	public void setAbConsiderTFANodeBacklog(boolean consider_backlog_bound) {
-		ab_consider_tfa_nodeBacklog = consider_backlog_bound;
-	}
+        return analysis_config_str.toString();
+    }
 
-	/**
-	 * Returns a deep copy of this analysis configuration.
-	 *
-	 * @return The copy.
-	 */
-	public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
-		return new AnalysisConfig(multiplexing_discipline, use_gamma, use_extra_gamma, arrival_bound_methods,
-				remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, ab_consider_tfa_nodeBacklog);
-	}
+    public enum Multiplexing {
+        ARBITRARY, FIFO
+    }
 
-	@Override
-	public String toString() {
-		StringBuffer analysis_config_str = new StringBuffer();
+    public enum MuxDiscipline {
+        SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
+    }
 
-		analysis_config_str.append(multiplexingDiscipline().toString());
-		analysis_config_str.append(", ");
-		analysis_config_str.append(arrivalBoundMethods().toString());
+    public enum GammaFlag {
+        SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
+    }
 
-		if (removeDuplicateArrivalBounds()) {
-			analysis_config_str.append(", ");
-			analysis_config_str.append("remove duplicate ABs");
-		}
-		if (tbrlConvolution()) {
-			analysis_config_str.append(", ");
-			analysis_config_str.append("TbRl Conv");
-		}
-		if (tbrlDeconvolution()) {
-			analysis_config_str.append(", ");
-			analysis_config_str.append("TbRl Deconv");
-		}
-
-		return analysis_config_str.toString();
-	}
+    public enum ArrivalBoundMethod {
+        PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, PER_FLOW_SFA, PER_FLOW_PMOO, PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
+    }
 }

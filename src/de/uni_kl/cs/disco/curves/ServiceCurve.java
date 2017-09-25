@@ -28,15 +28,15 @@
 package de.uni_kl.cs.disco.curves;
 
 public interface ServiceCurve extends CurvePwAffine {
-	@Override
-	ServiceCurve copy();
+    @Override
+    ServiceCurve copy();
 
-	@Override
-	boolean equals(Object obj);
+    @Override
+    boolean equals(Object obj);
 
-	@Override
-	int hashCode();
+    @Override
+    int hashCode();
 
-	@Override
-	String toString();
+    @Override
+    String toString();
 }

@@ -34,71 +34,71 @@ import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 
 public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
-	// --------------------------------------------------------------------------------------------------------------
-	// Constructors
-	// --------------------------------------------------------------------------------------------------------------
-	public ServiceCurve_DNC() {
-		super();
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // --------------------------------------------------------------------------------------------------------------
+    public ServiceCurve_DNC() {
+        super();
+    }
 
-	public ServiceCurve_DNC(int segment_count) {
-		super(segment_count);
-	}
+    public ServiceCurve_DNC(int segment_count) {
+        super(segment_count);
+    }
 
-	public ServiceCurve_DNC(CurvePwAffine curve) {
-		copy(curve);
+    public ServiceCurve_DNC(CurvePwAffine curve) {
+        copy(curve);
 
-		if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-																										// requirement:
-																										// !isConvex()
-			throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
-		}
-	}
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+            // requirement:
+            // !isConvex()
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+        }
+    }
 
-	public ServiceCurve_DNC(String service_curve_str) throws Exception {
-		if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
-																											// possible
-																											// string:
-																											// {(0,0),0}
-			throw new RuntimeException("Invalid string representation of a service curve.");
-		}
+    public ServiceCurve_DNC(String service_curve_str) throws Exception {
+        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
+            // possible
+            // string:
+            // {(0,0),0}
+            throw new RuntimeException("Invalid string representation of a service curve.");
+        }
 
-		initializeCurve(service_curve_str);
+        initializeCurve(service_curve_str);
 
-		if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-																										// requirement:
-																										// !isConvex()
-			throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
-		}
-	}
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+            // requirement:
+            // !isConvex()
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+        }
+    }
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
-	@Override
-	public ServiceCurve_DNC copy() {
-		ServiceCurve_DNC sc_copy = new ServiceCurve_DNC();
-		sc_copy.copy(this);
-		return sc_copy;
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
+    @Override
+    public ServiceCurve_DNC copy() {
+        ServiceCurve_DNC sc_copy = new ServiceCurve_DNC();
+        sc_copy.copy(this);
+        return sc_copy;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		return (obj instanceof ServiceCurve_DNC) && super.equals(obj);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof ServiceCurve_DNC) && super.equals(obj);
+    }
 
-	@Override
-	public int hashCode() {
-		return "SC".hashCode() * super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return "SC".hashCode() * super.hashCode();
+    }
 
-	/**
-	 * Returns a string representation of this curve.
-	 *
-	 * @return the curve represented as a string.
-	 */
-	@Override
-	public String toString() {
-		return "SC" + super.toString();
-	}
+    /**
+     * Returns a string representation of this curve.
+     *
+     * @return the curve represented as a string.
+     */
+    @Override
+    public String toString() {
+        return "SC" + super.toString();
+    }
 }

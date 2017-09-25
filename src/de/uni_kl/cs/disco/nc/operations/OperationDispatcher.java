@@ -1,7 +1,6 @@
 package de.uni_kl.cs.disco.nc.operations;
 
 import ch.ethz.rtc.kernel.Curve;
-import ch.ethz.rtc.kernel.CurveMath;
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
@@ -18,13 +17,13 @@ import java.util.Set;
 
 
 public class OperationDispatcher {
-    private OperationDispatcher(){
+    private OperationDispatcher() {
     }
 
     public static Num bl_derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-            return BacklogBound.derive(arrival_curve,service_curve);
+            return BacklogBound.derive(arrival_curve, service_curve);
         }
         //return BacklogBound.derive(arrival_curve,service_curve);
 
@@ -56,7 +55,7 @@ public class OperationDispatcher {
         //TODO: RTC equivalent for inflection points? There should be a better way
         ArrayList<Num> xcoords2 = CurvePwAffine.computeInflectionPointsX(arrival_curve, service_curve);
         ArrayList<Double> xcoords = new ArrayList<>();
-        for (int i = 0; i < xcoords2.size(); i++){
+        for (int i = 0; i < xcoords2.size(); i++) {
             xcoords.add(xcoords2.get(i).doubleValue());
         }
         for (int i = 0; i < xcoords.size(); i++) {
@@ -69,7 +68,7 @@ public class OperationDispatcher {
     }
 
     public static double bl_derivePmooSinkTreeTbRl(Network tree, Server root,
-                                                 AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
+                                                   AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return BacklogBound.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
@@ -115,7 +114,7 @@ public class OperationDispatcher {
 
 
     public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, Server server,
-                                            Set<ArrivalCurve> arrival_curves) {
+                                               Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return LeftOverService.compute(configuration, server, arrival_curves);
@@ -124,7 +123,7 @@ public class OperationDispatcher {
     }
 
     public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, ServiceCurve service_curve,
-                                            Set<ArrivalCurve> arrival_curves) {
+                                               Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return LeftOverService.compute(configuration, service_curve, arrival_curves);
@@ -157,6 +156,7 @@ public class OperationDispatcher {
         }
         return LeftOverService.arbMux(service_curve, arrival_curves);
     }
+
     public static ServiceCurve lo_arbMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -166,9 +166,8 @@ public class OperationDispatcher {
     }
 
 
-
     public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
-                                            Server server) throws Exception {
+                                               Server server) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return OutputBound.compute(configuration, arrival_curves, server);
@@ -177,7 +176,7 @@ public class OperationDispatcher {
     }
 
     public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
-                                            Server server, Set<ServiceCurve> betas_lo) throws Exception {
+                                               Server server, Set<ServiceCurve> betas_lo) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return OutputBound.compute(configuration, arrival_curves, server, betas_lo);
@@ -186,7 +185,7 @@ public class OperationDispatcher {
     }
 
     public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
-                                            Set<ServiceCurve> betas_lo) throws Exception {
+                                               Set<ServiceCurve> betas_lo) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return OutputBound.compute(configuration, arrival_curves, path, betas_lo);

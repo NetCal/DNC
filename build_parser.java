@@ -1,7 +1,3 @@
-import java.io.*;
-import java.util.Scanner;
-
-
 /**
  * Created by philipp on 5/23/17.
  */
@@ -36,9 +32,9 @@ public class build_parser {
             //System.out.println(result);
             String out = "" + result;
             System.out.println("(" + out.substring(0, Math.min(5, out.length())) + "%) covered");
-	    PrintWriter w = new PrintWriter("num_tests", "UTF-8");
-	    w.println(tests);
-	    w.close();
+            PrintWriter w = new PrintWriter("num_tests", "UTF-8");
+            w.println(tests);
+            w.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

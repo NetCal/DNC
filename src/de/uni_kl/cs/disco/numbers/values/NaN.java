@@ -31,202 +31,202 @@ package de.uni_kl.cs.disco.numbers.values;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public final class NaN implements Num {
-	// --------------------------------------------------------------------------------------------------------------
-	// Num Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
+    // Num Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
 
-	public NaN() {
-	}
+    public NaN() {
+    }
 
-	public boolean eqZero() {
-		return false;
-	}
+    public boolean eqZero() {
+        return false;
+    }
 
-	public boolean gt(Num num) {
-		return false;
-	}
+    public boolean gt(Num num) {
+        return false;
+    }
 
-	public boolean gtZero() {
-		return false;
-	}
+    public boolean gtZero() {
+        return false;
+    }
 
-	public boolean geq(Num num) {
-		return false;
-	}
+    public boolean geq(Num num) {
+        return false;
+    }
 
-	public boolean geqZero() {
-		return false;
-	}
+    public boolean geqZero() {
+        return false;
+    }
 
-	public boolean lt(Num num) {
-		return false;
-	}
+    public boolean lt(Num num) {
+        return false;
+    }
 
-	public boolean ltZero() {
-		return false;
-	}
+    public boolean ltZero() {
+        return false;
+    }
 
-	public boolean leq(Num num) {
-		return false;
-	}
+    public boolean leq(Num num) {
+        return false;
+    }
 
-	public boolean leqZero() {
-		return false;
-	}
+    public boolean leqZero() {
+        return false;
+    }
 
-	public boolean isFinite() {
-		return false;
-	}
+    public boolean isFinite() {
+        return false;
+    }
 
-	public boolean isInfinite() {
-		return false;
-	}
+    public boolean isInfinite() {
+        return false;
+    }
 
-	public boolean isNaN() {
-		return true;
-	}
+    public boolean isNaN() {
+        return true;
+    }
 
-	@Override
-	public double doubleValue() {
-		return Double.NaN;
-	}
+    @Override
+    public double doubleValue() {
+        return Double.NaN;
+    }
 
-	@Override
-	public Num copy() {
-		return new NaN();
-	}
+    @Override
+    public Num copy() {
+        return new NaN();
+    }
 
-	@Override
-	public boolean eq(double num) {
-		return false;
-	}
+    @Override
+    public boolean eq(double num) {
+        return false;
+    }
 
-	// @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to
-	// NaN should always return false")
-	@Override
-	public boolean equals(Object obj) {
-		return false;
-	}
+    // @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to
+    // NaN should always return false")
+    @Override
+    public boolean equals(Object obj) {
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return Double.hashCode(Double.NaN);
-	}
+    @Override
+    public int hashCode() {
+        return Double.hashCode(Double.NaN);
+    }
 
-	@Override
-	public String toString() {
-		return Double.toString(Double.NaN);
-	}
+    @Override
+    public String toString() {
+        return Double.toString(Double.NaN);
+    }
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Factory Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
 
-	public Num getPositiveInfinity() {
-		throw new RuntimeException();
-	}
+    public Num getPositiveInfinity() {
+        throw new RuntimeException();
+    }
 
-	public Num createPositiveInfinity() {
-		throw new RuntimeException();
-	}
+    public Num createPositiveInfinity() {
+        throw new RuntimeException();
+    }
 
-	public Num getNegativeInfinity() {
-		throw new RuntimeException();
-	}
+    public Num getNegativeInfinity() {
+        throw new RuntimeException();
+    }
 
-	public Num createNegativeInfinity() {
-		throw new RuntimeException();
-	}
+    public Num createNegativeInfinity() {
+        throw new RuntimeException();
+    }
 
-	public Num getNaN() {
-		return this;
-	}
+    public Num getNaN() {
+        return this;
+    }
 
-	public Num createNaN() {
-		return this;
-	}
+    public Num createNaN() {
+        return this;
+    }
 
-	public Num getZero() {
-		throw new RuntimeException();
-	}
+    public Num getZero() {
+        throw new RuntimeException();
+    }
 
-	public Num createZero() {
-		throw new RuntimeException();
-	}
+    public Num createZero() {
+        throw new RuntimeException();
+    }
 
-	public Num getEpsilon() {
-		return this;
-	}
+    public Num getEpsilon() {
+        return this;
+    }
 
-	public Num createEpsilon() {
-		return this;
-	}
+    public Num createEpsilon() {
+        return this;
+    }
 
-	public Num create(int num) {
-		throw new RuntimeException();
-	}
+    public Num create(int num) {
+        throw new RuntimeException();
+    }
 
-	public Num create(double value) {
-		throw new RuntimeException();
-	}
+    public Num create(double value) {
+        throw new RuntimeException();
+    }
 
-	public Num create(int num, int den) {
-		throw new RuntimeException();
-	}
+    public Num create(int num, int den) {
+        throw new RuntimeException();
+    }
 
-	public Num create(String num_str) throws Exception {
-		throw new RuntimeException();
-	}
+    public Num create(String num_str) throws Exception {
+        throw new RuntimeException();
+    }
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Utils Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
+    // Utils Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
 
-	public Num add(Num num1, Num num2) {
-		return this;
-	}
+    public Num add(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num sub(Num num1, Num num2) {
-		return this;
-	}
+    public Num sub(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num mult(Num num1, Num num2) {
-		return this;
-	}
+    public Num mult(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num div(Num num1, Num num2) {
-		return this;
-	}
+    public Num div(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num abs(Num num) {
-		return this;
-	}
+    public Num abs(Num num) {
+        return this;
+    }
 
-	public Num diff(Num num1, Num num2) {
-		return this;
-	}
+    public Num diff(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num max(Num num1, Num num2) {
-		return this;
-	}
+    public Num max(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num min(Num num1, Num num2) {
-		return this;
-	}
+    public Num min(Num num1, Num num2) {
+        return this;
+    }
 
-	public Num negate(Num num) {
-		return this;
-	}
+    public Num negate(Num num) {
+        return this;
+    }
 
-	public boolean isFinite(Num num) {
-		return false;
-	}
+    public boolean isFinite(Num num) {
+        return false;
+    }
 
-	public boolean isInfinite(Num num) {
-		return false;
-	}
+    public boolean isInfinite(Num num) {
+        return false;
+    }
 
-	public boolean isNaN(Num num) {
-		return true;
-	}
+    public boolean isNaN(Num num) {
+        return true;
+    }
 }

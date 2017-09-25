@@ -38,129 +38,129 @@ import de.uni_kl.cs.disco.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.disco.numbers.values.PositiveInfinity;
 
 public interface Num {
-	// --------------------------------------------------------------------------------------------------------------
-	// Num Interface
-	// --------------------------------------------------------------------------------------------------------------
-	
-	double doubleValue();
+    // --------------------------------------------------------------------------------------------------------------
+    // Num Interface
+    // --------------------------------------------------------------------------------------------------------------
 
-	boolean eq(double num);
+    final Num NaN = new NaN();
+    final Num NEGATIVE_INFINITY = new NegativeInfinity();
+    final Num POSITIVE_INFINITY = new PositiveInfinity();
 
-	boolean eqZero();
+    public static Num getFactory() {
+        switch (CalculatorConfig.getInstance().getNumImpl()) {
+            case REAL_SINGLE_PRECISION:
+                return RealSinglePrecision.getInstance();
+            case RATIONAL_INTEGER:
+                return RationalInt.getInstance();
+            case RATIONAL_BIGINTEGER:
+                return RationalBigInt.getInstance();
+            case REAL_DOUBLE_PRECISION:
+            default:
+                return RealDoublePrecision.getInstance();
+        }
+    }
 
-	boolean gt(Num num);
+    public static Num getUtils() {
+        switch (CalculatorConfig.getInstance().getNumImpl()) {
+            case REAL_SINGLE_PRECISION:
+                return RealSinglePrecision.getInstance();
+            case RATIONAL_INTEGER:
+                return RationalInt.getInstance();
+            case RATIONAL_BIGINTEGER:
+                return RationalBigInt.getInstance();
+            case REAL_DOUBLE_PRECISION:
+            default:
+                return RealDoublePrecision.getInstance();
+        }
+    }
 
-	boolean gtZero();
+    double doubleValue();
 
-	boolean geq(Num num);
+    boolean eq(double num);
 
-	boolean geqZero();
+    boolean eqZero();
 
-	boolean lt(Num num);
+    boolean gt(Num num);
 
-	boolean ltZero();
+    boolean gtZero();
 
-	boolean leq(Num num);
+    boolean geq(Num num);
 
-	boolean leqZero();
+    boolean geqZero();
 
-	boolean isFinite();
+    boolean lt(Num num);
 
-	boolean isInfinite();
+    boolean ltZero();
 
-	boolean isNaN();
+    boolean leq(Num num);
 
-	Num copy();
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory Interface
+    // --------------------------------------------------------------------------------------------------------------
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Factory Interface
-	// --------------------------------------------------------------------------------------------------------------
-	
-	final Num NaN = new NaN();
-	final Num NEGATIVE_INFINITY = new NegativeInfinity();
-	final Num POSITIVE_INFINITY = new PositiveInfinity();
+    boolean leqZero();
 
-	public static Num getFactory() {
-		switch (CalculatorConfig.getInstance().getNumImpl()) {
-		case REAL_SINGLE_PRECISION:
-			return RealSinglePrecision.getInstance();
-		case RATIONAL_INTEGER:
-			return RationalInt.getInstance();
-		case RATIONAL_BIGINTEGER:
-			return RationalBigInt.getInstance();
-		case REAL_DOUBLE_PRECISION:
-		default:
-			return RealDoublePrecision.getInstance();
-		}
-	}
+    boolean isFinite();
 
-	Num getPositiveInfinity();
+    boolean isInfinite();
 
-	Num createPositiveInfinity();
+    boolean isNaN();
 
-	Num getNegativeInfinity();
+    Num copy();
 
-	Num createNegativeInfinity();
+    Num getPositiveInfinity();
 
-	Num getNaN();
+    Num createPositiveInfinity();
 
-	Num createNaN();
+    Num getNegativeInfinity();
 
-	Num getZero();
+    Num createNegativeInfinity();
 
-	Num createZero();
+    Num getNaN();
 
-	Num getEpsilon();
+    Num createNaN();
 
-	Num createEpsilon();
+    Num getZero();
 
-	Num create(int num);
-	
-	Num create(double value);
+    Num createZero();
 
-	Num create(int num, int den);
+    Num getEpsilon();
 
-	Num create(String num_str) throws Exception;
+    Num createEpsilon();
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Utils Interface
-	// --------------------------------------------------------------------------------------------------------------
+    Num create(int num);
 
-	public static Num getUtils() {
-		switch (CalculatorConfig.getInstance().getNumImpl()) {
-		case REAL_SINGLE_PRECISION:
-			return RealSinglePrecision.getInstance();
-		case RATIONAL_INTEGER:
-			return RationalInt.getInstance();
-		case RATIONAL_BIGINTEGER:
-			return RationalBigInt.getInstance();
-		case REAL_DOUBLE_PRECISION:
-		default:
-			return RealDoublePrecision.getInstance();
-		}
-	}
+    Num create(double value);
 
-	Num add(Num num1, Num num2);
+    Num create(int num, int den);
 
-	Num sub(Num num1, Num num2);
+    // --------------------------------------------------------------------------------------------------------------
+    // Utils Interface
+    // --------------------------------------------------------------------------------------------------------------
 
-	Num mult(Num num1, Num num2);
+    Num create(String num_str) throws Exception;
 
-	Num div(Num num1, Num num2);
+    Num add(Num num1, Num num2);
 
-	Num abs(Num num);
+    Num sub(Num num1, Num num2);
 
-	Num diff(Num num1, Num num2);
+    Num mult(Num num1, Num num2);
 
-	Num max(Num num1, Num num2);
+    Num div(Num num1, Num num2);
 
-	Num min(Num num1, Num num2);
+    Num abs(Num num);
 
-	Num negate(Num num);
+    Num diff(Num num1, Num num2);
 
-	boolean isFinite(Num num);
+    Num max(Num num1, Num num2);
 
-	boolean isInfinite(Num num);
+    Num min(Num num1, Num num2);
 
-	boolean isNaN(Num num);
+    Num negate(Num num);
+
+    boolean isFinite(Num num);
+
+    boolean isInfinite(Num num);
+
+    boolean isNaN(Num num);
 }

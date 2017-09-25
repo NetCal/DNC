@@ -28,10 +28,6 @@
 
 package de.uni_kl.cs.disco.nc.operations;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlus;
@@ -40,48 +36,52 @@ import de.uni_kl.cs.disco.nc.AnalysisConfig.GammaFlag;
 import de.uni_kl.cs.disco.network.Path;
 import de.uni_kl.cs.disco.network.Server;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class OutputBound {
-	private OutputBound() {
-	}
+    private OutputBound() {
+    }
 
-	public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
-			Server server) throws Exception {
-		return compute(configuration, arrival_curves, server, Collections.singleton(server.getServiceCurve()));
-	}
+    public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
+                                            Server server) throws Exception {
+        return compute(configuration, arrival_curves, server, Collections.singleton(server.getServiceCurve()));
+    }
 
-	public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
-			Server server, Set<ServiceCurve> betas_lo) throws Exception {
-		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
+    public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
+                                            Server server, Set<ServiceCurve> betas_lo) throws Exception {
+        Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
-		if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlus.deconvolve_almostConcCs_SCs(
-					MinPlus.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
-		} else {
-			result = MinPlus.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
-		}
+        if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = MinPlus.deconvolve_almostConcCs_SCs(
+                    MinPlus.convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
+        } else {
+            result = MinPlus.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+        }
 
-		if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlus.convolve_ACs_EGamma(result, server.getExtraGamma());
-		}
+        if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = MinPlus.convolve_ACs_EGamma(result, server.getExtraGamma());
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
-			Set<ServiceCurve> betas_lo) throws Exception {
-		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
+    public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
+                                            Set<ServiceCurve> betas_lo) throws Exception {
+        Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
-		if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlus.deconvolve_almostConcCs_SCs(
-					MinPlus.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
-		} else {
-			result = MinPlus.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
-		}
+        if (configuration.useGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = MinPlus.deconvolve_almostConcCs_SCs(
+                    MinPlus.convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
+        } else {
+            result = MinPlus.deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+        }
 
-		if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
-			result = MinPlus.convolve_ACs_EGamma(result, path.getExtraGamma());
-		}
+        if (configuration.useExtraGamma() != GammaFlag.GLOBALLY_OFF) {
+            result = MinPlus.convolve_ACs_EGamma(result, path.getExtraGamma());
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

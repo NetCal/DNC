@@ -31,148 +31,145 @@ package de.uni_kl.cs.disco.nc;
 import java.io.File;
 
 public final class CalculatorConfig {
-	private static CalculatorConfig instance = new CalculatorConfig();
+    private static CalculatorConfig instance = new CalculatorConfig();
+    private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
+    private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
+    private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
+    private boolean ARRIVAL_CURVE_CHECKS = false;
+    private boolean SERVICE_CURVE_CHECKS = false;
+    private boolean MAX_SERVICE_CURVE_CHECKS = false;
+    private boolean FIFO_MUX_CHECKS = false;
+    private boolean DECONVOLUTION_CHECKS = false;
+    protected CalculatorConfig() {
+    }
 
-	public enum NumImpl {
-		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
-	}
+    public static CalculatorConfig getInstance() {
+        return instance;
+    }
 
-	public enum CurveImpl {
-		DNC, MPA_RTC
-	}
+    public NumImpl getNumImpl() {
+        return NUM_IMPLEMENTATION;
+    }
 
-	public enum OperationImpl {
-		DNC, NATIVE
-	}
+    public boolean setNumImpl(NumImpl num_impl) {
+        if (NUM_IMPLEMENTATION == num_impl) {
+            return false;
+        } else {
+            NUM_IMPLEMENTATION = num_impl;
+            return true;
+        }
+    }
 
-	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
-	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
+    public CurveImpl getCurveImpl() {
+        return CURVE_IMPLEMENTATION;
+    }
 
-	private boolean ARRIVAL_CURVE_CHECKS = false;
-	private boolean SERVICE_CURVE_CHECKS = false;
-	private boolean MAX_SERVICE_CURVE_CHECKS = false;
-	private boolean FIFO_MUX_CHECKS = false;
-	private boolean DECONVOLUTION_CHECKS = false;
+    private void checkMPARTC() throws RuntimeException {
+        File f = new File("rtc.jar");
+        if (!f.exists() && !f.isDirectory()) {
+            f = new File("lib/rtc.jar");
+            if (!f.exists() && !f.isDirectory()) {
+                throw new RuntimeException("Error: rtc.jar not found in directory " + f.getParent() + ".");
+            }
+        }
+    }
 
-	protected CalculatorConfig() {
-	}
+    public boolean setCurveImpl(CurveImpl curve_impl) {
+        checkMPARTC();
 
-	public static CalculatorConfig getInstance() {
-		return instance;
-	}
+        if (CURVE_IMPLEMENTATION == curve_impl) {
+            return false;
+        }
+        CURVE_IMPLEMENTATION = curve_impl;
+        return true;
+    }
 
-	public NumImpl getNumImpl() {
-		return NUM_IMPLEMENTATION;
-	}
+    public OperationImpl getOperationImpl() {
+        return OPERATION_IMPLEMENTATION;
+    }
 
-	public boolean setNumImpl(NumImpl num_impl) {
-		if (NUM_IMPLEMENTATION == num_impl) {
-			return false;
-		} else {
-			NUM_IMPLEMENTATION = num_impl;
-			return true;
-		}
-	}
+    public void setOperationImpl(OperationImpl operation_impl) {
+        checkMPARTC();
+        OPERATION_IMPLEMENTATION = operation_impl;
+    }
 
-	public CurveImpl getCurveImpl() {
-		return CURVE_IMPLEMENTATION;
-	}
+    public void disableAllChecks() {
+        ARRIVAL_CURVE_CHECKS = false;
+        SERVICE_CURVE_CHECKS = false;
+        MAX_SERVICE_CURVE_CHECKS = false;
+        FIFO_MUX_CHECKS = false;
+        DECONVOLUTION_CHECKS = false;
+    }
 
-	private void checkMPARTC() throws RuntimeException {
-		File f = new File("rtc.jar");
-		if (!f.exists() && !f.isDirectory()) {
-			f = new File("lib/rtc.jar");
-			if (!f.exists() && !f.isDirectory()) {
-				throw new RuntimeException("Error: rtc.jar not found in directory " + f.getParent() + ".");
-			}
-		}
-	}
+    public void enableAllChecks() {
+        ARRIVAL_CURVE_CHECKS = true;
+        SERVICE_CURVE_CHECKS = true;
+        MAX_SERVICE_CURVE_CHECKS = true;
+        FIFO_MUX_CHECKS = true;
+        DECONVOLUTION_CHECKS = true;
+    }
 
-	public boolean setCurveImpl(CurveImpl curve_impl) {
-		checkMPARTC();
+    public boolean exec_arrival_curve_checks() {
+        return ARRIVAL_CURVE_CHECKS;
+    }
 
-		if (CURVE_IMPLEMENTATION == curve_impl) {
-			return false;
-		}
-		CURVE_IMPLEMENTATION = curve_impl;
-		return true;
-	}
+    public boolean exec_service_curve_checks() {
+        return SERVICE_CURVE_CHECKS;
+    }
 
-	public OperationImpl getOperationImpl() {
-		return OPERATION_IMPLEMENTATION;
-	}
+    public boolean exec_max_service_curve_checks() {
+        return MAX_SERVICE_CURVE_CHECKS;
+    }
 
-	public void setOperationImpl(OperationImpl operation_impl) {
-		checkMPARTC();
-		OPERATION_IMPLEMENTATION = operation_impl;
-	}
+    public boolean exec_fifo_mux_checks() {
+        return FIFO_MUX_CHECKS;
+    }
 
-	public void disableAllChecks() {
-		ARRIVAL_CURVE_CHECKS = false;
-		SERVICE_CURVE_CHECKS = false;
-		MAX_SERVICE_CURVE_CHECKS = false;
-		FIFO_MUX_CHECKS = false;
-		DECONVOLUTION_CHECKS = false;
-	}
+    public boolean exec_deconvolution_checks() {
+        return DECONVOLUTION_CHECKS;
+    }
 
-	public void enableAllChecks() {
-		ARRIVAL_CURVE_CHECKS = true;
-		SERVICE_CURVE_CHECKS = true;
-		MAX_SERVICE_CURVE_CHECKS = true;
-		FIFO_MUX_CHECKS = true;
-		DECONVOLUTION_CHECKS = true;
-	}
+    @Override
+    public String toString() {
+        StringBuffer calculator_config_str = new StringBuffer();
 
-	public boolean exec_arrival_curve_checks() {
-		return ARRIVAL_CURVE_CHECKS;
-	}
+        calculator_config_str.append(getNumImpl().toString());
+        calculator_config_str.append(", ");
+        calculator_config_str.append(getCurveImpl().toString());
 
-	public boolean exec_service_curve_checks() {
-		return SERVICE_CURVE_CHECKS;
-	}
+        if (exec_arrival_curve_checks()) {
+            calculator_config_str.append(", ");
+            calculator_config_str.append("AC checks");
+        }
+        if (exec_service_curve_checks()) {
+            calculator_config_str.append(", ");
+            calculator_config_str.append("SC checks");
+        }
+        if (exec_max_service_curve_checks()) {
+            calculator_config_str.append(", ");
+            calculator_config_str.append("MSC checks");
+        }
+        if (exec_fifo_mux_checks()) {
+            calculator_config_str.append(", ");
+            calculator_config_str.append("FIFO checks");
+        }
+        if (exec_deconvolution_checks()) {
+            calculator_config_str.append(", ");
+            calculator_config_str.append("deconv checks");
+        }
 
-	public boolean exec_max_service_curve_checks() {
-		return MAX_SERVICE_CURVE_CHECKS;
-	}
+        return calculator_config_str.toString();
+    }
 
-	public boolean exec_fifo_mux_checks() {
-		return FIFO_MUX_CHECKS;
-	}
+    public enum NumImpl {
+        REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
+    }
 
-	public boolean exec_deconvolution_checks() {
-		return DECONVOLUTION_CHECKS;
-	}
+    public enum CurveImpl {
+        DNC, MPA_RTC
+    }
 
-	@Override
-	public String toString() {
-		StringBuffer calculator_config_str = new StringBuffer();
-
-		calculator_config_str.append(getNumImpl().toString());
-		calculator_config_str.append(", ");
-		calculator_config_str.append(getCurveImpl().toString());
-
-		if (exec_arrival_curve_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("AC checks");
-		}
-		if (exec_service_curve_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("SC checks");
-		}
-		if (exec_max_service_curve_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("MSC checks");
-		}
-		if (exec_fifo_mux_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("FIFO checks");
-		}
-		if (exec_deconvolution_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("deconv checks");
-		}
-
-		return calculator_config_str.toString();
-	}
+    public enum OperationImpl {
+        DNC, NATIVE
+    }
 }

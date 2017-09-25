@@ -1,23 +1,23 @@
 package de.uni_kl.cs.disco.nc;
 
-import java.util.Set;
-
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Link;
 import de.uni_kl.cs.disco.network.Network;
 
+import java.util.Set;
+
 public interface ArrivalBound {
-	// --------------------------------------------------------------------------------------------------------------
-	// Interface
-	// --------------------------------------------------------------------------------------------------------------
-	void setNetwork( Network network );
+    Network getNetwork();
 
-	Network getNetwork();
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface
+    // --------------------------------------------------------------------------------------------------------------
+    void setNetwork(Network network);
 
-	public void setConfiguration( AnalysisConfig configuration );
+    public AnalysisConfig getConfiguration();
 
-	public AnalysisConfig getConfiguration();
-	
-	Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception;
+    public void setConfiguration(AnalysisConfig configuration);
+
+    Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception;
 }

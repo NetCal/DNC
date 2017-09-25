@@ -176,7 +176,7 @@ public class Debug {
     public static void string() {
         CalculatorConfig.getInstance().setCurveImpl(CalculatorConfig.CurveImpl.MPA_RTC);
         System.out.println("Creating RTC Segments");
-        Segment s1 = new Segment(0,0,0);
+        Segment s1 = new Segment(0, 0, 0);
         Segment s = new Segment(1, 1, 1);
         SegmentList sl = new SegmentList();
         sl.add(s1);
@@ -185,14 +185,14 @@ public class Debug {
         System.out.println("Creating RTC Curve with Segments from above using RTC constructor:");
         Curve a = new Curve(sl);
         String as = a.toString();
-        System.out.println("Curve String:\n"+ as);
+        System.out.println("Curve String:\n" + as);
 
         System.out.println("\nCreating RTC Curve from String above using RTC constructor:");
         Curve b;
         try {
             b = new Curve(as);
             System.out.println(b.toString());
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Failed");
         }
 

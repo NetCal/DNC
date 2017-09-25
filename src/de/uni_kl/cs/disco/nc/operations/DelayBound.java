@@ -35,58 +35,58 @@ import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public class DelayBound {
-	private DelayBound() {
-	}
+    private DelayBound() {
+    }
 
-	private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-		if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
-			return Num.getFactory().createZero();
-		}
-		if (service_curve.getDelayedInfiniteBurst_Property()) {
-			// Assumption: the arrival curve does not have an initial latency.
-			// Otherwise its sub-additive closure would be zero, i.e., the arrival curve
-			// would not be sensible.
-			return service_curve.getLatency().copy();
-		}
-		if (service_curve.equals(CurvePwAffine.getFactory().createZeroService()) // We know from above that the
-																					// arrivals are not zero.
-				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-			return Num.getFactory().createPositiveInfinity();
-		}
-		return null;
-	}
+    private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+        if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
+            return Num.getFactory().createZero();
+        }
+        if (service_curve.getDelayedInfiniteBurst_Property()) {
+            // Assumption: the arrival curve does not have an initial latency.
+            // Otherwise its sub-additive closure would be zero, i.e., the arrival curve
+            // would not be sensible.
+            return service_curve.getLatency().copy();
+        }
+        if (service_curve.equals(CurvePwAffine.getFactory().createZeroService()) // We know from above that the
+                // arrivals are not zero.
+                || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
+            return Num.getFactory().createPositiveInfinity();
+        }
+        return null;
+    }
 
-	public static Num deriveARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-		Num result = deriveForSpecialCurves(arrival_curve, service_curve);
-		if (result != null) {
-			return result;
-		}
+    public static Num deriveARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+        Num result = deriveForSpecialCurves(arrival_curve, service_curve);
+        if (result != null) {
+            return result;
+        }
 
-		return CurvePwAffine.getXIntersection(arrival_curve, service_curve);
-	}
+        return CurvePwAffine.getXIntersection(arrival_curve, service_curve);
+    }
 
-	// Single flow to be bound, i.e., fifo per micro flow holds
-	public static Num deriveFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+    // Single flow to be bound, i.e., fifo per micro flow holds
+    public static Num deriveFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 
-		Num result = deriveForSpecialCurves(arrival_curve, service_curve);
-		if (result != null) {
-			return result;
-		}
+        Num result = deriveForSpecialCurves(arrival_curve, service_curve);
+        if (result != null) {
+            return result;
+        }
 
-		result = Num.getFactory().createNegativeInfinity();
-		for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
-			Num ip_y = arrival_curve.getSegment(i).getY();
+        result = Num.getFactory().createNegativeInfinity();
+        for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
+            Num ip_y = arrival_curve.getSegment(i).getY();
 
-			Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-			result = Num.getUtils().max(result, delay);
-		}
-		for (int i = 0; i < service_curve.getSegmentCount(); i++) {
-			Num ip_y = service_curve.getSegment(i).getY();
+            Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+            result = Num.getUtils().max(result, delay);
+        }
+        for (int i = 0; i < service_curve.getSegmentCount(); i++) {
+            Num ip_y = service_curve.getSegment(i).getY();
 
-			Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-			result = Num.getUtils().max(result, delay);
-		}
+            Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+            result = Num.getUtils().max(result, delay);
+        }
 
-		return Num.getUtils().max(Num.getFactory().getZero(), result);
-	}
+        return Num.getUtils().max(Num.getFactory().getZero(), result);
+    }
 }

@@ -29,9 +29,9 @@
 package de.uni_kl.cs.disco.network;
 
 public interface NetworkFactory {
-	Network createNetwork();
-	
-	Network getNetwork();
-	
-	void reinitializeCurves();
+    Network createNetwork();
+
+    Network getNetwork();
+
+    void reinitializeCurves();
 }

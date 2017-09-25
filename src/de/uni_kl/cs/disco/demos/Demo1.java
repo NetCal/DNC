@@ -43,96 +43,96 @@ import de.uni_kl.cs.disco.network.Server;
 
 public class Demo1 {
 
-	public Demo1() {
-	}
+    public Demo1() {
+    }
 
-	public static void main(String[] args) {
-		Demo1 demo = new Demo1();
+    public static void main(String[] args) {
+        Demo1 demo = new Demo1();
 
-		try {
-			demo.run();
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-	}
+        try {
+            demo.run();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
 
-	public void run() throws Exception {
-		ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
+    public void run() throws Exception {
+        ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
-		ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(10.0e6, 0.01);
-		MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createRateLatencyMSC(100.0e6, 0.001);
+        ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(10.0e6, 0.01);
+        MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
-		Network network = new Network();
-		AnalysisConfig configuration = new AnalysisConfig();
+        Network network = new Network();
+        AnalysisConfig configuration = new AnalysisConfig();
 
-		Server s0 = network.addServer(service_curve, max_service_curve);
-		// Creating a server with a maximum service curve automatically triggers the
-		// following setting
-		// s0.setUseGamma( true );
-		// s0.setUseExtraGamma( true );
-		// , however, disabling the use of a maximum service curve in a configuration
-		// overrides it.
-		configuration.setUseGamma(GammaFlag.GLOBALLY_ON);
-		configuration.setUseExtraGamma(GammaFlag.GLOBALLY_ON);
+        Server s0 = network.addServer(service_curve, max_service_curve);
+        // Creating a server with a maximum service curve automatically triggers the
+        // following setting
+        // s0.setUseGamma( true );
+        // s0.setUseExtraGamma( true );
+        // , however, disabling the use of a maximum service curve in a configuration
+        // overrides it.
+        configuration.setUseGamma(GammaFlag.GLOBALLY_ON);
+        configuration.setUseExtraGamma(GammaFlag.GLOBALLY_ON);
 
-		Flow flow_of_interest = network.addFlow(arrival_curve, s0);
+        Flow flow_of_interest = network.addFlow(arrival_curve, s0);
 
-		System.out.println("Flow of interest : " + flow_of_interest.toString());
-		System.out.println();
+        System.out.println("Flow of interest : " + flow_of_interest.toString());
+        System.out.println();
 
-		// Analyze the network
-		// TFA
-		System.out.println("--- Total Flow Analysis ---");
-		TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+        // Analyze the network
+        // TFA
+        System.out.println("--- Total Flow Analysis ---");
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
 
-		try {
-			tfa.performAnalysis(flow_of_interest);
-			System.out.println("delay bound     : " + tfa.getDelayBound());
-			System.out.println("     per server : " + tfa.getServerDelayBoundMapString());
-			System.out.println("backlog bound   : " + tfa.getBacklogBound());
-			System.out.println("     per server : " + tfa.getServerBacklogBoundMapString());
-			System.out.println("alpha per server: " + tfa.getServerAlphasMapString());
-		} catch (Exception e) {
-			System.out.println("TFA analysis failed");
-			System.out.println(e.toString());
-		}
+        try {
+            tfa.performAnalysis(flow_of_interest);
+            System.out.println("delay bound     : " + tfa.getDelayBound());
+            System.out.println("     per server : " + tfa.getServerDelayBoundMapString());
+            System.out.println("backlog bound   : " + tfa.getBacklogBound());
+            System.out.println("     per server : " + tfa.getServerBacklogBoundMapString());
+            System.out.println("alpha per server: " + tfa.getServerAlphasMapString());
+        } catch (Exception e) {
+            System.out.println("TFA analysis failed");
+            System.out.println(e.toString());
+        }
 
-		System.out.println();
+        System.out.println();
 
-		// SFA
-		System.out.println("--- Separated Flow Analysis ---");
-		SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
+        // SFA
+        System.out.println("--- Separated Flow Analysis ---");
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
 
-		try {
-			sfa.performAnalysis(flow_of_interest);
-			System.out.println("e2e SFA SCs     : " + sfa.getLeftOverServiceCurves());
-			System.out.println("     per server : " + sfa.getServerLeftOverBetasMapString());
-			System.out.println("xtx per server  : " + sfa.getServerAlphasMapString());
-			System.out.println("delay bound     : " + sfa.getDelayBound());
-			System.out.println("backlog bound   : " + sfa.getBacklogBound());
-		} catch (Exception e) {
-			System.out.println("SFA analysis failed");
-			System.out.println(e.toString());
-		}
+        try {
+            sfa.performAnalysis(flow_of_interest);
+            System.out.println("e2e SFA SCs     : " + sfa.getLeftOverServiceCurves());
+            System.out.println("     per server : " + sfa.getServerLeftOverBetasMapString());
+            System.out.println("xtx per server  : " + sfa.getServerAlphasMapString());
+            System.out.println("delay bound     : " + sfa.getDelayBound());
+            System.out.println("backlog bound   : " + sfa.getBacklogBound());
+        } catch (Exception e) {
+            System.out.println("SFA analysis failed");
+            System.out.println(e.toString());
+        }
 
-		System.out.println();
+        System.out.println();
 
-		// PMOO
-		System.out.println("--- PMOO Analysis ---");
-		PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+        // PMOO
+        System.out.println("--- PMOO Analysis ---");
+        PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
 
-		try {
-			pmoo.performAnalysis(flow_of_interest);
-			System.out.println("e2e PMOO SCs    : " + pmoo.getLeftOverServiceCurves());
-			System.out.println("xtx per server  : " + pmoo.getServerAlphasMapString());
-			System.out.println("delay bound     : " + pmoo.getDelayBound());
-			System.out.println("backlog bound   : " + pmoo.getBacklogBound());
-		} catch (Exception e) {
-			System.out.println("PMOO analysis failed");
-			System.out.println(e.toString());
-		}
+        try {
+            pmoo.performAnalysis(flow_of_interest);
+            System.out.println("e2e PMOO SCs    : " + pmoo.getLeftOverServiceCurves());
+            System.out.println("xtx per server  : " + pmoo.getServerAlphasMapString());
+            System.out.println("delay bound     : " + pmoo.getDelayBound());
+            System.out.println("backlog bound   : " + pmoo.getBacklogBound());
+        } catch (Exception e) {
+            System.out.println("PMOO analysis failed");
+            System.out.println(e.toString());
+        }
 
-		System.out.println();
-		System.out.println();
-	}
+        System.out.println();
+        System.out.println();
+    }
 }

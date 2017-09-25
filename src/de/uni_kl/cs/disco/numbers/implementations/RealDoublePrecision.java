@@ -32,364 +32,360 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 
 public class RealDoublePrecision implements Num {
-	private double value;
-	
-	private static RealDoublePrecision instance = new RealDoublePrecision();
-	
-	public static RealDoublePrecision getInstance() {
-		return instance;
-	}
-	
-	private RealDoublePrecision() {
-	}
+    private static final double EPSILON_Double = Double.parseDouble("5E-10");
+    private static RealDoublePrecision instance = new RealDoublePrecision();
+    private static boolean comparison_epsilon = false;
+    private double value;
+    private Num POSITIVE_INFINITY = null;
+    private Num NEGATIVE_INFINITY = null;
+    private Num NaN = null;
+    private Num ZERO = null;
 
-	public RealDoublePrecision(int num) {
-		value = (double) num;
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Num Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
+    private Num EPSILON = null;
+    private RealDoublePrecision() {
+    }
 
-	public RealDoublePrecision(double value) {
-		this.value = value;
-	}
+    public RealDoublePrecision(int num) {
+        value = (double) num;
+    }
 
-	public RealDoublePrecision(int num, int den) {
-		value = ((double) num) / ((double) den);
-	}
+    public RealDoublePrecision(double value) {
+        this.value = value;
+    }
 
-	public RealDoublePrecision(RealDoublePrecision num) {
-		value = num.value;
-	}
-	
-	// --------------------------------------------------------------------------------------------------------------
-	// Num Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
-	
-	private static final double EPSILON_Double = Double.parseDouble("5E-10");
-	private static boolean comparison_epsilon = false;
+    public RealDoublePrecision(int num, int den) {
+        value = ((double) num) / ((double) den);
+    }
 
-	public boolean eqZero() {
-		if (comparison_epsilon) {
-			return (value <= EPSILON_Double) && (value >= -EPSILON_Double);
-		} else {
-			return value == 0.0;
-		}
-	}
+    public RealDoublePrecision(RealDoublePrecision num) {
+        value = num.value;
+    }
 
-	public boolean gt(Num num) {
-		if (comparison_epsilon) {
-			return value > (num.doubleValue() + EPSILON_Double);
-		} else {
-			return value > num.doubleValue();
-		}
-	}
+    public static RealDoublePrecision getInstance() {
+        return instance;
+    }
 
-	public boolean gtZero() {
-		if (comparison_epsilon) {
-			return value > EPSILON_Double;
-		} else {
-			return value > 0.0;
-		}
-	}
+    public boolean eqZero() {
+        if (comparison_epsilon) {
+            return (value <= EPSILON_Double) && (value >= -EPSILON_Double);
+        } else {
+            return value == 0.0;
+        }
+    }
 
-	public boolean geq(Num num) {
-		if (comparison_epsilon) {
-			return value >= (num.doubleValue() + EPSILON_Double);
-		} else {
-			return value >= num.doubleValue();
-		}
-	}
+    public boolean gt(Num num) {
+        if (comparison_epsilon) {
+            return value > (num.doubleValue() + EPSILON_Double);
+        } else {
+            return value > num.doubleValue();
+        }
+    }
 
-	public boolean geqZero() {
-		if (comparison_epsilon) {
-			return value >= EPSILON_Double;
-		} else {
-			return value >= 0.0;
-		}
-	}
+    public boolean gtZero() {
+        if (comparison_epsilon) {
+            return value > EPSILON_Double;
+        } else {
+            return value > 0.0;
+        }
+    }
 
-	public boolean lt(Num num) {
-		if (comparison_epsilon) {
-			return value < (num.doubleValue() - EPSILON_Double);
-		} else {
-			return value < num.doubleValue();
-		}
-	}
+    public boolean geq(Num num) {
+        if (comparison_epsilon) {
+            return value >= (num.doubleValue() + EPSILON_Double);
+        } else {
+            return value >= num.doubleValue();
+        }
+    }
 
-	public boolean ltZero() {
-		if (comparison_epsilon) {
-			return value < -EPSILON_Double;
-		} else {
-			return value < 0.0;
-		}
-	}
+    public boolean geqZero() {
+        if (comparison_epsilon) {
+            return value >= EPSILON_Double;
+        } else {
+            return value >= 0.0;
+        }
+    }
 
-	public boolean leq(Num num) {
-		if (comparison_epsilon) {
-			return value <= (num.doubleValue() - EPSILON_Double);
-		} else {
-			return value <= num.doubleValue();
-		}
-	}
+    public boolean lt(Num num) {
+        if (comparison_epsilon) {
+            return value < (num.doubleValue() - EPSILON_Double);
+        } else {
+            return value < num.doubleValue();
+        }
+    }
 
-	public boolean leqZero() {
-		if (comparison_epsilon) {
-			return value <= -EPSILON_Double;
-		} else {
-			return value <= 0.0;
-		}
-	}
+    public boolean ltZero() {
+        if (comparison_epsilon) {
+            return value < -EPSILON_Double;
+        } else {
+            return value < 0.0;
+        }
+    }
 
-	public boolean isFinite() {
-		return Double.isFinite(value);
-	}
+    public boolean leq(Num num) {
+        if (comparison_epsilon) {
+            return value <= (num.doubleValue() - EPSILON_Double);
+        } else {
+            return value <= num.doubleValue();
+        }
+    }
 
-	public boolean isInfinite() {
-		return Double.isInfinite(value);
-	}
+    public boolean leqZero() {
+        if (comparison_epsilon) {
+            return value <= -EPSILON_Double;
+        } else {
+            return value <= 0.0;
+        }
+    }
 
-	public boolean isNaN() {
-		return Double.isNaN(value);
-	}
+    public boolean isFinite() {
+        return Double.isFinite(value);
+    }
 
-	@Override
-	public double doubleValue() {
-		return value;
-	}
+    public boolean isInfinite() {
+        return Double.isInfinite(value);
+    }
 
-	@Override
-	public Num copy() {
-		return new RealDoublePrecision(value);
-	}
+    public boolean isNaN() {
+        return Double.isNaN(value);
+    }
 
-	@Override
-	public boolean eq(double num) {
-		// if( ( this.value == Double.POSITIVE_INFINITY && num ==
-		// Double.POSITIVE_INFINITY )
-		// || ( this.value == Double.NEGATIVE_INFINITY && num ==
-		// Double.NEGATIVE_INFINITY ) ) {
-		if (Double.isInfinite(this.value) && Double.isInfinite(num) && (Double.compare(this.value, num) == 0)) {
-			return true;
-		}
+    @Override
+    public double doubleValue() {
+        return value;
+    }
 
-		if (Math.abs(value - num) <= EPSILON_Double) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public Num copy() {
+        return new RealDoublePrecision(value);
+    }
 
-	public boolean equals(RealDoublePrecision num) {
-		return eq(num.value);
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof RealDoublePrecision)) {
-			return false;
-		} else {
-			return eq(((RealDoublePrecision) obj).value);
-		}
-	}
+    @Override
+    public boolean eq(double num) {
+        // if( ( this.value == Double.POSITIVE_INFINITY && num ==
+        // Double.POSITIVE_INFINITY )
+        // || ( this.value == Double.NEGATIVE_INFINITY && num ==
+        // Double.NEGATIVE_INFINITY ) ) {
+        if (Double.isInfinite(this.value) && Double.isInfinite(num) && (Double.compare(this.value, num) == 0)) {
+            return true;
+        }
 
-	@Override
-	public int hashCode() {
-		return Double.hashCode(value);
-	}
+        if (Math.abs(value - num) <= EPSILON_Double) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	@Override
-	public String toString() {
-		return Double.toString(value);
-	}
-	
-	// --------------------------------------------------------------------------------------------------------------
-	// Factory Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
-	
-	private Num POSITIVE_INFINITY = null;
-	private Num NEGATIVE_INFINITY = null;
-	private Num NaN = null;
-	private Num ZERO = null;
-	private Num EPSILON = null;
+    public boolean equals(RealDoublePrecision num) {
+        return eq(num.value);
+    }
 
-	public Num getPositiveInfinity() {
-		if( POSITIVE_INFINITY == null ) {
-			POSITIVE_INFINITY = createPositiveInfinity();
-		}
-		return POSITIVE_INFINITY;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof RealDoublePrecision)) {
+            return false;
+        } else {
+            return eq(((RealDoublePrecision) obj).value);
+        }
+    }
 
-	public Num createPositiveInfinity() {
-		return new RealDoublePrecision(Double.POSITIVE_INFINITY);
-	}
+    @Override
+    public int hashCode() {
+        return Double.hashCode(value);
+    }
 
-	public Num getNegativeInfinity() {
-		if( NEGATIVE_INFINITY == null ) {
-			NEGATIVE_INFINITY = createNegativeInfinity();
-		}
-		return NEGATIVE_INFINITY;
-	}
+    @Override
+    public String toString() {
+        return Double.toString(value);
+    }
 
-	public Num createNegativeInfinity() {
-		return new RealDoublePrecision(Double.NEGATIVE_INFINITY);
-	}
+    public Num getPositiveInfinity() {
+        if (POSITIVE_INFINITY == null) {
+            POSITIVE_INFINITY = createPositiveInfinity();
+        }
+        return POSITIVE_INFINITY;
+    }
 
-	public Num getNaN() {
-		if( NaN == null ) {
-			NaN = createNaN();
-		}
-		return NaN;
-	}
+    public Num createPositiveInfinity() {
+        return new RealDoublePrecision(Double.POSITIVE_INFINITY);
+    }
 
-	public Num createNaN() {
-		return new RealDoublePrecision(Double.NaN);
-	}
+    public Num getNegativeInfinity() {
+        if (NEGATIVE_INFINITY == null) {
+            NEGATIVE_INFINITY = createNegativeInfinity();
+        }
+        return NEGATIVE_INFINITY;
+    }
 
-	public Num getZero() {
-		if( ZERO == null ) {
-			ZERO = createZero();
-		}
-		return ZERO;
-	}
+    public Num createNegativeInfinity() {
+        return new RealDoublePrecision(Double.NEGATIVE_INFINITY);
+    }
 
-	public Num createZero() {
-		return new RealDoublePrecision(0);
-	}
+    public Num getNaN() {
+        if (NaN == null) {
+            NaN = createNaN();
+        }
+        return NaN;
+    }
 
-	public Num getEpsilon() {
-		if( EPSILON == null ) {
-			EPSILON = createEpsilon();
-		}
-		return EPSILON;
-	}
+    public Num createNaN() {
+        return new RealDoublePrecision(Double.NaN);
+    }
 
-	public Num createEpsilon() {
-		return new RealDoublePrecision(EPSILON_Double);
-	}
+    public Num getZero() {
+        if (ZERO == null) {
+            ZERO = createZero();
+        }
+        return ZERO;
+    }
 
-	public Num create(int num) {
-		return new RealDoublePrecision(num);
-	}
+    public Num createZero() {
+        return new RealDoublePrecision(0);
+    }
 
-	public Num create(double value) {
-		return new RealDoublePrecision(value);
-	}
+    public Num getEpsilon() {
+        if (EPSILON == null) {
+            EPSILON = createEpsilon();
+        }
+        return EPSILON;
+    }
 
-	public Num create(int num, int den) {
-		if (den == 0) { // division by integer 0 throws an arithmetic exception
-			throw new ArithmeticException("/ by zero");
-		}
-		return new RealDoublePrecision(num, den);
-	}
+    public Num createEpsilon() {
+        return new RealDoublePrecision(EPSILON_Double);
+    }
 
-	public Num create(String num_str) throws Exception {
-		if (num_str.equals("Infinity")) {
-			return createPositiveInfinity();
-		}
-		if (num_str.equals("-Infinity")) {
-			return createNegativeInfinity();
-		}
-		if (num_str.equals("NaN") || num_str.equals("NA")) {
-			return createNaN();
-		}
+    public Num create(int num) {
+        return new RealDoublePrecision(num);
+    }
 
-		boolean fraction_indicator = num_str.contains(" / ");
-		boolean double_based = num_str.contains(".");
+    public Num create(double value) {
+        return new RealDoublePrecision(value);
+    }
 
-		if (fraction_indicator && double_based) {
-			throw new Exception("Invalid string representation of a number based on "
-					+ CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
-		}
+    public Num create(int num, int den) {
+        if (den == 0) { // division by integer 0 throws an arithmetic exception
+            throw new ArithmeticException("/ by zero");
+        }
+        return new RealDoublePrecision(num, den);
+    }
 
-		try {
-			// either an integer of something strange
-			if (!fraction_indicator && !double_based) {
-				return create(Integer.parseInt(num_str));
-			}
+    public Num create(String num_str) throws Exception {
+        if (num_str.equals("Infinity")) {
+            return createPositiveInfinity();
+        }
+        if (num_str.equals("-Infinity")) {
+            return createNegativeInfinity();
+        }
+        if (num_str.equals("NaN") || num_str.equals("NA")) {
+            return createNaN();
+        }
 
-			if (fraction_indicator) {
-				String[] num_den = num_str.split(" / "); // ["num","den"]
-				if (num_den.length != 2) {
-					throw new Exception("Invalid string representation of a number based on "
-							+ CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
-				}
+        boolean fraction_indicator = num_str.contains(" / ");
+        boolean double_based = num_str.contains(".");
 
-				int den = Integer.parseInt(num_den[1]);
-				if (den != 0) {
-					return create(Integer.parseInt(num_den[0]), den);
-				} else {
-					return createNaN();
-				}
-			}
+        if (fraction_indicator && double_based) {
+            throw new Exception("Invalid string representation of a number based on "
+                    + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+        }
 
-			if (double_based) {
-				return create(Double.parseDouble(num_str));
-			}
-		} catch (Exception e) {
-			throw new Exception("Invalid string representation of a number based on "
-					+ CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
-		}
+        try {
+            // either an integer of something strange
+            if (!fraction_indicator && !double_based) {
+                return create(Integer.parseInt(num_str));
+            }
 
-		// This code should not be reachable because all the operations above either
-		// succeed such that we can return a number
-		// of raise an exception of some kind. Yet, Java does not get this and thus
-		// complains if there's no "finalizing statement".
-		throw new Exception("Invalid string representation of a number based on "
-				+ CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
-	}
-	
-	// --------------------------------------------------------------------------------------------------------------
-	// Utils Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
-	
-	public Num add(Num num1, Num num2) {
-		return new RealDoublePrecision(((RealDoublePrecision) num1).value + ((RealDoublePrecision) num2).value);
-	}
+            if (fraction_indicator) {
+                String[] num_den = num_str.split(" / "); // ["num","den"]
+                if (num_den.length != 2) {
+                    throw new Exception("Invalid string representation of a number based on "
+                            + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+                }
 
-	public Num sub(Num num1, Num num2) {
-		double result = ((RealDoublePrecision) num1).value - ((RealDoublePrecision) num2).value;
-		if (Math.abs(result) <= EPSILON_Double) {
-			result = 0;
-		}
-		return new RealDoublePrecision(result);
-	}
+                int den = Integer.parseInt(num_den[1]);
+                if (den != 0) {
+                    return create(Integer.parseInt(num_den[0]), den);
+                } else {
+                    return createNaN();
+                }
+            }
 
-	public Num mult(Num num1, Num num2) {
-		return new RealDoublePrecision(((RealDoublePrecision) num1).value * ((RealDoublePrecision) num2).value);
-	}
+            if (double_based) {
+                return create(Double.parseDouble(num_str));
+            }
+        } catch (Exception e) {
+            throw new Exception("Invalid string representation of a number based on "
+                    + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+        }
 
-	public Num div(Num num1, Num num2) {
-		return new RealDoublePrecision(((RealDoublePrecision) num1).value / ((RealDoublePrecision) num2).value);
-	}
+        // This code should not be reachable because all the operations above either
+        // succeed such that we can return a number
+        // of raise an exception of some kind. Yet, Java does not get this and thus
+        // complains if there's no "finalizing statement".
+        throw new Exception("Invalid string representation of a number based on "
+                + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+    }
 
-	public Num abs(Num num) {
-		return new RealDoublePrecision(Math.abs(((RealDoublePrecision) num).value));
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Utils Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
 
-	public Num diff(Num num1, Num num2) {
-			return new RealDoublePrecision(Math.max(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value) 
-					- Math.min(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value));
-	}
+    public Num add(Num num1, Num num2) {
+        return new RealDoublePrecision(((RealDoublePrecision) num1).value + ((RealDoublePrecision) num2).value);
+    }
 
-	public Num max(Num num1, Num num2) {
-		return new RealDoublePrecision(Math.max(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value));
-	}
+    public Num sub(Num num1, Num num2) {
+        double result = ((RealDoublePrecision) num1).value - ((RealDoublePrecision) num2).value;
+        if (Math.abs(result) <= EPSILON_Double) {
+            result = 0;
+        }
+        return new RealDoublePrecision(result);
+    }
 
-	public Num min(Num num1, Num num2) {
-		return new RealDoublePrecision(Math.min(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value));
-	}
+    public Num mult(Num num1, Num num2) {
+        return new RealDoublePrecision(((RealDoublePrecision) num1).value * ((RealDoublePrecision) num2).value);
+    }
 
-	public Num negate(Num num) {
-		return new RealDoublePrecision(((RealDoublePrecision) num).value * -1);
-	}
+    public Num div(Num num1, Num num2) {
+        return new RealDoublePrecision(((RealDoublePrecision) num1).value / ((RealDoublePrecision) num2).value);
+    }
 
-	public boolean isFinite(Num num) {
-		return ((RealDoublePrecision) num).isFinite();
-	}
+    public Num abs(Num num) {
+        return new RealDoublePrecision(Math.abs(((RealDoublePrecision) num).value));
+    }
 
-	public boolean isInfinite(Num num) {
-		return ((RealDoublePrecision) num).isInfinite();
-	}
+    public Num diff(Num num1, Num num2) {
+        return new RealDoublePrecision(Math.max(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value)
+                - Math.min(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value));
+    }
 
-	public boolean isNaN(Num num) {
-		return ((RealDoublePrecision) num).isNaN();
-	}
+    public Num max(Num num1, Num num2) {
+        return new RealDoublePrecision(Math.max(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value));
+    }
+
+    public Num min(Num num1, Num num2) {
+        return new RealDoublePrecision(Math.min(((RealDoublePrecision) num1).value, ((RealDoublePrecision) num2).value));
+    }
+
+    public Num negate(Num num) {
+        return new RealDoublePrecision(((RealDoublePrecision) num).value * -1);
+    }
+
+    public boolean isFinite(Num num) {
+        return ((RealDoublePrecision) num).isFinite();
+    }
+
+    public boolean isInfinite(Num num) {
+        return ((RealDoublePrecision) num).isInfinite();
+    }
+
+    public boolean isNaN(Num num) {
+        return ((RealDoublePrecision) num).isNaN();
+    }
 }

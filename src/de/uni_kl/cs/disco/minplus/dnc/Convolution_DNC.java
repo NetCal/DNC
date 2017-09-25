@@ -29,444 +29,437 @@
 
 package de.uni_kl.cs.disco.minplus.dnc;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import de.uni_kl.cs.disco.curves.ArrivalCurve;
-import de.uni_kl.cs.disco.curves.CurvePwAffine;
-import de.uni_kl.cs.disco.curves.LinearSegment;
-import de.uni_kl.cs.disco.curves.MaxServiceCurve;
-import de.uni_kl.cs.disco.curves.ServiceCurve;
+import de.uni_kl.cs.disco.curves.*;
 import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.numbers.Num;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class Convolution_DNC {
 
-	// ------------------------------------------------------------
-	// Service Curves
-	// ------------------------------------------------------------
-	public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-		// null checks will be done by convolve( ... )
-		return convolve(service_curve_1, service_curve_2, false);
-	}
+    // ------------------------------------------------------------
+    // Service Curves
+    // ------------------------------------------------------------
+    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+        // null checks will be done by convolve( ... )
+        return convolve(service_curve_1, service_curve_2, false);
+    }
 
-	public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
-			boolean tb_rl_optimized) {
-		// null checks will be done by convolve_SC_SC_RLs( ... ) or
-		// convolve_SC_SC_Generic( ... )
-		if (tb_rl_optimized) {
-			return convolve_SC_SC_RLs(service_curve_1, service_curve_2);
-		} else {
-			return convolve_SC_SC_Generic(service_curve_1, service_curve_2);
-		}
-	}
+    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
+                                        boolean tb_rl_optimized) {
+        // null checks will be done by convolve_SC_SC_RLs( ... ) or
+        // convolve_SC_SC_Generic( ... )
+        if (tb_rl_optimized) {
+            return convolve_SC_SC_RLs(service_curve_1, service_curve_2);
+        } else {
+            return convolve_SC_SC_Generic(service_curve_1, service_curve_2);
+        }
+    }
 
-	private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-		switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
-		case 1:
-			return service_curve_2.copy();
-		case 2:
-			return service_curve_1.copy();
-		case 3:
-			return CurvePwAffine.getFactory().createZeroService();
-		case 0:
-		default:
-			break;
-		}
+    private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+        switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
+            case 1:
+                return service_curve_2.copy();
+            case 2:
+                return service_curve_1.copy();
+            case 3:
+                return CurvePwAffine.getFactory().createZeroService();
+            case 0:
+            default:
+                break;
+        }
 
-		Num rate;
-		switch (MinPlus.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
-		case 1:
-			rate = service_curve_2.getUltAffineRate();
-			break;
-		case 2:
-			rate = service_curve_1.getUltAffineRate();
-			break;
-		case 3:
-			rate = Num.getFactory().createPositiveInfinity();
-			break;
-		case 0:
-		default:
-			rate = Num.getUtils().min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
-			break;
-		}
+        Num rate;
+        switch (MinPlus.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+            case 1:
+                rate = service_curve_2.getUltAffineRate();
+                break;
+            case 2:
+                rate = service_curve_1.getUltAffineRate();
+                break;
+            case 3:
+                rate = Num.getFactory().createPositiveInfinity();
+                break;
+            case 0:
+            default:
+                rate = Num.getUtils().min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+                break;
+        }
 
-		return CurvePwAffine.getFactory().createRateLatency(rate,
-				Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
-	}
+        return CurvePwAffine.getFactory().createRateLatency(rate,
+                Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+    }
 
-	/**
-	 * Returns the convolution of two curve, which must be convex
-	 *
-	 * @param service_curve_1
-	 *            The first curve to convolve with.
-	 * @param service_curve_2
-	 *            The second curve to convolve with.
-	 * @return The convolved curve.
-	 */
-	private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-		switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
-		case 1:
-			return service_curve_2.copy();
-		case 2:
-			return service_curve_1.copy();
-		case 3:
-			return CurvePwAffine.getFactory().createZeroService();
-		case 0:
-		default:
-			break;
-		}
+    /**
+     * Returns the convolution of two curve, which must be convex
+     *
+     * @param service_curve_1 The first curve to convolve with.
+     * @param service_curve_2 The second curve to convolve with.
+     * @return The convolved curve.
+     */
+    private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+        switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
+            case 1:
+                return service_curve_2.copy();
+            case 2:
+                return service_curve_1.copy();
+            case 3:
+                return CurvePwAffine.getFactory().createZeroService();
+            case 0:
+            default:
+                break;
+        }
 
-		// Shortcut: only go here if there is at least one delayed infinite burst
-		if (service_curve_1.getDelayedInfiniteBurst_Property() || service_curve_2.getDelayedInfiniteBurst_Property()) {
-			if (service_curve_1.getDelayedInfiniteBurst_Property()
-					&& service_curve_2.getDelayedInfiniteBurst_Property()) {
-				return CurvePwAffine.getFactory().createDelayedInfiniteBurst(
-						Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
-			}
+        // Shortcut: only go here if there is at least one delayed infinite burst
+        if (service_curve_1.getDelayedInfiniteBurst_Property() || service_curve_2.getDelayedInfiniteBurst_Property()) {
+            if (service_curve_1.getDelayedInfiniteBurst_Property()
+                    && service_curve_2.getDelayedInfiniteBurst_Property()) {
+                return CurvePwAffine.getFactory().createDelayedInfiniteBurst(
+                        Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+            }
 
-			if (service_curve_1.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
-				return CurvePwAffine.getFactory().createServiceCurve(
-						CurvePwAffine.shiftRight(service_curve_2, service_curve_1.getLatency()));
-			}
+            if (service_curve_1.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
+                return CurvePwAffine.getFactory().createServiceCurve(
+                        CurvePwAffine.shiftRight(service_curve_2, service_curve_1.getLatency()));
+            }
 
-			if (service_curve_2.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
-				return CurvePwAffine.getFactory().createServiceCurve(
-						CurvePwAffine.shiftRight(service_curve_1, service_curve_2.getLatency()));
-			}
-		}
+            if (service_curve_2.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
+                return CurvePwAffine.getFactory().createServiceCurve(
+                        CurvePwAffine.shiftRight(service_curve_1, service_curve_2.getLatency()));
+            }
+        }
 
-		ServiceCurve zero_service = CurvePwAffine.getFactory().createZeroService();
-		if (service_curve_1.equals(zero_service) || service_curve_2.equals(zero_service)) {
-			return zero_service;
-		}
+        ServiceCurve zero_service = CurvePwAffine.getFactory().createZeroService();
+        if (service_curve_1.equals(zero_service) || service_curve_2.equals(zero_service)) {
+            return zero_service;
+        }
 
-		ServiceCurve result = CurvePwAffine.getFactory().createServiceCurve();
+        ServiceCurve result = CurvePwAffine.getFactory().createServiceCurve();
 
-		Num x = Num.getFactory().createZero();
-		Num y = Num.getFactory().createZero(); // Functions pass though the origin
-		Num grad = Num.getFactory().createZero();
-		LinearSegment s = LinearSegment.createLinearSegment(x, y, grad, false);
-		result.addSegment(s);
+        Num x = Num.getFactory().createZero();
+        Num y = Num.getFactory().createZero(); // Functions pass though the origin
+        Num grad = Num.getFactory().createZero();
+        LinearSegment s = LinearSegment.createLinearSegment(x, y, grad, false);
+        result.addSegment(s);
 
-		int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
-		int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
-		if (i1 > 0 || i2 > 0) {
-			x = Num.getFactory().createZero();
-			y = Num.getUtils().add(service_curve_1.fLimitRight(Num.getFactory().getZero()),
-					service_curve_2.fLimitRight(Num.getFactory().getZero()));
-			grad = Num.getFactory().createZero();
-			s = LinearSegment.createLinearSegment(x, y, grad, true);
+        int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
+        int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
+        if (i1 > 0 || i2 > 0) {
+            x = Num.getFactory().createZero();
+            y = Num.getUtils().add(service_curve_1.fLimitRight(Num.getFactory().getZero()),
+                    service_curve_2.fLimitRight(Num.getFactory().getZero()));
+            grad = Num.getFactory().createZero();
+            s = LinearSegment.createLinearSegment(x, y, grad, true);
 
-			result.addSegment(s);
-		}
+            result.addSegment(s);
+        }
 
-		while (i1 < service_curve_1.getSegmentCount() || i2 < service_curve_2.getSegmentCount()) {
-			if (service_curve_1.getSegment(i1).getGrad().lt(service_curve_2.getSegment(i2).getGrad())) {
-				if (i1 + 1 >= service_curve_1.getSegmentCount()) {
-					result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
-					break;
-				}
+        while (i1 < service_curve_1.getSegmentCount() || i2 < service_curve_2.getSegmentCount()) {
+            if (service_curve_1.getSegment(i1).getGrad().lt(service_curve_2.getSegment(i2).getGrad())) {
+                if (i1 + 1 >= service_curve_1.getSegmentCount()) {
+                    result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
+                    break;
+                }
 
-				x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
-						(Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getX(),
-								service_curve_1.getSegment(i1).getX())));
-				y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
-						(Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getY(),
-								service_curve_1.getSegment(i1).getY())));
-				grad = Num.getFactory().createZero();
-				s = LinearSegment.createLinearSegment(x, y, grad, true);
+                x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
+                        (Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getX(),
+                                service_curve_1.getSegment(i1).getX())));
+                y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
+                        (Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getY(),
+                                service_curve_1.getSegment(i1).getY())));
+                grad = Num.getFactory().createZero();
+                s = LinearSegment.createLinearSegment(x, y, grad, true);
 
-				result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
-				result.addSegment(s);
+                result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
+                result.addSegment(s);
 
-				i1++;
-			} else {
-				if (i2 + 1 >= service_curve_2.getSegmentCount()) {
-					result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
-					break;
-				}
+                i1++;
+            } else {
+                if (i2 + 1 >= service_curve_2.getSegmentCount()) {
+                    result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
+                    break;
+                }
 
-				x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
-						(Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getX(),
-								service_curve_2.getSegment(i2).getX())));
-				y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
-						(Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getY(),
-								service_curve_2.getSegment(i2).getY())));
-				grad = Num.getFactory().createZero();
-				s = LinearSegment.createLinearSegment(x, y, grad, true);
+                x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
+                        (Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getX(),
+                                service_curve_2.getSegment(i2).getX())));
+                y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
+                        (Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getY(),
+                                service_curve_2.getSegment(i2).getY())));
+                grad = Num.getFactory().createZero();
+                s = LinearSegment.createLinearSegment(x, y, grad, true);
 
-				result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
-				result.addSegment(s);
+                result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
+                result.addSegment(s);
 
-				i2++;
-			}
-		}
+                i2++;
+            }
+        }
 
-		CurvePwAffine.beautify(result);
+        CurvePwAffine.beautify(result);
 
-		return result;
-	}
+        return result;
+    }
 
-	// Java won't let me call this method "convolve" because it does not care about
-	// the Sets' types; tells that there's already another method taking the same
-	// arguments.
-	public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
-			Set<ServiceCurve> service_curves_2) {
-		// null and empty checks will be done by convolve_SCs_SCs( ... )
-		return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
-	}
+    // Java won't let me call this method "convolve" because it does not care about
+    // the Sets' types; tells that there's already another method taking the same
+    // arguments.
+    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
+                                                     Set<ServiceCurve> service_curves_2) {
+        // null and empty checks will be done by convolve_SCs_SCs( ... )
+        return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
+    }
 
-	public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
-			Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) {
-		Set<ServiceCurve> results = new HashSet<ServiceCurve>();
+    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
+                                                     Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) {
+        Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 
-		// An empty or null set does is not interpreted as a convolution with a null
-		// curve.
-		// Instead, the other set is return in case it is neither null or empty.
-		Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
-		switch (MinPlus.inputNullCheck(service_curves_1, service_curves_2)) {
-		case 1:
-			for (ServiceCurve sc : service_curves_2) {
-				clone.add(sc.copy());
-			}
-			return clone;
-		case 2:
-			for (ServiceCurve sc : service_curves_1) {
-				clone.add(sc.copy());
-			}
-			return clone;
-		case 3:
-			results.add(CurvePwAffine.getFactory().createZeroService());
-			return results;
-		case 0:
-		default:
-			break;
-		}
-		switch (MinPlus.inputEmptySetCheck(service_curves_1, service_curves_2)) {
-		case 1:
-			for (ServiceCurve sc : service_curves_2) {
-				clone.add(sc.copy());
-			}
-			return clone;
-		case 2:
-			for (ServiceCurve sc : service_curves_1) {
-				clone.add(sc.copy());
-			}
-			return clone;
-		case 3:
-			results.add(CurvePwAffine.getFactory().createZeroService());
-			return results;
-		case 0:
-		default:
-			break;
-		}
+        // An empty or null set does is not interpreted as a convolution with a null
+        // curve.
+        // Instead, the other set is return in case it is neither null or empty.
+        Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
+        switch (MinPlus.inputNullCheck(service_curves_1, service_curves_2)) {
+            case 1:
+                for (ServiceCurve sc : service_curves_2) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 2:
+                for (ServiceCurve sc : service_curves_1) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 3:
+                results.add(CurvePwAffine.getFactory().createZeroService());
+                return results;
+            case 0:
+            default:
+                break;
+        }
+        switch (MinPlus.inputEmptySetCheck(service_curves_1, service_curves_2)) {
+            case 1:
+                for (ServiceCurve sc : service_curves_2) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 2:
+                for (ServiceCurve sc : service_curves_1) {
+                    clone.add(sc.copy());
+                }
+                return clone;
+            case 3:
+                results.add(CurvePwAffine.getFactory().createZeroService());
+                return results;
+            case 0:
+            default:
+                break;
+        }
 
-		for (ServiceCurve beta_1 : service_curves_1) {
-			for (ServiceCurve beta_2 : service_curves_2) {
-				results.add(convolve(beta_1, beta_2, tb_rl_optimized));
-			}
-		}
+        for (ServiceCurve beta_1 : service_curves_1) {
+            for (ServiceCurve beta_2 : service_curves_2) {
+                results.add(convolve(beta_1, beta_2, tb_rl_optimized));
+            }
+        }
 
-		return results;
-	}
+        return results;
+    }
 
-	// ------------------------------------------------------------
-	// Arrival Curves
-	// ------------------------------------------------------------
-	public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-		switch (MinPlus.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
-		case 0:
-			break;
-		case 1:
-			return arrival_curve_2.copy();
-		case 2:
-			return arrival_curve_1.copy();
-		case 3:
-			return CurvePwAffine.getFactory().createZeroArrivals();
-		default:
-			break;
-		}
+    // ------------------------------------------------------------
+    // Arrival Curves
+    // ------------------------------------------------------------
+    public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
+        switch (MinPlus.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
+            case 0:
+                break;
+            case 1:
+                return arrival_curve_2.copy();
+            case 2:
+                return arrival_curve_1.copy();
+            case 3:
+                return CurvePwAffine.getFactory().createZeroArrivals();
+            default:
+                break;
+        }
 
-		ArrivalCurve zero_arrival = CurvePwAffine.getFactory().createZeroArrivals();
-		if (arrival_curve_1.equals(zero_arrival) || arrival_curve_2.equals(zero_arrival)) {
-			return zero_arrival;
-		}
+        ArrivalCurve zero_arrival = CurvePwAffine.getFactory().createZeroArrivals();
+        if (arrival_curve_1.equals(zero_arrival) || arrival_curve_2.equals(zero_arrival)) {
+            return zero_arrival;
+        }
 
-		ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffine.getFactory()
-				.createZeroDelayInfiniteBurst();
-		if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
-			return arrival_curve_2.copy();
-		}
-		if (arrival_curve_2.equals(zero_delay_infinite_burst)) {
-			return arrival_curve_1.copy();
-		}
+        ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffine.getFactory()
+                .createZeroDelayInfiniteBurst();
+        if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
+            return arrival_curve_2.copy();
+        }
+        if (arrival_curve_2.equals(zero_delay_infinite_burst)) {
+            return arrival_curve_1.copy();
+        }
 
-		// Arrival curves are concave curves so we can do a minimum instead of a
-		// convolution here.
-		ArrivalCurve convolved_arrival_curve = CurvePwAffine.getFactory()
-				.createArrivalCurve(CurvePwAffine.min(arrival_curve_1, arrival_curve_2));
-		return convolved_arrival_curve;
-	}
+        // Arrival curves are concave curves so we can do a minimum instead of a
+        // convolution here.
+        ArrivalCurve convolved_arrival_curve = CurvePwAffine.getFactory()
+                .createArrivalCurve(CurvePwAffine.min(arrival_curve_1, arrival_curve_2));
+        return convolved_arrival_curve;
+    }
 
-	public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) {
-		// Custom null and empty checks for this single argument method.
-		if (arrival_curves == null || arrival_curves.isEmpty()) {
-			return CurvePwAffine.getFactory().createZeroArrivals();
-		}
-		if (arrival_curves.size() == 1) {
-			return arrival_curves.iterator().next().copy();
-		}
+    public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) {
+        // Custom null and empty checks for this single argument method.
+        if (arrival_curves == null || arrival_curves.isEmpty()) {
+            return CurvePwAffine.getFactory().createZeroArrivals();
+        }
+        if (arrival_curves.size() == 1) {
+            return arrival_curves.iterator().next().copy();
+        }
 
-		ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
-		for (ArrivalCurve arrival_curve_2 : arrival_curves) {
-			arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
-		}
+        ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+        for (ArrivalCurve arrival_curve_2 : arrival_curves) {
+            arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
+        }
 
-		return arrival_curve_result;
-	}
+        return arrival_curve_result;
+    }
 
-	// ------------------------------------------------------------
-	// Maximum Service Curves
-	// ------------------------------------------------------------
-	/**
-	 * Returns the convolution of this curve, which must be (almost) concave, and
-	 * the given curve, which must also be (almost) concave.
-	 *
-	 * @param max_service_curve_1
-	 *            The fist maximum service curve in the convolution.
-	 * @param max_service_curve_2
-	 *            The second maximum service curve in the convolution.
-	 * @return The convolved maximum service curve.
-	 */
-	public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-		switch (MinPlus.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
-		case 0:
-			break;
-		case 1:
-			return max_service_curve_2.copy();
-		case 2:
-			return max_service_curve_1.copy();
-		case 3:
-			return CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
-		default:
-		}
+    // ------------------------------------------------------------
+    // Maximum Service Curves
+    // ------------------------------------------------------------
 
-		if (CalculatorConfig.getInstance().exec_max_service_curve_checks()
-				&& (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
-			throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
-		}
+    /**
+     * Returns the convolution of this curve, which must be (almost) concave, and
+     * the given curve, which must also be (almost) concave.
+     *
+     * @param max_service_curve_1 The fist maximum service curve in the convolution.
+     * @param max_service_curve_2 The second maximum service curve in the convolution.
+     * @return The convolved maximum service curve.
+     */
+    public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
+        switch (MinPlus.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
+            case 0:
+                break;
+            case 1:
+                return max_service_curve_2.copy();
+            case 2:
+                return max_service_curve_1.copy();
+            case 3:
+                return CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+            default:
+        }
 
-		Num latency_msc_1 = max_service_curve_1.getLatency();
-		Num latency_msc_2 = max_service_curve_2.getLatency();
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks()
+                && (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
+            throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
+        }
 
-		if (latency_msc_1.equals(Num.getFactory().getPositiveInfinity())) {
-			return max_service_curve_2.copy();
-		}
-		if (latency_msc_2.equals(Num.getFactory().getPositiveInfinity())) {
-			return max_service_curve_1.copy();
-		}
+        Num latency_msc_1 = max_service_curve_1.getLatency();
+        Num latency_msc_2 = max_service_curve_2.getLatency();
 
-		// (min,plus)-algebraic proceeding here:
-		// Remove latencies, act analog to the convolution of two arrival curves, and
-		// the sum of the two latencies.
-		ArrivalCurve ac_intermediate = convolve(
-				CurvePwAffine.getFactory()
-						.createArrivalCurve(CurvePwAffine.removeLatency(max_service_curve_1)),
-				CurvePwAffine.getFactory()
-						.createArrivalCurve(CurvePwAffine.removeLatency(max_service_curve_2)));
-		MaxServiceCurve result = CurvePwAffine.getFactory().createMaxServiceCurve(ac_intermediate);
-		result = (MaxServiceCurve) CurvePwAffine.shiftRight(result,
-				Num.getUtils().add(latency_msc_1, latency_msc_2));
-		CurvePwAffine.beautify(result);
+        if (latency_msc_1.equals(Num.getFactory().getPositiveInfinity())) {
+            return max_service_curve_2.copy();
+        }
+        if (latency_msc_2.equals(Num.getFactory().getPositiveInfinity())) {
+            return max_service_curve_1.copy();
+        }
 
-		return result;
-	}
+        // (min,plus)-algebraic proceeding here:
+        // Remove latencies, act analog to the convolution of two arrival curves, and
+        // the sum of the two latencies.
+        ArrivalCurve ac_intermediate = convolve(
+                CurvePwAffine.getFactory()
+                        .createArrivalCurve(CurvePwAffine.removeLatency(max_service_curve_1)),
+                CurvePwAffine.getFactory()
+                        .createArrivalCurve(CurvePwAffine.removeLatency(max_service_curve_2)));
+        MaxServiceCurve result = CurvePwAffine.getFactory().createMaxServiceCurve(ac_intermediate);
+        result = (MaxServiceCurve) CurvePwAffine.shiftRight(result,
+                Num.getUtils().add(latency_msc_1, latency_msc_2));
+        CurvePwAffine.beautify(result);
 
-	// ------------------------------------------------------------
-	// Arrival Curves and Max Service Curves
-	// ------------------------------------------------------------
-	// The result is used like an arrival curve, yet it is not really one. This
-	// inconsistency occurs because we need to consider MSC and SC in some order
-	// during the output bound computation.
-	public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
-			MaxServiceCurve maximum_service_curve) throws Exception {
-		switch (MinPlus.inputNullCheck(arrival_curves, maximum_service_curve)) {
-		case 1:
-			return new HashSet<CurvePwAffine>();
-		case 2:
-			Set<CurvePwAffine> clone = new HashSet<CurvePwAffine>();
+        return result;
+    }
 
-			for (ArrivalCurve ac : arrival_curves) {
-				clone.add(ac.copy());
-			}
-			return clone;
-		case 3:
-			return new HashSet<CurvePwAffine>();
-		case 0:
-		default:
-			break;
-		}
-		if (arrival_curves.isEmpty()) {
-			return new HashSet<CurvePwAffine>();
-		}
+    // ------------------------------------------------------------
+    // Arrival Curves and Max Service Curves
+    // ------------------------------------------------------------
+    // The result is used like an arrival curve, yet it is not really one. This
+    // inconsistency occurs because we need to consider MSC and SC in some order
+    // during the output bound computation.
+    public static Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
+                                                      MaxServiceCurve maximum_service_curve) throws Exception {
+        switch (MinPlus.inputNullCheck(arrival_curves, maximum_service_curve)) {
+            case 1:
+                return new HashSet<CurvePwAffine>();
+            case 2:
+                Set<CurvePwAffine> clone = new HashSet<CurvePwAffine>();
 
-		Num msc_latency = maximum_service_curve.getLatency();
-		Set<CurvePwAffine> result = new HashSet<CurvePwAffine>();
+                for (ArrivalCurve ac : arrival_curves) {
+                    clone.add(ac.copy());
+                }
+                return clone;
+            case 3:
+                return new HashSet<CurvePwAffine>();
+            case 0:
+            default:
+                break;
+        }
+        if (arrival_curves.isEmpty()) {
+            return new HashSet<CurvePwAffine>();
+        }
 
-		// Similar to convolve_ACs_EGamma
-		ArrivalCurve msc_as_ac = CurvePwAffine.getFactory()
-				.createArrivalCurve(CurvePwAffine.removeLatency(maximum_service_curve)); // Abuse the
-																										// ArrivalCurve
-																										// class here
-																										// for
-																										// convenience.
-		for (ArrivalCurve ac : arrival_curves) {
-			result.add(CurvePwAffine.shiftRight(convolve(ac, msc_as_ac), msc_latency));
-		}
+        Num msc_latency = maximum_service_curve.getLatency();
+        Set<CurvePwAffine> result = new HashSet<CurvePwAffine>();
 
-		return result;
-	}
+        // Similar to convolve_ACs_EGamma
+        ArrivalCurve msc_as_ac = CurvePwAffine.getFactory()
+                .createArrivalCurve(CurvePwAffine.removeLatency(maximum_service_curve)); // Abuse the
+        // ArrivalCurve
+        // class here
+        // for
+        // convenience.
+        for (ArrivalCurve ac : arrival_curves) {
+            result.add(CurvePwAffine.shiftRight(convolve(ac, msc_as_ac), msc_latency));
+        }
 
-	public static Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
-			MaxServiceCurve extra_gamma_curve) throws Exception {
-		switch (MinPlus.inputNullCheck(arrival_curves, extra_gamma_curve)) {
-		case 0:
-			break;
-		case 1:
-			return new HashSet<ArrivalCurve>();
-		case 2:
-			Set<ArrivalCurve> clone = new HashSet<ArrivalCurve>();
+        return result;
+    }
 
-			for (ArrivalCurve ac : arrival_curves) {
-				clone.add(ac.copy());
-			}
-			return clone;
-		case 3:
-			return new HashSet<ArrivalCurve>();
-		default:
-		}
-		if (arrival_curves.isEmpty()) {
-			return new HashSet<ArrivalCurve>();
-		}
+    public static Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
+                                                        MaxServiceCurve extra_gamma_curve) throws Exception {
+        switch (MinPlus.inputNullCheck(arrival_curves, extra_gamma_curve)) {
+            case 0:
+                break;
+            case 1:
+                return new HashSet<ArrivalCurve>();
+            case 2:
+                Set<ArrivalCurve> clone = new HashSet<ArrivalCurve>();
 
-		if (extra_gamma_curve.getLatency().gtZero()) {
-			throw new Exception("Cannot convolve with an extra gamma curve with latency");
-		}
+                for (ArrivalCurve ac : arrival_curves) {
+                    clone.add(ac.copy());
+                }
+                return clone;
+            case 3:
+                return new HashSet<ArrivalCurve>();
+            default:
+        }
+        if (arrival_curves.isEmpty()) {
+            return new HashSet<ArrivalCurve>();
+        }
 
-		Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-		ArrivalCurve extra_gamma_as_ac = CurvePwAffine.getFactory().createArrivalCurve(extra_gamma_curve); // Abuse
-																												// the
-																												// ArrivalCurve
-																												// class
-																												// here
-																												// for
-																												// convenience.
-		for (ArrivalCurve ac : arrival_curves) {
-			result.add(convolve(ac, extra_gamma_as_ac));
-		}
+        if (extra_gamma_curve.getLatency().gtZero()) {
+            throw new Exception("Cannot convolve with an extra gamma curve with latency");
+        }
 
-		return result;
-	}
+        Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
+        ArrivalCurve extra_gamma_as_ac = CurvePwAffine.getFactory().createArrivalCurve(extra_gamma_curve); // Abuse
+        // the
+        // ArrivalCurve
+        // class
+        // here
+        // for
+        // convenience.
+        for (ArrivalCurve ac : arrival_curves) {
+            result.add(convolve(ac, extra_gamma_as_ac));
+        }
+
+        return result;
+    }
 }

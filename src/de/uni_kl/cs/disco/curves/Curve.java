@@ -33,78 +33,78 @@ import de.uni_kl.cs.disco.numbers.Num;
  * Interface for wide-sense increasing, plain curves.
  */
 public interface Curve {
-	// --------------------------------------------------------------------------------------------------------------
-	// Interface
-	// --------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface
+    // --------------------------------------------------------------------------------------------------------------
 
-	Curve copy();
+    /**
+     * Create and return a linear segment that lies on the x axis of the Cartesian
+     * coordinate system.
+     *
+     * @return
+     */
+    static LinearSegment getXAxis() {
+        // Need to create it anew as the number representation might have changed.
+        return LinearSegment.createHorizontalLine(0.0);
+    }
 
-	void copy(Curve curve);
+    Curve copy();
 
-	// Curve's segments (incl. manipulation)
-	LinearSegment getSegment(int pos);
+    void copy(Curve curve);
 
-	int getSegmentCount();
+    // Curve's segments (incl. manipulation)
+    LinearSegment getSegment(int pos);
 
-	int getSegmentDefining(Num x);
+    int getSegmentCount();
 
-	void addSegment(LinearSegment s);
+    int getSegmentDefining(Num x);
 
-	void addSegment(int pos, LinearSegment s);
+    void addSegment(LinearSegment s);
 
-	void removeSegment(int pos);
+    void addSegment(int pos, LinearSegment s);
 
-	// Curve properties
-	boolean getDelayedInfiniteBurst_Property();
+    void removeSegment(int pos);
 
-	boolean isDiscontinuity(int pos);
+    // Curve properties
+    boolean getDelayedInfiniteBurst_Property();
 
-	boolean isRealDiscontinuity(int pos);
+    boolean isDiscontinuity(int pos);
 
-	boolean isUnrealDiscontinuity(int pos);
+    boolean isRealDiscontinuity(int pos);
 
-	boolean isWideSenseIncreasing();
+    boolean isUnrealDiscontinuity(int pos);
 
-	boolean isConcaveIn(Num a, Num b);
+    boolean isWideSenseIncreasing();
 
-	boolean isConvexIn(Num a, Num b);
+    boolean isConcaveIn(Num a, Num b);
 
-	@Override
-	boolean equals(Object obj);
+    boolean isConvexIn(Num a, Num b);
 
-	@Override
-	int hashCode();
+    @Override
+    boolean equals(Object obj);
 
-	@Override
-	String toString();
+    @Override
+    int hashCode();
 
-	// Curve function values
-	Num f(Num x);
+    @Override
+    String toString();
 
-	Num fLimitRight(Num x);
+    // Curve function values
+    Num f(Num x);
 
-	Num f_inv(Num y);
+    Num fLimitRight(Num x);
 
-	Num f_inv(Num y, boolean rightmost);
+    Num f_inv(Num y);
 
-	Num getLatency();
+    Num f_inv(Num y, boolean rightmost);
 
-	Num getBurst();
+    Num getLatency();
 
-	Num getGradientLimitRight(Num x);
+    Num getBurst();
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Utils
-	// --------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
+    // Utils
+    // --------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Create and return a linear segment that lies on the x axis of the Cartesian
-	 * coordinate system.
-	 * 
-	 * @return
-	 */
-	static LinearSegment getXAxis() {
-		// Need to create it anew as the number representation might have changed.
-		return LinearSegment.createHorizontalLine(0.0);
-	}
+    Num getGradientLimitRight(Num x);
 }
