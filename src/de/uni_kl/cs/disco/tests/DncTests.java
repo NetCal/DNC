@@ -1,5 +1,5 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta3 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
  *
  * Copyright (C) 2013 - 2017 Steffen Bondorf
  * Copyright (C) 2017 The DiscoDNC contributors
@@ -56,6 +56,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 
 @RunWith(Suite.class)
 @SuiteClasses({S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
