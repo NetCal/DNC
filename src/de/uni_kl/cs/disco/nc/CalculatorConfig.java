@@ -67,9 +67,9 @@ public final class CalculatorConfig {
     private void checkMPARTC() throws RuntimeException {
         File f = new File("rtc.jar");
         if (!f.exists() && !f.isDirectory()) {
-            f = new File("lib/rtc.jar");
-            if (!f.exists() && !f.isDirectory()) {
-                throw new RuntimeException("Error: rtc.jar not found in directory " + f.getParent() + ".");
+            File f2 = new File("lib/rtc.jar");
+            if (!f2.exists() && !f2.isDirectory()) {
+                throw new RuntimeException("Error: rtc.jar not found in directory " + f.getParent() + " or " + f2.getParent() + ".");
             }
         }
     }
