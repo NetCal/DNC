@@ -46,20 +46,19 @@ import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.platform.suite.api.SelectClasses;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-@RunWith(Suite.class)
-@SuiteClasses({S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
+@ExtendWith(Suite.class)
+@SelectClasses({S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
         TA_2S_1SC_1F_1AC_1P_Test.class, TA_3S_1SC_2F_1AC_1P_Test.class, TA_2S_1SC_2F_1AC_1P_Test.class,
         TA_4S_1SC_2F_1AC_2P_Test.class, TA_2S_1SC_2F_1AC_2P_Test.class, TA_3S_1SC_3F_1AC_3P_Test.class,
         TA_2S_1SC_4F_1AC_1P_Test.class, TA_2S_2SC_1F_1AC_1P_Test.class, TA_2S_2SC_2F_1AC_1P_Test.class,
@@ -87,7 +86,7 @@ public class DncTests {
         CalculatorConfig.getInstance().setOperationImpl(test_config.operation_implementation);
     }
 
-    @Parameters(name = "{index}: {0}")
+    @ValueSource(name = "{index}: {0}")
     public static Set<DncTestConfig> createParameters() {
         Set<DncTestConfig> test_configurations = new HashSet<DncTestConfig>();
 
@@ -302,7 +301,7 @@ public class DncTests {
         return test_configurations;
     }
 
-    @Before
+    @BeforeEach
     public void printSetting() {
         if (test_config.console_output) {
             System.out.println("--------------------------------------------------------------");
@@ -411,8 +410,8 @@ public class DncTests {
         }
 
         AnalysisResults bounds = expected_bounds.getBounds(Analyses.TFA, test_config.mux_discipline, flow_of_interest);
-        assertEquals("TFA delay", bounds.getDelayBound(), tfa.getDelayBound());
-        assertEquals("TFA backlog", bounds.getBacklogBound(), tfa.getBacklogBound());
+        assertEquals(bounds.getDelayBound(), tfa.getDelayBound(), "TFA delay");
+        assertEquals(bounds.getBacklogBound(), tfa.getBacklogBound(), "TFA backlog");
     }
 
     protected void runSFAtest(SeparateFlowAnalysis sfa, Flow flow_of_interest, DncTestResults expected_bounds) {
@@ -435,8 +434,8 @@ public class DncTests {
         }
 
         AnalysisResults bounds = expected_bounds.getBounds(Analyses.SFA, test_config.mux_discipline, flow_of_interest);
-        assertEquals("SFA delay", bounds.getDelayBound(), sfa.getDelayBound());
-        assertEquals("SFA backlog", bounds.getBacklogBound(), sfa.getBacklogBound());
+        assertEquals(bounds.getDelayBound(), sfa.getDelayBound(), "SFA delay");
+        assertEquals(bounds.getBacklogBound(), sfa.getBacklogBound(), "SFA backlog");
     }
 
     protected void runPMOOtest(PmooAnalysis pmoo, Flow flow_of_interest, DncTestResults expected_bounds) {
@@ -459,8 +458,8 @@ public class DncTests {
 
         AnalysisResults bounds = expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY,
                 flow_of_interest);
-        assertEquals("PMOO delay", bounds.getDelayBound(), pmoo.getDelayBound());
-        assertEquals("PMOO backlog", bounds.getBacklogBound(), pmoo.getBacklogBound());
+        assertEquals(bounds.getDelayBound(), pmoo.getDelayBound(), "PMOO delay");
+        assertEquals(bounds.getBacklogBound(), pmoo.getBacklogBound(), "PMOO backlog");
     }
 
     protected void runSinkTreePMOOtest(Network sink_tree, Flow flow_of_interest, DncTestResults expected_bounds) {
@@ -501,20 +500,20 @@ public class DncTests {
             System.out.println();
         }
 
-        assertEquals("PMOO backlog TBRL", expected_bounds
+        assertEquals(expected_bounds
                         .getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
-                backlog_bound_TBRL);
+                backlog_bound_TBRL,"PMOO backlog TBRL");
 
-        assertEquals("PMOO backlog TBRL CONV", expected_bounds
+        assertEquals(expected_bounds
                         .getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
-                backlog_bound_TBRL_CONV);
+                backlog_bound_TBRL_CONV, "PMOO backlog TBRL CONV");
 
-        assertEquals("PMOO backlog TBRL CONV TBRL DECONV", expected_bounds
+        assertEquals(expected_bounds
                         .getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
-                backlog_bound_TBRL_CONV_TBRL_DECONV);
+                backlog_bound_TBRL_CONV_TBRL_DECONV, "PMOO backlog TBRL CONV TBRL DECONV");
 
-        assertEquals("PMOO backlog RBRL HOMO", expected_bounds
+        assertEquals(expected_bounds
                         .getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest).getBacklogBound(),
-                backlog_bound_TBRL_HOMO);
+                backlog_bound_TBRL_HOMO, "PMOO backlog RBRL HOMO");
     }
 }
