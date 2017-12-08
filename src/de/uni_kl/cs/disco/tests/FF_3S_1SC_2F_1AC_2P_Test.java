@@ -39,9 +39,9 @@ import de.uni_kl.cs.disco.numbers.Num;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@ParameterizedTest(value = Parameterized.class)
+@ExtendWith(value = Parameterized.class)
 public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
     protected static final DncTestResults expected_results = new DncTestResults();
     private static FF_3S_1SC_2F_1AC_2P_Network test_network;
