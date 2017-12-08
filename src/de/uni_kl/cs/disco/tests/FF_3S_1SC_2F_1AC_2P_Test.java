@@ -36,13 +36,12 @@ import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.numbers.Num;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
-@RunWith(value = Parameterized.class)
+@ParameterizedTest(value = Parameterized.class)
 public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
     protected static final DncTestResults expected_results = new DncTestResults();
     private static FF_3S_1SC_2F_1AC_2P_Network test_network;
@@ -53,7 +52,7 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
         super(test_config);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void createNetwork() {
         test_network = new FF_3S_1SC_2F_1AC_2P_Network();
         f0 = test_network.f0;
@@ -96,7 +95,7 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
                 factory.create(4100, 9));
     }
 
-    @Before
+    @BeforeEach
     public void reinitNetwork() {
         if (!super.reinitilize_test) {
             return;
