@@ -86,7 +86,7 @@ public class DncTests {
         CalculatorConfig.getInstance().setOperationImpl(test_config.operation_implementation);
     }
 
-    @ValueSource(name = "{index}: {0}")
+    @ValueSource(strings = "{index}: {0}")
     public static Set<DncTestConfig> createParameters() {
         Set<DncTestConfig> test_configurations = new HashSet<DncTestConfig>();
 
