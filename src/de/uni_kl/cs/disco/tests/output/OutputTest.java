@@ -40,9 +40,9 @@ import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.NetworkFactory;
 import de.uni_kl.cs.disco.numbers.Num;
-import org.junit.After;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -50,7 +50,7 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OutputTest {
     private static Network network_given;
@@ -64,7 +64,7 @@ public class OutputTest {
     // "DE_MIGHT_IGNORE"},
     // justification = "Returned File object is only used for deletion. Just ignore
     // exception raised of there is no file to delete.")
-    @BeforeClass
+    @BeforeAll
     public static void createNetworks() throws Exception {
         File saved_network_java = new File(saved_network_path + saved_network_name + ".java");
 
@@ -189,15 +189,15 @@ public class OutputTest {
         }
 
         for (int i = 0; i < network_saved.numFlows(); i++) {
-            assertEquals("TFA delay, flow " + Integer.toString(i), d_tfa_given_network[i], d_tfa_saved_network[i]);
-            assertEquals("SFA delay, flow " + Integer.toString(i), d_sfa_given_network[i], d_sfa_saved_network[i]);
-            assertEquals("PMOO delay, flow " + Integer.toString(i), d_pmoo_given_network[i], d_pmoo_saved_network[i]);
+            assertEquals(d_tfa_given_network[i], d_tfa_saved_network[i],"TFA delay, flow " + Integer.toString(i));
+            assertEquals(d_sfa_given_network[i], d_sfa_saved_network[i],"SFA delay, flow " + Integer.toString(i));
+            assertEquals(d_pmoo_given_network[i], d_pmoo_saved_network[i],"PMOO delay, flow " + Integer.toString(i));
         }
     }
 
     // @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE",
     // justification = "Returned File object is only used for deletion.")
-    @After
+    @AfterEach
     public void restoreDummyTestNetworkSaved() throws Exception {
         new File(saved_network_path + saved_network_name + ".java").delete();
         new File(saved_network_path + saved_network_name + ".class").delete();
