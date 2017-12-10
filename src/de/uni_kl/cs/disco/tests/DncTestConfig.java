@@ -50,7 +50,7 @@ public class DncTestConfig extends AnalysisConfig {
     @SuppressWarnings("unused")
     private DncTestConfig() {
     }
-
+    
     public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
                          boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
                          boolean define_multiplexing_globally, NumImpl numbers, CurveImpl curves, OperationImpl operations) {

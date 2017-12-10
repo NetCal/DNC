@@ -47,7 +47,7 @@ import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+//import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.platform.suite.api.SelectClasses;
 
@@ -56,8 +56,6 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-@ExtendWith(Suite.class)
 @SelectClasses({S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
         TA_2S_1SC_1F_1AC_1P_Test.class, TA_3S_1SC_2F_1AC_1P_Test.class, TA_2S_1SC_2F_1AC_1P_Test.class,
         TA_4S_1SC_2F_1AC_2P_Test.class, TA_2S_1SC_2F_1AC_2P_Test.class, TA_3S_1SC_3F_1AC_3P_Test.class,
@@ -71,7 +69,7 @@ public class DncTests {
     protected DncTestConfig test_config;
     protected boolean reinitilize_test = true;
 
-    public DncTests(DncTestConfig test_config) {
+    protected void setDncTestConfig(DncTestConfig test_config) {
         this.test_config = test_config;
 
         if (test_config.enable_checks) {
@@ -301,7 +299,7 @@ public class DncTests {
         return test_configurations;
     }
 
-    @BeforeEach
+//    @BeforeEach
     public void printSetting() {
         if (test_config.console_output) {
             System.out.println("--------------------------------------------------------------");
