@@ -36,88 +36,88 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationImpl;
 import java.util.Set;
 
 public class DncTestConfig extends AnalysisConfig {
-    // Functional test specific parameters
-    protected boolean define_multiplexing_globally;
-    protected AnalysisConfig.Multiplexing mux_discipline;
-    protected boolean console_output = false;
+	// Functional test specific parameters
+	protected boolean define_multiplexing_globally;
+	protected AnalysisConfig.Multiplexing mux_discipline;
+	protected boolean console_output = false;
 
-    // Calculator configuration
-    protected boolean enable_checks = false;
-    protected NumImpl num_implementation;
-    protected CurveImpl curve_implementation;
-    protected OperationImpl operation_implementation;
+	// Calculator configuration
+	protected boolean enable_checks = false;
+	protected NumImpl num_implementation;
+	protected CurveImpl curve_implementation;
+	protected OperationImpl operation_implementation;
 
-    @SuppressWarnings("unused")
-    private DncTestConfig() {
-    }
-    
-    public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
-                         boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
-                         boolean define_multiplexing_globally, NumImpl numbers, CurveImpl curves, OperationImpl operations) {
+	@SuppressWarnings("unused")
+	private DncTestConfig() {
+	}
 
-        super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
-                GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
-                GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
-                arrival_bound_methods, remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, false);
+	public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
+			boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
+			boolean define_multiplexing_globally, NumImpl numbers, CurveImpl curves, OperationImpl operations) {
 
-        this.mux_discipline = mux_discipline;
-        this.define_multiplexing_globally = define_multiplexing_globally;
+		super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
+				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
+				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
+				arrival_bound_methods, remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, false);
 
-        // Will not work. Num implementation and curve implementation need to be stored
-        // locally as the singleton pattern will cause overwriting this setting in
-        // CalculatorConfig.
+		this.mux_discipline = mux_discipline;
+		this.define_multiplexing_globally = define_multiplexing_globally;
 
-        num_implementation = numbers;
-        curve_implementation = curves;
-        operation_implementation = operations;
-    }
+		// Will not work. Num implementation and curve implementation need to be stored
+		// locally as the singleton pattern will cause overwriting this setting in
+		// CalculatorConfig.
 
-    public boolean fullConsoleOutput() { // false == Exceptions only
-        return console_output;
-    }
+		num_implementation = numbers;
+		curve_implementation = curves;
+		operation_implementation = operations;
+	}
 
-    protected NumImpl getNumImpl() {
-        return num_implementation;
-    }
+	public boolean fullConsoleOutput() { // false == Exceptions only
+		return console_output;
+	}
 
-    protected CurveImpl getCurveImpl() {
-        return curve_implementation;
-    }
+	protected NumImpl getNumImpl() {
+		return num_implementation;
+	}
 
-    protected OperationImpl getOperationImpl() {
-        return operation_implementation;
-    }
+	protected CurveImpl getCurveImpl() {
+		return curve_implementation;
+	}
 
-    @Override
-    public String toString() {
-        // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, mux,
-        // global mux def, numbers, curves
-        StringBuffer func_test_str = new StringBuffer();
+	protected OperationImpl getOperationImpl() {
+		return operation_implementation;
+	}
 
-        func_test_str.append(arrivalBoundMethods().toString());
+	@Override
+	public String toString() {
+		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, mux,
+		// global mux def, numbers, curves
+		StringBuffer func_test_str = new StringBuffer();
 
-        if (removeDuplicateArrivalBounds()) {
-            func_test_str.append(", " + "rm dupl ABs");
-        }
-        if (tbrlConvolution()) {
-            func_test_str.append(", " + "TbRl Conv");
-        }
-        if (tbrlDeconvolution()) {
-            func_test_str.append(", " + "TbRl Deconv");
-        }
+		func_test_str.append(arrivalBoundMethods().toString());
 
-        func_test_str.append(", " + mux_discipline.toString());
+		if (removeDuplicateArrivalBounds()) {
+			func_test_str.append(", " + "rm dupl ABs");
+		}
+		if (tbrlConvolution()) {
+			func_test_str.append(", " + "TbRl Conv");
+		}
+		if (tbrlDeconvolution()) {
+			func_test_str.append(", " + "TbRl Deconv");
+		}
 
-        if (define_multiplexing_globally) {
-            func_test_str.append(", " + "MUX global");
-        }
+		func_test_str.append(", " + mux_discipline.toString());
 
-        func_test_str.append(", NUM_" + num_implementation.toString());
+		if (define_multiplexing_globally) {
+			func_test_str.append(", " + "MUX global");
+		}
 
-        func_test_str.append(", C_" + curve_implementation.toString());
+		func_test_str.append(", NUM_" + num_implementation.toString());
 
-        func_test_str.append(", OP_" + operation_implementation.toString());
+		func_test_str.append(", C_" + curve_implementation.toString());
 
-        return func_test_str.toString();
-    }
+		func_test_str.append(", OP_" + operation_implementation.toString());
+
+		return func_test_str.toString();
+	}
 }

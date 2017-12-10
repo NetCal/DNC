@@ -31,13 +31,9 @@ package de.uni_kl.cs.disco.tests;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.Analysis.Analyses;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
-import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.AnalysisResults;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveImpl;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.NumImpl;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationImpl;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
@@ -46,8 +42,6 @@ import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.platform.suite.api.SelectClasses;
 
@@ -56,12 +50,12 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SelectClasses({S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
-        TA_2S_1SC_1F_1AC_1P_Test.class, TA_3S_1SC_2F_1AC_1P_Test.class, TA_2S_1SC_2F_1AC_1P_Test.class,
-        TA_4S_1SC_2F_1AC_2P_Test.class, TA_2S_1SC_2F_1AC_2P_Test.class, TA_3S_1SC_3F_1AC_3P_Test.class,
-        TA_2S_1SC_4F_1AC_1P_Test.class, TA_2S_2SC_1F_1AC_1P_Test.class, TA_2S_2SC_2F_1AC_1P_Test.class,
-        TR_3S_1SC_2F_1AC_2P_Test.class, TR_7S_1SC_3F_1AC_3P_Test.class, FF_3S_1SC_2F_1AC_2P_Test.class,
-        FF_4S_1SC_3F_1AC_3P_Test.class, FF_4S_1SC_4F_1AC_4P_Test.class})
+@SelectClasses({ S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
+		TA_2S_1SC_1F_1AC_1P_Test.class, TA_3S_1SC_2F_1AC_1P_Test.class, TA_2S_1SC_2F_1AC_1P_Test.class,
+		TA_4S_1SC_2F_1AC_2P_Test.class, TA_2S_1SC_2F_1AC_2P_Test.class, TA_3S_1SC_3F_1AC_3P_Test.class,
+		TA_2S_1SC_4F_1AC_1P_Test.class, TA_2S_2SC_1F_1AC_1P_Test.class, TA_2S_2SC_2F_1AC_1P_Test.class,
+		TR_3S_1SC_2F_1AC_2P_Test.class, TR_7S_1SC_3F_1AC_3P_Test.class, FF_3S_1SC_2F_1AC_2P_Test.class,
+		FF_4S_1SC_3F_1AC_3P_Test.class, FF_4S_1SC_4F_1AC_4P_Test.class })
 
 public class DncTests {
     protected static Collection<DncTestConfig> test_configurations = createParameters();
@@ -88,69 +82,69 @@ public class DncTests {
     public static Set<DncTestConfig> createParameters() {
         Set<DncTestConfig> test_configurations = new HashSet<DncTestConfig>();
 
-        Set<NumImpl> nums = new HashSet<NumImpl>();
-        nums.add(NumImpl.REAL_DOUBLE_PRECISION);
-        nums.add(NumImpl.REAL_SINGLE_PRECISION);
-        nums.add(NumImpl.RATIONAL_INTEGER);
-        nums.add(NumImpl.RATIONAL_BIGINTEGER);
+        Set<CalculatorConfig.NumImpl> nums = new HashSet<CalculatorConfig.NumImpl>();
+        nums.add(CalculatorConfig.NumImpl.REAL_DOUBLE_PRECISION);
+        nums.add(CalculatorConfig.NumImpl.REAL_SINGLE_PRECISION);
+        nums.add(CalculatorConfig.NumImpl.RATIONAL_INTEGER);
+        nums.add(CalculatorConfig.NumImpl.RATIONAL_BIGINTEGER);
 
-        Set<CurveImpl> curves = new HashSet<CurveImpl>();
-        curves.add(CurveImpl.DNC);
-        curves.add(CurveImpl.MPA_RTC);
+        Set<CalculatorConfig.CurveImpl> curves = new HashSet<CalculatorConfig.CurveImpl>();
+        curves.add(CalculatorConfig.CurveImpl.DNC);
+        curves.add(CalculatorConfig.CurveImpl.MPA_RTC);
 
-        Set<OperationImpl> operations = new HashSet<OperationImpl>();
-        operations.add(OperationImpl.DNC);
-        operations.add(OperationImpl.NATIVE);
+        Set<CalculatorConfig.OperationImpl> operations = new HashSet<CalculatorConfig.OperationImpl>();
+        operations.add(CalculatorConfig.OperationImpl.DNC);
+        operations.add(CalculatorConfig.OperationImpl.NATIVE);
 
         Set<AnalysisConfig.Multiplexing> mux_disciplines = new HashSet<AnalysisConfig.Multiplexing>();
         mux_disciplines.add(AnalysisConfig.Multiplexing.ARBITRARY);
         mux_disciplines.add(AnalysisConfig.Multiplexing.FIFO);
 
-        Set<ArrivalBoundMethod> single_1 = new HashSet<ArrivalBoundMethod>();
-        single_1.add(ArrivalBoundMethod.PBOO_CONCATENATION);
+        Set<AnalysisConfig.ArrivalBoundMethod> single_1 = new HashSet<AnalysisConfig.ArrivalBoundMethod>();
+        single_1.add(AnalysisConfig.ArrivalBoundMethod.PBOO_CONCATENATION);
 
-        Set<ArrivalBoundMethod> single_2 = new HashSet<ArrivalBoundMethod>();
-        single_2.add(ArrivalBoundMethod.PBOO_PER_HOP);
+        Set<AnalysisConfig.ArrivalBoundMethod> single_2 = new HashSet<AnalysisConfig.ArrivalBoundMethod>();
+        single_2.add(AnalysisConfig.ArrivalBoundMethod.PBOO_PER_HOP);
 
-        LinkedList<Set<ArrivalBoundMethod>> single_abs_allMux = new LinkedList<Set<ArrivalBoundMethod>>();
+        LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>> single_abs_allMux = new LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>>();
         single_abs_allMux.add(single_1);
         single_abs_allMux.add(single_2);
 
-        LinkedList<Set<ArrivalBoundMethod>> single_abs_arbMux = new LinkedList<Set<ArrivalBoundMethod>>();
-        single_abs_arbMux.add(Collections.singleton(ArrivalBoundMethod.PMOO));
+        LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>> single_abs_arbMux = new LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>>();
+        single_abs_arbMux.add(Collections.singleton(AnalysisConfig.ArrivalBoundMethod.PMOO));
 
-        Set<ArrivalBoundMethod> pair_1 = new HashSet<ArrivalBoundMethod>();
-        pair_1.add(ArrivalBoundMethod.PBOO_PER_HOP);
-        pair_1.add(ArrivalBoundMethod.PBOO_CONCATENATION);
+        Set<AnalysisConfig.ArrivalBoundMethod> pair_1 = new HashSet<AnalysisConfig.ArrivalBoundMethod>();
+        pair_1.add(AnalysisConfig.ArrivalBoundMethod.PBOO_PER_HOP);
+        pair_1.add(AnalysisConfig.ArrivalBoundMethod.PBOO_CONCATENATION);
 
-        Set<ArrivalBoundMethod> pair_2 = new HashSet<ArrivalBoundMethod>();
-        pair_2.add(ArrivalBoundMethod.PBOO_PER_HOP);
-        pair_2.add(ArrivalBoundMethod.PMOO);
+        Set<AnalysisConfig.ArrivalBoundMethod> pair_2 = new HashSet<AnalysisConfig.ArrivalBoundMethod>();
+        pair_2.add(AnalysisConfig.ArrivalBoundMethod.PBOO_PER_HOP);
+        pair_2.add(AnalysisConfig.ArrivalBoundMethod.PMOO);
 
-        Set<ArrivalBoundMethod> pair_3 = new HashSet<ArrivalBoundMethod>();
-        pair_3.add(ArrivalBoundMethod.PBOO_CONCATENATION);
-        pair_3.add(ArrivalBoundMethod.PMOO);
+        Set<AnalysisConfig.ArrivalBoundMethod> pair_3 = new HashSet<AnalysisConfig.ArrivalBoundMethod>();
+        pair_3.add(AnalysisConfig.ArrivalBoundMethod.PBOO_CONCATENATION);
+        pair_3.add(AnalysisConfig.ArrivalBoundMethod.PMOO);
 
-        LinkedList<Set<ArrivalBoundMethod>> pair_abs_allMux = new LinkedList<Set<ArrivalBoundMethod>>();
+        LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>> pair_abs_allMux = new LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>>();
         pair_abs_allMux.add(pair_1);
 
-        LinkedList<Set<ArrivalBoundMethod>> pair_abs_arbMux = new LinkedList<Set<ArrivalBoundMethod>>();
+        LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>> pair_abs_arbMux = new LinkedList<Set<AnalysisConfig.ArrivalBoundMethod>>();
         pair_abs_arbMux.add(pair_2);
         pair_abs_arbMux.add(pair_3);
 
-        Set<ArrivalBoundMethod> triplet_arbMux = new HashSet<ArrivalBoundMethod>();
-        triplet_arbMux.add(ArrivalBoundMethod.PBOO_PER_HOP);
-        triplet_arbMux.add(ArrivalBoundMethod.PBOO_CONCATENATION);
-        triplet_arbMux.add(ArrivalBoundMethod.PMOO);
+        Set<AnalysisConfig.ArrivalBoundMethod> triplet_arbMux = new HashSet<AnalysisConfig.ArrivalBoundMethod>();
+        triplet_arbMux.add(AnalysisConfig.ArrivalBoundMethod.PBOO_PER_HOP);
+        triplet_arbMux.add(AnalysisConfig.ArrivalBoundMethod.PBOO_CONCATENATION);
+        triplet_arbMux.add(AnalysisConfig.ArrivalBoundMethod.PMOO);
 
         // Parameter configurations for single arrival bounding tests
         // AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
         // global mux def, number class to use, curve class to use, operations class to
         // use
-        for (CurveImpl curve : curves) {
-            for (OperationImpl operation : operations) {
-                for (NumImpl num : nums) {
-                    for (Set<ArrivalBoundMethod> single_ab : single_abs_allMux) {
+        for (CalculatorConfig.CurveImpl curve : curves) {
+            for (CalculatorConfig.OperationImpl operation : operations) {
+                for (CalculatorConfig.NumImpl num : nums) {
+                    for (Set<AnalysisConfig.ArrivalBoundMethod> single_ab : single_abs_allMux) {
                         for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
                             test_configurations.add(new DncTestConfig(single_ab, false, false, false, mux, false, num,
                                     curve, operation));
@@ -170,7 +164,7 @@ public class DncTests {
                                     new DncTestConfig(single_ab, false, true, true, mux, true, num, curve, operation));
                         }
                     }
-                    for (Set<ArrivalBoundMethod> single_ab : single_abs_arbMux) {
+                    for (Set<AnalysisConfig.ArrivalBoundMethod> single_ab : single_abs_arbMux) {
                         test_configurations.add(new DncTestConfig(single_ab, false, false, false,
                                 AnalysisConfig.Multiplexing.ARBITRARY, false, num, curve, operation));
                         test_configurations.add(new DncTestConfig(single_ab, false, true, false,
@@ -189,7 +183,7 @@ public class DncTests {
                                 AnalysisConfig.Multiplexing.ARBITRARY, true, num, curve, operation));
                     }
 
-                    for (Set<ArrivalBoundMethod> pair_ab : pair_abs_allMux) {
+                    for (Set<AnalysisConfig.ArrivalBoundMethod> pair_ab : pair_abs_allMux) {
                         for (AnalysisConfig.Multiplexing mux : mux_disciplines) {
                             test_configurations.add(
                                     new DncTestConfig(pair_ab, false, false, false, mux, false, num, curve, operation));
@@ -225,7 +219,7 @@ public class DncTests {
                                     new DncTestConfig(pair_ab, true, true, true, mux, true, num, curve, operation));
                         }
                     }
-                    for (Set<ArrivalBoundMethod> pair_ab : pair_abs_arbMux) {
+                    for (Set<AnalysisConfig.ArrivalBoundMethod> pair_ab : pair_abs_arbMux) {
                         test_configurations.add(new DncTestConfig(pair_ab, false, false, false,
                                 AnalysisConfig.Multiplexing.ARBITRARY, false, num, curve, operation));
                         test_configurations.add(new DncTestConfig(pair_ab, true, false, false,
