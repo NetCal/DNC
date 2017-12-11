@@ -59,7 +59,7 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
 
 		initializeBounds();
 	}
-
+	
 	private static void initializeBounds() {
 		expected_results.clear();
 
@@ -112,20 +112,32 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
 		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f0, expected_results);
 	}
 
-	// @Test
-	public void f0_sfa() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f0_sfa(DncTestConfig test_config) {
+		super.setDncTestConfig(test_config);
+		reinitNetwork();
+		super.printSetting();
 		setMux(network.getServers());
 		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f0, expected_results);
 	}
 
-	// @Test
-	public void f0_pmoo_arbMux() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f0_pmoo_arbMux(DncTestConfig test_config) {
+		super.setDncTestConfig(test_config);
+		reinitNetwork();
+		super.printSetting();
 		setArbitraryMux(network.getServers());
 		super.runPMOOtest(new PmooAnalysis(network, test_config), f0, expected_results);
 	}
 
-	// @Test
-	public void f0_sinktree_arbMux() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f0_sinktree_arbMux(DncTestConfig test_config) {
+		super.setDncTestConfig(test_config);
+		reinitNetwork();
+		super.printSetting();
 		if (test_config.fullConsoleOutput()) {
 			System.out.println("Analysis:\t\tTree Backlog Bound Analysis");
 			System.out.println("Multiplexing:\t\tArbitrary");
@@ -139,26 +151,39 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
 	}
 
 	// --------------------Flow 1--------------------
-	// @Test
-	public void f1_tfa() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f1_tfa(DncTestConfig test_config) {
+		super.setDncTestConfig(test_config);
+		reinitNetwork();
+		super.printSetting();
 		setMux(network.getServers());
 		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f1, expected_results);
 	}
 
-	// @Test
-	public void f1_sfa() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f1_sfa(DncTestConfig test_config) {
+		super.setDncTestConfig(test_config);
+		reinitNetwork();
+		super.printSetting();
 		setMux(network.getServers());
 		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f1, expected_results);
 	}
 
-	// @Test
-	public void f1_pmoo_arbMux() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f1_pmoo_arbMux(DncTestConfig test_config) {
+		super.setDncTestConfig(test_config);
+		reinitNetwork();
+		super.printSetting();
 		setArbitraryMux(network.getServers());
 		super.runPMOOtest(new PmooAnalysis(network, test_config), f1, expected_results);
 	}
 
-	// @Test
-	public void f1_sinktree_arbMux() {
+	@ParameterizedTest(name = "[{arguments}]")
+	@ArgumentsSource(DncTestArguments.class)
+	public void f1_sinktree_arbMux(DncTestConfig test_config) {
 		if (test_config.fullConsoleOutput()) {
 			System.out.println("Analysis:\t\tTree Backlog Bound Analysis");
 			System.out.println("Multiplexing:\t\tArbitrary");
