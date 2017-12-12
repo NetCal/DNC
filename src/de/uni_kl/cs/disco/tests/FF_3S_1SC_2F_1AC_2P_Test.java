@@ -34,110 +34,88 @@ import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
-import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.numbers.Num;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
-	protected static final DncTestResults expected_results = new DncTestResults();
-	private static FF_3S_1SC_2F_1AC_2P_Network test_network;
-	private static Network network;
+public class FF_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	private static Flow f0, f1;
 
 	private FF_3S_1SC_2F_1AC_2P_Test() throws Exception {
 	}
 
 	@BeforeAll
-	public static void createNetwork() {
-		test_network = new FF_3S_1SC_2F_1AC_2P_Network();
-		f0 = test_network.f0;
-		f1 = test_network.f1;
-
-		network = test_network.getNetwork();
-
-		initializeBounds();
+	private void createNetworkFactory() {
+		network_factory = new FF_3S_1SC_2F_1AC_2P_Network();
+		
+		network_factory.createNetwork();
+		f0 = ((FF_3S_1SC_2F_1AC_2P_Network)network_factory).f0;
+		f1 = ((FF_3S_1SC_2F_1AC_2P_Network)network_factory).f1;
 	}
 	
-	private static void initializeBounds() {
+	@Override
+	protected void initializeBounds() {
 		expected_results.clear();
 
-		Num factory = Num.getFactory();
+		Num num_factory = Num.getFactory();
 
 		// TFA
-		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, factory.create(485, 8),
-				factory.create(1125, 2));
-		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, factory.create(1395, 16),
-				factory.create(1125, 2));
-		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(385, 3),
-				factory.create(1900, 3));
-		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, factory.create(470, 3),
-				factory.create(1900, 3));
+		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, num_factory.create(485, 8),
+				num_factory.create(1125, 2));
+		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, num_factory.create(1395, 16),
+				num_factory.create(1125, 2));
+		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, num_factory.create(385, 3),
+				num_factory.create(1900, 3));
+		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, num_factory.create(470, 3),
+				num_factory.create(1900, 3));
 
 		// SFA
-		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, factory.create(2615, 48),
-				factory.create(4625, 16));
-		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, factory.create(3335, 48),
-				factory.create(5825, 16));
-		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(670, 9),
-				factory.create(3500, 9));
-		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, factory.create(790, 9),
-				factory.create(4100, 9));
+		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, num_factory.create(2615, 48),
+				num_factory.create(4625, 16));
+		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, num_factory.create(3335, 48),
+				num_factory.create(5825, 16));
+		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, num_factory.create(670, 9),
+				num_factory.create(3500, 9));
+		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, num_factory.create(790, 9),
+				num_factory.create(4100, 9));
 
 		// PMOO
-		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(670, 9),
-				factory.create(3500, 9));
-		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, factory.create(790, 9),
-				factory.create(4100, 9));
-	}
-
-	public void reinitNetwork() {
-		if (!super.reinitilize_test) {
-			return;
-		}
-
-		test_network.reinitializeCurves();
-		initializeBounds();
+		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, num_factory.create(670, 9),
+				num_factory.create(3500, 9));
+		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, num_factory.create(790, 9),
+				num_factory.create(4100, 9));
 	}
 
 	// --------------------Flow 0--------------------
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f0_tfa(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
-		setMux(network.getServers());
-		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f0, expected_results);
+		initializeTest(test_config);
+		setMux(network_factory.getNetwork().getServers());
+		runTFAtest(new TotalFlowAnalysis(network_factory.getNetwork(), test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f0_sfa(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
-		setMux(network.getServers());
-		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f0, expected_results);
+		initializeTest(test_config);
+		setMux(network_factory.getNetwork().getServers());
+		runSFAtest(new SeparateFlowAnalysis(network_factory.getNetwork(), test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f0_pmoo_arbMux(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
-		setArbitraryMux(network.getServers());
-		super.runPMOOtest(new PmooAnalysis(network, test_config), f0, expected_results);
+		initializeTest(test_config);
+		setArbitraryMux(network_factory.getNetwork().getServers());
+		super.runPMOOtest(new PmooAnalysis(network_factory.getNetwork(), test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f0_sinktree_arbMux(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
+		initializeTest(test_config);
 		if (test_config.fullConsoleOutput()) {
 			System.out.println("Analysis:\t\tTree Backlog Bound Analysis");
 			System.out.println("Multiplexing:\t\tArbitrary");
@@ -154,36 +132,31 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTests {
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f1_tfa(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
-		setMux(network.getServers());
-		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f1, expected_results);
+		initializeTest(test_config);
+		setMux(network_factory.getNetwork().getServers());
+		super.runTFAtest(new TotalFlowAnalysis(network_factory.getNetwork(), test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f1_sfa(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
-		setMux(network.getServers());
-		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f1, expected_results);
+		initializeTest(test_config);
+		setMux(network_factory.getNetwork().getServers());
+		super.runSFAtest(new SeparateFlowAnalysis(network_factory.getNetwork(), test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f1_pmoo_arbMux(DncTestConfig test_config) {
-		super.setDncTestConfig(test_config);
-		reinitNetwork();
-		super.printSetting();
-		setArbitraryMux(network.getServers());
-		super.runPMOOtest(new PmooAnalysis(network, test_config), f1, expected_results);
+		initializeTest(test_config);
+		setArbitraryMux(network_factory.getNetwork().getServers());
+		runPMOOtest(new PmooAnalysis(network_factory.getNetwork(), test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f1_sinktree_arbMux(DncTestConfig test_config) {
+		initializeTest(test_config);
 		if (test_config.fullConsoleOutput()) {
 			System.out.println("Analysis:\t\tTree Backlog Bound Analysis");
 			System.out.println("Multiplexing:\t\tArbitrary");

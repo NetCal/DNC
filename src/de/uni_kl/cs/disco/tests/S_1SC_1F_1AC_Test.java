@@ -47,7 +47,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 //import org.junit.runners.Parameterized;
 
 @ExtendWith(value = Parameterized.class)
-public class S_1SC_1F_1AC_Test extends DncTests {
+public class S_1SC_1F_1AC_Test extends DncTest {
     protected static final DncTestResults expected_results = new DncTestResults();
     protected static final DncTestResults expected_results_sinktree = new DncTestResults();
     private static S_1SC_1F_1AC_Network test_network;
