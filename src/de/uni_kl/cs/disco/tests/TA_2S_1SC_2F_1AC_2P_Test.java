@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(value = Parameterized.class)
-public class TA_2S_1SC_2F_1AC_2P_Test extends DncTests {
+public class TA_2S_1SC_2F_1AC_2P_Test extends DncTest {
     protected static final DncTestResults expected_results = new DncTestResults();
     protected static final DncTestResults expected_results_sinktree = new DncTestResults();
     private static TA_2S_1SC_2F_1AC_2P_Network test_network;

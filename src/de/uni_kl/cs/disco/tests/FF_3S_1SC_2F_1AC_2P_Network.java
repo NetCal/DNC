@@ -48,11 +48,14 @@ public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
     private Network network;
 
     public FF_3S_1SC_2F_1AC_2P_Network() {
-        network = createNetwork();
     }
 
     public Network getNetwork() {
-        return network;
+    		if( network == null ) {
+    			return createNetwork();
+    		} else {
+    			return network;
+    		}
     }
 
     public Network createNetwork() {

@@ -40,31 +40,31 @@ import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
+import de.uni_kl.cs.disco.network.NetworkFactory;
 import de.uni_kl.cs.disco.network.Server;
 import de.uni_kl.cs.disco.numbers.Num;
-import org.junit.platform.suite.api.SelectClasses;
 
-import java.util.*;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.fail;
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
-@SelectClasses({ S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
-		TA_2S_1SC_1F_1AC_1P_Test.class, TA_3S_1SC_2F_1AC_1P_Test.class, TA_2S_1SC_2F_1AC_1P_Test.class,
-		TA_4S_1SC_2F_1AC_2P_Test.class, TA_2S_1SC_2F_1AC_2P_Test.class, TA_3S_1SC_3F_1AC_3P_Test.class,
-		TA_2S_1SC_4F_1AC_1P_Test.class, TA_2S_2SC_1F_1AC_1P_Test.class, TA_2S_2SC_2F_1AC_1P_Test.class,
-		TR_3S_1SC_2F_1AC_2P_Test.class, TR_7S_1SC_3F_1AC_3P_Test.class, FF_3S_1SC_2F_1AC_2P_Test.class,
-		FF_4S_1SC_3F_1AC_3P_Test.class, FF_4S_1SC_4F_1AC_4P_Test.class })
-
-public class DncTests {
+public abstract class DncTest {
+	protected NetworkFactory network_factory;
 	protected DncTestConfig test_config;
+	protected DncTestResults expected_results;
 	protected boolean reinitilize_test = true;
 
-	protected DncTests() {
+	protected DncTest() {
 	}
 
-	protected void setDncTestConfig(DncTestConfig test_config) {
+	protected abstract void initializeBounds();
+
+	protected void initializeTest(DncTestConfig test_config) {
 		this.test_config = test_config;
+		printSetting();
 
 		if (test_config.enable_checks) {
 			CalculatorConfig.getInstance().enableAllChecks();
@@ -72,10 +72,16 @@ public class DncTests {
 			CalculatorConfig.getInstance().disableAllChecks();
 		}
 
-		reinitilize_test = (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
+		// reinitialize the network and the bounds in case number or curve backend changed
+		if(CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
 				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl()));
-
-		CalculatorConfig.getInstance().setOperationImpl(test_config.operation_implementation);
+		{
+			network_factory.reinitializeCurves();
+			initializeBounds();
+			// set to new backends
+			CalculatorConfig.getInstance().setOperationImpl(test_config.operation_implementation);
+			CalculatorConfig.getInstance().setCurveImpl(test_config.curve_implementation);
+		}
 	}
 
 	public void printSetting() {
@@ -166,7 +172,7 @@ public class DncTests {
 		}
 	}
 
-	protected void runTFAtest(TotalFlowAnalysis tfa, Flow flow_of_interest, DncTestResults expected_bounds) {
+	protected void runTFAtest(TotalFlowAnalysis tfa, Flow flow_of_interest) {
 		runAnalysis(tfa, flow_of_interest);
 
 		if (test_config.fullConsoleOutput()) {
@@ -185,12 +191,12 @@ public class DncTests {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_bounds.getBounds(Analyses.TFA, test_config.mux_discipline, flow_of_interest);
+		AnalysisResults bounds = expected_results.getBounds(Analyses.TFA, test_config.mux_discipline, flow_of_interest);
 		assertEquals(bounds.getDelayBound(), tfa.getDelayBound(), "TFA delay");
 		assertEquals(bounds.getBacklogBound(), tfa.getBacklogBound(), "TFA backlog");
 	}
 
-	protected void runSFAtest(SeparateFlowAnalysis sfa, Flow flow_of_interest, DncTestResults expected_bounds) {
+	protected void runSFAtest(SeparateFlowAnalysis sfa, Flow flow_of_interest) {
 		runAnalysis(sfa, flow_of_interest);
 
 		if (test_config.fullConsoleOutput()) {
@@ -209,12 +215,12 @@ public class DncTests {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_bounds.getBounds(Analyses.SFA, test_config.mux_discipline, flow_of_interest);
+		AnalysisResults bounds = expected_results.getBounds(Analyses.SFA, test_config.mux_discipline, flow_of_interest);
 		assertEquals(bounds.getDelayBound(), sfa.getDelayBound(), "SFA delay");
 		assertEquals(bounds.getBacklogBound(), sfa.getBacklogBound(), "SFA backlog");
 	}
 
-	protected void runPMOOtest(PmooAnalysis pmoo, Flow flow_of_interest, DncTestResults expected_bounds) {
+	protected void runPMOOtest(PmooAnalysis pmoo, Flow flow_of_interest) {
 		runAnalysis(pmoo, flow_of_interest);
 
 		if (test_config.fullConsoleOutput()) {
@@ -232,13 +238,13 @@ public class DncTests {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY,
+		AnalysisResults bounds = expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY,
 				flow_of_interest);
 		assertEquals(bounds.getDelayBound(), pmoo.getDelayBound(), "PMOO delay");
 		assertEquals(bounds.getBacklogBound(), pmoo.getBacklogBound(), "PMOO backlog");
 	}
 
-	protected void runSinkTreePMOOtest(Network sink_tree, Flow flow_of_interest, DncTestResults expected_bounds) {
+	protected void runSinkTreePMOOtest(Network sink_tree, Flow flow_of_interest) {
 		Num backlog_bound_TBRL = null;
 		Num backlog_bound_TBRL_CONV = null;
 		Num backlog_bound_TBRL_CONV_TBRL_DECONV = null;
@@ -276,16 +282,16 @@ public class DncTests {
 			System.out.println();
 		}
 
-		assertEquals(expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL, "PMOO backlog TBRL");
 
-		assertEquals(expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL_CONV, "PMOO backlog TBRL CONV");
 
-		assertEquals(expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL_CONV_TBRL_DECONV, "PMOO backlog TBRL CONV TBRL DECONV");
 
-		assertEquals(expected_bounds.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL_HOMO, "PMOO backlog RBRL HOMO");
 	}
 }

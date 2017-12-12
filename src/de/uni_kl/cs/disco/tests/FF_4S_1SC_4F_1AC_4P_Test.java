@@ -48,7 +48,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 //import org.junit.runners.Parameterized;
 
 @ExtendWith(value = Parameterized.class)
-public class FF_4S_1SC_4F_1AC_4P_Test extends DncTests {
+public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
     protected static final DncTestResults expected_results = new DncTestResults();
     protected static final DncTestResults expected_results_PMOOAB = new DncTestResults();
     private static FF_4S_1SC_4F_1AC_4P_Network test_network;
