@@ -1,6 +1,7 @@
 v2.4.0beta4 "Chimera" (2017-Sep-XY)
 -----------------------------------
-* All DNC boundings in de.uni_kl.cs.disco.operations (delay, backlog, output, left-over) are called via a dispatcher, OperationDispatcher.java. 
+* Attention: We move to Java 9. Compatibility to older Java releases is not tested anymore.
+* All DNC bound computations in de.uni_kl.cs.disco.operations (delay, backlog, output, left-over) are called via a dispatcher, OperationDispatcher.java. 
 
 v2.4.0beta3 "Chimera" (2017-Sep-01)
 -----------------------------------
