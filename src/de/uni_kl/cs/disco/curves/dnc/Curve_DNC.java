@@ -1247,10 +1247,8 @@ public class Curve_DNC implements CurvePwAffine {
                 Num.getFactory().createZero(), rate, false);
 
         c_dnc.setSegments(segments);
-		// TODO Is it a RL with L=0 (in the PMOO's point of view)?
-		// Could also be a token bucket with b = 0. Set both meta infos?
-		// decomposeIntoRateLatencies();
-		// decomposeIntoTokenBuckets();
+        c_dnc.is_rate_latency = true; // with latency 0
+        c_dnc.is_token_bucket = true; // with burstiness 0
     }
 
     private void makeRateLatency(Curve_DNC c_dnc, Num rate, Num latency) {
@@ -1275,8 +1273,6 @@ public class Curve_DNC implements CurvePwAffine {
         segments[1] = new LinearSegment_DNC(latency, Num.getFactory().createZero(), rate, true);
 
         c_dnc.setSegments(segments);
-        // TODO: Do decomposition for PMOO?
-		// decomposeIntoRateLatencies(); // instead of:
         c_dnc.is_rate_latency = true;
     }
 
@@ -1303,8 +1299,6 @@ public class Curve_DNC implements CurvePwAffine {
         segments[1] = new LinearSegment_DNC(Num.getFactory().createZero(), burst, rate, true);
 
         c_dnc.setSegments(segments);
-        // TODO: Do decomposition for PMOO?
-		// decomposeIntoTokenBuckets(); // instead of:
         c_dnc.is_token_bucket = true;
     }
 }

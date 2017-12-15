@@ -948,10 +948,8 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
 		Segment segment = new Segment(0.0, 0.0, rate);
 		c_rtc.initializeWithSegment(segment);
-		// TODO Is it a RL with L=0 (in the PMOO's point of view)?
-		// Could also be a token bucket with b = 0. Set both meta infos?
-		// decomposeIntoRateLatencies();
-		// decomposeIntoTokenBuckets();
+		c_rtc.is_rate_latency = true; // with latency 0
+		c_rtc.is_token_bucket = true; // with burstiness 0
 	}
 
 	private void makeRateLatency(Curve_MPARTC_PwAffine c_rtc, double rate, double latency) {
@@ -976,9 +974,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		segments.add(segment1);
 
 		c_rtc.initializeWithSegments(segments);
-		// TODO: Do decomposition for PMOO?
-		// TODO: Remark: PMOO throws exception due to non linear increasing segments
-		// decomposeIntoRateLatencies(); // instead of:
 		c_rtc.is_rate_latency = true;
 	}
 
@@ -1005,8 +1000,6 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		segments.add(segment1);
 
 		c_rtc.initializeWithSegments(segments);
-		// TODO: Do decomposition for PMOO?
-		// decomposeIntoTokenBuckets(); // instead of:
 		c_rtc.is_token_bucket = true;
 	}
 }
