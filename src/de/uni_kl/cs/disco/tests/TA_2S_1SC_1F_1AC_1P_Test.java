@@ -39,6 +39,8 @@ import de.uni_kl.cs.disco.numbers.Num;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class TA_2S_1SC_1F_1AC_1P_Test extends DncTest {
     protected static final DncTestResults expected_results = new DncTestResults();
@@ -95,24 +97,32 @@ public class TA_2S_1SC_1F_1AC_1P_Test extends DncTest {
 
     // --------------------Flow 0--------------------
     @Test
+    @ParameterizedTest(name = "[{arguments}]")
+    @ArgumentsSource(DncTestArguments.class)
     public void f0_tfa() {
         setMux(network.getServers());
         super.runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
     }
 
     @Test
+    @ParameterizedTest(name = "[{arguments}]")
+    @ArgumentsSource(DncTestArguments.class)
     public void f0_sfa() {
         setMux(network.getServers());
         super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f0);
     }
 
     @Test
+    @ParameterizedTest(name = "[{arguments}]")
+    @ArgumentsSource(DncTestArguments.class)
     public void f0_pmoo_arbMux() {
         setArbitraryMux(network.getServers());
         super.runPMOOtest(new PmooAnalysis(network, test_config), f0);
     }
 
     @Test
+    @ParameterizedTest(name = "[{arguments}]")
+    @ArgumentsSource(DncTestArguments.class)
     public void f0_sinktree_arbMux() {
         setArbitraryMux(network.getServers());
         super.runSinkTreePMOOtest(network, f0);
