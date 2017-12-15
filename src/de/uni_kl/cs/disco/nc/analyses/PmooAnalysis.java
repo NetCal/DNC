@@ -37,8 +37,8 @@ import de.uni_kl.cs.disco.nc.AbstractAnalysis;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.disco.nc.bounds.Bound;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
-import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import de.uni_kl.cs.disco.network.*;
 import de.uni_kl.cs.disco.numbers.Num;
 import org.apache.commons.math3.util.Pair;
@@ -271,7 +271,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         ((PmooResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
-            delay_bound__beta_e2e = OperationDispatcher.db_deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // Single flow
+            delay_bound__beta_e2e = Bound.db_deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // Single flow
             // of
             // interest,
             // i.e.,
@@ -283,7 +283,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                 ((PmooResults) result).setDelayBound(delay_bound__beta_e2e);
             }
 
-            backlog_bound__beta_e2e = OperationDispatcher.bl_derive(flow_of_interest.getArrivalCurve(), beta_e2e);
+            backlog_bound__beta_e2e = Bound.bl_derive(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (backlog_bound__beta_e2e.leq(result.getBacklogBound())) {
                 ((PmooResults) result).setBacklogBound(backlog_bound__beta_e2e);
             }

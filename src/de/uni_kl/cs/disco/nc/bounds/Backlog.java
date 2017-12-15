@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.disco.nc.operations;
+package de.uni_kl.cs.disco.nc.bounds;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
@@ -42,8 +42,8 @@ import de.uni_kl.cs.disco.numbers.Num;
 
 import java.util.ArrayList;
 
-public class BacklogBound {
-    private BacklogBound() {
+public class Backlog {
+    private Backlog() {
     }
 
     public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {

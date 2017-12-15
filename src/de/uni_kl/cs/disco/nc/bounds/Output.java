@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.disco.nc.operations;
+package de.uni_kl.cs.disco.nc.bounds;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
@@ -40,8 +40,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OutputBound {
-    private OutputBound() {
+public class Output {
+    private Output() {
     }
 
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,

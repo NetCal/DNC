@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.disco.nc.operations;
+package de.uni_kl.cs.disco.nc.bounds;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;

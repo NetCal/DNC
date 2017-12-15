@@ -1,7 +1,10 @@
 v2.4.0beta4 "Chimera" (2017-Dec-XY)
 -----------------------------------
 * Attention: We move to Java 9. Compatibility to older Java releases is not tested anymore.
-* All DNC bound computations in de.uni_kl.cs.disco.operations (delay, backlog, output, left-over) are called via a dispatcher, OperationDispatcher.java.
+* DNC bounds derived from two curves (i.e., other than arrival bound algorithms)
+  - package renamed from de.uni_kl.cs.disco.nc.operations to de.uni_kl.cs.disco.nc.bounds
+  - Computations (Backlog, Delay, LeftOverService and Output) are called via a dispatcher, Bound.java.
+  - Name simplifications: drop "Bound" suffix for Backlog, Delay, and Output classes.  
 * Method cleanups in curve classes:
   - Renamed auto-generated method names that started with "isIs" or "isHas" and removed underscores from these method names.
   - Rate latencies: merged getRL_Property() into isRateLateny(); renamed setRL_Property() to setRateLateny().

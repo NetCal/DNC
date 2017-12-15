@@ -41,7 +41,7 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationImpl;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
+import de.uni_kl.cs.disco.nc.bounds.Bound;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.Server;
@@ -470,14 +470,14 @@ public class DncTests {
         Num backlog_bound_TBRL_HOMO = null;
 
         try {
-            backlog_bound_TBRL = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
+            backlog_bound_TBRL = Num.getFactory().create(Bound.bl_derivePmooSinkTreeTbRl(sink_tree,
                     flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
-            backlog_bound_TBRL_CONV = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
+            backlog_bound_TBRL_CONV = Num.getFactory().create(Bound.bl_derivePmooSinkTreeTbRl(sink_tree,
                     flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
             backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory()
-                    .create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),
+                    .create(Bound.bl_derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),
                             AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
-            backlog_bound_TBRL_HOMO = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
+            backlog_bound_TBRL_HOMO = Num.getFactory().create(Bound.bl_derivePmooSinkTreeTbRl(sink_tree,
                     flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
         } catch (Exception e) {
             e.printStackTrace();

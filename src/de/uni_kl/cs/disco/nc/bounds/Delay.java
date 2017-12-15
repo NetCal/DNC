@@ -27,15 +27,15 @@
  *
  */
 
-package de.uni_kl.cs.disco.nc.operations;
+package de.uni_kl.cs.disco.nc.bounds;
 
 import de.uni_kl.cs.disco.curves.ArrivalCurve;
 import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.numbers.Num;
 
-public class DelayBound {
-    private DelayBound() {
+public class Delay {
+    private Delay() {
     }
 
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {

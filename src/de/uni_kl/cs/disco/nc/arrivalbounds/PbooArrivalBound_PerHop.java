@@ -37,7 +37,7 @@ import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.nc.ArrivalBound;
 import de.uni_kl.cs.disco.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
+import de.uni_kl.cs.disco.nc.bounds.Bound;
 import de.uni_kl.cs.disco.network.*;
 import de.uni_kl.cs.disco.numbers.Num;
 
@@ -133,7 +133,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
             }
 
             // Calculate the left-over service curve for this single server
-            betas_lo_s = OperationDispatcher.lo_compute(configuration, server, alphas_xxfcaller_s);
+            betas_lo_s = Bound.lo_compute(configuration, server, alphas_xxfcaller_s);
 
             // Check if there's any service left on this path. If not, the set only contains
             // a null-service curve.
@@ -147,7 +147,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 
             // The deconvolution of the two sets, arrival curves and service curves,
             // respectively, takes care of all the possible combinations
-            alphas_xfcaller = OperationDispatcher.ob_compute(configuration, alphas_xfcaller, server, betas_lo_s);
+            alphas_xfcaller = Bound.ob_compute(configuration, alphas_xfcaller, server, betas_lo_s);
         }
 
         if (configuration.abConsiderTFANodeBacklog()) {
