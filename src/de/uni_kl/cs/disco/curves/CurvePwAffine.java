@@ -39,8 +39,8 @@ import java.util.List;
 /**
  * Interface for piecewise affine curves, including convenience functions used
  * by Disco's implementation DNC operations. I.e., in addition to its defining
- * linear segments, curves may be ascribed as (compositions of) rate-latency and
- * token-bucket functions.
+ * linear segments, curves may be ascribed as (compositions of) rate latency and
+ * token bucket functions.
  */
 public interface CurvePwAffine extends Curve {
     static CurvePwAffine getFactory() {
@@ -721,8 +721,6 @@ public interface CurvePwAffine extends Curve {
     void setTokenBucket(boolean is_token_bucket);
 
     void setTB_MetaInfo(boolean has_tb_meta_info);
-
-    Num getTB_Burst();
 
     int getTB_ComponentCount();
 

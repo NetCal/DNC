@@ -230,7 +230,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             ArrivalCurve bound = f.getArrivalCurve();
             // TODO Actually needs to be an affine curve (single TB)
             CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-            sum_bursts = Num.getUtils().add(sum_bursts, current_tb.getTB_Burst());
+            sum_bursts = Num.getUtils().add(sum_bursts, current_tb.getBurst());
         }
 
         T = Num.getUtils().add(T,

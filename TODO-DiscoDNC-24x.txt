@@ -1,22 +1,18 @@
 v2.4.0
 ------
-* Rename copy() methods to clone() if they provide deep copies
+* JUnit5: minimal set of dependencies (only the JUnit5 libraries we use, remove hamcrest?)
 * Merge Ant build files build.xml and DiscoDNCjar.xml
 
 v2.4.x
 ------
-* Alternatives to store a delta_T function --> Identify properly 
+* Alternatives to store a delta_T curve --> Identify properly 
   - segment2.y == infty || segment2.rate == infty
-* Alternatives to store other functions?  
+* Alternatives to store other curves?
 
 * Check -Next branch for ideas regarding improvement of the flow prolongation code.
 
 * Use Curve's is_rate_latency and is_token_bucket in Convolution and Deconvolution --> Use a swtich to let it determine automatically?
 * Rearrange the checks: Currently, there are checks in curves that are specific to limitations of our operators. We should separate both parts more from each other. 
-
-* See isNetwork class and see the CPLEX branch for latest way to create the network. --> NetworkFactory interface
-* Make the tests an optional, separate package to get rid of dependencies (JUnit and hamcrest) ?
-* Make findbugs an optional dependency by not deliberately ignoring findings
 
 * Test all part of an analysis' intermediate results as found in the documentation and *Results.
 * In the tests: Create Num objects instead of AnalysisResults and let expected_results reuse previously created AnalysisResult objects internally.
@@ -58,28 +54,6 @@ v2.4.x
         curve_copy.beautify();
     	return curve_copy;
     }
-
-// getBurst: Check for TB and use getTBBurst instead 
-
-Curve.java:
-    /**
-     * Returns the burstiness of this token bucket curve.<br>
-     * Note: For performance reasons there are no sanity checks! Only
-     * call this method on a valid token bucket curve!
-     *
-     * @return the burstiness
-     */
-    public Num getTBBurst() {
-    	if( segments.length > 1 ) {		// Token Buckets pass through the origin
-			return segments[1].getY().copy();
-		} else {						// rate functions have burst 0
-			return Num.createZero();
-		}
-    }
-	
-	public Num getBurst() {
-		return fLimitRight( Num.getZero() );
-	}
 
 PMOO:
 // Compute sum of bursts

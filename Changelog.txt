@@ -5,11 +5,13 @@ v2.4.0beta4 "Chimera" (2017-Dec-XY)
   - package renamed from de.uni_kl.cs.disco.nc.operations to de.uni_kl.cs.disco.nc.bounds
   - Computations (Backlog, Delay, LeftOverService and Output) are called via a dispatcher, Bound.java.
   - Name simplifications: drop "Bound" suffix for Backlog, Delay, and Output classes.  
-* Method cleanups in curve classes:
+* Method cleanups in curve classes. Code improvements apply to the DNC implementation:
   - Renamed auto-generated method names that started with "isIs" or "isHas" and removed underscores from these method names.
   - Rate latencies: merged getRL_Property() into isRateLateny(); renamed setRL_Property() to setRateLateny().
   - Token buckets: merged getTB_Property() into isTokenBucket(); renamed setTB_Property() to setTokenBucket().
   - getDelayedInfiniteBurst_Property renamed to isDelayedInfiniteBurst.
+  - Merged getTB_Burst into getBurst.
+  - Created a rate-latency optimized code path for getLatenty(), similar to getBurst().
 * Comments and JavaDocs cleanups.
 
 v2.4.0beta3 "Chimera" (2017-Sep-01)

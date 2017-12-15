@@ -217,7 +217,7 @@ public abstract class Deconvolution_DNC {
 
         // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
         return CurvePwAffine.getFactory().createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
-                arrival_curve.getTB_Burst().doubleValue()
+                arrival_curve.getBurst().doubleValue()
                         + arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
     }
 
