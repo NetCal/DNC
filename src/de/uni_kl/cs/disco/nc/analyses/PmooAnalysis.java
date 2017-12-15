@@ -169,6 +169,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Num sum_bursts = Num.getFactory().createZero();
         Num sum_latencyterms = Num.getFactory().createZero();
 
+        Num compute = Num.getUtils();
+        
         double sum_r_at_s;
 
         Set<Flow> present_flows = new HashSet<Flow>();
@@ -193,7 +195,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             CurvePwAffine current_rl = service_curves[i].getRL_Component(server_rl_iters[i]);
 
             // Sum up latencies
-            T = Num.getUtils().add(T, current_rl.getLatency());
+            T = compute.add(T, current_rl.getLatency());
 
             // Compute and store sum of rates of all passing flows
             Num sum_r = Num.getFactory().createZero();
@@ -201,19 +203,19 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                 ArrivalCurve bound = f.getArrivalCurve();
                 // TODO Actually needs to be an affine curve (single TB)
                 CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-                sum_r = Num.getUtils().add(sum_r, current_tb.getUltAffineRate());
+                sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
             }
 
             // Update latency terms (increments)
-            sum_latencyterms = Num.getUtils().add(sum_latencyterms,
-                    Num.getUtils().mult(sum_r, current_rl.getLatency()));
+            sum_latencyterms = compute.add(sum_latencyterms,
+                    compute.mult(sum_r, current_rl.getLatency()));
 
             // Compute left-over rate; update min
-            Num Ri = Num.getUtils().sub(current_rl.getUltAffineRate(), sum_r);
+            Num Ri = compute.sub(current_rl.getUltAffineRate(), sum_r);
             if (Ri.leqZero()) {
                 return CurvePwAffine.getFactory().createZeroService();
             }
-            R = Num.getUtils().min(R, Ri);
+            R = compute.min(R, Ri);
 
             // Remove all outgoing flows from the set of present flows
             Set<Flow> leaving_flows = new HashSet<Flow>();
@@ -230,11 +232,10 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             ArrivalCurve bound = f.getArrivalCurve();
             // TODO Actually needs to be an affine curve (single TB)
             CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-            sum_bursts = Num.getUtils().add(sum_bursts, current_tb.getBurst());
+            sum_bursts = compute.add(sum_bursts, current_tb.getBurst());
         }
 
-        T = Num.getUtils().add(T,
-                Num.getUtils().div(Num.getUtils().add(sum_bursts, sum_latencyterms), R));
+        T = compute.add(T, compute.div(compute.add(sum_bursts, sum_latencyterms), R));
 
         if (T == Num.getFactory().getPositiveInfinity()) {
             return CurvePwAffine.getFactory().createZeroService();

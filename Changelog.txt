@@ -12,7 +12,7 @@ v2.4.0beta4 "Chimera" (2017-Dec-XY)
   - getDelayedInfiniteBurst_Property renamed to isDelayedInfiniteBurst.
   - Merged getTB_Burst into getBurst.
   - Created a rate-latency optimized code path for getLatenty(), similar to getBurst().
-* Comments and JavaDocs cleanups.
+* Comments and JavaDocs cleanups, various stability and performance improvements.
 
 v2.4.0beta3 "Chimera" (2017-Sep-01)
 -----------------------------------
