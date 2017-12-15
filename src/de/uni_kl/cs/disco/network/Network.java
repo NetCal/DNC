@@ -1218,7 +1218,6 @@ public class Network {
         return network_new;
     }
 
-    // TODO Adapt to new structure
     public void saveAs(String output_path, String file_name) throws Exception {
         saveAs(output_path, file_name, "default");
     }
@@ -1258,13 +1257,13 @@ public class Network {
         sb.append("\n");
         sb.append("import java.util.LinkedList;\n");
         sb.append("\n");
-        sb.append("import de.uni_kl.disco.curves.CurvePwAffine;\n");
+        sb.append("import de.uni_kl.cs.disco.curves.CurvePwAffine;\n");
         sb.append("\n");
-        sb.append("import de.uni_kl.disco.nc.AnalysisConfig.Multiplexing;\n");
+        sb.append("import de.uni_kl.cs.disco.nc.AnalysisConfig.Multiplexing;\n");
         sb.append("\n");
-        sb.append("import de.uni_kl.disco.network.Network;\n");
-        sb.append("import de.uni_kl.disco.network.NetworkFactory;\n");
-        sb.append("import de.uni_kl.disco.network.Server;\n");
+        sb.append("import de.uni_kl.cs.disco.network.Network;\n");
+        sb.append("import de.uni_kl.cs.disco.network.NetworkFactory;\n");
+        sb.append("import de.uni_kl.cs.disco.network.Server;\n");
         sb.append("\n");
 
         sb.append("public class " + file_name + " implements NetworkFactory {");
@@ -1280,8 +1279,8 @@ public class Network {
             sb.append("\t\tservers[" + s.getId() + "] = ");
             sb.append("network.addServer( ");
             sb.append("\"" + s.getAlias() + "\"" + ", ");
-            sb.append("CurvePwAffine.createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", ");
-            sb.append("CurvePwAffine.createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )"
+            sb.append("CurvePwAffine.getFactory().createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )" + ", ");
+            sb.append("CurvePwAffine.getFactory().createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString() + "\" )"
                     + ", ");
             sb.append("Multiplexing." + s.multiplexingDiscipline() + ", ");
             sb.append(s.useGamma() + ", ");
@@ -1345,7 +1344,7 @@ public class Network {
             }
             sb.append("\t\tnetwork.addFlow( ");
             sb.append("\"" + f.getAlias() + "\"" + ", ");
-            sb.append("CurvePwAffine.createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", ");
+            sb.append("CurvePwAffine.getFactory().createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )" + ", ");
             sb.append("servers_on_path_s");
             sb.append(" );\n");
             sb.append("\t\tservers_on_path_s.clear();");
