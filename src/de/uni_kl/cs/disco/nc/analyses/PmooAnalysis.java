@@ -189,7 +189,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                 return CurvePwAffine.getFactory().createZeroService();
             }
 
-            // TODO Actually needs to be an affine curve
+            // TODO Actually needs to be an affine curve (single RL)
             CurvePwAffine current_rl = service_curves[i].getRL_Component(server_rl_iters[i]);
 
             // Sum up latencies
@@ -199,7 +199,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             Num sum_r = Num.getFactory().createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
-                // TODO Actually needs to be an affine curve
+                // TODO Actually needs to be an affine curve (single TB)
                 CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
                 sum_r = Num.getUtils().add(sum_r, current_tb.getUltAffineRate());
             }
@@ -228,7 +228,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         // Compute sum of bursts
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
-            // TODO Actually needs to be an affine curve
+            // TODO Actually needs to be an affine curve (single TB)
             CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
             sum_bursts = Num.getUtils().add(sum_bursts, current_tb.getTB_Burst());
         }

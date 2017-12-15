@@ -106,7 +106,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		return rtc_curve;
 	}
 
-	// Accepts string representations of RTC as well as 
+	// Accepts string representations of RTC as well as
 	// DNC Curve, ArrivalCurve, ServiceCurve, and MaxServiceCurve.
 	protected void initializeCurve(String curve_str) throws Exception {
 		if (curve_str.substring(0, 2).equals("AC") || curve_str.substring(0, 2).equals("SC")) {
@@ -948,8 +948,8 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
 		Segment segment = new Segment(0.0, 0.0, rate);
 		c_rtc.initializeWithSegment(segment);
-		// TODO Is it a RL with L=0 (in the PMOO's point of view)? Could also be a token
-		// bucket. Set both meta infos?
+		// TODO Is it a RL with L=0 (in the PMOO's point of view)?
+		// Could also be a token bucket with b = 0. Set both meta infos?
 		// decomposeIntoRateLatencies();
 		// decomposeIntoTokenBuckets();
 	}
