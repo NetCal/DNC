@@ -4,8 +4,8 @@ v2.4.0beta4 "Chimera" (2017-Dec-XY)
 * All DNC bound computations in de.uni_kl.cs.disco.operations (delay, backlog, output, left-over) are called via a dispatcher, OperationDispatcher.java.
 * Method cleanups in curve classes:
   - Renamed auto-generated method names that started with "isIs" or "isHas" and removed underscores from these method names.
-  - Rate latencies: merged getRL_Property() with isRateLateny(); renamed setRL_Property() to setRateLateny().
-  - Token buckets: merged getTB_Property() with isTokenBucket(); renamed setTB_Property() to setTokenBucket().
+  - Rate latencies: merged getRL_Property() into isRateLateny(); renamed setRL_Property() to setRateLateny().
+  - Token buckets: merged getTB_Property() into isTokenBucket(); renamed setTB_Property() to setTokenBucket().
   - getDelayedInfiniteBurst_Property renamed to isDelayedInfiniteBurst .
 * Comments and JavaDocs cleanups
 
