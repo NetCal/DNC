@@ -42,7 +42,7 @@ import de.uni_kl.cs.disco.numbers.Num;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class Bound {
+public final class Bound {
     private Bound() {
     }
 
