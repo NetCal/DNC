@@ -50,7 +50,7 @@ public class Demo3 {
         try {
             demo.run();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -94,7 +94,7 @@ public class Demo3 {
                 System.out.println("alpha per server: " + tfa.getServerAlphasMapString());
             } catch (Exception e) {
                 System.out.println("TFA analysis failed");
-                System.out.println(e.toString());
+                e.printStackTrace();
             }
 
             System.out.println();
@@ -112,7 +112,7 @@ public class Demo3 {
                 System.out.println("backlog bound   : " + sfa.getBacklogBound());
             } catch (Exception e) {
                 System.out.println("SFA analysis failed");
-                System.out.println(e.toString());
+                e.printStackTrace();
             }
 
             System.out.println();
@@ -129,7 +129,7 @@ public class Demo3 {
                 System.out.println("backlog bound   : " + pmoo.getBacklogBound());
             } catch (Exception e) {
                 System.out.println("PMOO analysis failed");
-                System.out.println(e.toString());
+                e.printStackTrace();
             }
 
             System.out.println();
