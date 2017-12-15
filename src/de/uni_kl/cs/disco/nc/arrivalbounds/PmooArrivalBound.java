@@ -123,7 +123,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 
             ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
 
-            for (ServiceCurve beta_loxfcaller_subpath : Bound.lo_arbMux(common_subpath_src.getServiceCurve(),
+            for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
                     alphas_xxfcaller)) {
                 if (!beta_loxfcaller_subpath.equals(null_service)) {
                     betas_loxfcaller_subpath.add(beta_loxfcaller_subpath); // Adding to the set, not adding up the
@@ -153,7 +153,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
         // by this call of computeArrivalBound
         Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
                 common_subpath_src, f_xfcaller, flow_of_interest);
-        alphas_xfcaller = Bound.ob_compute(configuration, alpha_xfcaller_src, common_subpath,
+        alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath,
                 betas_loxfcaller_subpath);
 
         return alphas_xfcaller;

@@ -45,8 +45,12 @@ import java.util.Set;
 public final class Bound {
     private Bound() {
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Backlog
+    // --------------------------------------------------------------------------------------------------------------
 
-    public static Num bl_derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+    public static Num backlog(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return Backlog.derive(arrival_curve, service_curve);
@@ -92,8 +96,12 @@ public final class Bound {
         }
         return Num.getFactory().create(result);
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Delay
+    // --------------------------------------------------------------------------------------------------------------
 
-    public static double bl_derivePmooSinkTreeTbRl(Network tree, Server root,
+    public static double backlogPmooSinkTreeTbRl(Network tree, Server root,
                                                    AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -103,8 +111,7 @@ public final class Bound {
         return Backlog.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
     }
 
-
-    public static Num db_deriveARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+    public static Num delayARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return Delay.deriveARB(arrival_curve, service_curve);
@@ -121,9 +128,8 @@ public final class Bound {
         //return Num.getFactory().create(result);
     }
 
-
     //TODO: RTC capable of this?
-    public static Num db_deriveFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+    public static Num delayFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return Delay.deriveFIFO(arrival_curve, service_curve);
@@ -138,8 +144,11 @@ public final class Bound {
         //return Num.getFactory().create(result);
     }
 
+    // --------------------------------------------------------------------------------------------------------------
+    // left-over Service
+    // --------------------------------------------------------------------------------------------------------------
 
-    public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, Server server,
+    public static Set<ServiceCurve> leftOverService(AnalysisConfig configuration, Server server,
                                                Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -148,7 +157,7 @@ public final class Bound {
         return LeftOverService.compute(configuration, server, arrival_curves);
     }
 
-    public static Set<ServiceCurve> lo_compute(AnalysisConfig configuration, ServiceCurve service_curve,
+    public static Set<ServiceCurve> leftOverService(AnalysisConfig configuration, ServiceCurve service_curve,
                                                Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -158,7 +167,7 @@ public final class Bound {
 
     }
 
-    public static Set<ServiceCurve> lo_fifoMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
+    public static Set<ServiceCurve> leftOverServiceFIFO(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return LeftOverService.fifoMux(service_curve, arrival_curves);
@@ -166,7 +175,7 @@ public final class Bound {
         return LeftOverService.fifoMux(service_curve, arrival_curves);
     }
 
-    public static ServiceCurve lo_fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
+    public static ServiceCurve leftOverServiceFIFO(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return LeftOverService.fifoMux(service_curve, arrival_curve);
@@ -175,7 +184,7 @@ public final class Bound {
         return LeftOverService.fifoMux(service_curve, arrival_curve);
     }
 
-    public static Set<ServiceCurve> lo_arbMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
+    public static Set<ServiceCurve> leftOverServiceARB(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return LeftOverService.arbMux(service_curve, arrival_curves);
@@ -183,7 +192,7 @@ public final class Bound {
         return LeftOverService.arbMux(service_curve, arrival_curves);
     }
 
-    public static ServiceCurve lo_arbMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
+    public static ServiceCurve leftOverServiceARB(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
             return LeftOverService.arbMux(service_curve, arrival_curve);
@@ -191,8 +200,11 @@ public final class Bound {
         return LeftOverService.arbMux(service_curve, arrival_curve);
     }
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Output
+    // --------------------------------------------------------------------------------------------------------------
 
-    public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
+    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
                                                Server server) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -201,7 +213,7 @@ public final class Bound {
         return Output.compute(configuration, arrival_curves, server);
     }
 
-    public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
+    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
                                                Server server, Set<ServiceCurve> betas_lo) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
@@ -210,7 +222,7 @@ public final class Bound {
         return Output.compute(configuration, arrival_curves, server, betas_lo);
     }
 
-    public static Set<ArrivalCurve> ob_compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
+    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
                                                Set<ServiceCurve> betas_lo) throws Exception {
         if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
                 || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {

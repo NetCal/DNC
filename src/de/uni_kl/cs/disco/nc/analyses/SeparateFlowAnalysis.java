@@ -98,7 +98,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         ((SeparateFlowResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
-            delay_bound__beta_e2e = Bound.db_deriveFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // single flow
+            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // single flow
             // of
             // interest,
             // i.e.,
@@ -110,7 +110,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
                 ((SeparateFlowResults) result).setDelayBound(delay_bound__beta_e2e);
             }
 
-            backlog_bound__beta_e2e = Bound.bl_derive(flow_of_interest.getArrivalCurve(), beta_e2e);
+            backlog_bound__beta_e2e = Bound.backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (backlog_bound__beta_e2e.leq(result.getBacklogBound())) {
                 ((SeparateFlowResults) result).setBacklogBound(backlog_bound__beta_e2e);
             }
@@ -168,7 +168,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
                 }
 
                 // Calculate the left-over service curve for the flow of interest
-                betas_lofoi_s = Bound.lo_compute(configuration, server, alpha_xfois);
+                betas_lofoi_s = Bound.leftOverService(configuration, server, alpha_xfois);
 
                 result.map__server__alphas.put(server, alpha_xfois);
             }
