@@ -137,7 +137,6 @@ public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
         if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
             return false;
         }
-        // TODO Findbugs: EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS
         return rtc_segment.equals(obj);
     }
 
