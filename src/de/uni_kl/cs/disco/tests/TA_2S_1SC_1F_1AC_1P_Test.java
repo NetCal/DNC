@@ -39,7 +39,6 @@ import de.uni_kl.cs.disco.numbers.Num;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 public class TA_2S_1SC_1F_1AC_1P_Test extends DncTest {
     protected static final DncTestResults expected_results = new DncTestResults();
