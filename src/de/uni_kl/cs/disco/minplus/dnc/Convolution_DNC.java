@@ -288,7 +288,7 @@ public abstract class Convolution_DNC {
             return zero_arrival;
         }
 
-        ArrivalCurve zero_delay_infinite_burst = (ArrivalCurve) CurvePwAffine.getFactory()
+        Curve zero_delay_infinite_burst = CurvePwAffine.getFactory()
                 .createZeroDelayInfiniteBurst();
         if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
             return arrival_curve_2.copy();
