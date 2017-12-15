@@ -42,7 +42,7 @@ public class DelayBound {
         if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
             return Num.getFactory().createZero();
         }
-        if (service_curve.getDelayedInfiniteBurst_Property()) {
+        if (service_curve.isDelayedInfiniteBurst()) {
             // Assumption: the arrival curve does not have an initial latency.
             // Otherwise its sub-additive closure would be zero, i.e., the arrival curve
             // would not be sensible.

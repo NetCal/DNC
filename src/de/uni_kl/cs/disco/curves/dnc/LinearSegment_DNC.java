@@ -37,7 +37,7 @@ import de.uni_kl.cs.disco.numbers.Num;
  * point (<code>x0</code>, <code>y0</code>) and continues to the right with
  * slope <code>grad</code>. If <code>leftopen</code> is <code>true</code>, the
  * point (<code>x0</code>,<code>y0</code>) is excluded from the segment,
- * otherwise is is included.
+ * otherwise is included.
  */
 public class LinearSegment_DNC implements LinearSegment {
     /**

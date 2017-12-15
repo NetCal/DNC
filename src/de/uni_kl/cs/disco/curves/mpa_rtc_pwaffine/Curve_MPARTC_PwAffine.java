@@ -180,11 +180,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
         is_rate_latency = false;
         rate_latencies = new LinkedList<Curve_MPARTC_PwAffine>();
     }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
+    
     /**
      * Returns a copy of this instance.
      *
@@ -214,9 +210,9 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
                 this.token_buckets.add(((Curve_MPARTC_PwAffine) curve).token_buckets.get(i).copy());
             }
 
-            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
-            this.is_rate_latency = ((CurvePwAffine) curve).getRL_Property();
-            this.is_token_bucket = ((CurvePwAffine) curve).getTB_Property();
+            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).isDelayedInfiniteBurst();
+            this.is_rate_latency = ((CurvePwAffine) curve).isRateLatency();
+            this.is_token_bucket = ((CurvePwAffine) curve).isTokenBucket();
         } else {
             SegmentList segList_rtc = new SegmentList();
             LinearSegment seg_tmp;
@@ -574,7 +570,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     // Burst delay
-    public boolean getDelayedInfiniteBurst_Property() {
+    public boolean isDelayedInfiniteBurst() {
         return is_delayed_infinite_burst;
     }
 
@@ -582,18 +578,16 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     // Curve manipulation
     // ------------------------------------------------------------
 
-    // Rate latency
-    public boolean getRL_Property() {
-        decomposeIntoRateLatencies();
-        return is_rate_latency;
-    }
-
     // ------------------------------------------------------------
     // Specific curve shapes
     // ------------------------------------------------------------
 
-    @Override
-    public void setRL_Property(boolean is_rate_latency) {
+    public boolean isRateLatency() {
+        decomposeIntoRateLatencies();
+        return is_rate_latency;
+    }
+    
+    public void setRateLateny(boolean is_rate_latency) {
         this.is_rate_latency = is_rate_latency;
     }
 
@@ -647,13 +641,13 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
     }
 
     // Token bucket
-    public boolean getTB_Property() {
+    public boolean isTokenBucket() {
         decomposeIntoTokenBuckets();
         return is_token_bucket;
     }
 
     @Override
-    public void setTB_Property(boolean is_token_bucket) {
+    public void setTokenBucket(boolean is_token_bucket) {
         this.is_token_bucket = is_token_bucket;
     }
 

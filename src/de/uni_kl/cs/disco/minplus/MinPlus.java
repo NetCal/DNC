@@ -383,11 +383,11 @@ public abstract class MinPlus {
                                                      de.uni_kl.cs.disco.curves.Curve curve_2) {
         int return_value = 0;
 
-        if (curve_1.getDelayedInfiniteBurst_Property()) {
+        if (curve_1.isDelayedInfiniteBurst()) {
             return_value += 1;
         }
 
-        if (curve_2.getDelayedInfiniteBurst_Property()) {
+        if (curve_2.isDelayedInfiniteBurst()) {
             return_value += 2;
         }
 

@@ -135,7 +135,7 @@ public abstract class Deconvolution_DNC {
         }
 
         if (service_curve.equals(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst())
-                || (service_curve.getDelayedInfiniteBurst_Property() && service_curve.getLatency().doubleValue() == 0.0)
+                || (service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0)
                 || (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals()))) {
             return arrival_curve.copy();
         }

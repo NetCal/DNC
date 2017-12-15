@@ -66,7 +66,7 @@ public interface Curve {
     void removeSegment(int pos);
 
     // Curve properties
-    boolean getDelayedInfiniteBurst_Property();
+    boolean isDelayedInfiniteBurst();
 
     boolean isDiscontinuity(int pos);
 

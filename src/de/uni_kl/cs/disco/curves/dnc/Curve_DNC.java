@@ -96,15 +96,17 @@ public class Curve_DNC implements CurvePwAffine {
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
 
-    public boolean isIs_rate_latency() {
+    public boolean isRateLatency() {
+        decomposeIntoRateLatencies();
         return is_rate_latency;
     }
 
-    public boolean isIs_token_bucket() {
+    public boolean isTokenBucket() {
+        decomposeIntoTokenBuckets();
         return is_token_bucket;
     }
 
-    public boolean isHas_rate_latency_meta_info() {
+    public boolean hasRateLatencyMetaInfo() {
         return has_rate_latency_meta_info;
     }
 
@@ -132,7 +134,7 @@ public class Curve_DNC implements CurvePwAffine {
         this.rate_latencies = tmp;
     }
 
-    public boolean isHas_token_bucket_meta_info() {
+    public boolean hasTokenBucketMetaInfo() {
         return has_token_bucket_meta_info;
     }
 
@@ -263,9 +265,9 @@ public class Curve_DNC implements CurvePwAffine {
             this.has_token_bucket_meta_info = ((Curve_DNC) curve).has_token_bucket_meta_info;
             this.token_buckets = ((Curve_DNC) curve).token_buckets;
 
-            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).getDelayedInfiniteBurst_Property();
-            this.is_rate_latency = ((CurvePwAffine) curve).getRL_Property();
-            this.is_token_bucket = ((CurvePwAffine) curve).getTB_Property();
+            this.is_delayed_infinite_burst = ((CurvePwAffine) curve).isDelayedInfiniteBurst();
+            this.is_rate_latency = ((CurvePwAffine) curve).isRateLatency();
+            this.is_token_bucket = ((CurvePwAffine) curve).isTokenBucket();
         } else {
             for (int i = 0; i < curve.getSegmentCount(); i++) {
                 segments[i] = new LinearSegment_DNC(curve.getSegment(i));
@@ -274,11 +276,7 @@ public class Curve_DNC implements CurvePwAffine {
 
         setSegments(segments);
     }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
+    
     /**
      * Starting at 0.
      */
@@ -877,7 +875,7 @@ public class Curve_DNC implements CurvePwAffine {
     // Specific curve shapes
     // ------------------------------------------------------------
     // Burst delay
-    public boolean getDelayedInfiniteBurst_Property() {
+    public boolean isDelayedInfiniteBurst() {
         return is_delayed_infinite_burst;
     }
 
@@ -887,7 +885,7 @@ public class Curve_DNC implements CurvePwAffine {
         return is_rate_latency;
     }
 
-    public void setRL_Property(boolean is_rate_latency) {
+    public void setRateLateny(boolean is_rate_latency) {
         this.is_rate_latency = is_rate_latency;
     }
 
@@ -952,13 +950,7 @@ public class Curve_DNC implements CurvePwAffine {
         has_rate_latency_meta_info = true;
     }
 
-    // Token bucket
-    public boolean getTB_Property() {
-        decomposeIntoTokenBuckets();
-        return is_token_bucket;
-    }
-
-    public void setTB_Property(boolean is_token_bucket) {
+    public void setTokenBucket(boolean is_token_bucket) {
         this.is_token_bucket = is_token_bucket;
     }
 

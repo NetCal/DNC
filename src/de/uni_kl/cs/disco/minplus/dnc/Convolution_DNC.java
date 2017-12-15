@@ -113,19 +113,19 @@ public abstract class Convolution_DNC {
         }
 
         // Shortcut: only go here if there is at least one delayed infinite burst
-        if (service_curve_1.getDelayedInfiniteBurst_Property() || service_curve_2.getDelayedInfiniteBurst_Property()) {
-            if (service_curve_1.getDelayedInfiniteBurst_Property()
-                    && service_curve_2.getDelayedInfiniteBurst_Property()) {
+        if (service_curve_1.isDelayedInfiniteBurst() || service_curve_2.isDelayedInfiniteBurst()) {
+            if (service_curve_1.isDelayedInfiniteBurst()
+                    && service_curve_2.isDelayedInfiniteBurst()) {
                 return CurvePwAffine.getFactory().createDelayedInfiniteBurst(
                         Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
             }
 
-            if (service_curve_1.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
+            if (service_curve_1.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
                 return CurvePwAffine.getFactory().createServiceCurve(
                         CurvePwAffine.shiftRight(service_curve_2, service_curve_1.getLatency()));
             }
 
-            if (service_curve_2.getDelayedInfiniteBurst_Property()) { // service_curve_2 is not a delayed infinite burst
+            if (service_curve_2.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
                 return CurvePwAffine.getFactory().createServiceCurve(
                         CurvePwAffine.shiftRight(service_curve_1, service_curve_2.getLatency()));
             }

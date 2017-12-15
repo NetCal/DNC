@@ -673,11 +673,11 @@ public interface CurvePwAffine extends Curve {
         }
 
         c.setTB_MetaInfo(false);
-        c.setTB_Property(false);
+        c.setTokenBucket(false);
         c.setTB_Components(new LinkedList<>());
 
         c.setRL_MetaInfo(false);
-        c.setRL_Property(false);
+        c.setRateLateny(false);
         c.setRL_Components(new LinkedList<>());
     }
 
@@ -700,14 +700,10 @@ public interface CurvePwAffine extends Curve {
     // Curve function values
     Num getUltAffineRate();
 
-    // (Composition of) Rate latency
-    boolean getRL_Property();
+    // (Composition of) Rate latencies
+    boolean isRateLatency();
 
-    void setRL_Property(boolean is_rate_latency);
-
-    // ------------------------------------------------------------------------------
-    // Arrival Curve Constructors
-    // ------------------------------------------------------------------------------
+    void setRateLateny(boolean is_rate_latency);
 
     void setRL_MetaInfo(boolean has_rl_meta_info);
 
@@ -719,20 +715,16 @@ public interface CurvePwAffine extends Curve {
 
     void setRL_Components(List<CurvePwAffine> rate_latencies);
 
-    // (Composition of) Token bucket
-    boolean getTB_Property();
+    // (Composition of) Token buckets
+    boolean isTokenBucket();
 
-    void setTB_Property(boolean is_token_bucket);
+    void setTokenBucket(boolean is_token_bucket);
 
     void setTB_MetaInfo(boolean has_tb_meta_info);
 
     Num getTB_Burst();
 
     int getTB_ComponentCount();
-
-    // ------------------------------------------------------------------------------
-    // Maximum Service Curve Constructors
-    // ------------------------------------------------------------------------------
 
     List<CurvePwAffine> getTB_Components();
 
