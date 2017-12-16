@@ -37,54 +37,54 @@ import de.uni_kl.cs.disco.network.NetworkFactory;
 import de.uni_kl.cs.disco.network.Server;
 
 public class S_1SC_10F_10AC_Network implements NetworkFactory {
-    private static final int sc_R = 10;
-    private static final int sc_T = 10;
-    protected Server s0;
-    protected Flow f0, f6;
-    private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
-    private Flow[] flows = new Flow[10];
-    private ArrivalCurve[] arrival_curves = new ArrivalCurve[10];
-    private Network network;
+	private static final int sc_R = 10;
+	private static final int sc_T = 10;
+	protected Server s0;
+	protected Flow f0, f6;
+	private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
+	private Flow[] flows = new Flow[10];
+	private ArrivalCurve[] arrival_curves = new ArrivalCurve[10];
+	private Network network;
 
-    public S_1SC_10F_10AC_Network() {
-        network = createNetwork();
-    }
+	public S_1SC_10F_10AC_Network() {
+		network = createNetwork();
+	}
 
-    public Network getNetwork() {
-        return network;
-    }
+	public Network getNetwork() {
+		return network;
+	}
 
-    public Network createNetwork() {
-        network = new Network();
+	public Network createNetwork() {
+		network = new Network();
 
-        s0 = network.addServer(service_curve);
-        s0.setUseGamma(false);
-        s0.setUseExtraGamma(false);
+		s0 = network.addServer(service_curve);
+		s0.setUseGamma(false);
+		s0.setUseExtraGamma(false);
 
-        try {
-            for (int i = 1; i <= 10; i++) {
-                arrival_curves[i - 1] = CurvePwAffine.getFactory().createTokenBucket(i * 0.1, i);
-                flows[i - 1] = network.addFlow(arrival_curves[i - 1], s0);
-            }
-            f0 = flows[0];
-            f6 = flows[6];
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+		try {
+			for (int i = 1; i <= 10; i++) {
+				arrival_curves[i - 1] = CurvePwAffine.getFactory().createTokenBucket(i * 0.1, i);
+				flows[i - 1] = network.addFlow(arrival_curves[i - 1], s0);
+			}
+			f0 = flows[0];
+			f6 = flows[6];
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
-        return network;
-    }
+		return network;
+	}
 
-    public void reinitializeCurves() {
-        service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
-        for (Server server : network.getServers()) {
-            server.setServiceCurve(service_curve);
-        }
+	public void reinitializeCurves() {
+		service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
+		for (Server server : network.getServers()) {
+			server.setServiceCurve(service_curve);
+		}
 
-        for (int i = 1; i <= 10; i++) {
-            arrival_curves[i - 1] = CurvePwAffine.getFactory().createTokenBucket(i * 0.1, i);
-            flows[i - 1].setArrivalCurve(arrival_curves[i - 1]);
-        }
-    }
+		for (int i = 1; i <= 10; i++) {
+			arrival_curves[i - 1] = CurvePwAffine.getFactory().createTokenBucket(i * 0.1, i);
+			flows[i - 1].setArrivalCurve(arrival_curves[i - 1]);
+		}
+	}
 }

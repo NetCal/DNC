@@ -30,7 +30,7 @@ package de.uni_kl.cs.disco.tests;
 
 import org.junit.platform.suite.api.SelectClasses;
 
-@SelectClasses({S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class})
+@SelectClasses({ S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class })
 
 public class S_Tests {
 }

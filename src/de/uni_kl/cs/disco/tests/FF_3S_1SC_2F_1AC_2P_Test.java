@@ -48,12 +48,12 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	@BeforeAll
 	private void createNetworkFactory() {
 		network_factory = new FF_3S_1SC_2F_1AC_2P_Network();
-		
+
 		network_factory.createNetwork();
-		f0 = ((FF_3S_1SC_2F_1AC_2P_Network)network_factory).f0;
-		f1 = ((FF_3S_1SC_2F_1AC_2P_Network)network_factory).f1;
+		f0 = ((FF_3S_1SC_2F_1AC_2P_Network) network_factory).f0;
+		f1 = ((FF_3S_1SC_2F_1AC_2P_Network) network_factory).f1;
 	}
-	
+
 	@Override
 	protected void initializeBounds() {
 		expected_results.clear();

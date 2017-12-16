@@ -28,7 +28,6 @@
 
 package de.uni_kl.cs.disco.tests;
 
-import de.uni_kl.cs.disco.nc.operations.OperationDispatcher;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.Analysis.Analyses;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
@@ -38,6 +37,7 @@ import de.uni_kl.cs.disco.nc.CalculatorConfig;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
+import de.uni_kl.cs.disco.nc.bounds.Bound;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.network.NetworkFactory;
@@ -47,7 +47,6 @@ import de.uni_kl.cs.disco.numbers.Num;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.fail;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,9 +71,11 @@ public abstract class DncTest {
 			CalculatorConfig.getInstance().disableAllChecks();
 		}
 
-		// reinitialize the network and the bounds in case number or curve backend changed
-		if(CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
-				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl()));
+		// reinitialize the network and the bounds in case number or curve backend
+		// changed
+		if (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
+				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl()))
+			;
 		{
 			network_factory.reinitializeCurves();
 			initializeBounds();
@@ -251,14 +252,13 @@ public abstract class DncTest {
 		Num backlog_bound_TBRL_HOMO = null;
 
 		try {
-			backlog_bound_TBRL = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
+			backlog_bound_TBRL = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
-			backlog_bound_TBRL_CONV = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
+			backlog_bound_TBRL_CONV = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
-			backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory()
-					.create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree, flow_of_interest.getSink(),
-							AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
-			backlog_bound_TBRL_HOMO = Num.getFactory().create(OperationDispatcher.bl_derivePmooSinkTreeTbRl(sink_tree,
+			backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
+					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
+			backlog_bound_TBRL_HOMO = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
 					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
 		} catch (Exception e) {
 			e.printStackTrace();

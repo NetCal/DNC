@@ -30,7 +30,7 @@ package de.uni_kl.cs.disco.tests;
 
 import org.junit.platform.suite.api.SelectClasses;
 
-@SelectClasses({FF_3S_1SC_2F_1AC_2P_Test.class, FF_4S_1SC_3F_1AC_3P_Test.class, FF_4S_1SC_4F_1AC_4P_Test.class})
+@SelectClasses({ FF_3S_1SC_2F_1AC_2P_Test.class, FF_4S_1SC_3F_1AC_3P_Test.class, FF_4S_1SC_4F_1AC_4P_Test.class })
 
 public class FF_Tests {
 }

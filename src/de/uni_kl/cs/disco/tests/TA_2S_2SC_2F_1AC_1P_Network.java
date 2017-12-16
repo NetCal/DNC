@@ -37,66 +37,66 @@ import de.uni_kl.cs.disco.network.NetworkFactory;
 import de.uni_kl.cs.disco.network.Server;
 
 public class TA_2S_2SC_2F_1AC_1P_Network implements NetworkFactory {
-    private static final int sc_R_0 = 10;
-    private static final int sc_T_0 = 10;
-    private static final int sc_R_1 = 6;
-    private static final int sc_T_1 = 6;
-    private static final double ac_r = 2.5;
-    private static final double ac_b = 12.5;
-    protected Server s0, s1;
-    protected Flow f0, f1;
-    private ServiceCurve service_curve_0 = CurvePwAffine.getFactory().createRateLatency(sc_R_0, sc_T_0);
-    private ServiceCurve service_curve_1 = CurvePwAffine.getFactory().createRateLatency(sc_R_1, sc_T_1);
-    private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
-    private Network network;
+	private static final int sc_R_0 = 10;
+	private static final int sc_T_0 = 10;
+	private static final int sc_R_1 = 6;
+	private static final int sc_T_1 = 6;
+	private static final double ac_r = 2.5;
+	private static final double ac_b = 12.5;
+	protected Server s0, s1;
+	protected Flow f0, f1;
+	private ServiceCurve service_curve_0 = CurvePwAffine.getFactory().createRateLatency(sc_R_0, sc_T_0);
+	private ServiceCurve service_curve_1 = CurvePwAffine.getFactory().createRateLatency(sc_R_1, sc_T_1);
+	private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
+	private Network network;
 
-    public TA_2S_2SC_2F_1AC_1P_Network() {
-        network = createNetwork();
-    }
+	public TA_2S_2SC_2F_1AC_1P_Network() {
+		network = createNetwork();
+	}
 
-    public Network getNetwork() {
-        return network;
-    }
+	public Network getNetwork() {
+		return network;
+	}
 
-    public Network createNetwork() {
-        network = new Network();
+	public Network createNetwork() {
+		network = new Network();
 
-        s0 = network.addServer(service_curve_0);
-        s0.setUseGamma(false);
-        s0.setUseExtraGamma(false);
+		s0 = network.addServer(service_curve_0);
+		s0.setUseGamma(false);
+		s0.setUseExtraGamma(false);
 
-        s1 = network.addServer(service_curve_1);
-        s1.setUseGamma(false);
-        s1.setUseExtraGamma(false);
+		s1 = network.addServer(service_curve_1);
+		s1.setUseGamma(false);
+		s1.setUseExtraGamma(false);
 
-        try {
-            network.addLink(s0, s1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+		try {
+			network.addLink(s0, s1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
-        try {
-            f0 = network.addFlow(arrival_curve, s0, s1);
-            f1 = network.addFlow(arrival_curve, s0, s1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+		try {
+			f0 = network.addFlow(arrival_curve, s0, s1);
+			f1 = network.addFlow(arrival_curve, s0, s1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
-        return network;
-    }
+		return network;
+	}
 
-    public void reinitializeCurves() {
-        service_curve_0 = CurvePwAffine.getFactory().createRateLatency(sc_R_0, sc_T_0);
-        s0.setServiceCurve(service_curve_0);
+	public void reinitializeCurves() {
+		service_curve_0 = CurvePwAffine.getFactory().createRateLatency(sc_R_0, sc_T_0);
+		s0.setServiceCurve(service_curve_0);
 
-        service_curve_1 = CurvePwAffine.getFactory().createRateLatency(sc_R_1, sc_T_1);
-        s1.setServiceCurve(service_curve_1);
+		service_curve_1 = CurvePwAffine.getFactory().createRateLatency(sc_R_1, sc_T_1);
+		s1.setServiceCurve(service_curve_1);
 
-        arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
-        for (Flow flow : network.getFlows()) {
-            flow.setArrivalCurve(arrival_curve);
-        }
-    }
+		arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
+		for (Flow flow : network.getFlows()) {
+			flow.setArrivalCurve(arrival_curve);
+		}
+	}
 }
