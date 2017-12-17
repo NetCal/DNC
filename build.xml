@@ -1,18 +1,19 @@
 <project default="compile">
     <path id="classpath">
         <pathelement location="lib/commons-math3-3.6.1.jar"/>
-        <pathelement location="lib/ant-junit.jar"/>
-        <pathelement location="lib/junit-4.12.jar"/>
+        <pathelement location="lib/junit-platform-console-1.0.2.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.1.0-20171119.171524-179.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.1.0-20171119.171530-179.jar"/>
+        <pathelement location="lib/junit-platform-suite-api-1.1.0-20171208.130928-198.jar"/>
+        <pathelement location="lib/apiguardian-api-1.0.0.jar"/>
         <pathelement location="lib/rtc.jar"/>
-        <pathelement location="lib/java-hamcrest-2.0.0.0.jar"/>
-        <pathelement location="lib/findbugs.jar"/>
     </path>
 
     <target name="compile">
         <mkdir dir="out"/>
-        <javac srcdir="src" destdir="out" includeantruntime="false">
+        <javac srcdir="src" destdir="bin" includeantruntime="false">
             <classpath refid="classpath"/>
-            <exclude name="**/*OutputTestNetworkSaved*"/>
+            <exclude name="**/*OutputTest*"/>
         </javac>
     </target>
 
@@ -20,14 +21,15 @@
         <junit printsummary="on" haltonfailure="no" fork="true">
             <classpath>
                 <path refid="classpath"/>
-                <pathelement location="out"/>
+                <pathelement location="bin"/>
             </classpath>
             <formatter type="brief" usefile="false"/>
             <batchtest>
-                <fileset dir="src" includes="**/DncTests.java">
+                <fileset dir="src" includes="**/All_Tests.java">
                     <exclude name="**/*Config*"/>
+                    <exclude name="**/*Arguments*"/>
                     <exclude name="**/*Results*"/>
-                    <exclude name="**/*TestNetwork*"/>
+                    <exclude name="**/*Network*"/>
                 </fileset>
             </batchtest>
         </junit>
