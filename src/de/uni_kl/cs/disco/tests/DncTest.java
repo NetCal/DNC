@@ -55,7 +55,6 @@ public abstract class DncTest {
 	protected Network network;
 	protected DncTestConfig test_config;
 	protected DncTestResults expected_results;
-	protected boolean reinitilize_test = true;
 
 	@SuppressWarnings("unused")
 	private DncTest() {
@@ -82,22 +81,10 @@ public abstract class DncTest {
 		}
 
 		// reinitialize the network and the bounds
-		// in case number or curve backend changed
-
-		// TODO Selective reinitialization currently causes problems due to the need for
-		// initializeFlows() after the network was reinitialized and before
-		// initializeBounds()
-		// if (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
-		// || CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl())) {
-
-		// reinitialize
 		network_factory.reinitializeCurves();
 		network = network_factory.createNetwork();
 		initializeFlows();
-
-		// Changed Curve implementation does actually not affect the bounds
 		initializeBounds();
-		// }
 	}
 
 	public void printSetting() {
