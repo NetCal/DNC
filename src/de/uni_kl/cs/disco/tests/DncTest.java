@@ -47,9 +47,8 @@ import de.uni_kl.cs.disco.numbers.Num;
 
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class DncTest {
 	protected NetworkFactory network_factory;
