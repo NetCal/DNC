@@ -42,18 +42,16 @@ public class TR_7S_1SC_3F_1AC_3P_Test extends DncTest {
 	private DncTestResults expected_results_sinktree = new DncTestResults();
 	private Flow f0, f1, f2;
 
-	private TR_7S_1SC_3F_1AC_3P_Test(DncTestConfig test_config) {
+	private TR_7S_1SC_3F_1AC_3P_Test() {
 		super(new TR_7S_1SC_3F_1AC_3P_Network());
 	}
 
-	@Override
 	protected void initializeFlows() {
 		f0 = ((TR_7S_1SC_3F_1AC_3P_Network) network_factory).f0;
 		f1 = ((TR_7S_1SC_3F_1AC_3P_Network) network_factory).f1;
 		f2 = ((TR_7S_1SC_3F_1AC_3P_Network) network_factory).f2;
 	}
 
-	@Override
 	protected void initializeBounds() {
 		expected_results.clear();
 

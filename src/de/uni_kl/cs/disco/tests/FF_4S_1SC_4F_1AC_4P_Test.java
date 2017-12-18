@@ -40,14 +40,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
-	protected DncTestResults expected_results_PMOOAB = new DncTestResults();
+	private DncTestResults expected_results_PMOOAB = new DncTestResults();
 	private Flow f0, f1, f2, f3;
 
-	private FF_4S_1SC_4F_1AC_4P_Test(DncTestConfig test_config) {
+	private FF_4S_1SC_4F_1AC_4P_Test() {
 		super(new FF_4S_1SC_4F_1AC_4P_Network());
 	}
 
-	@Override
 	protected void initializeFlows() {
 		f0 = ((FF_4S_1SC_4F_1AC_4P_Network) network_factory).f0;
 		f1 = ((FF_4S_1SC_4F_1AC_4P_Network) network_factory).f1;
@@ -55,7 +54,6 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 		f3 = ((FF_4S_1SC_4F_1AC_4P_Network) network_factory).f3;
 	}
 
-	@Override
 	protected void initializeBounds() {
 		expected_results.clear();
 

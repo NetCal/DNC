@@ -42,11 +42,10 @@ public class TA_2S_1SC_1F_1AC_1P_Test extends DncTest {
 	private DncTestResults expected_results_sinktree = new DncTestResults();
 	private Flow f0;
 
-	private TA_2S_1SC_1F_1AC_1P_Test(DncTestConfig test_config) {
+	private TA_2S_1SC_1F_1AC_1P_Test() {
 		super(new TA_2S_1SC_1F_1AC_1P_Network());
 	}
 
-	@Override
 	protected void initializeFlows() {
 		f0 = ((TA_2S_1SC_1F_1AC_1P_Network) network_factory).f0;
 	}
