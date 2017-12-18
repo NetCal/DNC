@@ -118,10 +118,10 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 					factory.create(10625, 12));
 
 			// PMOO
-			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(2095, 12),
-					factory.create(10625, 12));
-			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, factory.create(875, 4),
+			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(875, 4),
 					factory.create(4425, 4));
+			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, factory.create(2095, 12),
+					factory.create(10625, 12));
 		}
 	}
 
