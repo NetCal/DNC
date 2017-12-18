@@ -28,8 +28,11 @@
 
 package de.uni_kl.cs.disco.tests;
 
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectClasses;
+import org.junit.runner.RunWith;
 
+@RunWith(JUnitPlatform.class)
 @SelectClasses({ TR_3S_1SC_2F_1AC_2P_Test.class, TR_7S_1SC_3F_1AC_3P_Test.class })
 
 public class TR_Tests {
