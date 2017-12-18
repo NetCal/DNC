@@ -34,32 +34,19 @@ import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.disco.network.Flow;
-import de.uni_kl.cs.disco.network.Network;
 import de.uni_kl.cs.disco.numbers.Num;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
-	protected static final DncTestResults expected_results = new DncTestResults();
 	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
-	private static TR_3S_1SC_2F_1AC_2P_Network test_network;
-	private static Network network;
 	private static Flow f0, f1;
 
-	public TR_3S_1SC_2F_1AC_2P_Test(DncTestConfig test_config) throws Exception {
-	}
+	private TR_3S_1SC_2F_1AC_2P_Test(DncTestConfig test_config) {
+		super(new TR_3S_1SC_2F_1AC_2P_Network());
 
-	@BeforeAll
-	public void createNetwork() {
-		test_network = new TR_3S_1SC_2F_1AC_2P_Network();
-		f0 = test_network.f0;
-		f1 = test_network.f1;
-
-		network = test_network.getNetwork();
-
-		initializeBounds();
+		f0 = ((TR_3S_1SC_2F_1AC_2P_Network) network_factory).f0;
+		f1 = ((TR_3S_1SC_2F_1AC_2P_Network) network_factory).f1;
 	}
 
 	@Override
@@ -99,71 +86,69 @@ public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
 		expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, factory.create(450));
 	}
 
-	@BeforeEach
-	public void reinitNetwork() {
-		if (!super.reinitilize_test) {
-			return;
-		}
-
-		test_network.reinitializeCurves();
-		initializeBounds();
-	}
-
 	// --------------------Flow 0--------------------
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f0_tfa() {
+	public void f0_tfa(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setMux(network.getServers());
-		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
+		runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f0_sfa() {
+	public void f0_sfa(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setMux(network.getServers());
-		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f0);
+		runSFAtest(new SeparateFlowAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f0_pmoo_arbMux() {
+	public void f0_pmoo_arbMux(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
-		super.runPMOOtest(new PmooAnalysis(network, test_config), f0);
+		runPMOOtest(new PmooAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f0_sinktree_arbMux() {
+	public void f0_sinktree_arbMux(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
-		super.runSinkTreePMOOtest(network, f0);
+		runSinkTreePMOOtest(network, f0);
 	}
 
 	// --------------------Flow 1--------------------
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f1_tfa() {
+	public void f1_tfa(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setMux(network.getServers());
-		super.runTFAtest(new TotalFlowAnalysis(network, test_config), f1);
+		runTFAtest(new TotalFlowAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f1_sfa() {
+	public void f1_sfa(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setMux(network.getServers());
-		super.runSFAtest(new SeparateFlowAnalysis(network, test_config), f1);
+		runSFAtest(new SeparateFlowAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f1_pmoo_arbMux() {
+	public void f1_pmoo_arbMux(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
-		super.runPMOOtest(new PmooAnalysis(network, test_config), f1);
+		runPMOOtest(new PmooAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
-	public void f1_sinktree_arbMux() {
+	public void f1_sinktree_arbMux(DncTestConfig test_config) {
+		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
-		super.runSinkTreePMOOtest(network, f1);
+		runSinkTreePMOOtest(network, f1);
 	}
 }

@@ -52,11 +52,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class DncTest {
 	protected NetworkFactory network_factory;
+	protected Network network;
 	protected DncTestConfig test_config;
 	protected DncTestResults expected_results;
 	protected boolean reinitilize_test = true;
 
-	protected DncTest() {
+	@SuppressWarnings("unused")
+	private DncTest() {
+	}
+
+	protected DncTest(NetworkFactory network_factory) {
+		this.network_factory = network_factory;
+		network = network_factory.createNetwork();
+		expected_results = new DncTestResults();
 	}
 
 	protected abstract void initializeBounds();
@@ -71,12 +79,10 @@ public abstract class DncTest {
 			CalculatorConfig.getInstance().disableAllChecks();
 		}
 
-		// reinitialize the network and the bounds in case number or curve backend
-		// changed
+		// reinitialize the network and the bounds
+		// in case number or curve backend changed
 		if (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
-				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl()))
-			;
-		{
+				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl())) {
 			network_factory.reinitializeCurves();
 			initializeBounds();
 			// set to new backends
