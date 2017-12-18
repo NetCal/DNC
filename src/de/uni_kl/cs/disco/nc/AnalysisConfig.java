@@ -59,6 +59,7 @@ public class AnalysisConfig {
         this.multiplexing_discipline = multiplexing_discipline;
         this.use_gamma = use_gamma;
         this.use_extra_gamma = use_extra_gamma;
+        this.arrival_bound_methods.clear();
         this.arrival_bound_methods.addAll(arrival_bound_methods);
 
         this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;

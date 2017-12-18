@@ -134,6 +134,7 @@ public class DncTestArguments implements ArgumentsProvider {
 						test_configurations.add(new DncTestConfig(single_ab, false, true, true, mux, true, num, curve));
 					}
 				}
+				
 				for (Set<ArrivalBoundMethod> single_ab : single_abs_arbMux) {
 					test_configurations.add(new DncTestConfig(single_ab, false, false, false,
 							AnalysisConfig.Multiplexing.ARBITRARY, false, num, curve));

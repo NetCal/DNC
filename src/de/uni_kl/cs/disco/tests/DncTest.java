@@ -31,6 +31,7 @@ package de.uni_kl.cs.disco.tests;
 import de.uni_kl.cs.disco.nc.Analysis;
 import de.uni_kl.cs.disco.nc.Analysis.Analyses;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
+import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.disco.nc.AnalysisResults;
 import de.uni_kl.cs.disco.nc.CalculatorConfig;
@@ -255,13 +256,13 @@ public abstract class DncTest {
 
 		try {
 			backlog_bound_TBRL = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
-					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
+					flow_of_interest.getSink(), ArrivalBoundMethod.PMOO_SINKTREE_TBRL));
 			backlog_bound_TBRL_CONV = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
-					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
+					flow_of_interest.getSink(), ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV));
 			backlog_bound_TBRL_CONV_TBRL_DECONV = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
-					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
+					flow_of_interest.getSink(), ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV));
 			backlog_bound_TBRL_HOMO = Num.getFactory().create(Bound.backlogPmooSinkTreeTbRl(sink_tree,
-					flow_of_interest.getSink(), AnalysisConfig.ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
+					flow_of_interest.getSink(), ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Analysis failed");

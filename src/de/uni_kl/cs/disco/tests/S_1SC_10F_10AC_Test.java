@@ -29,6 +29,7 @@
 package de.uni_kl.cs.disco.tests;
 
 import de.uni_kl.cs.disco.nc.Analysis.Analyses;
+import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.disco.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.disco.nc.analyses.SeparateFlowAnalysis;
@@ -39,7 +40,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class S_1SC_10F_10AC_Test extends DncTest {
-	private DncTestResults expected_results_sinktree = new DncTestResults();
 	private Flow f0, f6;
 
 	private S_1SC_10F_10AC_Test() {
@@ -81,10 +81,13 @@ public class S_1SC_10F_10AC_Test extends DncTest {
 				factory.create(350, 13));
 
 		// Sink-Tree PMOO at sink
-		expected_results_sinktree.clear();
-
-		expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, factory.create(110));
-		expected_results_sinktree.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f6, null, factory.create(110));
+		if (test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL)
+				|| test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV)
+				|| test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV)
+				|| test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO)) {
+			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, factory.create(110));
+			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f6, null, factory.create(110));
+		}
 	}
 
 	// --------------------Flow 0--------------------
@@ -115,6 +118,7 @@ public class S_1SC_10F_10AC_Test extends DncTest {
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f0_sinktree_arbMux(DncTestConfig test_config) {
+		test_config.setArrivalBoundMethod(ArrivalBoundMethod.PMOO_SINKTREE_TBRL);
 		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
 		runSinkTreePMOOtest(network, f0);
@@ -148,6 +152,7 @@ public class S_1SC_10F_10AC_Test extends DncTest {
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
 	public void f6_sinktree_arbMux(DncTestConfig test_config) {
+		test_config.setArrivalBoundMethod(ArrivalBoundMethod.PMOO_SINKTREE_TBRL);
 		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
 		runSinkTreePMOOtest(network, f6);

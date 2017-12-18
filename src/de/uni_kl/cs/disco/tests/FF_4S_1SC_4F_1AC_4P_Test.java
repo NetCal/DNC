@@ -40,7 +40,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
-	private DncTestResults expected_results_PMOOAB = new DncTestResults();
 	private Flow f0, f1, f2, f3;
 
 	private FF_4S_1SC_4F_1AC_4P_Test() {
@@ -102,27 +101,28 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 				factory.create(2900, 3));
 
 		// PMOO Arrival Bounding yields worse cross-traffic arrivals!
-		expected_results_PMOOAB.clear();
+		if (test_config.arrivalBoundMethods().size() == 1
+				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
+			// TFA
+			expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(2765, 6),
+					factory.create(8525, 6));
+			expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, factory.create(2395, 6),
+					factory.create(8525, 6));
+			expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f3, factory.create(1400, 3),
+					factory.create(8525, 6));
 
-		// TFA
-		expected_results_PMOOAB.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(2765, 6),
-				factory.create(8525, 6));
-		expected_results_PMOOAB.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, factory.create(2395, 6),
-				factory.create(8525, 6));
-		expected_results_PMOOAB.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f3, factory.create(1400, 3),
-				factory.create(8525, 6));
+			// SFA
+			expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(2345, 12),
+					factory.create(11875, 12));
+			expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, factory.create(2095, 12),
+					factory.create(10625, 12));
 
-		// SFA
-		expected_results_PMOOAB.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(2345, 12),
-				factory.create(11875, 12));
-		expected_results_PMOOAB.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, factory.create(2095, 12),
-				factory.create(10625, 12));
-
-		// PMOO
-		expected_results_PMOOAB.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(2095, 12),
-				factory.create(10625, 12));
-		expected_results_PMOOAB.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, factory.create(875, 4),
-				factory.create(4425, 4));
+			// PMOO
+			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(2095, 12),
+					factory.create(10625, 12));
+			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, factory.create(875, 4),
+					factory.create(4425, 4));
+		}
 	}
 
 	// --------------------Flow 0--------------------
@@ -131,14 +131,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f0_tfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) { // Cannot be FIFO multiplexing
-			// due to PMOO
-			runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
-		} else {
-			runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
-		}
+		runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
@@ -146,13 +139,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f0_sfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
-			runSFAtest(new SeparateFlowAnalysis(network, test_config), f0);
-		} else {
-			runSFAtest(new SeparateFlowAnalysis(network, test_config), f0);
-		}
+		runSFAtest(new SeparateFlowAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
@@ -160,13 +147,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f0_pmoo_arbMux(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
-			runPMOOtest(new PmooAnalysis(network, test_config), f0);
-		} else {
-			runPMOOtest(new PmooAnalysis(network, test_config), f0);
-		}
+		runPMOOtest(new PmooAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
@@ -191,13 +172,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f1_tfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
-			runTFAtest(new TotalFlowAnalysis(network, test_config), f1);
-		} else {
-			runTFAtest(new TotalFlowAnalysis(network, test_config), f1);
-		}
+		runTFAtest(new TotalFlowAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
@@ -205,13 +180,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f1_sfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
-			runSFAtest(new SeparateFlowAnalysis(network, test_config), f1);
-		} else {
-			runSFAtest(new SeparateFlowAnalysis(network, test_config), f1);
-		}
+		runSFAtest(new SeparateFlowAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
@@ -219,13 +188,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f1_pmoo_arbMux(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setArbitraryMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
-			runPMOOtest(new PmooAnalysis(network, test_config), f1);
-		} else {
-			runPMOOtest(new PmooAnalysis(network, test_config), f1);
-		}
+		runPMOOtest(new PmooAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
@@ -291,13 +254,7 @@ public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
 	public void f3_tfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
-
-		if (test_config.arrivalBoundMethods().size() == 1
-				&& test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO)) {
-			runTFAtest(new TotalFlowAnalysis(network, test_config), f3);
-		} else {
-			runTFAtest(new TotalFlowAnalysis(network, test_config), f3);
-		}
+		runTFAtest(new TotalFlowAnalysis(network, test_config), f3);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
