@@ -37,6 +37,7 @@ import de.uni_kl.cs.disco.numbers.Num;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class DncTestResults {
 	private Map<Flow, AnalysisResults> tfa_bounds_arb;
@@ -60,7 +61,7 @@ public class DncTestResults {
 		sfa_bounds_fifo.clear();
 		pmoo_bounds_arb.clear();
 	}
-
+	
 	protected void setBounds(Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, Num delay, Num backlog) {
 		AnalysisResults bounds = new AnalysisResults(delay, backlog, null);
 
@@ -107,5 +108,45 @@ public class DncTestResults {
 		} else {
 			return bounded_analysis.getSecond().get(flow);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		 StringBuffer exp_results_str = new StringBuffer();
+		 
+		 for( Entry<Flow,AnalysisResults> tfa_bound : tfa_bounds_arb.entrySet() ) {
+			 exp_results_str.append( tfa_bound.getKey().getAlias() );
+			 exp_results_str.append( " TFA_ARB " );
+			 exp_results_str.append( tfa_bound.getValue().toString() );
+			 exp_results_str.append( "\n" );
+		 }
+		 for( Entry<Flow,AnalysisResults> tfa_bound : tfa_bounds_fifo.entrySet() ) {
+			 exp_results_str.append( tfa_bound.getKey().getAlias() );
+			 exp_results_str.append( " TFA_FIFO " );
+			 exp_results_str.append( tfa_bound.getValue().toString() );
+			 exp_results_str.append( "\n" );
+		 }
+
+		 for( Entry<Flow,AnalysisResults> sfa_bound : sfa_bounds_arb.entrySet() ) {
+			 exp_results_str.append( sfa_bound.getKey().getAlias() );
+			 exp_results_str.append( " SFA_ARB " );
+			 exp_results_str.append( sfa_bound.getValue().toString() );
+			 exp_results_str.append( "\n" );
+		 }
+		 for( Entry<Flow,AnalysisResults> sfa_bound : sfa_bounds_fifo.entrySet() ) {
+			 exp_results_str.append( sfa_bound.getKey().getAlias() );
+			 exp_results_str.append( " SFA_FIFO " );
+			 exp_results_str.append( sfa_bound.getValue().toString() );
+			 exp_results_str.append( "\n" );
+		 }
+
+		 for( Entry<Flow,AnalysisResults> pmoo_bound : pmoo_bounds_arb.entrySet() ) {
+			 exp_results_str.append( pmoo_bound.getKey().getAlias() );
+			 exp_results_str.append( " PMOO_ARB " );
+			 exp_results_str.append( pmoo_bound.getValue().toString() );
+			 exp_results_str.append( "\n" );
+		 }
+		 
+		 return exp_results_str.toString();
 	}
 }

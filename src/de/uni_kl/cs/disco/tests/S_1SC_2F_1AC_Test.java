@@ -39,12 +39,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class S_1SC_2F_1AC_Test extends DncTest {
-	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
-	private static Flow f0, f1;
+	protected DncTestResults expected_results_sinktree = new DncTestResults();
+	private Flow f0, f1;
 
 	private S_1SC_2F_1AC_Test(DncTestConfig test_config) {
 		super(new S_1SC_2F_1AC_Network());
+	}
 
+	@Override
+	protected void initializeFlows() {
 		f0 = ((S_1SC_2F_1AC_Network) network_factory).f0;
 		f1 = ((S_1SC_2F_1AC_Network) network_factory).f1;
 	}

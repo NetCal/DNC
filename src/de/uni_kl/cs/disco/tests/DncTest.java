@@ -69,6 +69,8 @@ public abstract class DncTest {
 
 	protected abstract void initializeBounds();
 
+	protected abstract void initializeFlows();
+
 	protected void initializeTest(DncTestConfig test_config) {
 		this.test_config = test_config;
 		printSetting();
@@ -81,14 +83,21 @@ public abstract class DncTest {
 
 		// reinitialize the network and the bounds
 		// in case number or curve backend changed
-		if (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
-				|| CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl())) {
-			network_factory.reinitializeCurves();
-			initializeBounds();
-			// set to new backends
-			CalculatorConfig.getInstance().setOperationImpl(test_config.operation_implementation);
-			CalculatorConfig.getInstance().setCurveImpl(test_config.curve_implementation);
-		}
+
+		// TODO Selective reinitialization currently causes problems due to the need for
+		// initializeFlows() after the network was reinitialized and before
+		// initializeBounds()
+		// if (CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl())
+		// || CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl())) {
+
+		// reinitialize
+		network_factory.reinitializeCurves();
+		network = network_factory.createNetwork();
+		initializeFlows();
+
+		// Changed Curve implementation does actually not affect the bounds
+		initializeBounds();
+		// }
 	}
 
 	public void printSetting() {

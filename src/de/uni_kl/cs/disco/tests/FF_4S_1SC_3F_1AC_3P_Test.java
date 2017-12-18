@@ -39,11 +39,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class FF_4S_1SC_3F_1AC_3P_Test extends DncTest {
-	private static Flow f0, f1, f2;
+	private Flow f0, f1, f2;
 
 	private FF_4S_1SC_3F_1AC_3P_Test(DncTestConfig test_config) {
 		super(new FF_4S_1SC_3F_1AC_3P_Network());
+	}
 
+	@Override
+	protected void initializeFlows() {
 		f0 = ((FF_4S_1SC_3F_1AC_3P_Network) network_factory).f0;
 		f1 = ((FF_4S_1SC_3F_1AC_3P_Network) network_factory).f1;
 		f2 = ((FF_4S_1SC_3F_1AC_3P_Network) network_factory).f2;

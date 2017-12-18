@@ -42,7 +42,7 @@ public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	private static final int ac_b = 25;
 	protected Server s0, s1, s2;
 	protected Link l_s0_s1, l_s1_s2;
-	protected Flow f0, f1;
+	public Flow f0, f1;
 	private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
 	private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
 	private Network network;

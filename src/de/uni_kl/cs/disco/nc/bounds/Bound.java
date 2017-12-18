@@ -118,7 +118,7 @@ public final class Bound {
         }
         return Delay.deriveARB(arrival_curve, service_curve);
 
-        //TODO: doesn work?
+        //TODO: does this work?
         //return CurvePwAffine.getXIntersection(arrival_curve, service_curve);
         //Curve a = ((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve();
         //Curve b = ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve();

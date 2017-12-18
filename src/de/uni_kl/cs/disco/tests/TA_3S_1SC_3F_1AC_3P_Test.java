@@ -40,13 +40,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class TA_3S_1SC_3F_1AC_3P_Test extends DncTest {
-	protected static final DncTestResults expected_results_PMOOAB = new DncTestResults();
-	protected static final DncTestResults expected_results_sinktree = new DncTestResults();
-	private static Flow f0, f1, f2;
+	protected DncTestResults expected_results_PMOOAB = new DncTestResults();
+	protected DncTestResults expected_results_sinktree = new DncTestResults();
+	private Flow f0, f1, f2;
 
 	private TA_3S_1SC_3F_1AC_3P_Test(DncTestConfig test_config) {
 		super(new TA_3S_1SC_3F_1AC_3P_Network());
+	}
 
+	@Override
+	protected void initializeFlows() {
 		f0 = ((TA_3S_1SC_3F_1AC_3P_Network) network_factory).f0;
 		f1 = ((TA_3S_1SC_3F_1AC_3P_Network) network_factory).f1;
 		f2 = ((TA_3S_1SC_3F_1AC_3P_Network) network_factory).f2;

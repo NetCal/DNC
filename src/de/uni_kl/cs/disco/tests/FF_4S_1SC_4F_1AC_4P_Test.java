@@ -40,12 +40,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class FF_4S_1SC_4F_1AC_4P_Test extends DncTest {
-	protected static final DncTestResults expected_results_PMOOAB = new DncTestResults();
-	private static Flow f0, f1, f2, f3;
+	protected DncTestResults expected_results_PMOOAB = new DncTestResults();
+	private Flow f0, f1, f2, f3;
 
 	private FF_4S_1SC_4F_1AC_4P_Test(DncTestConfig test_config) {
 		super(new FF_4S_1SC_4F_1AC_4P_Network());
+	}
 
+	@Override
+	protected void initializeFlows() {
 		f0 = ((FF_4S_1SC_4F_1AC_4P_Network) network_factory).f0;
 		f1 = ((FF_4S_1SC_4F_1AC_4P_Network) network_factory).f1;
 		f2 = ((FF_4S_1SC_4F_1AC_4P_Network) network_factory).f2;

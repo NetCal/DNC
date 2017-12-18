@@ -39,11 +39,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class FF_3S_1SC_2F_1AC_2P_Test extends DncTest {
-	private static Flow f0, f1;
+	private Flow f0, f1;
 
 	private FF_3S_1SC_2F_1AC_2P_Test() {
 		super(new FF_3S_1SC_2F_1AC_2P_Network());
+	}
 
+	@Override
+	protected void initializeFlows() {
 		f0 = ((FF_3S_1SC_2F_1AC_2P_Network) network_factory).f0;
 		f1 = ((FF_3S_1SC_2F_1AC_2P_Network) network_factory).f1;
 	}
@@ -82,13 +85,13 @@ public class FF_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	}
 
 	// --------------------Flow 0--------------------
-	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
-	public void f0_tfa(DncTestConfig test_config) {
-		initializeTest(test_config);
-		setMux(network.getServers());
-		runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
-	}
+	 @ParameterizedTest(name = "[{arguments}]")
+	 @ArgumentsSource(DncTestArguments.class)
+	 public void f0_tfa(DncTestConfig test_config) {
+	 initializeTest(test_config);
+	 setMux(network.getServers());
+	 runTFAtest(new TotalFlowAnalysis(network, test_config), f0);
+	 }
 
 	@ParameterizedTest(name = "[{arguments}]")
 	@ArgumentsSource(DncTestArguments.class)
