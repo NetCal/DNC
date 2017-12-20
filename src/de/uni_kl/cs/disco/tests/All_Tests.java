@@ -28,11 +28,11 @@
 
 package de.uni_kl.cs.disco.tests;
 
-import org.junit.platform.runner.JUnitPlatform;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.Extension;
 import org.junit.platform.suite.api.SelectClasses;
-import org.junit.runner.RunWith;
 
-@RunWith(JUnitPlatform.class)
+@ExtendWith(Extension.class)
 @SelectClasses({ S_1SC_1F_1AC_Test.class, S_1SC_2F_1AC_Test.class, S_1SC_2F_2AC_Test.class, S_1SC_10F_10AC_Test.class,
 		TA_2S_1SC_1F_1AC_1P_Test.class, TA_3S_1SC_2F_1AC_1P_Test.class, TA_2S_1SC_2F_1AC_1P_Test.class,
 		TA_4S_1SC_2F_1AC_2P_Test.class, TA_2S_1SC_2F_1AC_2P_Test.class, TA_3S_1SC_3F_1AC_3P_Test.class,
