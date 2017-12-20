@@ -30,7 +30,6 @@ package de.uni_kl.cs.disco.tests;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.Extension;
-import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectClasses;
 
 @ExtendWith(Extension.class)
