@@ -1,6 +1,7 @@
 v2.4.0beta4 "Chimera" (2017-Dec-XY)
 -----------------------------------
 * Attention: The DiscoDNC does not yet fully work with Java 9. Compiler compliance level 1.8 is required.
+  - Thanks to Zóltan Mátyás for pointing this out.
 * Tests are all ported to JUnit5.
 * DNC bounds derived from two curves (i.e., other than arrival bound algorithms)
   - package renamed from de.uni_kl.cs.disco.nc.operations to de.uni_kl.cs.disco.nc.bounds
