@@ -137,7 +137,7 @@ public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
         if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
             return false;
         }
-        return rtc_segment.equals(obj);
+        return rtc_segment.equals(((LinearSegment_MPARTC_PwAffine)obj).rtc_segment);
     }
 
     @Override

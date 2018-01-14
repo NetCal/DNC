@@ -288,12 +288,12 @@ public abstract class Convolution_DNC {
             return zero_arrival;
         }
 
-        Curve zero_delay_infinite_burst = CurvePwAffine.getFactory()
+        Curve zero_delay_infinite_burst = (Curve)CurvePwAffine.getFactory()
                 .createZeroDelayInfiniteBurst();
-        if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
+        if (((Curve)arrival_curve_1).equals(zero_delay_infinite_burst)) {
             return arrival_curve_2.copy();
         }
-        if (arrival_curve_2.equals(zero_delay_infinite_burst)) {
+        if (((Curve)arrival_curve_2).equals(zero_delay_infinite_burst)) {
             return arrival_curve_1.copy();
         }
 

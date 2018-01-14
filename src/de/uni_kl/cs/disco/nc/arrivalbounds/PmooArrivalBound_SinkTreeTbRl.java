@@ -33,7 +33,6 @@ import de.uni_kl.cs.disco.curves.CurvePwAffine;
 import de.uni_kl.cs.disco.curves.ServiceCurve;
 import de.uni_kl.cs.disco.minplus.MinPlus;
 import de.uni_kl.cs.disco.misc.SetUtils;
-import de.uni_kl.cs.disco.nc.AnalysisConfig;
 import de.uni_kl.cs.disco.network.Flow;
 import de.uni_kl.cs.disco.network.Link;
 import de.uni_kl.cs.disco.network.Network;
@@ -47,7 +46,6 @@ import java.util.Set;
 public class PmooArrivalBound_SinkTreeTbRl { //extends AbstractArrivalBound {
     private static PmooArrivalBound_SinkTreeTbRl instance = new PmooArrivalBound_SinkTreeTbRl();
     protected Network network;
-    protected AnalysisConfig configuration;
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();
 
     private PmooArrivalBound_SinkTreeTbRl() {
@@ -55,7 +53,6 @@ public class PmooArrivalBound_SinkTreeTbRl { //extends AbstractArrivalBound {
 
     public PmooArrivalBound_SinkTreeTbRl(Network tree) {
         this.network = tree;
-        this.configuration = new AnalysisConfig();
     }
 
     public static PmooArrivalBound_SinkTreeTbRl getInstance() {

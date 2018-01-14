@@ -101,8 +101,8 @@ public final class NaN implements Num {
         return false;
     }
 
-    // @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to
-    // NaN should always return false")
+//    @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE",
+//    		justification = "Comparison to NaN should always return false")
     @Override
     public boolean equals(Object obj) {
         return false;

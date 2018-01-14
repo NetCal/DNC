@@ -80,7 +80,7 @@ public abstract class MinPlus {
 		}
 	}
 
-	// Java won't let me call this method "convolve" because it does not care about
+	// Java won't let us call this method "convolve" because it does not care about
 	// the Sets' types; tells that there's already another method taking the same
 	// arguments.
 	public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
