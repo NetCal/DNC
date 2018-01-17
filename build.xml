@@ -14,7 +14,6 @@
 	<!--<pathelement location="lib/apiguardian-api-1.0.0.jar"/>-->
         <pathelement location="lib/opentest4j-1.0.0.jar"/>
         <pathelement location="lib/rtc.jar"/>
-        <pathelement location="lib/junit-4.12.jar"/>
     </path>
 
     <target name="compile">
