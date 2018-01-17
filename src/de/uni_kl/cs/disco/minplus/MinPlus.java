@@ -1,7 +1,7 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
- * Copyright (C) 2017 The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
@@ -80,7 +80,7 @@ public abstract class MinPlus {
 		}
 	}
 
-	// Java won't let me call this method "convolve" because it does not care about
+	// Java won't let us call this method "convolve" because it does not care about
 	// the Sets' types; tells that there's already another method taking the same
 	// arguments.
 	public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,

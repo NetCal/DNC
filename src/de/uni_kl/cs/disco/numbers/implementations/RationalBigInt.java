@@ -1,8 +1,8 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
  * Copyright (C) 2016 - 2017 Steffen Bondorf
- * Copyright (C) 2017 The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany

@@ -1,9 +1,9 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2011 - 2017 Steffen Bondorf
- * Copyright (C) 2017 The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -288,12 +288,12 @@ public abstract class Convolution_DNC {
             return zero_arrival;
         }
 
-        Curve zero_delay_infinite_burst = CurvePwAffine.getFactory()
+        Curve zero_delay_infinite_burst = (Curve)CurvePwAffine.getFactory()
                 .createZeroDelayInfiniteBurst();
-        if (arrival_curve_1.equals(zero_delay_infinite_burst)) {
+        if (((Curve)arrival_curve_1).equals(zero_delay_infinite_burst)) {
             return arrival_curve_2.copy();
         }
-        if (arrival_curve_2.equals(zero_delay_infinite_burst)) {
+        if (((Curve)arrival_curve_2).equals(zero_delay_infinite_burst)) {
             return arrival_curve_1.copy();
         }
 

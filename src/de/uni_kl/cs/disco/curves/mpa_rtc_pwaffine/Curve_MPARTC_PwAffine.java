@@ -1,7 +1,7 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
- * Copyright (C) 2017 The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
@@ -118,10 +118,10 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		}
 
 		if (curve_str.substring(0, 6).equals("Curve:")) { // RTC curve string
-			String periodic = "";
+//			String periodic = "";
 			// Cut out periodic Part
 			if (curve_str.contains("PeriodicPart")) {
-				periodic = curve_str.substring(curve_str.indexOf("PeriodicPart"));
+//				periodic = curve_str.substring(curve_str.indexOf("PeriodicPart"));
 				curve_str = curve_str.substring(0, curve_str.indexOf("PeriodicPart"));
 			}
 			String s = curve_str.substring(27); // cut everything but {...}

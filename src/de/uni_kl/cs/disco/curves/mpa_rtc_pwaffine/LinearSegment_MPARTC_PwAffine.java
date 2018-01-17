@@ -1,7 +1,7 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
- * Copyright (C) 2017 The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
@@ -137,7 +137,7 @@ public class LinearSegment_MPARTC_PwAffine implements LinearSegment {
         if (obj == null || !(obj instanceof LinearSegment_MPARTC_PwAffine)) {
             return false;
         }
-        return rtc_segment.equals(obj);
+        return rtc_segment.equals(((LinearSegment_MPARTC_PwAffine)obj).rtc_segment);
     }
 
     @Override

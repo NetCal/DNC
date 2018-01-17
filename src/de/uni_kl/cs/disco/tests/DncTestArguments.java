@@ -1,8 +1,8 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0beta4 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
  * Copyright (C) 2017 Steffen Bondorf
- * Copyright (C) 2017 The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -31,7 +31,7 @@ package de.uni_kl.cs.disco.tests;
 import de.uni_kl.cs.disco.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.CurveImpl;
 import de.uni_kl.cs.disco.nc.CalculatorConfig.NumImpl;
-import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationImpl;
+//import de.uni_kl.cs.disco.nc.CalculatorConfig.OperationImpl;
 import de.uni_kl.cs.disco.nc.AnalysisConfig;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -64,9 +64,9 @@ public class DncTestArguments implements ArgumentsProvider {
 		curves.add(CurveImpl.DNC);
 		curves.add(CurveImpl.MPA_RTC);
 
-		Set<OperationImpl> operations = new HashSet<OperationImpl>();
-		operations.add(OperationImpl.DNC);
-		operations.add(OperationImpl.NATIVE);
+//		Set<OperationImpl> operations = new HashSet<OperationImpl>();
+//		operations.add(OperationImpl.DNC);
+//		operations.add(OperationImpl.NATIVE);
 
 		Set<AnalysisConfig.Multiplexing> mux_disciplines = new HashSet<AnalysisConfig.Multiplexing>();
 		mux_disciplines.add(AnalysisConfig.Multiplexing.ARBITRARY);
