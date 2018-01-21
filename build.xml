@@ -20,6 +20,7 @@
         <mkdir dir="out"/>
         <javac srcdir="src" destdir="bin" includeantruntime="false">
             <classpath refid="classpath"/>
+            <exclude name="**/*Demo*"/>
             <exclude name="**/*OutputTest*"/>
         </javac>
     </target>
