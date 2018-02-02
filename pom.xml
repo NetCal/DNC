@@ -17,6 +17,14 @@
 
     <dependencies>
         <dependency>
+    <groupId>ch.ethz.rtc.kernel</groupId>
+    <artifactId>rtc</artifactId>
+    <version>1.0</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+</dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.0.2</version>
