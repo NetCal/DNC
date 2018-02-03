@@ -3,6 +3,7 @@ v2.4.0 "Chimera" (2018-Feb-XX)
 * Maven build system
   - Reworked the source folders to src/main/java and src/test/java.
   - Added pom.xml
+  - Removed Ant files
 * New domain discodnc.cs.uni-kl.de and according renaming of the packages.
 * Static analysis: switched from obsolete FindBugs to its successor SpotBugs.
   - Fixed EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS in LinearSegment_MPARTC_PwAffine.
