@@ -1,7 +1,5 @@
 v2.4.x
 ------
-* Merge Ant build files build.xml and DiscoDNCjar.xml to a single one that can also run the JUnit tests? Migrate to MAven
-
 * Alternatives to store a delta_T curve --> Identify properly 
   - segment2.y == infty || segment2.rate == infty
 * Alternatives to store other curves?
