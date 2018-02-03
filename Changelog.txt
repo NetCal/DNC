@@ -3,7 +3,8 @@ v2.4.0 "Chimera" (2018-Jan-XX)
 * Static analysis: switched from obsolete FindBugs to its successor SpotBugs.
   - Fixed EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS in LinearSegment_MPARTC_PwAffine.
   - Fixed RV_RETURN_VALUE_IGNORED_BAD_PRACTICE in Network.
-* Reworked storing a network to the file system and removed broken OutputTest.
+* Reworked storing a network to the file system 
+* Removed broken OutputTest.
 * Code cleanups.
   - Moved preliminary code to dispatch to different DNC bounding implementations to comments.
 
