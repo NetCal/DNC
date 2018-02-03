@@ -1,4 +1,4 @@
-v2.4.0 "Chimera" (2018-Jan-XX)
+v2.4.0 "Chimera" (2018-Feb-XX)
 ------------------------------
 * Maven build system
   - Reworked the source folders to src/main/java and src/test/java.
