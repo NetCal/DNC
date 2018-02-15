@@ -1,5 +1,3 @@
-package de.uni_kl.cs.discodnc;
-
 /*
  * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
@@ -27,6 +25,8 @@ package de.uni_kl.cs.discodnc;
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
+
+package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
