@@ -4,8 +4,10 @@ v2.4.0 "Chimera" (2018-Feb-XX)
   - Reworked the source folders to src/main/java and src/test/java.
   - Added pom.xml
   - Removed Ant files
-* New domain discodnc.cs.uni-kl.de and according renaming of the packages.
-* Static analysis: switched from obsolete FindBugs to its successor SpotBugs.
+* New domain discodnc.cs.uni-kl.de
+  - Includes a new webpage.
+  - Package prefixes have been renamed to de.uni_kl.cs.discondc
+* Static analysis update: switched from obsolete FindBugs to its successor SpotBugs.
   - Fixed EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS in LinearSegment_MPARTC_PwAffine.
   - Fixed RV_RETURN_VALUE_IGNORED_BAD_PRACTICE in Network.
 * Reworked storing a network to the file system.
