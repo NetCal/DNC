@@ -7,7 +7,7 @@
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
- * http://disco.cs.uni-kl.de/index.php/projects/disco-dnc
+ * http://discodnc.cs.uni-kl.de
  *
  *
  * The Disco Deterministic Network Calculator (DiscoDNC) is free software;
