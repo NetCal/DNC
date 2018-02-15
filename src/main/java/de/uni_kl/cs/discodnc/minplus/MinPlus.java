@@ -6,7 +6,7 @@
  * disco | Distributed Computer Systems Lab
  * University of Kaiserslautern, Germany
  *
- * http://disco.cs.uni-kl.de/index.php/projects/disco-dnc
+ * http://discodnc.cs.uni-kl.de
  *
  *
  * The Disco Deterministic Network Calculator (DiscoDNC) is free software;
@@ -27,8 +27,9 @@
 
 package de.uni_kl.cs.discodnc.minplus;
 
-// Due to name collision, these classes not imported,
-// they are referenced by their full names
+// Due to name collisions, 
+// these classes are not imported,
+// they are referenced by their fully qualified names.
 //import ch.ethz.rtc.kernel.Curve;
 //import Curve;
 
