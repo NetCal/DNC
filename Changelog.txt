@@ -1,8 +1,11 @@
-v2.4.0 "Chimera" (2018-Feb-XX)
+v2.4.0 "Chimera" (2018-Mar-XX)
 ------------------------------
 * Maven build system
   - Reworked the source folders to src/main/java and src/test/java.
   - Added pom.xml
+  - Attention: You need to add the MPA toolbox manually:
+     - download it RTCToolbox_bin.zip at http://www.mpa.ethz.ch/Rtctoolbox/Download
+     - unzip it, and put the file RTCToolbox/rtc/rtc.jar into the DiscoDNC's lib folder
   - Removed Ant files
 * New domain discodnc.cs.uni-kl.de
   - Includes a new webpage.
