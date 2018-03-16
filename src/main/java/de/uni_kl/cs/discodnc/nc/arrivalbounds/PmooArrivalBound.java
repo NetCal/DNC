@@ -46,115 +46,119 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBound {
-    private static PmooArrivalBound instance = new PmooArrivalBound();
+	private static PmooArrivalBound instance = new PmooArrivalBound();
 
-    private PmooArrivalBound() {
-    }
+	private PmooArrivalBound() {
+	}
 
-    public PmooArrivalBound(Network network, AnalysisConfig configuration) {
-        this.network = network;
-        this.configuration = configuration;
-    }
+	public PmooArrivalBound(Network network, AnalysisConfig configuration) {
+		this.network = network;
+		this.configuration = configuration;
+	}
 
-    public static PmooArrivalBound getInstance() {
-        return instance;
-    }
+	public static PmooArrivalBound getInstance() {
+		return instance;
+	}
 
-    public Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception {
-        return computeArrivalBound(link, network.getFlows(link), flow_of_interest);
-    }
+	public Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception {
+		return computeArrivalBound(link, network.getFlows(link), flow_of_interest);
+	}
 
-    /**
-     * Computes the PMOO arrival bound for a set of <code>flows_to_bound</code>. The
-     * difference to the standard output bound method is that this method tries to
-     * compute tighter bounds by concatenating as many servers as possible using the
-     * PMOO approach. It does so by searching from <code>server</code> towards the
-     * sinks of the flows contained in <code>f_xfcaller</code> until it reaches the
-     * server where all these flows first meet each other (the "splitting point").
-     * It then concatenates all servers between the splitting point (inclusive) and
-     * <code>server</code> (exclusive).
-     *
-     * @param link             The link that all flows of interest flow into.
-     * @param f_xfcaller       The set of flows of interest.
-     * @param flow_of_interest The flow of interest to handle with lowest priority.
-     * @return The PMOO arrival bounds.
-     * @throws Exception If any of the sanity checks fails.
-     */
-    public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
-            throws Exception {
-        Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-                Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
-        if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-            return alphas_xfcaller;
-        }
+	/**
+	 * Computes the PMOO arrival bound for a set of <code>flows_to_bound</code>. The
+	 * difference to the standard output bound method is that this method tries to
+	 * compute tighter bounds by concatenating as many servers as possible using the
+	 * PMOO approach. It does so by searching from <code>server</code> towards the
+	 * sinks of the flows contained in <code>f_xfcaller</code> until it reaches the
+	 * server where all these flows first meet each other (the "splitting point").
+	 * It then concatenates all servers between the splitting point (inclusive) and
+	 * <code>server</code> (exclusive).
+	 *
+	 * @param link
+	 *            The link that all flows of interest flow into.
+	 * @param f_xfcaller
+	 *            The set of flows of interest.
+	 * @param flow_of_interest
+	 *            The flow of interest to handle with lowest priority.
+	 * @return The PMOO arrival bounds.
+	 * @throws Exception
+	 *             If any of the sanity checks fails.
+	 */
+	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
+			throws Exception {
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
+				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
+			return alphas_xfcaller;
+		}
 
-        // Get the common sub-path of f_xfcaller flows crossing the given link
-        // loi == location of interference
-        Server loi = link.getDest();
-        Set<Flow> f_loi = network.getFlows(loi);
-        Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
-        f_xfcaller_loi.remove(flow_of_interest);
-        if (f_xfcaller_loi.isEmpty()) {
-            return alphas_xfcaller;
-        }
+		// Get the common sub-path of f_xfcaller flows crossing the given link
+		// loi == location of interference
+		Server loi = link.getDest();
+		Set<Flow> f_loi = network.getFlows(loi);
+		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
+		f_xfcaller_loi.remove(flow_of_interest);
+		if (f_xfcaller_loi.isEmpty()) {
+			return alphas_xfcaller;
+		}
 
-        if (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.GLOBAL_FIFO
-                || (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.SERVER_LOCAL
-                && link.getSource().multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO)) {
-            throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
-        }
+		if (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.GLOBAL_FIFO
+				|| (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.SERVER_LOCAL
+						&& link.getSource().multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO)) {
+			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
+		}
 
-        Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
-        Server common_subpath_dest = link.getSource();
-        Path common_subpath;
-        Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
+		Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
+		Server common_subpath_dest = link.getSource();
+		Path common_subpath;
+		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
 
-        common_subpath = f_xfcaller_loi.iterator().next().getPath().getSubPath(common_subpath_src, common_subpath_dest);
+		common_subpath = f_xfcaller_loi.iterator().next().getPath().getSubPath(common_subpath_src, common_subpath_dest);
 
-        if (common_subpath.numServers() == 1) {
-            common_subpath = new Path(common_subpath_src);
+		if (common_subpath.numServers() == 1) {
+			common_subpath = new Path(common_subpath_src);
 
-            Set<Flow> f_xxfcaller = network.getFlows(common_subpath_src);
-            f_xxfcaller.removeAll(f_xfcaller_loi);
-            f_xxfcaller.remove(flow_of_interest);
-            Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
-                    common_subpath_src, f_xxfcaller, flow_of_interest);
+			Set<Flow> f_xxfcaller = network.getFlows(common_subpath_src);
+			f_xxfcaller.removeAll(f_xfcaller_loi);
+			f_xxfcaller.remove(flow_of_interest);
+			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+					common_subpath_src, f_xxfcaller, flow_of_interest);
 
-            ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
+			ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
 
-            for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
-                    alphas_xxfcaller)) {
-                if (!beta_loxfcaller_subpath.equals(null_service)) {
-                    betas_loxfcaller_subpath.add(beta_loxfcaller_subpath); // Adding to the set, not adding up the
-                    // curves
-                }
-            }
-        } else {
-            PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
-            betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_loi);
-        }
+			for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
+					alphas_xxfcaller)) {
+				if (!beta_loxfcaller_subpath.equals(null_service)) {
+					betas_loxfcaller_subpath.add(beta_loxfcaller_subpath); // Adding to the set, not adding up the
+					// curves
+				}
+			}
+		} else {
+			PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_loi);
+		}
 
-        // Check if there's any service left on this path. Signaled by at least one
-        // service curve in this set
-        if (betas_loxfcaller_subpath.isEmpty()) {
-            System.out.println("No service left over during PMOO arrival bounding!");
-            alphas_xfcaller.clear();
-            alphas_xfcaller.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
-            return alphas_xfcaller;
-        }
+		// Check if there's any service left on this path. Signaled by at least one
+		// service curve in this set
+		if (betas_loxfcaller_subpath.isEmpty()) {
+			System.out.println("No service left over during PMOO arrival bounding!");
+			alphas_xfcaller.clear();
+			alphas_xfcaller.add(CurvePwAffine.getFactory()
+					.createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
+			return alphas_xfcaller;
+		}
 
-        // Get arrival bound at the splitting point:
-        // We need to know the arrival bound of f_xfcaller at the server
-        // 'common_subpath_src', i.e., at the above sub-path's source
-        // in order to deconvolve it with beta_loxfcaller_subpath to get the arrival
-        // bound of the sub-path
-        // Note that flows f_xfcaller that originate in 'common_subpath_src' are covered
-        // by this call of computeArrivalBound
-        Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
-                common_subpath_src, f_xfcaller, flow_of_interest);
-        alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath,
-                betas_loxfcaller_subpath);
+		// Get arrival bound at the splitting point:
+		// We need to know the arrival bound of f_xfcaller at the server
+		// 'common_subpath_src', i.e., at the above sub-path's source
+		// in order to deconvolve it with beta_loxfcaller_subpath to get the arrival
+		// bound of the sub-path
+		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered
+		// by this call of computeArrivalBound
+		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+				common_subpath_src, f_xfcaller, flow_of_interest);
+		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 
-        return alphas_xfcaller;
-    }
+		return alphas_xfcaller;
+	}
 }
