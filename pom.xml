@@ -4,10 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
+    <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
+    <organization>
+        <url>discodnc.cs.uni-kl.de</url>
+    </organization>
+
+    <groupId>de.uni_kl.cs.discodnc</groupId>
     <artifactId>DiscoDNC</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>2.4.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -34,64 +38,42 @@
         <dependency>
             <groupId>ch.ethz.rtc.kernel</groupId>
             <artifactId>rtc</artifactId>
-            <version>1.0</version>
+            <version>1.2.beta.100</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/rtc.jar</systemPath>
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.0.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.0.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.0.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-commons</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-engine</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-runner</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-api</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.0</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -99,13 +81,26 @@
             <version>3.6.1</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.opentest4j</groupId>
             <artifactId>opentest4j</artifactId>
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+        	<groupId>org.junit.jupiter</groupId>
+        	<artifactId>junit-jupiter-engine</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.junit.jupiter</groupId>
+        	<artifactId>junit-jupiter-params</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.junit.jupiter</groupId>
+        	<artifactId>junit-jupiter-api</artifactId>
+        	<version>5.1.0</version>
+        </dependency>
     </dependencies>
-
 </project>
