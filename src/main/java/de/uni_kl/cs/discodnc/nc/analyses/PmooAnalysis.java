@@ -271,14 +271,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         ((PmooResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
-            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // Single flow
-            // of
-            // interest,
-            // i.e.,
-            // fifo per
-            // micro
-            // flow
-            // holds
+            // Single flow of interest, i.e., fifo per micro flow holds
+            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (delay_bound__beta_e2e.leq(result.getDelayBound())) {
                 ((PmooResults) result).setDelayBound(delay_bound__beta_e2e);
             }
