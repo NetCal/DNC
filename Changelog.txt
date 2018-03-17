@@ -1,15 +1,15 @@
-v2.4.0 "Chimera" (2018-Mar-XX)
+v2.4.0 "Chimera" (2018-Mar-18)
 ------------------------------
 * Maven build system
   - Reworked the source folders to src/main/java and src/test/java.
   - Added pom.xml
   - Attention: You need to add the MPA toolbox manually:
      - download it RTCToolbox_bin.zip at http://www.mpa.ethz.ch/Rtctoolbox/Download
-     - unzip it, and put the file RTCToolbox/rtc/rtc.jar into the DiscoDNC's lib folder
+     - unzip it, and put the file RTCToolbox/rtc/rtc.jar into the DiscoDNC's lib folder.
   - Removed Ant files
 * New domain discodnc.cs.uni-kl.de
   - Includes a new webpage.
-  - Package prefixes have been renamed to de.uni_kl.cs.discondc
+  - Package prefixes have been renamed to de.uni_kl.cs.discondc.
 * All the changes of betas 1 to 4.
   - Attention: Although all tests succeed with the rtc curve backend, it is considered a beta feature. 
 * Static analysis update: switched from obsolete FindBugs to its successor SpotBugs.
