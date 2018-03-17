@@ -1295,7 +1295,7 @@ public class Network {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("/* \n");
-		sb.append(" * This file is part of the Disco Deterministic Network Calculator >= v2.4 \"Chimera\".\n");
+		sb.append(" * This file is compatible with the Disco Deterministic Network Calculator v2.4 \"Chimera\".\n");
 		sb.append(" *\n");
 		sb.append(" * The Disco Deterministic Network Calculator (DiscoDNC) is free software;\n");
 		sb.append(" * you can redistribute it and/or modify it under the terms of the \n");
