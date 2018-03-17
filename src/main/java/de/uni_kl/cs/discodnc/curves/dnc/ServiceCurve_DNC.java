@@ -2,7 +2,7 @@
  * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2013 - 2017 Steffen Bondorf
+ * Copyright (C) 2013 - 2018 Steffen Bondorf
  * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab

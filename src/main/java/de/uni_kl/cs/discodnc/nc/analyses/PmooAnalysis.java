@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2008 - 2010 Andreas Kiefer
- * Copyright (C) 2011 - 2017 Steffen Bondorf
+ * Copyright (C) 2011 - 2018 Steffen Bondorf
  * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
