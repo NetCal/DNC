@@ -20,7 +20,6 @@ v2.4.0 "Chimera" (2018-Mar-XX)
 * Code cleanups.
   - Moved preliminary code to dispatch to different DNC bounding implementations to comments.
 
-
 v2.4.0beta4 "Chimera" (2017-Dec-23)
 -----------------------------------
 * Attention: The DiscoDNC does not yet fully work with Java 9. Compiler compliance level 1.8 is required.
