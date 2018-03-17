@@ -28,6 +28,7 @@
 package de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine;
 
 import ch.ethz.rtc.kernel.Segment;
+
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.numbers.Num;
 

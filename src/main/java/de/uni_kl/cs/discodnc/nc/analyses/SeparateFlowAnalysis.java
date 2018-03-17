@@ -40,7 +40,11 @@ import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
-import de.uni_kl.cs.discodnc.network.*;
+import de.uni_kl.cs.discodnc.network.Flow;
+import de.uni_kl.cs.discodnc.network.Link;
+import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.network.Path;
+import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.Collections;

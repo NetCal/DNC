@@ -27,8 +27,7 @@
 
 package de.uni_kl.cs.discodnc.minplus;
 
-// Due to name collisions, 
-// these classes are not imported,
+// Due to name collisions, these classes are not imported,
 // they are referenced by their fully qualified names.
 //import ch.ethz.rtc.kernel.Curve;
 //import Curve;
@@ -36,7 +35,9 @@ package de.uni_kl.cs.discodnc.minplus;
 import ch.ethz.rtc.kernel.CurveMath;
 import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
+
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -46,7 +47,6 @@ import de.uni_kl.cs.discodnc.minplus.dnc.Deconvolution_DNC;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig.OperationImpl;
-import de.uni_kl.cs.discodnc.curves.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -373,8 +373,7 @@ public abstract class MinPlus {
 	 *         2 == the second object is a delayed infinite burst, <br/>
 	 *         3 == both objects are a delayed infinite burst.
 	 */
-	public static int inputDelayedInfiniteBurstCheck(Curve curve_1,
-			Curve curve_2) {
+	public static int inputDelayedInfiniteBurstCheck(Curve curve_1, Curve curve_2) {
 		int return_value = 0;
 
 		if (curve_1.isDelayedInfiniteBurst()) {

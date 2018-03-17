@@ -33,6 +33,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.numbers.values.NaN;
 import de.uni_kl.cs.discodnc.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.discodnc.numbers.values.PositiveInfinity;
+
 import org.apache.commons.math3.fraction.BigFraction;
 
 import java.math.BigInteger;

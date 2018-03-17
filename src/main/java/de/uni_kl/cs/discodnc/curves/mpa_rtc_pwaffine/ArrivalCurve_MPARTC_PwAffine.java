@@ -29,6 +29,7 @@ package de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine;
 
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
+
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 

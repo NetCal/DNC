@@ -31,7 +31,11 @@ package de.uni_kl.cs.discodnc;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.network.*;
+import de.uni_kl.cs.discodnc.network.Flow;
+import de.uni_kl.cs.discodnc.network.Link;
+import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.network.NetworkFactory;
+import de.uni_kl.cs.discodnc.network.Server;
 
 import java.util.LinkedList;
 
