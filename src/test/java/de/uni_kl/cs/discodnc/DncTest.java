@@ -79,6 +79,9 @@ public abstract class DncTest {
 		} else {
 			CalculatorConfig.getInstance().disableAllChecks();
 		}
+		
+		CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl());
+		CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl());
 
 		// reinitialize the network and the bounds
 		network_factory.reinitializeCurves();
