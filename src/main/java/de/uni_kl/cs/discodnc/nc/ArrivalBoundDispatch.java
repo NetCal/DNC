@@ -35,9 +35,11 @@ import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_Concatenation;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_PerHop;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PmooArrivalBound;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.TandemMatchingArrivalBound;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -180,6 +182,13 @@ public abstract class ArrivalBoundDispatch {
 			/* There are no integration tests for the per-flow arrival bounds. */
 				
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
+			case TMA:
+				TandemMatchingArrivalBound tm_arrival_bound = TandemMatchingArrivalBound.getInstance();
+				tm_arrival_bound.setNetwork(network);
+				tm_arrival_bound.setConfiguration(configuration);
+				arrival_bounds_tmp = tm_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				break;
+
 			case PER_FLOW_SFA:
 				for (Flow flow : flows_to_bound) {
 					SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
@@ -204,6 +213,16 @@ public abstract class ArrivalBoundDispatch {
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
 							singleFlowABs(configuration, flow.getArrivalCurve(), pmoo.getLeftOverServiceCurves()));
+				}
+				break;
+
+			case PER_FLOW_TMA:
+				for (Flow flow : flows_to_bound) {
+					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network);
+					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+
+					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
+							singleFlowABs(configuration, flow.getArrivalCurve(), tma.getLeftOverServiceCurves()));
 				}
 				break;
 
