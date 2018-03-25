@@ -33,6 +33,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AnalysisConfig {
+    public enum Multiplexing {
+        ARBITRARY, FIFO
+    }
+
+    public enum MuxDiscipline {
+        SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
+    }
+
+    public enum GammaFlag {
+        SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
+    }
+
+    public enum ArrivalBoundMethod {
+		PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, TMA,
+		PER_FLOW_SFA, PER_FLOW_PMOO, PER_FLOW_TMA, 
+		PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
+    }
+    
     private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
     /**
      * Whether to use maximum service curves in output bound computation
@@ -205,21 +223,5 @@ public class AnalysisConfig {
         }
 
         return analysis_config_str.toString();
-    }
-
-    public enum Multiplexing {
-        ARBITRARY, FIFO
-    }
-
-    public enum MuxDiscipline {
-        SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
-    }
-
-    public enum GammaFlag {
-        SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
-    }
-
-    public enum ArrivalBoundMethod {
-        PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, PER_FLOW_SFA, PER_FLOW_PMOO, PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
     }
 }
