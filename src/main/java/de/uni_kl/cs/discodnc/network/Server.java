@@ -31,7 +31,7 @@ package de.uni_kl.cs.discodnc.network;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 
 public class Server {
     private int id;
@@ -58,7 +58,7 @@ public class Server {
      */
     private boolean use_extra_gamma = false;
 
-    private AnalysisConfig.Multiplexing multiplexing = AnalysisConfig.Multiplexing.ARBITRARY;
+    private Multiplexing multiplexing = Multiplexing.ARBITRARY;
 
     @SuppressWarnings("unused")
     private Server() {
@@ -75,7 +75,7 @@ public class Server {
      * @param use_extra_gamma   Convolve the output bound with the maximum service curve.
      */
     protected Server(int id, String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-                     AnalysisConfig.Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
+                     Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
         this.id = id;
         this.alias = alias;
         this.service_curve = service_curve;
@@ -86,7 +86,7 @@ public class Server {
         this.use_extra_gamma = use_extra_gamma;
     }
 
-    protected Server(int id, String alias, ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing) {
+    protected Server(int id, String alias, ServiceCurve service_curve, Multiplexing multiplexing) {
         this.id = id;
         this.alias = alias;
         this.service_curve = service_curve;
@@ -191,11 +191,11 @@ public class Server {
         this.use_extra_gamma = use_extra_gamma;
     }
 
-    public AnalysisConfig.Multiplexing multiplexingDiscipline() {
+    public Multiplexing multiplexingDiscipline() {
         return multiplexing;
     }
 
-    public void setMultiplexingDiscipline(AnalysisConfig.Multiplexing mux) {
+    public void setMultiplexingDiscipline(Multiplexing mux) {
         multiplexing = mux;
     }
 

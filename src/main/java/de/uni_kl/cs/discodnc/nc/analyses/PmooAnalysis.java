@@ -36,6 +36,8 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
@@ -269,7 +271,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        if (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.GLOBAL_FIFO) {
+        if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO) {
             throw new Exception("PMOO analysis is not available for FIFO multiplexing nodes");
         }
 
@@ -298,9 +300,9 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
     public Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
             throws Exception {
-        if (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.SERVER_LOCAL) {
+        if (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL) {
             for (Server s : path.getServers()) {
-                if (s.multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO) {
+                if (s.multiplexingDiscipline() == Multiplexing.FIFO) {
                     throw new Exception("PMOO analysis is not available for FIFO multiplexing nodes");
                 }
             }

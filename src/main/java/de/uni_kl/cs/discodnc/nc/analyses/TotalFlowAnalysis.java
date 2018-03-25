@@ -36,6 +36,8 @@ import de.uni_kl.cs.discodnc.misc.Pair;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.network.Flow;
@@ -117,9 +119,9 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
 
             Num delay_bound_server_alpha;
-            if (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.GLOBAL_FIFO
-                    || (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.SERVER_LOCAL
-                    && server.multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO)
+            if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
+                    || (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
+                    && server.multiplexingDiscipline() == Multiplexing.FIFO)
                     || fifo_per_micro_flow) {
                 delay_bound_server_alpha = Bound.delayFIFO(alpha_candidate, beta_server);
             } else {

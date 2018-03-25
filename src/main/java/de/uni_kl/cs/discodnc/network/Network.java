@@ -33,7 +33,7 @@ import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -163,20 +163,20 @@ public class Network {
 	// Without given maximum service curve
 	public Server addServer(ServiceCurve service_curve) {
 		return addServer(service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
-				AnalysisConfig.Multiplexing.ARBITRARY, false, false);
+				Multiplexing.ARBITRARY, false, false);
 	}
 
-	public Server addServer(ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing) {
+	public Server addServer(ServiceCurve service_curve, Multiplexing multiplexing) {
 		return addServer(service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(), multiplexing,
 				true, true);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve) {
 		return addServer(alias, service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
-				AnalysisConfig.Multiplexing.ARBITRARY, false, false);
+				Multiplexing.ARBITRARY, false, false);
 	}
 
-	public Server addServer(String alias, ServiceCurve service_curve, AnalysisConfig.Multiplexing multiplexing) {
+	public Server addServer(String alias, ServiceCurve service_curve, Multiplexing multiplexing) {
 		Server new_server = new Server(server_id_counter, alias, service_curve.copy(), multiplexing);
 		updateServerAdditionInternally(new_server);
 
@@ -195,7 +195,7 @@ public class Network {
 	 * @return The added server.
 	 */
 	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve) {
-		return addServer(service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, true, true);
+		return addServer(service_curve, max_service_curve, Multiplexing.ARBITRARY, true, true);
 	}
 
 	/**
@@ -210,39 +210,39 @@ public class Network {
 	 * @return The added server.
 	 */
 	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve) {
-		return addServer(alias, service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, true, true);
+		return addServer(alias, service_curve, max_service_curve, Multiplexing.ARBITRARY, true, true);
 	}
 
 	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve, boolean use_gamma,
 			boolean use_extra_gamma) {
-		return addServer(service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, use_gamma,
+		return addServer(service_curve, max_service_curve, Multiplexing.ARBITRARY, use_gamma,
 				use_extra_gamma);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			AnalysisConfig.Multiplexing multiplexing) {
+			Multiplexing multiplexing) {
 		return addServer(alias, service_curve, max_service_curve, multiplexing, true, true);
 	}
 
 	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			AnalysisConfig.Multiplexing multiplexing) {
+			Multiplexing multiplexing) {
 		return addServer(service_curve, max_service_curve, multiplexing, true, true);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
 			boolean use_gamma, boolean use_extra_gamma) {
-		return addServer(alias, service_curve, max_service_curve, AnalysisConfig.Multiplexing.ARBITRARY, use_gamma,
+		return addServer(alias, service_curve, max_service_curve, Multiplexing.ARBITRARY, use_gamma,
 				use_extra_gamma);
 	}
 
 	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			AnalysisConfig.Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
+			Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
 		String alias = server_default_name_prefix + Integer.toString(server_id_counter);
 		return addServer(alias, service_curve, max_service_curve, multiplexing, use_gamma, use_extra_gamma);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			AnalysisConfig.Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
+			Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
 		Server new_server = new Server(server_id_counter, alias, service_curve.copy(), max_service_curve.copy(),
 				multiplexing, use_gamma, use_extra_gamma);
 		updateServerAdditionInternally(new_server);
@@ -1320,7 +1320,7 @@ public class Network {
 		sb.append("\n");
 		sb.append("import CurvePwAffine;\n");
 		sb.append("\n");
-		sb.append("import AnalysisConfig.Multiplexing;\n");
+		sb.append("import Multiplexing;\n");
 		sb.append("\n");
 		sb.append("import Network;\n");
 		sb.append("import NetworkFactory;\n");

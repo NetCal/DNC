@@ -35,6 +35,8 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.ArrivalBound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
@@ -106,9 +108,9 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 			return alphas_xfcaller;
 		}
 
-		if (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.GLOBAL_FIFO
-				|| (configuration.multiplexingDiscipline() == AnalysisConfig.MuxDiscipline.SERVER_LOCAL
-						&& link.getSource().multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO)) {
+		if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
+				|| (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
+						&& link.getSource().multiplexingDiscipline() == Multiplexing.FIFO)) {
 			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
 		}
 

@@ -30,8 +30,8 @@ package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
@@ -115,15 +115,15 @@ public abstract class DncTest {
 		} else {
 			// Enforce potential test failure by defining the server-local multiplexing
 			// differently.
-			AnalysisConfig.Multiplexing mux_local;
+			Multiplexing mux_local;
 			MuxDiscipline mux_global;
 
-			if (test_config.mux_discipline == AnalysisConfig.Multiplexing.ARBITRARY) {
+			if (test_config.mux_discipline == Multiplexing.ARBITRARY) {
 				mux_global = MuxDiscipline.GLOBAL_ARBITRARY;
-				mux_local = AnalysisConfig.Multiplexing.FIFO;
+				mux_local = Multiplexing.FIFO;
 			} else {
 				mux_global = MuxDiscipline.GLOBAL_FIFO;
-				mux_local = AnalysisConfig.Multiplexing.ARBITRARY;
+				mux_local = Multiplexing.ARBITRARY;
 			}
 
 			test_config.setMultiplexingDiscipline(mux_global);
@@ -142,13 +142,13 @@ public abstract class DncTest {
 			test_config.setMultiplexingDiscipline(MuxDiscipline.GLOBAL_FIFO);
 			// Enforce potential test failure
 			for (Server s : servers) {
-				s.setMultiplexingDiscipline(AnalysisConfig.Multiplexing.ARBITRARY);
+				s.setMultiplexingDiscipline(Multiplexing.ARBITRARY);
 			}
 		} else {
 			test_config.setMultiplexingDiscipline(MuxDiscipline.SERVER_LOCAL);
 			// Enforce potential test failure
 			for (Server s : servers) {
-				s.setMultiplexingDiscipline(AnalysisConfig.Multiplexing.FIFO);
+				s.setMultiplexingDiscipline(Multiplexing.FIFO);
 			}
 		}
 	}
@@ -158,13 +158,13 @@ public abstract class DncTest {
 			test_config.setMultiplexingDiscipline(MuxDiscipline.GLOBAL_ARBITRARY);
 			// Enforce potential test failure
 			for (Server s : servers) {
-				s.setMultiplexingDiscipline(AnalysisConfig.Multiplexing.FIFO);
+				s.setMultiplexingDiscipline(Multiplexing.FIFO);
 			}
 		} else {
 			test_config.setMultiplexingDiscipline(MuxDiscipline.SERVER_LOCAL);
 			// Enforce potential test failure
 			for (Server s : servers) {
-				s.setMultiplexingDiscipline(AnalysisConfig.Multiplexing.ARBITRARY);
+				s.setMultiplexingDiscipline(Multiplexing.ARBITRARY);
 			}
 		}
 	}
@@ -244,7 +244,7 @@ public abstract class DncTest {
 			System.out.println();
 		}
 
-		AnalysisResults bounds = expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY,
+		AnalysisResults bounds = expected_results.getBounds(Analyses.PMOO, Multiplexing.ARBITRARY,
 				flow_of_interest);
 		assertEquals(bounds.getDelayBound(), pmoo.getDelayBound(), "PMOO delay");
 		assertEquals(bounds.getBacklogBound(), pmoo.getBacklogBound(), "PMOO backlog");
@@ -287,16 +287,16 @@ public abstract class DncTest {
 			System.out.println();
 		}
 
-		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL, "PMOO backlog TBRL");
 
-		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL_CONV, "PMOO backlog TBRL CONV");
 
-		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL_CONV_TBRL_DECONV, "PMOO backlog TBRL CONV TBRL DECONV");
 
-		assertEquals(expected_results.getBounds(Analyses.PMOO, AnalysisConfig.Multiplexing.ARBITRARY, flow_of_interest)
+		assertEquals(expected_results.getBounds(Analyses.PMOO, Multiplexing.ARBITRARY, flow_of_interest)
 				.getBacklogBound(), backlog_bound_TBRL_HOMO, "PMOO backlog RBRL HOMO");
 	}
 }
