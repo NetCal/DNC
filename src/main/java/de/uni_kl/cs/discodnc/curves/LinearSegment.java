@@ -27,31 +27,16 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine.LinearSegment_MPARTC_PwAffine;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {
     static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        switch (CalculatorConfig.getInstance().getCurveImpl()) {
-            case MPA_RTC:
-                return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
-            case DNC:
-            default:
-                return new LinearSegment_DNC(x, y, grad, leftopen);
-        }
+        return CalculatorConfig.getInstance().getCurveImpl().createLinearSegment(x, y, grad, leftopen);
     }
 
     static LinearSegment createHorizontalLine(double y) {
-        switch (CalculatorConfig.getInstance().getCurveImpl()) {
-            case MPA_RTC:
-                return new LinearSegment_MPARTC_PwAffine(0.0, y, 0.0);
-            case DNC:
-            default:
-                return new LinearSegment_DNC(Num.getFactory().createZero(),
-                        Num.getFactory().create(y), Num.getFactory().createZero(), false);
-        }
+        return CalculatorConfig.getInstance().getCurveImpl().createHorizontalLine(y);
     }
 
     /**

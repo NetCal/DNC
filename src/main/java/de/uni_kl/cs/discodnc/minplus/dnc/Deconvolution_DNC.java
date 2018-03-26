@@ -29,19 +29,19 @@
 
 package de.uni_kl.cs.discodnc.minplus.dnc;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public abstract class Deconvolution_DNC {
 
@@ -53,7 +53,7 @@ public abstract class Deconvolution_DNC {
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
                                                boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
-        switch (MinPlus.inputNullCheck(arrival_curves, service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curves, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -86,7 +86,7 @@ public abstract class Deconvolution_DNC {
                                                boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        switch (MinPlus.inputNullCheck(arrival_curves, service_curves)) {
+        switch (CheckUtils.inputNullCheck(arrival_curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -98,7 +98,7 @@ public abstract class Deconvolution_DNC {
                 return results;
             default:
         }
-        switch (MinPlus.inputEmptySetCheck(arrival_curves, service_curves)) {
+        switch (CheckUtils.inputEmptySetCheck(arrival_curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -127,7 +127,7 @@ public abstract class Deconvolution_DNC {
 
     public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
                                           boolean tb_rl_optimized) {
-        switch (MinPlus.inputNullCheck(arrival_curve, service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -160,7 +160,7 @@ public abstract class Deconvolution_DNC {
                                                                 Set<ServiceCurve> service_curves) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        switch (MinPlus.inputNullCheck(curves, service_curves)) {
+        switch (CheckUtils.inputNullCheck(curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -172,7 +172,7 @@ public abstract class Deconvolution_DNC {
                 return results;
             default:
         }
-        switch (MinPlus.inputEmptySetCheck(curves, service_curves)) {
+        switch (CheckUtils.inputEmptySetCheck(curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -199,7 +199,7 @@ public abstract class Deconvolution_DNC {
     }
 
     private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        switch (MinPlus.inputNullCheck(arrival_curve, service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -235,7 +235,7 @@ public abstract class Deconvolution_DNC {
      */
     private static ArrivalCurve deconvolve_mTB_mRL(CurvePwAffine curve_1, CurvePwAffine curve_2) {
         // if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-        switch (MinPlus.inputNullCheck(curve_1, curve_2)) {
+        switch (CheckUtils.inputNullCheck(curve_1, curve_2)) {
             case 0:
                 break;
             case 1:

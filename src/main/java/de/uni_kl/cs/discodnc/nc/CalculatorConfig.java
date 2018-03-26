@@ -30,10 +30,15 @@ package de.uni_kl.cs.discodnc.nc;
 
 import java.io.File;
 
+import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.numbers.Num;
+
 public final class CalculatorConfig {
 	private static CalculatorConfig instance = new CalculatorConfig();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
+	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl_DNC.DNC;
 	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -65,18 +70,11 @@ public final class CalculatorConfig {
 		return CURVE_IMPLEMENTATION;
 	}
 
-	private void checkMPARTC() throws RuntimeException {
-		String classpath = System.getProperty("java.class.path");
-		for (String classpathEntry : classpath.split(File.pathSeparator)) {
-			if (classpathEntry.contains("rtc.jar")) {
-				return;
-			}
-		}
-		throw new RuntimeException("rtc.jar cannot be found on the classpath!");
+	private void checkDependencies() {
+		CURVE_IMPLEMENTATION.checkDependencies();
 	}
-
 	public boolean setCurveImpl(CurveImpl curve_impl) {
-		checkMPARTC();
+		checkDependencies();
 
 		if (CURVE_IMPLEMENTATION == curve_impl) {
 			return false;
@@ -90,7 +88,7 @@ public final class CalculatorConfig {
 	}
 
 	public void setOperationImpl(OperationImpl operation_impl) {
-		checkMPARTC();
+		checkDependencies();
 		OPERATION_IMPLEMENTATION = operation_impl;
 	}
 
@@ -166,10 +164,25 @@ public final class CalculatorConfig {
 		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
 	}
 
-	public enum CurveImpl {
-		DNC, MPA_RTC
+	public interface CurveImpl {
+	
+		MinPlus getMinPlus();
+		CurvePwAffine getCurve();
+		LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen);
+		LinearSegment createHorizontalLine(double y);
+		default void checkDependencies() {
+			
+		}
 	}
-
+	
+	public MinPlus getMinPlus() {
+		return CURVE_IMPLEMENTATION.getMinPlus();
+	}
+	
+	public CurvePwAffine getCurve() {
+		return CURVE_IMPLEMENTATION.getCurve();
+	}
+	
 	public enum OperationImpl {
 		DNC, NATIVE
 	}

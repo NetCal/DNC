@@ -35,13 +35,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>ch.ethz.rtc.kernel</groupId>
-            <artifactId>rtc</artifactId>
-            <version>1.2.beta.100</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/rtc.jar</systemPath>
-        </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
@@ -80,13 +73,13 @@
             <artifactId>commons-math3</artifactId>
             <version>3.6.1</version>
         </dependency>
-
-        <dependency>
+		
+		 <dependency>
             <groupId>org.opentest4j</groupId>
             <artifactId>opentest4j</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        
         <dependency>
         	<groupId>org.junit.jupiter</groupId>
         	<artifactId>junit-jupiter-engine</artifactId>

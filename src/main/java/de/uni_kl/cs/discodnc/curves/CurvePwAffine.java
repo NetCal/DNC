@@ -27,14 +27,12 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import de.uni_kl.cs.discodnc.curves.dnc.Curve_DNC;
-import de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
-import de.uni_kl.cs.discodnc.numbers.Num;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
  * Interface for piecewise affine curves, including convenience functions used
@@ -43,15 +41,9 @@ import java.util.List;
  * token bucket functions.
  */
 public interface CurvePwAffine extends Curve {
-    static CurvePwAffine getFactory() {
-        switch (CalculatorConfig.getInstance().getCurveImpl()) {
-            case MPA_RTC:
-                return Curve_MPARTC_PwAffine.getFactory();
-            case DNC:
-            default:
-                return Curve_DNC.getFactory();
-        }
-    }
+	static CurvePwAffine getFactory() {
+		return CalculatorConfig.getInstance().getCurve();
+	}
 
     /**
      * Common helper for computing a new curve.

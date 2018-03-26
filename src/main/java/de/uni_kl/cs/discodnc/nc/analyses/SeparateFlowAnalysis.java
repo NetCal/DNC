@@ -39,6 +39,7 @@ import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
@@ -178,7 +179,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lofoi_s);
 
-            betas_lofoi_path = MinPlus.convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
+            betas_lofoi_path = CalculatorConfig.getInstance().getMinPlus().convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
                     configuration.tbrlConvolution());
         }
         return betas_lofoi_path;
