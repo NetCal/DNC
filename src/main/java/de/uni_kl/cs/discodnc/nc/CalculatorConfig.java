@@ -28,8 +28,6 @@
 
 package de.uni_kl.cs.discodnc.nc;
 
-import java.io.File;
-
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
