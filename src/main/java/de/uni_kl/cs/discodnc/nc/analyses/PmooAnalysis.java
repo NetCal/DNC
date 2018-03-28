@@ -216,6 +216,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             Num sum_r = Num.getFactory().createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
+
                 Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
                 AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
                 sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
