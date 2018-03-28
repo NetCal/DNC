@@ -30,7 +30,7 @@
 package de.uni_kl.cs.discodnc.network;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +39,7 @@ import java.util.List;
  * Class representing flows through the network.
  */
 public class Flow {
-    public static final Flow NULL_FLOW = createDummyFlow("null", CurvePwAffine.getFactory().createZeroArrivals(),
+    public static final Flow NULL_FLOW = createDummyFlow("null", Curve.getFactory().createZeroArrivals(),
             Path.createEmptyPath());
 
     /**

@@ -28,10 +28,7 @@
 
 package de.uni_kl.cs.discodnc.demos;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.curves.*;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
@@ -58,8 +55,8 @@ public class Demo4 {
     }
 
     public void run() throws Exception {
-        ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(10.0e6, 0.01);
-        MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createRateLatencyMSC(100.0e6, 0.001);
+        ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
+        MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
         Network network = new Network();
 
@@ -81,7 +78,7 @@ public class Demo4 {
         Link l_6_7 = network.addLink(servers[6], servers[7]);
         Link l_7_8 = network.addLink(servers[7], servers[8]);
 
-        ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
+        ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
         LinkedList<Link> path0 = new LinkedList<Link>();
 
