@@ -167,7 +167,7 @@ public final class CalculatorConfig {
 	}
 
 	public enum CurveImpl {
-		DNC, MPA_RTC
+		DNC, MPA_RTC, DNC_AFFINE
 	}
 
 	public enum OperationImpl {
