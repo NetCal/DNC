@@ -27,7 +27,7 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-public interface ServiceCurve extends CurvePwAffine {
+public interface ServiceCurve extends Curve {
     @Override
     ServiceCurve copy();
 

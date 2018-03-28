@@ -31,7 +31,7 @@
 package de.uni_kl.cs.discodnc.nc.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
@@ -166,7 +166,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
                 Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>();
                 for (ArrivalCurve arrival_curve_path : alpha_xfois_path) {
                     for (ArrivalCurve arrival_curve_offpath : alpha_xfois_offpath) {
-                        alpha_xfois.add(CurvePwAffine.add(arrival_curve_path, arrival_curve_offpath));
+                        alpha_xfois.add(Curve.add(arrival_curve_path, arrival_curve_offpath));
                     }
                 }
 
