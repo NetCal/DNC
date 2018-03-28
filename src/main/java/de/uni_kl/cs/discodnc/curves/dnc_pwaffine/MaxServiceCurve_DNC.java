@@ -1,6 +1,8 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
+ * Copyright (C) 2005 - 2007 Frank A. Zdarsky
+ * Copyright (C) 2016 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
@@ -25,70 +27,65 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
-import ch.ethz.rtc.kernel.Curve;
-import ch.ethz.rtc.kernel.SegmentList;
-
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
-public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implements MaxServiceCurve {
+public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    protected MaxServiceCurve_MPARTC_PwAffine() {
+    protected MaxServiceCurve_DNC() {
         super();
     }
 
-    public MaxServiceCurve_MPARTC_PwAffine(int segment_count) {
+    public MaxServiceCurve_DNC(int segment_count) {
         super(segment_count);
     }
 
-    public MaxServiceCurve_MPARTC_PwAffine(de.uni_kl.cs.discodnc.curves.Curve curve) {
+    public MaxServiceCurve_DNC(Curve curve) {
         copy(curve);
+
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+            // requirement:
+            // !isAlmostConcave()
+            // ) {
+            throw new RuntimeException(
+                    "Maximum service curves can only be created from wide-sense increasing functions.");
+        }
+
+        forceThroughOrigin();
     }
 
-    public MaxServiceCurve_MPARTC_PwAffine(String max_service_curve_str) throws Exception {
-        super.initializeCurve(max_service_curve_str);
-    }
+    public MaxServiceCurve_DNC(String max_service_curve_str) throws Exception {
+        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest
+            // possible
+            // string:
+            // {(0,0),0}
+            throw new RuntimeException("Invalid string representation of a service curve.");
+        }
 
-    public MaxServiceCurve_MPARTC_PwAffine(SegmentList aperSegments) {
-        rtc_curve = new Curve(aperSegments);
-    }
+        initializeCurve(max_service_curve_str);
 
-    public MaxServiceCurve_MPARTC_PwAffine(SegmentList perSegments, double py0, long period, double pdy) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy);
-    }
+        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+            // requirement:
+            // !isAlmostConcave()
+            // ) {
+            throw new RuntimeException(
+                    "Maximum service curves can only be created from wide-sense increasing functions.");
+        }
 
-    public MaxServiceCurve_MPARTC_PwAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
-        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
-    }
-
-    public MaxServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0,
-                                           long period, double pdy) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
-    }
-
-    public MaxServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0,
-                                           long period, double pdy, String name) {
-        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
-    }
-
-    public MaxServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, String name) {
-        rtc_curve = new Curve(aperSegments, name);
-    }
-
-    public MaxServiceCurve_MPARTC_PwAffine(Curve c) {
-        rtc_curve = c.clone();
+        forceThroughOrigin();
     }
 
     // --------------------------------------------------------------------------------------------------------------
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public MaxServiceCurve_MPARTC_PwAffine copy() {
-        MaxServiceCurve_MPARTC_PwAffine msc_copy = new MaxServiceCurve_MPARTC_PwAffine();
+    public MaxServiceCurve_DNC copy() {
+        MaxServiceCurve_DNC msc_copy = new MaxServiceCurve_DNC();
         msc_copy.copy(this);
 
         return msc_copy;
@@ -96,7 +93,7 @@ public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine imple
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MaxServiceCurve_MPARTC_PwAffine) && super.equals(obj);
+        return (obj instanceof MaxServiceCurve_DNC) && super.equals(obj);
     }
 
     @Override
