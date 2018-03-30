@@ -30,7 +30,6 @@ package de.uni_kl.cs.discodnc;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface CurveBackend {
 	
@@ -38,9 +37,7 @@ public interface CurveBackend {
 	
 	CurvePwAffine getCurveFactory();
 	
-	LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen);
-	
-	LinearSegment createHorizontalLine(double y);
+	Class<? extends LinearSegment> getLinearSegmentFactory();
 	
 	default void checkDependencies() {
 		

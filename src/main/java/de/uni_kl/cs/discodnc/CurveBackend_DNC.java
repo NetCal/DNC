@@ -22,13 +22,7 @@ public enum CurveBackend_DNC implements CurveBackend {
 		}
 
 		@Override
-		public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-			return new LinearSegment_DNC(x, y, grad, leftopen);
-		}
-
-		@Override
-		public LinearSegment createHorizontalLine(double y) {
-			return new LinearSegment_DNC(Num.getFactory().createZero(),
-                    Num.getFactory().create(y), Num.getFactory().createZero(), false);
+		public Class<? extends LinearSegment> getLinearSegmentFactory() {
+			return LinearSegment_DNC.class;
 		}
 }

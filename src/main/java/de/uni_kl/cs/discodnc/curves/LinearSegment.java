@@ -27,16 +27,35 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {
-    static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        return Calculator.getInstance().getCurveBackend().createLinearSegment(x, y, grad, leftopen);
+    
+	static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+        Class<? extends LinearSegment> linearSegmentClazz = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
+        Constructor<? extends LinearSegment> constructor;
+		try {
+			constructor = linearSegmentClazz.getConstructor(Num.class, Num.class, Num.class, boolean.class);
+			return constructor.newInstance(x, y, grad, leftopen);
+		} catch (Exception e) {
+			throw new IllegalStateException("Please implement the right constructor for your LinearSegment class. LinearSegment(Num, Num, Num, boolean)");
+		} 
+        
     }
 
     static LinearSegment createHorizontalLine(double y) {
-        return Calculator.getInstance().getCurveBackend().createHorizontalLine(y);
+    	Class<? extends LinearSegment> linearSegmentClazz = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
+        try {
+        	Constructor<? extends LinearSegment> constructor = linearSegmentClazz.getConstructor(Num.class, Num.class, Num.class, boolean.class);
+        	return constructor.newInstance(Num.getFactory().createZero(),
+                Num.getFactory().create(y), Num.getFactory().createZero(), false);
+        } catch (Exception e) {
+        	throw new IllegalStateException("Please implement the right constructor for your LinearSegment class. LinearSegment(Num, Num, Num, boolean)");
+        } 
     }
 
     /**
