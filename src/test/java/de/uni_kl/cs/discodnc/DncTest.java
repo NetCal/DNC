@@ -79,7 +79,7 @@ public abstract class DncTest {
 			Calculator.getInstance().disableAllChecks();
 		}
 		
-		Calculator.getInstance().setCurveImpl(test_config.getCurveImpl());
+		Calculator.getInstance().setCurveBackend(test_config.getCurveBackend());
 		Calculator.getInstance().setNumImpl(test_config.getNumImpl());
 
 		// reinitialize the network and the bounds
@@ -94,7 +94,7 @@ public abstract class DncTest {
 			System.out.println("--------------------------------------------------------------");
 			System.out.println();
 			System.out.println("Number representation:\t" + test_config.getNumImpl().toString());
-			System.out.println("Curve representation:\t" + test_config.getCurveImpl().toString());
+			System.out.println("Curve representation:\t" + test_config.getCurveBackend().toString());
 			System.out.println("Arrival Boundings:\t" + test_config.arrivalBoundMethods().toString());
 			System.out
 					.println("Remove duplicate ABs:\t" + Boolean.toString(test_config.removeDuplicateArrivalBounds()));

@@ -29,15 +29,13 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.nc.CurveImpl_DNC;
-import de.uni_kl.cs.discodnc.numbers.Num;
 
 public final class Calculator {
 	private static Calculator instance = new Calculator();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl_DNC.DNC;
+	private CurveBackend CURVE_IMPLEMENTATION = CurveImpl_DNC.DNC;
 	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -65,14 +63,14 @@ public final class Calculator {
 		}
 	}
 
-	public CurveImpl getCurveImpl() {
+	public CurveBackend getCurveBackend() {
 		return CURVE_IMPLEMENTATION;
 	}
 
 	private void checkDependencies() {
 		CURVE_IMPLEMENTATION.checkDependencies();
 	}
-	public boolean setCurveImpl(CurveImpl curve_impl) {
+	public boolean setCurveBackend(CurveBackend curve_impl) {
 		checkDependencies();
 
 		if (CURVE_IMPLEMENTATION == curve_impl) {
@@ -133,7 +131,7 @@ public final class Calculator {
 
 		calculator_config_str.append(getNumImpl().toString());
 		calculator_config_str.append(", ");
-		calculator_config_str.append(getCurveImpl().toString());
+		calculator_config_str.append(getCurveBackend().toString());
 
 		if (exec_arrival_curve_checks()) {
 			calculator_config_str.append(", ");
@@ -161,17 +159,6 @@ public final class Calculator {
 
 	public enum NumImpl {
 		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
-	}
-
-	public interface CurveImpl {
-	
-		MinPlus getMinPlus();
-		CurvePwAffine getCurve();
-		LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen);
-		LinearSegment createHorizontalLine(double y);
-		default void checkDependencies() {
-			
-		}
 	}
 	
 	public MinPlus getMinPlus() {

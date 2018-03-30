@@ -1,6 +1,6 @@
 package de.uni_kl.cs.discodnc.nc;
 
-import de.uni_kl.cs.discodnc.Calculator.CurveImpl;
+import de.uni_kl.cs.discodnc.CurveBackend;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.Curve_DNC;
@@ -9,7 +9,7 @@ import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.minplus.MinPlus_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public enum CurveImpl_DNC implements CurveImpl {
+public enum CurveImpl_DNC implements CurveBackend {
 		DNC;
 	
 		@Override

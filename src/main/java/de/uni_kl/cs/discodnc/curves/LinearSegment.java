@@ -32,11 +32,11 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {
     static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        return Calculator.getInstance().getCurveImpl().createLinearSegment(x, y, grad, leftopen);
+        return Calculator.getInstance().getCurveBackend().createLinearSegment(x, y, grad, leftopen);
     }
 
     static LinearSegment createHorizontalLine(double y) {
-        return Calculator.getInstance().getCurveImpl().createHorizontalLine(y);
+        return Calculator.getInstance().getCurveBackend().createHorizontalLine(y);
     }
 
     /**
