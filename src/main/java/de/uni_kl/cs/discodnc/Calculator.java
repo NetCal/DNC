@@ -30,12 +30,11 @@ package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.nc.CurveImpl_DNC;
 
 public final class Calculator {
 	private static Calculator instance = new Calculator();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveBackend CURVE_IMPLEMENTATION = CurveImpl_DNC.DNC;
+	private CurveBackend CURVE_IMPLEMENTATION = CurveBackend_DNC.DNC;
 	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -166,7 +165,7 @@ public final class Calculator {
 	}
 	
 	public CurvePwAffine getCurve() {
-		return CURVE_IMPLEMENTATION.getCurve();
+		return CURVE_IMPLEMENTATION.getCurveFactory();
 	}
 	
 	public enum OperationImpl {

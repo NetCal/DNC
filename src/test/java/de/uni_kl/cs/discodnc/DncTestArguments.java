@@ -29,7 +29,6 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
-import de.uni_kl.cs.discodnc.nc.CurveImpl_DNC;
 import de.uni_kl.cs.discodnc.CurveBackend;
 import de.uni_kl.cs.discodnc.Calculator.NumImpl;
 //import CalculatorConfig.OperationImpl;
@@ -62,7 +61,7 @@ public class DncTestArguments implements ArgumentsProvider {
 		nums.add(NumImpl.RATIONAL_BIGINTEGER);
 
 		Set<CurveBackend> curves = new HashSet<CurveBackend>();
-		curves.add(CurveImpl_DNC.DNC);
+		curves.add(CurveBackend_DNC.DNC);
 		
 //		Set<OperationImpl> operations = new HashSet<OperationImpl>();
 //		operations.add(OperationImpl.DNC);

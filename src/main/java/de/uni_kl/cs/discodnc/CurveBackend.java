@@ -36,7 +36,7 @@ public interface CurveBackend {
 	
 	MinPlus getMinPlus();
 	
-	CurvePwAffine getCurve();
+	CurvePwAffine getCurveFactory();
 	
 	LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen);
 	
