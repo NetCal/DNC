@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
@@ -42,7 +42,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
  */
 public interface CurvePwAffine extends Curve {
 	static CurvePwAffine getFactory() {
-		return CalculatorConfig.getInstance().getCurve();
+		return Calculator.getInstance().getCurve();
 	}
 
     /**

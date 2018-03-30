@@ -26,15 +26,16 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.nc.CurveImpl_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public final class CalculatorConfig {
-	private static CalculatorConfig instance = new CalculatorConfig();
+public final class Calculator {
+	private static Calculator instance = new Calculator();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
 	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl_DNC.DNC;
 	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
@@ -44,10 +45,10 @@ public final class CalculatorConfig {
 	private boolean FIFO_MUX_CHECKS = false;
 	private boolean DECONVOLUTION_CHECKS = false;
 
-	protected CalculatorConfig() {
+	protected Calculator() {
 	}
 
-	public static CalculatorConfig getInstance() {
+	public static Calculator getInstance() {
 		return instance;
 	}
 

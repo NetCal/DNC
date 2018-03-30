@@ -32,6 +32,7 @@ package de.uni_kl.cs.discodnc.minplus.dnc;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
@@ -39,7 +40,6 @@ import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.CheckUtils;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public abstract class Convolution_DNC {
@@ -351,7 +351,7 @@ public abstract class Convolution_DNC {
             default:
         }
 
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks()
+        if (Calculator.getInstance().exec_max_service_curve_checks()
                 && (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
             throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
         }

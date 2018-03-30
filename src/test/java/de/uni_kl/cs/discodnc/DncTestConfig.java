@@ -28,9 +28,9 @@
 
 package de.uni_kl.cs.discodnc;
 
+import de.uni_kl.cs.discodnc.Calculator.CurveImpl;
+import de.uni_kl.cs.discodnc.Calculator.NumImpl;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
 
 import java.util.Set;
 

@@ -29,9 +29,9 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
 import de.uni_kl.cs.discodnc.nc.CurveImpl_DNC;
+import de.uni_kl.cs.discodnc.Calculator.CurveImpl;
+import de.uni_kl.cs.discodnc.Calculator.NumImpl;
 //import CalculatorConfig.OperationImpl;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 

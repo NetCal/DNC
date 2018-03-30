@@ -27,16 +27,16 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {
     static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        return CalculatorConfig.getInstance().getCurveImpl().createLinearSegment(x, y, grad, leftopen);
+        return Calculator.getInstance().getCurveImpl().createLinearSegment(x, y, grad, leftopen);
     }
 
     static LinearSegment createHorizontalLine(double y) {
-        return CalculatorConfig.getInstance().getCurveImpl().createHorizontalLine(y);
+        return Calculator.getInstance().getCurveImpl().createHorizontalLine(y);
     }
 
     /**

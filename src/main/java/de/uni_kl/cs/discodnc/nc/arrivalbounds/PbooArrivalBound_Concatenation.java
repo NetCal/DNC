@@ -28,6 +28,7 @@
 
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -37,7 +38,6 @@ import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.network.Flow;
@@ -150,7 +150,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 			}
 
 			// Combine into the sub-path's left-over service curve
-			betas_lo_subpath = CalculatorConfig.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution());
+			betas_lo_subpath = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution());
 		}
 
 		// Next we need to know the arrival bound of f_xfcaller at the server

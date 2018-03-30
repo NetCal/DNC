@@ -28,6 +28,7 @@
 
 package de.uni_kl.cs.discodnc.nc;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -225,7 +226,7 @@ public abstract class ArrivalBoundDispatch {
 
 		// All permutations of single flow results
 		for (ServiceCurve beta_lo : betas_lo) {
-			arrival_bounds_f.add(CalculatorConfig.getInstance().getMinPlus().deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
+			arrival_bounds_f.add(Calculator.getInstance().getMinPlus().deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
 		}
 
 		return arrival_bounds_f;

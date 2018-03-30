@@ -34,7 +34,6 @@ import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
@@ -75,13 +74,13 @@ public abstract class DncTest {
 		printSetting();
 
 		if (test_config.enable_checks) {
-			CalculatorConfig.getInstance().enableAllChecks();
+			Calculator.getInstance().enableAllChecks();
 		} else {
-			CalculatorConfig.getInstance().disableAllChecks();
+			Calculator.getInstance().disableAllChecks();
 		}
 		
-		CalculatorConfig.getInstance().setCurveImpl(test_config.getCurveImpl());
-		CalculatorConfig.getInstance().setNumImpl(test_config.getNumImpl());
+		Calculator.getInstance().setCurveImpl(test_config.getCurveImpl());
+		Calculator.getInstance().setNumImpl(test_config.getNumImpl());
 
 		// reinitialize the network and the bounds
 		network_factory.reinitializeCurves();
