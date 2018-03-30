@@ -6,7 +6,6 @@ import de.uni_kl.cs.discodnc.curves.dnc.Curve_DNC;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.minplus.MinPlus_DNC;
-import de.uni_kl.cs.discodnc.numbers.Num;
 
 public enum CurveBackend_DNC implements CurveBackend {
 		DNC;
@@ -22,7 +21,7 @@ public enum CurveBackend_DNC implements CurveBackend {
 		}
 
 		@Override
-		public Class<? extends LinearSegment> getLinearSegmentFactory() {
-			return LinearSegment_DNC.class;
+		public LinearSegment.Builder getLinearSegmentFactory() {
+			return LinearSegment_DNC.getBuilder();
 		}
 }

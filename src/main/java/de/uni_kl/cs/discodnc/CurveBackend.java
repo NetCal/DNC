@@ -37,7 +37,7 @@ public interface CurveBackend {
 	
 	CurvePwAffine getCurveFactory();
 	
-	Class<? extends LinearSegment> getLinearSegmentFactory();
+	LinearSegment.Builder getLinearSegmentFactory();
 	
 	default void checkDependencies() {
 		

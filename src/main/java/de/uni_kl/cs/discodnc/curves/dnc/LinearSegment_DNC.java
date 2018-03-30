@@ -29,6 +29,9 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc;
 
+import java.lang.reflect.Constructor;
+
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
@@ -241,5 +244,24 @@ public class LinearSegment_DNC implements LinearSegment {
         result += "(" + x.toString() + "," + y.toString() + ")," + grad.toString();
 
         return result;
+    }
+    
+    public static LinearSegment.Builder getBuilder() {
+    	return new LinearSegment_DNC_builder();
+    }
+    
+    private static class LinearSegment_DNC_builder implements LinearSegment.Builder {
+
+		@Override
+		public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+			return new LinearSegment_DNC(x, y, grad, leftopen);
+		}
+
+		@Override
+		public LinearSegment createHorizontalLine(double y) {
+				return new LinearSegment_DNC(Num.getFactory().createZero(),
+	                Num.getFactory().create(y), Num.getFactory().createZero(), false);
+	    }
+    	
     }
 }
