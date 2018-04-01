@@ -371,24 +371,16 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                 // interference patter no derive a left-over beta for.
                 Set<Map<Path, Set<Flow>>> xtx_subpath_grouped_incl_prolongation_tmp = new HashSet<Map<Path, Set<Flow>>>();
 
-                for (Map<Path, Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation) { // At the
-                    // beginning,
-                    // only the
-                    // original
-                    // interference
-                    // pattern
-                    // is in
-                    // here.
+                // At the beginning, only the original interference pattern is in here.
+                for (Map<Path, Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation) { 
                     // Prevent the original from getting lost because its sink is not part of
                     // xf_prolongations's Server list.
                     xtx_subpath_grouped_incl_prolongation_tmp.add(interference_pattern);
 
-                    // The general idea is to copy the map and modify the two mappings of interest
-                    // only.
-                    // Yet, the copy we need is deeper than constructing a new map or using
-                    // clone()-functionality.
-                    // We need a new map where a) the key can be the same path object as in to old
-                    // map and
+                    // The general idea is to copy the map and modify the two mappings of interest only.
+                    // Yet, the copy we need is deeper than constructing a new map or using clone()-functionality.
+                    // We need a new map where 
+                    // a) the key can be the same path object as in to old map and
                     // b) the value is a new map with the old flow objects.
                     // Constructing this copy will require a loop -- the following loop we use for
                     // an "in situ" modification we need.
@@ -417,15 +409,15 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                             Link inlink_xfs = xfs.iterator().next().getPrecedingLink(subpaths_src);
                             Link inlink_subpath_flows;
                             for (Flow f : value_flows) {
-                                try {
+                            	try {
                                     inlink_subpath_flows = f.getPrecedingLink(subpaths_src);
                                     if (inlink_subpath_flows.equals(inlink_xfs)) {
                                         aggr_potential = true;
                                         continue;
                                     }
+                                // There's an exception thrown by getPrecedingLink if f is originating in subpaths_src
                                 } catch (Exception e) {
-                                } // There's an exception thrown by getPrecedingLink if f is originating in
-                                // subpaths_src
+                                } 
                             }
 
                             if (!aggr_potential) {
@@ -483,8 +475,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             }
         }
 
-        // First create the required sets. Saves us from checking for an existing set
-        // every time.
+        // First create the required sets.
+        // Saves us from checking for an existing set every time.
         Link inlink_flow;
         Map<Pair<Path, Link>, Set<Flow>> xtx_subpath_grouped_inlink_original = new HashMap<Pair<Path, Link>, Set<Flow>>();
 
@@ -503,8 +495,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
                 Pair<Path, Link> key_pair = new Pair<Path, Link>(entry.getKey(), inlink_flow);
 
-                // .put returns the previous value associated with key, or null if there was no
-                // mapping for key
+                // .put returns the previous value associated with key,
+                // or null if there was no mapping for key
                 Set<Flow> prev_flows_inlink = xtx_subpath_grouped_inlink_original.put(key_pair, flows_inlink);
 
                 if (prev_flows_inlink != null) {
@@ -530,16 +522,13 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
             Set<Flow> entry_flows = entry.getValue();
 
-            // What if the path prolonged to is empty due to prolongation of the flows in
-            // it?
-            // At this point we do not know that as the actual prolongation has not been
-            // done yet.
+            // What if the path prolonged to is empty due to prolongation of the flows in it?
+            // At this point we do not know that as the actual prolongation has not been done yet.
             // This situation will thus be handled in the calling method where we construct
             // the interference patterns.
             for (Path potential_path : paths_starting_in_s.get(subpath_src)) {
 
-                // Naturally, a prolonged subpath of path needs to be longer than the original
-                // one.
+                // Naturally, a prolonged subpath of path needs to be longer than the original one.
                 if (potential_path.getServers().size() <= current_subpath.getServers().size()) {
                     continue;
                 }
@@ -599,9 +588,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             for (Flow f : entry.getValue()) {
                 substitute_flow_alias = substitute_flow_alias.concat(f.getAlias() + ",");
             }
-            substitute_flow_alias = substitute_flow_alias.substring(0, substitute_flow_alias.length() - 1); // Remove
-            // trailing
-            // comma.
+            						// Remove trailing comma.
+            substitute_flow_alias = substitute_flow_alias.substring(0, substitute_flow_alias.length() - 1); 
             substitute_flow_alias = substitute_flow_alias.concat("}");
 
             // Derive the substitute flow's arrival bound
@@ -633,9 +621,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                     flow_list_tmp.add(Flow.createDummyFlow(substitute_flow_alias, alpha, entry.getKey()));
 
                     // Add this list to the set of permutations
-                    arrival_bounds_link_permutations.add(new LinkedList<Flow>(flow_list_tmp)); // Prevent interaction
-                    // with the clear()
-                    // operation above.
+                    arrival_bounds_link_permutations.add(new LinkedList<Flow>(flow_list_tmp));
+                    // Prevent interaction with the clear() operation above.
                 }
             }
             // Override cross_flow_substitutes_set for the next cross-flow substitute and
