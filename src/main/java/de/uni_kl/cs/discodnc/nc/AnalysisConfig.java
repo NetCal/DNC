@@ -51,8 +51,10 @@ public class AnalysisConfig {
     private boolean tbrl_deconvolution = false;
     private boolean flow_prolongation = false;
     private boolean ab_consider_tfa_nodeBacklog = false;
+    
     public AnalysisConfig() {
     }
+    
     public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
                           Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
                           boolean tbrl_convolution, boolean tbrl_deconvolution, boolean ab_consider_tfa_nodeBacklog) {

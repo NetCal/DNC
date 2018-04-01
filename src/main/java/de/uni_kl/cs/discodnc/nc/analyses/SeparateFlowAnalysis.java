@@ -126,10 +126,9 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         Set<ServiceCurve> betas_lofoi_path = new HashSet<ServiceCurve>();
         Set<ServiceCurve> betas_lofoi_s;
 
-        // This version iterates over the servers on the path and computes the the
-        // service curve set hop-by-hop
-        // You could also call network.getFlowsPerServer( path, {foi} u {flows_to_serve}
-        // )
+        // This version iterates over the servers on the path and 
+        // computes the service curve set hop-by-hop.
+        // You could also call network.getFlowsPerServer( path, {foi} \cup {flows_to_serve} )
         // and use that result. That would be more abstract and in line with the PMOO
         // analysis's way.
 
