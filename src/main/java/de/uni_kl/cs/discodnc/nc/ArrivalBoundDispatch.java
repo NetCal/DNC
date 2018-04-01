@@ -252,7 +252,7 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, Set<ArrivalCurve> arrival_bounds_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
+			Set<ArrivalCurve> arrival_bounds) throws Exception {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.addAll(arrival_bounds_to_merge);
 		} else {
@@ -263,23 +263,22 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, ArrivalCurve arrival_bound_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
+			Set<ArrivalCurve> arrival_bounds) throws Exception {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.add(arrival_bound_to_merge);
 		} else {
-			if (!configuration.removeDuplicateArrivalBounds() || (configuration.removeDuplicateArrivalBounds()
-					&& !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
+			if (!configuration.convolveAlternativeArrivalBounds() ) {
 				arrival_bounds.add(arrival_bound_to_merge);
+			} else { // convolve alternative arrival bounds
+				ArrivalCurve arrival_bound_tmp = arrival_bound_to_merge.copy();
+				// There should only be one arrival bound in arrival_bounds as this setting is global.
+				// Therefore, the convolution of all alternatives could be sped up using this knowledge.
+				for (ArrivalCurve arrival_bound : arrival_bounds) {
+					arrival_bound_tmp = MinPlus.convolve(arrival_bound_tmp, arrival_bound);
+				}
+				arrival_bounds.clear();
+				arrival_bounds.add(arrival_bound_tmp);
 			}
 		}
-	}
-
-	private static boolean isDuplicate(ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds) {
-		for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
-			if (arrival_bound_to_check.equals(arrival_bound_existing)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
