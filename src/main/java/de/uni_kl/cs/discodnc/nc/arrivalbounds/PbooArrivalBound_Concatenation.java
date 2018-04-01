@@ -178,7 +178,14 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 			}
 
 			// Reduce the burst
+			
+			// TODO This implementation only works for token-bucket arrivals. 
+			// It disregards the potential shift in inflection points not present in this burst cap variant.
 			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
+				if(alpha_xfcaller.getSegmentCount() > 2 ) {
+					// >2 segments -> >=2 inflection points -> burst reduction not applicable! 
+					continue;
+				}
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
 					// If the burst is >0 then there are at least two segments and
 					// the second holds the burst as its y-axis value
