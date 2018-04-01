@@ -1,3 +1,10 @@
+Changes since v2.4.0 "Chimera"
+------------------------------
+* Tests now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
+* Our current TFA AB burst reduction implementation is only applicable to TB arrivals.
+  - We now skip reducing the reduction for arrival curves with >2 segments.
+* Code and comment cleanups.
+
 v2.4.0 "Chimera" (2018-Mar-18)
 ------------------------------
 * Maven build system
