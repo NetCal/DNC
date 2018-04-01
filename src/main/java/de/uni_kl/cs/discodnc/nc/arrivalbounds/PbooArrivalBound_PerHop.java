@@ -155,8 +155,9 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
-		if (configuration.abConsiderTFANodeBacklog()) {
+		if (configuration.serverBacklogArrivalBound()) {
 			Server last_hop_xtx = link.getSource();
+			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
 			tfa.deriveBoundsAtServer(last_hop_xtx);
 
@@ -172,9 +173,9 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			// Reduce the burst
 			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
-					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min); // if the burst is >0 then there are at
-					// least two segments and the second
-					// holds the burst as its y-axis value
+					// If the burst is >0 then there are at least two segments and
+					// the second holds the burst as its y-axis value
+					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min);
 				}
 			}
 		}
