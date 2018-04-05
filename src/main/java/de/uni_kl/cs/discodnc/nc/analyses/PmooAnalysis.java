@@ -32,7 +32,9 @@ package de.uni_kl.cs.discodnc.nc.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.CurveAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.curves.dnc_affine.AffineCurve_DNC;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
@@ -205,8 +207,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                 return Curve.getFactory().createZeroService();
             }
 
-            // TODO Actually needs to be an affine curve (single RL)
-            Curve current_rl = service_curves[i].getRL_Component(server_rl_iters[i]);
+            Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
+            AffineCurve_DNC current_rl = AffineCurve_DNC.getFactory().createServiceCurve(tmpcurve);
 
             // Sum up latencies
             T = compute.add(T, current_rl.getLatency());
@@ -215,8 +217,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             Num sum_r = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
-                // TODO Actually needs to be an affine curve (single TB)
-                Curve current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+                Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+                AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
                 sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
             }
 
@@ -244,8 +246,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         // Compute sum of bursts
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
-            // TODO Actually needs to be an affine curve (single TB)
-            Curve current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+            Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+            AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
             sum_bursts = compute.add(sum_bursts, current_tb.getBurst());
         }
 
