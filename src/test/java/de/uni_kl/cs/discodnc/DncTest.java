@@ -96,8 +96,7 @@ public abstract class DncTest {
 			System.out.println("Number representation:\t" + test_config.getNumImpl().toString());
 			System.out.println("Curve representation:\t" + test_config.getCurveImpl().toString());
 			System.out.println("Arrival Boundings:\t" + test_config.arrivalBoundMethods().toString());
-			System.out
-					.println("Remove duplicate ABs:\t" + Boolean.toString(test_config.removeDuplicateArrivalBounds()));
+			System.out.println("Convolve alternative ABs:\t" + Boolean.toString(test_config.convolveAlternativeArrivalBounds()));
 			System.out.println("TB,RL convolution:\t" + Boolean.toString(test_config.tbrlConvolution()));
 			System.out.println("TB,RL deconvolution:\t" + Boolean.toString(test_config.tbrlDeconvolution()));
 		}
