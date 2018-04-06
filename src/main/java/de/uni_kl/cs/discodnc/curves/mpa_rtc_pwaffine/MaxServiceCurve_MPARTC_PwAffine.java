@@ -30,7 +30,6 @@ package de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine;
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
 
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 
 public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implements MaxServiceCurve {
@@ -45,7 +44,7 @@ public class MaxServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine imple
         super(segment_count);
     }
 
-    public MaxServiceCurve_MPARTC_PwAffine(CurvePwAffine curve) {
+    public MaxServiceCurve_MPARTC_PwAffine(de.uni_kl.cs.discodnc.curves.Curve curve) {
         copy(curve);
     }
 

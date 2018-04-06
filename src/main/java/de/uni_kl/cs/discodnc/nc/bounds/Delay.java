@@ -30,8 +30,9 @@
 package de.uni_kl.cs.discodnc.nc.bounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class Delay {
@@ -39,8 +40,8 @@ public class Delay {
     }
 
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
-            return Num.getFactory().createZero();
+        if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())) {
+            return Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
         }
         if (service_curve.isDelayedInfiniteBurst()) {
             // Assumption: the arrival curve does not have an initial latency.
@@ -48,10 +49,10 @@ public class Delay {
             // would not be sensible.
             return service_curve.getLatency().copy();
         }
-        if (service_curve.equals(CurvePwAffine.getFactory().createZeroService()) // We know from above that the
+        if (service_curve.equals(Curve.getFactory().createZeroService()) // We know from above that the
                 // arrivals are not zero.
                 || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-            return Num.getFactory().createPositiveInfinity();
+            return Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity();
         }
         return null;
     }
@@ -62,7 +63,7 @@ public class Delay {
             return result;
         }
 
-        return CurvePwAffine.getXIntersection(arrival_curve, service_curve);
+        return Curve.getXIntersection(arrival_curve, service_curve);
     }
 
     // Single flow to be bound, i.e., fifo per micro flow holds
@@ -73,20 +74,20 @@ public class Delay {
             return result;
         }
 
-        result = Num.getFactory().createNegativeInfinity();
+        result = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createNegativeInfinity();
         for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
             Num ip_y = arrival_curve.getSegment(i).getY();
 
-            Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-            result = Num.getUtils().max(result, delay);
+            Num delay = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+            result = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(result, delay);
         }
         for (int i = 0; i < service_curve.getSegmentCount(); i++) {
             Num ip_y = service_curve.getSegment(i).getY();
 
-            Num delay = Num.getUtils().sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-            result = Num.getUtils().max(result, delay);
+            Num delay = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
+            result = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(result, delay);
         }
 
-        return Num.getUtils().max(Num.getFactory().getZero(), result);
+        return Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getZero(), result);
     }
 }

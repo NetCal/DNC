@@ -30,7 +30,7 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
@@ -93,19 +93,19 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return alphas_xfcaller;
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
 		// Get the common sub-path of f_xfcaller flows crossing the given link
-		// loi == location of interference
-		Server loi = link.getDest();
-		Set<Flow> f_loi = network.getFlows(loi);
-		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
-		f_xfcaller_loi.remove(flow_of_interest);
-		if (f_xfcaller_loi.isEmpty()) {
-			return alphas_xfcaller;
+		// soi == server of interference
+		Server soi = link.getDest();
+		Set<Flow> f_soi = network.getFlows(soi);
+		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
+		f_xfcaller_soi.remove(flow_of_interest);
+		if (f_xfcaller_soi.isEmpty()) {
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
 		if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
@@ -114,34 +114,34 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
 		}
 
-		Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
+		Server common_subpath_src = network.findSplittingServer(soi, f_xfcaller_soi);
 		Server common_subpath_dest = link.getSource();
 		Path common_subpath;
 		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
 
-		common_subpath = f_xfcaller_loi.iterator().next().getPath().getSubPath(common_subpath_src, common_subpath_dest);
+		common_subpath = f_xfcaller_soi.iterator().next().getPath().getSubPath(common_subpath_src, common_subpath_dest);
 
 		if (common_subpath.numServers() == 1) {
 			common_subpath = new Path(common_subpath_src);
 
 			Set<Flow> f_xxfcaller = network.getFlows(common_subpath_src);
-			f_xxfcaller.removeAll(f_xfcaller_loi);
+			f_xxfcaller.removeAll(f_xfcaller_soi);
 			f_xxfcaller.remove(flow_of_interest);
 			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 					common_subpath_src, f_xxfcaller, flow_of_interest);
 
-			ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
+			ServiceCurve null_service = Curve.getFactory().createZeroService();
 
 			for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
 					alphas_xxfcaller)) {
 				if (!beta_loxfcaller_subpath.equals(null_service)) {
-					betas_loxfcaller_subpath.add(beta_loxfcaller_subpath); // Adding to the set, not adding up the
-					// curves
+					// Adding to the set, not adding up the curves
+					betas_loxfcaller_subpath.add(beta_loxfcaller_subpath);
 				}
 			}
 		} else {
 			PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
-			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_loi);
+			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_soi);
 		}
 
 		// Check if there's any service left on this path. Signaled by at least one
@@ -149,8 +149,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 		if (betas_loxfcaller_subpath.isEmpty()) {
 			System.out.println("No service left over during PMOO arrival bounding!");
 			alphas_xfcaller.clear();
-			alphas_xfcaller.add(CurvePwAffine.getFactory()
-					.createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
+			alphas_xfcaller.add(Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY));
 			return alphas_xfcaller;
 		}
 

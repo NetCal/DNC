@@ -29,15 +29,17 @@
 package de.uni_kl.cs.discodnc.nc;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_Concatenation;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_PerHop;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PmooArrivalBound;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.TandemMatchingArrivalBound;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -82,7 +84,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (flows_to_bound.isEmpty()) {
 			return arrival_bounds;
 		}
@@ -96,13 +98,14 @@ public abstract class ArrivalBoundDispatch {
 		// Get cross-traffic originating in server
 		Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection(f_xfcaller_server,
 				network.getSourceFlows(server));
-		f_xfcaller_sourceflows_server.remove(flow_of_interest);
-		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,
-				f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
-		arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
+		if( !f_xfcaller_sourceflows_server.isEmpty() ) {
+			f_xfcaller_sourceflows_server.remove(flow_of_interest);
+			ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
+			arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
 
-		if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
-			return arrival_bounds;
+			if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
+				return arrival_bounds;
+			}
 		}
 
 		// Get cross-traffic from each predecessor. Call per link in order to get
@@ -127,10 +130,10 @@ public abstract class ArrivalBoundDispatch {
 			// * Consider all the permutations of different bounds per in link.
 			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
 			for (ArrivalCurve arrival_bound_link : arrival_bounds_link) {
-				CurvePwAffine.beautify(arrival_bound_link);
+				Curve.beautify(arrival_bound_link);
 
 				for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-					arrival_bounds_link_permutations.add(CurvePwAffine.add(arrival_bound_link, arrival_bound_exiting));
+					arrival_bounds_link_permutations.add(Curve.add(arrival_bound_link, arrival_bound_exiting));
 				}
 			}
 
@@ -146,7 +149,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
@@ -176,8 +179,15 @@ public abstract class ArrivalBoundDispatch {
 				arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
-			/* There are not functional tests for the per-flow arrival bounds. */
+			/* There are no integration tests for TMA or the per-flow arrival bounds. */
 				
+			case TMA:
+				TandemMatchingArrivalBound tm_arrival_bound = TandemMatchingArrivalBound.getInstance();
+				tm_arrival_bound.setNetwork(network);
+				tm_arrival_bound.setConfiguration(configuration);
+				arrival_bounds_tmp = tm_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				break;
+
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
 			case PER_FLOW_SFA:
 				for (Flow flow : flows_to_bound) {
@@ -203,6 +213,16 @@ public abstract class ArrivalBoundDispatch {
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
 							singleFlowABs(configuration, flow.getArrivalCurve(), pmoo.getLeftOverServiceCurves()));
+				}
+				break;
+
+			case PER_FLOW_TMA:
+				for (Flow flow : flows_to_bound) {
+					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network);
+					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+
+					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
+							singleFlowABs(configuration, flow.getArrivalCurve(), tma.getLeftOverServiceCurves()));
 				}
 				break;
 
@@ -244,7 +264,7 @@ public abstract class ArrivalBoundDispatch {
 
 		for (ArrivalCurve alpha_1 : arrival_curves_1) {
 			for (ArrivalCurve alpha_2 : arrival_curves_2) {
-				arrival_bounds_merged.add(CurvePwAffine.add(alpha_1, alpha_2));
+				arrival_bounds_merged.add(Curve.add(alpha_1, alpha_2));
 			}
 		}
 

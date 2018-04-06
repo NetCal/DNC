@@ -36,6 +36,7 @@ import de.uni_kl.cs.discodnc.nc.AnalysisResults;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -69,6 +70,14 @@ public class SeparateFlowResults extends AnalysisResults {
     @Override
     protected void setBacklogBound(Num backlog_bound) {
         super.setBacklogBound(backlog_bound);
+    }
+    
+    public Set<ServiceCurve> getBetasE2E() {
+    	return Collections.unmodifiableSet(betas_e2e);
+    }
+    
+    public Map<Server, Set<ServiceCurve>> getBetasServerMap() {
+    	return Collections.unmodifiableMap(map__server__betas_lo);
     }
 
     public String getServerLeftOverBetasMapString() {

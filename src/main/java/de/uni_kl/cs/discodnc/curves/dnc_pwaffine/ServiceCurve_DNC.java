@@ -27,9 +27,9 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
@@ -45,29 +45,25 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC(CurvePwAffine curve) {
+    public ServiceCurve_DNC(Curve curve) {
         copy(curve);
 
-        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isConvex()
+        // Too strong requirement: !isConvex()
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }
 
     public ServiceCurve_DNC(String service_curve_str) throws Exception {
-        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
-            // possible
-            // string:
-            // {(0,0),0}
+    	// Smallest possible string: {(0,0),0}
+        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) {
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
         initializeCurve(service_curve_str);
 
-        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isConvex()
+        // Too strong requirement: !isConvex()
+        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }

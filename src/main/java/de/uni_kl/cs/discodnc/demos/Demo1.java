@@ -28,10 +28,7 @@
 
 package de.uni_kl.cs.discodnc.demos;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.curves.*;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
@@ -56,10 +53,10 @@ public class Demo1 {
     }
 
     public void run() throws Exception {
-        ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
+        ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
-        ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(10.0e6, 0.01);
-        MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createRateLatencyMSC(100.0e6, 0.001);
+        ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
+        MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
         Network network = new Network();
         AnalysisConfig configuration = new AnalysisConfig();

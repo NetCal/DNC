@@ -29,7 +29,7 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
@@ -38,6 +38,7 @@ import de.uni_kl.cs.discodnc.nc.ArrivalBound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -71,7 +72,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
 			return alphas_xfcaller;
 		}
@@ -132,7 +133,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
 			for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
 				for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
-					alphas_xxfcaller_s.add(CurvePwAffine.add(arrival_curve_path, arrival_curve_offpath));
+					alphas_xxfcaller_s.add(Curve.add(arrival_curve_path, arrival_curve_offpath));
 				}
 			}
 
@@ -142,16 +143,14 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			// Check if there's any service left on this path. If not, the set only contains
 			// a null-service curve.
 			if (betas_lo_s.size() == 1
-					&& betas_lo_s.iterator().next().equals(CurvePwAffine.getFactory().createZeroService())) {
+					&& betas_lo_s.iterator().next().equals(Curve.getFactory().createZeroService())) {
 				System.out.println("No service left over during PBOO arrival bounding!");
 				alphas_xfcaller.clear();
-				alphas_xfcaller.add(CurvePwAffine.getFactory()
-						.createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
+				alphas_xfcaller.add(Curve.getFactory()
+						.createArrivalCurve(Curve.getFactory().createZeroDelayInfiniteBurst()));
 				return alphas_xfcaller;
 			}
-
-			// The deconvolution of the two sets, arrival curves and service curves,
-			// respectively, takes care of all the possible combinations
+			
 			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
@@ -162,7 +161,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			tfa.deriveBoundsAtServer(last_hop_xtx);
 
 			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
-			Num tfa_backlog_bound_min = Num.getFactory().getPositiveInfinity();
+			Num tfa_backlog_bound_min = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity();
 
 			for (Num tfa_backlog_bound : tfa_backlog_bounds) {
 				if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {
@@ -171,7 +170,14 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			}
 
 			// Reduce the burst
+			
+			// TODO This implementation only works for token-bucket arrivals. 
+			// It disregards the potential shift in inflection points not present in this burst cap variant.
 			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
+				if(alpha_xfcaller.getSegmentCount() > 2 ) {
+					// >2 segments -> >=2 inflection points -> burst reduction not applicable! 
+					continue;
+				}
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
 					// If the burst is >0 then there are at least two segments and
 					// the second holds the burst as its y-axis value

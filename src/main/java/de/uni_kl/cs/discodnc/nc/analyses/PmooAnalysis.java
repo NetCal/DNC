@@ -31,21 +31,23 @@
 package de.uni_kl.cs.discodnc.nc.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.curves.dnc_affine.AffineCurve_DNC;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
-import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,7 +59,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
-
 
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
@@ -112,15 +113,15 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             i++;
         }
 
-        ServiceCurve beta_total = CurvePwAffine.getFactory().createZeroService();
+        ServiceCurve beta_total = Curve.getFactory().createZeroService();
 
         boolean more_combinations = true;
         while (more_combinations) {
             // Compute service curve for this combination
             ServiceCurve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
                     flow_tb_iter_map, server_rl_iters);
-            if (!beta.equals(CurvePwAffine.getFactory().createZeroService())) {
-                beta_total = CurvePwAffine.max(beta_total, beta);
+            if (!beta.equals(Curve.getFactory().createZeroService())) {
+                beta_total = Curve.max(beta_total, beta);
             }
 
             // First check whether there are more combinations of flow TBs
@@ -177,12 +178,12 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
      */
     protected static ServiceCurve computePartialPMOOServiceCurve(Path path, ServiceCurve[] service_curves,
                                                                  List<Flow> cross_flow_substitutes, Map<Flow, Integer> flow_tb_iter_map, int[] server_rl_iters) {
-        Num T = Num.getFactory().createZero();
-        Num R = Num.getFactory().createPositiveInfinity();
-        Num sum_bursts = Num.getFactory().createZero();
-        Num sum_latencyterms = Num.getFactory().createZero();
+        Num T = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        Num R = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity();
+        Num sum_bursts = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        Num sum_latencyterms = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
 
-        Num compute = Num.getUtils();
+        Num compute = Num.getUtils(CalculatorConfig.getInstance().getNumBackend());
         
         double sum_r_at_s;
 
@@ -201,21 +202,21 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
             // Check for stability constraint violation
             if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-                return CurvePwAffine.getFactory().createZeroService();
+                return Curve.getFactory().createZeroService();
             }
 
-            // TODO Actually needs to be an affine curve (single RL)
-            CurvePwAffine current_rl = service_curves[i].getRL_Component(server_rl_iters[i]);
+            Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
+            AffineCurve_DNC current_rl = AffineCurve_DNC.getFactory().createServiceCurve(tmpcurve);
 
             // Sum up latencies
             T = compute.add(T, current_rl.getLatency());
 
             // Compute and store sum of rates of all passing flows
-            Num sum_r = Num.getFactory().createZero();
+            Num sum_r = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
-                // TODO Actually needs to be an affine curve (single TB)
-                CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+                Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+                AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
                 sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
             }
 
@@ -226,7 +227,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             // Compute left-over rate; update min
             Num Ri = compute.sub(current_rl.getUltAffineRate(), sum_r);
             if (Ri.leqZero()) {
-                return CurvePwAffine.getFactory().createZeroService();
+                return Curve.getFactory().createZeroService();
             }
             R = compute.min(R, Ri);
 
@@ -243,21 +244,21 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         // Compute sum of bursts
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
-            // TODO Actually needs to be an affine curve (single TB)
-            CurvePwAffine current_tb = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+            Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
+            AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
             sum_bursts = compute.add(sum_bursts, current_tb.getBurst());
         }
 
         T = compute.add(T, compute.div(compute.add(sum_bursts, sum_latencyterms), R));
 
-        if (T == Num.getFactory().getPositiveInfinity()) {
-            return CurvePwAffine.getFactory().createZeroService();
+		if (T == Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity()) {
+            return Curve.getFactory().createZeroService();
         }
-        if (R == Num.getFactory().getPositiveInfinity()) {
-            return CurvePwAffine.getFactory().createDelayedInfiniteBurst(T);
+		if (R == Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity()) {
+            return Curve.getFactory().createDelayedInfiniteBurst(T);
         }
 
-        return CurvePwAffine.getFactory().createRateLatency(R, T);
+        return Curve.getFactory().createRateLatency(R, T);
     }
 
     /**
@@ -281,8 +282,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((PmooResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
-        ((PmooResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
+        ((PmooResults) result).setDelayBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
+        ((PmooResults) result).setBacklogBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
             // Single flow of interest, i.e., fifo per micro flow holds
@@ -371,24 +372,16 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                 // interference patter no derive a left-over beta for.
                 Set<Map<Path, Set<Flow>>> xtx_subpath_grouped_incl_prolongation_tmp = new HashSet<Map<Path, Set<Flow>>>();
 
-                for (Map<Path, Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation) { // At the
-                    // beginning,
-                    // only the
-                    // original
-                    // interference
-                    // pattern
-                    // is in
-                    // here.
+                // At the beginning, only the original interference pattern is in here.
+                for (Map<Path, Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation) { 
                     // Prevent the original from getting lost because its sink is not part of
                     // xf_prolongations's Server list.
                     xtx_subpath_grouped_incl_prolongation_tmp.add(interference_pattern);
 
-                    // The general idea is to copy the map and modify the two mappings of interest
-                    // only.
-                    // Yet, the copy we need is deeper than constructing a new map or using
-                    // clone()-functionality.
-                    // We need a new map where a) the key can be the same path object as in to old
-                    // map and
+                    // The general idea is to copy the map and modify the two mappings of interest only.
+                    // Yet, the copy we need is deeper than constructing a new map or using clone()-functionality.
+                    // We need a new map where 
+                    // a) the key can be the same path object as in to old map and
                     // b) the value is a new map with the old flow objects.
                     // Constructing this copy will require a loop -- the following loop we use for
                     // an "in situ" modification we need.
@@ -417,15 +410,15 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                             Link inlink_xfs = xfs.iterator().next().getPrecedingLink(subpaths_src);
                             Link inlink_subpath_flows;
                             for (Flow f : value_flows) {
-                                try {
+                            	try {
                                     inlink_subpath_flows = f.getPrecedingLink(subpaths_src);
                                     if (inlink_subpath_flows.equals(inlink_xfs)) {
                                         aggr_potential = true;
                                         continue;
                                     }
+                                // There's an exception thrown by getPrecedingLink if f is originating in subpaths_src
                                 } catch (Exception e) {
-                                } // There's an exception thrown by getPrecedingLink if f is originating in
-                                // subpaths_src
+                                } 
                             }
 
                             if (!aggr_potential) {
@@ -461,7 +454,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         });
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(CurvePwAffine.getFactory().createZeroService());
+            betas_e2e.add(Curve.getFactory().createZeroService());
         }
         return betas_e2e;
     }
@@ -483,8 +476,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             }
         }
 
-        // First create the required sets. Saves us from checking for an existing set
-        // every time.
+        // First create the required sets.
+        // Saves us from checking for an existing set every time.
         Link inlink_flow;
         Map<Pair<Path, Link>, Set<Flow>> xtx_subpath_grouped_inlink_original = new HashMap<Pair<Path, Link>, Set<Flow>>();
 
@@ -503,8 +496,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
                 Pair<Path, Link> key_pair = new Pair<Path, Link>(entry.getKey(), inlink_flow);
 
-                // .put returns the previous value associated with key, or null if there was no
-                // mapping for key
+                // .put returns the previous value associated with key,
+                // or null if there was no mapping for key
                 Set<Flow> prev_flows_inlink = xtx_subpath_grouped_inlink_original.put(key_pair, flows_inlink);
 
                 if (prev_flows_inlink != null) {
@@ -530,16 +523,13 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
             Set<Flow> entry_flows = entry.getValue();
 
-            // What if the path prolonged to is empty due to prolongation of the flows in
-            // it?
-            // At this point we do not know that as the actual prolongation has not been
-            // done yet.
+            // What if the path prolonged to is empty due to prolongation of the flows in it?
+            // At this point we do not know that as the actual prolongation has not been done yet.
             // This situation will thus be handled in the calling method where we construct
             // the interference patterns.
             for (Path potential_path : paths_starting_in_s.get(subpath_src)) {
 
-                // Naturally, a prolonged subpath of path needs to be longer than the original
-                // one.
+                // Naturally, a prolonged subpath of path needs to be longer than the original one.
                 if (potential_path.getServers().size() <= current_subpath.getServers().size()) {
                     continue;
                 }
@@ -599,9 +589,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             for (Flow f : entry.getValue()) {
                 substitute_flow_alias = substitute_flow_alias.concat(f.getAlias() + ",");
             }
-            substitute_flow_alias = substitute_flow_alias.substring(0, substitute_flow_alias.length() - 1); // Remove
-            // trailing
-            // comma.
+            						// Remove trailing comma.
+            substitute_flow_alias = substitute_flow_alias.substring(0, substitute_flow_alias.length() - 1); 
             substitute_flow_alias = substitute_flow_alias.concat("}");
 
             // Derive the substitute flow's arrival bound
@@ -623,7 +612,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             arrival_bounds_link_permutations.clear();
             List<Flow> flow_list_tmp = new LinkedList<Flow>();
             for (ArrivalCurve alpha : alphas_xf_group) {
-                CurvePwAffine.beautify(alpha);
+                Curve.beautify(alpha);
 
                 for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
                     // The new list of cross-flow substitutes = old list plus a new one with one of
@@ -633,9 +622,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                     flow_list_tmp.add(Flow.createDummyFlow(substitute_flow_alias, alpha, entry.getKey()));
 
                     // Add this list to the set of permutations
-                    arrival_bounds_link_permutations.add(new LinkedList<Flow>(flow_list_tmp)); // Prevent interaction
-                    // with the clear()
-                    // operation above.
+                    arrival_bounds_link_permutations.add(new LinkedList<Flow>(flow_list_tmp));
+                    // Prevent interaction with the clear() operation above.
                 }
             }
             // Override cross_flow_substitutes_set for the next cross-flow substitute and
@@ -652,7 +640,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         }
 
         // Derive the left-over service curves
-        ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
+        ServiceCurve null_service = Curve.getFactory().createZeroService();
         for (List<Flow> xtx_substitutes : cross_flow_substitutes_set) {
             ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
 
@@ -662,7 +650,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         }
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(CurvePwAffine.getFactory().createZeroService());
+            betas_e2e.add(Curve.getFactory().createZeroService());
         }
         return betas_e2e;
     }

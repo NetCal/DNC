@@ -28,7 +28,7 @@
 
 package de.uni_kl.cs.discodnc.network;
 
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
@@ -49,10 +49,12 @@ import java.util.List;
  * pessimistic, yet, the results remain valid.
  */
 public class Path {
-    private LinkedList<Server> path_servers = new LinkedList<Server>();
-    private LinkedList<Link> path_links = new LinkedList<Link>();
+    private LinkedList<Server> path_servers;
+    private LinkedList<Link> path_links;
 
     private Path() {
+        path_servers = new LinkedList<Server>();
+        path_links = new LinkedList<Link>();
     }
 
     protected Path(List<Server> path_servers, List<Link> path_links) {
@@ -69,7 +71,10 @@ public class Path {
     // Can be visible.
     // There's no way to create a single hop path not possible to take in a network.
     public Path(Server single_hop) {
-        this.path_servers.add(single_hop);
+        path_servers = new LinkedList<Server>();
+        path_servers.add(single_hop);
+        
+        path_links = new LinkedList<Link>();
     }
 
     public static Path createEmptyPath() {
@@ -78,6 +83,10 @@ public class Path {
 
     public Server getSource() {
         return path_servers.get(0);
+    }
+    
+    public boolean isSource(Server s) {
+    	return path_servers.indexOf(s) == 0;
     }
 
     public Server getSink() {
@@ -159,7 +168,7 @@ public class Path {
         }
         throw new Exception("No succeeding link on the path found");
     }
-
+    
     public Server getPrecedingServer(Server s) throws Exception {
         try {
             return getPrecedingLink(s).getSource();
@@ -188,7 +197,7 @@ public class Path {
     }
 
     private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
-        ServiceCurve service_curve_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+        ServiceCurve service_curve_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             service_curve_total = MinPlus.convolve(service_curve_total, s.getServiceCurve());
         }
@@ -212,7 +221,7 @@ public class Path {
     }
 
     private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
-        MaxServiceCurve gamma_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve gamma_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             gamma_total = MinPlus.convolve(gamma_total, s.getGamma());
         }
@@ -236,7 +245,7 @@ public class Path {
     }
 
     private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
-        MaxServiceCurve extra_gamma_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve extra_gamma_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             extra_gamma_total = MinPlus.convolve(extra_gamma_total, s.getExtraGamma());
         }
@@ -261,7 +270,7 @@ public class Path {
     }
 
     private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
-        MaxServiceCurve max_service_curve_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve max_service_curve_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
             max_service_curve_total = MinPlus.convolve(max_service_curve_total, s.getMaxServiceCurve());
         }

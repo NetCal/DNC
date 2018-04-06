@@ -1,3 +1,61 @@
+<<<<<<< HEAD
+Changes since v2.4.0 "Chimera"
+------------------------------
+* Tests now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
+* Our current TFA AB burst reduction implementation is only applicable to TB arrivals.
+  - We now skip reducing the reduction for arrival curves with >2 segments.
+* Code and comment cleanups.
+=======
+since v2.4.3 "Chimera"
+----------------------
+* Num interface and its implementations: 
+  - Major code refactoring and cleanup.
+  - Epsilons (for rounding purposes) are no longer included.
+  - Code trying to consider the machine epsilon in every operation was removed after a thorough review revealed bugs.
+* Functional tests: 
+  - Test results now also hold the required epsilons for individual test cases.
+* PwAffine Curves and implementations:
+  - Refactored code handling discontinuities (used with token bucket arrival curves).
+  - No usage of a machine epsilon required anymore.
+* Performance improvement for getSourceFlowArrivalCurve in case there is only a single such flow.
+* Remove unnecessary cast from Num to Num when bounding backlogs.
+* Code cleanups.
+
+v2.4.3 "Chimera" (2018-Aug-03)
+------------------------------
+* Fixed Bug #31: Computation of infinite output bound due to stability constraint violation.
+* Improved shifting of curves (horizontal and vertical).
+* SFA tandem analysis: Shortcut in case there is no interference by other flows. 
+* Comment cleanups and improvements.
+
+v2.4.2 "Chimera" (2018-Jul-04)
+------------------------------
+* Tandem Matching Analysis and Arrival Bound added 
+* SFA and PbooArrivalBounds:
+  - Improved structure, reliability and performance.
+  - Single, static SFA tandem analysis for SFA and PBOO ABs. 
+* Rational Num implementations gained a getValue function returning a new instance of the Math3 object in their backend.
+* Minor Javadocs and comment improvements.
+
+v2.4.1 "Chimera" (2018-May-07)
+------------------------------
+* Tests
+  - They now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
+  - Each test only works with a single instance of its respective network instead of creating one per test config.
+  - We use external method sources to not forcibly change configs to comply with PMOO's restriction to arbitrary multiplexing.
+  - Expected test results are were moved to separate classes. 
+* Added a class with presets with most common flow of interest analysis and arrival bounding configurations
+  for algebraic compositional feed-forward analysis (compFFA): de.uni_kl.cs.discodnc.nc.CompFFApresets. 
+  - Demo4 uses the presets instead of analyses instances implicitly using the defailt configuration.
+* Our current TFA AB burst reduction implementation is only applicable to TB arrivals.
+  - We now skip reducing the reduction for arrival curves with >2 segments.
+* Network: You can now get a flow by its ID.
+* SeparateFlowAnalysis: Do not rely on an exception to identify path's source server.
+* Improved pom.xml.
+* Code and comment cleanups.
+  - Rename location of interference, loi, to server of interference, soi, to prevent confusion with potential link of interference.
+>>>>>>> 0b0bff87f32353ee1f985dfa03834cf4daee3f75
+
 v2.4.0 "Chimera" (2018-Mar-18)
 ------------------------------
 * Maven build system
