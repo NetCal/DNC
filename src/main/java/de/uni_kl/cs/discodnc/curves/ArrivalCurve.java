@@ -27,7 +27,7 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-public interface ArrivalCurve extends CurvePwAffine {
+public interface ArrivalCurve extends Curve {
     @Override
     ArrivalCurve copy();
 

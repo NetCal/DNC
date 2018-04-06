@@ -29,7 +29,7 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
@@ -71,7 +71,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
 			return alphas_xfcaller;
 		}
@@ -132,7 +132,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
 			for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
 				for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
-					alphas_xxfcaller_s.add(CurvePwAffine.add(arrival_curve_path, arrival_curve_offpath));
+					alphas_xxfcaller_s.add(Curve.add(arrival_curve_path, arrival_curve_offpath));
 				}
 			}
 
@@ -142,11 +142,11 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			// Check if there's any service left on this path. If not, the set only contains
 			// a null-service curve.
 			if (betas_lo_s.size() == 1
-					&& betas_lo_s.iterator().next().equals(CurvePwAffine.getFactory().createZeroService())) {
+					&& betas_lo_s.iterator().next().equals(Curve.getFactory().createZeroService())) {
 				System.out.println("No service left over during PBOO arrival bounding!");
 				alphas_xfcaller.clear();
-				alphas_xfcaller.add(CurvePwAffine.getFactory()
-						.createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
+				alphas_xfcaller.add(Curve.getFactory()
+						.createArrivalCurve(Curve.getFactory().createZeroDelayInfiniteBurst()));
 				return alphas_xfcaller;
 			}
 
@@ -155,8 +155,9 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
-		if (configuration.abConsiderTFANodeBacklog()) {
+		if (configuration.serverBacklogArrivalBound()) {
 			Server last_hop_xtx = link.getSource();
+			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
 			tfa.deriveBoundsAtServer(last_hop_xtx);
 
@@ -179,9 +180,9 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 					continue;
 				}
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
-					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min); // if the burst is >0 then there are at
-					// least two segments and the second
-					// holds the burst as its y-axis value
+					// If the burst is >0 then there are at least two segments and
+					// the second holds the burst as its y-axis value
+					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min);
 				}
 			}
 		}
