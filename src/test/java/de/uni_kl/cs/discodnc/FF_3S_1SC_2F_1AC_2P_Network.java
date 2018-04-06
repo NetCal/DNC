@@ -55,11 +55,7 @@ public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 	}
 
 	public Network getNetwork() {
-		if (network == null) {
-			return createNetwork();
-		} else {
-			return network;
-		}
+		return network;
 	}
 
 	public Network createNetwork() {
