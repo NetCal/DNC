@@ -62,7 +62,7 @@ public abstract class DncTest {
 
 	protected DncTest(NetworkFactory network_factory) {
 		this.network_factory = network_factory;
-		network = network_factory.createNetwork();
+		network = network_factory.getNetwork();
 		expected_results = new DncTestResults();
 	}
 
@@ -85,7 +85,6 @@ public abstract class DncTest {
 
 		// reinitialize the network and the bounds
 		network_factory.reinitializeCurves();
-		network = network_factory.createNetwork();
 		initializeFlows();
 		initializeBounds();
 	}

@@ -28,7 +28,7 @@
 
 package de.uni_kl.cs.discodnc.network;
 
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
@@ -37,12 +37,12 @@ public class Server {
     private int id;
     private String alias;
 
-    private ServiceCurve service_curve = CurvePwAffine.getFactory().createZeroService();
+    private ServiceCurve service_curve = Curve.getFactory().createZeroService();
     /**
      * A zero delay burst curve lets the influence of the maximum service curve
      * vanish
      */
-    private MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+    private MaxServiceCurve max_service_curve = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
 
     private boolean max_service_curve_flag = false;
 
@@ -130,7 +130,7 @@ public class Server {
     }
 
     public boolean removeMaxServiceCurve() {
-        max_service_curve = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+        max_service_curve = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
 
         max_service_curve_flag = false;
         use_gamma = false;
@@ -155,7 +155,7 @@ public class Server {
      */
     public MaxServiceCurve getGamma() {
         if (use_gamma == false) {
-            return CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+            return Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         } else {
             return max_service_curve;
         }
@@ -169,9 +169,9 @@ public class Server {
      */
     public MaxServiceCurve getExtraGamma() {
         if (use_extra_gamma == false) {
-            return CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
+            return Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         } else {
-            return (MaxServiceCurve) CurvePwAffine.removeLatency(max_service_curve);
+            return (MaxServiceCurve) Curve.removeLatency(max_service_curve);
         }
     }
 

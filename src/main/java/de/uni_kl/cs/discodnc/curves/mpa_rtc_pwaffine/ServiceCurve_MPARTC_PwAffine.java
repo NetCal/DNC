@@ -45,7 +45,7 @@ public class ServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
         super(segment_count);
     }
 
-    public ServiceCurve_MPARTC_PwAffine(CurvePwAffine curve) {
+    public ServiceCurve_MPARTC_PwAffine(de.uni_kl.cs.discodnc.curves.Curve curve) {
         copy(curve);
     }
 
