@@ -29,9 +29,9 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc_affine;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
 public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxSer
     public AffineMaxServiceCurve_DNC(Curve curve) {
         copy(curve);
 
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
             // !isAlmostConcave()
             // ) {
@@ -69,7 +69,7 @@ public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxSer
 
         initializeCurve(max_service_curve_str);
 
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
             // !isAlmostConcave()
             // ) {

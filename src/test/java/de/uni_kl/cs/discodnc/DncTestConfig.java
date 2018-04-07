@@ -28,9 +28,9 @@
 
 package de.uni_kl.cs.discodnc;
 
+import de.uni_kl.cs.discodnc.CurveBackend;
+import de.uni_kl.cs.discodnc.Calculator.NumImpl;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
 
 import java.util.Set;
 
@@ -43,7 +43,7 @@ public class DncTestConfig extends AnalysisConfig {
 	// Calculator configuration
 	protected boolean enable_checks = false;
 	protected NumImpl num_implementation;
-	protected CurveImpl curve_implementation;
+	protected CurveBackend curve_implementation;
 
 	@SuppressWarnings("unused")
 	private DncTestConfig() {
@@ -51,7 +51,7 @@ public class DncTestConfig extends AnalysisConfig {
 
 	public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean convolve_alternative_arrival_bounds,
 			boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
-			boolean define_multiplexing_globally, NumImpl numbers, CurveImpl curves ) {
+			boolean define_multiplexing_globally, NumImpl numbers, CurveBackend curves ) {
 
 		super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
@@ -77,7 +77,7 @@ public class DncTestConfig extends AnalysisConfig {
 		return num_implementation;
 	}
 
-	protected CurveImpl getCurveImpl() {
+	protected CurveBackend getCurveBackend() {
 		return curve_implementation;
 	}
 

@@ -28,6 +28,7 @@
 
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -152,11 +153,11 @@ public class PmooArrivalBound_SinkTreeTbRl { //extends AbstractArrivalBound {
             if (arrival_bound_f == null) {
                 sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
                 for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
-                    sc_s_subpath = MinPlus.convolve(sc_s_subpath, s.getServiceCurve(), false); // false ->
+                    sc_s_subpath = Calculator.getInstance().getMinPlus().convolve(sc_s_subpath, s.getServiceCurve(), false); // false ->
                     // generic
                     // convolution
                 }
-                arrival_bound_f = MinPlus.deconvolve(f.getArrivalCurve(), sc_s_subpath, false); // false ->
+                arrival_bound_f = Calculator.getInstance().getMinPlus().deconvolve(f.getArrivalCurve(), sc_s_subpath, false); // false ->
                 // generic
                 // deconvolution
             }
@@ -200,10 +201,10 @@ public class PmooArrivalBound_SinkTreeTbRl { //extends AbstractArrivalBound {
             if (arrival_bound_f == null) {
                 sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
                 for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
-                    sc_s_subpath = MinPlus.convolve(sc_s_subpath, s.getServiceCurve(), true); // true -> tb, rl
+                    sc_s_subpath = Calculator.getInstance().getMinPlus().convolve(sc_s_subpath, s.getServiceCurve(), true); // true -> tb, rl
                     // optimized
                 }
-                arrival_bound_f = MinPlus.deconvolve(f.getArrivalCurve(), sc_s_subpath, true); // true -> tb, rl
+                arrival_bound_f = Calculator.getInstance().getMinPlus().deconvolve(f.getArrivalCurve(), sc_s_subpath, true); // true -> tb, rl
                 // optimized
             }
             ab_cache.addEntry(link, f, arrival_bound_f);

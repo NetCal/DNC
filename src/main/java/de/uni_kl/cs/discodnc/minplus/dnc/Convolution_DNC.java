@@ -1,9 +1,9 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator.
+ * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2011 - 2018 Steffen Bondorf
- * Copyright (C) 2017+ The DiscoDNC contributors
+ * Copyright (C) 2017, 2018 The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -29,17 +29,17 @@
 
 package de.uni_kl.cs.discodnc.minplus.dnc;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public abstract class Convolution_DNC {
 
@@ -63,7 +63,7 @@ public abstract class Convolution_DNC {
     }
 
     private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
+        switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
             case 2:
@@ -76,7 +76,7 @@ public abstract class Convolution_DNC {
         }
 
         Num rate;
-        switch (MinPlus.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+        switch (CheckUtils.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
             case 1:
                 rate = service_curve_2.getUltAffineRate();
                 break;
@@ -104,7 +104,7 @@ public abstract class Convolution_DNC {
      * @return The convolved curve.
      */
     private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        switch (MinPlus.inputNullCheck(service_curve_1, service_curve_2)) {
+        switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
             case 2:
@@ -224,7 +224,7 @@ public abstract class Convolution_DNC {
         // curve.
         // Instead, the other set is return in case it is neither null or empty.
         Set<ServiceCurve> clone = new HashSet<ServiceCurve>();
-        switch (MinPlus.inputNullCheck(service_curves_1, service_curves_2)) {
+        switch (CheckUtils.inputNullCheck(service_curves_1, service_curves_2)) {
             case 1:
                 for (ServiceCurve sc : service_curves_2) {
                     clone.add(sc.copy());
@@ -242,7 +242,7 @@ public abstract class Convolution_DNC {
             default:
                 break;
         }
-        switch (MinPlus.inputEmptySetCheck(service_curves_1, service_curves_2)) {
+        switch (CheckUtils.inputEmptySetCheck(service_curves_1, service_curves_2)) {
             case 1:
                 for (ServiceCurve sc : service_curves_2) {
                     clone.add(sc.copy());
@@ -274,7 +274,7 @@ public abstract class Convolution_DNC {
     // Arrival Curves
     // ------------------------------------------------------------
     public static ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) {
-        switch (MinPlus.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
+        switch (CheckUtils.inputNullCheck(arrival_curve_1, arrival_curve_2)) {
             case 0:
                 break;
             case 1:
@@ -338,7 +338,7 @@ public abstract class Convolution_DNC {
      * @return The convolved maximum service curve.
      */
     public static MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
-        switch (MinPlus.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
+        switch (CheckUtils.inputNullCheck(max_service_curve_1, max_service_curve_2)) {
             case 0:
                 break;
             case 1:
@@ -350,7 +350,7 @@ public abstract class Convolution_DNC {
             default:
         }
 
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks()
+        if (Calculator.getInstance().exec_max_service_curve_checks()
                 && (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
             throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
         }
@@ -389,7 +389,7 @@ public abstract class Convolution_DNC {
     // during the output bound computation.
     public static Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
                                                       MaxServiceCurve maximum_service_curve) throws Exception {
-        switch (MinPlus.inputNullCheck(arrival_curves, maximum_service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curves, maximum_service_curve)) {
             case 1:
                 return new HashSet<Curve>();
             case 2:
@@ -428,7 +428,7 @@ public abstract class Convolution_DNC {
 
     public static Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
                                                         MaxServiceCurve extra_gamma_curve) throws Exception {
-        switch (MinPlus.inputNullCheck(arrival_curves, extra_gamma_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curves, extra_gamma_curve)) {
             case 0:
                 break;
             case 1:

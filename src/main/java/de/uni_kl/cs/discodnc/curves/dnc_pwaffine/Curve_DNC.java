@@ -29,16 +29,16 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
-import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.LinearSegment;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
-import de.uni_kl.cs.discodnc.numbers.Num;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>
@@ -939,7 +939,7 @@ public class Curve_DNC implements CurvePwAffine {
 			return;
 		}
 
-		if (CalculatorConfig.getInstance().exec_service_curve_checks() && !this.isConvex()) {
+		if (Calculator.getInstance().exec_service_curve_checks() && !this.isConvex()) {
 			if (this.equals(this.createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_DNC>();
 				rate_latencies.add(this.createRateLatency(Num.getFactory().createPositiveInfinity(),
@@ -1005,7 +1005,7 @@ public class Curve_DNC implements CurvePwAffine {
 			return;
 		}
 
-		if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !this.isConcave()) {
+		if (Calculator.getInstance().exec_arrival_curve_checks() && !this.isConcave()) {
 			throw new RuntimeException("Can only decompose concave arrival curves into token buckets.");
 		}
 

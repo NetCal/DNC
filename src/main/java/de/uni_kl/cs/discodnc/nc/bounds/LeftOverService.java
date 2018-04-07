@@ -29,6 +29,7 @@
 
 package de.uni_kl.cs.discodnc.nc.bounds;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
@@ -36,7 +37,6 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
@@ -103,7 +103,7 @@ public final class LeftOverService {
             return Curve.getFactory().createZeroService();
         }
 
-        if (CalculatorConfig.getInstance().exec_fifo_mux_checks()) {
+        if (Calculator.getInstance().exec_fifo_mux_checks()) {
             if (!arrival_curve.isConcave()) {
                 throw new IllegalArgumentException("Arrival curve must be concave.");
             }

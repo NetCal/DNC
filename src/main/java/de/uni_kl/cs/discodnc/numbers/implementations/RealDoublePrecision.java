@@ -28,7 +28,7 @@
 
 package de.uni_kl.cs.discodnc.numbers.implementations;
 
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class RealDoublePrecision implements Num {
@@ -292,7 +292,7 @@ public class RealDoublePrecision implements Num {
 
         if (fraction_indicator && double_based) {
             throw new Exception("Invalid string representation of a number based on "
-                    + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+                    + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
         }
 
         try {
@@ -305,7 +305,7 @@ public class RealDoublePrecision implements Num {
                 String[] num_den = num_str.split(" / "); // ["num","den"]
                 if (num_den.length != 2) {
                     throw new Exception("Invalid string representation of a number based on "
-                            + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+                            + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
                 }
 
                 int den = Integer.parseInt(num_den[1]);
@@ -321,7 +321,7 @@ public class RealDoublePrecision implements Num {
             }
         } catch (Exception e) {
             throw new Exception("Invalid string representation of a number based on "
-                    + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+                    + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
         }
 
         // This code should not be reachable because all the operations above either
@@ -329,7 +329,7 @@ public class RealDoublePrecision implements Num {
         // of raise an exception of some kind. Yet, Java does not get this and thus
         // complains if there's no "finalizing statement".
         throw new Exception("Invalid string representation of a number based on "
-                + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+                + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
     }
 
     // --------------------------------------------------------------------------------------------------------------

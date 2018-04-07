@@ -29,8 +29,8 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
+import de.uni_kl.cs.discodnc.CurveBackend;
+import de.uni_kl.cs.discodnc.Calculator.NumImpl;
 //import CalculatorConfig.OperationImpl;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 
@@ -60,10 +60,10 @@ public class DncTestArguments implements ArgumentsProvider {
 		nums.add(NumImpl.RATIONAL_INTEGER);
 		nums.add(NumImpl.RATIONAL_BIGINTEGER);
 
-		Set<CurveImpl> curves = new HashSet<CurveImpl>();
-		curves.add(CurveImpl.DNC);
-		curves.add(CurveImpl.MPA_RTC);
-
+		Set<CurveBackend> curves = new HashSet<CurveBackend>();
+		curves.add(CurveBackend_DNC.DNC);
+//		curves.add(CurveBackend_DNC_AFFINE.DNC_AFFINE);
+		
 //		Set<OperationImpl> operations = new HashSet<OperationImpl>();
 //		operations.add(OperationImpl.DNC);
 //		operations.add(OperationImpl.NATIVE);
@@ -113,7 +113,7 @@ public class DncTestArguments implements ArgumentsProvider {
 		// AB, convolve alternative ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
 		// global mux def, number class to use, curve class to use, operations class to
 		// use
-		for (CurveImpl curve : curves) {
+		for (CurveBackend curve : curves) {
 			for (NumImpl num : nums) {
 				for (Set<ArrivalBoundMethod> single_ab : single_abs_allMux) {
 					for (AnalysisConfig.Multiplexing mux : mux_disciplines) {

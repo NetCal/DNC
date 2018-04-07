@@ -29,19 +29,19 @@
 
 package de.uni_kl.cs.discodnc.minplus.dnc;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public abstract class Deconvolution_DNC {
 
@@ -53,7 +53,7 @@ public abstract class Deconvolution_DNC {
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
                                                boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
-        switch (MinPlus.inputNullCheck(arrival_curves, service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curves, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -86,7 +86,7 @@ public abstract class Deconvolution_DNC {
                                                boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        switch (MinPlus.inputNullCheck(arrival_curves, service_curves)) {
+        switch (CheckUtils.inputNullCheck(arrival_curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -98,7 +98,7 @@ public abstract class Deconvolution_DNC {
                 return results;
             default:
         }
-        switch (MinPlus.inputEmptySetCheck(arrival_curves, service_curves)) {
+        switch (CheckUtils.inputEmptySetCheck(arrival_curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -127,7 +127,7 @@ public abstract class Deconvolution_DNC {
 
     public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
                                           boolean tb_rl_optimized) {
-        switch (MinPlus.inputNullCheck(arrival_curve, service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -160,7 +160,7 @@ public abstract class Deconvolution_DNC {
                                                                 Set<ServiceCurve> service_curves) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
-        switch (MinPlus.inputNullCheck(curves, service_curves)) {
+        switch (CheckUtils.inputNullCheck(curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -172,7 +172,7 @@ public abstract class Deconvolution_DNC {
                 return results;
             default:
         }
-        switch (MinPlus.inputEmptySetCheck(curves, service_curves)) {
+        switch (CheckUtils.inputEmptySetCheck(curves, service_curves)) {
             case 0:
                 break;
             case 1:
@@ -199,7 +199,7 @@ public abstract class Deconvolution_DNC {
     }
 
     private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        switch (MinPlus.inputNullCheck(arrival_curve, service_curve)) {
+        switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
             case 1:
@@ -235,7 +235,7 @@ public abstract class Deconvolution_DNC {
      */
     private static ArrivalCurve deconvolve_mTB_mRL(Curve curve_1, Curve curve_2) {
         // if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
-        switch (MinPlus.inputNullCheck(curve_1, curve_2)) {
+        switch (CheckUtils.inputNullCheck(curve_1, curve_2)) {
             case 0:
                 break;
             case 1:
@@ -258,7 +258,7 @@ public abstract class Deconvolution_DNC {
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }
-        if (CalculatorConfig.getInstance().exec_deconvolution_checks()) {
+        if (Calculator.getInstance().exec_deconvolution_checks()) {
             if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
                 throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
             }
@@ -279,7 +279,7 @@ public abstract class Deconvolution_DNC {
             // above):
 
             x_inflect_beta = curve_2.getSegment(i).getX();
-            candidate_tmp = Curve.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
+            candidate_tmp = Curve.shiftLeftClipping((Curve) curve_1, x_inflect_beta);
 
             y_beta = curve_2.f(x_inflect_beta);
             if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
@@ -404,9 +404,9 @@ public abstract class Deconvolution_DNC {
         sup_curve = candidates_iter.next();
         while (candidates_iter.hasNext()) {
             additional_curve = candidates_iter.next();
-            sup_curve = Curve.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
+            sup_curve = Curve.max((Curve) sup_curve, (Curve) additional_curve);
         }
 
-        return Curve.getFactory().createArrivalCurve((CurvePwAffine) sup_curve);
+        return Curve.getFactory().createArrivalCurve((Curve) sup_curve);
     }
 }

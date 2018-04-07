@@ -26,14 +26,15 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc;
 
-import java.io.File;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
-public final class CalculatorConfig {
-	private static CalculatorConfig instance = new CalculatorConfig();
+public final class Calculator {
+	private static Calculator instance = new Calculator();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
+	private CurveBackend CURVE_IMPLEMENTATION = CurveBackend_DNC.DNC;
 	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -41,10 +42,10 @@ public final class CalculatorConfig {
 	private boolean FIFO_MUX_CHECKS = false;
 	private boolean DECONVOLUTION_CHECKS = false;
 
-	protected CalculatorConfig() {
+	protected Calculator() {
 	}
 
-	public static CalculatorConfig getInstance() {
+	public static Calculator getInstance() {
 		return instance;
 	}
 
@@ -61,22 +62,15 @@ public final class CalculatorConfig {
 		}
 	}
 
-	public CurveImpl getCurveImpl() {
+	public CurveBackend getCurveBackend() {
 		return CURVE_IMPLEMENTATION;
 	}
 
-	private void checkMPARTC() throws RuntimeException {
-		String classpath = System.getProperty("java.class.path");
-		for (String classpathEntry : classpath.split(File.pathSeparator)) {
-			if (classpathEntry.contains("rtc.jar")) {
-				return;
-			}
-		}
-		throw new RuntimeException("rtc.jar cannot be found on the classpath!");
+	private void checkDependencies() {
+		CURVE_IMPLEMENTATION.checkDependencies();
 	}
-
-	public boolean setCurveImpl(CurveImpl curve_impl) {
-		checkMPARTC();
+	public boolean setCurveBackend(CurveBackend curve_impl) {
+		checkDependencies();
 
 		if (CURVE_IMPLEMENTATION == curve_impl) {
 			return false;
@@ -90,7 +84,7 @@ public final class CalculatorConfig {
 	}
 
 	public void setOperationImpl(OperationImpl operation_impl) {
-		checkMPARTC();
+		checkDependencies();
 		OPERATION_IMPLEMENTATION = operation_impl;
 	}
 
@@ -136,7 +130,7 @@ public final class CalculatorConfig {
 
 		calculator_config_str.append(getNumImpl().toString());
 		calculator_config_str.append(", ");
-		calculator_config_str.append(getCurveImpl().toString());
+		calculator_config_str.append(getCurveBackend().toString());
 
 		if (exec_arrival_curve_checks()) {
 			calculator_config_str.append(", ");
@@ -165,11 +159,15 @@ public final class CalculatorConfig {
 	public enum NumImpl {
 		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
 	}
-
-	public enum CurveImpl {
-		DNC, MPA_RTC, DNC_AFFINE
+	
+	public MinPlus getMinPlus() {
+		return CURVE_IMPLEMENTATION.getMinPlus();
 	}
-
+	
+	public Curve getCurve() {
+		return CURVE_IMPLEMENTATION.getCurveFactory();
+	}
+	
 	public enum OperationImpl {
 		DNC, NATIVE
 	}

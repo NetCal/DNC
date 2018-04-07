@@ -30,6 +30,7 @@
 
 package de.uni_kl.cs.discodnc.nc.analyses;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -177,7 +178,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lofoi_s);
 
-            betas_lofoi_path = MinPlus.convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
+            betas_lofoi_path = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
                     configuration.tbrlConvolution());
         }
         return betas_lofoi_path;

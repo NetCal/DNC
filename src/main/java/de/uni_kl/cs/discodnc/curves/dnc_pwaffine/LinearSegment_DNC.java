@@ -242,4 +242,23 @@ public class LinearSegment_DNC implements LinearSegment {
 
         return result;
     }
+    
+    public static LinearSegment.Builder getBuilder() {
+    	return new LinearSegment_DNC_builder();
+    }
+    
+    private static class LinearSegment_DNC_builder implements LinearSegment.Builder {
+
+		@Override
+		public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+			return new LinearSegment_DNC(x, y, grad, leftopen);
+		}
+
+		@Override
+		public LinearSegment createHorizontalLine(double y) {
+				return new LinearSegment_DNC(Num.getFactory().createZero(),
+	                Num.getFactory().create(y), Num.getFactory().createZero(), false);
+	    }
+    	
+    }
 }
