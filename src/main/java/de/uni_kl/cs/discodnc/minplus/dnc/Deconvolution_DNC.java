@@ -58,15 +58,15 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                results.add(CurvePwAffine.getFactory().createZeroArrivals());
+                results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
                 return results;
             default:
         }
         if (arrival_curves.isEmpty()) {
-            results.add(CurvePwAffine.getFactory().createZeroArrivals());
+            results.add(Curve.getFactory().createZeroArrivals());
             return results;
         }
 
@@ -91,10 +91,10 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                results.add(CurvePwAffine.getFactory().createZeroArrivals());
+                results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
                 return results;
             default:
         }
@@ -103,10 +103,10 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                results.add(CurvePwAffine.getFactory().createZeroArrivals());
+                results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
                 return results;
             default:
         }
@@ -132,22 +132,22 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                return CurvePwAffine.getFactory().createZeroArrivals();
+                return Curve.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
             default:
         }
 
-        if (service_curve.equals(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst())
+        if (service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())
                 || (service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0)
-                || (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals()))) {
+                || (arrival_curve.equals(Curve.getFactory().createZeroArrivals()))) {
             return arrival_curve.copy();
         }
-        if (service_curve.equals(CurvePwAffine.getFactory().createZeroService())
+        if (service_curve.equals(Curve.getFactory().createZeroService())
                 || service_curve.getLatency().equals(Num.getFactory().getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
-            return CurvePwAffine.getFactory().createZeroArrivals();
+            return Curve.getFactory().createZeroArrivals();
         }
         if (tb_rl_optimized) {
             return deconvolveTB_RL(arrival_curve, service_curve);
@@ -156,7 +156,7 @@ public abstract class Deconvolution_DNC {
         }
     }
 
-    public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves,
+    public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
                                                                 Set<ServiceCurve> service_curves) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
@@ -165,10 +165,10 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                results.add(CurvePwAffine.getFactory().createZeroArrivals());
+                results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
                 return results;
             default:
         }
@@ -177,20 +177,20 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                results.add(CurvePwAffine.getFactory().createZeroArrivals());
+                results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
                 return results;
             default:
         }
 
         Num latency;
         for (ServiceCurve sc : service_curves) {
-            for (CurvePwAffine pwa_c : curves) {
+            for (Curve pwa_c : curves) {
                 latency = pwa_c.getLatency();
-                results.add(CurvePwAffine.getFactory().createArrivalCurve(CurvePwAffine.shiftRight(
-                        deconvolve_mTB_mRL(CurvePwAffine.shiftLeftClipping(pwa_c, latency), sc),
+                results.add(Curve.getFactory().createArrivalCurve(Curve.shiftRight(
+                        deconvolve_mTB_mRL(Curve.shiftLeftClipping(pwa_c, latency), sc),
                         latency)));
             }
         }
@@ -204,23 +204,23 @@ public abstract class Deconvolution_DNC {
                 break;
             case 1:
             case 3:
-                return CurvePwAffine.getFactory().createZeroArrivals();
+                return Curve.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
             default:
         }
 
-        if (service_curve.equals(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst())) {
+        if (service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
             return arrival_curve.copy();
         }
-        if (service_curve.equals(CurvePwAffine.getFactory().createZeroService())
+        if (service_curve.equals(Curve.getFactory().createZeroService())
                 || service_curve.getLatency().equals(Num.getFactory().getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
-            return CurvePwAffine.getFactory().createZeroArrivals();
+            return Curve.getFactory().createZeroArrivals();
         }
 
         // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
-        return CurvePwAffine.getFactory().createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
+        return Curve.getFactory().createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
                 arrival_curve.getBurst().doubleValue()
                         + arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
     }
@@ -233,30 +233,30 @@ public abstract class Deconvolution_DNC {
      * @param curve_2 The convex service curve.
      * @return The deconvolved curve, an arrival curve.
      */
-    private static ArrivalCurve deconvolve_mTB_mRL(CurvePwAffine curve_1, CurvePwAffine curve_2) {
+    private static ArrivalCurve deconvolve_mTB_mRL(Curve curve_1, Curve curve_2) {
         // if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
         switch (CheckUtils.inputNullCheck(curve_1, curve_2)) {
             case 0:
                 break;
             case 1:
             case 3:
-                return CurvePwAffine.getFactory().createZeroArrivals();
+                return Curve.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
             default:
         }
         // }
 
         if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
-            return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+            return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
         }
-        if (curve_2.equals(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst())) {
-            return CurvePwAffine.getFactory().createArrivalCurve((CurvePwAffine) curve_1);
+        if (curve_2.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
+            return Curve.getFactory().createArrivalCurve((CurvePwAffine) curve_1);
         }
-        if (curve_2.equals(CurvePwAffine.getFactory().createZeroService())
+        if (curve_2.equals(Curve.getFactory().createZeroService())
                 || curve_2.getLatency().equals(Num.getFactory().getPositiveInfinity())
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
-            return CurvePwAffine.getFactory().createZeroArrivals();
+            return Curve.getFactory().createZeroArrivals();
         }
         if (Calculator.getInstance().exec_deconvolution_checks()) {
             if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
@@ -279,7 +279,7 @@ public abstract class Deconvolution_DNC {
             // above):
 
             x_inflect_beta = curve_2.getSegment(i).getX();
-            candidate_tmp = CurvePwAffine.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
+            candidate_tmp = Curve.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
 
             y_beta = curve_2.f(x_inflect_beta);
             if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
@@ -328,7 +328,7 @@ public abstract class Deconvolution_DNC {
                 // the end.
 
                 int segment_count = j + 3; // At least 2 (the origin and and a burst followed by rate 0)
-                candidate_tmp = CurvePwAffine.getFactory().createArrivalCurve(segment_count); // Consists of zero
+                candidate_tmp = Curve.getFactory().createArrivalCurve(segment_count); // Consists of zero
                 // segments (x,y),r =
                 // (0,0),0 only.
                 // The origin (first segment, id 0) stays as is, the remainder needs to be
@@ -404,9 +404,9 @@ public abstract class Deconvolution_DNC {
         sup_curve = candidates_iter.next();
         while (candidates_iter.hasNext()) {
             additional_curve = candidates_iter.next();
-            sup_curve = CurvePwAffine.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
+            sup_curve = Curve.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
         }
 
-        return CurvePwAffine.getFactory().createArrivalCurve((CurvePwAffine) sup_curve);
+        return Curve.getFactory().createArrivalCurve((CurvePwAffine) sup_curve);
     }
 }

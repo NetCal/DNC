@@ -27,10 +27,10 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 
 public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
@@ -45,7 +45,7 @@ public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
         super(segment_count);
     }
 
-    public MaxServiceCurve_DNC(CurvePwAffine curve) {
+    public MaxServiceCurve_DNC(Curve curve) {
         copy(curve);
 
         if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong

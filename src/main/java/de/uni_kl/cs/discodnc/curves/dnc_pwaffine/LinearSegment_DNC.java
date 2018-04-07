@@ -27,11 +27,8 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
-import java.lang.reflect.Constructor;
-
-import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
@@ -63,7 +60,7 @@ public class LinearSegment_DNC implements LinearSegment {
      * or not.
      */
     protected boolean leftopen;
-    
+
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------

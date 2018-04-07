@@ -109,7 +109,7 @@ public class DncTestArguments implements ArgumentsProvider {
 		triplet_arbMux.add(ArrivalBoundMethod.PMOO);
 
 		// Parameter configurations for single arrival bounding tests
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
+		// AB, convolve alternative ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
 		// global mux def, number class to use, curve class to use, operations class to
 		// use
 		for (CurveBackend curve : curves) {

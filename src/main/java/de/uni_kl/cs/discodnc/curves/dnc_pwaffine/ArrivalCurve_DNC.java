@@ -27,11 +27,11 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 
 public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
         super(segment_count);
     }
 
-    public ArrivalCurve_DNC(CurvePwAffine curve) {
+    public ArrivalCurve_DNC(Curve curve) {
         super(curve);
         forceThroughOrigin();
 

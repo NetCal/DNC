@@ -27,10 +27,10 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
@@ -45,7 +45,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC(CurvePwAffine curve) {
+    public ServiceCurve_DNC(Curve curve) {
         copy(curve);
 
         if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong

@@ -29,6 +29,7 @@ package de.uni_kl.cs.discodnc.minplus;
 import java.util.Set;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -59,12 +60,12 @@ public interface MinPlus {
 	MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) throws Exception;
 
 	// Arrival Curves and Max Service Curves
-	Set<CurvePwAffine> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve)
+	Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve)
 			throws Exception;
 
 	Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve)
 			throws Exception;
-
+	
 	// ------------------------------------------------------------
 	// Deconvolution
 	// ------------------------------------------------------------
@@ -83,7 +84,6 @@ public interface MinPlus {
 	ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve, boolean tb_rl_optimized)
 			throws Exception;
 
-	Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<CurvePwAffine> curves, Set<ServiceCurve> service_curves)
+	Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves, Set<ServiceCurve> service_curves)
 			throws Exception;
-
 }

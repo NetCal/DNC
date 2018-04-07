@@ -30,7 +30,7 @@ package de.uni_kl.cs.discodnc.nc;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
@@ -83,7 +83,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (flows_to_bound.isEmpty()) {
 			return arrival_bounds;
 		}
@@ -128,10 +128,10 @@ public abstract class ArrivalBoundDispatch {
 			// * Consider all the permutations of different bounds per in link.
 			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
 			for (ArrivalCurve arrival_bound_link : arrival_bounds_link) {
-				CurvePwAffine.beautify(arrival_bound_link);
+				Curve.beautify(arrival_bound_link);
 
 				for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-					arrival_bounds_link_permutations.add(CurvePwAffine.add(arrival_bound_link, arrival_bound_exiting));
+					arrival_bounds_link_permutations.add(Curve.add(arrival_bound_link, arrival_bound_exiting));
 				}
 			}
 
@@ -147,7 +147,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
@@ -245,7 +245,7 @@ public abstract class ArrivalBoundDispatch {
 
 		for (ArrivalCurve alpha_1 : arrival_curves_1) {
 			for (ArrivalCurve alpha_2 : arrival_curves_2) {
-				arrival_bounds_merged.add(CurvePwAffine.add(alpha_1, alpha_2));
+				arrival_bounds_merged.add(Curve.add(alpha_1, alpha_2));
 			}
 		}
 
@@ -253,7 +253,7 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, Set<ArrivalCurve> arrival_bounds_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
+			Set<ArrivalCurve> arrival_bounds) throws Exception {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.addAll(arrival_bounds_to_merge);
 		} else {
@@ -264,23 +264,22 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, ArrivalCurve arrival_bound_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
+			Set<ArrivalCurve> arrival_bounds) throws Exception {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.add(arrival_bound_to_merge);
 		} else {
-			if (!configuration.removeDuplicateArrivalBounds() || (configuration.removeDuplicateArrivalBounds()
-					&& !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
+			if (!configuration.convolveAlternativeArrivalBounds() ) {
 				arrival_bounds.add(arrival_bound_to_merge);
+			} else { // convolve alternative arrival bounds
+				ArrivalCurve arrival_bound_tmp = arrival_bound_to_merge.copy();
+				// There should only be one arrival bound in arrival_bounds as this setting is global.
+				// Therefore, the convolution of all alternatives could be sped up using this knowledge.
+				for (ArrivalCurve arrival_bound : arrival_bounds) {
+					arrival_bound_tmp = Calculator.getInstance().getMinPlus().convolve(arrival_bound_tmp, arrival_bound);
+				}
+				arrival_bounds.clear();
+				arrival_bounds.add(arrival_bound_tmp);
 			}
 		}
-	}
-
-	private static boolean isDuplicate(ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds) {
-		for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
-			if (arrival_bound_to_check.equals(arrival_bound_existing)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
