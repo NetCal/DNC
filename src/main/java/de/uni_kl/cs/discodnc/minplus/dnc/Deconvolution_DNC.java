@@ -279,7 +279,7 @@ public abstract class Deconvolution_DNC {
             // above):
 
             x_inflect_beta = curve_2.getSegment(i).getX();
-            candidate_tmp = Curve.shiftLeftClipping((CurvePwAffine) curve_1, x_inflect_beta);
+            candidate_tmp = Curve.shiftLeftClipping((Curve) curve_1, x_inflect_beta);
 
             y_beta = curve_2.f(x_inflect_beta);
             if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
@@ -404,9 +404,9 @@ public abstract class Deconvolution_DNC {
         sup_curve = candidates_iter.next();
         while (candidates_iter.hasNext()) {
             additional_curve = candidates_iter.next();
-            sup_curve = Curve.max((CurvePwAffine) sup_curve, (CurvePwAffine) additional_curve);
+            sup_curve = Curve.max((Curve) sup_curve, (Curve) additional_curve);
         }
 
-        return Curve.getFactory().createArrivalCurve((CurvePwAffine) sup_curve);
+        return Curve.getFactory().createArrivalCurve((Curve) sup_curve);
     }
 }

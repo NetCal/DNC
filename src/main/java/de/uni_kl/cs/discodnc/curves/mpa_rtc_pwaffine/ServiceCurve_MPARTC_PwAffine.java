@@ -30,7 +30,6 @@ package de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine;
 import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
 
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 public class ServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implements ServiceCurve {

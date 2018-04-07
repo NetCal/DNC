@@ -45,6 +45,7 @@ import de.uni_kl.cs.discodnc.minplus.dnc.Deconvolution_DNC;
 public enum MinPlus_DNC implements MinPlus {
 	
 	MIN_PLUS_DNC;
+	
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
 	// --------------------------------------------------------------------------------------------------------------

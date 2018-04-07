@@ -62,6 +62,7 @@ public class DncTestArguments implements ArgumentsProvider {
 
 		Set<CurveBackend> curves = new HashSet<CurveBackend>();
 		curves.add(CurveBackend_DNC.DNC);
+//		curves.add(CurveBackend_DNC_AFFINE.DNC_AFFINE);
 		
 //		Set<OperationImpl> operations = new HashSet<OperationImpl>();
 //		operations.add(OperationImpl.DNC);

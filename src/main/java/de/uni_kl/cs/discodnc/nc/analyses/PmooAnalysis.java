@@ -30,25 +30,6 @@
 
 package de.uni_kl.cs.discodnc.nc.analyses;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurveAffine;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.curves.dnc_affine.AffineCurve_DNC;
-import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
-import de.uni_kl.cs.discodnc.nc.Analysis;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.discodnc.nc.bounds.Bound;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
-import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.numbers.Num;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,6 +41,23 @@ import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
 
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
+import de.uni_kl.cs.discodnc.nc.Analysis;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
+import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.network.Flow;
+import de.uni_kl.cs.discodnc.network.Link;
+import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.network.Path;
+import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
@@ -207,7 +205,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             }
 
             Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
-            AffineCurve_DNC current_rl = AffineCurve_DNC.getFactory().createServiceCurve(tmpcurve);
+            ServiceCurve current_rl = Calculator.getInstance().getCurve().createServiceCurve(tmpcurve);
 
             // Sum up latencies
             T = compute.add(T, current_rl.getLatency());
@@ -217,7 +215,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
                 Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-                AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
+                ArrivalCurve current_tb = Calculator.getInstance().getCurve().createArrivalCurve(ac);
                 sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
             }
 
@@ -246,7 +244,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
             Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-            AffineCurve_DNC current_tb = AffineCurve_DNC.getFactory().createArrivalCurve(ac);
+            ArrivalCurve current_tb = Calculator.getInstance().getCurve().createArrivalCurve(ac);
             sum_bursts = compute.add(sum_bursts, current_tb.getBurst());
         }
 
