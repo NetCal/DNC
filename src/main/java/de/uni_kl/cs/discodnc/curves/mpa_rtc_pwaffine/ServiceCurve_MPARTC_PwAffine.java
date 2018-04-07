@@ -1,8 +1,6 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
- * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2013 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
@@ -27,64 +25,77 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine;
 
-import de.uni_kl.cs.discodnc.Calculator;
+import ch.ethz.rtc.kernel.Curve;
+import ch.ethz.rtc.kernel.SegmentList;
+
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
+public class ServiceCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implements ServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    public ServiceCurve_DNC() {
+    public ServiceCurve_MPARTC_PwAffine() {
         super();
     }
 
-    public ServiceCurve_DNC(int segment_count) {
+    public ServiceCurve_MPARTC_PwAffine(int segment_count) {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC(CurvePwAffine curve) {
+    public ServiceCurve_MPARTC_PwAffine(de.uni_kl.cs.discodnc.curves.Curve curve) {
         copy(curve);
-
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isConvex()
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
-        }
     }
 
-    public ServiceCurve_DNC(String service_curve_str) throws Exception {
-        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
-            // possible
-            // string:
-            // {(0,0),0}
-            throw new RuntimeException("Invalid string representation of a service curve.");
-        }
+    public ServiceCurve_MPARTC_PwAffine(String service_curve_str) throws Exception {
+        super.initializeCurve(service_curve_str);
+    }
 
-        initializeCurve(service_curve_str);
+    public ServiceCurve_MPARTC_PwAffine(SegmentList aperSegments) {
+        rtc_curve = new Curve(aperSegments);
+    }
 
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isConvex()
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
-        }
+    public ServiceCurve_MPARTC_PwAffine(SegmentList perSegments, double py0, long period, double pdy) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy);
+    }
+
+    public ServiceCurve_MPARTC_PwAffine(SegmentList perSegments, double py0, long period, double pdy, String name) {
+        rtc_curve = new Curve(perSegments, py0, period, pdy, name);
+    }
+
+    public ServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0,
+                                        long period, double pdy) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy);
+    }
+
+    public ServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, SegmentList perSegments, double px0, double py0,
+                                        long period, double pdy, String name) {
+        rtc_curve = new Curve(aperSegments, perSegments, px0, py0, period, pdy, name);
+    }
+
+    public ServiceCurve_MPARTC_PwAffine(SegmentList aperSegments, String name) {
+        rtc_curve = new Curve(aperSegments, name);
+    }
+
+    public ServiceCurve_MPARTC_PwAffine(Curve c) {
+        rtc_curve = c.clone();
     }
 
     // --------------------------------------------------------------------------------------------------------------
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public ServiceCurve_DNC copy() {
-        ServiceCurve_DNC sc_copy = new ServiceCurve_DNC();
+    public ServiceCurve_MPARTC_PwAffine copy() {
+        ServiceCurve_MPARTC_PwAffine sc_copy = new ServiceCurve_MPARTC_PwAffine();
         sc_copy.copy(this);
         return sc_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof ServiceCurve_DNC) && super.equals(obj);
+        return (obj instanceof ServiceCurve_MPARTC_PwAffine) && super.equals(obj);
     }
 
     @Override

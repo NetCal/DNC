@@ -28,6 +28,7 @@
 package de.uni_kl.cs.discodnc.curves;
 
 import de.uni_kl.cs.discodnc.Calculator;
+
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {

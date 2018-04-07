@@ -2,8 +2,8 @@ package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
-import de.uni_kl.cs.discodnc.curves.dnc.Curve_DNC;
-import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
+import de.uni_kl.cs.discodnc.curves.dnc_pwaffine.Curve_DNC;
+import de.uni_kl.cs.discodnc.curves.dnc_pwaffine.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.minplus.MinPlus_DNC;
 

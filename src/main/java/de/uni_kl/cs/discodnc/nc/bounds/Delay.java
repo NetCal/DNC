@@ -30,7 +30,7 @@
 package de.uni_kl.cs.discodnc.nc.bounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
@@ -39,7 +39,7 @@ public class Delay {
     }
 
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        if (arrival_curve.equals(CurvePwAffine.getFactory().createZeroArrivals())) {
+        if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())) {
             return Num.getFactory().createZero();
         }
         if (service_curve.isDelayedInfiniteBurst()) {
@@ -48,7 +48,7 @@ public class Delay {
             // would not be sensible.
             return service_curve.getLatency().copy();
         }
-        if (service_curve.equals(CurvePwAffine.getFactory().createZeroService()) // We know from above that the
+        if (service_curve.equals(Curve.getFactory().createZeroService()) // We know from above that the
                 // arrivals are not zero.
                 || arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
             return Num.getFactory().createPositiveInfinity();
@@ -62,7 +62,7 @@ public class Delay {
             return result;
         }
 
-        return CurvePwAffine.getXIntersection(arrival_curve, service_curve);
+        return Curve.getXIntersection(arrival_curve, service_curve);
     }
 
     // Single flow to be bound, i.e., fifo per micro flow holds

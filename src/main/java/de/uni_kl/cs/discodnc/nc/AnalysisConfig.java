@@ -46,26 +46,27 @@ public class AnalysisConfig {
     private GammaFlag use_extra_gamma = GammaFlag.SERVER_LOCAL;
     private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
             Collections.singleton(ArrivalBoundMethod.PBOO_CONCATENATION));
-    private boolean remove_duplicate_arrival_bounds = true;
+    private boolean convolve_alternative_arrival_bounds = true;
     private boolean tbrl_convolution = false;
     private boolean tbrl_deconvolution = false;
     private boolean flow_prolongation = false;
-    private boolean ab_consider_tfa_nodeBacklog = false;
+    private boolean server_backlog_arrival_bound = false;
     public AnalysisConfig() {
     }
+    
     public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
-                          Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
-                          boolean tbrl_convolution, boolean tbrl_deconvolution, boolean ab_consider_tfa_nodeBacklog) {
+                          Set<ArrivalBoundMethod> arrival_bound_methods, boolean convolve_alternative_arrival_bounds,
+                          boolean tbrl_convolution, boolean tbrl_deconvolution, boolean server_backlog_arrival_bound) {
         this.multiplexing_discipline = multiplexing_discipline;
         this.use_gamma = use_gamma;
         this.use_extra_gamma = use_extra_gamma;
         this.arrival_bound_methods.clear();
         this.arrival_bound_methods.addAll(arrival_bound_methods);
 
-        this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
+        this.convolve_alternative_arrival_bounds = convolve_alternative_arrival_bounds;
         this.tbrl_convolution = tbrl_convolution;
         this.tbrl_deconvolution = tbrl_deconvolution;
-        this.ab_consider_tfa_nodeBacklog = ab_consider_tfa_nodeBacklog;
+        this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
     public MuxDiscipline multiplexingDiscipline() {
@@ -131,12 +132,12 @@ public class AnalysisConfig {
         }
     }
 
-    public boolean removeDuplicateArrivalBounds() {
-        return remove_duplicate_arrival_bounds;
+    public boolean convolveAlternativeArrivalBounds() {
+        return convolve_alternative_arrival_bounds;
     }
 
-    public void setRemoveDuplicateArrivalBounds(boolean remove_duplicate_arrival_bounds_flag) {
-        remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds_flag;
+    public void setConvolveAlternativeArrivalBounds(boolean convolve_alternative_arrival_bounds_flag) {
+        convolve_alternative_arrival_bounds = convolve_alternative_arrival_bounds_flag;
     }
 
     public boolean tbrlConvolution() {
@@ -155,10 +156,6 @@ public class AnalysisConfig {
         tbrl_deconvolution = optimized_code_path;
     }
 
-    public boolean abConsiderTFANodeBacklog() {
-        return ab_consider_tfa_nodeBacklog;
-    }
-
     public boolean useFlowProlongation() {
         return flow_prolongation;
     }
@@ -167,8 +164,12 @@ public class AnalysisConfig {
         flow_prolongation = prolong_flows;
     }
 
-    public void setAbConsiderTFANodeBacklog(boolean consider_backlog_bound) {
-        ab_consider_tfa_nodeBacklog = consider_backlog_bound;
+    public boolean serverBacklogArrivalBound() {
+        return server_backlog_arrival_bound;
+    }
+
+    public void setServerBacklogArrivalBound(boolean consider_node_backlog) {
+        server_backlog_arrival_bound = consider_node_backlog;
     }
 
     /**
@@ -178,7 +179,7 @@ public class AnalysisConfig {
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
         return new AnalysisConfig(multiplexing_discipline, use_gamma, use_extra_gamma, arrival_bound_methods,
-                remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, ab_consider_tfa_nodeBacklog);
+                convolve_alternative_arrival_bounds, tbrl_convolution, tbrl_deconvolution, server_backlog_arrival_bound);
     }
 
     @Override
@@ -189,9 +190,9 @@ public class AnalysisConfig {
         analysis_config_str.append(", ");
         analysis_config_str.append(arrivalBoundMethods().toString());
 
-        if (removeDuplicateArrivalBounds()) {
+        if (convolveAlternativeArrivalBounds()) {
             analysis_config_str.append(", ");
-            analysis_config_str.append("remove duplicate ABs");
+            analysis_config_str.append("convolve alternative ABs");
         }
         if (tbrlConvolution()) {
             analysis_config_str.append(", ");
