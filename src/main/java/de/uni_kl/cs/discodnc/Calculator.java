@@ -29,7 +29,6 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public final class Calculator {
