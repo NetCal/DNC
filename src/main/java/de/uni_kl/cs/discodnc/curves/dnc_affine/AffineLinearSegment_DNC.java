@@ -209,11 +209,11 @@ public class AffineLinearSegment_DNC implements LinearSegment {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegment_DNC)) {
+        if (obj == null || !(obj instanceof AffineLinearSegment_DNC)) {
             return false;
         }
 
-        LinearSegment_DNC other = (LinearSegment_DNC) obj;
+        AffineLinearSegment_DNC other = (AffineLinearSegment_DNC) obj;
         boolean result;
         result = this.x.equals(other.getX());
         result = result && this.y.equals(other.getY());
