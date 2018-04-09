@@ -32,7 +32,6 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
