@@ -4,14 +4,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
-    <organization>
-        <url>discodnc.cs.uni-kl.de</url>
-    </organization>
-
     <groupId>de.uni_kl.cs.discodnc</groupId>
     <artifactId>DiscoDNC</artifactId>
     <version>2.4.0</version>
+
+    <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
+    <description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.</description>
+    <url>discodnc.cs.uni-kl.de</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Lesser Public License (LGPL) version 2.1</name>
+            <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Steffen Bondorf</name>
+            <email>bondorf@cs.uni-kl.de</email>
+            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+            <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/NetCal/DiscoDNC.git</connection>
+        <developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
+        <url>https://github.com/NetCal/DiscoDNC/tree/master</url>
+    </scm>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
