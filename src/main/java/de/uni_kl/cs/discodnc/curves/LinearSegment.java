@@ -35,7 +35,6 @@ public interface LinearSegment {
 	static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
 		LinearSegment.Builder builder = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
         return builder.createLinearSegment(x, y, grad, leftopen);
-        
     }
 
     static LinearSegment createHorizontalLine(double y) {
@@ -169,11 +168,6 @@ public interface LinearSegment {
 
     boolean isLeftopen();
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory
-    // --------------------------------------------------------------------------------------------------------------
-    // In contrast to the Curve factory, it does not dispatch to other factories.
-
     void setLeftopen(boolean leftopen);
 
     Num getXIntersectionWith(LinearSegment other);
@@ -194,11 +188,8 @@ public interface LinearSegment {
     String toString();
     
     interface Builder {
-    	
     	public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen);
-    		
+    	
     	public LinearSegment createHorizontalLine(double y);
-    
     }
-    
 }
