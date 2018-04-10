@@ -27,12 +27,13 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
+package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.ArrayList;
