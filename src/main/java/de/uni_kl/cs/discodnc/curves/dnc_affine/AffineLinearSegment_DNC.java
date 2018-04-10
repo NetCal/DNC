@@ -30,8 +30,8 @@
 package de.uni_kl.cs.discodnc.curves.dnc_affine;
 
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
-import de.uni_kl.cs.discodnc.curves.dnc_pwaffine.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
