@@ -165,11 +165,6 @@ public interface LinearSegment {
 
     boolean isLeftopen();
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory
-    // --------------------------------------------------------------------------------------------------------------
-    // In contrast to the Curve factory, it does not dispatch to other factories.
-
     void setLeftopen(boolean leftopen);
 
     Num getXIntersectionWith(LinearSegment other);
