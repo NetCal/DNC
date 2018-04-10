@@ -27,25 +27,25 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
+package de.uni_kl.cs.discodnc.curves.dnc.affine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
+public class AffineServiceCurve_DNC extends AffineCurve_DNC implements ServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    public ServiceCurve_DNC() {
+    public AffineServiceCurve_DNC() {
         super();
     }
 
-    public ServiceCurve_DNC(int segment_count) {
+    public AffineServiceCurve_DNC(int segment_count) {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC(Curve curve) {
+    public AffineServiceCurve_DNC(Curve curve) {
         copy(curve);
 
         if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
@@ -55,7 +55,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         }
     }
 
-    public ServiceCurve_DNC(String service_curve_str) throws Exception {
+    public AffineServiceCurve_DNC(String service_curve_str) throws Exception {
         if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
             // possible
             // string:
@@ -76,15 +76,15 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public ServiceCurve_DNC copy() {
-        ServiceCurve_DNC sc_copy = new ServiceCurve_DNC();
+    public AffineServiceCurve_DNC copy() {
+        AffineServiceCurve_DNC sc_copy = new AffineServiceCurve_DNC();
         sc_copy.copy(this);
         return sc_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof ServiceCurve_DNC) && super.equals(obj);
+        return (obj instanceof AffineServiceCurve_DNC) && super.equals(obj);
     }
 
     @Override
