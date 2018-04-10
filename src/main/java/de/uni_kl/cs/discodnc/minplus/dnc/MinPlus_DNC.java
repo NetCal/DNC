@@ -25,7 +25,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus;
+package de.uni_kl.cs.discodnc.minplus.dnc;
 
 import java.util.Set;
 
@@ -33,8 +33,7 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.dnc.Convolution_DNC;
-import de.uni_kl.cs.discodnc.minplus.dnc.Deconvolution_DNC;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public enum MinPlus_DNC implements MinPlus {
 	

@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
+package de.uni_kl.cs.discodnc.curves.dnc;
 
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.numbers.Num;
