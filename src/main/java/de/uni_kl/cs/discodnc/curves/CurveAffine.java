@@ -32,14 +32,14 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 import java.util.List;
 
 /**
- * Interface for piecewise affine curves, including convenience functions used
+ * Interface for affine curves, including convenience functions used
  * by Disco's implementation DNC operations. I.e., in addition to its defining
  * linear segments, curves may be ascribed as (compositions of) rate latency and
  * token bucket functions.
  */
 public interface CurveAffine extends Curve {
 
-    // // Specific piecewise affine curve shapes
+    // // Specific affine curve shapes
 
     /**
      * Returns the maximum horizontal deviation between the given two curves.
@@ -78,19 +78,11 @@ public interface CurveAffine extends Curve {
     @Override
     void copy(Curve curve);
 
-
-    // (Composition of) Rate latencies
     boolean isRateLatency();
-
 
     List<CurveAffine> getRL_Components();
 
-
-    // (Composition of) Token buckets
     boolean isTokenBucket();
 
-
     List<CurveAffine> getTB_Components();
-
-
 }

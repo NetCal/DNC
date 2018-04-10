@@ -6,8 +6,8 @@ import de.uni_kl.cs.discodnc.curves.Curve;
 
 public class CheckUtils {
 	
-	// --------------------------------------------------------------------------------------------------------------
-		// Min-Plus-Operation Input Checks
+		// --------------------------------------------------------------------------------------------------------------
+		// Generic Input Checks
 		// --------------------------------------------------------------------------------------------------------------
 
 		/**
@@ -38,28 +38,6 @@ public class CheckUtils {
 		}
 
 		/**
-		 * @param curve_1
-		 * @param curve_2
-		 * @return 0 == none of the objects is a delayed infinite burst, <br/>
-		 *         1 == the first object is a delayed infinite burst, <br/>
-		 *         2 == the second object is a delayed infinite burst, <br/>
-		 *         3 == both objects are a delayed infinite burst.
-		 */
-		public static int inputDelayedInfiniteBurstCheck(Curve curve_1, Curve curve_2) {
-			int return_value = 0;
-
-			if (curve_1.isDelayedInfiniteBurst()) {
-				return_value += 1;
-			}
-
-			if (curve_2.isDelayedInfiniteBurst()) {
-				return_value += 2;
-			}
-
-			return return_value;
-		}
-
-		/**
 		 * @param set1
 		 * @param set
 		 * @return 0 == none of the sets is empty, <br/>
@@ -81,6 +59,32 @@ public class CheckUtils {
 				return_value += 1;
 			}
 			if (set2.isEmpty()) {
+				return_value += 2;
+			}
+
+			return return_value;
+		}
+	
+		// --------------------------------------------------------------------------------------------------------------
+		// Curve Shape Checks
+		// --------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * @param curve_1
+		 * @param curve_2
+		 * @return 0 == none of the objects is a delayed infinite burst, <br/>
+		 *         1 == the first object is a delayed infinite burst, <br/>
+		 *         2 == the second object is a delayed infinite burst, <br/>
+		 *         3 == both objects are a delayed infinite burst.
+		 */
+		public static int inputDelayedInfiniteBurstCheck(Curve curve_1, Curve curve_2) {
+			int return_value = 0;
+
+			if (curve_1.isDelayedInfiniteBurst()) {
+				return_value += 1;
+			}
+
+			if (curve_2.isDelayedInfiniteBurst()) {
 				return_value += 2;
 			}
 
