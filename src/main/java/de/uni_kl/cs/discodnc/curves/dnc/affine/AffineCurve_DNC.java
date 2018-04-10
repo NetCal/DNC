@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc_affine;
+package de.uni_kl.cs.discodnc.curves.dnc.affine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,8 +37,8 @@ import java.util.List;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurveAffine;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
@@ -56,7 +56,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 public class AffineCurve_DNC implements CurveAffine {
 	private static AffineCurve_DNC instance = new AffineCurve_DNC();
 
-	protected AffineLinearSegment_DNC[] segments;
+	protected LinearSegment_DNC[] segments;
 
 	protected boolean is_delayed_infinite_burst = false;
 
@@ -164,30 +164,30 @@ public class AffineCurve_DNC implements CurveAffine {
 		if (!empty) { // old default
 			createZeroSegmentsCurve(segment_count);
 		} else { // potential new default, tests work
-			segments = new AffineLinearSegment_DNC[segment_count];
+			segments = new LinearSegment_DNC[segment_count];
 			// Initialize Elements of array, not only array itself
-			segments[0] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+			segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 					Num.getFactory().createZero(), false);
 
 			for (int i = 1; i < segment_count; i++) {
-				segments[i] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+				segments[i] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 						Num.getFactory().createZero(), true);
 			}
 		}
 	}
 
 	private void createZeroSegmentsCurve(int segment_count) {
-		segments = new AffineLinearSegment_DNC[segment_count];
+		segments = new LinearSegment_DNC[segment_count];
 
 		if (segment_count == 0) {
 			return;
 		}
 
-		segments[0] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 				Num.getFactory().createZero(), false);
 
 		for (int i = 1; i < segment_count; i++) {
-			segments[i] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+			segments[i] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 					Num.getFactory().createZero(), true);
 		}
 	}
@@ -212,18 +212,18 @@ public class AffineCurve_DNC implements CurveAffine {
 		String curve_str_internal = curve_str.substring(1, curve_str.length() - 1);
 
 		String[] segments_to_parse = curve_str_internal.split(";");
-		segments = new AffineLinearSegment_DNC[segments_to_parse.length]; // No need to use createZeroSegments( i ) because we
+		segments = new LinearSegment_DNC[segments_to_parse.length]; // No need to use createZeroSegments( i ) because we
 		// will store parsed segments
 
 		for (int i = 0; i < segments_to_parse.length; i++) {
-			segments[i] = new AffineLinearSegment_DNC(segments_to_parse[i]);
+			segments[i] = new LinearSegment_DNC(segments_to_parse[i]);
 		}
 		Curve.beautify(this);
 	}
 
 	protected void forceThroughOrigin() {
 		if (getSegment(0).getY().gtZero()) {
-			addSegment(0, new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+			addSegment(0, new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 					Num.getFactory().createZero(), false));
 
 			getSegment(1).setLeftopen(true);
@@ -254,7 +254,7 @@ public class AffineCurve_DNC implements CurveAffine {
 
 	@Override
 	public void copy(Curve curve) {
-		AffineLinearSegment_DNC[] segments = new AffineLinearSegment_DNC[curve.getSegmentCount()];
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[curve.getSegmentCount()];
 
 		if (curve instanceof AffineCurve_DNC) {
 			for (int i = 0; i < segments.length; i++) {
@@ -272,7 +272,7 @@ public class AffineCurve_DNC implements CurveAffine {
 			this.is_token_bucket = ((CurveAffine) curve).isTokenBucket();
 		} else {
 			for (int i = 0; i < curve.getSegmentCount(); i++) {
-				segments[i] = new AffineLinearSegment_DNC(curve.getSegment(i));
+				segments[i] = new LinearSegment_DNC(curve.getSegment(i));
 			}
 		}
 
@@ -282,7 +282,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	/**
 	 * Starting at 0.
 	 */
-	public AffineLinearSegment_DNC getSegment(int pos) {
+	public LinearSegment_DNC getSegment(int pos) {
 		if (pos < 0 || pos > segments.length - 1) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
 		}
@@ -362,11 +362,11 @@ public class AffineCurve_DNC implements CurveAffine {
 			throw new IllegalArgumentException("Tried to insert null!");
 		}
 
-		AffineLinearSegment_DNC s_dnc;
-		if (s instanceof AffineLinearSegment_DNC) {
-			s_dnc = ((AffineLinearSegment_DNC) s).copy();
+		LinearSegment_DNC s_dnc;
+		if (s instanceof LinearSegment_DNC) {
+			s_dnc = ((LinearSegment_DNC) s).copy();
 		} else {
-			s_dnc = new AffineLinearSegment_DNC(s);
+			s_dnc = new LinearSegment_DNC(s);
 		}
 
 		segments[pos] = s_dnc;
@@ -374,13 +374,13 @@ public class AffineCurve_DNC implements CurveAffine {
 	}
 
 	protected void setSegments(LinearSegment[] segments) {
-		if (segments instanceof AffineLinearSegment_DNC[]) {
-			this.segments = (AffineLinearSegment_DNC[]) segments;
+		if (segments instanceof LinearSegment_DNC[]) {
+			this.segments = (LinearSegment_DNC[]) segments;
 		} else {
 			// Convert to LinearSegmentDNC
-			this.segments = new AffineLinearSegment_DNC[segments.length];
+			this.segments = new LinearSegment_DNC[segments.length];
 			for (int i = 0; i < segments.length; i++) {
-				segments[i] = new AffineLinearSegment_DNC(segments[i]);
+				segments[i] = new LinearSegment_DNC(segments[i]);
 			}
 		}
 		clearMetaInfo();
@@ -418,15 +418,15 @@ public class AffineCurve_DNC implements CurveAffine {
 			throw new IllegalArgumentException("Tried to insert null!");
 		}
 
-		AffineLinearSegment_DNC s_dnc;
-		if (s instanceof AffineLinearSegment_DNC) {
-			s_dnc = ((AffineLinearSegment_DNC) s).copy();
+		LinearSegment_DNC s_dnc;
+		if (s instanceof LinearSegment_DNC) {
+			s_dnc = ((LinearSegment_DNC) s).copy();
 		} else {
-			s_dnc = new AffineLinearSegment_DNC(s);
+			s_dnc = new LinearSegment_DNC(s);
 		}
 
-		AffineLinearSegment_DNC[] old_segments = segments;
-		segments = new AffineLinearSegment_DNC[old_segments.length + 1];
+		LinearSegment_DNC[] old_segments = segments;
+		segments = new LinearSegment_DNC[old_segments.length + 1];
 		segments[pos] = s_dnc;
 		if (pos > 0) {
 			System.arraycopy(old_segments, 0, segments, 0, pos);
@@ -448,8 +448,8 @@ public class AffineCurve_DNC implements CurveAffine {
 		if (pos < 0 || pos >= segments.length) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
 		}
-		AffineLinearSegment_DNC[] old_segments = segments;
-		segments = new AffineLinearSegment_DNC[old_segments.length - 1];
+		LinearSegment_DNC[] old_segments = segments;
+		segments = new LinearSegment_DNC[old_segments.length - 1];
 		System.arraycopy(old_segments, 0, segments, 0, pos);
 		System.arraycopy(old_segments, pos + 1, segments, pos, old_segments.length - pos - 1);
 
@@ -1229,9 +1229,9 @@ public class AffineCurve_DNC implements CurveAffine {
 	// Curve assembly
 	// ------------------------------------------------------------------------------
 	private void makeHorizontal(AffineCurve_DNC c_dnc, Num y) {
-		AffineLinearSegment_DNC segment = new AffineLinearSegment_DNC(Num.getFactory().createZero(), y,
+		LinearSegment_DNC segment = new LinearSegment_DNC(Num.getFactory().createZero(), y,
 				Num.getFactory().createZero(), false);
-		c_dnc.setSegments(new AffineLinearSegment_DNC[] { segment });
+		c_dnc.setSegments(new LinearSegment_DNC[] { segment });
 	}
 
 	private void makeDelayedInfiniteBurst(AffineCurve_DNC c_dnc, Num delay) {
@@ -1239,12 +1239,12 @@ public class AffineCurve_DNC implements CurveAffine {
 			throw new IllegalArgumentException("Delayed infinite burst curve must have delay >= 0.0");
 		}
 
-		AffineLinearSegment_DNC[] segments = new AffineLinearSegment_DNC[2];
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
-		segments[0] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 				Num.getFactory().createZero(), false);
 
-		segments[1] = new AffineLinearSegment_DNC(delay, Num.getFactory().createPositiveInfinity(),
+		segments[1] = new LinearSegment_DNC(delay, Num.getFactory().createPositiveInfinity(),
 				Num.getFactory().createZero(), true);
 
 		c_dnc.setSegments(segments);
@@ -1261,9 +1261,9 @@ public class AffineCurve_DNC implements CurveAffine {
 			return;
 		}
 
-		AffineLinearSegment_DNC[] segments = new AffineLinearSegment_DNC[1];
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[1];
 
-		segments[0] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(), rate, false);
+		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(), rate, false);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_rate_latency = true; // with latency 0
@@ -1284,12 +1284,12 @@ public class AffineCurve_DNC implements CurveAffine {
 			return;
 		}
 
-		AffineLinearSegment_DNC[] segments = new AffineLinearSegment_DNC[2];
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
-		segments[0] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 				Num.getFactory().createZero(), false);
 
-		segments[1] = new AffineLinearSegment_DNC(latency, Num.getFactory().createZero(), rate, true);
+		segments[1] = new LinearSegment_DNC(latency, Num.getFactory().createZero(), rate, true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_rate_latency = true;
@@ -1310,12 +1310,12 @@ public class AffineCurve_DNC implements CurveAffine {
 			return;
 		}
 
-		AffineLinearSegment_DNC[] segments = new AffineLinearSegment_DNC[2];
+		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
-		segments[0] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
 				Num.getFactory().createZero(), false);
 
-		segments[1] = new AffineLinearSegment_DNC(Num.getFactory().createZero(), burst, rate, true);
+		segments[1] = new LinearSegment_DNC(Num.getFactory().createZero(), burst, rate, true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_token_bucket = true;
