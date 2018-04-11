@@ -26,6 +26,12 @@
             <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
             <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
         </developer>
+        <developer>
+            <name>Philipp Schon</name>
+            <email>schon@cs.uni-kl.de</email>
+            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+            <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+        </developer>
     </developers>
 
     <scm>
