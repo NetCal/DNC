@@ -32,6 +32,7 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.nc.CompFFApresets;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
@@ -103,6 +104,11 @@ public class Demo4 {
 
         network.addFlow(arrival_curve, path1);
 
+        CompFFApresets compffa_analyses = new CompFFApresets( network );
+        TotalFlowAnalysis tfa = compffa_analyses.tf_analysis;
+        SeparateFlowAnalysis sfa = compffa_analyses.sf_analysis;
+        PmooAnalysis pmoo = compffa_analyses.pmoo_analysis;
+        
         for (Flow flow_of_interest : network.getFlows()) {
 
             System.out.println("Flow of interest : " + flow_of_interest.toString());
@@ -111,8 +117,6 @@ public class Demo4 {
             // Analyze the network
             // TFA
             System.out.println("--- Total Flow Analysis ---");
-            TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
-
             try {
                 tfa.performAnalysis(flow_of_interest);
                 System.out.println("delay bound     : " + tfa.getDelayBound());
@@ -129,8 +133,6 @@ public class Demo4 {
 
             // SFA
             System.out.println("--- Separated Flow Analysis ---");
-            SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
-
             try {
                 sfa.performAnalysis(flow_of_interest);
                 System.out.println("e2e SFA SCs     : " + sfa.getLeftOverServiceCurves());
@@ -147,8 +149,6 @@ public class Demo4 {
 
             // PMOO
             System.out.println("--- PMOO Analysis ---");
-            PmooAnalysis pmoo = new PmooAnalysis(network);
-
             try {
                 pmoo.performAnalysis(flow_of_interest);
                 System.out.println("e2e PMOO SCs    : " + pmoo.getLeftOverServiceCurves());

@@ -1,6 +1,9 @@
 Changes since v2.4.0 "Chimera"
 ------------------------------
 * Tests now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
+* Added a class with presets with most common flow of interest analysis and arrival bounding configurations
+  for algebraic compositional feed-forward analysis (compFFA): de.uni_kl.cs.discodnc.nc.CompFFApresets. 
+  - Demo4 uses the presets instead of analyses instances implicitly using the defailt configuration.
 * Our current TFA AB burst reduction implementation is only applicable to TB arrivals.
   - We now skip reducing the reduction for arrival curves with >2 segments.
 * Code and comment cleanups.
