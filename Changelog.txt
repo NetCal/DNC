@@ -1,6 +1,8 @@
 Changes since v2.4.0 "Chimera"
 ------------------------------
-* Tests now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
+* Tests
+  - They now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
+  - Each test only works with a single instance of its respective network instead of creating one per test config.
 * Added a class with presets with most common flow of interest analysis and arrival bounding configurations
   for algebraic compositional feed-forward analysis (compFFA): de.uni_kl.cs.discodnc.nc.CompFFApresets. 
   - Demo4 uses the presets instead of analyses instances implicitly using the defailt configuration.
