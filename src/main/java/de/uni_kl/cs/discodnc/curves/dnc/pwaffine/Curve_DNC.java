@@ -29,6 +29,11 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
