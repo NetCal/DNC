@@ -535,6 +535,9 @@ public interface Curve {
             }
         }
 
+        // FIXME Can have colinear segments but the above beautify(...) method only works on curve instances.
+        // Makes creation of affine curve fail if we restrict to at most 2 segmetns when calling createCurve(...).
+        // Proposed solution: Overwrite this method with a affine curve specific one in the CurveAffine interface.
         return Curve.getFactory().createCurve(result);
     }
 

@@ -87,6 +87,10 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *            the number of segments
 	 */
 	protected AffineCurve_DNC(int segment_count) {
+		// // TODO requires fix to Curve's boundAtXAxis.
+//		if (segment_count < 0 || segment_count > 2) {
+//			throw new IndexOutOfBoundsException("Affine curves can have at most two segments (given count was " + segment_count + ")!");
+//		}
 		createNewCurve(segment_count, false);
 	}
 
