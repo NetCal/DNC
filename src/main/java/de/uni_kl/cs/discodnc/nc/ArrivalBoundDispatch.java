@@ -96,13 +96,14 @@ public abstract class ArrivalBoundDispatch {
 		// Get cross-traffic originating in server
 		Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection(f_xfcaller_server,
 				network.getSourceFlows(server));
-		f_xfcaller_sourceflows_server.remove(flow_of_interest);
-		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,
-				f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
-		arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
+		if( !f_xfcaller_sourceflows_server.isEmpty() ) {
+			f_xfcaller_sourceflows_server.remove(flow_of_interest);
+			ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
+			arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
 
-		if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
-			return arrival_bounds;
+			if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
+				return arrival_bounds;
+			}
 		}
 
 		// Get cross-traffic from each predecessor. Call per link in order to get
