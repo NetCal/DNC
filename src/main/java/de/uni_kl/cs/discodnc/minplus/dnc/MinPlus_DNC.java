@@ -36,8 +36,8 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public enum MinPlus_DNC implements MinPlus {
-	
 	MINPLUS_DNC;
+  
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
 	// --------------------------------------------------------------------------------------------------------------
@@ -47,23 +47,41 @@ public enum MinPlus_DNC implements MinPlus {
 	// ------------------------------------------------------------
 
 	// Service Curves
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.MinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 */
+	@Override
 	public ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception {
 		return convolve(service_curve_1, service_curve_2, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve, boolean)
+	 */
+	@Override
 	public ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
 			boolean tb_rl_optimized) throws Exception {
+		// DNC and MPA_RTC curves
+		// DNC curves
 		return Convolution_DNC.convolve(service_curve_1, service_curve_2, tb_rl_optimized);
 	}
 
 	// Java won't let us call this method "convolve" because it does not care about
 	// the Sets' types; tells that there's already another method taking the same
 	// arguments.
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_SCs_SCs(java.util.Set, java.util.Set)
+	 */
+	@Override
 	public Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
 			Set<ServiceCurve> service_curves_2) throws Exception {
 		return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_SCs_SCs(java.util.Set, java.util.Set, boolean)
+	 */
+	@Override
 	public Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
 			Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) throws Exception {
 
@@ -74,22 +92,35 @@ public enum MinPlus_DNC implements MinPlus {
 			return service_curves_1;
 		}
 
-			return Convolution_DNC.convolve_SCs_SCs(service_curves_1, service_curves_2, tb_rl_optimized);
-
+		// DNC curves
+		return Convolution_DNC.convolve_SCs_SCs(service_curves_1, service_curves_2, tb_rl_optimized);
 	}
 
 	// Arrival Curves
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ArrivalCurve)
+	 */
+	@Override
 	public ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
 			return Convolution_DNC.convolve(arrival_curve_1, arrival_curve_2);
+
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(java.util.Set)
+	 */
+	@Override
 	public ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
 			return Convolution_DNC.convolve(arrival_curves);
 	}
 
 	// Maximum Service Curves
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.MaxServiceCurve, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
+	 */
+	@Override
 	public MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2)
 			throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
@@ -97,12 +128,20 @@ public enum MinPlus_DNC implements MinPlus {
 	}
 
 	// Arrival Curves and Max Service Curves
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_ACs_MSC(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
+	 */
+	@Override
 	public Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve maximum_service_curve) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
 			return Convolution_DNC.convolve_ACs_MSC(arrival_curves, maximum_service_curve);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_ACs_EGamma(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
+	 */
+	@Override
 	public Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve extra_gamma_curve) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
@@ -112,38 +151,66 @@ public enum MinPlus_DNC implements MinPlus {
 	// ------------------------------------------------------------
 	// Deconvolution
 	// ------------------------------------------------------------
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(java.util.Set, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 */
+	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve)
 			throws Exception {
 		return deconvolve(arrival_curves, service_curve, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(java.util.Set, de.uni_kl.cs.discodnc.curves.ServiceCurve, boolean)
+	 */
+	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
 			boolean tb_rl_optimized) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
 			return Deconvolution_DNC.deconvolve(arrival_curves, service_curve, tb_rl_optimized);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(java.util.Set, java.util.Set)
+	 */
+	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves)
 			throws Exception {
 		return deconvolve(arrival_curves, service_curves, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(java.util.Set, java.util.Set, boolean)
+	 */
+	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves,
 			boolean tb_rl_optimized) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
 			return Deconvolution_DNC.deconvolve(arrival_curves, service_curves, tb_rl_optimized);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 */
+	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) throws Exception {
 		return deconvolve(arrival_curve, service_curve, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve, boolean)
+	 */
+	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
 			boolean tb_rl_optimized) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves
 			return Deconvolution_DNC.deconvolve(arrival_curve, service_curve);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve_almostConcCs_SCs(java.util.Set, java.util.Set)
+	 */
+	@Override
 	public Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
 			Set<ServiceCurve> service_curves) throws Exception {
 		// DNC operations work with DNC and MPA_RTC curves

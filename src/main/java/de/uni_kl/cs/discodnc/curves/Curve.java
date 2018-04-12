@@ -27,12 +27,12 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.numbers.Num;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
  * Interface for wide-sense increasing, plain curves.

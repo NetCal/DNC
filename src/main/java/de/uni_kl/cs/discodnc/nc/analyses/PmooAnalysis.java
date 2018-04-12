@@ -59,7 +59,6 @@ import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
     private PmooAnalysis() {

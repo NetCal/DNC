@@ -12,7 +12,6 @@
     <artifactId>DiscoDNC</artifactId>
     <version>2.5.0</version>
 	
-
     <licenses>
         <license>
             <name>GNU General Lesser Public License (LGPL) version 2.1</name>
@@ -24,7 +23,13 @@
         <developer>
             <name>Steffen Bondorf</name>
             <email>bondorf@cs.uni-kl.de</email>
-           <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+            <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+        </developer>
+        <developer>
+            <name>Philipp Schon</name>
+            <email>schon@cs.uni-kl.de</email>
+            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
             <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
         </developer>
         <developer>
