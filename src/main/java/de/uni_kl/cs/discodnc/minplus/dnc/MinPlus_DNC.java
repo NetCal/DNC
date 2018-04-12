@@ -29,12 +29,6 @@ package de.uni_kl.cs.discodnc.minplus.dnc;
 
 import java.util.Set;
 
-// Due to name collisions, these classes are not imported,
-
-// they are referenced by their fully qualified names.
-//import ch.ethz.rtc.kernel.Curve;
-//import Curve;
-
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
@@ -42,9 +36,8 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public enum MinPlus_DNC implements MinPlus {
-	
-	MIN_PLUS_DNC;
-	
+	MINPLUS_DNC;
+  
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
 	// --------------------------------------------------------------------------------------------------------------
@@ -55,7 +48,7 @@ public enum MinPlus_DNC implements MinPlus {
 
 	// Service Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.minplus.MinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
 	 */
 	@Override
 	public ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception {
@@ -71,7 +64,6 @@ public enum MinPlus_DNC implements MinPlus {
 		// DNC and MPA_RTC curves
 		// DNC curves
 		return Convolution_DNC.convolve(service_curve_1, service_curve_2, tb_rl_optimized);
-
 	}
 
 	// Java won't let us call this method "convolve" because it does not care about
@@ -102,7 +94,6 @@ public enum MinPlus_DNC implements MinPlus {
 
 		// DNC curves
 		return Convolution_DNC.convolve_SCs_SCs(service_curves_1, service_curves_2, tb_rl_optimized);
-
 	}
 
 	// Arrival Curves

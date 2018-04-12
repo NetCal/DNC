@@ -12,7 +12,7 @@ public enum CurveBackend_DNC implements CurveBackend {
 	
 		@Override
 		public MinPlus getMinPlus() {
-			return MinPlus_DNC.MIN_PLUS_DNC;
+			return MinPlus_DNC.MINPLUS_DNC;
 		}
 
 		@Override

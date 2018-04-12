@@ -40,7 +40,7 @@ import java.util.List;
 public interface Curve {
 
     static Curve getFactory() {
-    	return Calculator.getInstance().getCurve();
+        return Calculator.getInstance().getCurve();
     }
 
     // --------------------------------------------------------------------------------------------------------------

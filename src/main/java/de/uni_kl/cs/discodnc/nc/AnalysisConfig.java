@@ -51,6 +51,7 @@ public class AnalysisConfig {
     private boolean tbrl_deconvolution = false;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
+
     public AnalysisConfig() {
     }
     

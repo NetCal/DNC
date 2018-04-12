@@ -36,11 +36,6 @@ import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>
  * The curve is stored as an array of <code>LinearSegment</code> objects. Each
