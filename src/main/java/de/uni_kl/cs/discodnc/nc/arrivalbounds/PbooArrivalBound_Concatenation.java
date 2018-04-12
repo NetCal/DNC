@@ -78,12 +78,12 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		}
 
 		// Get the servers on common sub-path of f_xfcaller flows crossing link
-		// loi == location of interference
-		Server loi = link.getDest();
-		Set<Flow> f_loi = network.getFlows(loi);
-		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
-		f_xfcaller_loi.remove(flow_of_interest);
-		if (f_xfcaller_loi.size() == 0) {
+		// soi == server of interference
+		Server soi = link.getDest();
+		Set<Flow> f_soi = network.getFlows(soi);
+		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
+		f_xfcaller_soi.remove(flow_of_interest);
+		if (f_xfcaller_soi.size() == 0) {
 			return alphas_xfcaller;
 		}
 
@@ -92,9 +92,9 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		// There's not a big potential to increase performance as the PBOO arrival bound
 		// implicitly handles this situation by only iterating over one server in the
 		// for loop.
-		Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
+		Server common_subpath_src = network.findSplittingServer(soi, f_xfcaller_soi);
 		Server common_subpath_dest = link.getSource();
-		Flow f_representative = f_xfcaller_loi.iterator().next();
+		Flow f_representative = f_xfcaller_soi.iterator().next();
 		Path common_subpath = f_representative.getSubPath(common_subpath_src, common_subpath_dest);
 
 		// Calculate the left-over service curves on this sub-path by convolution of the

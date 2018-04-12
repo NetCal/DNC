@@ -99,12 +99,12 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 		}
 
 		// Get the common sub-path of f_xfcaller flows crossing the given link
-		// loi == location of interference
-		Server loi = link.getDest();
-		Set<Flow> f_loi = network.getFlows(loi);
-		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
-		f_xfcaller_loi.remove(flow_of_interest);
-		if (f_xfcaller_loi.isEmpty()) {
+		// soi == server of interference
+		Server soi = link.getDest();
+		Set<Flow> f_soi = network.getFlows(soi);
+		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
+		f_xfcaller_soi.remove(flow_of_interest);
+		if (f_xfcaller_soi.isEmpty()) {
 			return alphas_xfcaller;
 		}
 
@@ -114,18 +114,18 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
 		}
 
-		Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
+		Server common_subpath_src = network.findSplittingServer(soi, f_xfcaller_soi);
 		Server common_subpath_dest = link.getSource();
 		Path common_subpath;
 		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
 
-		common_subpath = f_xfcaller_loi.iterator().next().getPath().getSubPath(common_subpath_src, common_subpath_dest);
+		common_subpath = f_xfcaller_soi.iterator().next().getPath().getSubPath(common_subpath_src, common_subpath_dest);
 
 		if (common_subpath.numServers() == 1) {
 			common_subpath = new Path(common_subpath_src);
 
 			Set<Flow> f_xxfcaller = network.getFlows(common_subpath_src);
-			f_xxfcaller.removeAll(f_xfcaller_loi);
+			f_xxfcaller.removeAll(f_xfcaller_soi);
 			f_xxfcaller.remove(flow_of_interest);
 			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 					common_subpath_src, f_xxfcaller, flow_of_interest);
@@ -141,7 +141,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 			}
 		} else {
 			PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
-			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_loi);
+			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_soi);
 		}
 
 		// Check if there's any service left on this path. Signaled by at least one
