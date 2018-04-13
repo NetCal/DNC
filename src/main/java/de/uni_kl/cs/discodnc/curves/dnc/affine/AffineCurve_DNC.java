@@ -1042,6 +1042,14 @@ public class AffineCurve_DNC implements CurveAffine {
 	// DiscoDNC compliance
 	// ------------------------------------------------------------
 	public AffineCurve_DNC createCurve(List<LinearSegment> segments) {
+		// TODO Assume there are more than two segments, defining either a valid mTB or mRL.
+		// The first segment passes through the origin, the second defines best known lateny or burstiness.
+		// The last segment defines least arrival rate or largest service rate, respectively.
+		// Choosing the second segment for an affine curve from the given ones is thus finding a reasonable tradeoff.
+		// We should trade accuracy for certainty to not cause false resource exhaustion assumptions.
+		// I.e., the second segment of our affine curve should be defined by the last one of the givens segments by
+		// extending it to the front such that it either intersects with, i.e.,, then starts at,
+		// the x-axis (defining a new service curve latency) or the y-axis (defining a new arrival curve burstiness).
 		AffineCurve_DNC c_dnc = new AffineCurve_DNC(segments.size());
 		for (int i = 0; i < segments.size(); i++) {
 			c_dnc.setSegment(i, segments.get(i));
