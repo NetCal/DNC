@@ -9,6 +9,7 @@ Changes since v2.4.0 "Chimera"
 * Our current TFA AB burst reduction implementation is only applicable to TB arrivals.
   - We now skip reducing the reduction for arrival curves with >2 segments.
 * Code and comment cleanups.
+* Refactoring to multimodule project, integration tests moved to separate modul
 
 v2.4.0 "Chimera" (2018-Mar-18)
 ------------------------------
