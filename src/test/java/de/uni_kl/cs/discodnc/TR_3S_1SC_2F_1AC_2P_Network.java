@@ -37,14 +37,16 @@ import de.uni_kl.cs.discodnc.network.NetworkFactory;
 import de.uni_kl.cs.discodnc.network.Server;
 
 public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
-	private static final int sc_R = 20;
-	private static final int sc_T = 20;
-	private static final int ac_r = 5;
-	private static final int ac_b = 25;
-	protected Server s0, s1, s2;
-	protected Flow f0, f1;
+	private final int sc_R = 20;
+	private final int sc_T = 20;
+	private final int ac_r = 5;
+	private final int ac_b = 25;
+	
+	private Server s0, s1, s2;
+	
 	private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
 	private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
+	
 	private Network network;
 
 	public TR_3S_1SC_2F_1AC_2P_Network() {
@@ -71,8 +73,8 @@ public class TR_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
 		}
 
 		try {
-			f0 = network.addFlow(arrival_curve, s0, s2);
-			f1 = network.addFlow(arrival_curve, s1, s2);
+			network.addFlow("f0", arrival_curve, s0, s2);
+			network.addFlow("f1", arrival_curve, s1, s2);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

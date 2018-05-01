@@ -41,15 +41,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FF_4S_1SC_3F_1AC_3P_Network implements NetworkFactory {
-	private static final int sc_R = 20;
-	private static final int sc_T = 20;
-	private static final int ac_r = 5;
-	private static final int ac_b = 25;
-	protected Server s0, s1, s2, s3;
-	protected Flow f0, f1, f2;
-	protected Link l_s0_s1, l_s1_s3;
+	private final int sc_R = 20;
+	private final int sc_T = 20;
+	private final int ac_r = 5;
+	private final int ac_b = 25;
+	
+	private Server s0, s1, s2, s3;
+	private Link l_s0_s1, l_s1_s3;
+	
 	private ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(sc_R, sc_T);
 	private ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(ac_r, ac_b);
+	
 	private Network network;
 
 	public FF_4S_1SC_3F_1AC_3P_Network() {
@@ -85,9 +87,9 @@ public class FF_4S_1SC_3F_1AC_3P_Network implements NetworkFactory {
 		f0_path.add(l_s1_s3);
 
 		try {
-			f0 = network.addFlow(arrival_curve, f0_path);
-			f1 = network.addFlow(arrival_curve, s2, s3);
-			f2 = network.addFlow(arrival_curve, s2, s1);
+			network.addFlow(arrival_curve, f0_path); // f0
+			network.addFlow(arrival_curve, s2, s3);  // f1
+			network.addFlow(arrival_curve, s2, s1);  // f1
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

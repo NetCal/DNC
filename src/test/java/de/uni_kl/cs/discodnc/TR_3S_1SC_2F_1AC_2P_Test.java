@@ -28,72 +28,29 @@
 
 package de.uni_kl.cs.discodnc;
 
-import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.network.Network;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
+	private static TR_3S_1SC_2F_1AC_2P_Network network_factory = new TR_3S_1SC_2F_1AC_2P_Network();
+	private static Network network = network_factory.getNetwork();
 	private Flow f0, f1;
 
-	private TR_3S_1SC_2F_1AC_2P_Test() {
-		super(new TR_3S_1SC_2F_1AC_2P_Network());
-	}
-
-	protected void initializeFlows() {
-		f0 = ((TR_3S_1SC_2F_1AC_2P_Network) network_factory).f0;
-		f1 = ((TR_3S_1SC_2F_1AC_2P_Network) network_factory).f1;
-	}
-
-	protected void initializeBounds() {
-		expected_results.clear();
-
-		Num factory = Num.getFactory();
-
-		// TFA
-		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f0, factory.create(53.75), factory.create(450));
-		expected_results.setBounds(Analyses.TFA, Multiplexing.FIFO, f1, factory.create(53.75), factory.create(450));
-		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f0, factory.create(345, 4),
-				factory.create(450));
-		expected_results.setBounds(Analyses.TFA, Multiplexing.ARBITRARY, f1, factory.create(345, 4),
-				factory.create(450));
-
-		// SFA
-		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f0, factory.create(575, 12),
-				factory.create(1025, 4));
-		expected_results.setBounds(Analyses.SFA, Multiplexing.FIFO, f1, factory.create(575, 12),
-				factory.create(1025, 4));
-		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f0, factory.create(170, 3),
-				factory.create(300));
-		expected_results.setBounds(Analyses.SFA, Multiplexing.ARBITRARY, f1, factory.create(170, 3),
-				factory.create(300));
-
-		// PMOO
-		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, factory.create(170, 3),
-				factory.create(300));
-		expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, factory.create(170, 3),
-				factory.create(300));
-
-		// Sink-Tree PMOO at sink
-		if (test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL)
-				|| test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV)
-				|| test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV)
-				|| test_config.arrivalBoundMethods().contains(ArrivalBoundMethod.PMOO_SINKTREE_TBRL_HOMO)) {
-			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f0, null, factory.create(450));
-			expected_results.setBounds(Analyses.PMOO, Multiplexing.ARBITRARY, f1, null, factory.create(450));
-		}
+	private TR_3S_1SC_2F_1AC_2P_Test() throws Exception {
+		super(network_factory, new TR_3S_1SC_2F_1AC_2P_Results());
+		f0 = network.getFlow(0);
+		f1 = network.getFlow(1);
 	}
 
 	// --------------------Flow 0--------------------
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideAllArguments")
 	public void f0_tfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
@@ -101,7 +58,7 @@ public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideAllArguments")
 	public void f0_sfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
@@ -109,25 +66,24 @@ public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideArbArguments")
 	public void f0_pmoo_arbMux(DncTestConfig test_config) {
 		initializeTest(test_config);
-		setArbitraryMux(network.getServers());
+		setMux(network.getServers());
 		runPMOOtest(new PmooAnalysis(network, test_config), f0);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideSinkTreeArguments")
 	public void f0_sinktree_arbMux(DncTestConfig test_config) {
-		test_config.setArrivalBoundMethod(ArrivalBoundMethod.PMOO_SINKTREE_TBRL);
 		initializeTest(test_config);
-		setArbitraryMux(network.getServers());
-		runSinkTreePMOOtest(network, f0);
+		setMux(network.getServers());
+		runSinkTreePMOOtest(network, f0); // tests all PMOO Sink Tree variants
 	}
 
 	// --------------------Flow 1--------------------
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideAllArguments")
 	public void f1_tfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
@@ -135,7 +91,7 @@ public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideAllArguments")
 	public void f1_sfa(DncTestConfig test_config) {
 		initializeTest(test_config);
 		setMux(network.getServers());
@@ -143,19 +99,18 @@ public class TR_3S_1SC_2F_1AC_2P_Test extends DncTest {
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideArbArguments")
 	public void f1_pmoo_arbMux(DncTestConfig test_config) {
 		initializeTest(test_config);
-		setArbitraryMux(network.getServers());
+		setMux(network.getServers());
 		runPMOOtest(new PmooAnalysis(network, test_config), f1);
 	}
 
 	@ParameterizedTest(name = "[{arguments}]")
-	@ArgumentsSource(DncTestArguments.class)
+	@MethodSource("de.uni_kl.cs.discodnc.DncTestMethodSources#provideSinkTreeArguments")
 	public void f1_sinktree_arbMux(DncTestConfig test_config) {
-		test_config.setArrivalBoundMethod(ArrivalBoundMethod.PMOO_SINKTREE_TBRL);
 		initializeTest(test_config);
-		setArbitraryMux(network.getServers());
-		runSinkTreePMOOtest(network, f1);
+		setMux(network.getServers());
+		runSinkTreePMOOtest(network, f1); // tests all PMOO Sink Tree variants
 	}
 }
