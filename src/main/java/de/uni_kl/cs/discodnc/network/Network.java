@@ -28,7 +28,11 @@
 
 package de.uni_kl.cs.discodnc.network;
 
-import de.uni_kl.cs.discodnc.curves.*;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 
@@ -89,6 +93,7 @@ public class Network {
 
 	private String flow_default_name_prefix = "f";
 	private int flow_id_counter = 0;
+	private Map<Integer, Flow> map__id__flow;
 
 	public Network() {
 		servers = new HashSet<Server>();
@@ -96,6 +101,7 @@ public class Network {
 		flows = new HashSet<Flow>();
 
 		map__id__server = new HashMap<Integer, Server>();
+		map__id__flow = new HashMap<Integer, Flow>();
 
 		map__server__in_links = new HashMap<Server, Set<Link>>();
 		map__server__out_links = new HashMap<Server, Set<Link>>();
@@ -115,6 +121,7 @@ public class Network {
 
 		for (Flow f : flows_to_remove_cpy) {
 			flows.remove(f);
+			map__id__flow.remove(f.getId());
 
 			for (Link l : f.getPath().getLinks()) {
 				map__link__flows.get(l).remove(f);
@@ -652,9 +659,10 @@ public class Network {
 		}
 
 		Flow new_flow = new Flow(flow_id_counter, alias, arrival_curve.copy(), path);
-		flow_id_counter++;
-
 		flows.add(new_flow);
+		map__id__flow.put(Integer.valueOf(flow_id_counter), new_flow);
+		flow_id_counter++;
+		
 		map__server__source_flows.get(path.getSource()).add(new_flow);
 
 		for (Link l : path.getLinks()) {
@@ -689,6 +697,20 @@ public class Network {
 
 	public int numFlows() {
 		return flows.size();
+	}
+
+	public Flow getFlow(int id) throws Exception {
+		if (id < 0 || id > map__id__flow.size() - 1) {
+			throw new Exception("No flow with id " + Integer.toString(id) + " found");
+		}
+
+		Flow flow = map__id__flow.get(Integer.valueOf(id));
+
+		if (flow == null) {
+			throw new Exception("No flow with id " + Integer.toString(id) + " found");
+		}
+
+		return flow;
 	}
 
 	public Set<Flow> getFlows(Link l) {
