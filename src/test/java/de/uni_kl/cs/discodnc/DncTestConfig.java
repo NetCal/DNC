@@ -37,7 +37,7 @@ import java.util.Set;
 public class DncTestConfig extends AnalysisConfig {
 	// Functional test specific parameters
 	protected boolean define_multiplexing_globally;
-	protected AnalysisConfig.Multiplexing mux_discipline;
+	protected AnalysisConfig.Multiplexing multiplexing;
 	protected boolean console_output = false;
 
 	// Calculator configuration
@@ -49,16 +49,16 @@ public class DncTestConfig extends AnalysisConfig {
 	private DncTestConfig() {
 	}
 
-	public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
-			boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing mux_discipline,
+	public DncTestConfig(Set<ArrivalBoundMethod> arrival_bound_methods, boolean convolve_alternative_arrival_bounds,
+			boolean tbrl_convolution, boolean tbrl_deconvolution, AnalysisConfig.Multiplexing multiplexing,
 			boolean define_multiplexing_globally, NumImpl numbers, CurveImpl curves ) {
 
 		super(AnalysisConfig.MuxDiscipline.GLOBAL_ARBITRARY, // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
 				GammaFlag.GLOBALLY_OFF, // Not used, no influence yet.
-				arrival_bound_methods, remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, false);
+				arrival_bound_methods, convolve_alternative_arrival_bounds, tbrl_convolution, tbrl_deconvolution, false);
 
-		this.mux_discipline = mux_discipline;
+		this.multiplexing = multiplexing;
 		this.define_multiplexing_globally = define_multiplexing_globally;
 
 		// Will not work. Num implementation and curve implementation need to be stored
@@ -83,7 +83,7 @@ public class DncTestConfig extends AnalysisConfig {
 
 	@Override
 	public String toString() {
-		// AB, remove duplicate ABs, tbrl opt convolution, tbrl opt deconvolusion, mux,
+		// AB, convolve alternative ABs, tbrl opt convolution, tbrl opt deconvolusion, mux,
 		// global mux def, numbers, curves
 		StringBuffer func_test_str = new StringBuffer();
 
@@ -99,7 +99,7 @@ public class DncTestConfig extends AnalysisConfig {
 			func_test_str.append(", " + "TbRl Deconv");
 		}
 
-		func_test_str.append(", " + mux_discipline.toString());
+		func_test_str.append(", " + multiplexing.toString());
 
 		if (define_multiplexing_globally) {
 			func_test_str.append(", " + "MUX global");
