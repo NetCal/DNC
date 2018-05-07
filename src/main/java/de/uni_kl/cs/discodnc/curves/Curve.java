@@ -33,26 +33,31 @@ import de.uni_kl.cs.discodnc.numbers.Num;
  * Interface for wide-sense increasing, plain curves.
  */
 public interface Curve {
-    // --------------------------------------------------------------------------------------------------------------
-    // Interface
-    // --------------------------------------------------------------------------------------------------------------
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Generic functionality
+    // --------------------------------------------------------------------------------------------------------------
     /**
-     * Create and return a linear segment that lies on the x axis of the Cartesian
+     * Create and return a linear segment that lies on the positive x axis of the Cartesian
      * coordinate system.
      *
-     * @return
+     * @return the positive x-axis
      */
     static LinearSegment getXAxis() {
         // Need to create it anew as the number representation might have changed.
         return LinearSegment.createHorizontalLine(0.0);
     }
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Curve copying
+    // --------------------------------------------------------------------------------------------------------------
     Curve copy();
 
     void copy(Curve curve);
-
-    // Curve's segments (incl. manipulation)
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Curve segments
+    // --------------------------------------------------------------------------------------------------------------
     LinearSegment getSegment(int pos);
 
     int getSegmentCount();
@@ -64,8 +69,10 @@ public interface Curve {
     void addSegment(int pos, LinearSegment s);
 
     void removeSegment(int pos);
-
+    
+    // --------------------------------------------------------------------------------------------------------------
     // Curve properties
+    // --------------------------------------------------------------------------------------------------------------
     boolean isDelayedInfiniteBurst();
 
     boolean isDiscontinuity(int pos);
@@ -89,8 +96,10 @@ public interface Curve {
     @Override
     String toString();
 
-    // Curve function values
-    Num f(Num x);
+    // --------------------------------------------------------------------------------------------------------------
+	// Curve function values
+    // --------------------------------------------------------------------------------------------------------------
+	Num f(Num x);
 
     Num fLimitRight(Num x);
 
@@ -101,10 +110,6 @@ public interface Curve {
     Num getLatency();
 
     Num getBurst();
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Utils
-    // --------------------------------------------------------------------------------------------------------------
 
     Num getGradientLimitRight(Num x);
 }
