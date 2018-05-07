@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 
 public class DncTestMethodSources {
 
-	protected static Set<Set<ArrivalBoundMethod>> ab_sets = instantiateABsets();
+	protected static final Set<Set<ArrivalBoundMethod>> ab_sets = instantiateABsets();
 	protected static Set<ArrivalBoundMethod> single_1, single_2, single_3, pair_1, pair_2, pair_3, triplet, sinktree;
 
 	private static Set<Set<ArrivalBoundMethod>> instantiateABsets() {
