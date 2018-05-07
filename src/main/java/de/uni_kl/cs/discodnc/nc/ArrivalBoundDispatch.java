@@ -31,7 +31,9 @@ package de.uni_kl.cs.discodnc.nc;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
@@ -96,13 +98,14 @@ public abstract class ArrivalBoundDispatch {
 		// Get cross-traffic originating in server
 		Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection(f_xfcaller_server,
 				network.getSourceFlows(server));
-		f_xfcaller_sourceflows_server.remove(flow_of_interest);
-		ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,
-				f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
-		arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
+		if( !f_xfcaller_sourceflows_server.isEmpty() ) {
+			f_xfcaller_sourceflows_server.remove(flow_of_interest);
+			ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
+			arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
 
-		if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
-			return arrival_bounds;
+			if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
+				return arrival_bounds;
+			}
 		}
 
 		// Get cross-traffic from each predecessor. Call per link in order to get
@@ -252,7 +255,7 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, Set<ArrivalCurve> arrival_bounds_to_merge,
-			Set<ArrivalCurve> arrival_bounds) throws Exception {
+			Set<ArrivalCurve> arrival_bounds) {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.addAll(arrival_bounds_to_merge);
 		} else {
@@ -263,22 +266,23 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, ArrivalCurve arrival_bound_to_merge,
-			Set<ArrivalCurve> arrival_bounds) throws Exception {
+			Set<ArrivalCurve> arrival_bounds) {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.add(arrival_bound_to_merge);
 		} else {
-			if (!configuration.convolveAlternativeArrivalBounds() ) {
+			if (!configuration.removeDuplicateArrivalBounds() || (configuration.removeDuplicateArrivalBounds()
+					&& !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
 				arrival_bounds.add(arrival_bound_to_merge);
-			} else { // convolve alternative arrival bounds
-				ArrivalCurve arrival_bound_tmp = arrival_bound_to_merge.copy();
-				// There should only be one arrival bound in arrival_bounds as this setting is global.
-				// Therefore, the convolution of all alternatives could be sped up using this knowledge.
-				for (ArrivalCurve arrival_bound : arrival_bounds) {
-					arrival_bound_tmp = Calculator.getInstance().getMinPlus().convolve(arrival_bound_tmp, arrival_bound);
-				}
-				arrival_bounds.clear();
-				arrival_bounds.add(arrival_bound_tmp);
 			}
 		}
+	}
+
+	private static boolean isDuplicate(ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds) {
+		for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
+			if (arrival_bound_to_check.equals(arrival_bound_existing)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
