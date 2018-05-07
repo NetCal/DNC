@@ -79,6 +79,10 @@ public class Path {
     public Server getSource() {
         return path_servers.get(0);
     }
+    
+    public boolean isSource(Server s) {
+    	return path_servers.indexOf(s) == 0;
+    }
 
     public Server getSink() {
         return path_servers.get(path_servers.size() - 1);
@@ -159,7 +163,7 @@ public class Path {
         }
         throw new Exception("No succeeding link on the path found");
     }
-
+    
     public Server getPrecedingServer(Server s) throws Exception {
         try {
             return getPrecedingLink(s).getSource();
