@@ -37,12 +37,12 @@ import de.uni_kl.cs.discodnc.network.NetworkFactory;
 import de.uni_kl.cs.discodnc.network.Server;
 
 public class S_1SC_2F_2AC_Network implements NetworkFactory {
-	private final int sc_R = 10;
-	private final int sc_T = 10;
-	private final int ac_r_0 = 4;
-	private final int ac_b_0 = 10;
-	private final int ac_r_1 = 5;
-	private final int ac_b_1 = 25;
+	private static final int sc_R = 10;
+	private static final int sc_T = 10;
+	private static final int ac_r_0 = 4;
+	private static final int ac_b_0 = 10;
+	private static final int ac_r_1 = 5;
+	private static final int ac_b_1 = 25;
 
 	private Server s0;
 	private Flow f0, f1;

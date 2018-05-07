@@ -41,10 +41,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FF_4S_1SC_4F_1AC_4P_Network implements NetworkFactory {
-	private final int sc_R = 20;
-	private final int sc_T = 20;
-	private final int ac_r = 5;
-	private final int ac_b = 25;
+	private static final int sc_R = 20;
+	private static final int sc_T = 20;
+	private static final int ac_r = 5;
+	private static final int ac_b = 25;
 	
 	private Server s0, s1, s2, s3;
 	private Link l_s0_s1, l_s1_s3, l_s2_s0, l_s0_s3;

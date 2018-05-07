@@ -40,10 +40,10 @@ import de.uni_kl.cs.discodnc.network.Server;
 import java.util.LinkedList;
 
 public class FF_3S_1SC_2F_1AC_2P_Network implements NetworkFactory {
-	private final int sc_R = 20;
-	private final int sc_T = 20;
-	private final int ac_r = 5;
-	private final int ac_b = 25;
+	private static final int sc_R = 20;
+	private static final int sc_T = 20;
+	private static final int ac_r = 5;
+	private static final int ac_b = 25;
 	
 	private Server s0, s1, s2;
 	private Link l_s0_s1, l_s1_s2;

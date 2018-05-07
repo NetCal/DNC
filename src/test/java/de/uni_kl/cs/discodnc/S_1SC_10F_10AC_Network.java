@@ -37,8 +37,8 @@ import de.uni_kl.cs.discodnc.network.NetworkFactory;
 import de.uni_kl.cs.discodnc.network.Server;
 
 public class S_1SC_10F_10AC_Network implements NetworkFactory {
-	private final int sc_R = 10;
-	private final int sc_T = 10;
+	private static final int sc_R = 10;
+	private static final int sc_T = 10;
 	
 	private Server s0;
 	private Flow[] flows = new Flow[10];
