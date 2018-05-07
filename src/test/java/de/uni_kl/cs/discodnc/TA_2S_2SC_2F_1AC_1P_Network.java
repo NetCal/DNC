@@ -41,8 +41,8 @@ public class TA_2S_2SC_2F_1AC_1P_Network implements NetworkFactory {
 	private static final int sc_T_0 = 10;
 	private static final int sc_R_1 = 6;
 	private static final int sc_T_1 = 6;
-	private final double ac_r = 2.5;
-	private final double ac_b = 12.5;
+	private static final double ac_r = 2.5;
+	private static final double ac_b = 12.5;
 	
 	private Server s0, s1;
 	
