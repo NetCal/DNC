@@ -177,7 +177,7 @@ public abstract class ArrivalBoundDispatch {
 				arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
-			/* There are not functional tests for the per-flow arrival bounds. */
+			/* There are no integration tests for the per-flow arrival bounds. */
 				
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
 			case PER_FLOW_SFA:
