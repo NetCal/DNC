@@ -71,7 +71,7 @@ public class CompFFApresets {
 		CalculatorConfig.getInstance().disableAllChecks();
 		
 		AnalysisConfig base_config = new AnalysisConfig();
-		base_config.setConvolveAlternativeArrivalBounds( true );
+		base_config.setRemoveDuplicateArrivalBounds( true );
 		
 		base_config.setUseTbrlConvolution( true );
 		base_config.setUseTbrlDeconvolution( true );
