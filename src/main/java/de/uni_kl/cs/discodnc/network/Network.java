@@ -1184,9 +1184,9 @@ public class Network {
 	 * are still together.
 	 *
 	 * @param server_common_dest
-	 *            The common destination.
+	 *            The common destination, excluded as a potential splitting server.
 	 * @param flows_of_interest
-	 *            The flow of interest.
+	 *            The flows whose common subpath before server_common_dest is computed.
 	 * @return the splitting point server The common source.
 	 * @throws Exception
 	 *             No splitting point prior to the common destination found.
