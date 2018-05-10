@@ -48,6 +48,9 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -129,48 +132,76 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         Path foi_path = flow_of_interest.getPath();
 
         Link link_from_prev_s;
-        Set<Flow> f_xfoi_server_path;
+        Set<Flow> f_xfoi_server_onpath;
+        Set<Flow> f_xfoi_server_src;
         
         for (Server server : path.getServers()) {
+			// Find the set of flows that interfere, either already on or coming off the common_subpath. 
+            Set<Flow> f_xfoi_server = network.getFlows(server);
+            f_xfoi_server.removeAll(flows_to_serve);	// We compute their beta l.o.
+            f_xfoi_server.remove(flow_of_interest);		// If present, it has lowest priority.
+        	
         	// implies that there is also a link connecting server and the preceding one
         	if( !foi_path.isSource(server) ) { 
         		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
-        		f_xfoi_server_path = network.getFlows(link_from_prev_s);
-        		f_xfoi_server_path.remove(flow_of_interest);
+        		f_xfoi_server_onpath = network.getFlows(link_from_prev_s);
+        		f_xfoi_server_onpath.remove(flow_of_interest);
         	} else {
-        		link_from_prev_s = null;
-        		f_xfoi_server_path = new HashSet<Flow>();
+        		f_xfoi_server_onpath = new HashSet<Flow>();
         	}
         	
+        	// The interfering flows originating at the current server.
+        	f_xfoi_server_src = network.getSourceFlows(server);
+        	f_xfoi_server_src.remove(flow_of_interest);
+        	f_xfoi_server_src.removeAll(flows_to_serve);
+
+            // Convert f_xfoi_server to "f_xfoi_server_offpath"
+            f_xfoi_server.removeAll(f_xfoi_server_onpath);
+            f_xfoi_server.removeAll(f_xfoi_server_src);
+
             betas_lofoi_s = new HashSet<ServiceCurve>();
 
-            Set<Flow> f_xfoi_server = network.getFlows(server);
-            f_xfoi_server.removeAll(flows_to_serve);
-            f_xfoi_server.remove(flow_of_interest);
+            // Attention!
+            // We cannot use a Set; we actually need a multiset in order to add equal sets of arrival curves.
+            // For instance, this is tested by TR_7S_1SC_3F_1AC_3P_Test's f1 with PMOO arrival bounding
+            // where cross-flows f0 and f2 have a single, equal arrival curves at s5.
+        	List<Set<ArrivalCurve>> ac_sets_to_combine = new LinkedList<Set<ArrivalCurve>>();
+        	
+        	if(!f_xfoi_server_src.isEmpty()) {
+        		ac_sets_to_combine.add(Collections.singleton(network.getSourceFlowArrivalCurve(server, f_xfoi_server_src)));
+        	}
+        	
+        	if(!f_xfoi_server_onpath.isEmpty()) {
+        		ac_sets_to_combine.add(
+        				ArrivalBoundDispatch.computeArrivalBounds(network, configuration ,server, f_xfoi_server_onpath, flow_of_interest));
+        	}
 
-            // Convert f_xfoi_server to f_xfoi_server_offpath
-            f_xfoi_server.removeAll(f_xfoi_server_path);
-
-            ServiceCurve beta_lofoi = server.getServiceCurve();
-
-            if (f_xfoi_server.isEmpty() && f_xfoi_server_path.isEmpty()) {
-                betas_lofoi_s.add(beta_lofoi);
-            } else { // network, server, flows_to_bound, flows_lower_priority
-                Set<ArrivalCurve> alpha_xfois_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
-                        server, f_xfoi_server_path, flow_of_interest);
-                Set<ArrivalCurve> alpha_xfois_offpath = ArrivalBoundDispatch.computeArrivalBounds(network,
-                        configuration, server, f_xfoi_server, Flow.NULL_FLOW);
-
-                Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>();
-                for (ArrivalCurve arrival_curve_path : alpha_xfois_path) {
-                    for (ArrivalCurve arrival_curve_offpath : alpha_xfois_offpath) {
-                        alpha_xfois.add(CurvePwAffine.add(arrival_curve_path, arrival_curve_offpath));
-                    }
+        	if(!f_xfoi_server.isEmpty()) {
+        		ac_sets_to_combine.add(
+        			ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xfoi_server, Flow.NULL_FLOW));
+        	}
+        	
+        	if( ac_sets_to_combine.isEmpty() ) {
+        		betas_lofoi_s.add(server.getServiceCurve());
+        		result.map__server__alphas.put(server, Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+        	} else {
+        		Iterator<Set<ArrivalCurve>> ac_set_iterator = ac_sets_to_combine.iterator();
+        		Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>(ac_set_iterator.next());
+    			
+        		Set<ArrivalCurve> ac_combinations_tmp = new HashSet<ArrivalCurve>();
+                while(ac_set_iterator.hasNext()) {
+                	for(ArrivalCurve ac_new : ac_set_iterator.next()) {
+                		for(ArrivalCurve ac_existing : alpha_xfois) {
+                			ac_combinations_tmp.add(CurvePwAffine.add(ac_new,ac_existing));
+                		}
+                	}
+            		alpha_xfois.clear();
+            		alpha_xfois.addAll(ac_combinations_tmp);
+                	ac_combinations_tmp.clear();
                 }
-
+	             
                 // Calculate the left-over service curve for the flow of interest
                 betas_lofoi_s = Bound.leftOverService(configuration, server, alpha_xfois);
-
                 result.map__server__alphas.put(server, alpha_xfois);
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lofoi_s);

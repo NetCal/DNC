@@ -48,6 +48,9 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class PbooArrivalBound_Concatenation extends AbstractArrivalBound implements ArrivalBound {
@@ -101,6 +104,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		
 		Link link_from_prev_s;
 		Set<Flow> f_xxfcaller_server_onpath;
+		Set<Flow> f_xxfcaller_server_src;
 		
 		for (Server server : common_subpath.getServers()) {
 			// Find the set of flows that interfere, either already on or coming off the common_subpath. 
@@ -116,37 +120,67 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
         	} else {
         		f_xxfcaller_server_onpath = new HashSet<Flow>();
         	}
+        	
+        	// The interfering flows originating at the current server.
+        	f_xxfcaller_server_src = network.getSourceFlows(server);
+        	f_xxfcaller_server_src.remove(flow_of_interest);
+        	f_xxfcaller_server_src.removeAll(f_xfcaller);
 
 			// Convert f_xxfcaller_server to "f_xxfcaller_server_offpath"
 			f_xxfcaller_server.removeAll(f_xxfcaller_server_onpath);
+			f_xxfcaller_server.removeAll(f_xxfcaller_server_src);
 
-			// If, during the entire arrival bounding procedure, we are already left the foi's path,
+            betas_lo_s = new HashSet<ServiceCurve>();
+
+        	List<Set<ArrivalCurve>> ac_sets_to_combine = new LinkedList<Set<ArrivalCurve>>();
+        	
+        	if(!f_xxfcaller_server_src.isEmpty()) {
+        		ac_sets_to_combine.add(Collections.singleton(network.getSourceFlowArrivalCurve(server, f_xxfcaller_server_src)));
+        	}
+        	
+        	if(!f_xxfcaller_server_onpath.isEmpty()) {
+        		ac_sets_to_combine.add(
+        				ArrivalBoundDispatch.computeArrivalBounds(network, configuration ,server, f_xxfcaller_server_onpath, flow_of_interest));
+        	}
+
+        	// If, during the already executed arrival bounding procedure, we are already left the foi's path,
 			// flow_of_interest was set to Flow.NULL_FLOW before. If not, do it again now, that won't harm.
-			Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
-					server, f_xxfcaller_server_onpath, flow_of_interest);
-			Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(network,
-					configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
+        	if(!f_xxfcaller_server.isEmpty()) {
+        		ac_sets_to_combine.add(
+        			ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW));
+        	}
+        	
+        	if( ac_sets_to_combine.isEmpty() ) {
+        		betas_lo_s.add(server.getServiceCurve());
+        	} else {
+        		Iterator<Set<ArrivalCurve>> ac_set_iterator = ac_sets_to_combine.iterator();
+        		Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>(ac_set_iterator.next());
+    			
+        		Set<ArrivalCurve> ac_combinations_tmp = new HashSet<ArrivalCurve>();
+                while(ac_set_iterator.hasNext()) {
+                	for(ArrivalCurve ac_new : ac_set_iterator.next()) {
+                		for(ArrivalCurve ac_existing : alpha_xfois) {
+                			ac_combinations_tmp.add(CurvePwAffine.add(ac_new,ac_existing));
+                		}
+                	}
+            		alpha_xfois.clear();
+            		alpha_xfois.addAll(ac_combinations_tmp);
+                	ac_combinations_tmp.clear();
+                }
+	             
+                // Calculate the left-over service curve for this single server
+                betas_lo_s = Bound.leftOverService(configuration, server, alpha_xfois);
 
-			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
-			for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
-				for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
-					alphas_xxfcaller_s.add(CurvePwAffine.add(arrival_curve_path, arrival_curve_offpath));
-				}
-			}
-
-			// Calculate the left-over service curve for this single server
-			betas_lo_s = Bound.leftOverService(configuration, server, alphas_xxfcaller_s);
-
-			// Check if there's any service left on this path. If not, the set only contains
-			// a null-service curve.
-			if (betas_lo_s.size() == 1
-					&& betas_lo_s.iterator().next().equals(CurvePwAffine.getFactory().createZeroService())) {
-				System.out.println("No service left over during PBOO arrival bounding!");
-				alphas_xfcaller.clear();
-				alphas_xfcaller.add(CurvePwAffine.getFactory()
-						.createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
-				return alphas_xfcaller;
-			}
+    			// Check if there's any service left on this path. If not, the set only contains
+    			// a null-service curve.
+    			if (betas_lo_s.size() == 1
+    				&& betas_lo_s.iterator().next().equals(CurvePwAffine.getFactory().createZeroService())) {
+	    				System.out.println("No service left over during PBOO arrival bounding!");
+	    				alphas_xfcaller.clear();
+	    				alphas_xfcaller.add(CurvePwAffine.getFactory().createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
+	    				return alphas_xfcaller;
+    			}
+            }
 
 			// Combine into the sub-path's left-over service curve
 			betas_lo_subpath = MinPlus.convolve_SCs_SCs(betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution());
