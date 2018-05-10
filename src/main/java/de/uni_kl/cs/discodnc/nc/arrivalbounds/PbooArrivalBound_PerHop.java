@@ -70,19 +70,17 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
 			return alphas_xfcaller;
 		}
 
-		// Get the servers on common sub-path of f_xfcaller flows crossing link
-		// soi == server of interference
-		Server soi = link.getDest();
-		Set<Flow> f_soi = network.getFlows(soi);
-		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
-		f_xfcaller_soi.remove(flow_of_interest);
-		if (f_xfcaller_soi.size() == 0) {
+		// Get the servers crossed by all flows in f_xfcaller
+		// that will eventually also cross the given link.
+		Set<Flow> f_xfcaller_link = SetUtils.getIntersection(network.getFlows(link), f_xfcaller);
+		f_xfcaller_link.remove(flow_of_interest);
+		if (f_xfcaller_link.size() == 0) {
+			// The flows to bound given in f_xfcaller do not cross the given link.
 			return alphas_xfcaller;
 		}
 
@@ -91,41 +89,48 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 		// There's not a big potential to increase performance as the PBOO arrival bound
 		// implicitly handles this situation by only iterating over one server in the
 		// for loop.
-		Server common_subpath_src = network.findSplittingServer(soi, f_xfcaller_soi);
-		Server common_subpath_dest = link.getSource();
-		Flow f_representative = f_xfcaller_soi.iterator().next();
-		Path common_subpath = f_representative.getSubPath(common_subpath_src, common_subpath_dest);
+		Server common_subpath_src = network.findSplittingServer(link.getDest(), f_xfcaller_link);
+		Flow f_representative = f_xfcaller_link.iterator().next();
+		Path common_subpath = f_representative.getSubPath(common_subpath_src, link.getSource());
 
-		alphas_xfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, common_subpath_src,
-				f_xfcaller, flow_of_interest);
-
-		// Calculate the left-over service curves for ever server on the sub-path and
-		// convolve the cross-traffics arrival with it
+		// Calculate the left-over service curves on this sub-path by convolution of the
+		// individual left over service curves.
+		Set<ServiceCurve> betas_lo_s;
+		
 		Link link_from_prev_s;
-		Path foi_path = flow_of_interest.getPath();
+		Set<Flow> f_xxfcaller_server_onpath;
+
+		// We need to know the arrival bound of f_xfcaller at the server 'common_subpath_src'
+		// in order to deconvolve it with beta_lo_s in the order they appear on the common_subpath.
+		// Note: 
+		// * common_subpath must be a LinkedList retaining the order of servers.
+		// * flows f_xfcaller that originate in 'common_subpath_src' are covered
+		//   by this call of computeArrivalBound.
+		alphas_xfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+				common_subpath_src, f_xfcaller, flow_of_interest);
+		
 		for (Server server : common_subpath.getServers()) {
-			try {
-				link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
-			} catch (Exception e) { // Reached the path's first server
-				link_from_prev_s = null; // reset to null
-			}
-
-			Set<ServiceCurve> betas_lo_s;
-
+			// Find the set of flows that interfere, either already on or coming off the common_subpath. 
 			Set<Flow> f_xxfcaller_server = network.getFlows(server);
-			f_xxfcaller_server.removeAll(f_xfcaller);
-			f_xxfcaller_server.remove(flow_of_interest);
+			f_xxfcaller_server.removeAll(f_xfcaller);		// We compute their beta l.o.
+			f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
+			
+        	// The common_subpath need not entirely coincide with the foi's path && 
+			// !isSource implies that there is also a link connecting server and the preceding one.
+        	if( common_subpath.getServers().contains(server) && !common_subpath.isSource(server) ) { 
+        		link_from_prev_s = network.findLink(common_subpath.getPrecedingServer(server), server);
+        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
+        	} else {
+        		f_xxfcaller_server_onpath = new HashSet<Flow>();
+        	}
 
-			Set<Flow> f_xxfcaller_server_path = SetUtils.getIntersection(f_xxfcaller_server,
-					network.getFlows(link_from_prev_s));
+			// Convert f_xxfcaller_server to "f_xxfcaller_server_offpath"
+			f_xxfcaller_server.removeAll(f_xxfcaller_server_onpath);
 
-			// Convert f_xfoi_server to f_xfoi_server_offpath
-			f_xxfcaller_server.removeAll(f_xxfcaller_server_path);
-
-			// If we are off the path of interest, flow_of_interest is Flow.NULL_FLOW
-			// already.
+			// If, during the entire arrival bounding procedure, we are already left the foi's path,
+			// flow_of_interest was set to Flow.NULL_FLOW before. If not, do it again now, that won't harm.
 			Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
-					server, f_xxfcaller_server_path, flow_of_interest);
+					server, f_xxfcaller_server_onpath, flow_of_interest);
 			Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(network,
 					configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
 
@@ -149,7 +154,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 						.createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
 				return alphas_xfcaller;
 			}
-
+			
 			// The deconvolution of the two sets, arrival curves and service curves,
 			// respectively, takes care of all the possible combinations
 			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
