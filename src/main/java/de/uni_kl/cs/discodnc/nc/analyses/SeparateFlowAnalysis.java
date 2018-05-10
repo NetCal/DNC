@@ -34,7 +34,6 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
@@ -127,14 +126,19 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         // analysis's way.
 
         // Convolve all left over service curves, server by server
-        Link link_from_prev_s;
         Path foi_path = flow_of_interest.getPath();
+
+        Link link_from_prev_s;
+        Set<Flow> f_xfoi_server_path;
+        
         for (Server server : path.getServers()) {
         	// implies that there is also a link connecting server and the preceding one
         	if( !foi_path.isSource(server) ) { 
         		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+        		f_xfoi_server_path = network.getFlows(link_from_prev_s);
         	} else {
         		link_from_prev_s = null;
+        		f_xfoi_server_path = new HashSet<Flow>();
         	}
         	
             betas_lofoi_s = new HashSet<ServiceCurve>();
@@ -142,8 +146,6 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             Set<Flow> f_xfoi_server = network.getFlows(server);
             f_xfoi_server.removeAll(flows_to_serve);
             f_xfoi_server.remove(flow_of_interest);
-
-            Set<Flow> f_xfoi_server_path = SetUtils.getIntersection(f_xfoi_server, network.getFlows(link_from_prev_s));
 
             // Convert f_xfoi_server to f_xfoi_server_offpath
             f_xfoi_server.removeAll(f_xfoi_server_path);
