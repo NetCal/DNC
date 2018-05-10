@@ -135,8 +135,8 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 			for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
 					alphas_xxfcaller)) {
 				if (!beta_loxfcaller_subpath.equals(null_service)) {
-					betas_loxfcaller_subpath.add(beta_loxfcaller_subpath); // Adding to the set, not adding up the
-					// curves
+					// Adding to the set, not adding up the curves
+					betas_loxfcaller_subpath.add(beta_loxfcaller_subpath);
 				}
 			}
 		} else {
