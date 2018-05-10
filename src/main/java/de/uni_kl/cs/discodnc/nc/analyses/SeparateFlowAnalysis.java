@@ -136,6 +136,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         	if( !foi_path.isSource(server) ) { 
         		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
         		f_xfoi_server_path = network.getFlows(link_from_prev_s);
+        		f_xfoi_server_path.remove(flow_of_interest);
         	} else {
         		link_from_prev_s = null;
         		f_xfoi_server_path = new HashSet<Flow>();
