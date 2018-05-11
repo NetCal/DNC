@@ -1,0 +1,10 @@
+v2.5
+
+* Renaming: TFA node backlog --> Server Backlog Arrival Bound
+  Because TFA might also be interpreted as a non-demultiplexing analysis, 
+  i.e., it prolongs all flows to the end of the analyzed tandem.
+  We do not offer this arrival bounding alternative, instead always separate by PBOO or PMOO left-over service curve operations.
+
+* Removal of duplicate ABs replaced with convolution of all.
+  This is one of the features to mitigate a combinatorial explosion when multiple arrival boundings are executed during the analysis. 
+  Before, we only removed duplicate arrival bounds. Now, we convolve all alternatives to a single one.
