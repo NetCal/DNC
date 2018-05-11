@@ -34,6 +34,7 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
@@ -94,8 +95,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        ((SeparateFlowResults) result).betas_e2e = getServiceCurves(flow_of_interest, path,
-                Collections.singleton(flow_of_interest));
+        result = tandemAnalysis(network, flow_of_interest, path, Collections.singleton(flow_of_interest), configuration);
 
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
@@ -116,11 +116,18 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
         }
     }
+    
+    @Deprecated
+    protected Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve) throws Exception {
+    	return tandemAnalysis(network,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
+    }
 
-    protected Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
+    // TODO Change variable naming to the more generic one of AB Concat.
+    public static SeparateFlowResults tandemAnalysis(Network network, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
             throws Exception {
-        Set<ServiceCurve> betas_lofoi_path = new HashSet<ServiceCurve>();
-        Set<ServiceCurve> betas_lofoi_s;
+    	SeparateFlowResults result = new SeparateFlowResults();
+        Set<ServiceCurve> betas_lo_path = new HashSet<ServiceCurve>();
+        Set<ServiceCurve> betas_lo_server;
 
         // This version iterates over the servers on the path and 
         // computes the service curve set hop-by-hop.
@@ -129,37 +136,57 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         // analysis's way.
 
         // Convolve all left over service curves, server by server
-        Path foi_path = flow_of_interest.getPath();
+//        Path foi_path = flow_of_interest.getPath();
 
         Link link_from_prev_s;
-        Set<Flow> f_xfoi_server_onpath;
-        Set<Flow> f_xfoi_server_src;
+        Set<Flow> f_xxfcaller_server_onpath;
+        Set<Flow> f_xxfcaller_server_src;
         
         for (Server server : path.getServers()) {
 			// Find the set of flows that interfere, either already on or coming off the common_subpath. 
-            Set<Flow> f_xfoi_server = network.getFlows(server);
-            f_xfoi_server.removeAll(flows_to_serve);	// We compute their beta l.o.
-            f_xfoi_server.remove(flow_of_interest);		// If present, it has lowest priority.
+            Set<Flow> f_xxfcaller_server = network.getFlows(server);
+            f_xxfcaller_server.removeAll(flows_to_serve);	// We compute their beta l.o.
+            f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
         	
-        	// implies that there is also a link connecting server and the preceding one
-        	if( !foi_path.isSource(server) ) { 
-        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
-        		f_xfoi_server_onpath = network.getFlows(link_from_prev_s);
-        		f_xfoi_server_onpath.remove(flow_of_interest);
-        	} else {
-        		f_xfoi_server_onpath = new HashSet<Flow>();
-        	}
+            f_xxfcaller_server_onpath = new HashSet<Flow>();
+            
+			// We might still be on the path of the flow of interest.
+			if(flow_of_interest.getId() != -1) {
+				// If so, we need to consider this when we further backtrack.
+				// Continued backtracking on the foipath requires to hand over the foi.
+				// Backtracking offpath requires to hand over a NULL flow that has ID -1.
+				
+				Path foi_path = flow_of_interest.getPath();
+	        	if( foi_path.getServers().contains(server) && !foi_path.isSource(server) ) { 
+	        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+	        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
+	        	}
+			}
+            
+//            // We might still be on the path of the flow of interest.
+//        	// The second check implies that there is also a link connecting server and the preceding one
+//        	if( foi_path.getServers().contains(server) && !foi_path.isSource(server) ) {
+//        		// If so, we need to consider this when we further backtrack.
+//				// Continued backtracking on the foipath requires to hand over the foi.
+//				// Backtracking offpath requires to hand over a NULL flow that has ID -1.
+//        		
+//        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+//        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xfoi_server, network.getFlows(link_from_prev_s));
+//        		f_xxfcaller_server_onpath.remove(flow_of_interest);
+//        	} else {
+//        		f_xxfcaller_server_onpath = new HashSet<Flow>();
+//        	}
         	
         	// The interfering flows originating at the current server.
-        	f_xfoi_server_src = network.getSourceFlows(server);
-        	f_xfoi_server_src.remove(flow_of_interest);
-        	f_xfoi_server_src.removeAll(flows_to_serve);
+        	f_xxfcaller_server_src = network.getSourceFlows(server);
+        	f_xxfcaller_server_src.remove(flow_of_interest);
+        	f_xxfcaller_server_src.removeAll(flows_to_serve);
 
             // Convert f_xfoi_server to "f_xfoi_server_offpath"
-            f_xfoi_server.removeAll(f_xfoi_server_onpath);
-            f_xfoi_server.removeAll(f_xfoi_server_src);
+            f_xxfcaller_server.removeAll(f_xxfcaller_server_onpath);
+            f_xxfcaller_server.removeAll(f_xxfcaller_server_src);
 
-            betas_lofoi_s = new HashSet<ServiceCurve>();
+            betas_lo_server = new HashSet<ServiceCurve>();
 
             // Attention!
             // We cannot use a Set; we actually need a multiset in order to add equal sets of arrival curves.
@@ -167,22 +194,24 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             // where cross-flows f0 and f2 have a single, equal arrival curves at s5.
         	List<Set<ArrivalCurve>> ac_sets_to_combine = new LinkedList<Set<ArrivalCurve>>();
         	
-        	if(!f_xfoi_server_src.isEmpty()) {
-        		ac_sets_to_combine.add(Collections.singleton(network.getSourceFlowArrivalCurve(server, f_xfoi_server_src)));
+        	if(!f_xxfcaller_server_src.isEmpty()) {
+        		ac_sets_to_combine.add(Collections.singleton(network.getSourceFlowArrivalCurve(server, f_xxfcaller_server_src)));
         	}
         	
-        	if(!f_xfoi_server_onpath.isEmpty()) {
+        	if(!f_xxfcaller_server_onpath.isEmpty()) {
         		ac_sets_to_combine.add(
-        				ArrivalBoundDispatch.computeArrivalBounds(network, configuration ,server, f_xfoi_server_onpath, flow_of_interest));
+        				ArrivalBoundDispatch.computeArrivalBounds(network, configuration ,server, f_xxfcaller_server_onpath, flow_of_interest));
         	}
-
-        	if(!f_xfoi_server.isEmpty()) {
+        	
+        	// If, during this method's use in arrival bounding, we already left the foi's path,
+			// flow_of_interest was set to Flow.NULL_FLOW before. If not, do it again now, that won't harm.
+        	if(!f_xxfcaller_server.isEmpty()) {
         		ac_sets_to_combine.add(
-        			ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xfoi_server, Flow.NULL_FLOW));
+        			ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW));
         	}
         	
         	if( ac_sets_to_combine.isEmpty() ) {
-        		betas_lofoi_s.add(server.getServiceCurve());
+        		betas_lo_server.add(server.getServiceCurve());
         		result.map__server__alphas.put(server, Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
         	} else {
         		Iterator<Set<ArrivalCurve>> ac_set_iterator = ac_sets_to_combine.iterator();
@@ -201,15 +230,17 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
                 }
 	             
                 // Calculate the left-over service curve for the flow of interest
-                betas_lofoi_s = Bound.leftOverService(configuration, server, alpha_xfois);
+                betas_lo_server = Bound.leftOverService(configuration, server, alpha_xfois);
                 result.map__server__alphas.put(server, alpha_xfois);
             }
-            ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lofoi_s);
+            ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
 
-            betas_lofoi_path = MinPlus.convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
+            betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server,
                     configuration.tbrlConvolution());
         }
-        return betas_lofoi_path;
+        result.betas_e2e = betas_lo_path;
+        
+        return result;
     }
 
     public Set<ServiceCurve> getLeftOverServiceCurves() {
