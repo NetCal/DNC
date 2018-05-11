@@ -1153,6 +1153,12 @@ public class Curve_DNC implements CurvePwAffine {
 		return new ArrivalCurve_DNC(); // ArrivalCurveDNC constructor's default behavior
 	}
 
+	public ArrivalCurve_DNC createUnboundedArrivals() {
+		ArrivalCurve_DNC ac_dnc = new ArrivalCurve_DNC();
+		makeDelayedInfiniteBurst(ac_dnc, Num.getFactory().createZero());
+		return ac_dnc;
+	}
+
 	public ArrivalCurve_DNC createPeakArrivalRate(double rate) {
 		return createPeakArrivalRate(Num.getFactory().create(rate));
 	}

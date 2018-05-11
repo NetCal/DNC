@@ -74,9 +74,8 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return alphas_xfcaller;
+			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		}
 
 		// Get the servers crossed by all flows in f_xfcaller
@@ -85,7 +84,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		f_xfcaller_link.remove(flow_of_interest);
 		if (f_xfcaller_link.size() == 0) {
 			// The flows to bound given in f_xfcaller do not cross the given link.
-			return alphas_xfcaller;
+			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		}
 
 		// The shortcut found in PmooArrivalBound for the a common_subpath of length 1
@@ -182,9 +181,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
     			if (betas_lo_s.size() == 1
     				&& betas_lo_s.iterator().next().equals(CurvePwAffine.getFactory().createZeroService())) {
 	    				System.out.println("No service left over during PBOO arrival bounding!");
-	    				alphas_xfcaller.clear();
-	    				alphas_xfcaller.add(CurvePwAffine.getFactory().createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
-	    				return alphas_xfcaller;
+	    				return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createUnboundedArrivals()));
     			}
             }
 
@@ -200,7 +197,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		// by this call of computeArrivalBound
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
-		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
+		Set<ArrivalCurve> alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
 		if (configuration.abConsiderTFANodeBacklog()) {
 			Server last_hop_xtx = link.getSource();

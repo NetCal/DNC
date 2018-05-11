@@ -779,6 +779,8 @@ public interface CurvePwAffine extends Curve {
 
     ArrivalCurve createZeroArrivals();
 
+    ArrivalCurve createUnboundedArrivals();
+
     ArrivalCurve createPeakArrivalRate(double rate);
 
     ArrivalCurve createPeakArrivalRate(Num rate);

@@ -73,9 +73,8 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return alphas_xfcaller;
+			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		}
 
 		// Get the servers crossed by all flows in f_xfcaller
@@ -84,7 +83,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 		f_xfcaller_link.remove(flow_of_interest);
 		if (f_xfcaller_link.size() == 0) {
 			// The flows to bound given in f_xfcaller do not cross the given link.
-			return alphas_xfcaller;
+			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
 		}
 
 		// The shortcut found in PmooArrivalBound for the a common_subpath of length 1
@@ -110,7 +109,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 		// * common_subpath must be a LinkedList retaining the order of servers.
 		// * flows f_xfcaller that originate in 'common_subpath_src' are covered
 		//   by this call of computeArrivalBound.
-		alphas_xfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+		Set<ArrivalCurve> alphas_xfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
 		
 		for (Server server : common_subpath.getServers()) {
@@ -188,15 +187,13 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
     			if (betas_lo_s.size() == 1
     				&& betas_lo_s.iterator().next().equals(CurvePwAffine.getFactory().createZeroService())) {
 	    				System.out.println("No service left over during PBOO arrival bounding!");
-	    				alphas_xfcaller.clear();
-	    				alphas_xfcaller.add(CurvePwAffine.getFactory().createArrivalCurve(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst()));
-	    				return alphas_xfcaller;
+	    				return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createUnboundedArrivals()));
     			}
             }
 			
 			// The deconvolution of the two sets, arrival curves and service curves,
 			// respectively, takes care of all the possible combinations
-			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
+        	alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
 		if (configuration.abConsiderTFANodeBacklog()) {

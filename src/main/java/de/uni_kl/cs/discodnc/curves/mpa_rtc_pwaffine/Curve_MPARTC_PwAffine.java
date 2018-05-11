@@ -833,6 +833,12 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		return new ArrivalCurve_MPARTC_PwAffine(); // ArrivalCurveRTC constructor's default behavior
 	}
 
+	public ArrivalCurve_MPARTC_PwAffine createUnboundedArrivals() {
+		ArrivalCurve_MPARTC_PwAffine ac_rtc = new ArrivalCurve_MPARTC_PwAffine();
+		makeDelayedInfiniteBurst(ac_rtc, 0.0);
+		return ac_rtc;
+	}
+	
 	public ArrivalCurve_MPARTC_PwAffine createPeakArrivalRate(double rate) {
 		ArrivalCurve_MPARTC_PwAffine ac_rtc = new ArrivalCurve_MPARTC_PwAffine();
 		makePeakRate(ac_rtc, rate);
