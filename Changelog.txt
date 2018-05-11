@@ -1,7 +1,8 @@
 Changes since v2.4.1
 --------------------
 * SFA and PbooArrivalBounds: Improved structure, reliability and performance.
-* Minot Javadocs and comment improvements.
+* Rational Num implementations gained a getValue function returning a new instance of the Math3 object in their backend.
+* Minor Javadocs and comment improvements.
 
 v2.4.1 "Chimera" (2018-May-07)
 ------------------------------
