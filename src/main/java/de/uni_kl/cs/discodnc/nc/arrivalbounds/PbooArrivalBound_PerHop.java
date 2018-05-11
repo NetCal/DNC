@@ -118,15 +118,20 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			Set<Flow> f_xxfcaller_server = network.getFlows(server);
 			f_xxfcaller_server.removeAll(f_xfcaller);		// We compute their beta l.o.
 			f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
+			f_xxfcaller_server_onpath = new HashSet<Flow>();
 			
-        	// The common_subpath need not entirely coincide with the foi's path && 
-			// !isSource implies that there is also a link connecting server and the preceding one.
-        	if( common_subpath.getServers().contains(server) && !common_subpath.isSource(server) ) { 
-        		link_from_prev_s = network.findLink(common_subpath.getPrecedingServer(server), server);
-        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
-        	} else {
-        		f_xxfcaller_server_onpath = new HashSet<Flow>();
-        	}
+			// We might still be on the path of the flow of interest.
+			if(flow_of_interest.getId() != -1) {
+				// If so, we need to consider this when we further backtrack.
+				// Continued backtracking on the foipath requires to hand over the foi.
+				// Backtracking offpath requires to hand over a NULL flow that has ID -1.
+				
+				Path foi_path = flow_of_interest.getPath();
+	        	if( foi_path.getServers().contains(server) && !foi_path.isSource(server) ) { 
+	        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+	        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
+	        	}
+			}
         	
         	// The interfering flows originating at the current server.
         	f_xxfcaller_server_src = network.getSourceFlows(server);
