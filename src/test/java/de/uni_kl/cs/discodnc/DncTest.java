@@ -52,6 +52,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+// TODO between commits 74c8762863d599914e4d6458c653ab807aa25ff5 and 651b08c1b9b2dc420cc738410ecee24cba0e0310,
+// there was a bug in PBOO* arrival bounding regarding backtracking on the foi's path.
+// It caused overly pessimistic results and was not caught by the tests.
 public abstract class DncTest {
 	protected NetworkFactory network_factory;
 	protected DncTestConfig test_config;
