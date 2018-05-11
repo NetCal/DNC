@@ -612,4 +612,12 @@ public class RationalBigInt implements Num {
             return false;
         }
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Misc
+    // --------------------------------------------------------------------------------------------------------------
+    
+    public BigFraction getValue() {
+    	return new BigFraction(this.value.getNumerator(), this.value.getDenominator());
+    }
 }

@@ -609,4 +609,12 @@ public class RationalInt implements Num {
             return false;
         }
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Misc
+    // --------------------------------------------------------------------------------------------------------------
+    
+    public Fraction getValue() {
+    	return new Fraction(this.value.getNumerator(), this.value.getDenominator());
+    }
 }
