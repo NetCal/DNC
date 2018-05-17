@@ -13,6 +13,7 @@ import org.apache.commons.math3.util.Pair;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
@@ -66,7 +67,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		} else {
 			if( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL ) {
 				for( Server s : path.getServers() ) {
-					if( s.multiplexingDiscipline() == AnalysisConfig.Multiplexing.FIFO ) {
+					if( s.multiplexingDiscipline() == Multiplexing.FIFO ) {
 						throw new Exception( "Cutting analysis is not available for FIFO multiplexing nodes" );
 					}
 				}
@@ -167,31 +168,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 				betas_e2e_combination = MinPlus.convolve_SCs_SCs( 
 						betas_e2e_combination, getSubTandemServiceCurves( flow_of_interest, sub_path, new HashSet<Flow>( flows_to_serve ) ), configuration.tbrlConvolution() );
 			}
-			
-			boolean rl_service_curves = true;
-			
-			// If we have only rate latency service curves, then we can just take the maximum as the result.
-			// Currently, I am not quite sure if that is restricted to the case of rate latencies that only differ in their latency term while having equal rates.
-			// No matter what, this is the case in all of the experiments so we will stick with this currently unimportant uncertainty for now.
-			if( rl_service_curves ) {
-				ServiceCurve beta_max = CurvePwAffine.getFactory().createZeroService();
-				
-				// Get max of newly computed curve.
-				for ( ServiceCurve beta : betas_e2e_combination ) {
-					beta_max = CurvePwAffine.max( beta, beta_max );
-				}
-				
-				// Check if it's bigger than the maximum value last found.
-				// There shouldn't be more than one service curve in this set,
-				// yet, the loop saves us from additionally checking if betas_e2e is empty (initially once true) every time.
-				for ( ServiceCurve beta : betas_e2e ) {
-					beta_max = CurvePwAffine.max( beta, beta_max ); // The same as with the previous max applies here!
-				}
-				
-				betas_e2e = new HashSet<ServiceCurve>( Collections.singleton( beta_max ) ); // Only do this if beta_max > (beta \in beta_e2e) 
-			} else {
-				betas_e2e.addAll( betas_e2e_combination );
-			}
+			betas_e2e.addAll( betas_e2e_combination );
 		}
 
 		return betas_e2e;
