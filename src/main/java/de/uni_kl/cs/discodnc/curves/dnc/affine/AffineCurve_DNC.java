@@ -119,7 +119,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	public void setRL_MetaInfo(boolean has_rate_latency_meta_info) {
 		this.has_rate_latency_meta_info = has_rate_latency_meta_info;
 	}
-
+	/*To fetch Rate latency curve components*/
 	public List<CurveAffine> getRL_Components() {
 		List<CurveAffine> tmp = new LinkedList<>();
 		if (this.is_rate_latency) {
