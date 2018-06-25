@@ -86,14 +86,15 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @param segment_count
 	 *            the number of segments
 	 */
+	/*Done*/
 	protected AffineCurve_DNC(int segment_count) {
-		// // TODO requires fix to Curve's boundAtXAxis.
-//		if (segment_count < 0 || segment_count > 2) {
-//			throw new IndexOutOfBoundsException("Affine curves can have at most two segments (given count was " + segment_count + ")!");
-//		}
-		createNewCurve(segment_count, false);
+		if (segment_count < 0 || segment_count > 2) {
+			throw new IndexOutOfBoundsException("Affine Affine curves can have at most two segments (given count was " + segment_count + ")!");
+		}
+		createNewCurve(segment_count);
 	}
 
+	/*Done*/
 	public static AffineCurve_DNC getFactory() {
 		return instance;
 	}
@@ -101,25 +102,29 @@ public class AffineCurve_DNC implements CurveAffine {
 	// --------------------------------------------------------------------------------------------------------------
 	// Interface Implementations
 	// --------------------------------------------------------------------------------------------------------------
-
+	/*Done*/
 	public boolean isRateLatency() {
 		decomposeIntoRateLatencies();
 		return is_rate_latency;
 	}
 
+	/*Done*/
 	public boolean isTokenBucket() {
 		decomposeIntoTokenBuckets();
 		return is_token_bucket;
 	}
 
+	/*Done*/
 	public boolean hasRateLatencyMetaInfo() {
 		return has_rate_latency_meta_info;
 	}
 
+	/*Done*/
 	public void setRL_MetaInfo(boolean has_rate_latency_meta_info) {
 		this.has_rate_latency_meta_info = has_rate_latency_meta_info;
 	}
 	/*To fetch Rate latency curve components*/
+	/*Done*/
 	public List<CurveAffine> getRL_Components() {
 		List<CurveAffine> tmp = new LinkedList<>();
 		if (this.is_rate_latency) {
@@ -140,15 +145,19 @@ public class AffineCurve_DNC implements CurveAffine {
 		this.rate_latencies = tmp;
 	}
 
+	/*Done*/
 	public boolean hasTokenBucketMetaInfo() {
 		return has_token_bucket_meta_info;
 	}
 
+	/*Done*/
 	public void setTB_MetaInfo(boolean has_token_bucket_meta_info) {
 		this.has_token_bucket_meta_info = has_token_bucket_meta_info;
 	}
 
+	/*Done*/
 	public List<CurveAffine> getTB_Components() {
+		/*If its a Affine Token bucket curve then there should be only two segments */
 		List<CurveAffine> tmp = new LinkedList<>();
 		for (int i = 0; i < token_buckets.size(); i++) {
 			tmp.add(token_buckets.get(i));
@@ -157,43 +166,24 @@ public class AffineCurve_DNC implements CurveAffine {
 	}
 
 	public void setTB_Components(List<Curve> token_buckets) {
+		/*If its a Affine Token bucket curve then there should be only two segments */
 		List<AffineCurve_DNC> tmp = new LinkedList<>();
-		for (int i = 0; i < token_buckets.size(); i++) {
-			tmp.add((AffineCurve_DNC) token_buckets.get(i));
-		}
+		tmp.add((AffineCurve_DNC) token_buckets.get(0));
+		tmp.add((AffineCurve_DNC) token_buckets.get(1));
 		this.token_buckets = tmp;
 	}
-
-	private void createNewCurve(int segment_count, boolean empty) {
-		if (!empty) { // old default
-			createZeroSegmentsCurve(segment_count);
-		} else { // potential new default, tests work
-			segments = new LinearSegment_DNC[segment_count];
-			// Initialize Elements of array, not only array itself
-			segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-					Num.getFactory().createZero(), false);
-
-			for (int i = 1; i < segment_count; i++) {
-				segments[i] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-						Num.getFactory().createZero(), true);
-			}
-		}
-	}
-
-	private void createZeroSegmentsCurve(int segment_count) {
+	/*Done*/
+	private void createNewCurve(int segment_count) {
 		segments = new LinearSegment_DNC[segment_count];
-
-		if (segment_count == 0) {
-			return;
-		}
-
 		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-				Num.getFactory().createZero(), false);
+						Num.getFactory().createZero(), false);
+		if(segment_count > 1)
+		{
+				segments[1] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
+								Num.getFactory().createZero(), true);
 
-		for (int i = 1; i < segment_count; i++) {
-			segments[i] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-					Num.getFactory().createZero(), true);
 		}
+
 	}
 
 	// Accepts string representations of Curve, ArrivalCurve, ServiceCurve, and
@@ -225,6 +215,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		Curve.beautify(this);
 	}
 
+	/*Done*/
 	protected void forceThroughOrigin() {
 		if (getSegment(0).getY().gtZero()) {
 			addSegment(0, new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
@@ -234,6 +225,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		}
 	}
 
+	/*Done*/
 	private void clearMetaInfo() {
 		has_token_bucket_meta_info = false;
 		is_token_bucket = false;
@@ -250,6 +242,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @return a copy of this instance.
 	 */
 	@Override
+	/*Done*/
 	public AffineCurve_DNC copy() {
 		AffineCurve_DNC c_copy = new AffineCurve_DNC();
 		c_copy.copy(this);
@@ -257,6 +250,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	}
 
 	@Override
+	/*Done*/
 	public void copy(Curve curve) {
 		LinearSegment_DNC[] segments = new LinearSegment_DNC[curve.getSegmentCount()];
 
@@ -286,6 +280,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	/**
 	 * Starting at 0.
 	 */
+	/*Done*/
 	public LinearSegment_DNC getSegment(int pos) {
 		if (pos < 0 || pos > segments.length - 1) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
@@ -298,6 +293,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *
 	 * @return the number of segments
 	 */
+	/*Done*/
 	public int getSegmentCount() {
 		return segments.length;
 	}
@@ -358,6 +354,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		return -1;
 	}
 
+	/*Done*/
 	public void setSegment(int pos, LinearSegment s) {
 		if (pos < 0 || pos >= segments.length) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
@@ -377,6 +374,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		clearMetaInfo();
 	}
 
+	/*Done*/
 	protected void setSegments(LinearSegment[] segments) {
 		if (segments instanceof LinearSegment_DNC[]) {
 			this.segments = (LinearSegment_DNC[]) segments;
@@ -398,6 +396,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @param s
 	 *            the segment to be added.
 	 */
+	/*Done*/
 	public void addSegment(LinearSegment s) {
 		addSegment(segments.length, s);
 	}
@@ -414,6 +413,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @param s
 	 *            the segment to be added.
 	 */
+	/*Done*/
 	public void addSegment(int pos, LinearSegment s) {
 		if (pos < 0 || pos > segments.length) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
@@ -448,6 +448,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @param pos
 	 *            the index of the segment to be removed.
 	 */
+	/*Done*/
 	public void removeSegment(int pos) {
 		if (pos < 0 || pos >= segments.length) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
@@ -468,6 +469,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @return <code>true</code> if the IP is a discontinuity, <code>false</code> if
 	 *         not.
 	 */
+	/*Done*/
 	public boolean isDiscontinuity(int pos) {
 		return (pos + 1 < segments.length
 				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getX(), segments[pos].getX())))
@@ -483,6 +485,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @return <code>true</code> if the IP is a real discontinuity,
 	 *         <code>false</code> if not.
 	 */
+	/*Done*/
 	public boolean isRealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
 				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getY(), segments[pos].getY())))
@@ -503,6 +506,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @return <code>true</code> if the IP is an unreal discontinuity,
 	 *         <code>false</code> if not.
 	 */
+	/*Done*/
 	public boolean isUnrealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
 				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getY(), segments[pos].getY())))
@@ -512,7 +516,9 @@ public class AffineCurve_DNC implements CurveAffine {
 	/**
 	 * Tests whether the curve is wide-sense increasing.
 	 *
+
 	 * @return whether the curve is wide-sense increasing.
+
 	 */
 	public boolean isWideSenseIncreasing() {
 		Num y = Num.getFactory().getNegativeInfinity(); // No need to create an object as this value is only
@@ -531,44 +537,13 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *
 	 * @return whether the curve is convex.
 	 */
+	/*Done*/
 	public boolean isConvex() {
-		return isConvexIn(Num.getFactory().getZero(), Num.getFactory().getPositiveInfinity());
-	}
-
-	/**
-	 * Tests whether the curve is convex in [a,b].
-	 *
-	 * @param a
-	 *            the lower bound of the test interval.
-	 * @param b
-	 *            the upper bound of the test interval.
-	 * @return whether the curve is convex
-	 */
-	public boolean isConvexIn(Num a, Num b) {
-		Num last_gradient = Num.getFactory().getNegativeInfinity(); // No need to create an object as this
-		// value is only set for initial
-		// comparison in the loop.
-
-		int i_start = getSegmentDefining(a);
-		int i_end = getSegmentDefining(b);
-		for (int i = i_start; i <= i_end; i++) {
-			if (i_start < 0) {
-				break;
-			}
-			if (i == i_end && segments[i].getX() == b) {
-				break;
-			}
-			Num gradient;
-			if (i < segments.length - 1) {
-				gradient = Num.getUtils().div(Num.getUtils().sub(segments[i + 1].getY(), segments[i].getY()),
-						Num.getUtils().sub(segments[i + 1].getX(), segments[i].getX()));
-			} else {
-				gradient = segments[i].getGrad();
-			}
-			if (gradient.lt(last_gradient)) {
+		if(segments.length == 2){
+			/*If affine curve has two segments, it will not be convex if it is token bucket*/
+			if(segments[1].getY() > 0){
 				return false;
 			}
-			last_gradient = gradient;
 		}
 		return true;
 	}
@@ -578,42 +553,13 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *
 	 * @return whether the curve is concave.
 	 */
+	/*Done*/
 	public boolean isConcave() {
-		return isConcaveIn(Num.getFactory().getZero(), Num.getFactory().getPositiveInfinity());
-	}
-
-	/**
-	 * Tests whether the curve is concave in [a,b].
-	 *
-	 * @param a
-	 *            the lower bound of the test interval.
-	 * @param b
-	 *            the upper bound of the test interval.
-	 * @return whether the curve is concave.
-	 */
-	public boolean isConcaveIn(Num a, Num b) {
-		Num last_gradient = Num.getFactory().getPositiveInfinity(); // No need to create an object as this
-		// value is only set for initial
-		// comparison in the loop.
-
-		int i_start = getSegmentDefining(a);
-		int i_end = getSegmentDefining(b);
-		for (int i = i_start; i <= i_end; i++) {
-			if (i == i_end && segments[i].getX() == b) {
-				break;
-			}
-			Num gradient;
-			// Handles discontinuities
-			if (i < segments.length - 1) {
-				gradient = Num.getUtils().div(Num.getUtils().sub(segments[i + 1].getY(), segments[i].getY()),
-						Num.getUtils().sub(segments[i + 1].getX(), segments[i].getX()));
-			} else {
-				gradient = segments[i].getGrad();
-			}
-			if (gradient.gt(last_gradient)) {
+		if(segments.length == 2){
+			/*If affine curve has two segments, it will not be concave if it is Rate latency curve*/
+			if(segments[1].getY() == 0){
 				return false;
 			}
-			last_gradient = gradient;
 		}
 		return true;
 	}
@@ -652,6 +598,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	}
 
 	@Override
+	/*Done*/
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof AffineCurve_DNC)) {
 			return false;
@@ -686,6 +633,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	}
 
 	@Override
+	/*Done*/
 	public int hashCode() {
 		return Arrays.hashCode(segments);
 	}
@@ -696,6 +644,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * @return the curve represented as a string.
 	 */
 	@Override
+	/*Done*/
 	public String toString() {
 		StringBuffer result = new StringBuffer("{");
 		for (int i = 0; i < segments.length; i++) {
@@ -716,6 +665,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *            the x-coordinate
 	 * @return the function value
 	 */
+	/*Done*/
 	public Num f(Num x) {
 		int i = getSegmentDefining(x);
 		if (i < 0) {
@@ -897,16 +847,19 @@ public class AffineCurve_DNC implements CurveAffine {
 	// Specific curve shapes
 	// ------------------------------------------------------------
 	// Burst delay
+	/*Done*/
 	public boolean isDelayedInfiniteBurst() {
 		return is_delayed_infinite_burst;
 	}
 
 	// Rate latency
+	/*Done*/
 	public boolean getRL_Property() {
 		decomposeIntoRateLatencies();
 		return is_rate_latency;
 	}
 
+	/*Done*/
 	public void setRateLateny(boolean is_rate_latency) {
 		this.is_rate_latency = is_rate_latency;
 	}
@@ -916,6 +869,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *
 	 * @return the number of rate latency curves
 	 */
+	/*Done*/
 	public int getRL_ComponentCount() {
 		decomposeIntoRateLatencies();
 		return rate_latencies.size();
@@ -929,6 +883,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *            the number of the rate latency curve
 	 * @return the rate latency curve
 	 */
+	/*Done*/
 	public AffineCurve_DNC getRL_Component(int i) {
 		decomposeIntoRateLatencies();
 		return rate_latencies.get(i);
@@ -939,6 +894,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * in the curve's <code>rate_latencies</code> field.<br>
 	 * Note: Curve must be convex.
 	 */
+	/*Done*/
 	private void decomposeIntoRateLatencies() {
 		if (has_rate_latency_meta_info == true) {
 			return;
@@ -973,6 +929,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		has_rate_latency_meta_info = true;
 	}
 
+	/*Done*/
 	public void setTokenBucket(boolean is_token_bucket) {
 		this.is_token_bucket = is_token_bucket;
 	}
@@ -982,6 +939,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *
 	 * @return the number of token buckets
 	 */
+	/*Done*/
 	public int getTB_ComponentCount() {
 		decomposeIntoTokenBuckets();
 		return token_buckets.size();
@@ -995,6 +953,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *            the number of the token bucket
 	 * @return the token bucket
 	 */
+	/*Done*/
 	public AffineCurve_DNC getTB_Component(int i) {
 		decomposeIntoTokenBuckets();
 		return token_buckets.get(i);
@@ -1005,6 +964,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 * in the curve's <code>token_buckets</code> field.<br>
 	 * Note: Curve must be concave.
 	 */
+	/*Done*/
 	private void decomposeIntoTokenBuckets() {
 		if (has_token_bucket_meta_info == true) {
 			return;
@@ -1058,10 +1018,12 @@ public class AffineCurve_DNC implements CurveAffine {
 		return c_dnc;
 	}
 
+	/*Done*/
 	public AffineCurve_DNC createZeroCurve() {
 		return new AffineCurve_DNC(); // CurveDNC constructor's default behavior
 	}
 
+	/*Done*/
 	public AffineCurve_DNC createHorizontal(double y) {
 		return createHorizontal(Num.getFactory().create(y));
 	}
@@ -1073,6 +1035,7 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *            the y-intercept of the curve
 	 * @return a <code>Curve</code> instance
 	 */
+	/*Done*/
 	public AffineCurve_DNC createHorizontal(Num y) {
 		AffineCurve_DNC c_dnc = new AffineCurve_DNC();
 		makeHorizontal(c_dnc, y);
@@ -1086,22 +1049,27 @@ public class AffineCurve_DNC implements CurveAffine {
 	// ------------------------------------------------------------
 	// DiscoDNC compliance
 	// ------------------------------------------------------------
+	/*Done*/
 	public AffineServiceCurve_DNC createServiceCurve() {
 		return new AffineServiceCurve_DNC();
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createServiceCurve(int segment_count) {
 		return new AffineServiceCurve_DNC(segment_count);
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createServiceCurve(String service_curve_str) throws Exception {
 		return new AffineServiceCurve_DNC(service_curve_str);
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createServiceCurve(Curve curve) {
 		return new AffineServiceCurve_DNC(curve);
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createZeroService() {
 		return new AffineServiceCurve_DNC(); // ServiceCurveDNC constructor's default behavior
 	}
@@ -1111,24 +1079,37 @@ public class AffineCurve_DNC implements CurveAffine {
 	 *
 	 * @return a <code>ServiceCurve</code> instance
 	 */
+	/*Done*/
 	public AffineServiceCurve_DNC createZeroDelayInfiniteBurst() {
 		return createDelayedInfiniteBurst(Num.getFactory().createZero());
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createDelayedInfiniteBurst(double delay) {
 		return createDelayedInfiniteBurst(Num.getFactory().create(delay));
 	}
 
+	/**
+	 * Returns the <code>i</code>the rate latency curve that this curve can be
+	 * decomposed into.
+	 *
+	 * @param i
+	 *            the number of the rate latency curve
+	 * @return the rate latency curve
+	 */
+	/*Done*/
 	public AffineServiceCurve_DNC createDelayedInfiniteBurst(Num delay) {
 		AffineServiceCurve_DNC sc_dnc = new AffineServiceCurve_DNC();
 		makeDelayedInfiniteBurst(sc_dnc, delay);
 		return sc_dnc;
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createRateLatency(double rate, double latency) {
 		return createRateLatency(Num.getFactory().create(rate), Num.getFactory().create(latency));
 	}
 
+	/*Done*/
 	public AffineServiceCurve_DNC createRateLatency(Num rate, Num latency) {
 		AffineServiceCurve_DNC sc_dnc = new AffineServiceCurve_DNC();
 		makeRateLatency(sc_dnc, rate, latency);
@@ -1142,44 +1123,54 @@ public class AffineCurve_DNC implements CurveAffine {
 	// ------------------------------------------------------------
 	// DiscoDNC compliance
 	// ------------------------------------------------------------
+	/*Done*/
 	public AffineArrivalCurve_DNC createArrivalCurve() {
 		return new AffineArrivalCurve_DNC();
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createArrivalCurve(int segment_count) {
 		return new AffineArrivalCurve_DNC(segment_count);
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createArrivalCurve(String arrival_curve_str) throws Exception {
 		return new AffineArrivalCurve_DNC(arrival_curve_str);
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createArrivalCurve(Curve curve) {
 		return new AffineArrivalCurve_DNC(curve);
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createArrivalCurve(Curve curve, boolean remove_latency) {
 		return createArrivalCurve(Curve.removeLatency(curve));
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createZeroArrivals() {
 		return new AffineArrivalCurve_DNC(); // ArrivalCurveDNC constructor's default behavior
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createPeakArrivalRate(double rate) {
 		return createPeakArrivalRate(Num.getFactory().create(rate));
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createPeakArrivalRate(Num rate) {
 		AffineArrivalCurve_DNC ac_dnc = new AffineArrivalCurve_DNC();
 		makePeakRate(ac_dnc, rate);
 		return ac_dnc;
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createTokenBucket(double rate, double burst) {
 		return createTokenBucket(Num.getFactory().create(rate), Num.getFactory().create(burst));
 	}
 
+	/*Done*/
 	public AffineArrivalCurve_DNC createTokenBucket(Num rate, Num burst) {
 		AffineArrivalCurve_DNC ac_dnc = new AffineArrivalCurve_DNC();
 		makeTokenBucket(ac_dnc, rate, burst);
@@ -1193,44 +1184,54 @@ public class AffineCurve_DNC implements CurveAffine {
 	// ------------------------------------------------------------
 	// DiscoDNC compliance
 	// ------------------------------------------------------------
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createMaxServiceCurve() {
 		return new AffineMaxServiceCurve_DNC();
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createMaxServiceCurve(int segment_count) {
 		return new AffineMaxServiceCurve_DNC(segment_count);
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createMaxServiceCurve(String max_service_curve_str) throws Exception {
 		return new AffineMaxServiceCurve_DNC(max_service_curve_str);
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createMaxServiceCurve(Curve curve) {
 		return new AffineMaxServiceCurve_DNC(curve);
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createInfiniteMaxService() {
 		return createDelayedInfiniteBurstMSC(Num.getFactory().createZero());
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createZeroDelayInfiniteBurstMSC() {
 		return createDelayedInfiniteBurstMSC(Num.getFactory().createZero());
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createDelayedInfiniteBurstMSC(double delay) {
 		return createDelayedInfiniteBurstMSC(Num.getFactory().create(delay));
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createDelayedInfiniteBurstMSC(Num delay) {
 		AffineMaxServiceCurve_DNC msc_dnc = new AffineMaxServiceCurve_DNC();
 		makeDelayedInfiniteBurst(msc_dnc, delay);
 		return msc_dnc;
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createRateLatencyMSC(double rate, double latency) {
 		return createRateLatencyMSC(Num.getFactory().create(rate), Num.getFactory().create(latency));
 	}
 
+	/*Done*/
 	public AffineMaxServiceCurve_DNC createRateLatencyMSC(Num rate, Num latency) {
 		AffineMaxServiceCurve_DNC msc_dnc = new AffineMaxServiceCurve_DNC();
 		makeRateLatency(msc_dnc, rate, latency);
@@ -1240,12 +1241,14 @@ public class AffineCurve_DNC implements CurveAffine {
 	// ------------------------------------------------------------------------------
 	// Curve assembly
 	// ------------------------------------------------------------------------------
+	/*Done*/
 	private void makeHorizontal(AffineCurve_DNC c_dnc, Num y) {
 		LinearSegment_DNC segment = new LinearSegment_DNC(Num.getFactory().createZero(), y,
 				Num.getFactory().createZero(), false);
 		c_dnc.setSegments(new LinearSegment_DNC[] { segment });
 	}
 
+	/*Done*/
 	private void makeDelayedInfiniteBurst(AffineCurve_DNC c_dnc, Num delay) {
 		if (delay.ltZero()) {
 			throw new IllegalArgumentException("Delayed infinite burst curve must have delay >= 0.0");
@@ -1263,6 +1266,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		c_dnc.is_delayed_infinite_burst = true;
 	}
 
+	/*Done*/
 	private void makePeakRate(AffineCurve_DNC c_dnc, Num rate) {
 		if (rate.equals(Num.getFactory().getPositiveInfinity())) {
 			throw new IllegalArgumentException(
@@ -1272,16 +1276,18 @@ public class AffineCurve_DNC implements CurveAffine {
 			makeHorizontal(c_dnc, Num.getFactory().createZero());
 			return;
 		}
-
+		/*Since both latency and burst are 0 and rate is positive, its a line passing through origin*/
 		LinearSegment_DNC[] segments = new LinearSegment_DNC[1];
 
 		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(), rate, false);
 
 		c_dnc.setSegments(segments);
+		/*Since the line is passing through origin, it satisifies the criteria of both RL and TB with latency and burst = 0*/
 		c_dnc.is_rate_latency = true; // with latency 0
 		c_dnc.is_token_bucket = true; // with burstiness 0
 	}
 
+	/*Done*/
 	private void makeRateLatency(AffineCurve_DNC c_dnc, Num rate, Num latency) {
 		if (rate.equals(Num.getFactory().getPositiveInfinity())) {
 			makeDelayedInfiniteBurst(c_dnc, latency);
@@ -1307,6 +1313,7 @@ public class AffineCurve_DNC implements CurveAffine {
 		c_dnc.is_rate_latency = true;
 	}
 
+	/*Done*/
 	private void makeTokenBucket(AffineCurve_DNC c_dnc, Num rate, Num burst) {
 		if (rate.equals(Num.getFactory().getPositiveInfinity())
 				|| burst.equals(Num.getFactory().getPositiveInfinity())) {
