@@ -67,7 +67,7 @@ public abstract class MinPlus {
 
 	public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
 			boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC) // DNC operations work with
+		if (CalculatorConfig.getInstance().getOperationImpl().equals(OperationImpl.DNC) // DNC operations work with
 				// DNC and MPA_RTC curves
 				|| CalculatorConfig.getInstance().getCurveImpl().equals(CurveImpl.DNC)) { // NATIVE operation on
 			// DNC curves
