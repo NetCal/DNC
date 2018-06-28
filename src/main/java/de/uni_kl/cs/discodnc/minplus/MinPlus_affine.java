@@ -35,12 +35,7 @@ package de.uni_kl.cs.discodnc.minplus;
 import ch.ethz.rtc.kernel.CurveMath;
 import ch.ethz.rtc.kernel.Segment;
 import ch.ethz.rtc.kernel.SegmentList;
-
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.curves.*;
 import de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.cs.discodnc.minplus.dnc.Convolution_DNC;
 import de.uni_kl.cs.discodnc.minplus.dnc.Deconvolution_DNC;
@@ -51,7 +46,7 @@ import de.uni_kl.cs.discodnc.nc.CalculatorConfig.OperationImpl;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class MinPlus {
+public abstract class MinPlus_affine {
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
 	// --------------------------------------------------------------------------------------------------------------
@@ -67,7 +62,7 @@ public abstract class MinPlus {
 
 	public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
 			boolean tb_rl_optimized) throws Exception {
-		if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC) // DNC operations work with
+		if (CalculatorConfig.getInstance().getOperationImpl().equals(OperationImpl.DNC) // DNC operations work with
 				// DNC and MPA_RTC curves
 				|| CalculatorConfig.getInstance().getCurveImpl().equals(CurveImpl.DNC)) { // NATIVE operation on
 			// DNC curves
