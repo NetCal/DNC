@@ -1,5 +1,6 @@
-Changes since v2.4.1
---------------------
+v2.4.2 "Chimera" (2018-Jul-04)
+------------------------------
+* Tandem Matching Analysis and Arrival Bound added 
 * SFA and PbooArrivalBounds:
   - Improved structure, reliability and performance.
   - Single, static SFA tandem analysis for SFA and PBOO ABs. 
