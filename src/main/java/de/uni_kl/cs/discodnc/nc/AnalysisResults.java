@@ -1,8 +1,9 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
- * Copyright (C) 2015 - 2018 Steffen Bondorf
- * Copyright (C) 2018+ The DiscoDNC contributors
+ * Copyright (C) 2008 - 2010 Andreas Kiefer
+ * Copyright (C) 2011 - 2018 Steffen Bondorf
+ * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
