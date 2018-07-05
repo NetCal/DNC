@@ -32,7 +32,6 @@ import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public interface CurveBackend {
-	
 	MinPlus getMinPlus();
 	
 	Curve getCurveFactory();
@@ -42,4 +41,6 @@ public interface CurveBackend {
 	default void checkDependencies() {
 		
 	}
+	
+	// TODO toString method
 }

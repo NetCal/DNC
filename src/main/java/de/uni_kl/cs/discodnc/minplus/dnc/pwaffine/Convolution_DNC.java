@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc;
+package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,55 +46,6 @@ public abstract class Convolution_DNC {
     // ------------------------------------------------------------
     // Service Curves
     // ------------------------------------------------------------
-    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        // null checks will be done by convolve( ... )
-        return convolve(service_curve_1, service_curve_2, false);
-    }
-
-    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
-                                        boolean tb_rl_optimized) {
-        // null checks will be done by convolve_SC_SC_RLs( ... ) or
-        // convolve_SC_SC_Generic( ... )
-        if (tb_rl_optimized) {
-            return convolve_SC_SC_RLs(service_curve_1, service_curve_2);
-        } else {
-            return convolve_SC_SC_Generic(service_curve_1, service_curve_2);
-        }
-    }
-
-    private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
-            case 1:
-                return service_curve_2.copy();
-            case 2:
-                return service_curve_1.copy();
-            case 3:
-                return Curve.getFactory().createZeroService();
-            case 0:
-            default:
-                break;
-        }
-
-        Num rate;
-        switch (CheckUtils.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
-            case 1:
-                rate = service_curve_2.getUltAffineRate();
-                break;
-            case 2:
-                rate = service_curve_1.getUltAffineRate();
-                break;
-            case 3:
-                rate = Num.getFactory().createPositiveInfinity();
-                break;
-            case 0:
-            default:
-                rate = Num.getUtils().min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
-                break;
-        }
-
-        return Curve.getFactory().createRateLatency(rate,
-                Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
-    }
 
     /**
      * Returns the convolution of two curve, which must be convex
@@ -103,7 +54,8 @@ public abstract class Convolution_DNC {
      * @param service_curve_2 The second curve to convolve with.
      * @return The convolved curve.
      */
-    private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+        // null checks will be done by convolve_SC_SC_Generic( ... ).
         switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
@@ -210,14 +162,7 @@ public abstract class Convolution_DNC {
     // Java won't let me call this method "convolve" because it does not care about
     // the Sets' types; tells that there's already another method taking the same
     // arguments.
-    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
-                                                     Set<ServiceCurve> service_curves_2) {
-        // null and empty checks will be done by convolve_SCs_SCs( ... )
-        return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
-    }
-
-    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
-                                                     Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) {
+    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2) {
         Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 
         // An empty or null set does is not interpreted as a convolution with a null
@@ -263,7 +208,7 @@ public abstract class Convolution_DNC {
 
         for (ServiceCurve beta_1 : service_curves_1) {
             for (ServiceCurve beta_2 : service_curves_2) {
-                results.add(convolve(beta_1, beta_2, tb_rl_optimized));
+                results.add(convolve(beta_1, beta_2));
             }
         }
 

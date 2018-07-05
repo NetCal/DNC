@@ -3,21 +3,21 @@ package de.uni_kl.cs.discodnc;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.curves.dnc.affine.AffineCurve_DNC;
+import de.uni_kl.cs.discodnc.curves.dnc.pwaffine.Curve_DNC;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.minplus.dnc.affine.MinPlus_DNCaffine;
+import de.uni_kl.cs.discodnc.minplus.dnc.pwaffine.MinPlus_DNC;
 
-public enum CurveBackend_DNC_AFFINE implements CurveBackend {
-	DNC_AFFINE;
+public enum CurveBackend_DNC_PWAFFINE implements CurveBackend {
+	DNC_PWAFFINE;
 
 	@Override
 	public MinPlus getMinPlus() {
-		return MinPlus_DNCaffine.MINPLUS_DNC_AFFINE;
+		return MinPlus_DNC.MINPLUS_DNC;
 	}
 
 	@Override
 	public Curve getCurveFactory() {
-		return AffineCurve_DNC.getFactory();
+		return Curve_DNC.getFactory();
 	}
 
 	@Override

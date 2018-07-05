@@ -226,7 +226,7 @@ public abstract class ArrivalBoundDispatch {
 
 		// All permutations of single flow results
 		for (ServiceCurve beta_lo : betas_lo) {
-			arrival_bounds_f.add(Calculator.getInstance().getMinPlus().deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
+			arrival_bounds_f.add(Calculator.getInstance().getMinPlus().deconvolve(alpha, beta_lo));
 		}
 
 		return arrival_bounds_f;
