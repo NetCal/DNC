@@ -1,9 +1,9 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator.
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2011 - 2018 Steffen Bondorf
- * Copyright (C) 2017, 2018 The DiscoDNC contributors
+ * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -281,11 +281,9 @@ public abstract class Convolution_DNCaffine {
 
         // Similar to convolve_ACs_EGamma
         ArrivalCurve msc_as_ac = Curve.getFactory()
-                .createArrivalCurve(Curve.removeLatency(maximum_service_curve)); // Abuse the
-        // ArrivalCurve
-        // class here
-        // for
-        // convenience.
+                .createArrivalCurve(Curve.removeLatency(maximum_service_curve));
+        // Abuse the ArrivalCurve class here for convenience. 
+
         for (ArrivalCurve ac : arrival_curves) {
             result.add(Curve.shiftRight(convolve(ac, msc_as_ac), msc_latency));
         }
