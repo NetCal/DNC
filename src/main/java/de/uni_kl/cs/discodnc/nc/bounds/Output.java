@@ -56,7 +56,7 @@ public class Output {
             result = Calculator.getInstance().getMinPlus().deconvolve_almostConcCs_SCs(
             		Calculator.getInstance().getMinPlus().convolve_ACs_MSC(arrival_curves, server.getGamma()), betas_lo);
         } else {
-            result = Calculator.getInstance().getMinPlus().deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+            result = Calculator.getInstance().getMinPlus().deconvolve(arrival_curves, betas_lo);
         }
 
         if (configuration.useExtraGamma() != AnalysisConfig.GammaFlag.GLOBALLY_OFF) {
@@ -74,7 +74,7 @@ public class Output {
             result = Calculator.getInstance().getMinPlus().deconvolve_almostConcCs_SCs(
             		Calculator.getInstance().getMinPlus().convolve_ACs_MSC(arrival_curves, path.getGamma()), betas_lo);
         } else {
-            result = Calculator.getInstance().getMinPlus().deconvolve(arrival_curves, betas_lo, configuration.tbrlDeconvolution());
+            result = Calculator.getInstance().getMinPlus().deconvolve(arrival_curves, betas_lo);
         }
 
         if (configuration.useExtraGamma() != AnalysisConfig.GammaFlag.GLOBALLY_OFF) {

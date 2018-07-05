@@ -74,9 +74,6 @@ public class CompFFApresets {
 		AnalysisConfig base_config = new AnalysisConfig();
 		base_config.setRemoveDuplicateArrivalBounds( true );
 		
-		base_config.setUseTbrlConvolution( true );
-		base_config.setUseTbrlDeconvolution( true );
-		
 		base_config.setUseGamma( GammaFlag.GLOBALLY_OFF );
 		base_config.setUseExtraGamma( GammaFlag.GLOBALLY_OFF );
 		

@@ -47,8 +47,6 @@ public class AnalysisConfig {
     private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
             Collections.singleton(ArrivalBoundMethod.PBOO_CONCATENATION));
     private boolean remove_duplicate_arrival_bounds = true;
-    private boolean tbrl_convolution = false;
-    private boolean tbrl_deconvolution = false;
     private boolean flow_prolongation = false;
     private boolean ab_consider_tfa_nodeBacklog = false;
     
@@ -57,7 +55,7 @@ public class AnalysisConfig {
     
     public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
                           Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
-                          boolean tbrl_convolution, boolean tbrl_deconvolution, boolean ab_consider_tfa_nodeBacklog) {
+                          boolean ab_consider_tfa_nodeBacklog) {
         this.multiplexing_discipline = multiplexing_discipline;
         this.use_gamma = use_gamma;
         this.use_extra_gamma = use_extra_gamma;
@@ -65,8 +63,6 @@ public class AnalysisConfig {
         this.arrival_bound_methods.addAll(arrival_bound_methods);
 
         this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
-        this.tbrl_convolution = tbrl_convolution;
-        this.tbrl_deconvolution = tbrl_deconvolution;
         this.ab_consider_tfa_nodeBacklog = ab_consider_tfa_nodeBacklog;
     }
 
@@ -141,22 +137,6 @@ public class AnalysisConfig {
         remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds_flag;
     }
 
-    public boolean tbrlConvolution() {
-        return tbrl_convolution;
-    }
-
-    public void setUseTbrlConvolution(boolean optimized_code_path) {
-        tbrl_convolution = optimized_code_path;
-    }
-
-    public boolean tbrlDeconvolution() {
-        return tbrl_deconvolution;
-    }
-
-    public void setUseTbrlDeconvolution(boolean optimized_code_path) {
-        tbrl_deconvolution = optimized_code_path;
-    }
-
     public boolean abConsiderTFANodeBacklog() {
         return ab_consider_tfa_nodeBacklog;
     }
@@ -180,7 +160,7 @@ public class AnalysisConfig {
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
         return new AnalysisConfig(multiplexing_discipline, use_gamma, use_extra_gamma, arrival_bound_methods,
-                remove_duplicate_arrival_bounds, tbrl_convolution, tbrl_deconvolution, ab_consider_tfa_nodeBacklog);
+                remove_duplicate_arrival_bounds, ab_consider_tfa_nodeBacklog);
     }
 
     @Override
@@ -194,14 +174,6 @@ public class AnalysisConfig {
         if (removeDuplicateArrivalBounds()) {
             analysis_config_str.append(", ");
             analysis_config_str.append("remove duplicate ABs");
-        }
-        if (tbrlConvolution()) {
-            analysis_config_str.append(", ");
-            analysis_config_str.append("TbRl Conv");
-        }
-        if (tbrlDeconvolution()) {
-            analysis_config_str.append(", ");
-            analysis_config_str.append("TbRl Deconv");
         }
 
         return analysis_config_str.toString();

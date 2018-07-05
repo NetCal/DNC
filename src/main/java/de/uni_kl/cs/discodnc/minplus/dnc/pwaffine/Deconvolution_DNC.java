@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc;
+package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -46,12 +46,6 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 public abstract class Deconvolution_DNC {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
-        // null and empty checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curves, service_curve, false);
-    }
-
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
-                                               boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
         switch (CheckUtils.inputNullCheck(arrival_curves, service_curve)) {
             case 0:
@@ -71,19 +65,13 @@ public abstract class Deconvolution_DNC {
         }
 
         for (ArrivalCurve alpha : arrival_curves) {
-            results.add(deconvolve(alpha, service_curve, tb_rl_optimized));
+            results.add(deconvolve(alpha, service_curve));
         }
 
         return results;
     }
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves) {
-        // null and empty checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curves, service_curves, false);
-    }
-
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves,
-                                               boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
         switch (CheckUtils.inputNullCheck(arrival_curves, service_curves)) {
@@ -113,7 +101,7 @@ public abstract class Deconvolution_DNC {
 
         for (ServiceCurve beta : service_curves) {
             for (ArrivalCurve alpha : arrival_curves) {
-                results.add(deconvolve(alpha, beta, tb_rl_optimized));
+                results.add(deconvolve(alpha, beta));
             }
         }
 
@@ -121,12 +109,6 @@ public abstract class Deconvolution_DNC {
     }
 
     public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        // null checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curve, service_curve, false);
-    }
-
-    public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
-                                          boolean tb_rl_optimized) {
         switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
@@ -149,11 +131,7 @@ public abstract class Deconvolution_DNC {
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }
-        if (tb_rl_optimized) {
-            return deconvolveTB_RL(arrival_curve, service_curve);
-        } else {
-            return deconvolve_mTB_mRL(arrival_curve, service_curve);
-        }
+        return deconvolve_mTB_mRL(arrival_curve, service_curve);
     }
 
     public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
@@ -196,33 +174,6 @@ public abstract class Deconvolution_DNC {
         }
 
         return results;
-    }
-
-    private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                return Curve.getFactory().createZeroArrivals();
-            case 2:
-                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
-            default:
-        }
-
-        if (service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
-            return arrival_curve.copy();
-        }
-        if (service_curve.equals(Curve.getFactory().createZeroService())
-                || service_curve.getLatency().equals(Num.getFactory().getPositiveInfinity())
-                || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
-            return Curve.getFactory().createZeroArrivals();
-        }
-
-        // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
-        return Curve.getFactory().createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
-                arrival_curve.getBurst().doubleValue()
-                        + arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
     }
 
     /**
