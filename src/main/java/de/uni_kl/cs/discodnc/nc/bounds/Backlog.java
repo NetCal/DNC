@@ -29,12 +29,12 @@
 
 package de.uni_kl.cs.discodnc.nc.bounds;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PmooArrivalBound_SinkTreeTbRl;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -49,7 +49,7 @@ public class Backlog {
 
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 		if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())) {
-			return Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 		}
 		if (service_curve.isDelayedInfiniteBurst()) {
 			return arrival_curve.f(service_curve.getLatency());
@@ -57,7 +57,7 @@ public class Backlog {
 		if (service_curve.equals(Curve.getFactory().createZeroService()) // We know from above that the
 				// arrivals are not zero.
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-			return Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
 		}
 
 		// The computeInflectionPoints based method does not work for
@@ -71,14 +71,14 @@ public class Backlog {
 		// Solution:
 		// Start with the burst as minimum vertical deviation
 
-		Num result = arrival_curve.fLimitRight(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getZero());
+		Num result = arrival_curve.fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero());
 
 		ArrayList<Num> xcoords = Curve.computeInflectionPointsX(arrival_curve, service_curve);
 		for (int i = 0; i < xcoords.size(); i++) {
 			Num ip_x = xcoords.get(i);
 
-			Num backlog = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
-			result = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(result, backlog);
+			Num backlog = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
+			result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, backlog);
 		}
 		return result;
 	}

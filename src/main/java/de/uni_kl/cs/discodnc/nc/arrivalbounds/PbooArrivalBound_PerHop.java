@@ -28,6 +28,7 @@
 
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -38,7 +39,6 @@ import de.uni_kl.cs.discodnc.nc.ArrivalBound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -161,7 +161,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 			tfa.deriveBoundsAtServer(last_hop_xtx);
 
 			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
-			Num tfa_backlog_bound_min = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity();
+			Num tfa_backlog_bound_min = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity();
 
 			for (Num tfa_backlog_bound : tfa_backlog_bounds) {
 				if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {

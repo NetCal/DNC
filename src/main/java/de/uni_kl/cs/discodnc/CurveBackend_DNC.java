@@ -5,7 +5,7 @@ import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.curves.dnc.pwaffine.Curve_DNC;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.minplus.dnc.MinPlus_DNC;
+import de.uni_kl.cs.discodnc.minplus.dnc.pwaffine.MinPlus_DNC;
 
 public enum CurveBackend_DNC implements CurveBackend {
 		DNC;

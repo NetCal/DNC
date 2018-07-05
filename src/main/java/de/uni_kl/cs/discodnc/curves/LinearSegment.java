@@ -27,17 +27,17 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {
 	static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-		LinearSegment.Builder builder = CalculatorConfig.getInstance().getCurveImpl().getLinearSegmentFactory();
+		LinearSegment.Builder builder = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
         return builder.createLinearSegment(x, y, grad, leftopen);
     }
 
     static LinearSegment createHorizontalLine(double y) {
-    	LinearSegment.Builder builder = CalculatorConfig.getInstance().getCurveImpl().getLinearSegmentFactory();
+    	LinearSegment.Builder builder = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
         return builder.createHorizontalLine(y);
     }
 
@@ -55,8 +55,8 @@ public interface LinearSegment {
     static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = createHorizontalLine(0.0);
         result.setX(x);
-        result.setY(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(s1.f(x), s2.f(x)));
-        result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(s1.getGrad(), s2.getGrad()));
+        result.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).add(s1.f(x), s2.f(x)));
+        result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).add(s1.getGrad(), s2.getGrad()));
         result.setLeftopen(leftopen);
         return result;
     }
@@ -75,8 +75,8 @@ public interface LinearSegment {
     static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = createHorizontalLine(0.0);
         result.setX(x);
-        result.setY(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(s1.f(x), s2.f(x)));
-        result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(s1.getGrad(), s2.getGrad()));
+        result.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(s1.f(x), s2.f(x)));
+        result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(s1.getGrad(), s2.getGrad()));
         result.setLeftopen(leftopen);
         return result;
     }
@@ -102,7 +102,7 @@ public interface LinearSegment {
         result.setX(x);
         if (crossed || f1_x.eq(f2_x)) {
             result.setY(f1_x);
-            result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).min(s1.getGrad(), s2.getGrad()));
+            result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).min(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.lt(f2_x)) {
             result.setY(f1_x);
             result.setGrad(s1.getGrad());
@@ -134,7 +134,7 @@ public interface LinearSegment {
         result.setX(x);
         if (crossed || f1_x.eq(f2_x)) {
             result.setY(f1_x);
-            result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(s1.getGrad(), s2.getGrad()));
+            result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).max(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.gt(f2_x)) {
             result.setY(f1_x);
             result.setGrad(s1.getGrad());

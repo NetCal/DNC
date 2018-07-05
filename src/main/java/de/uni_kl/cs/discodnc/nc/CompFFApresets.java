@@ -3,6 +3,7 @@ package de.uni_kl.cs.discodnc.nc;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.GammaFlag;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
@@ -68,13 +69,10 @@ public class CompFFApresets {
 		// Calculator Configurations
 		// --------------------------------------------------------------------------------------------------------------
 		
-		CalculatorConfig.getInstance().disableAllChecks();
+		Calculator.getInstance().disableAllChecks();
 		
 		AnalysisConfig base_config = new AnalysisConfig();
 		base_config.setRemoveDuplicateArrivalBounds( true );
-		
-		base_config.setUseTbrlConvolution( true );
-		base_config.setUseTbrlDeconvolution( true );
 		
 		base_config.setUseGamma( GammaFlag.GLOBALLY_OFF );
 		base_config.setUseExtraGamma( GammaFlag.GLOBALLY_OFF );
