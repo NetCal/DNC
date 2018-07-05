@@ -359,11 +359,9 @@ public abstract class Convolution_DNC {
 
         // Similar to convolve_ACs_EGamma
         ArrivalCurve msc_as_ac = Curve.getFactory()
-                .createArrivalCurve(Curve.removeLatency(maximum_service_curve)); // Abuse the
-        // ArrivalCurve
-        // class here
-        // for
-        // convenience.
+                .createArrivalCurve(Curve.removeLatency(maximum_service_curve));
+        // Abuse the ArrivalCurve class here for convenience.
+        
         for (ArrivalCurve ac : arrival_curves) {
             result.add(Curve.shiftRight(convolve(ac, msc_as_ac), msc_latency));
         }
@@ -398,13 +396,9 @@ public abstract class Convolution_DNC {
         }
 
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-        ArrivalCurve extra_gamma_as_ac = Curve.getFactory().createArrivalCurve(extra_gamma_curve); // Abuse
-        // the
-        // ArrivalCurve
-        // class
-        // here
-        // for
-        // convenience.
+        
+        // Abuse the ArrivalCurve class here for convenience.
+        ArrivalCurve extra_gamma_as_ac = Curve.getFactory().createArrivalCurve(extra_gamma_curve);
         for (ArrivalCurve ac : arrival_curves) {
             result.add(convolve(ac, extra_gamma_as_ac));
         }
