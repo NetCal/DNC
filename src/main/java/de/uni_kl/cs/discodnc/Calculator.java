@@ -69,13 +69,13 @@ public final class Calculator {
 	private void checkDependencies() {
 		CURVE_BACKEND.checkDependencies();
 	}
-	public boolean setCurveBackend(CurveBackend curve_impl) {
+	public boolean setCurveBackend(CurveBackend curve_backend) {
 		checkDependencies();
 
-		if (CURVE_BACKEND == curve_impl) {
+		if (CURVE_BACKEND == curve_backend) {
 			return false;
 		}
-		CURVE_BACKEND = curve_impl;
+		CURVE_BACKEND = curve_backend;
 		return true;
 	}
 
