@@ -1,8 +1,7 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
- * Copyright (C) 2013 - 2018 Steffen Bondorf
- * Copyright (C) 2017+ The DiscoDNC contributors
+ * Copyright (C) 2018+ The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -25,6 +24,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
+
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.Curve;
