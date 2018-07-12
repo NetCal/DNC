@@ -33,19 +33,19 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 
-public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxServiceCurve {
+public class MaxServiceCurve_DNC_Affine extends Curve_DNC_Affine implements MaxServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    protected AffineMaxServiceCurve_DNC() {
+    protected MaxServiceCurve_DNC_Affine() {
         super();
     }
 
-    public AffineMaxServiceCurve_DNC(int segment_count) {
+    public MaxServiceCurve_DNC_Affine(int segment_count) {
         super(segment_count);
     }
 
-    public AffineMaxServiceCurve_DNC(Curve curve) {
+    public MaxServiceCurve_DNC_Affine(Curve curve) {
         copy(curve);
 
         if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
@@ -59,7 +59,7 @@ public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxSer
         forceThroughOrigin();
     }
 
-    public AffineMaxServiceCurve_DNC(String max_service_curve_str) throws Exception {
+    public MaxServiceCurve_DNC_Affine(String max_service_curve_str) throws Exception {
         if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest
             // possible
             // string:
@@ -84,8 +84,8 @@ public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxSer
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public AffineMaxServiceCurve_DNC copy() {
-        AffineMaxServiceCurve_DNC msc_copy = new AffineMaxServiceCurve_DNC();
+    public MaxServiceCurve_DNC_Affine copy() {
+        MaxServiceCurve_DNC_Affine msc_copy = new MaxServiceCurve_DNC_Affine();
         msc_copy.copy(this);
 
         return msc_copy;
@@ -93,7 +93,7 @@ public class AffineMaxServiceCurve_DNC extends AffineCurve_DNC implements MaxSer
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof AffineMaxServiceCurve_DNC) && super.equals(obj);
+        return (obj instanceof MaxServiceCurve_DNC_Affine) && super.equals(obj);
     }
 
     @Override

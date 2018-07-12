@@ -34,7 +34,7 @@ import de.uni_kl.cs.discodnc.minplus.MinPlus;
 public final class Calculator {
 	private static Calculator instance = new Calculator();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveBackend CURVE_BACKEND = CurveBackend_DNC_PWAFFINE.DNC_PWAFFINE;
+	private CurveBackend CURVE_BACKEND = CurveBackend_DNC_PwAffine.DNC_PWAFFINE;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
