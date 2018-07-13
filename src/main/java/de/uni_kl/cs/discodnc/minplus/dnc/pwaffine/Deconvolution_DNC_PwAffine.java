@@ -32,7 +32,7 @@ package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.CheckUtils;
@@ -43,7 +43,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public abstract class Deconvolution_DNC {
+public abstract class Deconvolution_DNC_PwAffine {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
@@ -202,7 +202,7 @@ public abstract class Deconvolution_DNC {
             return Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY);
         }
         if (curve_2.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
-            return Curve.getFactory().createArrivalCurve((CurvePwAffine) curve_1);
+            return Curve.getFactory().createArrivalCurve((Curve_PwAffine) curve_1);
         }
         if (curve_2.equals(Curve.getFactory().createZeroService())
         		|| curve_2.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
@@ -210,10 +210,10 @@ public abstract class Deconvolution_DNC {
             return Curve.getFactory().createZeroArrivals();
         }
         if (Calculator.getInstance().exec_deconvolution_checks()) {
-            if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
+            if (!((Curve_PwAffine) curve_1).isAlmostConcave()) {
                 throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
             }
-            if (!((CurvePwAffine) curve_2).isConvex()) {
+            if (!((Curve_PwAffine) curve_2).isConvex()) {
                 throw new IllegalArgumentException("Service curve of deconvolution must be convex.");
             }
         }

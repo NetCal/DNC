@@ -25,15 +25,9 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
+package de.uni_kl.cs.discodnc.minplus.dnc.affine;
 
 import java.util.Set;
-
-// Due to name collisions, these classes are not imported,
-
-// they are referenced by their fully qualified names.
-//import ch.ethz.rtc.kernel.Curve;
-//import Curve;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -41,10 +35,9 @@ import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
-public enum MinPlus_DNC implements MinPlus {
-	
-	MIN_PLUS_DNC;
-	
+public enum MinPlus_DNC_Affine implements MinPlus {
+	MINPLUS_DNC_AFFINE;
+  
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
 	// --------------------------------------------------------------------------------------------------------------
@@ -55,11 +48,11 @@ public enum MinPlus_DNC implements MinPlus {
 
 	// Service Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.minplus.MinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
 	 */
 	@Override
 	public ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception {
-		return Convolution_DNC.convolve(service_curve_1, service_curve_2);
+		return Convolution_DNC_Affine.convolve(service_curve_1, service_curve_2);
 	}
 
 	// Java won't let us call this method "convolve" because it does not care about
@@ -71,7 +64,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
 			Set<ServiceCurve> service_curves_2) throws Exception {
-		return Convolution_DNC.convolve_SCs_SCs(service_curves_1, service_curves_2);
+		return Convolution_DNC_Affine.convolve_SCs_SCs(service_curves_1, service_curves_2);
 	}
 
 	// Arrival Curves
@@ -80,7 +73,7 @@ public enum MinPlus_DNC implements MinPlus {
 	 */
 	@Override
 	public ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) throws Exception {
-		return Convolution_DNC.convolve(arrival_curve_1, arrival_curve_2);
+		return Convolution_DNC_Affine.convolve(arrival_curve_1, arrival_curve_2);
 	}
 
 	/* (non-Javadoc)
@@ -88,7 +81,7 @@ public enum MinPlus_DNC implements MinPlus {
 	 */
 	@Override
 	public ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) throws Exception {
-		return Convolution_DNC.convolve(arrival_curves);
+		return Convolution_DNC_Affine.convolve(arrival_curves);
 	}
 
 	// Maximum Service Curves
@@ -98,7 +91,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2)
 			throws Exception {
-		return Convolution_DNC.convolve(max_service_curve_1, max_service_curve_2);
+		return Convolution_DNC_Affine.convolve(max_service_curve_1, max_service_curve_2);
 	}
 
 	// Arrival Curves and Max Service Curves
@@ -108,7 +101,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve maximum_service_curve) throws Exception {
-		return Convolution_DNC.convolve_ACs_MSC(arrival_curves, maximum_service_curve);
+		return Convolution_DNC_Affine.convolve_ACs_MSC(arrival_curves, maximum_service_curve);
 	}
 
 	/* (non-Javadoc)
@@ -117,7 +110,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve extra_gamma_curve) throws Exception {
-		return Convolution_DNC.convolve_ACs_EGamma(arrival_curves, extra_gamma_curve);
+		return Convolution_DNC_Affine.convolve_ACs_EGamma(arrival_curves, extra_gamma_curve);
 	}
 
 	// ------------------------------------------------------------
@@ -129,7 +122,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve)
 			throws Exception {
-		return Deconvolution_DNC.deconvolve(arrival_curves, service_curve);
+		return Deconvolution_DNC_Affine.deconvolve(arrival_curves, service_curve);
 	}
 
 	/* (non-Javadoc)
@@ -138,7 +131,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves)
 			throws Exception {
-		return Deconvolution_DNC.deconvolve(arrival_curves, service_curves);
+		return Deconvolution_DNC_Affine.deconvolve(arrival_curves, service_curves);
 	}
 
 	/* (non-Javadoc)
@@ -155,7 +148,7 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
 			boolean tb_rl_optimized) throws Exception {
-		return Deconvolution_DNC.deconvolve(arrival_curve, service_curve);
+		return Deconvolution_DNC_Affine.deconvolve(arrival_curve, service_curve);
 	}
 
 	/* (non-Javadoc)
@@ -164,7 +157,6 @@ public enum MinPlus_DNC implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
 			Set<ServiceCurve> service_curves) throws Exception {
-		return Deconvolution_DNC.deconvolve_almostConcCs_SCs(curves, service_curves);
+		return Deconvolution_DNC_Affine.deconvolve_almostConcCs_SCs(curves, service_curves);
 	}
-	
 }
