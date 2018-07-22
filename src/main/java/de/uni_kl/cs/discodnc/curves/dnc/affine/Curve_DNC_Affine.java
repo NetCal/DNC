@@ -1335,7 +1335,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 *
 	 */
 	public Curve_DNC_Affine createCurve(List<LinearSegment> segments) {
-		// TODO Assume there are more than two segments, defining either a valid mTB or mRL.
+		// Assume there are more than two segments, defining either a valid mTB or mRL.
 		// The first segment passes through the origin, the second defines best known lateny or burstiness.
 		// The last segment defines least arrival rate or largest service rate, respectively.
 		// Choosing the second segment for an affine curve from the given ones is thus finding a reasonable tradeoff.
@@ -1343,9 +1343,35 @@ public class Curve_DNC_Affine implements Curve_Affine {
 		// I.e., the second segment of our affine curve should be defined by the last one of the givens segments by
 		// extending it to the front such that it either intersects with, i.e.,, then starts at,
 		// the x-axis (defining a new service curve latency) or the y-axis (defining a new arrival curve burstiness).
-		Curve_DNC_Affine c_dnc = new Curve_DNC_Affine(segments.size());
-		for (int i = 0; i < segments.size(); i++) {
-			c_dnc.setSegment(i, segments.get(i));
+		int segment_size = segments.size();
+		if(segment_size > 2)
+		{
+			segment_size = 2;
+		}
+		//Curve_DNC_Affine c_dnc = new Curve_DNC_Affine(segments.size());
+		Curve_DNC_Affine c_dnc = new Curve_DNC_Affine(segment_size);
+		for (int i = 0; i < segment_size; i++) {
+			LinearSegment s = null;
+			if(i == 0) {
+				s = segments.get(i);
+			}
+			else
+			{
+				s = segments.get( segments.size() - 1);
+				Num temp = Num.getUtils().create(-1);
+				Num x2 = Num.getUtils().add(Num.getUtils().mult(Num.getUtils().div(s.getY(), s.getGrad()), temp), s.getX());
+				Num y2 = Num.getUtils().add(Num.getUtils().mult(Num.getUtils().mult( s.getX(), s.getGrad()),temp), s.getY());
+				if(x2.leqZero()){
+					s.setX(Num.getUtils().createZero());
+					s.setY(y2);
+				}
+				else{
+					s.setX(x2);
+					s.setY(Num.getUtils().createZero());
+				}
+
+			}
+			c_dnc.setSegment(i, s);
 		}
 		Curve.beautify(c_dnc);
 		return c_dnc;
