@@ -29,18 +29,26 @@ package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
+import de.uni_kl.cs.discodnc.curves.dnc.affine.Curve_DNC_Affine;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.minplus.dnc.affine.MinPlus_DNC_Affine;
 
-public interface CurveBackend {
-	MinPlus getMinPlus();
-	
-	Curve getCurveFactory();
-	
-	LinearSegment.Builder getLinearSegmentFactory();
-	
-	default void checkDependencies() {
-		
+public enum CurveBackend_DNC_Affine implements CurveBackend {
+	DNC_AFFINE;
+
+	@Override
+	public MinPlus getMinPlus() {
+		return MinPlus_DNC_Affine.MINPLUS_DNC_AFFINE;
 	}
-	
-	// TODO toString method
+
+	@Override
+	public Curve getCurveFactory() {
+		return Curve_DNC_Affine.getFactory();
+	}
+
+	@Override
+	public LinearSegment.Builder getLinearSegmentFactory() {
+		return LinearSegment_DNC.getBuilder();
+	}
 }

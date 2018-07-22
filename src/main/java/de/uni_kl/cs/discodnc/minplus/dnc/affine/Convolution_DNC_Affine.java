@@ -1,9 +1,9 @@
 /*
- * This file is part of the Disco Deterministic Network Calculator v2.4.0 "Chimera".
+ * This file is part of the Disco Deterministic Network Calculator.
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
  * Copyright (C) 2011 - 2018 Steffen Bondorf
- * Copyright (C) 2017, 2018 The DiscoDNC contributors
+ * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc;
+package de.uni_kl.cs.discodnc.minplus.dnc.affine;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,34 +35,17 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public abstract class Convolution_DNC {
+public abstract class Convolution_DNC_Affine {
 
     // ------------------------------------------------------------
     // Service Curves
     // ------------------------------------------------------------
     public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        // null checks will be done by convolve( ... )
-        return convolve(service_curve_1, service_curve_2, false);
-    }
-
-    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2,
-                                        boolean tb_rl_optimized) {
-        // null checks will be done by convolve_SC_SC_RLs( ... ) or
-        // convolve_SC_SC_Generic( ... )
-        if (tb_rl_optimized) {
-            return convolve_SC_SC_RLs(service_curve_1, service_curve_2);
-        } else {
-            return convolve_SC_SC_Generic(service_curve_1, service_curve_2);
-        }
-    }
-
-    private static ServiceCurve convolve_SC_SC_RLs(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
         switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
@@ -96,128 +79,12 @@ public abstract class Convolution_DNC {
                 Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
-    /**
-     * Returns the convolution of two curve, which must be convex
-     *
-     * @param service_curve_1 The first curve to convolve with.
-     * @param service_curve_2 The second curve to convolve with.
-     * @return The convolved curve.
-     */
-    private static ServiceCurve convolve_SC_SC_Generic(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
-            case 1:
-                return service_curve_2.copy();
-            case 2:
-                return service_curve_1.copy();
-            case 3:
-                return Curve.getFactory().createZeroService();
-            case 0:
-            default:
-                break;
-        }
-
-        // Shortcut: only go here if there is at least one delayed infinite burst
-        if (service_curve_1.isDelayedInfiniteBurst() || service_curve_2.isDelayedInfiniteBurst()) {
-            if (service_curve_1.isDelayedInfiniteBurst()
-                    && service_curve_2.isDelayedInfiniteBurst()) {
-                return Curve.getFactory().createDelayedInfiniteBurst(
-                        Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
-            }
-
-            if (service_curve_1.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
-                return Curve.getFactory().createServiceCurve(
-                        Curve.shiftRight(service_curve_2, service_curve_1.getLatency()));
-            }
-
-            if (service_curve_2.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
-                return Curve.getFactory().createServiceCurve(
-                        Curve.shiftRight(service_curve_1, service_curve_2.getLatency()));
-            }
-        }
-
-        ServiceCurve zero_service = Curve.getFactory().createZeroService();
-        if (service_curve_1.equals(zero_service) || service_curve_2.equals(zero_service)) {
-            return zero_service;
-        }
-
-        ServiceCurve result = Curve.getFactory().createServiceCurve();
-
-        Num x = Num.getFactory().createZero();
-        Num y = Num.getFactory().createZero(); // Functions pass though the origin
-        Num grad = Num.getFactory().createZero();
-        LinearSegment s = LinearSegment.createLinearSegment(x, y, grad, false);
-        result.addSegment(s);
-
-        int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
-        int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
-        if (i1 > 0 || i2 > 0) {
-            x = Num.getFactory().createZero();
-            y = Num.getUtils().add(service_curve_1.fLimitRight(Num.getFactory().getZero()),
-                    service_curve_2.fLimitRight(Num.getFactory().getZero()));
-            grad = Num.getFactory().createZero();
-            s = LinearSegment.createLinearSegment(x, y, grad, true);
-
-            result.addSegment(s);
-        }
-
-        while (i1 < service_curve_1.getSegmentCount() || i2 < service_curve_2.getSegmentCount()) {
-            if (service_curve_1.getSegment(i1).getGrad().lt(service_curve_2.getSegment(i2).getGrad())) {
-                if (i1 + 1 >= service_curve_1.getSegmentCount()) {
-                    result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
-                    break;
-                }
-
-                x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getX(),
-                                service_curve_1.getSegment(i1).getX())));
-                y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getY(),
-                                service_curve_1.getSegment(i1).getY())));
-                grad = Num.getFactory().createZero();
-                s = LinearSegment.createLinearSegment(x, y, grad, true);
-
-                result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
-                result.addSegment(s);
-
-                i1++;
-            } else {
-                if (i2 + 1 >= service_curve_2.getSegmentCount()) {
-                    result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
-                    break;
-                }
-
-                x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getX(),
-                                service_curve_2.getSegment(i2).getX())));
-                y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getY(),
-                                service_curve_2.getSegment(i2).getY())));
-                grad = Num.getFactory().createZero();
-                s = LinearSegment.createLinearSegment(x, y, grad, true);
-
-                result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
-                result.addSegment(s);
-
-                i2++;
-            }
-        }
-
-        Curve.beautify(result);
-
-        return result;
-    }
 
     // Java won't let me call this method "convolve" because it does not care about
     // the Sets' types; tells that there's already another method taking the same
     // arguments.
     public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
                                                      Set<ServiceCurve> service_curves_2) {
-        // null and empty checks will be done by convolve_SCs_SCs( ... )
-        return convolve_SCs_SCs(service_curves_1, service_curves_2, false);
-    }
-
-    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
-                                                     Set<ServiceCurve> service_curves_2, boolean tb_rl_optimized) {
         Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 
         // An empty or null set does is not interpreted as a convolution with a null
@@ -263,7 +130,7 @@ public abstract class Convolution_DNC {
 
         for (ServiceCurve beta_1 : service_curves_1) {
             for (ServiceCurve beta_2 : service_curves_2) {
-                results.add(convolve(beta_1, beta_2, tb_rl_optimized));
+                results.add(convolve(beta_1, beta_2));
             }
         }
 
@@ -414,11 +281,9 @@ public abstract class Convolution_DNC {
 
         // Similar to convolve_ACs_EGamma
         ArrivalCurve msc_as_ac = Curve.getFactory()
-                .createArrivalCurve(Curve.removeLatency(maximum_service_curve)); // Abuse the
-        // ArrivalCurve
-        // class here
-        // for
-        // convenience.
+                .createArrivalCurve(Curve.removeLatency(maximum_service_curve));
+        // Abuse the ArrivalCurve class here for convenience. 
+
         for (ArrivalCurve ac : arrival_curves) {
             result.add(Curve.shiftRight(convolve(ac, msc_as_ac), msc_latency));
         }
@@ -453,13 +318,9 @@ public abstract class Convolution_DNC {
         }
 
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
-        ArrivalCurve extra_gamma_as_ac = Curve.getFactory().createArrivalCurve(extra_gamma_curve); // Abuse
-        // the
-        // ArrivalCurve
-        // class
-        // here
-        // for
-        // convenience.
+        
+        // Abuse the ArrivalCurve class here for convenience.
+        ArrivalCurve extra_gamma_as_ac = Curve.getFactory().createArrivalCurve(extra_gamma_curve); 
         for (ArrivalCurve ac : arrival_curves) {
             result.add(convolve(ac, extra_gamma_as_ac));
         }

@@ -50,6 +50,12 @@
 		<developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
 		<url>https://github.com/NetCal/DiscoDNC/tree/master</url>
 	</scm>
+	
+	<properties>
+        	<maven.compiler.source>1.8</maven.compiler.source>
+        	<maven.compiler.target>1.8</maven.compiler.target>
+        	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<dependencies>
 

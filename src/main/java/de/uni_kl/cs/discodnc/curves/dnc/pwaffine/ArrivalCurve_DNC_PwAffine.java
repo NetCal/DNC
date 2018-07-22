@@ -27,25 +27,25 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc.affine;
+package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 
-public class AffineArrivalCurve_DNC extends AffineCurve_DNC implements ArrivalCurve {
+public class ArrivalCurve_DNC_PwAffine extends Curve_DNC_PwAffine implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    public AffineArrivalCurve_DNC() {
+    public ArrivalCurve_DNC_PwAffine() {
         super();
     }
 
-    public AffineArrivalCurve_DNC(int segment_count) {
+    public ArrivalCurve_DNC_PwAffine(int segment_count) {
         super(segment_count);
     }
 
-    public AffineArrivalCurve_DNC(Curve curve) {
+    public ArrivalCurve_DNC_PwAffine(Curve curve) {
         super(curve);
         forceThroughOrigin();
 
@@ -57,7 +57,7 @@ public class AffineArrivalCurve_DNC extends AffineCurve_DNC implements ArrivalCu
         }
     }
 
-    public AffineArrivalCurve_DNC(String arrival_curve_str) throws Exception {
+    public ArrivalCurve_DNC_PwAffine(String arrival_curve_str) throws Exception {
         if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest
             // possible
             // string:
@@ -80,15 +80,15 @@ public class AffineArrivalCurve_DNC extends AffineCurve_DNC implements ArrivalCu
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public AffineArrivalCurve_DNC copy() {
-        AffineArrivalCurve_DNC ac_copy = new AffineArrivalCurve_DNC();
+    public ArrivalCurve_DNC_PwAffine copy() {
+        ArrivalCurve_DNC_PwAffine ac_copy = new ArrivalCurve_DNC_PwAffine();
         ac_copy.copy(this);
         return ac_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof AffineArrivalCurve_DNC) && super.equals(obj);
+        return (obj instanceof ArrivalCurve_DNC_PwAffine) && super.equals(obj);
     }
 
     @Override

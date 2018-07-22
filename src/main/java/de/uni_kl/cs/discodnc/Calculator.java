@@ -34,8 +34,8 @@ import de.uni_kl.cs.discodnc.minplus.MinPlus;
 public final class Calculator {
 	private static Calculator instance = new Calculator();
 	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
-	private CurveBackend CURVE_IMPLEMENTATION = CurveBackend_DNC.DNC;
-	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
+	private CurveBackend CURVE_BACKEND = CurveBackend_DNC_PwAffine.DNC_PWAFFINE;
+	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
 	private boolean MAX_SERVICE_CURVE_CHECKS = false;
@@ -63,29 +63,20 @@ public final class Calculator {
 	}
 
 	public CurveBackend getCurveBackend() {
-		return CURVE_IMPLEMENTATION;
+		return CURVE_BACKEND;
 	}
 
 	private void checkDependencies() {
-		CURVE_IMPLEMENTATION.checkDependencies();
+		CURVE_BACKEND.checkDependencies();
 	}
-	public boolean setCurveBackend(CurveBackend curve_impl) {
+	public boolean setCurveBackend(CurveBackend curve_backend) {
 		checkDependencies();
 
-		if (CURVE_IMPLEMENTATION == curve_impl) {
+		if (CURVE_BACKEND == curve_backend) {
 			return false;
 		}
-		CURVE_IMPLEMENTATION = curve_impl;
+		CURVE_BACKEND = curve_backend;
 		return true;
-	}
-
-	public OperationImpl getOperationImpl() {
-		return OPERATION_IMPLEMENTATION;
-	}
-
-	public void setOperationImpl(OperationImpl operation_impl) {
-		checkDependencies();
-		OPERATION_IMPLEMENTATION = operation_impl;
 	}
 
 	public void disableAllChecks() {
@@ -161,14 +152,10 @@ public final class Calculator {
 	}
 	
 	public MinPlus getMinPlus() {
-		return CURVE_IMPLEMENTATION.getMinPlus();
+		return CURVE_BACKEND.getMinPlus();
 	}
 	
 	public Curve getCurve() {
-		return CURVE_IMPLEMENTATION.getCurveFactory();
-	}
-	
-	public enum OperationImpl {
-		DNC, NATIVE
+		return CURVE_BACKEND.getCurveFactory();
 	}
 }

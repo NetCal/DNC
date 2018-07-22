@@ -30,45 +30,49 @@
 package de.uni_kl.cs.discodnc.curves.dnc.affine;
 
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public class AffineServiceCurve_DNC extends AffineCurve_DNC implements ServiceCurve {
+public class ArrivalCurve_DNC_Affine extends Curve_DNC_Affine implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    public AffineServiceCurve_DNC() {
+    public ArrivalCurve_DNC_Affine() {
         super();
     }
 
-    public AffineServiceCurve_DNC(int segment_count) {
+    public ArrivalCurve_DNC_Affine(int segment_count) {
         super(segment_count);
     }
 
-    public AffineServiceCurve_DNC(Curve curve) {
-        copy(curve);
+    public ArrivalCurve_DNC_Affine(Curve curve) {
+        super(curve);
+        forceThroughOrigin();
 
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
-            // !isConvex()
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+            // !isConcave()
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
-    public AffineServiceCurve_DNC(String service_curve_str) throws Exception {
-        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
+    public ArrivalCurve_DNC_Affine(String arrival_curve_str) throws Exception {
+        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest
             // possible
             // string:
             // {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(service_curve_str);
+        initializeCurve(arrival_curve_str);
+        forceThroughOrigin();
 
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
-            // !isConvex()
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+            // !isConcave()
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
@@ -76,20 +80,20 @@ public class AffineServiceCurve_DNC extends AffineCurve_DNC implements ServiceCu
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public AffineServiceCurve_DNC copy() {
-        AffineServiceCurve_DNC sc_copy = new AffineServiceCurve_DNC();
-        sc_copy.copy(this);
-        return sc_copy;
+    public ArrivalCurve_DNC_Affine copy() {
+        ArrivalCurve_DNC_Affine ac_copy = new ArrivalCurve_DNC_Affine();
+        ac_copy.copy(this);
+        return ac_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof AffineServiceCurve_DNC) && super.equals(obj);
+        return (obj instanceof ArrivalCurve_DNC_Affine) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "SC".hashCode() * super.hashCode();
+        return "AC".hashCode() * super.hashCode();
     }
 
     /**
@@ -99,6 +103,6 @@ public class AffineServiceCurve_DNC extends AffineCurve_DNC implements ServiceCu
      */
     @Override
     public String toString() {
-        return "SC" + super.toString();
+        return "AC" + super.toString();
     }
 }
