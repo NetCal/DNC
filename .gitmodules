@@ -2,7 +2,7 @@
 	path = src/mpa_ext
 	url = git@github.com:NetCal/DiscoDNCext_MPARTC.git
 [submodule "src/test"]
-	path = src/test
+	path = src/functional_test
 	url = git@github.com:NetCal/DiscoDNC_tests.git
 [submodule "src/experiments"]
 	path = src/experiments
