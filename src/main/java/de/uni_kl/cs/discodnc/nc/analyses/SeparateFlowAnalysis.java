@@ -145,7 +145,17 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             Set<Flow> f_xxfcaller_server = network.getFlows(server);
             f_xxfcaller_server.removeAll(flows_to_serve);	// We compute their beta l.o.
             f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
-        	
+
+            betas_lo_server = new HashSet<ServiceCurve>();
+            
+            if(f_xxfcaller_server.isEmpty()) {
+            	betas_lo_server.add(server.getServiceCurve());
+        		result.map__server__alphas.put(server, Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+                ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
+                betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
+        		continue;
+            }
+            
             f_xxfcaller_server_onpath = new HashSet<Flow>();
             
 			// We might still be on the path of the flow of interest.
@@ -169,8 +179,6 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             // Convert f_xfoi_server to "f_xfoi_server_offpath"
             f_xxfcaller_server.removeAll(f_xxfcaller_server_onpath);
             f_xxfcaller_server.removeAll(f_xxfcaller_server_src);
-
-            betas_lo_server = new HashSet<ServiceCurve>();
 
             // Attention!
             // We cannot use a Set; we actually need a multiset in order to add equal sets of arrival curves.
