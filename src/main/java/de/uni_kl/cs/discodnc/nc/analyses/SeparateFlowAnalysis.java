@@ -122,7 +122,6 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     	return tandemAnalysis(network,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
     }
 
-    // TODO Change variable naming to the more generic one of AB Concat.
     public static SeparateFlowResults tandemAnalysis(Network network, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
             throws Exception {
     	SeparateFlowResults result = new SeparateFlowResults();
