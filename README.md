@@ -2,12 +2,35 @@
 
 Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.
 
-# Submodule structure
+# Submodule Structure
 
 * combine profiles as needed
 The DiscoDNC code consists of 4 parts, that are structured in 4 different repositories. The base code in `src/main` is contained in this repository, where the ones are included as submodules as follows. The MPARTC wrapper in `src/mpa_ext` is located in [DiscoDNCext_MPARTC](https://github.com/NetCal/DiscoDNCext_MPARTC), the test files in `src/test` are in [DiscoDNC_tests](https://github.com/NetCal/DiscoDNC_tests) and the experiment extension in `src/experiments` are in [DiscoDNC_experiments](https://github.com/NetCal/DiscoDNC_experiments). In order to checkout the submodules use `git submodule update --init --recursive`.
 
-# Compile jars
+# Development with Eclipse
+This small guide assumes you cloned the DiscoDNC repository, executed the above commands to pull the submodules, and created an Eclipse project from the code.
+You might also be able to do all this from Eclipse using its EGit plugin.
+
+These steps were tested with Eclipse Juno only.
+
+## Add Profiles
+Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
+
+## Maven Lifecycle Mapping Error (pom.xml Error)
+Click on the pom.xml, go to the Overview. Above the Overview caption, you are offerd the option to ignore build-helper:add-source in your workspace.
+
+## Add Source Folders
+Go to your Project's Properties > Java Build Path > Source and add
+* `src/experiments/java`
+* `src/mpa_ext/java`
+* `src/functional_test/java`
+
+## Tests
+* In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
+* You need to change the output folder, e.g., create `target/func-test-classes` for this purpose.
+* To run a test from within Eclipse, you need to add this folder to the test's classpath. Otherwise, it will break with a "class not found" exception. Go to Run Configurations ..., select your test > Classpath > select User Entries > click Advanced > Add Folder to do so.   
+
+# Compile jars with Maven
 
 Use the following maven profiles for compiling jars the different parts of the DiscoDNC
 
