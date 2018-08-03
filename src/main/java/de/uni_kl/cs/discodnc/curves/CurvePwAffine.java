@@ -390,11 +390,14 @@ public interface CurvePwAffine extends Curve {
      * @return The shifted curve.
      */
     static CurvePwAffine add(CurvePwAffine curve, Num dy) {
-        CurvePwAffine result = curve.copy();
-        for (int i = 0; i < curve.getSegmentCount(); i++) {
-            result.getSegment(i).setY(Num.getUtils().add(result.getSegment(i).getY(), dy));
+        CurvePwAffine curve_copy = curve.copy();
+        if(dy.eqZero()) {
+        	return curve_copy;
         }
-        return result;
+        for (int i = 0; i < curve.getSegmentCount(); i++) {
+            curve_copy.getSegment(i).setY(Num.getUtils().add(curve_copy.getSegment(i).getY(), dy));
+        }
+        return curve_copy;
     }
 
     static MaxServiceCurve add(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) {
@@ -512,8 +515,12 @@ public interface CurvePwAffine extends Curve {
      * @return The shifted curve.
      */
     static CurvePwAffine shiftRight(CurvePwAffine curve, Num dx) {
+    	if(dx.ltZero()) {
+    		return shiftLeftClipping(curve, dx);
+    	}
+    	
         CurvePwAffine curve_copy = curve.copy();
-        if (dx.eq(0.0)) {
+        if (dx.eqZero()) {
             return curve_copy;
         }
 
@@ -546,9 +553,17 @@ public interface CurvePwAffine extends Curve {
      * @return The shifted curve.
      */
     static CurvePwAffine shiftLeftClipping(CurvePwAffine curve, Num dx) {
+    	if(dx.ltZero()) {
+    		return shiftRight(curve, dx);
+    	}
+        
+    	CurvePwAffine curve_copy = curve.copy();
+    	if(dx.eqZero()) {
+    		return curve_copy;
+    	}
+    	
         int i = curve.getSegmentDefining(dx);
-        CurvePwAffine result = curve.copy();
-        LinearSegment segment_i = result.getSegment(i);
+        LinearSegment segment_i = curve_copy.getSegment(i);
         if (segment_i.getX().lt(dx)) {
             segment_i.setY(Num.getUtils().add(segment_i.getY(), Num.getUtils()
                     .mult(Num.getUtils().sub(dx, segment_i.getX()), segment_i.getGrad())));
@@ -556,13 +571,13 @@ public interface CurvePwAffine extends Curve {
             segment_i.setLeftopen(false);
         }
         for (int j = 1; j <= i; j++) {
-            result.removeSegment(0);
+            curve_copy.removeSegment(0);
         }
-        for (i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(Num.getUtils().sub(result.getSegment(i).getX(), dx));
+        for (i = 0; i < curve_copy.getSegmentCount(); i++) {
+            curve_copy.getSegment(i).setX(Num.getUtils().sub(curve_copy.getSegment(i).getX(), dx));
         }
 
-        return result;
+        return curve_copy;
     }
 
     // ------------------------------------------------------------------------------
