@@ -136,7 +136,6 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         // analysis's way.
 
         // Convolve all left over service curves, server by server
-//        Path foi_path = flow_of_interest.getPath();
 
         Link link_from_prev_s;
         Set<Flow> f_xxfcaller_server_onpath;
@@ -162,21 +161,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 	        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
 	        	}
 			}
-            
-//            // We might still be on the path of the flow of interest.
-//        	// The second check implies that there is also a link connecting server and the preceding one
-//        	if( foi_path.getServers().contains(server) && !foi_path.isSource(server) ) {
-//        		// If so, we need to consider this when we further backtrack.
-//				// Continued backtracking on the foipath requires to hand over the foi.
-//				// Backtracking offpath requires to hand over a NULL flow that has ID -1.
-//        		
-//        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
-//        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xfoi_server, network.getFlows(link_from_prev_s));
-//        		f_xxfcaller_server_onpath.remove(flow_of_interest);
-//        	} else {
-//        		f_xxfcaller_server_onpath = new HashSet<Flow>();
-//        	}
-        	
+                    	
         	// The interfering flows originating at the current server.
         	f_xxfcaller_server_src = network.getSourceFlows(server);
         	f_xxfcaller_server_src.remove(flow_of_interest);
