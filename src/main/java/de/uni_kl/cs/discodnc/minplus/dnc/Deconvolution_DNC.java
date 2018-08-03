@@ -248,8 +248,7 @@ public abstract class Deconvolution_DNC {
         // }
 
         if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the stability constraint
-        	// TODO Bug31: cannot cast the created service curve to an arrival curve.
-            return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+            return CurvePwAffine.getFactory().createUnboundedArrivals();
         }
         if (curve_2.equals(CurvePwAffine.getFactory().createZeroDelayInfiniteBurst())) {
             return CurvePwAffine.getFactory().createArrivalCurve((CurvePwAffine) curve_1);
