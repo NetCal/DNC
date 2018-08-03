@@ -102,8 +102,8 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 //		if(!betas_lo_subpath.keySet().containsAll(common_subpath.getServers())) {} // No need to check this.
 		
 		Set<ServiceCurve> betas_lo_server;
-		for( Server s : common_subpath.getServers() ) { // It's a LinkedList retaining the order of servers.
-			betas_lo_server = betas_lo_subpath.get(s);
+		for( Server server : common_subpath.getServers() ) { // It's a LinkedList retaining the order of servers.
+			betas_lo_server = betas_lo_subpath.get(server);
 			
 			if(betas_lo_server.size() == 1
 					&& betas_lo_server.contains(CurvePwAffine.getFactory().createZeroService())) {
@@ -111,7 +111,7 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 				return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createUnboundedArrivals()));
 			}
 			
-			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, s, betas_lo_server);
+			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_server);
 		}
 
 		if (configuration.abConsiderTFANodeBacklog()) {
