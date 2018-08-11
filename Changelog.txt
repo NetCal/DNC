@@ -1,3 +1,7 @@
+since v2.4.3 "Chimera"
+----------------------
+* Performance improvement for getSourceFlowArrivalCurve in case there is only a single such flow.
+
 v2.4.3 "Chimera" (2018-Aug-03)
 ------------------------------
 * Fixed Bug #31: Computation of infinite output bound due to stability constraint violation.
