@@ -1022,8 +1022,12 @@ public class Network {
 			return a_out;
 		} else {
 			if (source_flows_internal != null) {
-				for (Flow f : source_flows_internal) {
-					a_out = CurvePwAffine.add(a_out, f.getArrivalCurve());
+				if(source_flows_internal.size() == 1) {
+					a_out = source_flows_internal.iterator().next().getArrivalCurve();
+				} else {
+					for (Flow f : source_flows_internal) {
+						a_out = CurvePwAffine.add(a_out, f.getArrivalCurve());
+					}
 				}
 			}
 		}

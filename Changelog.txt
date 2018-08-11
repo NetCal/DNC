@@ -8,6 +8,7 @@ since v2.4.3 "Chimera"
 * PwAffine Curves and implementations:
   - Refactored code handling discontinuities (used with token bucket arrival curves).
   - No usage of a machine epsilon required anymore.
+* Performance improvement for getSourceFlowArrivalCurve in case there is only a single such flow.
 * Code cleanups.
 
 v2.4.3 "Chimera" (2018-Aug-03)
