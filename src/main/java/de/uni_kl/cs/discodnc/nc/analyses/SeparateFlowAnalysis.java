@@ -227,8 +227,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
 
-            betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server,
-                    configuration.tbrlConvolution());
+            betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
         }
         result.betas_e2e = betas_lo_path;
         
