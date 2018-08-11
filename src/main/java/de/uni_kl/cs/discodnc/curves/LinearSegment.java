@@ -113,8 +113,7 @@ public interface LinearSegment {
 
         LinearSegment result = createHorizontalLine(0.0);
         result.setX(x);
-        if (crossed || Num.getUtils().abs(Num.getUtils().sub(f1_x, f2_x))
-                .lt(Num.getFactory().getEpsilon())) {
+        if (crossed || f1_x.eq(f2_x)) {
             result.setY(f1_x);
             result.setGrad(Num.getUtils().min(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.lt(f2_x)) {
@@ -146,8 +145,7 @@ public interface LinearSegment {
 
         LinearSegment result = createHorizontalLine(0.0);
         result.setX(x);
-        if (crossed || Num.getUtils().abs(Num.getUtils().sub(f1_x, f2_x))
-                .lt(Num.getFactory().getEpsilon())) {
+        if (crossed || f1_x.eq(f2_x)) {
             result.setY(f1_x);
             result.setGrad(Num.getUtils().max(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.gt(f2_x)) {

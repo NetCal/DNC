@@ -142,10 +142,10 @@ public interface CurvePwAffine extends Curve {
                     break;
             }
 
-            if (x_next1.equals(x_next)) {
+            if (x_next1.eq(x_next)) {
                 i1++;
             }
-            if (x_next2.equals(x_next)) {
+            if (x_next2.eq(x_next)) {
                 i2++;
             }
             x = x_next;
@@ -637,9 +637,8 @@ public interface CurvePwAffine extends Curve {
     }
 
     static void beautify(CurvePwAffine c) {
-        int i = 0;
-        while (i < c.getSegmentCount() - 1) {
-            // Remove unreal discontinuity
+        // Remove unreal discontinuity.
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
             if (c.isUnrealDiscontinuity(i)) {
                 c.getSegment(i + 1).setLeftopen(c.getSegment(i).isLeftopen());
                 c.removeSegment(i);
@@ -648,38 +647,36 @@ public interface CurvePwAffine extends Curve {
             i++;
         }
 
-        i = 0;
-        while (i < c.getSegmentCount() - 1) {
-            // Join colinear segments
-            Num firstArg = Num.getUtils().sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
+        // Join colinear segments.
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
+            if(!(c.getSegment(i).getGrad().eq(c.getSegment(i + 1).getGrad()))) {
+            	continue;
+            }
 
             Num secondArg = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
             secondArg = Num.getUtils().mult(secondArg, c.getSegment(i).getGrad());
             secondArg = Num.getUtils().add(c.getSegment(i).getY(), secondArg);
-            secondArg = Num.getUtils().sub(c.getSegment(i + 1).getY(), secondArg);
-
-            if (Num.getUtils().abs(firstArg).lt(Num.getFactory().getEpsilon())
-                    && Num.getUtils().abs(secondArg).lt(Num.getFactory().getEpsilon())) {
-
-                c.removeSegment(i + 1);
-                if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
-                    Num resultPt1 = Num.getUtils().sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
-                    Num resultPt2 = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
-
-                    c.getSegment(i).setGrad(Num.getUtils().div(resultPt1, resultPt2));
-                }
-                continue;
+            if(!(secondArg.eq(c.getSegment(i + 1).getY()))) {
+            	continue;
             }
-            i++;
+
+            c.removeSegment(i + 1);
+            if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
+                Num resultPt1 = Num.getUtils().sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
+                Num resultPt2 = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+
+                c.getSegment(i).setGrad(Num.getUtils().div(resultPt1, resultPt2));
+            }
+            continue;
         }
 
-        for (i = 0; i < c.getSegmentCount() - 1; i++) {
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
             if (c.getSegment(i).getX().equals(c.getSegment(i + 1).getX())) {
                 c.getSegment(i).setGrad(Num.getFactory().createZero());
             }
         }
 
-        // Remove rate of tb arrival curves' first segment
+        // Remove rate of tb arrival curves' first segment.
         if (c.getSegmentCount() > 1 && c.getSegment(0).getX() == Num.getFactory().getZero()
                 && c.getSegment(0).getY() != Num.getFactory().getZero()
                 && c.getSegment(1).getX() == Num.getFactory().getZero()

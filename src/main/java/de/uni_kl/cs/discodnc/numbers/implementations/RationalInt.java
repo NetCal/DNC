@@ -46,23 +46,25 @@ import org.apache.commons.math3.fraction.Fraction;
  * objects, copy by value semantic are is applied.
  */
 public class RationalInt implements Num {
-    // Unfortunately you cannot give the constructor the double value 0.0000001
-    private static final Fraction EPSILON_FRACTION = new Fraction(1, 1000000);
     private static RationalInt instance = new RationalInt();
+
+    // TODO Bound in the observed epsilon in DiscoDNC test results after all operations had been executed. 
+    private static final Num TEST_EPSILON = new RationalInt(new Fraction(1, 1000000));
+    
     private Fraction value;
+    
     private Num POSITIVE_INFINITY = null;
     private Num NEGATIVE_INFINITY = null;
     private Num NaN = null;
     private Num ZERO = null;
-    private Num EPSILON = null;
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // --------------------------------------------------------------------------------------------------------------
+    
     private RationalInt() {
     }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Num Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
+    
     public RationalInt(int num) {
         value = new Fraction(num);
     }
@@ -86,161 +88,17 @@ public class RationalInt implements Num {
     public static RationalInt getInstance() {
         return instance;
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
 
-    public boolean eqZero() {
-        return value.getNumerator() == 0;
-    }
-
-    public boolean gt(Num num) {
-        if (num instanceof de.uni_kl.cs.discodnc.numbers.values.NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return false;
-        }
-        if (num instanceof NegativeInfinity) {
-            return true;
-        }
-
-        if (this.value.compareTo(((RationalInt) num).value) > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean gtZero() {
-        if (this.value.compareTo(Fraction.ZERO) > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean geq(Num num) {
-        if (num instanceof NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return false;
-        }
-        if (num instanceof NegativeInfinity) {
-            return true;
-        }
-
-        if (this.value.compareTo(((RationalInt) num).value) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean geqZero() {
-        if (this.value.compareTo(Fraction.ZERO) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean lt(Num num) {
-        if (num instanceof NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return true;
-        }
-        if (num instanceof NegativeInfinity) {
-            return false;
-        }
-
-        if (this.value.compareTo(((RationalInt) num).value) < 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean ltZero() {
-        if (this.value.compareTo(Fraction.ZERO) < 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean leq(Num num) {
-        if (num instanceof NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return true;
-        }
-        if (num instanceof NegativeInfinity) {
-            return false;
-        }
-
-        if (this.value.compareTo(((RationalInt) num).value) <= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean leqZero() {
-        if (this.value.compareTo(Fraction.ZERO) <= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isFinite() {
-        return true;
-    }
-
-    public boolean isInfinite() {
-        return false; // Handled by extraValues
-    }
-
-    public boolean isNaN() {
-        return false; // Handled by extraValues
-    }
-
-    @Override
     public double doubleValue() {
         return value.doubleValue();
     }
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public Num copy() {
-        return new RationalInt(this.value.getNumerator(), this.value.getDenominator());
-    }
-
-    @Override
-    public boolean eq(double num) {
-        return equals(new RationalInt(num));
-    }
-
-    public boolean equals(RationalInt num) {
-        if (this.value.compareTo(num.value) == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RationalInt)) {
-            return false;
-        } else {
-            return equals(((RationalInt) obj));
-        }
+    public Fraction getValue() {
+    	return new Fraction(this.value.getNumerator(), this.value.getDenominator());
     }
 
     @Override
@@ -252,6 +110,14 @@ public class RationalInt implements Num {
     public String toString() {
         return value.toString();
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory
+    // --------------------------------------------------------------------------------------------------------------
+
+    public Num copy() {
+        return new RationalInt(this.value.getNumerator(), this.value.getDenominator());
+    }
 
     public Num getPositiveInfinity() {
         if (POSITIVE_INFINITY == null) {
@@ -261,7 +127,7 @@ public class RationalInt implements Num {
     }
 
     public Num createPositiveInfinity() {
-        return new PositiveInfinity();
+        return PositiveInfinity.getInstance();
     }
 
     public Num getNegativeInfinity() {
@@ -272,7 +138,7 @@ public class RationalInt implements Num {
     }
 
     public Num createNegativeInfinity() {
-        return new NegativeInfinity();
+        return NegativeInfinity.getInstance();
     }
 
     public Num getNaN() {
@@ -283,7 +149,7 @@ public class RationalInt implements Num {
     }
 
     public Num createNaN() {
-        return new NaN();
+        return de.uni_kl.cs.discodnc.numbers.values.NaN.getInstance();
     }
 
     public Num getZero() {
@@ -297,15 +163,8 @@ public class RationalInt implements Num {
         return new RationalInt(0);
     }
 
-    public Num getEpsilon() {
-        if (EPSILON == null) {
-            EPSILON = createEpsilon();
-        }
-        return EPSILON;
-    }
-
-    public Num createEpsilon() {
-        return new RationalInt(EPSILON_FRACTION);
+    public Num getTestEpsilon() {
+        return TEST_EPSILON;
     }
 
     public Num create(int num) {
@@ -390,24 +249,140 @@ public class RationalInt implements Num {
         throw new Exception("Invalid string representation of a number based on "
                 + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
     }
-
+    
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface Implementations
+    // Comparisons
+    // --------------------------------------------------------------------------------------------------------------
+
+    // Compare to zero: >, >=, =, <=, <
+    public boolean gtZero() {
+        return this.value.compareTo(Fraction.ZERO) > 0;
+    }
+    
+    public boolean geqZero() {
+        return this.value.compareTo(Fraction.ZERO) >= 0;
+    }
+
+    public boolean eqZero() {
+        return value.getNumerator() == 0;
+    }
+
+    public boolean leqZero() {
+        return this.value.compareTo(Fraction.ZERO) <= 0;
+    }
+
+    public boolean ltZero() {
+        return this.value.compareTo(Fraction.ZERO) < 0;
+    }
+
+    // Compare to other number: >, >=, =, <=, <
+    public boolean gt(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return false;
+        }
+        if (num instanceof NegativeInfinity) {
+            return true;
+        }
+
+        return this.value.compareTo(((RationalInt) num).value) > 0;
+    }
+
+    public boolean geq(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return false;
+        }
+        if (num instanceof NegativeInfinity) {
+            return true;
+        }
+
+        return this.value.compareTo(((RationalInt) num).value) >= 0;
+    }
+
+	public boolean eq(Num num) {
+	    if (!(num instanceof RationalInt)) {
+	        return false;
+	    }
+	    
+	    return this.value.compareTo(((RationalInt)num).value) == 0;
+	}
+
+    public boolean eq(double num) {
+        return eq(new RationalInt(num));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof RationalInt)) {
+            return false;
+        } else {
+            return eq(((RationalInt) obj));
+        }
+    }
+
+    public boolean leq(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return true;
+        }
+        if (num instanceof NegativeInfinity) {
+            return false;
+        }
+
+        return this.value.compareTo(((RationalInt) num).value) <= 0;
+    }
+
+    public boolean lt(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return true;
+        }
+        if (num instanceof NegativeInfinity) {
+            return false;
+        }
+
+        return this.value.compareTo(((RationalInt) num).value) < 0;
+    }
+    
+    // Properties
+    public boolean isFinite() {
+        return true;
+    }
+
+    public boolean isInfinite() {
+        return false; // Handled by extraValues
+    }
+
+    public boolean isNaN() {
+        return false; // Handled by extraValues
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Operations (Utils)
     // --------------------------------------------------------------------------------------------------------------
 
     public Num add(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN
                 || (num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity)
                 || (num1 instanceof NegativeInfinity && num2 instanceof PositiveInfinity)) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) { // other num is not negative
             // infinity
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
         if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) { // other num is not positive
             // infinity
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
 
         // May throw MathArithmeticException due to integer overflow
@@ -416,21 +391,21 @@ public class RationalInt implements Num {
 
     public Num sub(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
 
         if (num1 instanceof NaN || num2 instanceof NaN
                 || (num1 instanceof PositiveInfinity && num2 instanceof PositiveInfinity)
                 || (num1 instanceof NegativeInfinity && num2 instanceof NegativeInfinity)) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity // num2 is not positive infinity
                 || num2 instanceof NegativeInfinity) { // num1 is not negative infinity
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
         if (num1 instanceof NegativeInfinity // num2 is not negative infinity
                 || num2 instanceof PositiveInfinity) { // num1 is not positive infinity
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
 
         // May throw MathArithmeticException due to integer overflow
@@ -439,34 +414,34 @@ public class RationalInt implements Num {
 
     public Num mult(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity) {
             if (num2.ltZero() || num2 instanceof NegativeInfinity) {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             } else {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             }
         }
         if (num2 instanceof PositiveInfinity) {
             if (num1.ltZero() || num1 instanceof NegativeInfinity) {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             } else {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             }
         }
         if (num1 instanceof NegativeInfinity) {
             if (num2.ltZero() || num2 instanceof NegativeInfinity) {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             } else {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             }
         }
         if (num2 instanceof NegativeInfinity) {
             if (num1.ltZero() || num1 instanceof NegativeInfinity) {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             } else {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             }
         }
 
@@ -480,20 +455,20 @@ public class RationalInt implements Num {
                 && (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity))) { // two infinities
             // in the
             // division
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity) { // positive infinity divided by some finite value
             if (num2.ltZero()) {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             } else {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             }
         }
         if (num1 instanceof NegativeInfinity) { // negative infinity divided by some finite value
             if (num2.ltZero()) {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             } else {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             }
         }
         if (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity) { // finite value divided by infinity
@@ -501,7 +476,7 @@ public class RationalInt implements Num {
         }
 
         if (((RationalInt) num2).eqZero()) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         } else {
             return new RationalInt(((RationalInt) num1).value.divide(((RationalInt) num2).value));
         }
@@ -509,10 +484,10 @@ public class RationalInt implements Num {
 
     public Num abs(Num num) {
         if (num instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num instanceof PositiveInfinity || num instanceof NegativeInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
 
         return new RationalInt(((RationalInt) num).value.abs());
@@ -520,11 +495,11 @@ public class RationalInt implements Num {
 
     public Num diff(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity || num1 instanceof NegativeInfinity
                 || num2 instanceof NegativeInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
 
         return sub(max(((RationalInt) num1), ((RationalInt) num2)), min(((RationalInt) num1), ((RationalInt) num2)));
@@ -532,10 +507,10 @@ public class RationalInt implements Num {
 
     public Num max(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
         if (num1 instanceof NegativeInfinity) {
             return num2.copy();
@@ -553,10 +528,10 @@ public class RationalInt implements Num {
 
     public Num min(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) {
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
         if (num1 instanceof PositiveInfinity) {
             return num2.copy();
@@ -574,47 +549,15 @@ public class RationalInt implements Num {
 
     public Num negate(Num num) {
         if (num instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num instanceof PositiveInfinity) {
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
         if (num instanceof NegativeInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
 
         return new RationalInt(((RationalInt) num).value.negate());
-    }
-
-    public boolean isFinite(Num num) {
-        if (num instanceof RationalInt) { // Only stores finite values
-            return true;
-        } else {
-            return false; // NaN is neither finite nor infinite
-        }
-    }
-
-    public boolean isInfinite(Num num) {
-        if ((num instanceof PositiveInfinity) || (num instanceof NegativeInfinity)) {
-            return true;
-        } else {
-            return false; // NaN is neither finite nor infinite
-        }
-    }
-
-    public boolean isNaN(Num num) {
-        if (num instanceof NaN) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    // --------------------------------------------------------------------------------------------------------------
-    // Misc
-    // --------------------------------------------------------------------------------------------------------------
-    
-    public Fraction getValue() {
-    	return new Fraction(this.value.getNumerator(), this.value.getDenominator());
     }
 }

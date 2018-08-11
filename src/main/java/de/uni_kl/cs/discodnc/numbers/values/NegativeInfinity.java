@@ -31,96 +31,37 @@ package de.uni_kl.cs.discodnc.numbers.values;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public final class NegativeInfinity implements Num {
+    private static NegativeInfinity instance = new NegativeInfinity();
+
     // --------------------------------------------------------------------------------------------------------------
-    // Num Interface Implementations
+    // Constructors
     // --------------------------------------------------------------------------------------------------------------
 
-    public NegativeInfinity() {
+    private NegativeInfinity() {
+    }
+    
+ 	public NegativeInfinity(int num) {
+    }
+ 	
+    public NegativeInfinity(double value) {
+    }
+    
+    public NegativeInfinity(int num, int den) {
+    }
+    
+    public NegativeInfinity(NegativeInfinity num) {
     }
 
-    public boolean eqZero() {
-        return false;
+    public static NegativeInfinity getInstance() {
+    	return instance;
     }
 
-    public boolean gt(Num num) {
-        return false;
-    }
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
 
-    public boolean gtZero() {
-        return false;
-    }
-
-    public boolean geq(Num num) {
-        return false;
-    }
-
-    public boolean geqZero() {
-        return false;
-    }
-
-    public boolean lt(Num num) {
-        return true;
-    }
-
-    public boolean ltZero() {
-        return true;
-    }
-
-    public boolean leq(Num num) {
-        return true;
-    }
-
-    public boolean leqZero() {
-        return true;
-    }
-
-    public boolean isFinite() {
-        return false;
-    }
-
-    public boolean isInfinite() {
-        return true;
-    }
-
-    public boolean isNaN() {
-        return false;
-    }
-
-    @Override
     public double doubleValue() {
         return Double.NEGATIVE_INFINITY;
-    }
-
-    @Override
-    public Num copy() {
-        return new NegativeInfinity();
-    }
-
-    public Num create(int num) {
-        throw new RuntimeException();
-    }
-
-    @Override
-    public boolean eq(double num) {
-        if (num == Double.NEGATIVE_INFINITY) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj instanceof NegativeInfinity) {
-            return true;
-        }
-        if (obj instanceof Num) {
-            return eq(((Num) obj).doubleValue());
-        }
-        return false;
     }
 
     @Override
@@ -134,8 +75,12 @@ public final class NegativeInfinity implements Num {
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface Implementations
+    // Factory
     // --------------------------------------------------------------------------------------------------------------
+
+    public Num copy() {
+        return instance;
+    }
 
     public Num getPositiveInfinity() {
         throw new RuntimeException();
@@ -146,11 +91,11 @@ public final class NegativeInfinity implements Num {
     }
 
     public Num getNegativeInfinity() {
-        return this;
+        return instance;
     }
 
     public Num createNegativeInfinity() {
-        return this;
+        return instance;
     }
 
     public Num getNaN() {
@@ -169,20 +114,20 @@ public final class NegativeInfinity implements Num {
         throw new RuntimeException();
     }
 
-    public Num getEpsilon() {
-        return this;
-    }
-
-    public Num createEpsilon() {
-        return this;
+    public Num getTestEpsilon() {
+        return instance;
     }
 
     public Num create(double value) {
         if (value == Double.NEGATIVE_INFINITY) {
-            return this;
+            return instance;
         } else {
             throw new RuntimeException();
         }
+    }
+
+    public Num create(int num) {
+        throw new RuntimeException();
     }
 
     public Num create(int num, int den) {
@@ -191,14 +136,99 @@ public final class NegativeInfinity implements Num {
 
     public Num create(String num_str) throws Exception {
         if (num_str.equals("-Infinity")) {
-            return this;
+            return instance;
         } else {
             throw new RuntimeException();
         }
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Comparisons
+    // --------------------------------------------------------------------------------------------------------------
+
+    // Compare to zero: >, >=, =, <=, <
+    public boolean gtZero() {
+        return false;
+    }
+
+    public boolean geqZero() {
+        return false;
+    }
+
+    public boolean eqZero() {
+        return false;
+    }
+
+    public boolean leqZero() {
+        return true;
+    }
+
+    public boolean ltZero() {
+        return true;
+    }
+
+    // Compare to other number: >, >=, =, <=, <
+    public boolean gt(Num num) {
+        return false;
+    }
+
+    public boolean geq(Num num) {
+        return false;
+    }
+
+    public boolean eq(Num num) {
+        if (num.ltZero() && num.isInfinite()) {
+            return true;
+        } else {
+        	return false;
+        }
+    }
+
+    public boolean eq(double num) {
+        if (num == Double.NEGATIVE_INFINITY) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof NegativeInfinity) {
+            return true;
+        }
+        if (obj instanceof Num) {
+            return eq(((Num) obj));
+        }
+        return false;
+    }
+
+    public boolean leq(Num num) {
+        return true;
+    }
+
+    public boolean lt(Num num) {
+        return true;
+    }
+
+    // Properties
+    public boolean isFinite() {
+        return false;
+    }
+
+    public boolean isInfinite() {
+        return true;
+    }
+
+    public boolean isNaN() {
+        return false;
+    }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface Implementations
+    // Operations (Utils)
     // --------------------------------------------------------------------------------------------------------------
 
     public Num add(Num num1, Num num2) {
@@ -234,18 +264,6 @@ public final class NegativeInfinity implements Num {
     }
 
     public Num negate(Num num) {
-        throw new RuntimeException();
-    }
-
-    public boolean isFinite(Num num) {
-        throw new RuntimeException();
-    }
-
-    public boolean isInfinite(Num num) {
-        throw new RuntimeException();
-    }
-
-    public boolean isNaN(Num num) {
         throw new RuntimeException();
     }
 }

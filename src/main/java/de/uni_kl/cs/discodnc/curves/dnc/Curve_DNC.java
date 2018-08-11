@@ -455,6 +455,10 @@ public class Curve_DNC implements CurvePwAffine {
 		clearMetaInfo();
 	}
 
+	// ------------------------------------------------------------
+	// Curve properties
+	// ------------------------------------------------------------
+
 	/**
 	 * Returns whether the inflection point is a (real or unreal) discontinuity.
 	 *
@@ -465,8 +469,7 @@ public class Curve_DNC implements CurvePwAffine {
 	 */
 	public boolean isDiscontinuity(int pos) {
 		return (pos + 1 < segments.length
-				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getX(), segments[pos].getX())))
-						.lt(Num.getFactory().getEpsilon()));
+				&& segments[pos + 1].getX().eq(segments[pos].getX()));
 	}
 
 	/**
@@ -479,14 +482,9 @@ public class Curve_DNC implements CurvePwAffine {
 	 *         <code>false</code> if not.
 	 */
 	public boolean isRealDiscontinuity(int pos) {
-		return (isDiscontinuity(pos)
-				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getY(), segments[pos].getY())))
-						.geq(Num.getFactory().getEpsilon()));
+		return (isDiscontinuity(pos) 
+				&& !(segments[pos + 1].getY().eq(segments[pos].getY())));
 	}
-
-	// ------------------------------------------------------------
-	// Curve properties
-	// ------------------------------------------------------------
 
 	/**
 	 * Returns whether the inflection point is an unreal discontinuity, i.e. the y0
@@ -500,8 +498,7 @@ public class Curve_DNC implements CurvePwAffine {
 	 */
 	public boolean isUnrealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
-				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getY(), segments[pos].getY())))
-						.lt(Num.getFactory().getEpsilon()));
+				&& segments[pos + 1].getY().eq(segments[pos].getY()));
 	}
 
 	/**
@@ -832,7 +829,7 @@ public class Curve_DNC implements CurvePwAffine {
 			}
 			for (int i = 0; i < segments.length; i++) {
 				Num y0 = segments[i].getY();
-				if (y0.lt(Num.getFactory().getZero()) && y0.gt(Num.getUtils().negate(Num.getFactory().getEpsilon()))) {
+				if (y0.lt(Num.getFactory().getZero())) {
 					y0 = Num.getFactory().createZero();
 				}
 				if (y0.gt(Num.getFactory().getZero()) || (y0.geq(Num.getFactory().getZero())

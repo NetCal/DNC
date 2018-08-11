@@ -35,7 +35,6 @@ import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
-import de.uni_kl.cs.discodnc.numbers.implementations.RealDoublePrecision;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -320,20 +319,17 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 
 	public boolean isDiscontinuity(int pos) {
 		return (pos + 1 < getSegmentCount()
-				&& (Math.abs(getSegmentRTC(pos + 1).x() - getSegmentRTC(pos).x())) < RealDoublePrecision.getInstance()
-						.createEpsilon().doubleValue());
+				&& (getSegmentRTC(pos + 1).x() == (getSegmentRTC(pos).x())));
 	}
 
 	public boolean isRealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
-				&& (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y())) >= RealDoublePrecision.getInstance()
-						.createEpsilon().doubleValue());
+				&& (getSegmentRTC(pos + 1).y() != getSegmentRTC(pos).y()));
 	}
 
 	public boolean isUnrealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
-				&& (Math.abs(getSegmentRTC(pos + 1).y() - getSegmentRTC(pos).y())) < RealDoublePrecision.getInstance()
-						.createEpsilon().doubleValue());
+				&& (getSegmentRTC(pos + 1).y() == getSegmentRTC(pos).y()));
 	}
 
 	public boolean isWideSenseIncreasing() {

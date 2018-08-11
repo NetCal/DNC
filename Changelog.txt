@@ -1,3 +1,15 @@
+since v2.4.3 "Chimera"
+----------------------
+* Num interface and its implementations: 
+  - Major code refactoring and cleanup.
+  - EPSILON is now only used for ignoring rounding errors in tests.
+  - Code trying to consider the machine epsilon in every operation was removed after a thorough review revealed bugs.
+* Tests now compare doubles and consider a TEST_EPSILON to not fail due to rounding errors.
+* PwAffine Curves and implementations:
+  - Refactored code handling discontinuities (used with token bucket arrival curves).
+  - No usage of a machine epsilon required anymore.
+* Code cleanups.
+
 v2.4.3 "Chimera" (2018-Aug-03)
 ------------------------------
 * Fixed Bug #31: Computation of infinite output bound due to stability constraint violation.

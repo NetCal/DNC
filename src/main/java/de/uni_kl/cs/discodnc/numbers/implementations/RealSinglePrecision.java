@@ -32,19 +32,23 @@ import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class RealSinglePrecision implements Num {
-    private static final float EPSILON_Float = 0.00016f; // Maximum rounding error observed in the functional tests
     private static RealSinglePrecision instance = new RealSinglePrecision();
-    private static boolean comparison_epsilon = false;
+    
+    // Bound in the observed epsilon in DiscoDNC test results after all operations had been executed. 
+    private static final double TEST_EPSILON_f = new Float(1.23e-4);
+    private static Num TEST_EPSILON = null;
+    
     private float value;
+    
     private Num POSITIVE_INFINITY = null;
     private Num NEGATIVE_INFINITY = null;
     private Num NaN = null;
     private Num ZERO = null;
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // --------------------------------------------------------------------------------------------------------------
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Num Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-    private Num EPSILON = null;
     private RealSinglePrecision() {
     }
 
@@ -64,157 +68,26 @@ public class RealSinglePrecision implements Num {
         value = num.value;
     }
 
+    private RealSinglePrecision(float value) {
+        this.value = value;
+    }
+
     public static RealSinglePrecision getInstance() {
         return instance;
     }
 
-    public boolean eqZero() {
-        if (comparison_epsilon) {
-            return (value <= EPSILON_Float) && (value >= -EPSILON_Float);
-        } else {
-            return value == 0.0f;
-        }
-    }
-
-    public boolean gt(Num num) {
-        float num_float = (float) num.doubleValue();
-
-        if (comparison_epsilon) {
-            return value > (num_float + EPSILON_Float);
-        } else {
-            return value > num_float;
-        }
-    }
-
-    public boolean gtZero() {
-        if (comparison_epsilon) {
-            return value > EPSILON_Float;
-        } else {
-            return value > 0.0f;
-        }
-    }
-
-    public boolean geq(Num num) {
-        float num_float = (float) num.doubleValue();
-
-        if (comparison_epsilon) {
-            return value >= (num_float + EPSILON_Float);
-        } else {
-            return value >= num_float;
-        }
-    }
-
-    public boolean geqZero() {
-        if (comparison_epsilon) {
-            return value >= EPSILON_Float;
-        } else {
-            return value >= 0.0f;
-        }
-    }
-
-    public boolean lt(Num num) {
-        float num_float = (float) num.doubleValue();
-
-        if (comparison_epsilon) {
-            return value < (num_float - EPSILON_Float);
-        } else {
-            return value < num_float;
-        }
-    }
-
-    public boolean ltZero() {
-        if (comparison_epsilon) {
-            return value < -EPSILON_Float;
-        } else {
-            return value < 0.0f;
-        }
-    }
-
-    public boolean leq(Num num) {
-        float num_float = (float) num.doubleValue();
-
-        if (comparison_epsilon) {
-            return value <= (num_float - EPSILON_Float);
-        } else {
-            return value <= num_float;
-        }
-    }
-
-    public boolean leqZero() {
-        if (comparison_epsilon) {
-            return value <= -EPSILON_Float;
-        } else {
-            return value <= 0.0f;
-        }
-    }
-
-    public boolean isFinite() {
-        return Float.isFinite(value);
-    }
-
-    public boolean isInfinite() {
-        return Float.isInfinite(value);
-    }
-
-    public boolean isNaN() {
-        return Float.isNaN(value);
-    }
-
-    @Override
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
+    
     public double doubleValue() {
         return (double) value;
     }
-
-    @Override
-    public Num copy() {
-        return new RealSinglePrecision(value);
+    
+    public float floatValue() {
+        return value;
     }
-
-    @Override
-    public boolean eq(double num) {
-        if (comparison_epsilon) {
-            return Math.abs(num - value) <= EPSILON_Float;
-        } else {
-            return Double.compare(value, num) == 0;
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
-    public boolean equals(RealSinglePrecision num) {
-        return equals(num.value);
-    }
-
-    private boolean equals(float num) {
-        // if(
-        // ( this.value == Float.POSITIVE_INFINITY && num == Float.POSITIVE_INFINITY )
-        // ||
-        // ( this.value == Float.NEGATIVE_INFINITY && num == Float.NEGATIVE_INFINITY )
-        // ) {
-        // 	return true;
-        // }
-        if (Float.isInfinite(this.value) && Float.isInfinite(num) && (Float.compare(this.value, num) == 0)) {
-            return true;
-        }
-
-        if (Math.abs(value - num) <= EPSILON_Float) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RealSinglePrecision)) {
-            return false;
-        } else {
-            return equals(((RealSinglePrecision) obj).value);
-        }
-    }
-
+    
     @Override
     public int hashCode() {
         return Float.hashCode(value);
@@ -223,6 +96,14 @@ public class RealSinglePrecision implements Num {
     @Override
     public String toString() {
         return Float.toString(value);
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory
+    // --------------------------------------------------------------------------------------------------------------
+
+    public Num copy() {
+        return new RealSinglePrecision(value);
     }
 
     public Num getPositiveInfinity() {
@@ -269,15 +150,11 @@ public class RealSinglePrecision implements Num {
         return new RealSinglePrecision(0);
     }
 
-    public Num getEpsilon() {
-        if (EPSILON == null) {
-            EPSILON = createEpsilon();
+    public Num getTestEpsilon() {
+        if (TEST_EPSILON == null) {
+        	TEST_EPSILON = new RealSinglePrecision(TEST_EPSILON_f);
         }
-        return EPSILON;
-    }
-
-    public Num createEpsilon() {
-        return new RealSinglePrecision(EPSILON_Float);
+        return TEST_EPSILON;
     }
 
     public Num create(int num) {
@@ -351,9 +228,92 @@ public class RealSinglePrecision implements Num {
         throw new Exception("Invalid string representation of a number based on "
                 + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Comparisons
+    // --------------------------------------------------------------------------------------------------------------
+
+    // Compare to zero: >, >=, =, <=, <
+    public boolean gtZero() {
+    	return value > 0.0f;
+    }
+    
+    public boolean geqZero() {
+    	return value >= 0.0f;
+    }
+    
+    public boolean eqZero() {
+    	return value == 0.0f;
+    }
+
+    public boolean leqZero() {
+    	return value <= 0.0f;
+    }
+
+    public boolean ltZero() {
+    	return value < 0.0f;
+    }
+
+    // Compare to other number: >, >=, =, <=, <
+    public boolean gt(Num num) {
+        float num_float = new Float(num.doubleValue());
+        return value > num_float;
+    }
+    
+    public boolean geq(Num num) {
+        float num_float = new Float(num.doubleValue());
+        return value >= num_float;
+    }
+    
+    public boolean eq(Num num) {
+        if (!(num instanceof RealSinglePrecision)) {
+            return false;
+        }
+        return eq(((RealSinglePrecision)num).value);
+    }
+
+    public boolean eq(double num) {
+    	return Double.compare(value, num) == 0;
+    }
+
+    private boolean eq(float num) {
+        return Float.compare(this.value, num) == 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof RealSinglePrecision)) {
+            return false;
+        } else {
+            return eq(((RealSinglePrecision) obj).value);
+        }
+    }
+    
+    public boolean leq(Num num) {
+        float num_float = new Float(num.doubleValue());
+        return value <= num_float;
+    }
+
+    public boolean lt(Num num) {
+        float num_float = new Float(num.doubleValue());
+        return value < num_float;
+    }
+
+    // Properties
+    public boolean isFinite() {
+        return Float.isFinite(value);
+    }
+
+    public boolean isInfinite() {
+        return Float.isInfinite(value);
+    }
+
+    public boolean isNaN() {
+        return Float.isNaN(value);
+    }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface Implementations
+    // Operations (Utils)
     // --------------------------------------------------------------------------------------------------------------
 
     public Num add(Num num1, Num num2) {
@@ -362,9 +322,6 @@ public class RealSinglePrecision implements Num {
 
     public Num sub(Num num1, Num num2) {
         float result = ((RealSinglePrecision) num1).value - ((RealSinglePrecision) num2).value;
-        if (comparison_epsilon && Math.abs(result) <= EPSILON_Float) {
-            result = 0;
-        }
         return new RealSinglePrecision(result);
     }
 
@@ -397,17 +354,5 @@ public class RealSinglePrecision implements Num {
 
     public Num negate(Num num) {
         return new RealSinglePrecision(((RealSinglePrecision) num).value * -1);
-    }
-
-    public boolean isFinite(Num num) {
-        return ((RealSinglePrecision) num).isFinite();
-    }
-
-    public boolean isInfinite(Num num) {
-        return ((RealSinglePrecision) num).isInfinite();
-    }
-
-    public boolean isNaN(Num num) {
-        return ((RealSinglePrecision) num).isNaN();
     }
 }

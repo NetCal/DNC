@@ -38,13 +38,9 @@ import de.uni_kl.cs.discodnc.numbers.values.NegativeInfinity;
 import de.uni_kl.cs.discodnc.numbers.values.PositiveInfinity;
 
 public interface Num {
-    // --------------------------------------------------------------------------------------------------------------
-    // Num Interface
-    // --------------------------------------------------------------------------------------------------------------
-
-    final Num NaN = new NaN();
-    final Num NEGATIVE_INFINITY = new NegativeInfinity();
-    final Num POSITIVE_INFINITY = new PositiveInfinity();
+    final Num NaN = new NaN(Double.NaN);
+    final Num POSITIVE_INFINITY = new PositiveInfinity(Double.POSITIVE_INFINITY);
+    final Num NEGATIVE_INFINITY = new NegativeInfinity(Double.NEGATIVE_INFINITY);
 
     public static Num getFactory() {
         switch (CalculatorConfig.getInstance().getNumImpl()) {
@@ -61,53 +57,54 @@ public interface Num {
     }
 
     public static Num getUtils() {
-        switch (CalculatorConfig.getInstance().getNumImpl()) {
-            case REAL_SINGLE_PRECISION:
-                return RealSinglePrecision.getInstance();
-            case RATIONAL_INTEGER:
-                return RationalInt.getInstance();
-            case RATIONAL_BIGINTEGER:
-                return RationalBigInt.getInstance();
-            case REAL_DOUBLE_PRECISION:
-            default:
-                return RealDoublePrecision.getInstance();
-        }
+    	return getFactory();
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // --------------------------------------------------------------------------------------------------------------
+    
+    /*
+     * When creating a class N that implements this Num interface,
+     * please include at least these constructors:
+     * 
+     *  private N()
+     *  public N(int num)
+     *  public N(double value)
+     *  public N(int num, int den)
+     *  public N(N num)
+     */
 
+    /* 
+     * Creating a class N extending Num, please add a method
+     *		public static N getInstance() { return instance; }
+     * to get a generic instance to be used as a factory and utils dispatcher above.
+     */
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
+    
     double doubleValue();
 
-    boolean eq(double num);
-
-    boolean eqZero();
-
-    boolean gt(Num num);
-
-    boolean gtZero();
-
-    boolean geq(Num num);
-
-    boolean geqZero();
-
-    boolean lt(Num num);
-
-    boolean ltZero();
-
-    boolean leq(Num num);
-
+    /*
+     * When creating a class N that implements this Num interface,
+     * that is either a primitive data type or 
+     * an instance of a different class.
+     */
+    
+    @Override
+    int hashCode();
+    
+    @Override
+    String toString();
+    
     // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface
+    // Factory
     // --------------------------------------------------------------------------------------------------------------
-
-    boolean leqZero();
-
-    boolean isFinite();
-
-    boolean isInfinite();
-
-    boolean isNaN();
 
     Num copy();
-
+    
     Num getPositiveInfinity();
 
     Num createPositiveInfinity();
@@ -117,16 +114,14 @@ public interface Num {
     Num createNegativeInfinity();
 
     Num getNaN();
-
+    
     Num createNaN();
 
     Num getZero();
 
     Num createZero();
 
-    Num getEpsilon();
-
-    Num createEpsilon();
+    Num getTestEpsilon();
 
     Num create(int num);
 
@@ -134,11 +129,49 @@ public interface Num {
 
     Num create(int num, int den);
 
+    Num create(String num_str) throws Exception;
+    
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface
+    // Comparisons
     // --------------------------------------------------------------------------------------------------------------
 
-    Num create(String num_str) throws Exception;
+    // Compare to zero: >, >=, =, <=, <
+    boolean gtZero();
+
+    boolean geqZero();
+
+    boolean eqZero();
+
+    boolean leqZero();
+
+    boolean ltZero();
+
+    // Compare to other number: >, >=, =, <=, <
+    boolean gt(Num num);
+    
+    boolean geq(Num num);
+
+    boolean eq(Num num);
+    
+    boolean eq(double num);
+
+    @Override
+    boolean equals(Object obj);
+    
+    boolean leq(Num num);
+
+    boolean lt(Num num);
+
+    // Properties
+    boolean isFinite();
+
+    boolean isInfinite();
+
+    boolean isNaN();
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Operations (Utils)
+    // --------------------------------------------------------------------------------------------------------------
 
     Num add(Num num1, Num num2);
 
@@ -157,10 +190,4 @@ public interface Num {
     Num min(Num num1, Num num2);
 
     Num negate(Num num);
-
-    boolean isFinite(Num num);
-
-    boolean isInfinite(Num num);
-
-    boolean isNaN(Num num);
 }
