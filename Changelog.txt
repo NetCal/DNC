@@ -2,9 +2,10 @@ since v2.4.3 "Chimera"
 ----------------------
 * Num interface and its implementations: 
   - Major code refactoring and cleanup.
-  - EPSILON is now only used for ignoring rounding errors in tests.
+  - Epsilons (for rounding purposes) are no longer included.
   - Code trying to consider the machine epsilon in every operation was removed after a thorough review revealed bugs.
-* Tests now compare doubles and consider a TEST_EPSILON to not fail due to rounding errors.
+* Functional tests: 
+  - Test results now also hold the required epsilons for individual test cases.
 * PwAffine Curves and implementations:
   - Refactored code handling discontinuities (used with token bucket arrival curves).
   - No usage of a machine epsilon required anymore.
