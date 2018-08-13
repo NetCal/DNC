@@ -54,13 +54,17 @@ public class FF_4S_1SC_3F_1AC_3P_Results extends DncTestResults {
 		RationalBigInt rational_bigint_epsilon = new RationalBigInt(1, 1000000000);
 
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(5985, 64), num_factory.create(9425, 16));
-			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(3965, 64), num_factory.create(9425, 16));
-			addBounds(2, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(885, 16), num_factory.create(1825, 4));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(6425, 36), num_factory.create(6125, 9));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(5985, 64), num_factory.create(9425, 16));
+			
 			addBounds(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(11975, 90), num_factory.create(6125, 9));
+			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(3965, 64), num_factory.create(9425, 16));
+			
 			addBounds(2, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(685, 6), num_factory.create(1475, 3));
+			addBounds(2, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(885, 16), num_factory.create(1825, 4));
 			
 			/*
 			 * Observed test failures:
@@ -89,18 +93,24 @@ public class FF_4S_1SC_3F_1AC_3P_Results extends DncTestResults {
 
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(1, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(2, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(2, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(1795, 24), num_factory.create(3125, 8));
-			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(10715, 192), num_factory.create(18925, 64));
-			addBounds(2, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(295, 6), num_factory.create(525, 2));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(875, 9), num_factory.create(4525, 9));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(1795, 24), num_factory.create(3125, 8));
+			
 			addBounds(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(2095, 27), num_factory.create(10925, 27));
+			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(10715, 192), num_factory.create(18925, 64));
+			
 			addBounds(2, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(65), num_factory.create(1025, 3));
+			addBounds(2, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(295, 6), num_factory.create(525, 2));
 
 			/*
 			 * Observed test failures:
@@ -128,12 +138,16 @@ public class FF_4S_1SC_3F_1AC_3P_Results extends DncTestResults {
 
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(2, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(2, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(875, 9), num_factory.create(4525, 9));
 			addBounds(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(2095, 27), num_factory.create(10925, 27));
 			addBounds(2, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(65), num_factory.create(1025, 3));

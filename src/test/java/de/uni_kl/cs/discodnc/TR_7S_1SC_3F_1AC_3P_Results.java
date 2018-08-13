@@ -54,21 +54,29 @@ public class TR_7S_1SC_3F_1AC_3P_Results extends DncTestResults {
 		RationalBigInt rational_bigint_epsilon = new RationalBigInt(1, 1000000000);
 		
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(395, 2), num_factory.create(1375));
-			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(875, 4), num_factory.create(1375));
-			addBounds(2, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(180), num_factory.create(1375));
+		    // --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(660), num_factory.create(1375));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(395, 2), num_factory.create(1375));
+			
 			addBounds(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(2725, 4), num_factory.create(1375));
+			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(875, 4), num_factory.create(1375));
+			
 			addBounds(2, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(1155, 2), num_factory.create(1375));
+			addBounds(2, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(180), num_factory.create(1375));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(165), num_factory.create(1675, 2));
-			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(165), num_factory.create(1675, 2));
-			addBounds(2, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(295, 2), num_factory.create(750));
+		    // --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(1735, 6), num_factory.create(4375, 3));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(165), num_factory.create(1675, 2));
+			
 			addBounds(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(1655, 6), num_factory.create(4175, 3));
+			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(165), num_factory.create(1675, 2));
+			
 			addBounds(2, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(505, 2), num_factory.create(1275));
+			addBounds(2, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(295, 2), num_factory.create(750));
 			
 			/*
 			 * Observed test failures:
@@ -106,15 +114,21 @@ public class TR_7S_1SC_3F_1AC_3P_Results extends DncTestResults {
 
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// PMOO
+		    // --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(355, 2), num_factory.create(900));
 			addBounds(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(375, 2), num_factory.create(950));
 			addBounds(2, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(355, 2), num_factory.create(900));
 		}
-
+		
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(0, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(1375));
 		addBounds(1, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(1375));
 		addBounds(2, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(1375));

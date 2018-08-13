@@ -54,11 +54,14 @@ public class S_1SC_10F_10AC_Results extends DncTestResults {
 		RationalBigInt rational_bigint_epsilon = new RationalBigInt(1, 1000000000);
 
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(15.5), num_factory.create(110));
-			addBounds(6,  Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(15.5), num_factory.create(110));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(310, 9), num_factory.create(110));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(15.5), num_factory.create(110));
+			
 			addBounds(6,  Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(310, 9), num_factory.create(110));
+			addBounds(6,  Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(15.5), num_factory.create(110));
 
 			/*
 			 * Observed test failures:
@@ -75,27 +78,33 @@ public class S_1SC_10F_10AC_Results extends DncTestResults {
 			 * 		TFA delay ==> expected <310 / 9> but was <1116892707587883008 / 32425917317067569>
 			 */
 			real_double_epsilon = new RealDoublePrecision(new Double(1e-14));
-			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
-			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
+			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
+			
 			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
+			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
 
 			real_single_epsilon = new RealSinglePrecision(new Double(1e-5));
-			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
-			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
+			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
+			
 			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
+			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
 
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(6, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(1796, 115), num_factory.create(127, 50));
-			addBounds(6,  Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(2099, 130), num_factory.create(434, 25));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(775, 23), num_factory.create(100, 23));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(1796, 115), num_factory.create(127, 50));
+			
 			addBounds(6,  Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(775, 26), num_factory.create(350, 13));
+			addBounds(6,  Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(2099, 130), num_factory.create(434, 25));
 
 			/*
 			 * Observed test failures:
@@ -119,6 +128,7 @@ public class S_1SC_10F_10AC_Results extends DncTestResults {
 			real_double_epsilon = new RealDoublePrecision(new Double(8e-15));
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
+			
 			addEpsilon(6, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
 			addEpsilon(6, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
 
@@ -132,10 +142,13 @@ public class S_1SC_10F_10AC_Results extends DncTestResults {
 
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(6, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(6, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(775, 23), num_factory.create(100, 23));
 			addBounds(6,  Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(775, 26), num_factory.create(350, 13));
 
@@ -161,12 +174,16 @@ public class S_1SC_10F_10AC_Results extends DncTestResults {
 
 			real_single_epsilon = new RealSinglePrecision(new Float(4e-6));
 			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
+			
 			addEpsilon(6, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
 
 			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(6, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 		}
 
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(0, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(110));
 		addBounds(6, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(110));
 

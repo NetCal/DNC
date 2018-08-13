@@ -50,13 +50,17 @@ public class TA_2S_2SC_1F_1AC_1P_Results extends DncTestResults {
 		RationalBigInt rational_bigint_epsilon = new RationalBigInt(1, 1000000000);
 		
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(31), num_factory.create(105));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(31), num_factory.create(105));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(31), num_factory.create(105));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(121, 6), num_factory.create(105));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(121, 6), num_factory.create(105));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(121, 6), num_factory.create(105));
 			
 			/*
 			 * Observed test failures:
@@ -67,7 +71,9 @@ public class TA_2S_2SC_1F_1AC_1P_Results extends DncTestResults {
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(121, 6), num_factory.create(105));
 			
 			/*
@@ -79,6 +85,9 @@ public class TA_2S_2SC_1F_1AC_1P_Results extends DncTestResults {
 			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 		}
 
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(0, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(105));
 	}
 }

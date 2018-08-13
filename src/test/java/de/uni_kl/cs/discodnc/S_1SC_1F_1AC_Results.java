@@ -46,18 +46,27 @@ public class S_1SC_1F_1AC_Results extends DncTestResults {
 		Num num_factory = Num.getFactory();
 		
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(12.5), num_factory.create(75));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(12.5), num_factory.create(75));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(12.5), num_factory.create(75));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(12.5), num_factory.create(75));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(12.5), num_factory.create(75));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(12.5), num_factory.create(75));
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(12.5), num_factory.create(75));
 		}
 
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(0, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(75));
 	}
 }

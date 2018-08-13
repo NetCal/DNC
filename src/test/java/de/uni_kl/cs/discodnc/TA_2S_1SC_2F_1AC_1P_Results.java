@@ -46,23 +46,34 @@ public class TA_2S_1SC_2F_1AC_1P_Results extends DncTestResults {
 		Num num_factory = Num.getFactory();
 		
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(40), num_factory.create(250));
-			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(40), num_factory.create(250));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.getPositiveInfinity(), num_factory.create(250));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(40), num_factory.create(250));
+			
 			addBounds(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.getPositiveInfinity(), num_factory.create(250));
+			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(40), num_factory.create(250));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(35), num_factory.create(175));
-			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(35), num_factory.create(175));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(65), num_factory.create(325));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(35), num_factory.create(175));
+			
 			addBounds(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(65), num_factory.create(325));
+			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(35), num_factory.create(175));
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(50), num_factory.create(250));
 			addBounds(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(50), num_factory.create(250));
 		}
 
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(0, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(250));
 		addBounds(1, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(250));
 	}

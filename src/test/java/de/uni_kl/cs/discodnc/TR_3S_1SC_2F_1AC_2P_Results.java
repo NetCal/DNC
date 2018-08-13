@@ -50,17 +50,23 @@ public class TR_3S_1SC_2F_1AC_2P_Results extends DncTestResults {
 		RationalBigInt rational_bigint_epsilon = new RationalBigInt(1, 1000000000);
 		
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(53.75), num_factory.create(450));
-			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(53.75), num_factory.create(450));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(345, 4), num_factory.create(450));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(53.75), num_factory.create(450));
+			
 			addBounds(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(345, 4), num_factory.create(450));
+			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(53.75), num_factory.create(450));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(575, 12), num_factory.create(1025, 4));
-			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(575, 12), num_factory.create(1025, 4));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(170, 3), num_factory.create(300));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(575, 12), num_factory.create(1025, 4));
+			
 			addBounds(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(170, 3), num_factory.create(300));
+			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(575, 12), num_factory.create(1025, 4));
 			
 			/*
 			 * Observed test failures:
@@ -70,10 +76,13 @@ public class TR_3S_1SC_2F_1AC_2P_Results extends DncTestResults {
 			 */
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(170, 3), num_factory.create(300));
 			addBounds(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(170, 3), num_factory.create(300));
 			
@@ -86,7 +95,10 @@ public class TR_3S_1SC_2F_1AC_2P_Results extends DncTestResults {
 			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 		}
-
+		
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(0, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(450));
 		addBounds(1, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(450));
 	}

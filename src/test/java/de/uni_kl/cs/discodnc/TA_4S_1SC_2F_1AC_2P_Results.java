@@ -60,19 +60,27 @@ public class TA_4S_1SC_2F_1AC_2P_Results extends DncTestResults {
 		ab_sets_PBOO.add(DncTestMethodSources.pair_1);
 		
 		for( Set<ArrivalBoundMethod> ab_set : ab_sets_PBOO ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(7985, 64), num_factory.create(550));
-			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(65), num_factory.create(550));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(2335, 12), num_factory.create(1700, 3));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(7985, 64), num_factory.create(550));
+			
 			addBounds(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(130), num_factory.create(550));
+			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(65), num_factory.create(550));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(535, 6), num_factory.create(925, 2));
-			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(355, 6), num_factory.create(625, 2));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(105), num_factory.create(1625, 3));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(535, 6), num_factory.create(925, 2));
+			
 			addBounds(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(235, 3), num_factory.create(1225, 3));
+			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(355, 6), num_factory.create(625, 2));
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(290, 3), num_factory.create(500));
 			addBounds(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(190, 3), num_factory.create(1000, 3));
 		}
@@ -86,27 +94,41 @@ public class TA_4S_1SC_2F_1AC_2P_Results extends DncTestResults {
 		ab_sets_PMOO.add(DncTestMethodSources.triplet);
 		
 		for( Set<ArrivalBoundMethod> ab_set : ab_sets_PMOO ) {
-			// TFA
-			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(7985, 64), num_factory.create(550));
-			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(65), num_factory.create(550));
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(765, 4), num_factory.create(550));
+			addBounds(0, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(7985, 64), num_factory.create(550));
+			
 			addBounds(1, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(130), num_factory.create(550));
+			addBounds(1, Analyses.TFA, ab_set, Multiplexing.FIFO, num_factory.create(65), num_factory.create(550));
 
-			// SFA
-			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(535, 6), num_factory.create(925, 2));
-			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(355, 6), num_factory.create(625, 2));
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(105), num_factory.create(1625, 3));
+			addBounds(0, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(535, 6), num_factory.create(925, 2));
+			
 			addBounds(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, num_factory.create(235, 3), num_factory.create(1225, 3));
+			addBounds(1, Analyses.SFA, ab_set, Multiplexing.FIFO, num_factory.create(355, 6), num_factory.create(625, 2));
 
-			// PMOO
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			addBounds(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(290, 3), num_factory.create(500));
 			addBounds(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, num_factory.create(190, 3), num_factory.create(1000, 3));
 		}
 
+		// --------------------------------------------------------------------------------------------------------------
+	    // Sink tree
+	    // --------------------------------------------------------------------------------------------------------------
 		addBounds(1, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY, num_factory.getNaN(), num_factory.create(550));
-		
 
-		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {/*
+		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
+			// --------------------------------------------------------------------------------------------------------------
+		    // TFA
+		    // --------------------------------------------------------------------------------------------------------------
+			/*
 			 * Observed test failures:
 			 * 
 			 * Real Double: Epsilon set to ignore
@@ -131,6 +153,9 @@ public class TA_4S_1SC_2F_1AC_2P_Results extends DncTestResults {
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.TFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			
+			// --------------------------------------------------------------------------------------------------------------
+		    // SFA
+		    // --------------------------------------------------------------------------------------------------------------
 			/*
 			 * Observed test failures:
 			 * 
@@ -155,9 +180,13 @@ public class TA_4S_1SC_2F_1AC_2P_Results extends DncTestResults {
 
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			
+			// --------------------------------------------------------------------------------------------------------------
+		    // PMOO
+		    // --------------------------------------------------------------------------------------------------------------
 			/*
 			 * Observed test failures:
 			 * 
