@@ -10,6 +10,7 @@ since v2.4.3 "Chimera"
   - Refactored code handling discontinuities (used with token bucket arrival curves).
   - No usage of a machine epsilon required anymore.
 * Performance improvement for getSourceFlowArrivalCurve in case there is only a single such flow.
+* Remove unnecessary cast from Num to Num when bounding backlogs.
 * Code cleanups.
 
 v2.4.3 "Chimera" (2018-Aug-03)
