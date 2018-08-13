@@ -32,7 +32,12 @@ import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.numbers.implementations.RationalBigInt;
+import de.uni_kl.cs.discodnc.numbers.implementations.RationalInt;
+import de.uni_kl.cs.discodnc.numbers.implementations.RealDoublePrecision;
+import de.uni_kl.cs.discodnc.numbers.implementations.RealSinglePrecision;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,14 +45,23 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class DncTestResults {
-	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> map__foi_id__analysis;
+	// TODO Convert to per test case epsilons 
+	protected static Num EPSILON_REAL_DOUBLE = new RealDoublePrecision(0); // new RealDoublePrecision(new Double(3e-13));
+	protected static Num EPSILON_REAL_SINGLE = new RealSinglePrecision(0); // new RealSinglePrecision(new Float(1.23e-4));
+	protected static Num EPSILON_RATIONAL_BIGINT = new RationalBigInt(0);
+	protected static Num EPSILON_RATIONAL_INT = new RationalInt(0);
+	
+	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> results_map;
+	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>> epsilon_map;
 	
 	public DncTestResults() {
-		map__foi_id__analysis = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>>();
+		results_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>>();
+		epsilon_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>>();
 	}
 
 	protected void clear() {
-		map__foi_id__analysis.clear();
+		results_map.clear();
+		epsilon_map.clear();
 	}
 
 	protected abstract void initialize();
@@ -56,10 +70,10 @@ public abstract class DncTestResults {
 	protected void addBounds(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, Num delay, Num backlog) {
 		AnalysisResults expected_results = new AnalysisResults(delay, backlog, null);
 
-		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> foi_maps = map__foi_id__analysis.get(flowId);
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> foi_maps = results_map.get(flowId);
 		if(foi_maps == null) {
 			foi_maps = new HashMap<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>();
-			map__foi_id__analysis.put(flowId, foi_maps);
+			results_map.put(flowId, foi_maps);
 		}
 		
 		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>> foi_analysis_maps = foi_maps.get(analysis);
@@ -85,7 +99,7 @@ public abstract class DncTestResults {
 
 	public AnalysisResults getBounds(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux) {
 
-		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> foi_maps = map__foi_id__analysis.get(flowId);
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> foi_maps = results_map.get(flowId);
 		if(foi_maps == null || foi_maps.isEmpty()) {
 			throw new RuntimeException("No DNC test results fournd! The results file may be corrupted.");
 		}
@@ -123,13 +137,74 @@ public abstract class DncTestResults {
 			throw new RuntimeException("Ambiguous DNC test results! The results file may be corrupted.");
 		}
 	}
+	
+	protected void addEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumImpl num_rep, Num epsilon) {
+
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>> foi_maps = epsilon_map.get(flowId);
+		if(foi_maps == null) {
+			foi_maps = new HashMap<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>();
+			epsilon_map.put(flowId, foi_maps);
+		}
+		
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>> foi_analysis_maps = foi_maps.get(analysis);
+		if(foi_analysis_maps == null) {
+			foi_analysis_maps =  new HashMap<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>();
+			foi_maps.put(analysis, foi_analysis_maps);
+		}
+		
+		Map<Multiplexing, Map<NumImpl, Num>> foi_analysis_ab_maps = foi_analysis_maps.get(ab_set);
+		if(foi_analysis_ab_maps == null) {
+			foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumImpl, Num>>();
+			foi_analysis_maps.put(ab_set, foi_analysis_ab_maps);
+		}
+		
+		Map<NumImpl, Num> existing_results = foi_analysis_ab_maps.get(mux);
+		if(existing_results == null) {
+			existing_results = new HashMap<NumImpl, Num>();
+			foi_analysis_ab_maps.put(mux, existing_results);
+		}
+
+		existing_results.put(num_rep,epsilon);
+	}
+
+	public Num getEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumImpl num_rep) {
+		
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>> foi_maps = epsilon_map.get(flowId);
+		if(foi_maps == null || foi_maps.isEmpty()) {
+			return Num.getFactory().createZero();
+		}
+		
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>> foi_analysis_maps = foi_maps.get(analysis);
+		if(foi_analysis_maps == null || foi_analysis_maps.isEmpty()) {
+			return Num.getFactory().createZero();
+		}
+		
+		Map<Multiplexing, Map<NumImpl, Num>> foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumImpl, Num>>(); 
+		for(Map.Entry<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>> abs_to_map : foi_analysis_maps.entrySet()) {
+			if( abs_to_map.getKey().size() == ab_set.size()
+					&& abs_to_map.getKey().containsAll(ab_set)) {
+				foi_analysis_ab_maps = abs_to_map.getValue();
+				break;
+			}
+		}
+		if(foi_analysis_ab_maps.isEmpty()) {
+			return Num.getFactory().createZero();
+		}
+		
+		Map<NumImpl, Num> existing_epsilons = foi_analysis_ab_maps.get(mux);
+		if(foi_analysis_ab_maps == null || foi_analysis_ab_maps.isEmpty()) {
+			return Num.getFactory().createZero();
+		}
+		
+		return existing_epsilons.getOrDefault(num_rep, Num.getFactory().createZero());
+	}
 
 	@Override
 	public String toString() {
 		StringBuffer exp_results_str = new StringBuffer();
 		String analysis_str, ab_str, mux_str; 
 		
-		for( Map.Entry<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> foi_map_entry : map__foi_id__analysis.entrySet() ) {
+		for( Map.Entry<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> foi_map_entry : results_map.entrySet() ) {
 			exp_results_str.append("flow Id: " + foi_map_entry.getKey().toString());
 			exp_results_str.append("\n");
 			

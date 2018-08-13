@@ -34,10 +34,6 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 public class RealSinglePrecision implements Num {
     private static RealSinglePrecision instance = new RealSinglePrecision();
     
-    // Bound in the observed epsilon in DiscoDNC test results after all operations had been executed. 
-    private static final double TEST_EPSILON_f = new Float(1.23e-4);
-    private static Num TEST_EPSILON = null;
-    
     private float value;
     
     private Num POSITIVE_INFINITY = null;
@@ -148,13 +144,6 @@ public class RealSinglePrecision implements Num {
 
     public Num createZero() {
         return new RealSinglePrecision(0);
-    }
-
-    public Num getTestEpsilon() {
-        if (TEST_EPSILON == null) {
-        	TEST_EPSILON = new RealSinglePrecision(TEST_EPSILON_f);
-        }
-        return TEST_EPSILON;
     }
 
     public Num create(int num) {

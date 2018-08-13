@@ -48,9 +48,6 @@ import org.apache.commons.math3.fraction.Fraction;
 public class RationalInt implements Num {
     private static RationalInt instance = new RationalInt();
 
-    // TODO Bound in the observed epsilon in DiscoDNC test results after all operations had been executed. 
-    private static final Num TEST_EPSILON = new RationalInt(new Fraction(1, 1000000));
-    
     private Fraction value;
     
     private Num POSITIVE_INFINITY = null;
@@ -161,10 +158,6 @@ public class RationalInt implements Num {
 
     public Num createZero() {
         return new RationalInt(0);
-    }
-
-    public Num getTestEpsilon() {
-        return TEST_EPSILON;
     }
 
     public Num create(int num) {

@@ -114,10 +114,6 @@ public final class NegativeInfinity implements Num {
         throw new RuntimeException();
     }
 
-    public Num getTestEpsilon() {
-        return instance;
-    }
-
     public Num create(double value) {
         if (value == Double.NEGATIVE_INFINITY) {
             return instance;

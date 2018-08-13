@@ -49,7 +49,6 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 // TODO between commits 74c8762863d599914e4d6458c653ab807aa25ff5 and 651b08c1b9b2dc420cc738410ecee24cba0e0310,
@@ -160,14 +159,32 @@ public abstract class DncTest {
 		Integer foiID_from_alias = Integer.valueOf(flow_of_interest.getAlias().substring(1));
 		
 		AnalysisResults bounds = expected_results.getBounds(foiID_from_alias, Analyses.TFA, test_config.arrivalBoundMethods(), test_config.multiplexing);
-		assertEquals(bounds.getDelayBound().doubleValue(), 
-				tfa.getDelayBound().doubleValue(), 
-				Num.getFactory().getTestEpsilon().doubleValue(), 
+		
+		Num epsilon = expected_results.getEpsilon(foiID_from_alias, Analyses.TFA, 
+				test_config.arrivalBoundMethods(), test_config.multiplexing, test_config.getNumImpl());
+		
+		// AssertEquals fails with a delta of zero.
+		if(epsilon.eqZero()) {
+			assertEquals(
+				bounds.getDelayBound(), 
+				tfa.getDelayBound(), 
 				"TFA delay");
-		assertEquals(bounds.getBacklogBound().doubleValue(), 
-				tfa.getBacklogBound().doubleValue(), 
-				Num.getFactory().getTestEpsilon().doubleValue(), 
+			assertEquals(
+				bounds.getBacklogBound(), 
+				tfa.getBacklogBound(), 
 				"TFA backlog");
+		} else {
+			assertEquals(
+				bounds.getDelayBound().doubleValue(), 
+				tfa.getDelayBound().doubleValue(), 
+				epsilon.doubleValue(), 
+				"TFA delay");
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				tfa.getBacklogBound().doubleValue(), 
+				epsilon.doubleValue(), 
+				"TFA backlog");
+		}
 	}
 
 	protected void runSFAtest(SeparateFlowAnalysis sfa, Flow flow_of_interest) {
@@ -193,19 +210,37 @@ public abstract class DncTest {
 		Integer foiID_from_alias = Integer.valueOf(flow_of_interest.getAlias().substring(1));
 		
 		AnalysisResults bounds = expected_results.getBounds(foiID_from_alias, Analyses.SFA, test_config.arrivalBoundMethods(), test_config.multiplexing);
-		assertEquals(bounds.getDelayBound().doubleValue(), 
-				sfa.getDelayBound().doubleValue(),
-				Num.getFactory().getTestEpsilon().doubleValue(), 
+		
+		Num epsilon = expected_results.getEpsilon(foiID_from_alias, Analyses.SFA, 
+				test_config.arrivalBoundMethods(), test_config.multiplexing, test_config.getNumImpl());
+		
+		// AssertEquals fails with a delta of zero.
+		if(epsilon.eqZero()) {
+			assertEquals(
+				bounds.getDelayBound(), 
+				sfa.getDelayBound(), 
 				"SFA delay");
-		assertEquals(bounds.getBacklogBound().doubleValue(),
-				sfa.getBacklogBound().doubleValue(),
-				Num.getFactory().getTestEpsilon().doubleValue(), 
+			assertEquals(
+				bounds.getBacklogBound(), 
+				sfa.getBacklogBound(), 
 				"SFA backlog");
+		} else {
+			assertEquals(
+				bounds.getDelayBound().doubleValue(), 
+				sfa.getDelayBound().doubleValue(), 
+				epsilon.doubleValue(), 
+				"SFA delay");
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				sfa.getBacklogBound().doubleValue(), 
+				epsilon.doubleValue(), 
+				"SFA backlog");
+		}
 	}
 
 	protected void runPMOOtest(PmooAnalysis pmoo, Flow flow_of_interest) {
 		if(test_config.multiplexing == AnalysisConfig.Multiplexing.FIFO) {
-			assertTrue( true, "PMOO FIFO test skipped");
+			assertEquals( true, "PMOO FIFO test skipped");
 			return;
 		}
 		
@@ -230,14 +265,32 @@ public abstract class DncTest {
 		Integer foiID_from_alias = Integer.valueOf(flow_of_interest.getAlias().substring(1));
 		
 		AnalysisResults bounds = expected_results.getBounds(foiID_from_alias, Analyses.PMOO, test_config.arrivalBoundMethods(), test_config.multiplexing);
-		assertEquals(bounds.getDelayBound().doubleValue(), 
-				pmoo.getDelayBound().doubleValue(),
-				Num.getFactory().getTestEpsilon().doubleValue(),
-				"PMOO delay");
-		assertEquals(bounds.getBacklogBound().doubleValue(),
-				pmoo.getBacklogBound().doubleValue(),
-				Num.getFactory().getTestEpsilon().doubleValue(),
+		
+		Num epsilon = expected_results.getEpsilon(foiID_from_alias, Analyses.PMOO, 
+				test_config.arrivalBoundMethods(), test_config.multiplexing, test_config.getNumImpl());
+		
+		// AssertEquals fails with a delta of zero.
+		if(epsilon.eqZero()) {
+			assertEquals(
+					bounds.getDelayBound(), 
+					pmoo.getDelayBound(),
+					"PMOO delay");
+			assertEquals(
+				bounds.getBacklogBound(), 
+				pmoo.getBacklogBound(), 
 				"PMOO backlog");
+		} else {
+			assertEquals(
+				bounds.getDelayBound().doubleValue(), 
+				pmoo.getDelayBound().doubleValue(),
+				epsilon.doubleValue(), 
+				"PMOO delay");
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				pmoo.getBacklogBound().doubleValue(), 
+				epsilon.doubleValue(), 
+				"PMOO backlog");
+		}
 	}
 
 	protected void runSinkTreePMOOtest(Network sink_tree, Flow flow_of_interest) {
@@ -280,21 +333,49 @@ public abstract class DncTest {
 		Integer foiID_from_alias = Integer.valueOf(flow_of_interest.getAlias().substring(1));
 
 		AnalysisResults bounds = expected_results.getBounds(foiID_from_alias, Analyses.PMOO, DncTestMethodSources.sinktree, Multiplexing.ARBITRARY);
-		assertEquals(bounds.getBacklogBound().doubleValue(), 
-				backlog_bound_TBRL.doubleValue(), 
-				Num.getFactory().getTestEpsilon().doubleValue(),
+
+		Num epsilon = expected_results.getEpsilon(foiID_from_alias, Analyses.PMOO, 
+				test_config.arrivalBoundMethods(), test_config.multiplexing, test_config.getNumImpl());
+		
+		// AssertEquals fails with a delta of zero.
+		if(epsilon.eqZero()) {
+			assertEquals(
+				bounds.getBacklogBound(), 
+				backlog_bound_TBRL,
 				"PMOO backlog TBRL");
-		assertEquals(bounds.getBacklogBound().doubleValue(), 
-				backlog_bound_TBRL_CONV.doubleValue(), 
-				Num.getFactory().getTestEpsilon().doubleValue(),
+			assertEquals(
+				bounds.getBacklogBound(), 
+				backlog_bound_TBRL_CONV, 
 				"PMOO backlog TBRL CONV");
-		assertEquals(bounds.getBacklogBound().doubleValue(), 
-				backlog_bound_TBRL_CONV_TBRL_DECONV.doubleValue(), 
-				Num.getFactory().getTestEpsilon().doubleValue(),
+			assertEquals(
+				bounds.getBacklogBound(), 
+				backlog_bound_TBRL_CONV_TBRL_DECONV, 
 				"PMOO backlog TBRL CONV TBRL DECONV");
-		assertEquals(bounds.getBacklogBound().doubleValue(), 
-				backlog_bound_TBRL_HOMO.doubleValue(), 
-				Num.getFactory().getTestEpsilon().doubleValue(),
+			assertEquals(
+				bounds.getBacklogBound(), 
+				backlog_bound_TBRL_HOMO, 
 				"PMOO backlog RBRL HOMO");
+		} else {
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				backlog_bound_TBRL.doubleValue(),
+				epsilon.doubleValue(), 
+				"PMOO backlog TBRL");
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				backlog_bound_TBRL_CONV.doubleValue(), 
+				epsilon.doubleValue(), 
+				"PMOO backlog TBRL CONV");
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				backlog_bound_TBRL_CONV_TBRL_DECONV.doubleValue(), 
+				epsilon.doubleValue(), 
+				"PMOO backlog TBRL CONV TBRL DECONV");
+			assertEquals(
+				bounds.getBacklogBound().doubleValue(), 
+				backlog_bound_TBRL_HOMO.doubleValue(), 
+				epsilon.doubleValue(), 
+				"PMOO backlog RBRL HOMO");
+		}
 	}
 }

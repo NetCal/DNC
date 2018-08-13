@@ -50,9 +50,6 @@ import java.math.BigInteger;
 public class RationalBigInt implements Num {
     private static RationalBigInt instance = new RationalBigInt();
 
-    // TODO Bound in the observed epsilon in DiscoDNC test results after all operations had been executed. 
-    private static final Num TEST_EPSILON = new RationalBigInt(new BigFraction(1, 1000000));
-    
     private BigFraction value;
     
     private Num POSITIVE_INFINITY = null;
@@ -169,10 +166,6 @@ public class RationalBigInt implements Num {
         return new RationalBigInt(0);
     }
     
-    public Num getTestEpsilon() {
-        return TEST_EPSILON;
-    }
-
     public Num create(int num) {
         return new RationalBigInt(num);
     }

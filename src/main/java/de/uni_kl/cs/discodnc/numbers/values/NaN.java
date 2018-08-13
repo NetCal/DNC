@@ -122,10 +122,6 @@ public final class NaN implements Num {
         throw new RuntimeException();
     }
 
-    public Num getTestEpsilon() {
-        return instance;
-    }
-
     public Num create(int num) {
         throw new RuntimeException();
     }

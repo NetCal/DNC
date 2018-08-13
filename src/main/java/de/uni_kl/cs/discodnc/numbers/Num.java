@@ -121,8 +121,6 @@ public interface Num {
 
     Num createZero();
 
-    Num getTestEpsilon();
-
     Num create(int num);
 
     Num create(double value);

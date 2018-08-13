@@ -34,10 +34,6 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 public class RealDoublePrecision implements Num {
     private static RealDoublePrecision instance = new RealDoublePrecision();
 
-    // Bound in the observed epsilon in DiscoDNC test results after all operations had been executed. 
-    private static final double TEST_EPSILON_d = new Double(3e-13);
-    private static Num TEST_EPSILON = null;
-    
     private double value;
     
     private Num POSITIVE_INFINITY = null;
@@ -140,13 +136,6 @@ public class RealDoublePrecision implements Num {
 
     public Num createZero() {
         return new RealDoublePrecision(0);
-    }
-
-    public Num getTestEpsilon() {
-        if (TEST_EPSILON == null) {
-        	TEST_EPSILON = new RealDoublePrecision(TEST_EPSILON_d);
-        }
-        return TEST_EPSILON;
     }
 
     public Num create(int num) {
