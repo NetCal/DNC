@@ -272,9 +272,9 @@ public abstract class DncTest {
 		// AssertEquals fails with a delta of zero.
 		if(epsilon.eqZero()) {
 			assertEquals(
-					bounds.getDelayBound(), 
-					pmoo.getDelayBound(),
-					"PMOO delay");
+				bounds.getDelayBound(), 
+				pmoo.getDelayBound(),
+				"PMOO delay");
 			assertEquals(
 				bounds.getBacklogBound(), 
 				pmoo.getBacklogBound(), 
