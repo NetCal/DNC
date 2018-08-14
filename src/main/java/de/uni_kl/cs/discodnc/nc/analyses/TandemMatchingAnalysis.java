@@ -50,11 +50,11 @@ import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis {
 	@SuppressWarnings("unused")

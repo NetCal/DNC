@@ -5,9 +5,9 @@ import java.util.Set;
 
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
 import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class TandemMatchingResults extends AnalysisResults {
 	protected Set<ServiceCurve> betas_e2e;
