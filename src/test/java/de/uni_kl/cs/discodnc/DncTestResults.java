@@ -34,10 +34,6 @@ import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
 import de.uni_kl.cs.discodnc.numbers.Num;
-import de.uni_kl.cs.discodnc.numbers.implementations.RationalBigInt;
-import de.uni_kl.cs.discodnc.numbers.implementations.RationalInt;
-import de.uni_kl.cs.discodnc.numbers.implementations.RealDoublePrecision;
-import de.uni_kl.cs.discodnc.numbers.implementations.RealSinglePrecision;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,12 +41,6 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class DncTestResults {
-	// TODO Convert to per test case epsilons 
-	protected static Num EPSILON_REAL_DOUBLE = new RealDoublePrecision(0); // new RealDoublePrecision(new Double(3e-13));
-	protected static Num EPSILON_REAL_SINGLE = new RealSinglePrecision(0); // new RealSinglePrecision(new Float(1.23e-4));
-	protected static Num EPSILON_RATIONAL_BIGINT = new RationalBigInt(0);
-	protected static Num EPSILON_RATIONAL_INT = new RationalInt(0);
-	
 	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> results_map;
 	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>> epsilon_map;
 	
