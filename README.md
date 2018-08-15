@@ -27,8 +27,13 @@ If you use the Disco Deterministic Network Calculator for research, please inclu
 # Submodule Structure
 >>>>>>> 0a65767... v2.5 development with Eclipse
 
-* combine profiles as needed
-The DiscoDNC code consists of 4 parts, that are structured in 4 different repositories. The base code in `src/main` is contained in this repository, where the ones are included as submodules as follows. The MPARTC wrapper in `src/mpa_ext` is located in [DiscoDNCext_MPARTC](https://github.com/NetCal/DiscoDNCext_MPARTC), the test files in `src/test` are in [DiscoDNC_tests](https://github.com/NetCal/DiscoDNC_tests) and the experiment extension in `src/experiments` are in [DiscoDNC_experiments](https://github.com/NetCal/DiscoDNC_experiments). In order to checkout the submodules use `git submodule update --init --recursive`.
+The DiscoDNC consists of 4 parts, that are located in 4 different repositories:<br /> 
+* The core code in `src/main` is contained in this repository, the other parts ones can be included as git submodules. 
+* The MPA RTC wrapper extension in `src/mpa_ext` is located in [DiscoDNCext_MPARTC](https://github.com/NetCal/DiscoDNCext_MPARTC), 
+* the test files in `src/test` are in [DiscoDNC_tests](https://github.com/NetCal/DiscoDNC_tests) and 
+* the experiment in `src/experiments` are in [DiscoDNC_experiments](https://github.com/NetCal/DiscoDNC_experiments). 
+
+In order to checkout all submodules, use the command `git submodule update --init --recursive`.
 
 # Development with Eclipse
 This small guide assumes you cloned the DiscoDNC repository, executed the above commands to pull the submodules, and created an Eclipse project from the code.
@@ -40,7 +45,18 @@ These steps were tested with Eclipse Juno only.
 Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
 
 ## Maven Lifecycle Mapping Error (pom.xml Error)
-Click on the pom.xml, go to the Overview. Above the Overview caption, you are offerd the option to ignore build-helper:add-source in your workspace.
+Initially, the error console will show this error:<br />
+> Plugin execution not covered by lifecycle configuration: org.codehaus.mojo:build-helper-maven-plugin:1.7:add-source (execution: add-source, phase: generate-sources) Maven Project Build Lifecycle Mapping Problem
+
+Additionally, it will be shown as an error of our pom.xml build file.
+To resolve it, got to Eclipse's the pom.xml view, Overview tab where you will find 
+> Plugin execution not covered by lifecycle configuration: org.codehaus.mojo.build (Click for details)
+
+above the Overview caption.
+On click, there are suggestions. Two offerings are to ignore this error.
+* Mark goal add-source as ignored in pom.xml
+* Mark goal add-source as ignored in eclipse preferences
+Choose the second on (globally ignore error cause) to prevent changes to the pom.xml file.
 
 ## Add Source Folders
 Go to your Project's Properties > Java Build Path > Source and add
