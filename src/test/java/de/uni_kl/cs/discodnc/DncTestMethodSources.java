@@ -28,11 +28,11 @@
 
 package de.uni_kl.cs.discodnc;
 
+//import de.uni_kl.cs.discodnc.nc.CalculatorConfig.OperationImpl;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
 import de.uni_kl.cs.discodnc.numbers.NumBackend;
-//import CalculatorConfig.OperationImpl;
 
 import org.junit.jupiter.params.provider.Arguments;
 
