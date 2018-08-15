@@ -101,7 +101,7 @@ public interface Curve {
         // Shift remaining segments left by latency
         Num L = result.getSegment(0).getX();
         for (int i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(Num.getUtils().sub(result.getSegment(i).getX(), L));
+            result.getSegment(i).setX(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(result.getSegment(i).getX(), L));
         }
         if (result.getSegment(0).isLeftopen()) {
             result.addSegment(0, LinearSegment.createHorizontalLine(0.0));
@@ -136,7 +136,7 @@ public interface Curve {
         }
 
         for (int i = 1; i < curve_copy.getSegmentCount(); i++) {
-            curve_copy.getSegment(i).setX(Num.getUtils().add(curve_copy.getSegment(i).getX(), dx));
+            curve_copy.getSegment(i).setX(Num.getUtils(Calculator.getInstance().getNumBackend()).add(curve_copy.getSegment(i).getX(), dx));
         }
 
         beautify(curve_copy);
@@ -144,9 +144,8 @@ public interface Curve {
     }
 
     static void beautify(Curve c) {
-        int i = 0;
-        while (i < c.getSegmentCount() - 1) {
-            // Remove unreal discontinuity
+        // Remove unreal discontinuity.
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
             if (c.isUnrealDiscontinuity(i)) {
                 c.getSegment(i + 1).setLeftopen(c.getSegment(i).isLeftopen());
                 c.removeSegment(i);
@@ -155,43 +154,41 @@ public interface Curve {
             i++;
         }
 
-        i = 0;
-        while (i < c.getSegmentCount() - 1) {
-            // Join colinear segments
-            Num firstArg = Num.getUtils().sub(c.getSegment(i + 1).getGrad(), c.getSegment(i).getGrad());
-
-            Num secondArg = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
-            secondArg = Num.getUtils().mult(secondArg, c.getSegment(i).getGrad());
-            secondArg = Num.getUtils().add(c.getSegment(i).getY(), secondArg);
-            secondArg = Num.getUtils().sub(c.getSegment(i + 1).getY(), secondArg);
-
-            if (Num.getUtils().abs(firstArg).lt(Num.getFactory().getEpsilon())
-                    && Num.getUtils().abs(secondArg).lt(Num.getFactory().getEpsilon())) {
-
-                c.removeSegment(i + 1);
-                if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
-                    Num resultPt1 = Num.getUtils().sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
-                    Num resultPt2 = Num.getUtils().sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
-
-                    c.getSegment(i).setGrad(Num.getUtils().div(resultPt1, resultPt2));
-                }
-                continue;
+        // Join colinear segments.
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
+            if(!(c.getSegment(i).getGrad().eq(c.getSegment(i + 1).getGrad()))) {
+            	continue;
             }
-            i++;
+
+            Num secondArg = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+            secondArg = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(secondArg, c.getSegment(i).getGrad());
+            secondArg = Num.getUtils(Calculator.getInstance().getNumBackend()).add(c.getSegment(i).getY(), secondArg);
+            if(!(secondArg.eq(c.getSegment(i + 1).getY()))) {
+            	continue;
+            }
+
+            c.removeSegment(i + 1);
+            if (i + 1 < c.getSegmentCount() && !c.getSegment(i + 1).isLeftopen()) {
+                Num resultPt1 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c.getSegment(i + 1).getY(), c.getSegment(i).getY());
+                Num resultPt2 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+
+                c.getSegment(i).setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).div(resultPt1, resultPt2));
+            }
+            continue;
         }
 
-        for (i = 0; i < c.getSegmentCount() - 1; i++) {
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
             if (c.getSegment(i).getX().equals(c.getSegment(i + 1).getX())) {
-                c.getSegment(i).setGrad(Num.getFactory().createZero());
+                c.getSegment(i).setGrad(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
             }
         }
 
-        // Remove rate of tb arrival curves' first segment
-        if (c.getSegmentCount() > 1 && c.getSegment(0).getX() == Num.getFactory().getZero()
-                && c.getSegment(0).getY() != Num.getFactory().getZero()
-                && c.getSegment(1).getX() == Num.getFactory().getZero()
-                && c.getSegment(1).getY() != Num.getFactory().getZero()) {
-            c.getSegment(0).setGrad(Num.getFactory().createZero());
+        // Remove rate of tb arrival curves' first segment.
+        if (c.getSegmentCount() > 1 && c.getSegment(0).getX() == Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()
+                && c.getSegment(0).getY() != Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()
+                && c.getSegment(1).getX() == Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()
+                && c.getSegment(1).getY() != Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()) {
+            c.getSegment(0).setGrad(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
         }
 
         c.setTB_MetaInfo(false);
@@ -221,9 +218,9 @@ public interface Curve {
         int i2 = 0;
         while (i1 < c1.getSegmentCount() || i2 < c2.getSegmentCount()) {
             Num x1 = (i1 < c1.getSegmentCount()) ? c1.getSegment(i1).getX()
-                    : Num.getFactory().createPositiveInfinity();
+                    : Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
             Num x2 = (i2 < c2.getSegmentCount()) ? c2.getSegment(i2).getX()
-                    : Num.getFactory().createPositiveInfinity();
+                    : Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
             if (x1.lt(x2)) {
                 xcoords.add(x1.copy());
                 i1++;
@@ -248,7 +245,7 @@ public interface Curve {
      */
     static Num getMaxVerticalDeviation(Curve c1, Curve c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-            return Num.getFactory().createPositiveInfinity();
+            return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
         }
         // The computeInflectionPoints based method does not work for
         // single rate service curves (without latency)
@@ -262,22 +259,22 @@ public interface Curve {
         // Start with the burst as minimum of all possible solutions for the deviation
         // instead of negative infinity.
 
-        Num burst_c1 = c1.fLimitRight(Num.getFactory().getZero());
-        Num burst_c2 = c2.fLimitRight(Num.getFactory().getZero());
-        Num result = Num.getUtils().diff(burst_c1, burst_c2);
+        Num burst_c1 = c1.fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero());
+        Num burst_c2 = c2.fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero());
+        Num result = Num.getUtils(Calculator.getInstance().getNumBackend()).diff(burst_c1, burst_c2);
 
         ArrayList<Num> xcoords = computeInflectionPointsX(c1, c2);
         for (int i = 0; i < xcoords.size(); i++) {
             Num ip_x = xcoords.get(i);
 
-            Num backlog = Num.getUtils().sub(c1.f(ip_x), c2.f(ip_x));
-            result = Num.getUtils().max(result, backlog);
+            Num backlog = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c1.f(ip_x), c2.f(ip_x));
+            result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, backlog);
         }
         return result;
     }
 
     static Num getXIntersection(Curve curve1, Curve curve2) {
-        Num x_int = Num.getFactory().getPositiveInfinity(); // No need to create an object as this value is
+        Num x_int = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity(); // No need to create an object as this value is
         // only set for initial comparison in the loop.
 
         for (int i = 0; i < curve1.getSegmentCount(); i++) {
@@ -288,7 +285,7 @@ public interface Curve {
 
                 Num x_int_tmp = curve1.getSegment(i).getXIntersectionWith(curve2.getSegment(j));
 
-                if (x_int_tmp.equals(Num.getFactory().getNaN())) {
+                if (x_int_tmp.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getNaN())) {
                     break;
                 }
 
@@ -341,9 +338,9 @@ public interface Curve {
         int i2 = 0;
         while (i1 < c1.getSegmentCount() || i2 < c2.getSegmentCount()) {
             Num y1 = (i1 < c1.getSegmentCount()) ? c1.getSegment(i1).getY()
-                    : Num.getFactory().createPositiveInfinity();
+                    : Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
             Num y2 = (i2 < c2.getSegmentCount()) ? c2.getSegment(i2).getY()
-                    : Num.getFactory().createPositiveInfinity();
+                    : Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
             if (y1.lt(y2)) {
                 ycoords.add(y1.copy());
                 i1++;
@@ -415,7 +412,7 @@ public interface Curve {
         }
 
         ArrayList<LinearSegment> result = new ArrayList<LinearSegment>();
-        Num x = Num.getFactory().createZero();
+        Num x = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
         Num x_cross;
         boolean leftopen;
 
@@ -423,10 +420,10 @@ public interface Curve {
         int i2 = 0;
         while (i1 < curve1.getSegmentCount() || i2 < curve2.getSegmentCount()) {
             Num x_next1 = (i1 + 1 < curve1.getSegmentCount()) ? curve1.getSegment(i1 + 1).getX()
-                    : Num.getFactory().createPositiveInfinity();
+                    : Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
             Num x_next2 = (i2 + 1 < curve2.getSegmentCount()) ? curve2.getSegment(i2 + 1).getX()
-                    : Num.getFactory().createPositiveInfinity();
-            Num x_next = Num.getUtils().min(x_next1, x_next2);
+                    : Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+            Num x_next = Num.getUtils(Calculator.getInstance().getNumBackend()).min(x_next1, x_next2);
 
             leftopen = curve1.getSegment(i1).isLeftopen() || curve2.getSegment(i2).isLeftopen();
 
@@ -439,8 +436,8 @@ public interface Curve {
                     break;
                 case MIN:
                     x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
-                    if (x_cross.equals(Num.getFactory().getNaN())) {
-                        x_cross = Num.getFactory().createPositiveInfinity();
+                    if (x_cross.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getNaN())) {
+                        x_cross = Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
                     }
                     if (x.lt(x_cross) && x_cross.lt(x_next)) {
                         result.add(LinearSegment.min(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
@@ -451,8 +448,8 @@ public interface Curve {
                     break;
                 case MAX:
                     x_cross = curve1.getSegment(i1).getXIntersectionWith(curve2.getSegment(i2));
-                    if (x_cross.equals(Num.getFactory().getNaN())) {
-                        x_cross = Num.getFactory().createPositiveInfinity();
+                    if (x_cross.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getNaN())) {
+                        x_cross = Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
                     }
                     if (x.lt(x_cross) && x_cross.lt(x_next)) {
                         result.add(LinearSegment.max(curve1.getSegment(i1), curve2.getSegment(i2), x, leftopen, false));
@@ -613,7 +610,7 @@ public interface Curve {
     static Curve add(Curve curve, Num dy) {
         Curve result = curve.copy();
         for (int i = 0; i < curve.getSegmentCount(); i++) {
-            result.getSegment(i).setY(Num.getUtils().add(result.getSegment(i).getY(), dy));
+            result.getSegment(i).setY(Num.getUtils(Calculator.getInstance().getNumBackend()).add(result.getSegment(i).getY(), dy));
         }
         return result;
     }
@@ -632,8 +629,8 @@ public interface Curve {
         Curve result = curve.copy();
         LinearSegment segment_i = result.getSegment(i);
         if (segment_i.getX().lt(dx)) {
-            segment_i.setY(Num.getUtils().add(segment_i.getY(), Num.getUtils()
-                    .mult(Num.getUtils().sub(dx, segment_i.getX()), segment_i.getGrad())));
+            segment_i.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).add(segment_i.getY(), Num.getUtils(Calculator.getInstance().getNumBackend())
+                    .mult(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(dx, segment_i.getX()), segment_i.getGrad())));
             segment_i.setX(dx);
             segment_i.setLeftopen(false);
         }
@@ -641,7 +638,7 @@ public interface Curve {
             result.removeSegment(0);
         }
         for (i = 0; i < result.getSegmentCount(); i++) {
-            result.getSegment(i).setX(Num.getUtils().sub(result.getSegment(i).getX(), dx));
+            result.getSegment(i).setX(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(result.getSegment(i).getX(), dx));
         }
 
         return result;

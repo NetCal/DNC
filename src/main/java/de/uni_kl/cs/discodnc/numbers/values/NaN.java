@@ -31,82 +31,46 @@ package de.uni_kl.cs.discodnc.numbers.values;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public final class NaN implements Num {
+    private static NaN instance = new NaN();
+    
     // --------------------------------------------------------------------------------------------------------------
-    // Num Interface Implementations
+    // Constructors
     // --------------------------------------------------------------------------------------------------------------
-
-    public NaN() {
+    
+	private NaN() {
     }
 
-    public boolean eqZero() {
-        return false;
+    public NaN(int num) {
+    }
+    
+    public NaN(double value) {
+    }
+    
+    public NaN(int num, int den){
+    }
+    
+    public NaN(NaN num) {
     }
 
-    public boolean gt(Num num) {
-        return false;
+    /* 
+     * NaN should not be used as a factory.
+     * Therefore, there is no instance or get Instance method.
+     */
+    public static NaN getInstance() {
+    	return instance;
     }
-
-    public boolean gtZero() {
-        return false;
-    }
-
-    public boolean geq(Num num) {
-        return false;
-    }
-
-    public boolean geqZero() {
-        return false;
-    }
-
-    public boolean lt(Num num) {
-        return false;
-    }
-
-    public boolean ltZero() {
-        return false;
-    }
-
-    public boolean leq(Num num) {
-        return false;
-    }
-
-    public boolean leqZero() {
-        return false;
-    }
-
-    public boolean isFinite() {
-        return false;
-    }
-
-    public boolean isInfinite() {
-        return false;
-    }
-
-    public boolean isNaN() {
-        return true;
-    }
-
-    @Override
+	
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
+    
     public double doubleValue() {
         return Double.NaN;
     }
 
-    @Override
-    public Num copy() {
-        return new NaN();
-    }
-
-    @Override
-    public boolean eq(double num) {
-        return false;
-    }
-
-//    @SuppressFBWarnings(value = "EQ_ALWAYS_FALSE",
-//    		justification = "Comparison to NaN should always return false")
-    @Override
-    public boolean equals(Object obj) {
-        return false;
-    }
+    /* 
+     * NaN does not have an value member variable.
+     */
 
     @Override
     public int hashCode() {
@@ -117,10 +81,14 @@ public final class NaN implements Num {
     public String toString() {
         return Double.toString(Double.NaN);
     }
+	
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory
+    // --------------------------------------------------------------------------------------------------------------
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
+    public Num copy() {
+        return instance;
+    }
 
     public Num getPositiveInfinity() {
         throw new RuntimeException();
@@ -139,11 +107,11 @@ public final class NaN implements Num {
     }
 
     public Num getNaN() {
-        return this;
+        return instance;
     }
 
     public Num createNaN() {
-        return this;
+        return instance;
     }
 
     public Num getZero() {
@@ -152,14 +120,6 @@ public final class NaN implements Num {
 
     public Num createZero() {
         throw new RuntimeException();
-    }
-
-    public Num getEpsilon() {
-        return this;
-    }
-
-    public Num createEpsilon() {
-        return this;
     }
 
     public Num create(int num) {
@@ -177,56 +137,113 @@ public final class NaN implements Num {
     public Num create(String num_str) throws Exception {
         throw new RuntimeException();
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Comparisons
+    // --------------------------------------------------------------------------------------------------------------
+
+    // Compare to zero: >, >=, =, <=, <
+    public boolean ltZero() {
+        return false;
+    }
+
+    public boolean leqZero() {
+        return false;
+    }
+    
+    public boolean eqZero() {
+        return false;
+    }
+
+    public boolean geqZero() {
+        return false;
+    }
+
+    public boolean gtZero() {
+        return false;
+    }
+
+    // Compare to other number: >, >=, =, <=, <
+    public boolean lt(Num num) {
+        return false;
+    }
+
+    public boolean leq(Num num) {
+        return false;
+    }
+    
+    public boolean eq(Num num) {
+        return false;
+    }
+    
+    public boolean eq(double num) {
+        return false;
+    }
+    
+//	@SuppressFBWarnings(value = "EQ_ALWAYS_FALSE", justification = "Comparison to NaN should always return false.")
+    @Override
+    public boolean equals(Object obj) {
+        return false;
+    }
+
+    public boolean geq(Num num) {
+        return false;
+    }
+    
+    public boolean gt(Num num) {
+        return false;
+    }
+
+    // Properties
+    public boolean isFinite() {
+        return false;
+    }
+
+    public boolean isInfinite() {
+        return false;
+    }
+
+    public boolean isNaN() {
+        return true;
+    }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface Implementations
+    // Operations (Utils)
     // --------------------------------------------------------------------------------------------------------------
 
     public Num add(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num sub(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num mult(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num div(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num abs(Num num) {
-        return this;
+        return instance;
     }
 
     public Num diff(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num max(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num min(Num num1, Num num2) {
-        return this;
+        return instance;
     }
 
     public Num negate(Num num) {
-        return this;
-    }
-
-    public boolean isFinite(Num num) {
-        return false;
-    }
-
-    public boolean isInfinite(Num num) {
-        return false;
-    }
-
-    public boolean isNaN(Num num) {
-        return true;
+        return instance;
     }
 }

@@ -98,8 +98,8 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((SeparateFlowResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
-        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
+        ((SeparateFlowResults) result).setDelayBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
+        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
             delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // single flow

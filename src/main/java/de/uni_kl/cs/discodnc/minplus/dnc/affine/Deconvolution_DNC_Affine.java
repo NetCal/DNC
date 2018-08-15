@@ -32,6 +32,7 @@ package de.uni_kl.cs.discodnc.minplus.dnc.affine;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -121,7 +122,7 @@ public abstract class Deconvolution_DNC_Affine {
             return arrival_curve.copy();
         }
         if (service_curve.equals(Curve.getFactory().createZeroService())
-                || service_curve.getLatency().equals(Num.getFactory().getPositiveInfinity())
+                || service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
@@ -188,7 +189,7 @@ public abstract class Deconvolution_DNC_Affine {
             return arrival_curve.copy();
         }
         if (service_curve.equals(Curve.getFactory().createZeroService())
-                || service_curve.getLatency().equals(Num.getFactory().getPositiveInfinity())
+                || service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }
