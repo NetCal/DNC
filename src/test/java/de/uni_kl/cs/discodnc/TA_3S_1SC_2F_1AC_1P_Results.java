@@ -31,8 +31,9 @@ package de.uni_kl.cs.discodnc;
 import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.numbers.NumBackend;
 import de.uni_kl.cs.discodnc.numbers.implementations.RationalBigInt;
 import de.uni_kl.cs.discodnc.numbers.implementations.RealDoublePrecision;
 import de.uni_kl.cs.discodnc.numbers.implementations.RealSinglePrecision;
@@ -47,7 +48,7 @@ public class TA_3S_1SC_2F_1AC_1P_Results extends DncTestResults {
 	protected void initialize() {
 		super.clear();
 
-		Num num_factory = Num.getFactory();
+		Num num_factory = Num.getFactory(CalculatorConfig.getInstance().getNumBackend());
 		
 		RealDoublePrecision real_double_epsilon;
 		RealSinglePrecision real_single_epsilon;
@@ -79,11 +80,11 @@ public class TA_3S_1SC_2F_1AC_1P_Results extends DncTestResults {
 			 * 		SFA delay ==> expected <320 / 3> but was <7505999378950827 / 70368744177664>
 			 * 		SFA delay ==> expected <965 / 12> but was <5658819844287147 / 70368744177664>
 			 */
-			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
-			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			
-			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
-			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
 			// --------------------------------------------------------------------------------------------------------------
 		    // PMOO
@@ -107,15 +108,15 @@ public class TA_3S_1SC_2F_1AC_1P_Results extends DncTestResults {
 			 * 		PMOO delay ==> expected <250 / 3> but was <2932031007402667 / 35184372088832>
 			 */
 			real_double_epsilon = new RealDoublePrecision(new Double(7e-14));
-			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
-			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_DOUBLE_PRECISION, real_double_epsilon);
+			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.REAL_DOUBLE_PRECISION, real_double_epsilon);
+			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.REAL_DOUBLE_PRECISION, real_double_epsilon);
 
 			real_single_epsilon = new RealSinglePrecision(new Float(3.25e-5));
-			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
-			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.REAL_SINGLE_PRECISION, real_single_epsilon);
+			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.REAL_SINGLE_PRECISION, real_single_epsilon);
+			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.REAL_SINGLE_PRECISION, real_single_epsilon);
 
-			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
-			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------

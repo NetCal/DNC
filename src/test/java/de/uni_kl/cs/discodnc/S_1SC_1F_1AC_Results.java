@@ -33,6 +33,7 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class S_1SC_1F_1AC_Results extends DncTestResults {
@@ -43,7 +44,7 @@ public class S_1SC_1F_1AC_Results extends DncTestResults {
 	protected void initialize() {
 		super.clear();
 
-		Num num_factory = Num.getFactory();
+		Num num_factory = Num.getFactory(CalculatorConfig.getInstance().getNumBackend());
 		
 		for( Set<ArrivalBoundMethod> ab_set : DncTestMethodSources.ab_sets ) {
 			// --------------------------------------------------------------------------------------------------------------

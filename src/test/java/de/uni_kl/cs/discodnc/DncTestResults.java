@@ -1,4 +1,5 @@
 /*
+
  * This file is part of the Disco Deterministic Network Calculator.
  *
  * Copyright (C) 2017 - 2018 Steffen Bondorf
@@ -32,8 +33,9 @@ import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,11 +44,13 @@ import java.util.Set;
 
 public abstract class DncTestResults {
 	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> results_map;
-	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>> epsilon_map;
+	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>>> epsilon_map;
+	
+	private Num num_factory = Num.getFactory(CalculatorConfig.getInstance().getNumBackend());
 	
 	public DncTestResults() {
 		results_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>>();
-		epsilon_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>>();
+		epsilon_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>>>();
 	}
 
 	protected void clear() {
@@ -128,49 +132,49 @@ public abstract class DncTestResults {
 		}
 	}
 	
-	protected void addEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumImpl num_rep, Num epsilon) {
+	protected void addEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumBackend num_rep, Num epsilon) {
 
-		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>> foi_maps = epsilon_map.get(flowId);
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>> foi_maps = epsilon_map.get(flowId);
 		if(foi_maps == null) {
-			foi_maps = new HashMap<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>>();
+			foi_maps = new HashMap<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>>();
 			epsilon_map.put(flowId, foi_maps);
 		}
 		
-		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>> foi_analysis_maps = foi_maps.get(analysis);
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>> foi_analysis_maps = foi_maps.get(analysis);
 		if(foi_analysis_maps == null) {
-			foi_analysis_maps =  new HashMap<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>();
+			foi_analysis_maps =  new HashMap<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>();
 			foi_maps.put(analysis, foi_analysis_maps);
 		}
 		
-		Map<Multiplexing, Map<NumImpl, Num>> foi_analysis_ab_maps = foi_analysis_maps.get(ab_set);
+		Map<Multiplexing, Map<NumBackend, Num>> foi_analysis_ab_maps = foi_analysis_maps.get(ab_set);
 		if(foi_analysis_ab_maps == null) {
-			foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumImpl, Num>>();
+			foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumBackend, Num>>();
 			foi_analysis_maps.put(ab_set, foi_analysis_ab_maps);
 		}
 		
-		Map<NumImpl, Num> existing_results = foi_analysis_ab_maps.get(mux);
+		Map<NumBackend, Num> existing_results = foi_analysis_ab_maps.get(mux);
 		if(existing_results == null) {
-			existing_results = new HashMap<NumImpl, Num>();
+			existing_results = new HashMap<NumBackend, Num>();
 			foi_analysis_ab_maps.put(mux, existing_results);
 		}
 
 		existing_results.put(num_rep,epsilon);
 	}
 
-	public Num getEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumImpl num_rep) {
+	public Num getEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumBackend num_rep) {
 		
-		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>>> foi_maps = epsilon_map.get(flowId);
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>> foi_maps = epsilon_map.get(flowId);
 		if(foi_maps == null || foi_maps.isEmpty()) {
-			return Num.getFactory().createZero();
+			return num_factory.createZero();
 		}
 		
-		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>> foi_analysis_maps = foi_maps.get(analysis);
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>> foi_analysis_maps = foi_maps.get(analysis);
 		if(foi_analysis_maps == null || foi_analysis_maps.isEmpty()) {
-			return Num.getFactory().createZero();
+			return num_factory.createZero();
 		}
 		
-		Map<Multiplexing, Map<NumImpl, Num>> foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumImpl, Num>>(); 
-		for(Map.Entry<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumImpl, Num>>> abs_to_map : foi_analysis_maps.entrySet()) {
+		Map<Multiplexing, Map<NumBackend, Num>> foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumBackend, Num>>(); 
+		for(Map.Entry<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>> abs_to_map : foi_analysis_maps.entrySet()) {
 			if( abs_to_map.getKey().size() == ab_set.size()
 					&& abs_to_map.getKey().containsAll(ab_set)) {
 				foi_analysis_ab_maps = abs_to_map.getValue();
@@ -178,15 +182,15 @@ public abstract class DncTestResults {
 			}
 		}
 		if(foi_analysis_ab_maps.isEmpty()) {
-			return Num.getFactory().createZero();
+			return num_factory.createZero();
 		}
 		
-		Map<NumImpl, Num> existing_epsilons = foi_analysis_ab_maps.get(mux);
+		Map<NumBackend, Num> existing_epsilons = foi_analysis_ab_maps.get(mux);
 		if(foi_analysis_ab_maps == null || foi_analysis_ab_maps.isEmpty()) {
-			return Num.getFactory().createZero();
+			return num_factory.createZero();
 		}
 		
-		return existing_epsilons.getOrDefault(num_rep, Num.getFactory().createZero());
+		return existing_epsilons.getOrDefault(num_rep, num_factory.createZero());
 	}
 
 	@Override

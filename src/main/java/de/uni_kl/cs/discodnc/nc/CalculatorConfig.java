@@ -28,11 +28,13 @@
 
 package de.uni_kl.cs.discodnc.nc;
 
+import de.uni_kl.cs.discodnc.numbers.NumBackend;
+
 import java.io.File;
 
 public final class CalculatorConfig {
 	private static CalculatorConfig instance = new CalculatorConfig();
-	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
+	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
 	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
 	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
 	private boolean ARRIVAL_CURVE_CHECKS = false;
@@ -48,15 +50,15 @@ public final class CalculatorConfig {
 		return instance;
 	}
 
-	public NumImpl getNumImpl() {
-		return NUM_IMPLEMENTATION;
+	public NumBackend getNumBackend() {
+		return NUM_BACKEND;
 	}
 
-	public boolean setNumImpl(NumImpl num_impl) {
-		if (NUM_IMPLEMENTATION == num_impl) {
+	public boolean setNumBackend(NumBackend backend) {
+		if (NUM_BACKEND == backend) {
 			return false;
 		} else {
-			NUM_IMPLEMENTATION = num_impl;
+			NUM_BACKEND = backend;
 			return true;
 		}
 	}
@@ -134,7 +136,7 @@ public final class CalculatorConfig {
 	public String toString() {
 		StringBuffer calculator_config_str = new StringBuffer();
 
-		calculator_config_str.append(getNumImpl().toString());
+		calculator_config_str.append(getNumBackend().toString());
 		calculator_config_str.append(", ");
 		calculator_config_str.append(getCurveImpl().toString());
 
@@ -160,10 +162,6 @@ public final class CalculatorConfig {
 		}
 
 		return calculator_config_str.toString();
-	}
-
-	public enum NumImpl {
-		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
 	}
 
 	public enum CurveImpl {

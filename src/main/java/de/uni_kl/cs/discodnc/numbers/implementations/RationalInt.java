@@ -28,7 +28,6 @@
 
 package de.uni_kl.cs.discodnc.numbers.implementations;
 
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.numbers.values.NaN;
 import de.uni_kl.cs.discodnc.numbers.values.NegativeInfinity;
@@ -202,8 +201,7 @@ public class RationalInt implements Num {
         boolean double_based = num_str.contains(".");
 
         if (fraction_indicator && double_based) {
-            throw new Exception("Invalid string representation of a number based on "
-                    + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+            throw new Exception("Invalid string representation of a number based on RationalInt: " + num_str);
         }
 
         try {
@@ -215,8 +213,7 @@ public class RationalInt implements Num {
             if (fraction_indicator) {
                 String[] num_den = num_str.split(" / "); // ["num","den"]
                 if (num_den.length != 2) {
-                    throw new Exception("Invalid string representation of a number based on "
-                            + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+                    throw new Exception("Invalid string representation of a number based on RationalInt: " + num_str);
                 }
 
                 int den = Integer.parseInt(num_den[1]);
@@ -231,16 +228,14 @@ public class RationalInt implements Num {
                 return create(Double.parseDouble(num_str));
             }
         } catch (Exception e) {
-            throw new Exception("Invalid string representation of a number based on "
-                    + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+            throw new Exception("Invalid string representation of a number based on RationalInt: " + num_str);
         }
 
         // This code should not be reachable because all the operations above either
         // succeed such that we can return a number
         // of raise an exception of some kind. Yet, Java does not get this and thus
         // complains if there's no "finalizing statement".
-        throw new Exception("Invalid string representation of a number based on "
-                + CalculatorConfig.getInstance().getNumImpl().toString() + ": " + num_str);
+        throw new Exception("Invalid string representation of a number based on RationalInt: " + num_str);
     }
     
     // --------------------------------------------------------------------------------------------------------------

@@ -28,7 +28,6 @@
 
 package de.uni_kl.cs.discodnc.numbers;
 
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.implementations.RationalBigInt;
 import de.uni_kl.cs.discodnc.numbers.implementations.RationalInt;
 import de.uni_kl.cs.discodnc.numbers.implementations.RealDoublePrecision;
@@ -42,8 +41,8 @@ public interface Num {
     final Num POSITIVE_INFINITY = new PositiveInfinity(Double.POSITIVE_INFINITY);
     final Num NEGATIVE_INFINITY = new NegativeInfinity(Double.NEGATIVE_INFINITY);
 
-    public static Num getFactory() {
-        switch (CalculatorConfig.getInstance().getNumImpl()) {
+    public static Num getFactory(NumBackend backend) {
+        switch (backend) {
             case REAL_SINGLE_PRECISION:
                 return RealSinglePrecision.getInstance();
             case RATIONAL_INTEGER:
@@ -56,8 +55,8 @@ public interface Num {
         }
     }
 
-    public static Num getUtils() {
-    	return getFactory();
+    public static Num getUtils(NumBackend backend) {
+    	return getFactory(backend);
     }
     
     // --------------------------------------------------------------------------------------------------------------

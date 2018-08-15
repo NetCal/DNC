@@ -41,6 +41,7 @@ import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -148,7 +149,7 @@ public class TandemMatchingArrivalBound extends AbstractArrivalBound implements 
 			tfa.deriveBoundsAtServer(last_hop_xtx);
 
 			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
-			Num tfa_backlog_bound_min = Num.getFactory().getPositiveInfinity();
+			Num tfa_backlog_bound_min = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity();
 
 			for (Num tfa_backlog_bound : tfa_backlog_bounds) {
 				if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {

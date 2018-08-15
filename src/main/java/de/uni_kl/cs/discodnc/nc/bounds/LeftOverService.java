@@ -124,7 +124,7 @@ public final class LeftOverService {
 
             if (arrival_curve.getGradientLimitRight(x_alpha).leq(service_curve.getGradientLimitRight(x_beta))) {
 
-                Num theta = Num.getUtils().sub(x_beta, x_alpha);
+                Num theta = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(x_beta, x_alpha);
                 ServiceCurve beta_fifo = CurvePwAffine.getFactory()
                         .createServiceCurve(CurvePwAffine.boundAtXAxis(CurvePwAffine.min(
                                 CurvePwAffine.sub(service_curve,

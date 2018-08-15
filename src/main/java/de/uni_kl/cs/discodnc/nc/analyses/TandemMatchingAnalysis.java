@@ -45,6 +45,7 @@ import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -107,8 +108,8 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		Num delay_bound__beta_e2e;
 		Num backlog_bound__beta_e2e;
 
-        ((TandemMatchingResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
-        ((TandemMatchingResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
+        ((TandemMatchingResults) result).setDelayBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
+        ((TandemMatchingResults) result).setBacklogBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
 		
 		for( ServiceCurve beta_e2e : ((TandemMatchingResults) result).betas_e2e ) {
 			delay_bound__beta_e2e = Bound.delayFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // Single flow of interest, i.e., fifo per micro flow holds

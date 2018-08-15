@@ -40,6 +40,7 @@ import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -100,8 +101,8 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((SeparateFlowResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
-        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
+        ((SeparateFlowResults) result).setDelayBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
+        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
         	// single flow of interest, i.e., FIFO per micro flow holds.

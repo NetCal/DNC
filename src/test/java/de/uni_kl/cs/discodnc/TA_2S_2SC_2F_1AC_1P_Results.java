@@ -31,8 +31,9 @@ package de.uni_kl.cs.discodnc;
 import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.NumImpl;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.numbers.NumBackend;
 import de.uni_kl.cs.discodnc.numbers.implementations.RationalBigInt;
 
 import java.util.Set;
@@ -45,7 +46,7 @@ public class TA_2S_2SC_2F_1AC_1P_Results extends DncTestResults {
 	protected void initialize() {
 		super.clear();
 
-		Num num_factory = Num.getFactory();
+		Num num_factory = Num.getFactory(CalculatorConfig.getInstance().getNumBackend());
 		
 		RationalBigInt rational_bigint_epsilon = new RationalBigInt(1, 1000000000);
 		
@@ -74,11 +75,11 @@ public class TA_2S_2SC_2F_1AC_1P_Results extends DncTestResults {
 			 * Rational BigInteger: Epsilon set to ignore
 			 * 		SFA delay ==> expected <277 / 7> but was <2784591733887561 / 70368744177664>
 			 */
-			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
-			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(0, Analyses.SFA, ab_set, Multiplexing.FIFO, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 			
-			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
-			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(1, Analyses.SFA, ab_set, Multiplexing.FIFO, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 
 			// --------------------------------------------------------------------------------------------------------------
 		    // PMOO
@@ -92,8 +93,8 @@ public class TA_2S_2SC_2F_1AC_1P_Results extends DncTestResults {
 			 * Rational BigInteger: Epsilon set to ignore
 			 * 		PMOO delay ==> expected <242 / 7> but was <2432748012999241 / 70368744177664>
 			 */
-			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
-			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumImpl.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(0, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
+			addEpsilon(1, Analyses.PMOO, ab_set, Multiplexing.ARBITRARY, NumBackend.RATIONAL_BIGINTEGER, rational_bigint_epsilon);
 		}
 
 		// --------------------------------------------------------------------------------------------------------------
