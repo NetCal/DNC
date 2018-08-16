@@ -126,7 +126,7 @@ public abstract class Deconvolution_DNC_PwAffine {
             return arrival_curve.copy();
         }
         if (service_curve.equals(Curve.getFactory().createZeroService())
-        		 || service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
+				|| service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
