@@ -32,19 +32,19 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class RealDoublePrecision implements Num {
-    private static final double EPSILON_Double = Double.parseDouble("5E-10");
     private static RealDoublePrecision instance = new RealDoublePrecision();
-    private static boolean comparison_epsilon = false;
+
     private double value;
+    
     private Num POSITIVE_INFINITY = null;
     private Num NEGATIVE_INFINITY = null;
     private Num NaN = null;
     private Num ZERO = null;
-
+    
     // --------------------------------------------------------------------------------------------------------------
-    // Num Interface Implementations
+    // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    private Num EPSILON = null;
+    
     private RealDoublePrecision() {
     }
 
@@ -67,143 +67,31 @@ public class RealDoublePrecision implements Num {
     public static RealDoublePrecision getInstance() {
         return instance;
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
 
-    public boolean eqZero() {
-        if (comparison_epsilon) {
-            return (value <= EPSILON_Double) && (value >= -EPSILON_Double);
-        } else {
-            return value == 0.0;
-        }
-    }
-
-    public boolean gt(Num num) {
-        if (comparison_epsilon) {
-            return value > (num.doubleValue() + EPSILON_Double);
-        } else {
-            return value > num.doubleValue();
-        }
-    }
-
-    public boolean gtZero() {
-        if (comparison_epsilon) {
-            return value > EPSILON_Double;
-        } else {
-            return value > 0.0;
-        }
-    }
-
-    public boolean geq(Num num) {
-        if (comparison_epsilon) {
-            return value >= (num.doubleValue() + EPSILON_Double);
-        } else {
-            return value >= num.doubleValue();
-        }
-    }
-
-    public boolean geqZero() {
-        if (comparison_epsilon) {
-            return value >= EPSILON_Double;
-        } else {
-            return value >= 0.0;
-        }
-    }
-
-    public boolean lt(Num num) {
-        if (comparison_epsilon) {
-            return value < (num.doubleValue() - EPSILON_Double);
-        } else {
-            return value < num.doubleValue();
-        }
-    }
-
-    public boolean ltZero() {
-        if (comparison_epsilon) {
-            return value < -EPSILON_Double;
-        } else {
-            return value < 0.0;
-        }
-    }
-
-    public boolean leq(Num num) {
-        if (comparison_epsilon) {
-            return value <= (num.doubleValue() - EPSILON_Double);
-        } else {
-            return value <= num.doubleValue();
-        }
-    }
-
-    public boolean leqZero() {
-        if (comparison_epsilon) {
-            return value <= -EPSILON_Double;
-        } else {
-            return value <= 0.0;
-        }
-    }
-
-    public boolean isFinite() {
-        return Double.isFinite(value);
-    }
-
-    public boolean isInfinite() {
-        return Double.isInfinite(value);
-    }
-
-    public boolean isNaN() {
-        return Double.isNaN(value);
-    }
-
-    @Override
     public double doubleValue() {
         return value;
     }
-
-    @Override
-    public Num copy() {
-        return new RealDoublePrecision(value);
-    }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean eq(double num) {
-        // if( ( this.value == Double.POSITIVE_INFINITY && num ==
-        // Double.POSITIVE_INFINITY )
-        // || ( this.value == Double.NEGATIVE_INFINITY && num ==
-        // Double.NEGATIVE_INFINITY ) ) {
-        if (Double.isInfinite(this.value) && Double.isInfinite(num) && (Double.compare(this.value, num) == 0)) {
-            return true;
-        }
-
-        if (Math.abs(value - num) <= EPSILON_Double) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean equals(RealDoublePrecision num) {
-        return eq(num.value);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RealDoublePrecision)) {
-            return false;
-        } else {
-            return eq(((RealDoublePrecision) obj).value);
-        }
-    }
-
+    
     @Override
     public int hashCode() {
         return Double.hashCode(value);
     }
-
+    
     @Override
     public String toString() {
         return Double.toString(value);
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory
+    // --------------------------------------------------------------------------------------------------------------
+
+    public Num copy() {
+        return new RealDoublePrecision(value);
     }
 
     public Num getPositiveInfinity() {
@@ -250,17 +138,6 @@ public class RealDoublePrecision implements Num {
         return new RealDoublePrecision(0);
     }
 
-    public Num getEpsilon() {
-        if (EPSILON == null) {
-            EPSILON = createEpsilon();
-        }
-        return EPSILON;
-    }
-
-    public Num createEpsilon() {
-        return new RealDoublePrecision(EPSILON_Double);
-    }
-
     public Num create(int num) {
         return new RealDoublePrecision(num);
     }
@@ -291,8 +168,7 @@ public class RealDoublePrecision implements Num {
         boolean double_based = num_str.contains(".");
 
         if (fraction_indicator && double_based) {
-            throw new Exception("Invalid string representation of a number based on "
-                    + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+            throw new Exception("Invalid string representation of a number based on RealDoublePrecision: " + num_str);
         }
 
         try {
@@ -304,8 +180,7 @@ public class RealDoublePrecision implements Num {
             if (fraction_indicator) {
                 String[] num_den = num_str.split(" / "); // ["num","den"]
                 if (num_den.length != 2) {
-                    throw new Exception("Invalid string representation of a number based on "
-                            + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+                    throw new Exception("Invalid string representation of a number based on RealDoublePrecision: " + num_str);
                 }
 
                 int den = Integer.parseInt(num_den[1]);
@@ -320,20 +195,90 @@ public class RealDoublePrecision implements Num {
                 return create(Double.parseDouble(num_str));
             }
         } catch (Exception e) {
-            throw new Exception("Invalid string representation of a number based on "
-                    + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+            throw new Exception("Invalid string representation of a number based on RealDoublePrecision: " + num_str);
         }
 
         // This code should not be reachable because all the operations above either
         // succeed such that we can return a number
         // of raise an exception of some kind. Yet, Java does not get this and thus
         // complains if there's no "finalizing statement".
-        throw new Exception("Invalid string representation of a number based on "
-                + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+        throw new Exception("Invalid string representation of a number based on RealDoublePrecision: " + num_str);
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface Implementations
+    // Comparisons
+    // --------------------------------------------------------------------------------------------------------------
+
+	// Compare to zero: >, >=, =, <=, <
+    public boolean gtZero() {
+    	return value > 0.0;
+    }
+
+    public boolean geqZero() {
+    	return value >= 0.0;
+    }
+
+    public boolean eqZero() {
+    	return value == 0.0;
+    }
+
+    public boolean leqZero() {
+    	return value <= 0.0;
+    }
+
+    public boolean ltZero() {
+    	return value < 0.0;
+    }
+    
+    // Compare to other number: >, >=, =, <=, <
+    public boolean gt(Num num) {
+    	return value > num.doubleValue();
+    }
+
+    public boolean geq(Num num) {
+    	return value >= num.doubleValue();
+    }
+    
+    public boolean eq(Num num) {
+    	return eq(num.doubleValue()); 
+    }
+    
+    public boolean eq(double num) {
+        return Double.compare(this.value, num) == 0;
+	}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof RealDoublePrecision)) {
+            return false;
+        } else {
+            return eq(((RealDoublePrecision) obj).value);
+        }
+    }
+
+    public boolean leq(Num num) {
+    	return value <= num.doubleValue();
+    }
+
+    public boolean lt(Num num) {
+    	return value < num.doubleValue();
+    }
+
+    // Properties
+    public boolean isFinite() {
+        return Double.isFinite(value);
+    }
+
+    public boolean isInfinite() {
+        return Double.isInfinite(value);
+    }
+
+    public boolean isNaN() {
+        return Double.isNaN(value);
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Operations (Utils)
     // --------------------------------------------------------------------------------------------------------------
 
     public Num add(Num num1, Num num2) {
@@ -342,9 +287,6 @@ public class RealDoublePrecision implements Num {
 
     public Num sub(Num num1, Num num2) {
         double result = ((RealDoublePrecision) num1).value - ((RealDoublePrecision) num2).value;
-        if (Math.abs(result) <= EPSILON_Double) {
-            result = 0;
-        }
         return new RealDoublePrecision(result);
     }
 
@@ -375,17 +317,5 @@ public class RealDoublePrecision implements Num {
 
     public Num negate(Num num) {
         return new RealDoublePrecision(((RealDoublePrecision) num).value * -1);
-    }
-
-    public boolean isFinite(Num num) {
-        return ((RealDoublePrecision) num).isFinite();
-    }
-
-    public boolean isInfinite(Num num) {
-        return ((RealDoublePrecision) num).isInfinite();
-    }
-
-    public boolean isNaN(Num num) {
-        return ((RealDoublePrecision) num).isNaN();
     }
 }

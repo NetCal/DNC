@@ -28,7 +28,6 @@
 
 package de.uni_kl.cs.discodnc.numbers.implementations;
 
-import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.numbers.values.NaN;
 import de.uni_kl.cs.discodnc.numbers.values.NegativeInfinity;
@@ -48,41 +47,40 @@ import java.math.BigInteger;
  * objects, copy by value semantic are is applied.
  */
 public class RationalBigInt implements Num {
-    // Unfortunately you cannot give the constructor the double value 0.0000001
-    private static final BigFraction EPSILON_BIGFRACTION = new BigFraction(1, 1000000);
     private static RationalBigInt instance = new RationalBigInt();
+
     private BigFraction value;
+    
     private Num POSITIVE_INFINITY = null;
     private Num NEGATIVE_INFINITY = null;
     private Num NaN = null;
     private Num ZERO = null;
-    private Num EPSILON = null;
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // --------------------------------------------------------------------------------------------------------------
+    
     private RationalBigInt() {
     }
 
-    private RationalBigInt(int num) {
+    public RationalBigInt(int num) {
         value = new BigFraction(num);
     }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Num Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
-    private RationalBigInt(double value) {
+    
+    public RationalBigInt(double value) {
         this.value = new BigFraction(value);
     }
 
-    private RationalBigInt(int num, int den) {
+    public RationalBigInt(int num, int den) {
         value = new BigFraction(num, den);
+    }
+
+    public RationalBigInt(RationalBigInt num) {
+        value = new BigFraction(num.value.getNumerator(), num.value.getDenominator());
     }
 
     private RationalBigInt(BigInteger num, BigInteger den) {
         value = new BigFraction(num, den);
-    }
-
-    private RationalBigInt(RationalBigInt num) {
-        value = new BigFraction(num.value.getNumerator(), num.value.getDenominator());
     }
 
     private RationalBigInt(BigFraction frac) {
@@ -92,161 +90,17 @@ public class RationalBigInt implements Num {
     public static RationalBigInt getInstance() {
         return instance;
     }
-
-    public boolean eqZero() {
-        return value.compareTo(BigFraction.ZERO) == 0;
-    }
-
-    public boolean gt(Num num) {
-        if (num instanceof de.uni_kl.cs.discodnc.numbers.values.NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return false;
-        }
-        if (num instanceof NegativeInfinity) {
-            return true;
-        }
-
-        if (this.value.compareTo(((RationalBigInt) num).value) > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean gtZero() {
-        if (this.value.compareTo(BigFraction.ZERO) > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean geq(Num num) {
-        if (num instanceof NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return false;
-        }
-        if (num instanceof NegativeInfinity) {
-            return true;
-        }
-
-        if (this.value.compareTo(((RationalBigInt) num).value) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean geqZero() {
-        if (this.value.compareTo(BigFraction.ZERO) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean lt(Num num) {
-        if (num instanceof NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return true;
-        }
-        if (num instanceof NegativeInfinity) {
-            return false;
-        }
-
-        if (this.value.compareTo(((RationalBigInt) num).value) < 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean ltZero() {
-        if (this.value.compareTo(BigFraction.ZERO) < 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean leq(Num num) {
-        if (num instanceof NaN) {
-            return false;
-        }
-        if (num instanceof PositiveInfinity) {
-            return true;
-        }
-        if (num instanceof NegativeInfinity) {
-            return false;
-        }
-
-        if (this.value.compareTo(((RationalBigInt) num).value) <= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean leqZero() {
-        if (this.value.compareTo(BigFraction.ZERO) <= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isFinite() {
-        return true;
-    }
-
-    public boolean isInfinite() {
-        return false; // Handled by extraValues
-    }
-
-    public boolean isNaN() {
-        return false; // Handled by extraValues
-    }
-
-    @Override
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Conversions
+    // --------------------------------------------------------------------------------------------------------------
+    
     public double doubleValue() {
         return value.doubleValue();
     }
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory Interface Implementations
-    // --------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public Num copy() {
-        return new RationalBigInt(this.value.getNumerator(), this.value.getDenominator());
-    }
-
-    @Override
-    public boolean eq(double num) {
-        return this.doubleValue() - num <= RealDoublePrecision.getInstance().createEpsilon().doubleValue();
-    }
-
-    public boolean equals(RationalBigInt num) {
-        if (this.value.compareTo(num.value) == 0) {
-            return true;
-        } else {
-            return eq(num.doubleValue());
-        }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RationalBigInt)) {
-            return false;
-        } else {
-            return equals(((RationalBigInt) obj));
-        }
+    public BigFraction getValue() {
+    	return new BigFraction(this.value.getNumerator(), this.value.getDenominator());
     }
 
     @Override
@@ -259,6 +113,14 @@ public class RationalBigInt implements Num {
         return value.toString();
     }
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory
+    // --------------------------------------------------------------------------------------------------------------
+    
+    public Num copy() {
+        return new RationalBigInt(this.value.getNumerator(), this.value.getDenominator());
+    }
+    
     public Num getPositiveInfinity() {
         if (POSITIVE_INFINITY == null) {
             POSITIVE_INFINITY = createPositiveInfinity();
@@ -267,7 +129,7 @@ public class RationalBigInt implements Num {
     }
 
     public Num createPositiveInfinity() {
-        return new PositiveInfinity();
+        return PositiveInfinity.getInstance();
     }
 
     public Num getNegativeInfinity() {
@@ -278,7 +140,7 @@ public class RationalBigInt implements Num {
     }
 
     public Num createNegativeInfinity() {
-        return new NegativeInfinity();
+        return NegativeInfinity.getInstance();
     }
 
     public Num getNaN() {
@@ -289,7 +151,7 @@ public class RationalBigInt implements Num {
     }
 
     public Num createNaN() {
-        return new NaN();
+        return de.uni_kl.cs.discodnc.numbers.values.NaN.getInstance();
     }
 
     public Num getZero() {
@@ -302,18 +164,7 @@ public class RationalBigInt implements Num {
     public Num createZero() {
         return new RationalBigInt(0);
     }
-
-    public Num getEpsilon() {
-        if (EPSILON == null) {
-            EPSILON = createEpsilon();
-        }
-        return EPSILON;
-    }
-
-    public Num createEpsilon() {
-        return new RationalBigInt(EPSILON_BIGFRACTION);
-    }
-
+    
     public Num create(int num) {
         return new RationalBigInt(num);
     }
@@ -356,8 +207,7 @@ public class RationalBigInt implements Num {
         boolean double_based = num_str.contains(".");
 
         if (fraction_indicator && double_based) {
-            throw new Exception("Invalid string representation of a number based on "
-                    + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+            throw new Exception("Invalid string representation of a number based on RationalBigInt: " + num_str);
         }
 
         try {
@@ -369,8 +219,7 @@ public class RationalBigInt implements Num {
             if (fraction_indicator) {
                 String[] num_den = num_str.split(" / "); // ["num","den"]
                 if (num_den.length != 2) {
-                    throw new Exception("Invalid string representation of a number based on "
-                            + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+                    throw new Exception("Invalid string representation of a number based on RationalBigInt: " + num_str);
                 }
 
                 int den = Integer.parseInt(num_den[1]);
@@ -385,35 +234,149 @@ public class RationalBigInt implements Num {
                 return create(Double.parseDouble(num_str));
             }
         } catch (Exception e) {
-            throw new Exception("Invalid string representation of a number based on "
-                    + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+            throw new Exception("Invalid string representation of a number based on RationalBigInt: " + num_str);
         }
 
         // This code should not be reachable because all the operations above either
         // succeed such that we can return a number
         // of raise an exception of some kind. Yet, Java does not get this and thus
         // complains if there's no "finalizing statement".
-        throw new Exception("Invalid string representation of a number based on "
-                + Calculator.getInstance().getNumImpl().toString() + ": " + num_str);
+        throw new Exception("Invalid string representation of a number based on RationalBigInt: " + num_str);
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Utils Interface Implementations
+    // Comparisons
     // --------------------------------------------------------------------------------------------------------------
+    
+    // Compare to zero: >, >=, =, <=, <
+    public boolean gtZero() {
+        return this.value.compareTo(BigFraction.ZERO) > 0;
+    }
 
+    public boolean geqZero() {
+        return this.value.compareTo(BigFraction.ZERO) >= 0;
+    }
+
+    public boolean eqZero() {
+        return value.compareTo(BigFraction.ZERO) == 0;
+    }
+
+    public boolean leqZero() {
+        return this.value.compareTo(BigFraction.ZERO) <= 0;
+    }
+    
+    public boolean ltZero() {
+        return this.value.compareTo(BigFraction.ZERO) < 0;
+    }
+
+    // Compare to other number: >, >=, =, <=, <
+    public boolean gt(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return false;
+        }
+        if (num instanceof NegativeInfinity) {
+            return true;
+        }
+
+        return this.value.compareTo(((RationalBigInt) num).value) > 0;
+    }
+
+    public boolean geq(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return false;
+        }
+        if (num instanceof NegativeInfinity) {
+            return true;
+        }
+
+        return this.value.compareTo(((RationalBigInt) num).value) >= 0;
+    }
+    
+    public boolean eq(Num num) {
+    	if (!(num instanceof RationalBigInt)) {
+    		return false;
+    	}
+    	
+        return this.value.compareTo(((RationalBigInt)num).value) == 0;
+    }
+
+    public boolean eq(double num) {
+    	return eq(new RationalBigInt(num));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof RationalBigInt)) {
+            return false;
+        } else {
+            return eq(((RationalBigInt) obj));
+        }
+    }
+
+    public boolean leq(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return true;
+        }
+        if (num instanceof NegativeInfinity) {
+            return false;
+        }
+
+        return this.value.compareTo(((RationalBigInt) num).value) <= 0;
+    }
+
+    public boolean lt(Num num) {
+        if (num instanceof NaN) {
+            return false;
+        }
+        if (num instanceof PositiveInfinity) {
+            return true;
+        }
+        if (num instanceof NegativeInfinity) {
+            return false;
+        }
+
+        return this.value.compareTo(((RationalBigInt) num).value) < 0;
+    }
+
+    // Properties
+    public boolean isFinite() {
+        return true;
+    }
+
+    public boolean isInfinite() {
+        return false; // Handled by extraValues
+    }
+
+    public boolean isNaN() {
+        return false; // Handled by extraValues
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Operations (Utils)
+    // --------------------------------------------------------------------------------------------------------------
+    
     public Num add(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN
                 || (num1 instanceof PositiveInfinity && num2 instanceof NegativeInfinity)
                 || (num1 instanceof NegativeInfinity && num2 instanceof PositiveInfinity)) {
-            return new NaN();
+            return getNaN();
         }
-        if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) { // other num is not negative
-            // infinity
-            return new PositiveInfinity();
+        if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) {
+        	// other num is not negative infinity
+            return getPositiveInfinity();
         }
-        if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) { // other num is not positive
-            // infinity
-            return new NegativeInfinity();
+        if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) {
+        	// other num is not positive infinity
+            return getNegativeInfinity();
         }
 
         return new RationalBigInt(((RationalBigInt) num1).value.add(((RationalBigInt) num2).value));
@@ -421,21 +384,21 @@ public class RationalBigInt implements Num {
 
     public Num sub(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
 
         if (num1 instanceof NaN || num2 instanceof NaN
                 || (num1 instanceof PositiveInfinity && num2 instanceof PositiveInfinity)
                 || (num1 instanceof NegativeInfinity && num2 instanceof NegativeInfinity)) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity // num2 is not positive infinity
                 || num2 instanceof NegativeInfinity) { // num1 is not negative infinity
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
         if (num1 instanceof NegativeInfinity // num2 is not negative infinity
                 || num2 instanceof PositiveInfinity) { // num1 is not positive infinity
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
 
         return new RationalBigInt(((RationalBigInt) num1).value.subtract(((RationalBigInt) num2).value));
@@ -443,34 +406,34 @@ public class RationalBigInt implements Num {
 
     public Num mult(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity) {
             if (num2.ltZero() || num2 instanceof NegativeInfinity) {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             } else {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             }
         }
         if (num2 instanceof PositiveInfinity) {
             if (num1.ltZero() || num1 instanceof NegativeInfinity) {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             } else {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             }
         }
         if (num1 instanceof NegativeInfinity) {
             if (num2.ltZero() || num2 instanceof NegativeInfinity) {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             } else {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             }
         }
         if (num2 instanceof NegativeInfinity) {
             if (num1.ltZero() || num1 instanceof NegativeInfinity) {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             } else {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             }
         }
 
@@ -480,23 +443,22 @@ public class RationalBigInt implements Num {
     public Num div(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN
                 || ((num1 instanceof PositiveInfinity || num1 instanceof NegativeInfinity)
-                && (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity))) { // two infinities
-            // in the
-            // division
-            return new NaN();
+                		// two infinities in the division
+                && (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity))) { 
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity) { // positive infinity divided by some finite value
             if (num2.ltZero()) {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             } else {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             }
         }
         if (num1 instanceof NegativeInfinity) { // negative infinity divided by some finite value
             if (num2.ltZero()) {
-                return new PositiveInfinity();
+                return getPositiveInfinity();
             } else {
-                return new NegativeInfinity();
+                return getNegativeInfinity();
             }
         }
         if (num2 instanceof PositiveInfinity || num2 instanceof NegativeInfinity) { // finite value divided by infinity
@@ -504,7 +466,7 @@ public class RationalBigInt implements Num {
         }
 
         if (((RationalBigInt) num2).eqZero()) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         } else {
             return new RationalBigInt(((RationalBigInt) num1).value.divide(((RationalBigInt) num2).value));
         }
@@ -512,10 +474,10 @@ public class RationalBigInt implements Num {
 
     public Num abs(Num num) {
         if (num instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num instanceof PositiveInfinity || num instanceof NegativeInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
 
         return new RationalBigInt(((RationalBigInt) num).value.abs());
@@ -523,11 +485,11 @@ public class RationalBigInt implements Num {
 
     public Num diff(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity || num1 instanceof NegativeInfinity
                 || num2 instanceof NegativeInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
 
         return sub(max(((RationalBigInt) num1), ((RationalBigInt) num2)), min(((RationalBigInt) num1), ((RationalBigInt) num2)));
@@ -535,10 +497,10 @@ public class RationalBigInt implements Num {
 
     public Num max(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof PositiveInfinity || num2 instanceof PositiveInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
         if (num1 instanceof NegativeInfinity) {
             return num2.copy();
@@ -556,10 +518,10 @@ public class RationalBigInt implements Num {
 
     public Num min(Num num1, Num num2) {
         if (num1 instanceof NaN || num2 instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num1 instanceof NegativeInfinity || num2 instanceof NegativeInfinity) {
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
         if (num1 instanceof PositiveInfinity) {
             return num2.copy();
@@ -577,39 +539,15 @@ public class RationalBigInt implements Num {
 
     public Num negate(Num num) {
         if (num instanceof NaN) {
-            return new NaN();
+            return getNaN();
         }
         if (num instanceof PositiveInfinity) {
-            return new NegativeInfinity();
+            return getNegativeInfinity();
         }
         if (num instanceof NegativeInfinity) {
-            return new PositiveInfinity();
+            return getPositiveInfinity();
         }
 
         return new RationalBigInt(((RationalBigInt) num).value.negate());
-    }
-
-    public boolean isFinite(Num num) {
-        if (num instanceof RationalBigInt) { // Only stores finite values
-            return true;
-        } else {
-            return false; // NaN is neither finite nor infinite
-        }
-    }
-
-    public boolean isInfinite(Num num) {
-        if ((num instanceof PositiveInfinity) || (num instanceof NegativeInfinity)) {
-            return true;
-        } else {
-            return false; // NaN is neither finite nor infinite
-        }
-    }
-
-    public boolean isNaN(Num num) {
-        if (num instanceof NaN) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

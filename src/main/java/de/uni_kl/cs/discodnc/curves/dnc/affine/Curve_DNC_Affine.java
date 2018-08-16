@@ -170,12 +170,12 @@ public class Curve_DNC_Affine implements Curve_Affine {
 		} else { // potential new default, tests work
 			segments = new LinearSegment_DNC[segment_count];
 			// Initialize Elements of array, not only array itself
-			segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-					Num.getFactory().createZero(), false);
+			segments[0] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+					Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 
 			for (int i = 1; i < segment_count; i++) {
-				segments[i] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-						Num.getFactory().createZero(), true);
+				segments[i] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+						Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), true);
 			}
 		}
 	}
@@ -187,12 +187,12 @@ public class Curve_DNC_Affine implements Curve_Affine {
 			return;
 		}
 
-		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-				Num.getFactory().createZero(), false);
+		segments[0] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 
 		for (int i = 1; i < segment_count; i++) {
-			segments[i] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-					Num.getFactory().createZero(), true);
+			segments[i] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+					Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), true);
 		}
 	}
 
@@ -227,8 +227,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 
 	protected void forceThroughOrigin() {
 		if (getSegment(0).getY().gtZero()) {
-			addSegment(0, new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-					Num.getFactory().createZero(), false));
+			addSegment(0, new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+					Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false));
 
 			getSegment(1).setLeftopen(true);
 		}
@@ -346,7 +346,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return the index of the segment into the array.
 	 */
 	public int getSegmentLimitRight(Num x) {
-		if (x.equals(Num.getFactory().getPositiveInfinity())) {
+		if (x.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
 			return getSegmentCount();
 		}
 
@@ -460,6 +460,10 @@ public class Curve_DNC_Affine implements Curve_Affine {
 		clearMetaInfo();
 	}
 
+	// ------------------------------------------------------------
+	// Curve properties
+	// ------------------------------------------------------------
+
 	/**
 	 * Returns whether the inflection point is a (real or unreal) discontinuity.
 	 *
@@ -470,8 +474,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 */
 	public boolean isDiscontinuity(int pos) {
 		return (pos + 1 < segments.length
-				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getX(), segments[pos].getX())))
-						.lt(Num.getFactory().getEpsilon()));
+				&& segments[pos + 1].getX().eq(segments[pos].getX()));
 	}
 
 	/**
@@ -484,14 +487,9 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 *         <code>false</code> if not.
 	 */
 	public boolean isRealDiscontinuity(int pos) {
-		return (isDiscontinuity(pos)
-				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getY(), segments[pos].getY())))
-						.geq(Num.getFactory().getEpsilon()));
+		return (isDiscontinuity(pos) 
+				&& !(segments[pos + 1].getY().eq(segments[pos].getY())));
 	}
-
-	// ------------------------------------------------------------
-	// Curve properties
-	// ------------------------------------------------------------
 
 	/**
 	 * Returns whether the inflection point is an unreal discontinuity, i.e. the y0
@@ -505,8 +503,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 */
 	public boolean isUnrealDiscontinuity(int pos) {
 		return (isDiscontinuity(pos)
-				&& (Num.getUtils().abs(Num.getUtils().sub(segments[pos + 1].getY(), segments[pos].getY())))
-						.lt(Num.getFactory().getEpsilon()));
+				&& segments[pos + 1].getY().eq(segments[pos].getY()));
 	}
 
 	/**
@@ -515,10 +512,10 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return whether the curve is wide-sense increasing.
 	 */
 	public boolean isWideSenseIncreasing() {
-		Num y = Num.getFactory().getNegativeInfinity(); // No need to create an object as this value is only
+		Num y = Num.getFactory(Calculator.getInstance().getNumBackend()).getNegativeInfinity(); // No need to create an object as this value is only
 		// set for initial comparison in the loop.
 		for (int i = 0; i < segments.length; i++) {
-			if (segments[i].getY().lt(y) || segments[i].getGrad().lt(Num.getFactory().getZero())) {
+			if (segments[i].getY().lt(y) || segments[i].getGrad().lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 				return false;
 			}
 			y = segments[i].getY();
@@ -532,7 +529,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return whether the curve is convex.
 	 */
 	public boolean isConvex() {
-		return isConvexIn(Num.getFactory().getZero(), Num.getFactory().getPositiveInfinity());
+		return isConvexIn(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity());
 	}
 
 	/**
@@ -545,7 +542,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return whether the curve is convex
 	 */
 	public boolean isConvexIn(Num a, Num b) {
-		Num last_gradient = Num.getFactory().getNegativeInfinity(); // No need to create an object as this
+		Num last_gradient = Num.getFactory(Calculator.getInstance().getNumBackend()).getNegativeInfinity(); // No need to create an object as this
 		// value is only set for initial
 		// comparison in the loop.
 
@@ -560,8 +557,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 			}
 			Num gradient;
 			if (i < segments.length - 1) {
-				gradient = Num.getUtils().div(Num.getUtils().sub(segments[i + 1].getY(), segments[i].getY()),
-						Num.getUtils().sub(segments[i + 1].getX(), segments[i].getX()));
+				gradient = Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i + 1].getY(), segments[i].getY()),
+						Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i + 1].getX(), segments[i].getX()));
 			} else {
 				gradient = segments[i].getGrad();
 			}
@@ -579,7 +576,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return whether the curve is concave.
 	 */
 	public boolean isConcave() {
-		return isConcaveIn(Num.getFactory().getZero(), Num.getFactory().getPositiveInfinity());
+		return isConcaveIn(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity());
 	}
 
 	/**
@@ -592,7 +589,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return whether the curve is concave.
 	 */
 	public boolean isConcaveIn(Num a, Num b) {
-		Num last_gradient = Num.getFactory().getPositiveInfinity(); // No need to create an object as this
+		Num last_gradient = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity(); // No need to create an object as this
 		// value is only set for initial
 		// comparison in the loop.
 
@@ -605,8 +602,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 			Num gradient;
 			// Handles discontinuities
 			if (i < segments.length - 1) {
-				gradient = Num.getUtils().div(Num.getUtils().sub(segments[i + 1].getY(), segments[i].getY()),
-						Num.getUtils().sub(segments[i + 1].getX(), segments[i].getX()));
+				gradient = Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i + 1].getY(), segments[i].getY()),
+						Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i + 1].getX(), segments[i].getX()));
 			} else {
 				gradient = segments[i].getGrad();
 			}
@@ -625,21 +622,21 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return whether the curve is almost concave.
 	 */
 	public boolean isAlmostConcave() {
-		Num last_gradient = Num.getFactory().getPositiveInfinity(); // No need to create an object as this
+		Num last_gradient = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity(); // No need to create an object as this
 		// value is only set for initial
 		// comparison in the loop.
 
 		for (int i = 0; i < segments.length; i++) {
 			// Skip the horizontal part at the beginning
-			if (last_gradient.equals(Num.getFactory().getPositiveInfinity())
-					&& segments[i].getGrad().equals(Num.getFactory().getZero())) {
+			if (last_gradient.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
+					&& segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 				continue;
 			}
 
 			Num gradient;
 			if (i < segments.length - 1) {
-				gradient = Num.getUtils().div(Num.getUtils().sub(segments[i + 1].getY(), segments[i].getY()),
-						Num.getUtils().sub(segments[i + 1].getX(), segments[i].getX()));
+				gradient = Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i + 1].getY(), segments[i].getY()),
+						Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i + 1].getX(), segments[i].getX()));
 			} else {
 				gradient = segments[i].getGrad();
 			}
@@ -663,10 +660,10 @@ public class Curve_DNC_Affine implements Curve_Affine {
 		Curve.beautify(this_cpy);
 		Curve.beautify(other_cpy);
 
-		if (this_cpy.getLatency() == Num.getFactory().getPositiveInfinity()) {
+		if (this_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
 			this_cpy = this.createZeroCurve();
 		}
-		if (other_cpy.getLatency() == Num.getFactory().getPositiveInfinity()) {
+		if (other_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
 			other_cpy = this.createZeroCurve();
 		}
 
@@ -719,9 +716,9 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	public Num f(Num x) {
 		int i = getSegmentDefining(x);
 		if (i < 0) {
-			return Num.getFactory().createNaN();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		}
-		return Num.getUtils().add(Num.getUtils().mult(Num.getUtils().sub(x, segments[i].getX()), segments[i].getGrad()),
+		return Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x, segments[i].getX()), segments[i].getGrad()),
 				segments[i].getY());
 	}
 
@@ -736,9 +733,9 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	public Num fLimitRight(Num x) {
 		int i = getSegmentLimitRight(x);
 		if (i < 0) {
-			return Num.getFactory().createNaN();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		}
-		return Num.getUtils().add(Num.getUtils().mult(Num.getUtils().sub(x, segments[i].getX()), segments[i].getGrad()),
+		return Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x, segments[i].getX()), segments[i].getGrad()),
 				segments[i].getY());
 	}
 
@@ -773,19 +770,19 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	public Num f_inv(Num y, boolean rightmost) {
 		int i = getSegmentFirstAtValue(y);
 		if (i < 0) {
-			return Num.getFactory().createNaN();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		}
 		if (rightmost) {
-			while (i < segments.length && segments[i].getGrad().equals(Num.getFactory().getZero())) {
+			while (i < segments.length && segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 				i++;
 			}
 			if (i >= segments.length) {
-				return Num.getFactory().createPositiveInfinity();
+				return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
 			}
 		}
-		if (!segments[i].getGrad().equals(Num.getFactory().getZero())) {
-			return Num.getUtils().add(segments[i].getX(),
-					Num.getUtils().div(Num.getUtils().sub(y, segments[i].getY()), segments[i].getGrad()));
+		if (!segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+			return Num.getUtils(Calculator.getInstance().getNumBackend()).add(segments[i].getX(),
+					Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y, segments[i].getY()), segments[i].getGrad()));
 		} else {
 			return segments[i].getX();
 		}
@@ -809,7 +806,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 					return i;
 				}
 			} else {
-				if (segments[i].getGrad().gt(Num.getFactory().getZero())) {
+				if (segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 					return i;
 				}
 			}
@@ -828,28 +825,28 @@ public class Curve_DNC_Affine implements Curve_Affine {
 			if (segments.length == 2) { // Rate latency other than a simple rate function
 				return segments[1].getX().copy();
 			} else { // Single-segment rate functions have latency 0
-				return Num.getFactory().createZero();
+				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 			}
 		} else {
 			Curve.beautify(this);
-			if (segments[0].getY().gt(Num.getFactory().getZero())) {
-				return Num.getFactory().createZero();
+			if (segments[0].getY().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 			}
 			for (int i = 0; i < segments.length; i++) {
 				Num y0 = segments[i].getY();
-				if (y0.lt(Num.getFactory().getZero()) && y0.gt(Num.getUtils().negate(Num.getFactory().getEpsilon()))) {
-					y0 = Num.getFactory().createZero();
+				if (y0.lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+					y0 = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 				}
-				if (y0.gt(Num.getFactory().getZero()) || (y0.geq(Num.getFactory().getZero())
-						&& segments[i].getGrad().gt(Num.getFactory().getZero()))) {
+				if (y0.gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()) || (y0.geq(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())
+						&& segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()))) {
 					return segments[i].getX();
 				}
-				if (y0.lt(Num.getFactory().getZero()) || segments[i].getGrad().lt(Num.getFactory().getZero())) {
+				if (y0.lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()) || segments[i].getGrad().lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 					System.out.println("RemoveLatency of " + this.toString());
 					throw new RuntimeException("Should have avoided neg. gradients elsewhere...");
 				}
 			}
-			return Num.getFactory().createPositiveInfinity();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
 		}
 	}
 
@@ -861,10 +858,10 @@ public class Curve_DNC_Affine implements Curve_Affine {
 			if (segments.length == 2) { // Token buckets with spot in the origin
 				return segments[1].getY().copy();
 			} else { // Single-segment peak rate functions have burstiness 0
-				return Num.getFactory().createZero();
+				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 			}
 		} else {
-			return fLimitRight(Num.getFactory().getZero());
+			return fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero());
 		}
 	}
 
@@ -879,7 +876,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	public Num getGradientLimitRight(Num x) {
 		int i = getSegmentLimitRight(x);
 		if (i < 0) {
-			return Num.getFactory().createNaN();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		}
 		return segments[i].getGrad();
 	}
@@ -947,8 +944,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 		if (Calculator.getInstance().exec_service_curve_checks() && !this.isConvex()) {
 			if (this.equals(this.createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_DNC_Affine>();
-				rate_latencies.add(this.createRateLatency(Num.getFactory().createPositiveInfinity(),
-						Num.getFactory().createZero()));
+				rate_latencies.add(this.createRateLatency(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity(),
+						Num.getFactory(Calculator.getInstance().getNumBackend()).createZero()));
 			} else {
 				throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
 			}
@@ -959,8 +956,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 					continue;
 				}
 				Num rate = segments[i].getGrad();
-				Num latency = Num.getUtils().sub(segments[i].getX(),
-						Num.getUtils().div(segments[i].getY(), segments[i].getGrad()));
+				Num latency = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i].getX(),
+						Num.getUtils(Calculator.getInstance().getNumBackend()).div(segments[i].getY(), segments[i].getGrad()));
 				if (latency.ltZero()) {
 					continue;
 				}
@@ -1020,8 +1017,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 				continue;
 			}
 			Num rate = segments[i].getGrad();
-			Num burst = Num.getUtils().sub(segments[i].getY(),
-					Num.getUtils().mult(segments[i].getX(), segments[i].getGrad()));
+			Num burst = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i].getY(),
+					Num.getUtils(Calculator.getInstance().getNumBackend()).mult(segments[i].getX(), segments[i].getGrad()));
 			token_buckets.add(this.createTokenBucket(rate, burst));
 		}
 
@@ -1063,7 +1060,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	public Curve_DNC_Affine createHorizontal(double y) {
-		return createHorizontal(Num.getFactory().create(y));
+		return createHorizontal(Num.getFactory(Calculator.getInstance().getNumBackend()).create(y));
 	}
 
 	/**
@@ -1112,11 +1109,11 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 * @return a <code>ServiceCurve</code> instance
 	 */
 	public ServiceCurve_DNC_Affine createZeroDelayInfiniteBurst() {
-		return createDelayedInfiniteBurst(Num.getFactory().createZero());
+		return createDelayedInfiniteBurst(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}
 
 	public ServiceCurve_DNC_Affine createDelayedInfiniteBurst(double delay) {
-		return createDelayedInfiniteBurst(Num.getFactory().create(delay));
+		return createDelayedInfiniteBurst(Num.getFactory(Calculator.getInstance().getNumBackend()).create(delay));
 	}
 
 	public ServiceCurve_DNC_Affine createDelayedInfiniteBurst(Num delay) {
@@ -1126,7 +1123,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	public ServiceCurve_DNC_Affine createRateLatency(double rate, double latency) {
-		return createRateLatency(Num.getFactory().create(rate), Num.getFactory().create(latency));
+		return createRateLatency(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(latency));
 	}
 
 	public ServiceCurve_DNC_Affine createRateLatency(Num rate, Num latency) {
@@ -1167,7 +1164,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	public ArrivalCurve_DNC_Affine createPeakArrivalRate(double rate) {
-		return createPeakArrivalRate(Num.getFactory().create(rate));
+		return createPeakArrivalRate(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate));
 	}
 
 	public ArrivalCurve_DNC_Affine createPeakArrivalRate(Num rate) {
@@ -1177,7 +1174,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	public ArrivalCurve_DNC_Affine createTokenBucket(double rate, double burst) {
-		return createTokenBucket(Num.getFactory().create(rate), Num.getFactory().create(burst));
+		return createTokenBucket(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(burst));
 	}
 
 	public ArrivalCurve_DNC_Affine createTokenBucket(Num rate, Num burst) {
@@ -1210,15 +1207,15 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	public MaxServiceCurve_DNC_Affine createInfiniteMaxService() {
-		return createDelayedInfiniteBurstMSC(Num.getFactory().createZero());
+		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}
 
 	public MaxServiceCurve_DNC_Affine createZeroDelayInfiniteBurstMSC() {
-		return createDelayedInfiniteBurstMSC(Num.getFactory().createZero());
+		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}
 
 	public MaxServiceCurve_DNC_Affine createDelayedInfiniteBurstMSC(double delay) {
-		return createDelayedInfiniteBurstMSC(Num.getFactory().create(delay));
+		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).create(delay));
 	}
 
 	public MaxServiceCurve_DNC_Affine createDelayedInfiniteBurstMSC(Num delay) {
@@ -1228,7 +1225,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	public MaxServiceCurve_DNC_Affine createRateLatencyMSC(double rate, double latency) {
-		return createRateLatencyMSC(Num.getFactory().create(rate), Num.getFactory().create(latency));
+		return createRateLatencyMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(latency));
 	}
 
 	public MaxServiceCurve_DNC_Affine createRateLatencyMSC(Num rate, Num latency) {
@@ -1241,8 +1238,8 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	// Curve assembly
 	// ------------------------------------------------------------------------------
 	private void makeHorizontal(Curve_DNC_Affine c_dnc, Num y) {
-		LinearSegment_DNC segment = new LinearSegment_DNC(Num.getFactory().createZero(), y,
-				Num.getFactory().createZero(), false);
+		LinearSegment_DNC segment = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), y,
+				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 		c_dnc.setSegments(new LinearSegment_DNC[] { segment });
 	}
 
@@ -1253,29 +1250,29 @@ public class Curve_DNC_Affine implements Curve_Affine {
 
 		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
-		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-				Num.getFactory().createZero(), false);
+		segments[0] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 
-		segments[1] = new LinearSegment_DNC(delay, Num.getFactory().createPositiveInfinity(),
-				Num.getFactory().createZero(), true);
+		segments[1] = new LinearSegment_DNC(delay, Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity(),
+				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_delayed_infinite_burst = true;
 	}
 
 	private void makePeakRate(Curve_DNC_Affine c_dnc, Num rate) {
-		if (rate.equals(Num.getFactory().getPositiveInfinity())) {
+		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
 			throw new IllegalArgumentException(
 					"Peak rate with rate infinity equals a delayed infinite burst curve with delay < 0.0");
 		}
 		if (rate.eqZero()) {
-			makeHorizontal(c_dnc, Num.getFactory().createZero());
+			makeHorizontal(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 			return;
 		}
 
 		LinearSegment_DNC[] segments = new LinearSegment_DNC[1];
 
-		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(), rate, false);
+		segments[0] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), rate, false);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_rate_latency = true; // with latency 0
@@ -1283,12 +1280,12 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	}
 
 	private void makeRateLatency(Curve_DNC_Affine c_dnc, Num rate, Num latency) {
-		if (rate.equals(Num.getFactory().getPositiveInfinity())) {
+		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
 			makeDelayedInfiniteBurst(c_dnc, latency);
 			return;
 		}
-		if (rate.eqZero() || latency.equals(Num.getFactory().getPositiveInfinity())) {
-			makeHorizontal(c_dnc, Num.getFactory().createZero());
+		if (rate.eqZero() || latency.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
+			makeHorizontal(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 			return;
 		}
 		if (latency.leqZero()) {
@@ -1298,19 +1295,19 @@ public class Curve_DNC_Affine implements Curve_Affine {
 
 		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
-		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-				Num.getFactory().createZero(), false);
+		segments[0] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 
-		segments[1] = new LinearSegment_DNC(latency, Num.getFactory().createZero(), rate, true);
+		segments[1] = new LinearSegment_DNC(latency, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), rate, true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_rate_latency = true;
 	}
 
 	private void makeTokenBucket(Curve_DNC_Affine c_dnc, Num rate, Num burst) {
-		if (rate.equals(Num.getFactory().getPositiveInfinity())
-				|| burst.equals(Num.getFactory().getPositiveInfinity())) {
-			makeDelayedInfiniteBurst(c_dnc, Num.getFactory().createZero());
+		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
+				|| burst.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
+			makeDelayedInfiniteBurst(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 			return;
 		}
 		if (rate.eqZero()) { // burst is finite
@@ -1324,10 +1321,10 @@ public class Curve_DNC_Affine implements Curve_Affine {
 
 		LinearSegment_DNC[] segments = new LinearSegment_DNC[2];
 
-		segments[0] = new LinearSegment_DNC(Num.getFactory().createZero(), Num.getFactory().createZero(),
-				Num.getFactory().createZero(), false);
+		segments[0] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 
-		segments[1] = new LinearSegment_DNC(Num.getFactory().createZero(), burst, rate, true);
+		segments[1] = new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), burst, rate, true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_token_bucket = true;
