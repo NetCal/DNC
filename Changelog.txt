@@ -1,6 +1,7 @@
 Changes for v2.5.0
 ------------------
 * Refactoring: tests, experiments and MPA RTC curve backend moved into git submoduls.
+* ArrivalCurve createUnboundedArrivals() is now ArrivalCurve createInfiniteArrivals().
 
 since v2.4.3 "Chimera"
 ----------------------

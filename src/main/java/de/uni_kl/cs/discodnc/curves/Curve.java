@@ -729,6 +729,8 @@ public interface Curve {
 
     ArrivalCurve createZeroArrivals();
 
+    ArrivalCurve createInfiniteArrivals();
+
     ArrivalCurve createPeakArrivalRate(double rate);
 
     ArrivalCurve createPeakArrivalRate(Num rate);

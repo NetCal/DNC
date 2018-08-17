@@ -199,7 +199,7 @@ public abstract class Deconvolution_DNC_PwAffine {
         // }
 
         if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the stability constraint
-            return Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY);
+            return Curve.getFactory().createInfiniteArrivals();
         }
         if (curve_2.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
             return Curve.getFactory().createArrivalCurve((Curve_PwAffine) curve_1);

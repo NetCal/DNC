@@ -128,7 +128,7 @@ public class TandemMatchingArrivalBound extends AbstractArrivalBound implements 
 		// service curve in this set
 		if (betas_loxfcaller_subpath.isEmpty()) {
 			System.out.println( "No service left over during TMA arrival bounding!" );
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY)));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createInfiniteArrivals()));
 		}
 
 		// Get arrival bound at the splitting point:

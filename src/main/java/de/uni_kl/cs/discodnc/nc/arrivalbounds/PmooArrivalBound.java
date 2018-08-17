@@ -149,7 +149,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 		if (betas_loxfcaller_subpath.isEmpty()) {
 			System.out.println("No service left over during PMOO arrival bounding!");
 			alphas_xfcaller.clear();
-			alphas_xfcaller.add(Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY));
+			alphas_xfcaller.add(Curve.getFactory().createInfiniteArrivals());
 			return alphas_xfcaller;
 		}
 
