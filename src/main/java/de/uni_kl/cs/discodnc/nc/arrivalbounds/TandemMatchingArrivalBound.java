@@ -29,6 +29,7 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.CurveBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -143,7 +144,10 @@ public class TandemMatchingArrivalBound extends AbstractArrivalBound implements 
 		Set<ArrivalCurve> alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 
 		// TODO It has not been investigated if the TFA node backlog can improve TM arrival bounds.
-		if (configuration.serverBacklogArrivalBound()) {
+		// TODO This implementation only works for token-bucket arrivals. 
+		// It disregards the potential shift in inflection points not present in this burst cap variant.
+		if (configuration.serverBacklogArrivalBound()
+				&& Calculator.getInstance().getCurveBackend() == CurveBackend_DNC_Affine.DNC_AFFINE) {
 			Server last_hop_xtx = link.getSource();
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
 			tfa.deriveBoundsAtServer(last_hop_xtx);
@@ -157,15 +161,9 @@ public class TandemMatchingArrivalBound extends AbstractArrivalBound implements 
 				}
 			}
 
-			// Reduce the burst
-			
-			// TODO This implementation only works for token-bucket arrivals. 
+			// Reduce the burst: Here's the limitation.
 			// It disregards the potential shift in inflection points not present in this burst cap variant.
 			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
-				if(alpha_xfcaller.getSegmentCount() > 2 ) {
-					// >2 segments -> >=2 inflection points -> burst reduction not applicable! 
-					continue;
-				}
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
 					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min); // if the burst is >0 then there are at
 					// least two segments and the second

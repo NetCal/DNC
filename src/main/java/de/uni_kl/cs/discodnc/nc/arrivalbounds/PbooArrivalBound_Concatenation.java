@@ -29,6 +29,7 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.CurveBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -161,7 +162,9 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 				common_subpath_src, f_xfcaller, flow_of_interest);
 		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
-		if (configuration.serverBacklogArrivalBound()) {
+		// TODO This implementation only works for token-bucket arrivals. 
+		if (configuration.serverBacklogArrivalBound()
+				&& Calculator.getInstance().getCurveBackend() == CurveBackend_DNC_Affine.DNC_AFFINE) {
 			Server last_hop_xtx = link.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
@@ -176,15 +179,9 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 				}
 			}
 
-			// Reduce the burst
-			
-			// TODO This implementation only works for token-bucket arrivals. 
+			// Reduce the burst: Here's the limitation.
 			// It disregards the potential shift in inflection points not present in this burst cap variant.
 			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
-				if(alpha_xfcaller.getSegmentCount() > 2 ) {
-					// >2 segments -> >=2 inflection points -> burst reduction not applicable! 
-					continue;
-				}
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
 					// if the burst is >0 then there are at least two segments 
 					// and the second one holds the burst as its y-axis value.
