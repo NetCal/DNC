@@ -2,7 +2,7 @@
  * This file is part of the Disco Deterministic Network Calculator.
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2016 Steffen Bondorf
+ * Copyright (C) 2013 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
@@ -27,78 +27,69 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.dnc;
+package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
-public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
+public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    protected MaxServiceCurve_DNC() {
+    public ArrivalCurve_DNC() {
         super();
     }
 
-    public MaxServiceCurve_DNC(int segment_count) {
+    public ArrivalCurve_DNC(int segment_count) {
         super(segment_count);
     }
 
-    public MaxServiceCurve_DNC(CurvePwAffine curve) {
-        copy(curve);
-
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isAlmostConcave()
-            // ) {
-            throw new RuntimeException(
-                    "Maximum service curves can only be created from wide-sense increasing functions.");
-        }
-
+    public ArrivalCurve_DNC(Curve curve) {
+        super(curve);
         forceThroughOrigin();
+        
+        // Too strong requirement: !isConcave()
+        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+        }
     }
 
-    public MaxServiceCurve_DNC(String max_service_curve_str) throws Exception {
-        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest
-            // possible
-            // string:
-            // {(0,0),0}
+    public ArrivalCurve_DNC(String arrival_curve_str) throws Exception {
+    	// Smallest possible string: {(0,0),0}
+        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { 
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(max_service_curve_str);
-
-        if (CalculatorConfig.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isAlmostConcave()
-            // ) {
-            throw new RuntimeException(
-                    "Maximum service curves can only be created from wide-sense increasing functions.");
-        }
-
+        initializeCurve(arrival_curve_str);
         forceThroughOrigin();
+
+        // Too strong requirement: !isConcave()
+        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public MaxServiceCurve_DNC copy() {
-        MaxServiceCurve_DNC msc_copy = new MaxServiceCurve_DNC();
-        msc_copy.copy(this);
-
-        return msc_copy;
+    public ArrivalCurve_DNC copy() {
+        ArrivalCurve_DNC ac_copy = new ArrivalCurve_DNC();
+        ac_copy.copy(this);
+        return ac_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MaxServiceCurve_DNC) && super.equals(obj);
+        return (obj instanceof ArrivalCurve_DNC) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "MSC".hashCode() * super.hashCode();
+        return "AC".hashCode() * super.hashCode();
     }
 
     /**
@@ -108,6 +99,6 @@ public class MaxServiceCurve_DNC extends Curve_DNC implements MaxServiceCurve {
      */
     @Override
     public String toString() {
-        return "MSC" + super.toString();
+        return "AC" + super.toString();
     }
 }

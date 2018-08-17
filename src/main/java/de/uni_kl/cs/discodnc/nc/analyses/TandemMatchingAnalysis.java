@@ -53,7 +53,7 @@ import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
@@ -263,7 +263,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 			arrival_bounds_link_permutations.clear();
  			List<Flow> flow_list_tmp = new LinkedList<Flow>();
  			for( ArrivalCurve alpha : alphas_xf_group ) {
- 				CurvePwAffine.beautify(alpha);
+ 				Curve.beautify(alpha);
 	 			
 	 			for( List<Flow> f_subst_list : cross_flow_substitutes_set ) {
 	 				// The new list of cross-flow substitutes = old list plus a new one with one of the derived arrival bounds. 
@@ -288,7 +288,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		}
 		
 		// Derive the left-over service curves
-		ServiceCurve null_service = CurvePwAffine.getFactory().createZeroService();
+		ServiceCurve null_service = Curve.getFactory().createZeroService();
 		for( List<Flow> xtx_substitutes : cross_flow_substitutes_set ) {
 			ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve( path, xtx_substitutes );
 			
@@ -298,7 +298,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		}
 
 		if( betas_e2e.isEmpty() ) {
-			betas_e2e.add( CurvePwAffine.getFactory().createZeroService() );
+			betas_e2e.add( Curve.getFactory().createZeroService() );
 		}
 		return betas_e2e;
 	}

@@ -66,7 +66,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	// Constructors
 	// --------------------------------------------------------------------------------------------------------------
 
-	protected Curve_MPARTC_PwAffine(CurvePwAffine curve) {
+	protected Curve_MPARTC_PwAffine(de.uni_kl.cs.discodnc.curves.Curve curve) {
 		copy(curve);
 	}
 
@@ -525,7 +525,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	@Override
-	public void setRL_Components(List<CurvePwAffine> rate_latencies) {
+	public void setRL_Components(List<de.uni_kl.cs.discodnc.curves.Curve> rate_latencies) {
 		List<Curve_MPARTC_PwAffine> tmp = new LinkedList<>();
 		for (int i = 0; i < rate_latencies.size(); i++) {
 			tmp.add((Curve_MPARTC_PwAffine) rate_latencies.get(i));
@@ -543,7 +543,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 	}
 
 	@Override
-	public void setTB_Components(List<CurvePwAffine> token_buckets) {
+	public void setTB_Components(List<de.uni_kl.cs.discodnc.curves.Curve> token_buckets) {
 		List<Curve_MPARTC_PwAffine> tmp = new LinkedList<>();
 		for (int i = 0; i < token_buckets.size(); i++) {
 			tmp.add((Curve_MPARTC_PwAffine) token_buckets.get(i));
@@ -759,7 +759,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		return new ServiceCurve_MPARTC_PwAffine(service_curve_str);
 	}
 
-	public ServiceCurve_MPARTC_PwAffine createServiceCurve(CurvePwAffine curve) {
+	public ServiceCurve_MPARTC_PwAffine createServiceCurve(de.uni_kl.cs.discodnc.curves.Curve curve) {
 		return new ServiceCurve_MPARTC_PwAffine(curve);
 	}
 
@@ -817,12 +817,12 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		return new ArrivalCurve_MPARTC_PwAffine(arrival_curve_str);
 	}
 
-	public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(CurvePwAffine curve) {
+	public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(de.uni_kl.cs.discodnc.curves.Curve curve) {
 		return new ArrivalCurve_MPARTC_PwAffine(curve);
 	}
 
-	public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(CurvePwAffine curve, boolean remove_latency) {
-		return createArrivalCurve(CurvePwAffine.removeLatency(curve));
+	public ArrivalCurve_MPARTC_PwAffine createArrivalCurve(de.uni_kl.cs.discodnc.curves.Curve curve, boolean remove_latency) {
+		return createArrivalCurve(de.uni_kl.cs.discodnc.curves.Curve.removeLatency(curve));
 	}
 
 	public ArrivalCurve_MPARTC_PwAffine createZeroArrivals() {
@@ -874,7 +874,7 @@ public class Curve_MPARTC_PwAffine implements CurvePwAffine {
 		return new MaxServiceCurve_MPARTC_PwAffine(max_service_curve_str);
 	}
 
-	public MaxServiceCurve_MPARTC_PwAffine createMaxServiceCurve(CurvePwAffine curve) {
+	public MaxServiceCurve_MPARTC_PwAffine createMaxServiceCurve(de.uni_kl.cs.discodnc.curves.Curve curve) {
 		return new MaxServiceCurve_MPARTC_PwAffine(curve);
 	}
 

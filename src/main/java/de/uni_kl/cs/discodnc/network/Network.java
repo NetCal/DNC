@@ -28,10 +28,7 @@
 
 package de.uni_kl.cs.discodnc.network;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.curves.*;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 
@@ -168,17 +165,17 @@ public class Network {
 	// --------------------------------------------------------------------------------------------
 	// Without given maximum service curve
 	public Server addServer(ServiceCurve service_curve) {
-		return addServer(service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
+		return addServer(service_curve, Curve.getFactory().createZeroDelayInfiniteBurstMSC(),
 				Multiplexing.ARBITRARY, false, false);
 	}
 
 	public Server addServer(ServiceCurve service_curve, Multiplexing multiplexing) {
-		return addServer(service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(), multiplexing,
+		return addServer(service_curve, Curve.getFactory().createZeroDelayInfiniteBurstMSC(), multiplexing,
 				true, true);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve) {
-		return addServer(alias, service_curve, CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC(),
+		return addServer(alias, service_curve, Curve.getFactory().createZeroDelayInfiniteBurstMSC(),
 				Multiplexing.ARBITRARY, false, false);
 	}
 
@@ -1014,7 +1011,7 @@ public class Network {
 	 * @return An aggregate arrival curve.
 	 */
 	public ArrivalCurve getSourceFlowArrivalCurve(Server source, Set<Flow> source_flows) {
-		ArrivalCurve a_out = CurvePwAffine.getFactory().createZeroArrivals();
+		ArrivalCurve a_out = Curve.getFactory().createZeroArrivals();
 
 		// Returns an empty set if one of the arguments is null
 		Set<Flow> source_flows_internal = SetUtils.getIntersection(map__server__source_flows.get(source), source_flows);
@@ -1026,7 +1023,7 @@ public class Network {
 					a_out = source_flows_internal.iterator().next().getArrivalCurve();
 				} else {
 					for (Flow f : source_flows_internal) {
-						a_out = CurvePwAffine.add(a_out, f.getArrivalCurve());
+						a_out = Curve.add(a_out, f.getArrivalCurve());
 					}
 				}
 			}

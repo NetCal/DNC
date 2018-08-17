@@ -31,7 +31,7 @@
 package de.uni_kl.cs.discodnc.nc.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
@@ -151,7 +151,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             
             if(f_xxfcaller_server.isEmpty()) {
             	betas_lo_server.add(server.getServiceCurve());
-        		result.map__server__alphas.put(server, Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+        		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
                 ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
                 betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
         		continue;
@@ -205,7 +205,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         	
         	if( ac_sets_to_combine.isEmpty() ) {
         		betas_lo_server.add(server.getServiceCurve());
-        		result.map__server__alphas.put(server, Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+        		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
         	} else {
         		Iterator<Set<ArrivalCurve>> ac_set_iterator = ac_sets_to_combine.iterator();
         		Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>(ac_set_iterator.next());
@@ -214,7 +214,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
                 while(ac_set_iterator.hasNext()) {
                 	for(ArrivalCurve ac_new : ac_set_iterator.next()) {
                 		for(ArrivalCurve ac_existing : alpha_xfois) {
-                			ac_combinations_tmp.add(CurvePwAffine.add(ac_new,ac_existing));
+                			ac_combinations_tmp.add(Curve.add(ac_new,ac_existing));
                 		}
                 	}
             		alpha_xfois.clear();

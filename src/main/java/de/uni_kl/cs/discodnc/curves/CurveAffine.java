@@ -38,7 +38,7 @@ import java.util.List;
  * linear segments, curves may be ascribed as (compositions of) rate latency and
  * token bucket functions.
  */
-public interface CurvePwAffine extends Curve {
+public interface CurveAffine extends Curve {
 
     // // Specific piecewise affine curve shapes
 
@@ -49,7 +49,7 @@ public interface CurvePwAffine extends Curve {
      * @param c2 the second curve.
      * @return the value of the horizontal deviation.
      */
-    static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
+    static Num getMaxHorizontalDeviation(CurveAffine c1, CurveAffine c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
             return Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity();
         }
@@ -74,7 +74,7 @@ public interface CurvePwAffine extends Curve {
     // Interface
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    CurvePwAffine copy();
+    CurveAffine copy();
 
     @Override
     void copy(Curve curve);
@@ -84,14 +84,14 @@ public interface CurvePwAffine extends Curve {
     boolean isRateLatency();
 
 
-    List<CurvePwAffine> getRL_Components();
+    List<CurveAffine> getRL_Components();
 
 
     // (Composition of) Token buckets
     boolean isTokenBucket();
 
 
-    List<CurvePwAffine> getTB_Components();
+    List<CurveAffine> getTB_Components();
 
 
 }

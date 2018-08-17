@@ -29,15 +29,14 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowResults;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
@@ -73,17 +72,20 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+			return alphas_xfcaller;
 		}
 
-		// Get the servers crossed by all flows in f_xfcaller
-		// that will eventually also cross the given link.
-		Set<Flow> f_xfcaller_link = SetUtils.getIntersection(network.getFlows(link), f_xfcaller);
-		f_xfcaller_link.remove(flow_of_interest);
-		if (f_xfcaller_link.size() == 0) {
-			// The flows to bound given in f_xfcaller do not cross the given link.
-			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+		// Get the servers on common sub-path of f_xfcaller flows crossing link
+		// loi == location of interference
+		Server loi = link.getDest();
+		Set<Flow> f_loi = network.getFlows(loi);
+		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
+		f_xfcaller_loi.remove(flow_of_interest);
+		if (f_xfcaller_loi.size() == 0) {
+			return alphas_xfcaller;
 		}
 
 		// The shortcut found in PmooArrivalBound for the a common_subpath of length 1
@@ -91,17 +93,64 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		// There's not a big potential to increase performance as the PBOO arrival bound
 		// implicitly handles this situation by only iterating over one server in the
 		// for loop.
-		Server common_subpath_src = network.findSplittingServer(link.getDest(), f_xfcaller_link);
-		Flow f_representative = f_xfcaller_link.iterator().next();
-		Path common_subpath = f_representative.getSubPath(common_subpath_src, link.getSource());
-		
-		SeparateFlowResults tandem_results = SeparateFlowAnalysis.tandemAnalysis(network, flow_of_interest, common_subpath, f_xfcaller, configuration);
-		
-		Set<ServiceCurve> betas_lo_subpath = tandem_results.getBetasE2E();
-		if(betas_lo_subpath.size() == 1
-				&& betas_lo_subpath.contains(CurvePwAffine.getFactory().createZeroService())) {
-			System.out.println("No service left over during PBOO arrival bounding!");
-			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createUnboundedArrivals()));
+		Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
+		Server common_subpath_dest = link.getSource();
+		Flow f_representative = f_xfcaller_loi.iterator().next();
+		Path common_subpath = f_representative.getSubPath(common_subpath_src, common_subpath_dest);
+
+		// Calculate the left-over service curves on this sub-path by convolution of the
+		// individual left over service curves
+		Set<ServiceCurve> betas_lo_subpath = new HashSet<ServiceCurve>();
+		Set<ServiceCurve> betas_lo_s;
+		Link link_from_prev_s;
+		Path foi_path = flow_of_interest.getPath();
+		for (Server server : common_subpath.getServers()) {
+			try {
+				link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+			} catch (Exception e) { // Reached the path's first server
+				link_from_prev_s = null; // reset to null
+			}
+
+			Set<Flow> f_xxfcaller_server = network.getFlows(server);
+			f_xxfcaller_server.removeAll(f_xfcaller);
+			f_xxfcaller_server.remove(flow_of_interest);
+
+			Set<Flow> f_xxfcaller_server_path = SetUtils.getIntersection(f_xxfcaller_server,
+					network.getFlows(link_from_prev_s));
+
+			// Convert f_xfoi_server to f_xfoi_server_offpath
+			f_xxfcaller_server.removeAll(f_xxfcaller_server_path);
+
+			// If we are off the path of interest, flow_of_interest is Flow.NULL_FLOW
+			// already.
+			Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+					server, f_xxfcaller_server_path, flow_of_interest);
+			Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(network,
+					configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
+
+			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
+			for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
+				for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
+					alphas_xxfcaller_s.add(Curve.add(arrival_curve_path, arrival_curve_offpath));
+				}
+			}
+
+			// Calculate the left-over service curve for this single server
+			betas_lo_s = Bound.leftOverService(configuration, server, alphas_xxfcaller_s);
+
+			// Check if there's any service left on this path. If not, the set only contains
+			// a null-service curve.
+			if (betas_lo_s.size() == 1
+					&& betas_lo_s.iterator().next().equals(Curve.getFactory().createZeroService())) {
+				System.out.println("No service left over during PBOO arrival bounding!");
+				alphas_xfcaller.clear();
+				alphas_xfcaller.add(Curve.getFactory()
+						.createArrivalCurve(Curve.getFactory().createZeroDelayInfiniteBurst()));
+				return alphas_xfcaller;
+			}
+
+			// Combine into the sub-path's left-over service curve
+			betas_lo_subpath = MinPlus.convolve_SCs_SCs(betas_lo_subpath, betas_lo_s, configuration.tbrlConvolution());
 		}
 
 		// Next we need to know the arrival bound of f_xfcaller at the server
@@ -111,7 +160,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		// by this call of computeArrivalBound.
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
-		Set<ArrivalCurve> alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
+		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
 		if (configuration.abConsiderTFANodeBacklog()) {
 			Server last_hop_xtx = link.getSource();

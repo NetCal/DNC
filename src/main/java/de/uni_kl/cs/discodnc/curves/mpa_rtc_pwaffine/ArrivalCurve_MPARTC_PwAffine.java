@@ -31,7 +31,6 @@ import ch.ethz.rtc.kernel.Curve;
 import ch.ethz.rtc.kernel.SegmentList;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 
 public class ArrivalCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -45,7 +44,7 @@ public class ArrivalCurve_MPARTC_PwAffine extends Curve_MPARTC_PwAffine implemen
         super(segment_count);
     }
 
-    public ArrivalCurve_MPARTC_PwAffine(CurvePwAffine curve) {
+    public ArrivalCurve_MPARTC_PwAffine(de.uni_kl.cs.discodnc.curves.Curve curve) {
         super(curve);
     }
 

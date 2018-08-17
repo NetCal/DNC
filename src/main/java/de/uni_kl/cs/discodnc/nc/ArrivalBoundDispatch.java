@@ -29,7 +29,7 @@
 package de.uni_kl.cs.discodnc.nc;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
@@ -84,7 +84,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(
-				Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (flows_to_bound.isEmpty()) {
 			return arrival_bounds;
 		}
@@ -130,10 +130,10 @@ public abstract class ArrivalBoundDispatch {
 			// * Consider all the permutations of different bounds per in link.
 			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
 			for (ArrivalCurve arrival_bound_link : arrival_bounds_link) {
-				CurvePwAffine.beautify(arrival_bound_link);
+				Curve.beautify(arrival_bound_link);
 
 				for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-					arrival_bounds_link_permutations.add(CurvePwAffine.add(arrival_bound_link, arrival_bound_exiting));
+					arrival_bounds_link_permutations.add(Curve.add(arrival_bound_link, arrival_bound_exiting));
 				}
 			}
 
@@ -149,7 +149,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(CurvePwAffine.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
@@ -264,7 +264,7 @@ public abstract class ArrivalBoundDispatch {
 
 		for (ArrivalCurve alpha_1 : arrival_curves_1) {
 			for (ArrivalCurve alpha_2 : arrival_curves_2) {
-				arrival_bounds_merged.add(CurvePwAffine.add(alpha_1, alpha_2));
+				arrival_bounds_merged.add(Curve.add(alpha_1, alpha_2));
 			}
 		}
 
