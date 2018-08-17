@@ -25,11 +25,22 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.numbers;
+package de.uni_kl.cs.discodnc;
 
-public enum NumBackend { 
-	REAL_DOUBLE_PRECISION,
-	REAL_SINGLE_PRECISION, 
-	RATIONAL_INTEGER, 
-	RATIONAL_BIGINTEGER
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
+
+public interface CurveBackend {
+	MinPlus getMinPlus();
+	
+	Curve getCurveFactory();
+	
+	LinearSegment.Builder getLinearSegmentFactory();
+	
+	default void checkDependencies() {
+		
+	}
+	
+	// TODO toString method
 }

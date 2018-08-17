@@ -31,7 +31,7 @@ package de.uni_kl.cs.discodnc.network;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -199,7 +199,7 @@ public class Path {
     private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
         ServiceCurve service_curve_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            service_curve_total = MinPlus.convolve(service_curve_total, s.getServiceCurve());
+            service_curve_total = CalculatorConfig.getInstance().getMinPlus().convolve(service_curve_total, s.getServiceCurve());
         }
 
         return service_curve_total;
@@ -223,7 +223,7 @@ public class Path {
     private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
         MaxServiceCurve gamma_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            gamma_total = MinPlus.convolve(gamma_total, s.getGamma());
+            gamma_total = CalculatorConfig.getInstance().getMinPlus().convolve(gamma_total, s.getGamma());
         }
 
         return gamma_total;
@@ -247,7 +247,7 @@ public class Path {
     private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
         MaxServiceCurve extra_gamma_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            extra_gamma_total = MinPlus.convolve(extra_gamma_total, s.getExtraGamma());
+            extra_gamma_total = CalculatorConfig.getInstance().getMinPlus().convolve(extra_gamma_total, s.getExtraGamma());
         }
         // extra_gamma_total.removeLatency(); // Already done by s.getExtraGamma()
 
@@ -272,7 +272,7 @@ public class Path {
     private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
         MaxServiceCurve max_service_curve_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            max_service_curve_total = MinPlus.convolve(max_service_curve_total, s.getMaxServiceCurve());
+            max_service_curve_total = CalculatorConfig.getInstance().getMinPlus().convolve(max_service_curve_total, s.getMaxServiceCurve());
         }
 
         return max_service_curve_total;

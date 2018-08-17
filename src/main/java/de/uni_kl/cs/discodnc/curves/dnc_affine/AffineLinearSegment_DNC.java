@@ -31,6 +31,7 @@ package de.uni_kl.cs.discodnc.curves.dnc_affine;
 
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.curves.dnc_pwaffine.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
@@ -40,7 +41,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
  * point (<code>x0</code>,<code>y0</code>) is excluded from the segment,
  * otherwise is included.
  */
-public class LinearSegment_DNC implements LinearSegment {
+public class AffineLinearSegment_DNC implements LinearSegment {
     /**
      * The x-coordinate of the linear segment's starting point.
      */
@@ -69,7 +70,7 @@ public class LinearSegment_DNC implements LinearSegment {
     /**
      * The default constructor.
      */
-    protected LinearSegment_DNC() {
+    protected AffineLinearSegment_DNC() {
         x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
         y = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
         grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
@@ -84,21 +85,21 @@ public class LinearSegment_DNC implements LinearSegment {
      * @param grad     The segments gradient.
      * @param leftopen Set the segment to be left-open.
      */
-    public LinearSegment_DNC(Num x, Num y, Num grad, boolean leftopen) {
+    public AffineLinearSegment_DNC(Num x, Num y, Num grad, boolean leftopen) {
         this.x = x;
         this.y = y;
         this.grad = grad;
         this.leftopen = leftopen;
     }
 
-    public LinearSegment_DNC(LinearSegment segment) {
+    public AffineLinearSegment_DNC(LinearSegment segment) {
         x = segment.getX();
         y = segment.getY();
         grad = segment.getGrad();
         leftopen = segment.isLeftopen();
     }
 
-    public LinearSegment_DNC(String segment_str) throws Exception {
+    public AffineLinearSegment_DNC(String segment_str) throws Exception {
         // Is this segment left-open?
         leftopen = false;
         switch (segment_str.charAt(0)) {
@@ -202,8 +203,8 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return a copy of this instance.
      */
     @Override
-    public LinearSegment_DNC copy() {
-        LinearSegment_DNC copy = new LinearSegment_DNC(x.copy(), y.copy(), grad.copy(), leftopen);
+    public AffineLinearSegment_DNC copy() {
+    	AffineLinearSegment_DNC copy = new AffineLinearSegment_DNC(x.copy(), y.copy(), grad.copy(), leftopen);
         return copy;
     }
 
@@ -242,5 +243,24 @@ public class LinearSegment_DNC implements LinearSegment {
         result += "(" + x.toString() + "," + y.toString() + ")," + grad.toString();
 
         return result;
+    }
+    
+    public static LinearSegment.Builder getBuilder() {
+    	return new AffineLinearSegment_DNC_builder();
+    }
+    
+    private static class AffineLinearSegment_DNC_builder implements LinearSegment.Builder {
+
+		@Override
+		public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+			return new LinearSegment_DNC(x, y, grad, leftopen);
+		}
+
+		@Override
+		public LinearSegment createHorizontalLine(double y) {
+				return new LinearSegment_DNC(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(),
+	                Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(y), Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(), false);
+	    }
+    	
     }
 }

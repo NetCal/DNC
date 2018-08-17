@@ -27,9 +27,6 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import de.uni_kl.cs.discodnc.curves.dnc_affine.AffineCurve_DNC;
-import de.uni_kl.cs.discodnc.curves.dnc_pwaffine.Curve_DNC;
-import de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine.Curve_MPARTC_PwAffine;
 import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
@@ -43,15 +40,7 @@ import java.util.List;
 public interface Curve {
 
     static Curve getFactory() {
-        switch (CalculatorConfig.getInstance().getCurveImpl()) {
-            case MPA_RTC:
-                return Curve_MPARTC_PwAffine.getFactory();
-            case DNC_AFFINE:
-                return AffineCurve_DNC.getFactory();
-            case DNC:
-            default:
-                return Curve_DNC.getFactory();
-        }
+        return CalculatorConfig.getInstance().getCurve();
     }
 
     // --------------------------------------------------------------------------------------------------------------

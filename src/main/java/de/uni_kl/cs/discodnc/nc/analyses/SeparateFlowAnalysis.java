@@ -33,7 +33,6 @@ package de.uni_kl.cs.discodnc.nc.analyses;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
@@ -153,7 +152,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             	betas_lo_server.add(server.getServiceCurve());
         		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
                 ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
-                betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
+                betas_lo_path = CalculatorConfig.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
         		continue;
             }
             
@@ -228,7 +227,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
 
-            betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
+            betas_lo_path = CalculatorConfig.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
         }
         result.betas_e2e = betas_lo_path;
         

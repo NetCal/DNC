@@ -28,10 +28,9 @@
 
 package de.uni_kl.cs.discodnc;
 
-//import de.uni_kl.cs.discodnc.nc.CalculatorConfig.OperationImpl;
+import de.uni_kl.cs.discodnc.CurveBackend;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig.CurveImpl;
 import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 import org.junit.jupiter.params.provider.Arguments;
@@ -125,9 +124,9 @@ public class DncTestMethodSources {
 		nums.add(NumBackend.RATIONAL_INTEGER);
 		nums.add(NumBackend.RATIONAL_BIGINTEGER);
 
-		Set<CurveImpl> curves = new HashSet<CurveImpl>();
-		curves.add(CurveImpl.DNC);
-		curves.add(CurveImpl.MPA_RTC);
+		Set<CurveBackend> curves = new HashSet<CurveBackend>();
+		curves.add(CurveBackend_DNC.DNC);
+		curves.add(CurveBackend_DNC_AFFINE.DNC_AFFINE);
 		
 //		Set<OperationImpl> operations = new HashSet<OperationImpl>();
 //		operations.add(OperationImpl.DNC);
@@ -136,7 +135,7 @@ public class DncTestMethodSources {
 		// Parameter configurations for single arrival bounding tests
 		// 		AB, convolve alternative ABs, tbrl opt convolution, tbrl opt deconvolution, mux,
 		// global mux def, number class to use, curve class to use, operations class to use.
-		for (CurveImpl curve : curves) {
+		for (CurveBackend curve : curves) {
 			for (NumBackend num : nums) {
 				for (Set<ArrivalBoundMethod> ab : ab_sets) {
 					for (Multiplexing mux : mux_disciplines) {

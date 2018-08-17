@@ -28,15 +28,18 @@
 
 package de.uni_kl.cs.discodnc.nc;
 
+import de.uni_kl.cs.discodnc.CurveBackend;
+import de.uni_kl.cs.discodnc.CurveBackend_DNC;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.numbers.NumBackend;
+import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 import java.io.File;
 
 public final class CalculatorConfig {
 	private static CalculatorConfig instance = new CalculatorConfig();
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
-	private CurveImpl CURVE_IMPLEMENTATION = CurveImpl.DNC;
-	private OperationImpl OPERATION_IMPLEMENTATION = OperationImpl.DNC;
+	private CurveBackend CURVE_IMPLEMENTATION = CurveBackend_DNC.DNC;
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
 	private boolean MAX_SERVICE_CURVE_CHECKS = false;
@@ -63,7 +66,7 @@ public final class CalculatorConfig {
 		}
 	}
 
-	public CurveImpl getCurveImpl() {
+	public CurveBackend getCurveImpl() {
 		return CURVE_IMPLEMENTATION;
 	}
 
@@ -77,7 +80,7 @@ public final class CalculatorConfig {
 		throw new RuntimeException("rtc.jar cannot be found on the classpath!");
 	}
 
-	public boolean setCurveImpl(CurveImpl curve_impl) {
+	public boolean setCurveImpl(CurveBackend curve_impl) {
 		checkMPARTC();
 
 		if (CURVE_IMPLEMENTATION == curve_impl) {
@@ -85,15 +88,6 @@ public final class CalculatorConfig {
 		}
 		CURVE_IMPLEMENTATION = curve_impl;
 		return true;
-	}
-
-	public OperationImpl getOperationImpl() {
-		return OPERATION_IMPLEMENTATION;
-	}
-
-	public void setOperationImpl(OperationImpl operation_impl) {
-		checkMPARTC();
-		OPERATION_IMPLEMENTATION = operation_impl;
 	}
 
 	public void disableAllChecks() {
@@ -163,12 +157,12 @@ public final class CalculatorConfig {
 
 		return calculator_config_str.toString();
 	}
-
-	public enum CurveImpl {
-		DNC, MPA_RTC, DNC_AFFINE
+	
+	public MinPlus getMinPlus() {
+		return CURVE_IMPLEMENTATION.getMinPlus();
 	}
-
-	public enum OperationImpl {
-		DNC, NATIVE
+	
+	public Curve getCurve() {
+		return CURVE_IMPLEMENTATION.getCurveFactory();
 	}
 }
