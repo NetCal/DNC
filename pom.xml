@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
-    <description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of
-        communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s
-        end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the
-        Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.
-    </description>
-    <url>discodnc.cs.uni-kl.de</url>
-
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<name>DiscoDNC - The Disco Deterministic Network Calculator</name>
+	<description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.</description>
+	<url>discodnc.cs.uni-kl.de</url>
+	
+	<artifactId>DiscoDNC</artifactId>
     <groupId>discodnc.cs.uni-kl.de</groupId>
-    <artifactId>DiscoDNC</artifactId>
     <version>2.5.0-SNAPSHOT</version>
 
     <licenses>
