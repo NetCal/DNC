@@ -69,11 +69,16 @@ public final class Calculator {
 		return CURVE_BACKEND;
 	}
 
-	public boolean setCurveImpl(CurveBackend curve_impl) {
-		if (CURVE_BACKEND == curve_impl) {
+	private void checkDependencies() {
+		CURVE_BACKEND.checkDependencies();
+	}
+	public boolean setCurveBackend(CurveBackend curve_backend) {
+		checkDependencies();
+
+		if (CURVE_BACKEND == curve_backend) {
 			return false;
 		}
-		CURVE_BACKEND = curve_impl;
+		CURVE_BACKEND = curve_backend;
 		return true;
 	}
 
