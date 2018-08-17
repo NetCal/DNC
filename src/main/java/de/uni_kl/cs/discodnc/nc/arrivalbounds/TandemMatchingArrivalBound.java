@@ -143,7 +143,7 @@ public class TandemMatchingArrivalBound extends AbstractArrivalBound implements 
 		Set<ArrivalCurve> alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 
 		// TODO It has not been investigated if the TFA node backlog can improve TM arrival bounds.
-		if (configuration.abConsiderTFANodeBacklog()) {
+		if (configuration.serverBacklogArrivalBound()) {
 			Server last_hop_xtx = link.getSource();
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
 			tfa.deriveBoundsAtServer(last_hop_xtx);

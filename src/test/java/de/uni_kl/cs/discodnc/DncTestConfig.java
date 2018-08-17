@@ -89,8 +89,8 @@ public class DncTestConfig extends AnalysisConfig {
 
 		func_test_str.append(arrivalBoundMethods().toString());
 
-		if (removeDuplicateArrivalBounds()) {
-			func_test_str.append(", " + "rm dupl ABs");
+		if (convolveAlternativeArrivalBounds()) {
+			func_test_str.append(", " + "conv alt ABs");
 		}
 		if (tbrlConvolution()) {
 			func_test_str.append(", " + "TbRl Conv");

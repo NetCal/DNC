@@ -32,7 +32,6 @@ package de.uni_kl.cs.discodnc.nc.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurveAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.curves.dnc_affine.AffineCurve_DNC;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
@@ -60,7 +59,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
-
 
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
