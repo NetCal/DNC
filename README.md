@@ -14,7 +14,7 @@ If you use the Disco Deterministic Network Calculator for research, please inclu
   booktitle = {Proc. of the International Conference on Performance Evaluation Methodologies and Tools},
   series    = {ValueTools '14},
   pages     = {44--49},
-  month     = December,
+  month     = {December},
   year      = 2014,
   url       = {https://dl.acm.org/citation.cfm?id=2747659}
 }
