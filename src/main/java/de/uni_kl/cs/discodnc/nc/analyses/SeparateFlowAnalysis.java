@@ -40,6 +40,7 @@ import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -49,6 +50,9 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -92,24 +96,17 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        ((SeparateFlowResults) result).betas_e2e = getServiceCurves(flow_of_interest, path,
-                Collections.singleton(flow_of_interest));
+        result = tandemAnalysis(network, flow_of_interest, path, Collections.singleton(flow_of_interest), configuration);
 
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((SeparateFlowResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
-        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
+        ((SeparateFlowResults) result).setDelayBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
+        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
-            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); // single flow
-            // of
-            // interest,
-            // i.e.,
-            // fifo per
-            // micro
-            // flow
-            // holds
+        	// single flow of interest, i.e., FIFO per micro flow holds.
+            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); 
             if (delay_bound__beta_e2e.leq(result.getDelayBound())) {
                 ((SeparateFlowResults) result).setDelayBound(delay_bound__beta_e2e);
             }
@@ -120,11 +117,17 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
         }
     }
+    
+    @Deprecated
+    protected Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve) throws Exception {
+    	return tandemAnalysis(network,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
+    }
 
-    protected Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
+    public static SeparateFlowResults tandemAnalysis(Network network, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
             throws Exception {
-        Set<ServiceCurve> betas_lofoi_path = new HashSet<ServiceCurve>();
-        Set<ServiceCurve> betas_lofoi_s;
+    	SeparateFlowResults result = new SeparateFlowResults();
+        Set<ServiceCurve> betas_lo_path = new HashSet<ServiceCurve>();
+        Set<ServiceCurve> betas_lo_server;
 
         // This version iterates over the servers on the path and 
         // computes the service curve set hop-by-hop.
@@ -133,54 +136,103 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         // analysis's way.
 
         // Convolve all left over service curves, server by server
+
         Link link_from_prev_s;
-        Path foi_path = flow_of_interest.getPath();
+        Set<Flow> f_xxfcaller_server_onpath;
+        Set<Flow> f_xxfcaller_server_src;
+        
         for (Server server : path.getServers()) {
-            try {
-                link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
-            } catch (Exception e) { // Reached the path's first server
-                link_from_prev_s = null; // reset to null
+			// Find the set of flows that interfere, either already on or coming off the common_subpath. 
+            Set<Flow> f_xxfcaller_server = network.getFlows(server);
+            f_xxfcaller_server.removeAll(flows_to_serve);	// We compute their beta l.o.
+            f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
+
+            betas_lo_server = new HashSet<ServiceCurve>();
+            
+            if(f_xxfcaller_server.isEmpty()) {
+            	betas_lo_server.add(server.getServiceCurve());
+        		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
+                ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
+                betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
+        		continue;
             }
+            
+            f_xxfcaller_server_onpath = new HashSet<Flow>();
+            
+			// We might still be on the path of the flow of interest.
+			if(flow_of_interest.getId() != -1) {
+				// If so, we need to consider this when we further backtrack.
+				// Continued backtracking on the foipath requires to hand over the foi.
+				// Backtracking offpath requires to hand over a NULL flow that has ID -1.
+				
+				Path foi_path = flow_of_interest.getPath();
+	        	if( foi_path.getServers().contains(server) && !foi_path.isSource(server) ) { 
+	        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+	        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
+	        	}
+			}
+                    	
+        	// The interfering flows originating at the current server.
+        	f_xxfcaller_server_src = network.getSourceFlows(server);
+        	f_xxfcaller_server_src.remove(flow_of_interest);
+        	f_xxfcaller_server_src.removeAll(flows_to_serve);
 
-            betas_lofoi_s = new HashSet<ServiceCurve>();
+            // Convert f_xfoi_server to "f_xfoi_server_offpath"
+            f_xxfcaller_server.removeAll(f_xxfcaller_server_onpath);
+            f_xxfcaller_server.removeAll(f_xxfcaller_server_src);
 
-            Set<Flow> f_xfoi_server = network.getFlows(server);
-            f_xfoi_server.removeAll(flows_to_serve);
-            f_xfoi_server.remove(flow_of_interest);
-
-            Set<Flow> f_xfoi_server_path = SetUtils.getIntersection(f_xfoi_server, network.getFlows(link_from_prev_s));
-
-            // Convert f_xfoi_server to f_xfoi_server_offpath
-            f_xfoi_server.removeAll(f_xfoi_server_path);
-
-            ServiceCurve beta_lofoi = server.getServiceCurve();
-
-            if (f_xfoi_server.isEmpty() && f_xfoi_server_path.isEmpty()) {
-                betas_lofoi_s.add(beta_lofoi);
-            } else { // network, server, flows_to_bound, flows_lower_priority
-                Set<ArrivalCurve> alpha_xfois_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
-                        server, f_xfoi_server_path, flow_of_interest);
-                Set<ArrivalCurve> alpha_xfois_offpath = ArrivalBoundDispatch.computeArrivalBounds(network,
-                        configuration, server, f_xfoi_server, Flow.NULL_FLOW);
-
-                Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>();
-                for (ArrivalCurve arrival_curve_path : alpha_xfois_path) {
-                    for (ArrivalCurve arrival_curve_offpath : alpha_xfois_offpath) {
-                        alpha_xfois.add(Curve.add(arrival_curve_path, arrival_curve_offpath));
-                    }
+            // Attention!
+            // We cannot use a Set; we actually need a multiset in order to add equal sets of arrival curves.
+            // For instance, this is tested by TR_7S_1SC_3F_1AC_3P_Test's f1 with PMOO arrival bounding
+            // where cross-flows f0 and f2 have a single, equal arrival curves at s5.
+        	List<Set<ArrivalCurve>> ac_sets_to_combine = new LinkedList<Set<ArrivalCurve>>();
+        	
+        	if(!f_xxfcaller_server_src.isEmpty()) {
+        		ac_sets_to_combine.add(Collections.singleton(network.getSourceFlowArrivalCurve(server, f_xxfcaller_server_src)));
+        	}
+        	
+        	if(!f_xxfcaller_server_onpath.isEmpty()) {
+        		ac_sets_to_combine.add(
+        				ArrivalBoundDispatch.computeArrivalBounds(network, configuration ,server, f_xxfcaller_server_onpath, flow_of_interest));
+        	}
+        	
+        	// If, during this method's use in arrival bounding, we already left the foi's path,
+			// flow_of_interest was set to Flow.NULL_FLOW before. If not, do it again now, that won't harm.
+        	if(!f_xxfcaller_server.isEmpty()) {
+        		ac_sets_to_combine.add(
+        			ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW));
+        	}
+        	
+        	if( ac_sets_to_combine.isEmpty() ) {
+        		betas_lo_server.add(server.getServiceCurve());
+        		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
+        	} else {
+        		Iterator<Set<ArrivalCurve>> ac_set_iterator = ac_sets_to_combine.iterator();
+        		Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>(ac_set_iterator.next());
+    			
+        		Set<ArrivalCurve> ac_combinations_tmp = new HashSet<ArrivalCurve>();
+                while(ac_set_iterator.hasNext()) {
+                	for(ArrivalCurve ac_new : ac_set_iterator.next()) {
+                		for(ArrivalCurve ac_existing : alpha_xfois) {
+                			ac_combinations_tmp.add(Curve.add(ac_new,ac_existing));
+                		}
+                	}
+            		alpha_xfois.clear();
+            		alpha_xfois.addAll(ac_combinations_tmp);
+                	ac_combinations_tmp.clear();
                 }
-
+	             
                 // Calculate the left-over service curve for the flow of interest
-                betas_lofoi_s = Bound.leftOverService(configuration, server, alpha_xfois);
-
+                betas_lo_server = Bound.leftOverService(configuration, server, alpha_xfois);
                 result.map__server__alphas.put(server, alpha_xfois);
             }
-            ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lofoi_s);
+            ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
 
-            betas_lofoi_path = MinPlus.convolve_SCs_SCs(betas_lofoi_path, betas_lofoi_s,
-                    configuration.tbrlConvolution());
+            betas_lo_path = MinPlus.convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
         }
-        return betas_lofoi_path;
+        result.betas_e2e = betas_lo_path;
+        
+        return result;
     }
 
     public Set<ServiceCurve> getLeftOverServiceCurves() {

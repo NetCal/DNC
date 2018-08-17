@@ -31,7 +31,6 @@ package de.uni_kl.cs.discodnc.nc.bounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
@@ -125,7 +124,7 @@ public final class LeftOverService {
 
             if (arrival_curve.getGradientLimitRight(x_alpha).leq(service_curve.getGradientLimitRight(x_beta))) {
 
-                Num theta = Num.getUtils().sub(x_beta, x_alpha);
+                Num theta = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(x_beta, x_alpha);
                 ServiceCurve beta_fifo = Curve.getFactory()
                         .createServiceCurve(Curve.boundAtXAxis(Curve.min(
                                 Curve.sub(service_curve,

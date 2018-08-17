@@ -84,16 +84,16 @@ public abstract class Convolution_DNC {
                 rate = service_curve_1.getUltAffineRate();
                 break;
             case 3:
-                rate = Num.getFactory().createPositiveInfinity();
+                rate = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity();
                 break;
             case 0:
             default:
-                rate = Num.getUtils().min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+                rate = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
                 break;
         }
 
         return Curve.getFactory().createRateLatency(rate,
-                Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+        		Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
     /**
@@ -121,7 +121,7 @@ public abstract class Convolution_DNC {
             if (service_curve_1.isDelayedInfiniteBurst()
                     && service_curve_2.isDelayedInfiniteBurst()) {
                 return Curve.getFactory().createDelayedInfiniteBurst(
-                        Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                		Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
             }
 
             if (service_curve_1.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
@@ -142,19 +142,19 @@ public abstract class Convolution_DNC {
 
         ServiceCurve result = Curve.getFactory().createServiceCurve();
 
-        Num x = Num.getFactory().createZero();
-        Num y = Num.getFactory().createZero(); // Functions pass though the origin
-        Num grad = Num.getFactory().createZero();
+        Num x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        Num y = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(); // Functions pass though the origin
+        Num grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
         LinearSegment s = LinearSegment.createLinearSegment(x, y, grad, false);
         result.addSegment(s);
 
         int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
         int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
         if (i1 > 0 || i2 > 0) {
-            x = Num.getFactory().createZero();
-            y = Num.getUtils().add(service_curve_1.fLimitRight(Num.getFactory().getZero()),
-                    service_curve_2.fLimitRight(Num.getFactory().getZero()));
-            grad = Num.getFactory().createZero();
+            x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+            y = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(service_curve_1.fLimitRight(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getZero()),
+                    service_curve_2.fLimitRight(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getZero()));
+            grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
             s = LinearSegment.createLinearSegment(x, y, grad, true);
 
             result.addSegment(s);
@@ -167,13 +167,13 @@ public abstract class Convolution_DNC {
                     break;
                 }
 
-                x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getX(),
+                x = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getX(),
+                        (Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(service_curve_1.getSegment(i1 + 1).getX(),
                                 service_curve_1.getSegment(i1).getX())));
-                y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (Num.getUtils().sub(service_curve_1.getSegment(i1 + 1).getY(),
+                y = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getY(),
+                        (Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(service_curve_1.getSegment(i1 + 1).getY(),
                                 service_curve_1.getSegment(i1).getY())));
-                grad = Num.getFactory().createZero();
+                grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
                 s = LinearSegment.createLinearSegment(x, y, grad, true);
 
                 result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
@@ -186,13 +186,13 @@ public abstract class Convolution_DNC {
                     break;
                 }
 
-                x = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getX(),
+                x = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getX(),
+                        (Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(service_curve_2.getSegment(i2 + 1).getX(),
                                 service_curve_2.getSegment(i2).getX())));
-                y = Num.getUtils().add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (Num.getUtils().sub(service_curve_2.getSegment(i2 + 1).getY(),
+                y = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getY(),
+                        (Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(service_curve_2.getSegment(i2 + 1).getY(),
                                 service_curve_2.getSegment(i2).getY())));
-                grad = Num.getFactory().createZero();
+                grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
                 s = LinearSegment.createLinearSegment(x, y, grad, true);
 
                 result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
@@ -358,10 +358,10 @@ public abstract class Convolution_DNC {
         Num latency_msc_1 = max_service_curve_1.getLatency();
         Num latency_msc_2 = max_service_curve_2.getLatency();
 
-        if (latency_msc_1.equals(Num.getFactory().getPositiveInfinity())) {
+        if (latency_msc_1.equals(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity())) {
             return max_service_curve_2.copy();
         }
-        if (latency_msc_2.equals(Num.getFactory().getPositiveInfinity())) {
+        if (latency_msc_2.equals(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity())) {
             return max_service_curve_1.copy();
         }
 
@@ -375,7 +375,7 @@ public abstract class Convolution_DNC {
                         .createArrivalCurve(Curve.removeLatency(max_service_curve_2)));
         MaxServiceCurve result = Curve.getFactory().createMaxServiceCurve(ac_intermediate);
         result = (MaxServiceCurve) Curve.shiftRight(result,
-                Num.getUtils().add(latency_msc_1, latency_msc_2));
+        		Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(latency_msc_1, latency_msc_2));
         Curve.beautify(result);
 
         return result;

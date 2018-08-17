@@ -27,6 +27,7 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.List;
@@ -50,21 +51,21 @@ public interface CurvePwAffine extends Curve {
      */
     static Num getMaxHorizontalDeviation(CurvePwAffine c1, CurvePwAffine c2) {
         if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-            return Num.getFactory().createPositiveInfinity();
+            return Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity();
         }
 
-        Num result = Num.getFactory().createNegativeInfinity();
+        Num result = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createNegativeInfinity();
         for (int i = 0; i < c1.getSegmentCount(); i++) {
             Num ip_y = c1.getSegment(i).getY();
 
-            Num delay = Num.getUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = Num.getUtils().max(result, delay);
+            Num delay = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+            result = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(result, delay);
         }
         for (int i = 0; i < c2.getSegmentCount(); i++) {
             Num ip_y = c2.getSegment(i).getY();
 
-            Num delay = Num.getUtils().sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = Num.getUtils().max(result, delay);
+            Num delay = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
+            result = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(result, delay);
         }
         return result;
     }
@@ -78,19 +79,13 @@ public interface CurvePwAffine extends Curve {
     @Override
     void copy(Curve curve);
 
-
     // (Composition of) Rate latencies
     boolean isRateLatency();
 
-
     List<CurvePwAffine> getRL_Components();
-
 
     // (Composition of) Token buckets
     boolean isTokenBucket();
 
-
     List<CurvePwAffine> getTB_Components();
-
-
 }

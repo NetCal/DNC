@@ -1,4 +1,5 @@
 /*
+
  * This file is part of the Disco Deterministic Network Calculator.
  *
  * Copyright (C) 2017 - 2018 Steffen Bondorf
@@ -28,125 +29,201 @@
 
 package de.uni_kl.cs.discodnc;
 
-import de.uni_kl.cs.discodnc.misc.Pair;
 import de.uni_kl.cs.discodnc.nc.Analysis.Analyses;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.ArrivalBoundMethod;
+import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisResults;
-import de.uni_kl.cs.discodnc.network.Flow;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
-public class DncTestResults {
-	private Map<Flow, AnalysisResults> tfa_bounds_arb;
-	private Map<Flow, AnalysisResults> tfa_bounds_fifo;
-	private Map<Flow, AnalysisResults> sfa_bounds_arb;
-	private Map<Flow, AnalysisResults> sfa_bounds_fifo;
-	private Map<Flow, AnalysisResults> pmoo_bounds_arb;
-
+public abstract class DncTestResults {
+	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> results_map;
+	private Map<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>>> epsilon_map;
+	
+	private Num num_factory = Num.getFactory(CalculatorConfig.getInstance().getNumBackend());
+	
 	public DncTestResults() {
-		tfa_bounds_arb = new HashMap<Flow, AnalysisResults>();
-		tfa_bounds_fifo = new HashMap<Flow, AnalysisResults>();
-		sfa_bounds_arb = new HashMap<Flow, AnalysisResults>();
-		sfa_bounds_fifo = new HashMap<Flow, AnalysisResults>();
-		pmoo_bounds_arb = new HashMap<Flow, AnalysisResults>();
+		results_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>>();
+		epsilon_map = new HashMap<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>>>();
 	}
 
 	protected void clear() {
-		tfa_bounds_arb.clear();
-		tfa_bounds_fifo.clear();
-		sfa_bounds_arb.clear();
-		sfa_bounds_fifo.clear();
-		pmoo_bounds_arb.clear();
+		results_map.clear();
+		epsilon_map.clear();
+	}
+
+	protected abstract void initialize();
+
+	// TODO Some batch mode would be nice in order not to query the maps for every analysis of the same flow.
+	protected void addBounds(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, Num delay, Num backlog) {
+		AnalysisResults expected_results = new AnalysisResults(delay, backlog, null);
+
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> foi_maps = results_map.get(flowId);
+		if(foi_maps == null) {
+			foi_maps = new HashMap<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>();
+			results_map.put(flowId, foi_maps);
+		}
+		
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>> foi_analysis_maps = foi_maps.get(analysis);
+		if(foi_analysis_maps == null) {
+			foi_analysis_maps =  new HashMap<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>();
+			foi_maps.put(analysis, foi_analysis_maps);
+		}
+		
+		Map<Multiplexing, Set<AnalysisResults>> foi_analysis_ab_maps = foi_analysis_maps.get(ab_set);
+		if(foi_analysis_ab_maps == null) {
+			foi_analysis_ab_maps = new HashMap<Multiplexing, Set<AnalysisResults>>();
+			foi_analysis_maps.put(ab_set, foi_analysis_ab_maps);
+		}
+		
+		Set<AnalysisResults> existing_results = foi_analysis_ab_maps.get(mux);
+		if(existing_results == null) {
+			existing_results = new HashSet<AnalysisResults>();
+			foi_analysis_ab_maps.put(mux, existing_results);
+		}
+
+		existing_results.add(expected_results);
+	}
+
+	public AnalysisResults getBounds(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux) {
+
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> foi_maps = results_map.get(flowId);
+		if(foi_maps == null || foi_maps.isEmpty()) {
+			throw new RuntimeException("No DNC test results fournd! The results file may be corrupted.");
+		}
+		
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>> foi_analysis_maps = foi_maps.get(analysis);
+		if(foi_analysis_maps == null || foi_analysis_maps.isEmpty()) {
+			throw new RuntimeException("No DNC test results fournd! The results file may be corrupted.");
+		}
+		
+		Map<Multiplexing, Set<AnalysisResults>> foi_analysis_ab_maps = new HashMap<Multiplexing, Set<AnalysisResults>>(); 
+		for(Map.Entry<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>> abs_to_map : foi_analysis_maps.entrySet()) {
+			if( abs_to_map.getKey().size() == ab_set.size()
+					&& abs_to_map.getKey().containsAll(ab_set)) {
+				foi_analysis_ab_maps = abs_to_map.getValue();
+				break;
+			}
+		}
+		if(foi_analysis_ab_maps.isEmpty()) {
+			throw new RuntimeException("No DNC test results fournd! The results file may be corrupted.");
+		}
+		
+		Set<AnalysisResults> existing_results = foi_analysis_ab_maps.get(mux);
+		if(existing_results == null || existing_results.isEmpty()) {
+			throw new RuntimeException("No DNC test results fournd! The results file may be corrupted.");
+		}
+		
+		if(existing_results.size() == 1) {
+			return existing_results.iterator().next();
+		}
+
+		if( existing_results.isEmpty() ) {
+			throw new RuntimeException("No DNC test results fournd! The results file may be corrupted.");
+		} else {
+			System.out.println( existing_results.toString() );
+			throw new RuntimeException("Ambiguous DNC test results! The results file may be corrupted.");
+		}
 	}
 	
-	protected void setBounds(Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow, Num delay, Num backlog) {
-		AnalysisResults bounds = new AnalysisResults(delay, backlog, null);
+	protected void addEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumBackend num_rep, Num epsilon) {
 
-		Pair<Map<Flow, AnalysisResults>> bounded_analysis;
-		switch (analysis) {
-		case TFA:
-			bounded_analysis = new Pair<Map<Flow, AnalysisResults>>(tfa_bounds_arb, tfa_bounds_fifo);
-			break;
-		case SFA:
-			bounded_analysis = new Pair<Map<Flow, AnalysisResults>>(sfa_bounds_arb, sfa_bounds_fifo);
-			break;
-		case PMOO:
-			bounded_analysis = new Pair<Map<Flow, AnalysisResults>>(pmoo_bounds_arb, null);
-			break;
-		default:
-			throw new RuntimeException("Invalid analysis given.");
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>> foi_maps = epsilon_map.get(flowId);
+		if(foi_maps == null) {
+			foi_maps = new HashMap<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>>();
+			epsilon_map.put(flowId, foi_maps);
+		}
+		
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>> foi_analysis_maps = foi_maps.get(analysis);
+		if(foi_analysis_maps == null) {
+			foi_analysis_maps =  new HashMap<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>();
+			foi_maps.put(analysis, foi_analysis_maps);
+		}
+		
+		Map<Multiplexing, Map<NumBackend, Num>> foi_analysis_ab_maps = foi_analysis_maps.get(ab_set);
+		if(foi_analysis_ab_maps == null) {
+			foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumBackend, Num>>();
+			foi_analysis_maps.put(ab_set, foi_analysis_ab_maps);
+		}
+		
+		Map<NumBackend, Num> existing_results = foi_analysis_ab_maps.get(mux);
+		if(existing_results == null) {
+			existing_results = new HashMap<NumBackend, Num>();
+			foi_analysis_ab_maps.put(mux, existing_results);
 		}
 
-		if (mux == AnalysisConfig.Multiplexing.ARBITRARY) {
-			bounded_analysis.getFirst().put(flow, bounds);
-		} else {
-			bounded_analysis.getSecond().put(flow, bounds);
-		}
+		existing_results.put(num_rep,epsilon);
 	}
 
-	public AnalysisResults getBounds(Analyses analysis, AnalysisConfig.Multiplexing mux, Flow flow) {
-		Pair<Map<Flow, AnalysisResults>> bounded_analysis;
-		switch (analysis) {
-		case TFA:
-			bounded_analysis = new Pair<Map<Flow, AnalysisResults>>(tfa_bounds_arb, tfa_bounds_fifo);
-			break;
-		case SFA:
-			bounded_analysis = new Pair<Map<Flow, AnalysisResults>>(sfa_bounds_arb, sfa_bounds_fifo);
-			break;
-		case PMOO:
-			bounded_analysis = new Pair<Map<Flow, AnalysisResults>>(pmoo_bounds_arb, null);
-			break;
-		default:
-			throw new RuntimeException("Invalid analysis given.");
+	public Num getEpsilon(Integer flowId, Analyses analysis, Set<ArrivalBoundMethod> ab_set, Multiplexing mux, NumBackend num_rep) {
+		
+		Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>>> foi_maps = epsilon_map.get(flowId);
+		if(foi_maps == null || foi_maps.isEmpty()) {
+			return num_factory.createZero();
 		}
-
-		if (mux == AnalysisConfig.Multiplexing.ARBITRARY) {
-			return bounded_analysis.getFirst().get(flow);
-		} else {
-			return bounded_analysis.getSecond().get(flow);
+		
+		Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>> foi_analysis_maps = foi_maps.get(analysis);
+		if(foi_analysis_maps == null || foi_analysis_maps.isEmpty()) {
+			return num_factory.createZero();
 		}
+		
+		Map<Multiplexing, Map<NumBackend, Num>> foi_analysis_ab_maps = new HashMap<Multiplexing, Map<NumBackend, Num>>(); 
+		for(Map.Entry<Set<ArrivalBoundMethod>, Map<Multiplexing, Map<NumBackend, Num>>> abs_to_map : foi_analysis_maps.entrySet()) {
+			if( abs_to_map.getKey().size() == ab_set.size()
+					&& abs_to_map.getKey().containsAll(ab_set)) {
+				foi_analysis_ab_maps = abs_to_map.getValue();
+				break;
+			}
+		}
+		if(foi_analysis_ab_maps.isEmpty()) {
+			return num_factory.createZero();
+		}
+		
+		Map<NumBackend, Num> existing_epsilons = foi_analysis_ab_maps.get(mux);
+		if(foi_analysis_ab_maps == null || foi_analysis_ab_maps.isEmpty()) {
+			return num_factory.createZero();
+		}
+		
+		return existing_epsilons.getOrDefault(num_rep, num_factory.createZero());
 	}
-	
+
 	@Override
 	public String toString() {
-		 StringBuffer exp_results_str = new StringBuffer();
-		 
-		 for( Entry<Flow,AnalysisResults> tfa_bound : tfa_bounds_arb.entrySet() ) {
-			 exp_results_str.append( tfa_bound.getKey().getAlias() );
-			 exp_results_str.append( " TFA_ARB " );
-			 exp_results_str.append( tfa_bound.getValue().toString() );
-			 exp_results_str.append( "\n" );
-		 }
-		 for( Entry<Flow,AnalysisResults> tfa_bound : tfa_bounds_fifo.entrySet() ) {
-			 exp_results_str.append( tfa_bound.getKey().getAlias() );
-			 exp_results_str.append( " TFA_FIFO " );
-			 exp_results_str.append( tfa_bound.getValue().toString() );
-			 exp_results_str.append( "\n" );
-		 }
+		StringBuffer exp_results_str = new StringBuffer();
+		String analysis_str, ab_str, mux_str; 
+		
+		for( Map.Entry<Integer, Map<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>>> foi_map_entry : results_map.entrySet() ) {
+			exp_results_str.append("flow Id: " + foi_map_entry.getKey().toString());
+			exp_results_str.append("\n");
+			
+			for( Map.Entry<Analyses, Map<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>>> analysis_map_entry : foi_map_entry.getValue().entrySet() ) {
+				analysis_str = "\t" + "Analysis: " + analysis_map_entry.getKey().toString();
+				
+				for( Map.Entry<Set<ArrivalBoundMethod>, Map<Multiplexing, Set<AnalysisResults>>> ab_map_entry : analysis_map_entry.getValue().entrySet() ) {
+					ab_str = "; " + "Arrival Boundings: " + ab_map_entry.getKey().toString();
+					
+					for( Map.Entry<Multiplexing, Set<AnalysisResults>> mux_map_entry : ab_map_entry.getValue().entrySet() ) {
+						mux_str = "; " + "Multiplexing: " + mux_map_entry.getKey().toString();
+						
+						for( AnalysisResults stored_results : mux_map_entry.getValue() ) {
+							exp_results_str.append( analysis_str );
+							exp_results_str.append( ab_str );
+							exp_results_str.append( mux_str );
+							exp_results_str.append( "; " );
+							exp_results_str.append(stored_results.toString());
+							exp_results_str.append("\n");
+						}
+					}
+				}
+			}
+		}
 
-		 for( Entry<Flow,AnalysisResults> sfa_bound : sfa_bounds_arb.entrySet() ) {
-			 exp_results_str.append( sfa_bound.getKey().getAlias() );
-			 exp_results_str.append( " SFA_ARB " );
-			 exp_results_str.append( sfa_bound.getValue().toString() );
-			 exp_results_str.append( "\n" );
-		 }
-		 for( Entry<Flow,AnalysisResults> sfa_bound : sfa_bounds_fifo.entrySet() ) {
-			 exp_results_str.append( sfa_bound.getKey().getAlias() );
-			 exp_results_str.append( " SFA_FIFO " );
-			 exp_results_str.append( sfa_bound.getValue().toString() );
-			 exp_results_str.append( "\n" );
-		 }
-
-		 for( Entry<Flow,AnalysisResults> pmoo_bound : pmoo_bounds_arb.entrySet() ) {
-			 exp_results_str.append( pmoo_bound.getKey().getAlias() );
-			 exp_results_str.append( " PMOO_ARB " );
-			 exp_results_str.append( pmoo_bound.getValue().toString() );
-			 exp_results_str.append( "\n" );
-		 }
-		 
-		 return exp_results_str.toString();
+		return exp_results_str.toString();
 	}
 }

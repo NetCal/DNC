@@ -39,11 +39,14 @@ import de.uni_kl.cs.discodnc.network.Server;
 public class S_1SC_10F_10AC_Network implements NetworkFactory {
 	private static final int sc_R = 10;
 	private static final int sc_T = 10;
-	protected Server s0;
-	protected Flow f0, f6;
-	private ServiceCurve service_curve = Curve.getFactory().createRateLatency(sc_R, sc_T);
+	
+	private Server s0;
+
 	private Flow[] flows = new Flow[10];
+	
+	private ServiceCurve service_curve = Curve.getFactory().createRateLatency(sc_R, sc_T);
 	private ArrivalCurve[] arrival_curves = new ArrivalCurve[10];
+	
 	private Network network;
 
 	public S_1SC_10F_10AC_Network() {
@@ -64,10 +67,8 @@ public class S_1SC_10F_10AC_Network implements NetworkFactory {
 		try {
 			for (int i = 1; i <= 10; i++) {
 				arrival_curves[i - 1] = Curve.getFactory().createTokenBucket(i * 0.1, i);
-				flows[i - 1] = network.addFlow(arrival_curves[i - 1], s0);
+				flows[i - 1] = network.addFlow( "f" + Integer.toString(i-1) , arrival_curves[i - 1], s0);
 			}
-			f0 = flows[0];
-			f6 = flows[6];
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

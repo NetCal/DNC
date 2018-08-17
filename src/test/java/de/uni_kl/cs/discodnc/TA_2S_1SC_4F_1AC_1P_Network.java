@@ -41,10 +41,12 @@ public class TA_2S_1SC_4F_1AC_1P_Network implements NetworkFactory {
 	private static final int sc_T = 10;
 	private static final int ac_r = 2;
 	private static final int ac_b = 10;
-	protected Server s0, s1;
-	protected Flow f0, f1, f2, f3;
+	
+	private Server s0, s1;
+	
 	private ServiceCurve service_curve = Curve.getFactory().createRateLatency(sc_R, sc_T);
 	private ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(ac_r, ac_b);
+	
 	private Network network;
 
 	public TA_2S_1SC_4F_1AC_1P_Network() {
@@ -74,10 +76,10 @@ public class TA_2S_1SC_4F_1AC_1P_Network implements NetworkFactory {
 		}
 
 		try {
-			f0 = network.addFlow(arrival_curve, s0, s1);
-			f1 = network.addFlow(arrival_curve, s0, s1);
-			f2 = network.addFlow(arrival_curve, s0, s1);
-			f3 = network.addFlow(arrival_curve, s0, s1);
+			network.addFlow("f0", arrival_curve, s0, s1);
+			network.addFlow("f1", arrival_curve, s0, s1);
+			network.addFlow("f2", arrival_curve, s0, s1);
+			network.addFlow("f3", arrival_curve, s0, s1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

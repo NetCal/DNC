@@ -5,13 +5,34 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
-    <organization>
-        <url>discodnc.cs.uni-kl.de</url>
-    </organization>
+    <description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.</description>
+    <url>discodnc.cs.uni-kl.de</url>
 
     <groupId>de.uni_kl.cs.discodnc</groupId>
     <artifactId>DiscoDNC</artifactId>
-    <version>2.4.0</version>
+    <version>2.4.4pre</version>
+	
+    <licenses>
+        <license>
+            <name>GNU General Lesser Public License (LGPL) version 2.1</name>
+            <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Steffen Bondorf</name>
+            <email>bondorf@cs.uni-kl.de</email>
+            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+            <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/NetCal/DiscoDNC.git</connection>
+        <developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
+        <url>https://github.com/NetCal/DiscoDNC/tree/master</url>
+    </scm>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -24,7 +45,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>[2.21.0]</version>
                 <configuration>
                     <includes>
                         <include>**/*Test*</include>
@@ -52,7 +73,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>[5.0.0,5.0.3],[5.1.0]</version>
+            <version>[5.2.0]</version>
             <scope>test</scope>
         </dependency>
 
@@ -60,20 +81,20 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <scope>test</scope>
-            <version>[5.0.0,5.0.3],[5.1.0]</version>
+            <version>[5.2.0]</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>[1.0.0,1.0.3],[1.1.0]</version>
+            <version>[1.2.0]</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-api</artifactId>
-            <version>[1.0.0,1.0.3],[1.1.0]</version>
+            <version>[1.2.0]</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

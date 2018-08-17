@@ -44,8 +44,8 @@ public class AnalysisResults {
 	protected Num backlog_bound;
 
 	public AnalysisResults() {
-		this.delay_bound = Num.getFactory().createNaN();
-		this.backlog_bound = Num.getFactory().createNaN();
+		this.delay_bound = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createNaN();
+		this.backlog_bound = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createNaN();
 		this.map__server__alphas = new HashMap<Server, Set<ArrivalCurve>>();
 	}
 

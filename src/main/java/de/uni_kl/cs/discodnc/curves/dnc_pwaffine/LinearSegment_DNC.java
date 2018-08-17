@@ -30,6 +30,7 @@
 package de.uni_kl.cs.discodnc.curves.dnc_pwaffine;
 
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
+import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
@@ -69,9 +70,9 @@ public class LinearSegment_DNC implements LinearSegment {
      * The default constructor.
      */
     protected LinearSegment_DNC() {
-        x = Num.getFactory().createZero();
-        y = Num.getFactory().createZero();
-        grad = Num.getFactory().createZero();
+        x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        y = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
         leftopen = false;
     }
 
@@ -125,9 +126,9 @@ public class LinearSegment_DNC implements LinearSegment {
             throw new RuntimeException("Invalid string representation of a linear segment.");
         }
 
-        x = Num.getFactory().create(x_y[0]);
-        y = Num.getFactory().create(x_y[1]);
-        grad = Num.getFactory().create(xy_r[1]);
+        x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(x_y[0]);
+        y = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(x_y[1]);
+        grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(xy_r[1]);
     }
 
     // --------------------------------------------------------------------------------------------------------------
@@ -143,7 +144,7 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return the function value
      */
     public Num f(Num x) {
-        return Num.getUtils().add(Num.getUtils().mult(Num.getUtils().sub(x, this.x), grad), y);
+        return Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(x, this.x), grad), y);
     }
 
     public Num getX() {
@@ -187,12 +188,12 @@ public class LinearSegment_DNC implements LinearSegment {
      * parallel
      */
     public Num getXIntersectionWith(LinearSegment other) {
-        Num y1 = Num.getUtils().sub(this.y, Num.getUtils().mult(x, this.grad));
-        Num y2 = Num.getUtils().sub(other.getY(), Num.getUtils().mult(other.getX(), other.getGrad()));
+        Num y1 = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(this.y, Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(x, this.grad));
+        Num y2 = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(other.getY(), Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(other.getX(), other.getGrad()));
 
         // returns NaN if lines are parallel
-        return Num.getUtils().div(Num.getUtils().sub(y2, y1),
-                Num.getUtils().sub(this.grad, other.getGrad()));
+        return Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).div(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(y2, y1),
+                Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(this.grad, other.getGrad()));
     }
 
     /**
