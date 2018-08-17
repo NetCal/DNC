@@ -29,11 +29,6 @@
 
 package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -42,6 +37,11 @@ import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class Deconvolution_DNC_PwAffine {
 
@@ -126,7 +126,7 @@ public abstract class Deconvolution_DNC_PwAffine {
             return arrival_curve.copy();
         }
         if (service_curve.equals(Curve.getFactory().createZeroService())
-                || service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
+				|| service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
@@ -198,14 +198,14 @@ public abstract class Deconvolution_DNC_PwAffine {
         }
         // }
 
-        if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
-            return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
+        if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the stability constraint
+            return Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY);
         }
         if (curve_2.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
             return Curve.getFactory().createArrivalCurve((Curve_PwAffine) curve_1);
         }
         if (curve_2.equals(Curve.getFactory().createZeroService())
-                || curve_2.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
+        		|| curve_2.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }

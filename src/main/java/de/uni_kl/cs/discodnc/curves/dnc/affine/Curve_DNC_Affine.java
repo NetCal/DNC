@@ -29,17 +29,17 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc.affine;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_Affine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>
@@ -543,8 +543,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 */
 	public boolean isConvexIn(Num a, Num b) {
 		Num last_gradient = Num.getFactory(Calculator.getInstance().getNumBackend()).getNegativeInfinity(); // No need to create an object as this
-		// value is only set for initial
-		// comparison in the loop.
+		// value is only set for initial comparison in the loop.
 
 		int i_start = getSegmentDefining(a);
 		int i_end = getSegmentDefining(b);
@@ -590,8 +589,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 */
 	public boolean isConcaveIn(Num a, Num b) {
 		Num last_gradient = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity(); // No need to create an object as this
-		// value is only set for initial
-		// comparison in the loop.
+		// value is only set for initial comparison in the loop.
 
 		int i_start = getSegmentDefining(a);
 		int i_end = getSegmentDefining(b);
@@ -623,8 +621,7 @@ public class Curve_DNC_Affine implements Curve_Affine {
 	 */
 	public boolean isAlmostConcave() {
 		Num last_gradient = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity(); // No need to create an object as this
-		// value is only set for initial
-		// comparison in the loop.
+		// value is only set for initial comparison in the loop.
 
 		for (int i = 0; i < segments.length; i++) {
 			// Skip the horizontal part at the beginning

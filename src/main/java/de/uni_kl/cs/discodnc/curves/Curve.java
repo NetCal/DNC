@@ -686,7 +686,6 @@ public interface Curve {
 
     ServiceCurve createServiceCurve(Curve curve);
 
-
     ServiceCurve createZeroDelayInfiniteBurst();
 
     ServiceCurve createDelayedInfiniteBurst(double delay);

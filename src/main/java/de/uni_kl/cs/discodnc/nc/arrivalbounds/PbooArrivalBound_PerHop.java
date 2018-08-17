@@ -150,13 +150,11 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 						.createArrivalCurve(Curve.getFactory().createZeroDelayInfiniteBurst()));
 				return alphas_xfcaller;
 			}
-
-			// The deconvolution of the two sets, arrival curves and service curves,
-			// respectively, takes care of all the possible combinations
+			
 			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
-		if (configuration.abConsiderTFANodeBacklog()) {
+		if (configuration.serverBacklogArrivalBound()) {
 			Server last_hop_xtx = link.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);

@@ -29,6 +29,11 @@ package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
 import java.util.Set;
 
+// Due to name collisions, these classes are not imported,
+// they are referenced by their fully qualified names.
+//import ch.ethz.rtc.kernel.Curve;
+//import Curve;
+
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
@@ -48,7 +53,7 @@ public enum MinPlus_DNC_PwAffine implements MinPlus {
 
 	// Service Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.MinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
 	 */
 	@Override
 	public ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception {

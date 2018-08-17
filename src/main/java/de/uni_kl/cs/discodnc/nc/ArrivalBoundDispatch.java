@@ -35,9 +35,11 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_Concatenation;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_PerHop;
 import de.uni_kl.cs.discodnc.nc.arrivalbounds.PmooArrivalBound;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.TandemMatchingArrivalBound;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -177,8 +179,15 @@ public abstract class ArrivalBoundDispatch {
 				arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
-			/* There are not functional tests for the per-flow arrival bounds. */
+			/* There are no integration tests for TMA or the per-flow arrival bounds. */
 				
+			case TMA:
+				TandemMatchingArrivalBound tm_arrival_bound = TandemMatchingArrivalBound.getInstance();
+				tm_arrival_bound.setNetwork(network);
+				tm_arrival_bound.setConfiguration(configuration);
+				arrival_bounds_tmp = tm_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				break;
+
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
 			case PER_FLOW_SFA:
 				for (Flow flow : flows_to_bound) {
@@ -204,6 +213,16 @@ public abstract class ArrivalBoundDispatch {
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
 							singleFlowABs(configuration, flow.getArrivalCurve(), pmoo.getLeftOverServiceCurves()));
+				}
+				break;
+
+			case PER_FLOW_TMA:
+				for (Flow flow : flows_to_bound) {
+					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network);
+					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+
+					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
+							singleFlowABs(configuration, flow.getArrivalCurve(), tma.getLeftOverServiceCurves()));
 				}
 				break;
 
@@ -253,7 +272,7 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, Set<ArrivalCurve> arrival_bounds_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
+			Set<ArrivalCurve> arrival_bounds) throws Exception {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.addAll(arrival_bounds_to_merge);
 		} else {
@@ -264,13 +283,22 @@ public abstract class ArrivalBoundDispatch {
 	}
 
 	private static void addArrivalBounds(AnalysisConfig configuration, ArrivalCurve arrival_bound_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
+			Set<ArrivalCurve> arrival_bounds) throws Exception {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.add(arrival_bound_to_merge);
 		} else {
 			if (!configuration.removeDuplicateArrivalBounds() || (configuration.removeDuplicateArrivalBounds()
 					&& !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
 				arrival_bounds.add(arrival_bound_to_merge);
+			} else { // convolve alternative arrival bounds
+				ArrivalCurve arrival_bound_tmp = arrival_bound_to_merge.copy();
+				// There should only be one arrival bound in arrival_bounds as this setting is global.
+				// Therefore, the convolution of all alternatives could be sped up using this knowledge.
+				for (ArrivalCurve arrival_bound : arrival_bounds) {
+					arrival_bound_tmp = Calculator.getInstance().getMinPlus().convolve(arrival_bound_tmp, arrival_bound);
+				}
+				arrival_bounds.clear();
+				arrival_bounds.add(arrival_bound_tmp);
 			}
 		}
 	}

@@ -54,11 +54,11 @@ public final class Calculator {
 		return NUM_BACKEND;
 	}
 
-	public boolean setNumBackend(NumBackend num_impl) {
-		if (NUM_BACKEND == num_impl) {
+	public boolean setNumBackend(NumBackend backend) {
+		if (NUM_BACKEND == backend) {
 			return false;
 		} else {
-			NUM_BACKEND = num_impl;
+			NUM_BACKEND = backend;
 			return true;
 		}
 	}

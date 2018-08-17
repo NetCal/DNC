@@ -48,29 +48,24 @@ public class ArrivalCurve_DNC_PwAffine extends Curve_DNC_PwAffine implements Arr
     public ArrivalCurve_DNC_PwAffine(Curve curve) {
         super(curve);
         forceThroughOrigin();
-
-        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isConcave()
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) {
+        // Too strong requirement: !isConcave()
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
     public ArrivalCurve_DNC_PwAffine(String arrival_curve_str) throws Exception {
-        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest
-            // possible
-            // string:
-            // {(0,0),0}
+        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) {
+        	// Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
         initializeCurve(arrival_curve_str);
         forceThroughOrigin();
 
-        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isConcave()
+        // Too strong requirement: !isConcave()
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }

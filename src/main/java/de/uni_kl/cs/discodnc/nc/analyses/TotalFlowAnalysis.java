@@ -94,7 +94,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         Set<ArrivalCurve> alphas_server = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server);
         // Although the TFA has a flow of interest, DO NOT call
         // computeArrivalBounds( Network network, AnalysisConfig configuration, Server
-        // server, Set<Flow> flows_to_bound, Flow flow_of_interest ).
+        // 							server, Set<Flow> flows_to_bound, Flow flow_of_interest ).
+        // Otherwise, we would not get the flow of interest's arrivals at this server.
 
         Set<Num> delay_bounds_server = new HashSet<Num>();
         Set<Num> backlog_bounds_server = new HashSet<Num>();

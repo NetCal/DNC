@@ -46,6 +46,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.math3.util.Pair;
+
 import java.util.Set;
 
 /**
@@ -897,6 +900,92 @@ public class Network {
 		}
 		return map__path__set_flows;
 	}
+	
+	// TODO Unify with groupFlowsPerInlinkSubPath
+	private Map<Pair<Server,Path>,Set<Flow>> groupFlowsPerSubPathInternal( Path p, Set<Flow> flows_to_group ) throws Exception {
+		Map<Pair<Server,Path>,Set<Flow>> map__path__set_flows = new HashMap<Pair<Server,Path>,Set<Flow>>();
+				
+		Map<Server,Set<Flow>> map__s_i__joining_flows_tmp = getServerJoiningFlowsMap( p );
+		Map<Server,Set<Flow>> map__s_i__joining_flows = new HashMap<Server,Set<Flow>>();
+		
+		Set<Flow> tmp_set;
+		for( Entry<Server,Set<Flow>> s_i__joining_flows : map__s_i__joining_flows_tmp.entrySet() ) {
+			tmp_set = s_i__joining_flows.getValue();
+			tmp_set.retainAll( flows_to_group );
+			map__s_i__joining_flows.put( s_i__joining_flows.getKey(), tmp_set );
+		}
+		
+		// Iterate over the servers s on the path. Use indices to easily determine egress servers 
+		LinkedList<Server> servers = p.getServers();
+		int n = servers.size();
+		
+		// Flows with the same egress server (independent of the out link) can be aggregated for PMOO's and OBA's arrival bound calculation.
+		// This still preserves the demultiplexing considerations. Note that the last server contains all remaining flows by default.
+ 		Map<Server,Set<Flow>> map__server__leaving_flows = getServerLeavingFlowsMap( p );
+		
+		for( int i = 0; i<n; i++ ) {
+			Server s_i = servers.get( i );
+			
+			Set<Flow> s_i_ingress = map__s_i__joining_flows.get( s_i );
+			if ( s_i_ingress.isEmpty() ) {
+				continue;
+			}
+
+	 		for( int j = i; j<n; j++ ) {
+	 			Server s_j_egress = servers.get( j );
+	 			
+	 			Set<Flow> s_i_ingress__s_j_egress = SetUtils.getIntersection( s_i_ingress, map__server__leaving_flows.get( s_j_egress ) ); // Intersection with the remaining joining_flows prevents rejoining flows to be considered multiple times
+	 			s_i_ingress__s_j_egress.retainAll( flows_to_group );
+	 			
+	 			if ( s_i_ingress__s_j_egress.isEmpty() ) { // No such flows to bound
+	 				continue;
+	 			}
+	 			
+	 			// TODO Put sorting by inlink here
+
+		 		map__path__set_flows.put( new Pair<Server,Path>( s_i, p.getSubPath(s_i, s_j_egress) ), s_i_ingress__s_j_egress );
+				
+				// Remove the flows otherwise rejoining flows will occur multiple times with wrong paths
+				s_i_ingress.removeAll( s_i_ingress__s_j_egress );
+			}
+		}
+		return map__path__set_flows;
+	}
+	
+	/**
+	 * 
+	 * @param p
+	 * @param flows_to_group
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<Pair<Link,Path>,Set<Flow>> groupFlowsPerInlinkSubPath( Path p, Set<Flow> flows_to_group ) throws Exception {
+		Map<Pair<Server,Path>,Set<Flow>> starting_set = groupFlowsPerSubPathInternal( p, flows_to_group );
+		Map<Pair<Link,Path>,Set<Flow>> results_set = new HashMap<Pair<Link,Path>,Set<Flow>>();
+		
+		Set<Flow> flows_in_l, flows_in_link_grouped = new HashSet<Flow>();
+		for ( Entry<Pair<Server,Path>,Set<Flow>> entry : starting_set.entrySet() ) {
+			
+			flows_in_link_grouped.clear(); // Reusing this set reference works because the getDifference below creates a new set to return.
+			for( Link in_l : getInLinks(  entry.getKey().getFirst() ) ) {
+				
+				flows_in_l = SetUtils.getIntersection( getFlows( in_l ), entry.getValue() );
+				if( !flows_in_l.isEmpty() ) {
+					results_set.put( new Pair<Link,Path>( in_l, entry.getKey().getSecond() ), flows_in_l );
+					flows_in_link_grouped.addAll( new HashSet<Flow>( flows_in_l ) );
+				}
+			}
+			
+			Set<Flow> remaining_flows = SetUtils.getDifference( entry.getValue(), flows_in_link_grouped );
+			if( !remaining_flows.isEmpty() ) {
+				Link dummy = new Link( -1, "dummy", entry.getKey().getFirst(), entry.getKey().getFirst() );
+				Pair<Link,Path> link_path = new Pair<Link,Path>( dummy, entry.getKey().getSecond() );
+				results_set.put( link_path, remaining_flows );
+			}
+		}
+		
+		return results_set;
+	}
 
 	/**
 	 * Returns an aggregate arrival curve for all flows originating in
@@ -933,8 +1022,12 @@ public class Network {
 			return a_out;
 		} else {
 			if (source_flows_internal != null) {
-				for (Flow f : source_flows_internal) {
-					a_out = Curve.add(a_out, f.getArrivalCurve());
+				if(source_flows_internal.size() == 1) {
+					a_out = source_flows_internal.iterator().next().getArrivalCurve();
+				} else {
+					for (Flow f : source_flows_internal) {
+						a_out = Curve.add(a_out, f.getArrivalCurve());
+					}
 				}
 			}
 		}
@@ -1184,9 +1277,9 @@ public class Network {
 	 * are still together.
 	 *
 	 * @param server_common_dest
-	 *            The common destination.
+	 *            The common destination, excluded as a potential splitting server.
 	 * @param flows_of_interest
-	 *            The flow of interest.
+	 *            The flows whose common subpath before server_common_dest is computed.
 	 * @return the splitting point server The common source.
 	 * @throws Exception
 	 *             No splitting point prior to the common destination found.

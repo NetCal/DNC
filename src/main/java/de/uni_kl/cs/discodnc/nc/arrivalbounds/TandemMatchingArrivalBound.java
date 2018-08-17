@@ -1,9 +1,8 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
- * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2011 - 2018 Steffen Bondorf
- * Copyright (C) 2017+ The DiscoDNC contributors
+ * Copyright (C) 2015 - 2018 Steffen Bondorf
+ * Copyright (C) 2018+ The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
@@ -29,6 +28,7 @@
 
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -39,61 +39,41 @@ import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.ArrivalBound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
+import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
+import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBound {
-	private static PmooArrivalBound instance = new PmooArrivalBound();
+public class TandemMatchingArrivalBound extends AbstractArrivalBound implements ArrivalBound {
+	private static TandemMatchingArrivalBound instance = new TandemMatchingArrivalBound();
 
-	private PmooArrivalBound() {
+	private TandemMatchingArrivalBound() {
 	}
 
-	public PmooArrivalBound(Network network, AnalysisConfig configuration) {
+	public TandemMatchingArrivalBound( Network network, AnalysisConfig configuration ) {
 		this.network = network;
 		this.configuration = configuration;
 	}
 
-	public static PmooArrivalBound getInstance() {
+	public static TandemMatchingArrivalBound getInstance() {
 		return instance;
 	}
-
-	public Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception {
-		return computeArrivalBound(link, network.getFlows(link), flow_of_interest);
+	
+	public Set<ArrivalCurve> computeArrivalBound( Link link, Flow flow_of_interest ) throws Exception {
+		return computeArrivalBound( link, network.getFlows( link ), flow_of_interest );
 	}
-
-	/**
-	 * Computes the PMOO arrival bound for a set of <code>flows_to_bound</code>. The
-	 * difference to the standard output bound method is that this method tries to
-	 * compute tighter bounds by concatenating as many servers as possible using the
-	 * PMOO approach. It does so by searching from <code>server</code> towards the
-	 * sinks of the flows contained in <code>f_xfcaller</code> until it reaches the
-	 * server where all these flows first meet each other (the "splitting point").
-	 * It then concatenates all servers between the splitting point (inclusive) and
-	 * <code>server</code> (exclusive).
-	 *
-	 * @param link
-	 *            The link that all flows of interest flow into.
-	 * @param f_xfcaller
-	 *            The set of flows of interest.
-	 * @param flow_of_interest
-	 *            The flow of interest to handle with lowest priority.
-	 * @return The PMOO arrival bounds.
-	 * @throws Exception
-	 *             If any of the sanity checks fails.
-	 */
+	
 	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
@@ -111,7 +91,7 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 		if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
 				|| (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
 						&& link.getSource().multiplexingDiscipline() == Multiplexing.FIFO)) {
-			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
+			throw new Exception( "Tandem matching arrival bounding is not available for FIFO multiplexing nodes" );
 		}
 
 		Server common_subpath_src = network.findSplittingServer(soi, f_xfcaller_soi);
@@ -140,17 +120,15 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 				}
 			}
 		} else {
-			PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
-			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_soi);
+			TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network, configuration);
+			betas_loxfcaller_subpath = tma.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_soi);
 		}
 
 		// Check if there's any service left on this path. Signaled by at least one
 		// service curve in this set
 		if (betas_loxfcaller_subpath.isEmpty()) {
-			System.out.println("No service left over during PMOO arrival bounding!");
-			alphas_xfcaller.clear();
-			alphas_xfcaller.add(Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY));
-			return alphas_xfcaller;
+			System.out.println( "No service left over during TMA arrival bounding!" );
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createTokenBucket(0.0, Double.POSITIVE_INFINITY)));
 		}
 
 		// Get arrival bound at the splitting point:
@@ -162,8 +140,40 @@ public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBou
 		// by this call of computeArrivalBound
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
-		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
+		Set<ArrivalCurve> alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 
+		// TODO It has not been investigated if the TFA node backlog can improve TM arrival bounds.
+		if (configuration.serverBacklogArrivalBound()) {
+			Server last_hop_xtx = link.getSource();
+			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+			tfa.deriveBoundsAtServer(last_hop_xtx);
+
+			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
+			Num tfa_backlog_bound_min = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity();
+
+			for (Num tfa_backlog_bound : tfa_backlog_bounds) {
+				if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {
+					tfa_backlog_bound_min = tfa_backlog_bound;
+				}
+			}
+
+			// Reduce the burst
+			
+			// TODO This implementation only works for token-bucket arrivals. 
+			// It disregards the potential shift in inflection points not present in this burst cap variant.
+			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
+				if(alpha_xfcaller.getSegmentCount() > 2 ) {
+					// >2 segments -> >=2 inflection points -> burst reduction not applicable! 
+					continue;
+				}
+				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
+					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min); // if the burst is >0 then there are at
+					// least two segments and the second
+					// holds the burst as its y-axis value
+				}
+			}
+		}
+		
 		return alphas_xfcaller;
 	}
 }
