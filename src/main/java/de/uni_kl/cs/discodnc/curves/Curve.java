@@ -39,12 +39,20 @@ import java.util.List;
  */
 public interface Curve {
 
+    enum CurveOperation {
+        ADD, SUB, MIN, MAX
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Factory
+    // --------------------------------------------------------------------------------------------------------------
+
     static Curve getFactory() {
         return Calculator.getInstance().getCurve();
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    // Interface
+    // X-Axis
     // --------------------------------------------------------------------------------------------------------------
 
     /**
@@ -57,6 +65,10 @@ public interface Curve {
         // Need to create it anew as the number representation might have changed.
         return LinearSegment.createHorizontalLine(0.0);
     }
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Generic Manipulations
+    // --------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns a copy of this curve with latency removed, i.e. shifted left by the
@@ -644,6 +656,10 @@ public interface Curve {
         return result;
     }
 
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface
+    // --------------------------------------------------------------------------------------------------------------
+    
     Curve copy();
 
     void copy(Curve curve);
@@ -660,24 +676,25 @@ public interface Curve {
 
     // Curve function values
     Num getUltAffineRate();
+    
     int getSegmentDefining(Num x);
 
     void addSegment(LinearSegment s);
+    
     Curve createZeroCurve();
+    
     ServiceCurve createZeroService();
-    // ------------------------------------------------------------
-    // DiscoDNC compliance
-    // ------------------------------------------------------------
-    Curve createCurve(List<LinearSegment> segments);
 
+    Curve createCurve(List<LinearSegment> segments);
 
     Curve createHorizontal(double y);
 
     Curve createHorizontal(Num y);
 
     // ------------------------------------------------------------
-    // DiscoDNC compliance
+    // Service Curves
     // ------------------------------------------------------------
+    
     ServiceCurve createServiceCurve();
 
     ServiceCurve createServiceCurve(int segment_count);
@@ -697,8 +714,9 @@ public interface Curve {
     ServiceCurve createRateLatency(Num rate, Num latency);
 
     // ------------------------------------------------------------
-    // DiscoDNC compliance
+    // Arrival Curves
     // ------------------------------------------------------------
+
     ArrivalCurve createArrivalCurve();
 
     ArrivalCurve createArrivalCurve(int segment_count);
@@ -720,8 +738,9 @@ public interface Curve {
     ArrivalCurve createTokenBucket(Num rate, Num burst);
 
     // ------------------------------------------------------------
-    // DiscoDNC compliance
+    // Maximum Service Curves
     // ------------------------------------------------------------
+
     MaxServiceCurve createMaxServiceCurve();
 
     MaxServiceCurve createMaxServiceCurve(int segment_count);
@@ -742,21 +761,34 @@ public interface Curve {
 
     MaxServiceCurve createRateLatencyMSC(Num rate, Num latency);
 
+    // ------------------------------------------------------------
+    // Properties, Special Shapes etc.
+    // ------------------------------------------------------------
+
     void addSegment(int pos, LinearSegment s);
 
     void setTB_Components(List<Curve> token_buckets);
+    
     void setRL_MetaInfo(boolean has_rl_meta_info);
+    
     void setRateLateny(boolean is_rate_latency);
+    
     void setRL_Components(List<Curve> rate_latencies);
+    
     boolean isAlmostConcave();
+    
     int getRL_ComponentCount();
+    
     int getTB_ComponentCount();
+    
     Curve getRL_Component(int i);
+    
     Curve getTB_Component(int i);
+    
     void setTokenBucket(boolean is_token_bucket);
+    
     void removeSegment(int pos);
 
-    // Curve properties
     boolean isDelayedInfiniteBurst();
 
     boolean isDiscontinuity(int pos);
@@ -764,8 +796,8 @@ public interface Curve {
     boolean isRealDiscontinuity(int pos);
 
     boolean isUnrealDiscontinuity(int pos);
+    
     void setTB_MetaInfo(boolean has_tb_meta_info);
-
 
     boolean isWideSenseIncreasing();
 
@@ -773,16 +805,10 @@ public interface Curve {
 
     boolean isConvexIn(Num a, Num b);
 
-    @Override
-    boolean equals(Object obj);
-
-    @Override
-    int hashCode();
-
-    @Override
-    String toString();
-
-    // Curve function values
+    // ------------------------------------------------------------
+    // Function Values
+    // ------------------------------------------------------------
+    
     Num f(Num x);
 
     Num fLimitRight(Num x);
@@ -795,13 +821,18 @@ public interface Curve {
 
     Num getBurst();
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Utils
-    // --------------------------------------------------------------------------------------------------------------
-
     Num getGradientLimitRight(Num x);
 
-    enum CurveOperation {
-        ADD, SUB, MIN, MAX
-    }
+    // ------------------------------------------------------------
+    // Methods to override
+    // ------------------------------------------------------------
+    
+    @Override
+    boolean equals(Object obj);
+
+    @Override
+    int hashCode();
+
+    @Override
+    String toString();
 }
