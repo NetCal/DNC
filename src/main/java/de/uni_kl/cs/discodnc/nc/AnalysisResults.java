@@ -29,6 +29,7 @@
 
 package de.uni_kl.cs.discodnc.nc;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
@@ -44,8 +45,8 @@ public class AnalysisResults {
 	protected Num backlog_bound;
 
 	public AnalysisResults() {
-		this.delay_bound = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createNaN();
-		this.backlog_bound = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createNaN();
+		this.delay_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
+		this.backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		this.map__server__alphas = new HashMap<Server, Set<ArrivalCurve>>();
 	}
 

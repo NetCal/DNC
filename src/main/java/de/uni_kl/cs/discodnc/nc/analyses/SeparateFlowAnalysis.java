@@ -30,6 +30,7 @@
 
 package de.uni_kl.cs.discodnc.nc.analyses;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -39,7 +40,6 @@ import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -100,8 +100,8 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((SeparateFlowResults) result).setDelayBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
-        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createPositiveInfinity());
+        ((SeparateFlowResults) result).setDelayBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
+        ((SeparateFlowResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
         	// single flow of interest, i.e., FIFO per micro flow holds.
@@ -152,7 +152,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             	betas_lo_server.add(server.getServiceCurve());
         		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
                 ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
-                betas_lo_path = CalculatorConfig.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
+                betas_lo_path = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server);
         		continue;
             }
             
@@ -227,7 +227,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
 
-            betas_lo_path = CalculatorConfig.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server, configuration.tbrlConvolution());
+            betas_lo_path = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server);
         }
         result.betas_e2e = betas_lo_path;
         

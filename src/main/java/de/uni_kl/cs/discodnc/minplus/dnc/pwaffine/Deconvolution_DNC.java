@@ -27,15 +27,15 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc;
+package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.CheckUtils;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 import java.util.Collections;
@@ -46,12 +46,6 @@ import java.util.Set;
 public abstract class Deconvolution_DNC {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
-        // null and empty checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curves, service_curve, false);
-    }
-
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve,
-                                               boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
         switch (CheckUtils.inputNullCheck(arrival_curves, service_curve)) {
             case 0:
@@ -71,19 +65,13 @@ public abstract class Deconvolution_DNC {
         }
 
         for (ArrivalCurve alpha : arrival_curves) {
-            results.add(deconvolve(alpha, service_curve, tb_rl_optimized));
+            results.add(deconvolve(alpha, service_curve));
         }
 
         return results;
     }
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves) {
-        // null and empty checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curves, service_curves, false);
-    }
-
-    public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves,
-                                               boolean tb_rl_optimized) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
 
         switch (CheckUtils.inputNullCheck(arrival_curves, service_curves)) {
@@ -113,7 +101,7 @@ public abstract class Deconvolution_DNC {
 
         for (ServiceCurve beta : service_curves) {
             for (ArrivalCurve alpha : arrival_curves) {
-                results.add(deconvolve(alpha, beta, tb_rl_optimized));
+                results.add(deconvolve(alpha, beta));
             }
         }
 
@@ -121,12 +109,6 @@ public abstract class Deconvolution_DNC {
     }
 
     public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        // null checks will be done by deconvolve( ... )
-        return deconvolve(arrival_curve, service_curve, false);
-    }
-
-    public static ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
-                                          boolean tb_rl_optimized) {
         switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
             case 0:
                 break;
@@ -144,16 +126,12 @@ public abstract class Deconvolution_DNC {
             return arrival_curve.copy();
         }
         if (service_curve.equals(Curve.getFactory().createZeroService())
-        		 || service_curve.getLatency().equals(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity())
+        		 || service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }
-        if (tb_rl_optimized) {
-            return deconvolveTB_RL(arrival_curve, service_curve);
-        } else {
-            return deconvolve_mTB_mRL(arrival_curve, service_curve);
-        }
+        return deconvolve_mTB_mRL(arrival_curve, service_curve);
     }
 
     public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
@@ -198,33 +176,6 @@ public abstract class Deconvolution_DNC {
         return results;
     }
 
-    private static ArrivalCurve deconvolveTB_RL(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-        switch (CheckUtils.inputNullCheck(arrival_curve, service_curve)) {
-            case 0:
-                break;
-            case 1:
-            case 3:
-                return Curve.getFactory().createZeroArrivals();
-            case 2:
-                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
-            default:
-        }
-
-        if (service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
-            return arrival_curve.copy();
-        }
-        if (service_curve.equals(Curve.getFactory().createZeroService())
-        		|| service_curve.getLatency().equals(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity())
-                || (service_curve.getUltAffineRate().eqZero() && service_curve.getSegment(1).getY().eqZero())) {
-            return Curve.getFactory().createZeroArrivals();
-        }
-
-        // Result: Token bucket gamma_{r,'b'} with r' = r and b' = b+r*T
-        return Curve.getFactory().createTokenBucket(arrival_curve.getUltAffineRate().doubleValue(),
-                arrival_curve.getBurst().doubleValue()
-                        + arrival_curve.getUltAffineRate().doubleValue() * service_curve.getLatency().doubleValue());
-    }
-
     /**
      * Returns the deconvolution of an (almost) concave arrival curve and a convex
      * service curve.
@@ -254,11 +205,11 @@ public abstract class Deconvolution_DNC {
             return Curve.getFactory().createArrivalCurve((CurvePwAffine) curve_1);
         }
         if (curve_2.equals(Curve.getFactory().createZeroService())
-        		|| curve_2.getLatency().equals(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity())
+        		|| curve_2.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }
-        if (CalculatorConfig.getInstance().exec_deconvolution_checks()) {
+        if (Calculator.getInstance().exec_deconvolution_checks()) {
             if (!((CurvePwAffine) curve_1).isAlmostConcave()) {
                 throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
             }
@@ -286,7 +237,7 @@ public abstract class Deconvolution_DNC {
                 for (int j = 0; j < candidate_tmp.getSegmentCount(); j++) {
                     LinearSegment lin_seg = candidate_tmp.getSegment(j);
                     y_alpha = lin_seg.getY();
-                    candidate_tmp.getSegment(j).setY(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(y_alpha, y_beta));
+                    candidate_tmp.getSegment(j).setY(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha, y_beta));
                 }
             }
             result_candidates.add(candidate_tmp);
@@ -304,7 +255,7 @@ public abstract class Deconvolution_DNC {
             x_inflect_alpha = curve_1.getSegment(i).getX();
             y_alpha = curve_1.f(x_inflect_alpha);
             y_beta = curve_2.f(x_inflect_alpha);
-            results_cand_burst = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(y_alpha, y_beta);
+            results_cand_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha, y_beta);
 
             if (x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero
                     // curve.
@@ -334,7 +285,7 @@ public abstract class Deconvolution_DNC {
                 // The origin (first segment, id 0) stays as is, the remainder needs to be
                 // constructed.
                 // Compute the second segment
-                Num next_x_coord = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+                Num next_x_coord = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
                 Num next_y_coord = results_cand_burst;
 
                 LinearSegment current_candidate_segment = candidate_tmp.getSegment(1);
@@ -345,9 +296,9 @@ public abstract class Deconvolution_DNC {
                 current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
                 // The length of this segment is defined by the following one's y-coordinate:
-                next_x_coord = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(x_inflect_alpha, x_inflect_beta);
-                next_y_coord = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(results_cand_burst,
-                        Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(next_x_coord, current_beta_segment.getGrad()));
+                next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_inflect_alpha, x_inflect_beta);
+                next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(results_cand_burst,
+                        Num.getUtils(Calculator.getInstance().getNumBackend()).mult(next_x_coord, current_beta_segment.getGrad()));
 
                 LinearSegment prev_beta_segment;
                 Num current_segment_length;
@@ -369,15 +320,15 @@ public abstract class Deconvolution_DNC {
                     current_candidate_segment.setY(next_y_coord);
                     current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
-                    current_segment_length = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(prev_beta_segment.getX(),
+                    current_segment_length = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(prev_beta_segment.getX(),
                             current_beta_segment.getX());
-                    next_x_coord = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(next_x_coord, current_segment_length); // Prev > current
+                    next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(next_x_coord, current_segment_length); // Prev > current
                     // because we
                     // iterate j in
                     // decreasing
                     // order.
-                    next_y_coord = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(current_candidate_segment.getY(),
-                            Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(current_segment_length, current_beta_segment.getGrad()));
+                    next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(current_candidate_segment.getY(),
+                            Num.getUtils(Calculator.getInstance().getNumBackend()).mult(current_segment_length, current_beta_segment.getGrad()));
                 }
 
                 // Add a horizontal line at the end.

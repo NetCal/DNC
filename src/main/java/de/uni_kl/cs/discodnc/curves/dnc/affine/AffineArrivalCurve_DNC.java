@@ -29,9 +29,9 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc.affine;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
 public class AffineArrivalCurve_DNC extends AffineCurve_DNC implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ public class AffineArrivalCurve_DNC extends AffineCurve_DNC implements ArrivalCu
         super(curve);
         forceThroughOrigin();
 
-        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
             // !isConcave()
             System.out.println(toString());
@@ -68,7 +68,7 @@ public class AffineArrivalCurve_DNC extends AffineCurve_DNC implements ArrivalCu
         initializeCurve(arrival_curve_str);
         forceThroughOrigin();
 
-        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
             // !isConcave()
             System.out.println(toString());

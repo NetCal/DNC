@@ -29,9 +29,9 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc_affine;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 /**
@@ -71,9 +71,9 @@ public class AffineLinearSegment_DNC implements LinearSegment {
      * The default constructor.
      */
     protected AffineLinearSegment_DNC() {
-        x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
-        y = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
-        grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        x = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        y = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        grad = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
         leftopen = false;
     }
 
@@ -127,9 +127,9 @@ public class AffineLinearSegment_DNC implements LinearSegment {
             throw new RuntimeException("Invalid string representation of a linear segment.");
         }
 
-        x = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(x_y[0]);
-        y = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(x_y[1]);
-        grad = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(xy_r[1]);
+        x = Num.getFactory(Calculator.getInstance().getNumBackend()).create(x_y[0]);
+        y = Num.getFactory(Calculator.getInstance().getNumBackend()).create(x_y[1]);
+        grad = Num.getFactory(Calculator.getInstance().getNumBackend()).create(xy_r[1]);
     }
 
     // --------------------------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ public class AffineLinearSegment_DNC implements LinearSegment {
      * @return the function value
      */
     public Num f(Num x) {
-        return Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(x, this.x), grad), y);
+        return Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x, this.x), grad), y);
     }
 
     public Num getX() {
@@ -189,12 +189,12 @@ public class AffineLinearSegment_DNC implements LinearSegment {
      * parallel
      */
     public Num getXIntersectionWith(LinearSegment other) {
-        Num y1 = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(this.y, Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(x, this.grad));
-        Num y2 = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(other.getY(), Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).mult(other.getX(), other.getGrad()));
+        Num y1 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(this.y, Num.getUtils(Calculator.getInstance().getNumBackend()).mult(x, this.grad));
+        Num y2 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(other.getY(), Num.getUtils(Calculator.getInstance().getNumBackend()).mult(other.getX(), other.getGrad()));
 
         // returns NaN if lines are parallel
-        return Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).div(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(y2, y1),
-                Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(this.grad, other.getGrad()));
+        return Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y2, y1),
+                Num.getUtils(Calculator.getInstance().getNumBackend()).sub(this.grad, other.getGrad()));
     }
 
     /**
@@ -258,8 +258,8 @@ public class AffineLinearSegment_DNC implements LinearSegment {
 
 		@Override
 		public LinearSegment createHorizontalLine(double y) {
-				return new LinearSegment_DNC(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(),
-	                Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(y), Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(), false);
+				return new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+	                Num.getFactory(Calculator.getInstance().getNumBackend()).create(y), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 	    }
     	
     }

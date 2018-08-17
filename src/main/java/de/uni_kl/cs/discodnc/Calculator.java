@@ -26,30 +26,29 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.CurveBackend;
-import de.uni_kl.cs.discodnc.CurveBackend_DNC;
+import de.uni_kl.cs.discodnc.CurveBackend_DNC_PWAFFINE;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.numbers.NumBackend;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
-import java.io.File;
-
-public final class CalculatorConfig {
-	private static CalculatorConfig instance = new CalculatorConfig();
+public final class Calculator {
+	private static Calculator instance = new Calculator();
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
-	private CurveBackend CURVE_IMPLEMENTATION = CurveBackend_DNC.DNC;
+	private CurveBackend CURVE_BACKEND = CurveBackend_DNC_PWAFFINE.DNC_PWAFFINE;
+	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
 	private boolean MAX_SERVICE_CURVE_CHECKS = false;
 	private boolean FIFO_MUX_CHECKS = false;
 	private boolean DECONVOLUTION_CHECKS = false;
 
-	protected CalculatorConfig() {
+	protected Calculator() {
 	}
 
-	public static CalculatorConfig getInstance() {
+	public static Calculator getInstance() {
 		return instance;
 	}
 
@@ -66,27 +65,15 @@ public final class CalculatorConfig {
 		}
 	}
 
-	public CurveBackend getCurveImpl() {
-		return CURVE_IMPLEMENTATION;
-	}
-
-	private void checkMPARTC() throws RuntimeException {
-		String classpath = System.getProperty("java.class.path");
-		for (String classpathEntry : classpath.split(File.pathSeparator)) {
-			if (classpathEntry.contains("rtc.jar")) {
-				return;
-			}
-		}
-		throw new RuntimeException("rtc.jar cannot be found on the classpath!");
+	public CurveBackend getCurveBackend() {
+		return CURVE_BACKEND;
 	}
 
 	public boolean setCurveImpl(CurveBackend curve_impl) {
-		checkMPARTC();
-
-		if (CURVE_IMPLEMENTATION == curve_impl) {
+		if (CURVE_BACKEND == curve_impl) {
 			return false;
 		}
-		CURVE_IMPLEMENTATION = curve_impl;
+		CURVE_BACKEND = curve_impl;
 		return true;
 	}
 
@@ -132,7 +119,7 @@ public final class CalculatorConfig {
 
 		calculator_config_str.append(getNumBackend().toString());
 		calculator_config_str.append(", ");
-		calculator_config_str.append(getCurveImpl().toString());
+		calculator_config_str.append(getCurveBackend().toString());
 
 		if (exec_arrival_curve_checks()) {
 			calculator_config_str.append(", ");
@@ -159,10 +146,10 @@ public final class CalculatorConfig {
 	}
 	
 	public MinPlus getMinPlus() {
-		return CURVE_IMPLEMENTATION.getMinPlus();
+		return CURVE_BACKEND.getMinPlus();
 	}
 	
 	public Curve getCurve() {
-		return CURVE_IMPLEMENTATION.getCurveFactory();
+		return CURVE_BACKEND.getCurveFactory();
 	}
 }

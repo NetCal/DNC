@@ -30,6 +30,7 @@
 
 package de.uni_kl.cs.discodnc.nc.analyses;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.Pair;
@@ -40,7 +41,6 @@ import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.nc.bounds.Bound;
 import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
@@ -73,14 +73,14 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        Num delay_bound = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
-        Num backlog_bound = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero();
+        Num delay_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        Num backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 
         for (Server server : path.getServers()) {
             Pair<Num> min_D_B = deriveBoundsAtServer(server);
 
-            delay_bound = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(delay_bound, min_D_B.getFirst());
-            backlog_bound = Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(backlog_bound, min_D_B.getSecond());
+            delay_bound = Num.getUtils(Calculator.getInstance().getNumBackend()).add(delay_bound, min_D_B.getFirst());
+            backlog_bound = Num.getUtils(Calculator.getInstance().getNumBackend()).max(backlog_bound, min_D_B.getSecond());
         }
 
         ((TotalFlowResults) result).setDelayBound(delay_bound);
@@ -100,8 +100,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         Set<Num> delay_bounds_server = new HashSet<Num>();
         Set<Num> backlog_bounds_server = new HashSet<Num>();
 
-        Num delay_bound_s__min = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity();
-        Num backlog_bound_s__min = Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).getPositiveInfinity();
+        Num delay_bound_s__min = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity();
+        Num backlog_bound_s__min = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity();
         for (ArrivalCurve alpha_candidate : alphas_server) {
             // According to the call of computeOutputBound there's no left-over service
             // curve calculation

@@ -28,6 +28,7 @@
 
 package de.uni_kl.cs.discodnc.nc;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -244,7 +245,7 @@ public abstract class ArrivalBoundDispatch {
 
 		// All permutations of single flow results
 		for (ServiceCurve beta_lo : betas_lo) {
-			arrival_bounds_f.add(CalculatorConfig.getInstance().getMinPlus().deconvolve(alpha, beta_lo, configuration.tbrlDeconvolution()));
+			arrival_bounds_f.add(Calculator.getInstance().getMinPlus().deconvolve(alpha, beta_lo));
 		}
 
 		return arrival_bounds_f;
@@ -294,7 +295,7 @@ public abstract class ArrivalBoundDispatch {
 				// There should only be one arrival bound in arrival_bounds as this setting is global.
 				// Therefore, the convolution of all alternatives could be sped up using this knowledge.
 				for (ArrivalCurve arrival_bound : arrival_bounds) {
-					arrival_bound_tmp = CalculatorConfig.getInstance().getMinPlus().convolve(arrival_bound_tmp, arrival_bound);
+					arrival_bound_tmp = Calculator.getInstance().getMinPlus().convolve(arrival_bound_tmp, arrival_bound);
 				}
 				arrival_bounds.clear();
 				arrival_bounds.add(arrival_bound_tmp);

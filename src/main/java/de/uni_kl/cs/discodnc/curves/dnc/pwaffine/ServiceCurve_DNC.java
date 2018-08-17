@@ -29,9 +29,9 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
 public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         copy(curve);
 
         // Too strong requirement: !isConvex()
-        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }
@@ -63,7 +63,7 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
         initializeCurve(service_curve_str);
 
         // Too strong requirement: !isConvex()
-        if (CalculatorConfig.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }

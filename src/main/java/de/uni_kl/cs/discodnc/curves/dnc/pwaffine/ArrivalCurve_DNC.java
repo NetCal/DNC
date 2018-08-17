@@ -29,9 +29,9 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
 
 public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
         forceThroughOrigin();
         
         // Too strong requirement: !isConcave()
-        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
@@ -66,7 +66,7 @@ public class ArrivalCurve_DNC extends Curve_DNC implements ArrivalCurve {
         forceThroughOrigin();
 
         // Too strong requirement: !isConcave()
-        if (CalculatorConfig.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
