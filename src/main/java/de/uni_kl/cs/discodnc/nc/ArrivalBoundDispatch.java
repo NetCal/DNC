@@ -286,7 +286,8 @@ public abstract class ArrivalBoundDispatch {
 		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
 			arrival_bounds.add(arrival_bound_to_merge);
 		} else {
-			if (!configuration.convolveAlternativeArrivalBounds() ) {
+			if (!configuration.removeDuplicateArrivalBounds() || (configuration.removeDuplicateArrivalBounds()
+					&& !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
 				arrival_bounds.add(arrival_bound_to_merge);
 			} else { // convolve alternative arrival bounds
 				ArrivalCurve arrival_bound_tmp = arrival_bound_to_merge.copy();
@@ -299,5 +300,14 @@ public abstract class ArrivalBoundDispatch {
 				arrival_bounds.add(arrival_bound_tmp);
 			}
 		}
+	}
+
+	private static boolean isDuplicate(ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds) {
+		for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
+			if (arrival_bound_to_check.equals(arrival_bound_existing)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
