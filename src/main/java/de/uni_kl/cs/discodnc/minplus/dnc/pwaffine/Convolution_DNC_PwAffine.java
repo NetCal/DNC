@@ -35,8 +35,8 @@ import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.utils.CheckUtils;
 
 import java.util.HashSet;
 import java.util.Set;
