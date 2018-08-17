@@ -53,8 +53,12 @@ v2.4.1 "Chimera" (2018-May-07)
 * SeparateFlowAnalysis: Do not rely on an exception to identify path's source server.
 * Improved pom.xml.
 * Code and comment cleanups.
+<<<<<<< HEAD
   - Rename location of interference, loi, to server of interference, soi, to prevent confusion with potential link of interference.
 >>>>>>> 0b0bff87f32353ee1f985dfa03834cf4daee3f75
+=======
+* Refactoring to multimodule project, integration tests moved to separate modul
+>>>>>>> 38b9f7f... Moving integration tests to separate modul.
 
 v2.4.0 "Chimera" (2018-Mar-18)
 ------------------------------

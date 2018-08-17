@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
-    <description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.</description>
-    <url>discodnc.cs.uni-kl.de</url>
-
-    <groupId>de.uni_kl.cs.discodnc</groupId>
-    <artifactId>DiscoDNC</artifactId>
-    <version>2.5.0</version>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 	
+<<<<<<< HEAD
     <licenses>
         <license>
             <name>GNU General Lesser Public License (LGPL) version 2.1</name>
@@ -69,13 +62,29 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/rtc.jar</systemPath>
         </dependency>
+=======
+	<name>DiscoDNC - The Disco Deterministic Network Calculator</name>
+	<description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.</description>
+	<url>discodnc.cs.uni-kl.de</url>
+	
+	<parent>
+		<groupId>de.uni_kl.cs.discodnc</groupId>
+		<artifactId>DiscoDNC_meta</artifactId>
+		<version>2.5.0</version>
+		<relativePath>../DiscoDNC_meta</relativePath>
+	</parent>
+	
+	<artifactId>DiscoDNC</artifactId>
+>>>>>>> 38b9f7f... Moving integration tests to separate modul.
 
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>[3.0,3.6.1]</version>
-        </dependency>
+	<licenses>
+		<license>
+			<name>GNU General Lesser Public License (LGPL) version 2.1</name>
+			<url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
+		</license>
+	</licenses>
 
+<<<<<<< HEAD
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -104,4 +113,43 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+=======
+	<developers>
+		<developer>
+			<name>Steffen Bondorf</name>
+			<email>bondorf@cs.uni-kl.de</email>
+			<organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+			<organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Philipp Schon</name>
+			<email>schon@cs.uni-kl.de</email>
+			<organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+			<organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Zoltan Matyas</name>
+			<email>matyesz79@gmail.com</email>
+			<organization></organization>
+			<organizationUrl></organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/NetCal/DiscoDNC.git</connection>
+		<developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
+		<url>https://github.com/NetCal/DiscoDNC/tree/master</url>
+	</scm>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>[3.0,3.6.1]</version>
+		</dependency>
+
+	</dependencies>
+	
+>>>>>>> 38b9f7f... Moving integration tests to separate modul.
 </project>
