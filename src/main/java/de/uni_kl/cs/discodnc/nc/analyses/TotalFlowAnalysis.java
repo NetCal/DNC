@@ -33,7 +33,6 @@ package de.uni_kl.cs.discodnc.nc.analyses;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.Pair;
 import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.nc.Analysis;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
@@ -50,6 +49,8 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.math3.util.Pair;
 
 public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
@@ -77,7 +78,7 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         Num backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 
         for (Server server : path.getServers()) {
-            Pair<Num> min_D_B = deriveBoundsAtServer(server);
+            Pair<Num,Num> min_D_B = deriveBoundsAtServer(server);
 
             delay_bound = Num.getUtils(Calculator.getInstance().getNumBackend()).add(delay_bound, min_D_B.getFirst());
             backlog_bound = Num.getUtils(Calculator.getInstance().getNumBackend()).max(backlog_bound, min_D_B.getSecond());
@@ -87,7 +88,7 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         ((TotalFlowResults) result).setBacklogBound(backlog_bound);
     }
 
-    public Pair<Num> deriveBoundsAtServer(Server server) throws Exception {
+    public Pair<Num,Num> deriveBoundsAtServer(Server server) throws Exception {
         // Here's the difference to SFA:
         // TFA needs the arrival bound of all flows at the server, including the flow of
         // interest.
@@ -139,7 +140,7 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         ((TotalFlowResults) result).map__server__D_server.put(server, delay_bounds_server);
         ((TotalFlowResults) result).map__server__B_server.put(server, backlog_bounds_server);
 
-        return new Pair<Num>(delay_bound_s__min, backlog_bound_s__min);
+        return new Pair<Num,Num>(delay_bound_s__min, backlog_bound_s__min);
     }
 
     public Map<Server, Set<Num>> getServerDelayBoundMap() {
