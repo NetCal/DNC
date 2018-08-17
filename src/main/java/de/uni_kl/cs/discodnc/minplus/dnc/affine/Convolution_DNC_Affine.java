@@ -40,7 +40,7 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public abstract class Convolution_DNCaffine {
+public abstract class Convolution_DNC_Affine {
 
     // ------------------------------------------------------------
     // Service Curves

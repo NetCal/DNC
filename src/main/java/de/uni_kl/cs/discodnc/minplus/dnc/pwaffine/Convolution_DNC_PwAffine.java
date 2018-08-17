@@ -41,7 +41,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class Convolution_DNC {
+public abstract class Convolution_DNC_PwAffine {
 
     // ------------------------------------------------------------
     // Service Curves

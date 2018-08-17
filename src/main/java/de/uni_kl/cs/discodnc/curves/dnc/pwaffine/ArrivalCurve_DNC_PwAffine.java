@@ -30,41 +30,45 @@
 package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
+public class ArrivalCurve_DNC_PwAffine extends Curve_DNC_PwAffine implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    public ServiceCurve_DNC() {
+    public ArrivalCurve_DNC_PwAffine() {
         super();
     }
 
-    public ServiceCurve_DNC(int segment_count) {
+    public ArrivalCurve_DNC_PwAffine(int segment_count) {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC(Curve curve) {
-        copy(curve);
-
-        // Too strong requirement: !isConvex()
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+    public ArrivalCurve_DNC_PwAffine(Curve curve) {
+        super(curve);
+        forceThroughOrigin();
+        
+        // Too strong requirement: !isConcave()
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
-    public ServiceCurve_DNC(String service_curve_str) throws Exception {
-    	// Smallest possible string: {(0,0),0}
-        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) {
+    public ArrivalCurve_DNC_PwAffine(String arrival_curve_str) throws Exception {
+        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) {
+        	// Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(service_curve_str);
+        initializeCurve(arrival_curve_str);
+        forceThroughOrigin();
 
-        // Too strong requirement: !isConvex()
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+        // Too strong requirement: !isConcave()
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
@@ -72,20 +76,20 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public ServiceCurve_DNC copy() {
-        ServiceCurve_DNC sc_copy = new ServiceCurve_DNC();
-        sc_copy.copy(this);
-        return sc_copy;
+    public ArrivalCurve_DNC_PwAffine copy() {
+        ArrivalCurve_DNC_PwAffine ac_copy = new ArrivalCurve_DNC_PwAffine();
+        ac_copy.copy(this);
+        return ac_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof ServiceCurve_DNC) && super.equals(obj);
+        return (obj instanceof ArrivalCurve_DNC_PwAffine) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "SC".hashCode() * super.hashCode();
+        return "AC".hashCode() * super.hashCode();
     }
 
     /**
@@ -95,6 +99,6 @@ public class ServiceCurve_DNC extends Curve_DNC implements ServiceCurve {
      */
     @Override
     public String toString() {
-        return "SC" + super.toString();
+        return "AC" + super.toString();
     }
 }
