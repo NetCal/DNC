@@ -63,6 +63,13 @@
             <version>[3.0,3.6.1]</version>
         </dependency>
         <dependency>
+            <groupId>de.uni_kl.cs.discodnc</groupId>
+            <artifactId>NumBackend</artifactId>
+            <version>[1.0]</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/NumBackend-1.0.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>[5.2.0]</version>
