@@ -30,17 +30,6 @@
 
 package de.uni_kl.cs.discodnc.nc.analyses;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.math3.util.Pair;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -58,6 +47,17 @@ import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.math3.util.Pair;
 
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
@@ -250,10 +250,10 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         T = compute.add(T, compute.div(compute.add(sum_bursts, sum_latencyterms), R));
 
-        if (T == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
+		if (T == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
             return Curve.getFactory().createZeroService();
         }
-        if (R == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
+		if (R == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
             return Curve.getFactory().createDelayedInfiniteBurst(T);
         }
 

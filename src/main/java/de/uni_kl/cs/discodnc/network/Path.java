@@ -49,10 +49,12 @@ import java.util.List;
  * pessimistic, yet, the results remain valid.
  */
 public class Path {
-    private LinkedList<Server> path_servers = new LinkedList<Server>();
-    private LinkedList<Link> path_links = new LinkedList<Link>();
+    private LinkedList<Server> path_servers;
+    private LinkedList<Link> path_links;
 
     private Path() {
+        path_servers = new LinkedList<Server>();
+        path_links = new LinkedList<Link>();
     }
 
     protected Path(List<Server> path_servers, List<Link> path_links) {
@@ -69,7 +71,10 @@ public class Path {
     // Can be visible.
     // There's no way to create a single hop path not possible to take in a network.
     public Path(Server single_hop) {
-        this.path_servers.add(single_hop);
+        path_servers = new LinkedList<Server>();
+        path_servers.add(single_hop);
+        
+        path_links = new LinkedList<Link>();
     }
 
     public static Path createEmptyPath() {
@@ -78,6 +83,10 @@ public class Path {
 
     public Server getSource() {
         return path_servers.get(0);
+    }
+    
+    public boolean isSource(Server s) {
+    	return path_servers.indexOf(s) == 0;
     }
 
     public Server getSink() {
@@ -159,7 +168,7 @@ public class Path {
         }
         throw new Exception("No succeeding link on the path found");
     }
-
+    
     public Server getPrecedingServer(Server s) throws Exception {
         try {
             return getPrecedingLink(s).getSource();

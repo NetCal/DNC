@@ -32,7 +32,6 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBound;
@@ -45,6 +44,7 @@ import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -153,16 +153,15 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 		}
 
 		// Next we need to know the arrival bound of f_xfcaller at the server
-		// 'common_subpath_src', i.e., at the above sub-path's source
-		// in order to deconvolve it with beta_lo_s to get the arrival bound of the
-		// sub-path
+		// 'common_subpath_src', i.e., at the above sub-path's source in order to
+		// deconvolve it with beta_lo_s to get the arrival bound of the sub-path.
 		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered
-		// by this call of computeArrivalBound
+		// by this call of computeArrivalBound.
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
 		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
-		if (configuration.abConsiderTFANodeBacklog()) {
+		if (configuration.serverBacklogArrivalBound()) {
 			Server last_hop_xtx = link.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
@@ -187,8 +186,8 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 					continue;
 				}
 				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
-					// If the burst is >0 then there are at least two segments and
-					// the second holds the burst as its y-axis value
+					// if the burst is >0 then there are at least two segments 
+					// and the second one holds the burst as its y-axis value.
 					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min);
 				}
 			}

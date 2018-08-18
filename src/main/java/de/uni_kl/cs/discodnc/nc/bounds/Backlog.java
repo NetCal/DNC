@@ -75,7 +75,7 @@ public class Backlog {
 
 		ArrayList<Num> xcoords = Curve.computeInflectionPointsX(arrival_curve, service_curve);
 		for (int i = 0; i < xcoords.size(); i++) {
-			Num ip_x = ((Num) xcoords.get(i));
+			Num ip_x = xcoords.get(i);
 
 			Num backlog = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(arrival_curve.f(ip_x), service_curve.f(ip_x));
 			result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, backlog);

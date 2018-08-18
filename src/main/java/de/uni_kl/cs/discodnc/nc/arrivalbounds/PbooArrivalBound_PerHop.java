@@ -32,7 +32,6 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.SetUtils;
 import de.uni_kl.cs.discodnc.nc.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.nc.ArrivalBound;
@@ -45,6 +44,7 @@ import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -150,13 +150,11 @@ public class PbooArrivalBound_PerHop extends AbstractArrivalBound implements Arr
 						.createArrivalCurve(Curve.getFactory().createZeroDelayInfiniteBurst()));
 				return alphas_xfcaller;
 			}
-
-			// The deconvolution of the two sets, arrival curves and service curves,
-			// respectively, takes care of all the possible combinations
+			
 			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
-		if (configuration.abConsiderTFANodeBacklog()) {
+		if (configuration.serverBacklogArrivalBound()) {
 			Server last_hop_xtx = link.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);

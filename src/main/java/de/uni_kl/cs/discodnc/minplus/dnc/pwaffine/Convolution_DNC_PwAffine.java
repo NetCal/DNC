@@ -29,17 +29,17 @@
 
 package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.utils.CheckUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Convolution_DNC_PwAffine {
 
@@ -73,7 +73,7 @@ public abstract class Convolution_DNC_PwAffine {
             if (service_curve_1.isDelayedInfiniteBurst()
                     && service_curve_2.isDelayedInfiniteBurst()) {
                 return Curve.getFactory().createDelayedInfiniteBurst(
-                        Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                		Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
             }
 
             if (service_curve_1.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
@@ -320,7 +320,7 @@ public abstract class Convolution_DNC_PwAffine {
                         .createArrivalCurve(Curve.removeLatency(max_service_curve_2)));
         MaxServiceCurve result = Curve.getFactory().createMaxServiceCurve(ac_intermediate);
         result = (MaxServiceCurve) Curve.shiftRight(result,
-                Num.getUtils(Calculator.getInstance().getNumBackend()).add(latency_msc_1, latency_msc_2));
+        		Num.getUtils(Calculator.getInstance().getNumBackend()).add(latency_msc_1, latency_msc_2));
         Curve.beautify(result);
 
         return result;

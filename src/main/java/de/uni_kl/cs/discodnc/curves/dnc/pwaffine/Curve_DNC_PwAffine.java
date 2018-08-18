@@ -29,17 +29,17 @@
 
 package de.uni_kl.cs.discodnc.curves.dnc.pwaffine;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.numbers.Num;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>
@@ -1149,6 +1149,12 @@ public class Curve_DNC_PwAffine implements Curve_PwAffine {
 
 	public ArrivalCurve_DNC_PwAffine createZeroArrivals() {
 		return new ArrivalCurve_DNC_PwAffine(); // ArrivalCurveDNC constructor's default behavior
+	}
+
+	public ArrivalCurve_DNC_PwAffine createInfiniteArrivals() {
+		ArrivalCurve_DNC_PwAffine ac_dnc = new ArrivalCurve_DNC_PwAffine(); 
+		makeDelayedInfiniteBurst(ac_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
+		return ac_dnc;
 	}
 
 	public ArrivalCurve_DNC_PwAffine createPeakArrivalRate(double rate) {

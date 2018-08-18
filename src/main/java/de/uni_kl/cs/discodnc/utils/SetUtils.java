@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.misc;
+package de.uni_kl.cs.discodnc.utils;
 
 import java.util.HashSet;
 import java.util.Iterator;
