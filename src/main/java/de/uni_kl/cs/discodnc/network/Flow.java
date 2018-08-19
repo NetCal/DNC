@@ -120,28 +120,60 @@ public class Flow {
     public Path getPath() {
         return path;
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // String Conversions
+    // --------------------------------------------------------------------------------------------------------------
+    
+    private StringBuffer commonStringPrefix() {
+    	StringBuffer flow_str_prefix = new StringBuffer();
+
+     	flow_str_prefix.append("Flow(");
+     	flow_str_prefix.append(alias);
+     	flow_str_prefix.append(", ");
+     	flow_str_prefix.append(Integer.toString(id));
+     	flow_str_prefix.append(", ");
+     	flow_str_prefix.append(arrival_curve.toString());
+     	flow_str_prefix.append(", ");
+     	
+     	return flow_str_prefix;
+    }
 
     public String toShortString() {
-        return "Flow(" + alias + "," + Integer.toString(id) + "," + arrival_curve.toString() + path.toShortString()
-                + ")";
+    	StringBuffer flow_str = commonStringPrefix();
+
+    	flow_str.append(path.toShortString());
+    	flow_str.append(")");
+    	
+        return flow_str.toString();
     }
 
     /**
-     * @return A string representation of the flow
+     * @return String representation of the flow.
      */
     @Override
     public String toString() {
-        return "Flow(" + alias + "," + Integer.toString(id) + "," + arrival_curve.toString() + path.toString() + ")";
+    	StringBuffer flow_str = commonStringPrefix();
+    	
+    	flow_str.append(path.toString());
+    	flow_str.append(")");
+    	
+    	return flow_str.toString();
     }
 
     public String toLongString() {
-        return "Flow(" + alias + "," + Integer.toString(id) + "," + arrival_curve.toString() + path.toExtendedString()
-                + ")";
+    	StringBuffer flow_str = commonStringPrefix();
+    	
+    	flow_str.append(path.toExtendedString());
+    	flow_str.append(")");
+    	
+    	return flow_str.toString();
     }
 
-    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
     // Shortcuts to conveniently access the path's according methods
-    // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
+    
     public Server getSource() {
         return path.getSource();
     }

@@ -76,17 +76,52 @@ public class Link {
     public int hashCode() {
         return (int) src.hashCode() * dest.hashCode();
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // String Conversions
+    // --------------------------------------------------------------------------------------------------------------
 
+    private StringBuffer commonStringPrefix() {
+    	StringBuffer link_str_prefix = new StringBuffer();
+
+     	link_str_prefix.append("Link(");
+     	link_str_prefix.append(alias);
+     	link_str_prefix.append(", ");
+     	link_str_prefix.append(Integer.toString(id));
+     	
+     	return link_str_prefix;
+    }
+    
     public String toShortString() {
-        return alias;
+    	StringBuffer link_str = commonStringPrefix();
+    	
+    	link_str.append(")");
+    	
+        return link_str.toString();
     }
 
     @Override
     public String toString() {
-        return "Link(" + src.toShortString() + ", " + dest.toShortString() + ")";
+    	StringBuffer link_str = new StringBuffer();
+
+     	link_str.append(",");
+     	link_str.append(src.toShortString());
+     	link_str.append(", ");
+     	link_str.append(dest.toShortString());
+     	link_str.append(")");
+     	
+     	return link_str.toString();
     }
 
     public String toExtendedString() {
-        return "Link(" + src.toExtendedString() + ", " + dest.toExtendedString() + ")";
+    	StringBuffer link_str = new StringBuffer();
+
+     	link_str.append(",");
+     	link_str.append(src.toExtendedString());
+     	link_str.append(", ");
+     	link_str.append(dest.toExtendedString());
+     	link_str.append(")");
+     	
+     	return link_str.toString();
     }
 }
