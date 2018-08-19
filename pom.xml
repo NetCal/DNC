@@ -54,12 +54,19 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>[3.0,3.6.1]</version>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>[3.0,3.6.1]</version>
+        </dependency>
+        <dependency>
+            <groupId>de.uni_kl.cs.discodnc</groupId>
+            <artifactId>NumBackend</artifactId>
+            <version>[1.0]</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/NumBackend-1.0.jar</systemPath>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

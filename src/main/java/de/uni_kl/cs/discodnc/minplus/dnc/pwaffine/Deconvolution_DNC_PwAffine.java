@@ -29,19 +29,19 @@
 
 package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.utils.CheckUtils;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class Deconvolution_DNC_PwAffine {
 
@@ -126,7 +126,7 @@ public abstract class Deconvolution_DNC_PwAffine {
             return arrival_curve.copy();
         }
         if (service_curve.equals(Curve.getFactory().createZeroService())
-                || service_curve.getLatency().equals(Num.getFactory().getPositiveInfinity())
+				|| service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
@@ -198,14 +198,14 @@ public abstract class Deconvolution_DNC_PwAffine {
         }
         // }
 
-        if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the sability constraint
-            return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
+        if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the stability constraint
+            return Curve.getFactory().createInfiniteArrivals();
         }
         if (curve_2.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
             return Curve.getFactory().createArrivalCurve((Curve_PwAffine) curve_1);
         }
         if (curve_2.equals(Curve.getFactory().createZeroService())
-                || curve_2.getLatency().equals(Num.getFactory().getPositiveInfinity())
+        		|| curve_2.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return Curve.getFactory().createZeroArrivals();
         }
@@ -237,7 +237,7 @@ public abstract class Deconvolution_DNC_PwAffine {
                 for (int j = 0; j < candidate_tmp.getSegmentCount(); j++) {
                     LinearSegment lin_seg = candidate_tmp.getSegment(j);
                     y_alpha = lin_seg.getY();
-                    candidate_tmp.getSegment(j).setY(Num.getUtils().sub(y_alpha, y_beta));
+                    candidate_tmp.getSegment(j).setY(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha, y_beta));
                 }
             }
             result_candidates.add(candidate_tmp);
@@ -255,7 +255,7 @@ public abstract class Deconvolution_DNC_PwAffine {
             x_inflect_alpha = curve_1.getSegment(i).getX();
             y_alpha = curve_1.f(x_inflect_alpha);
             y_beta = curve_2.f(x_inflect_alpha);
-            results_cand_burst = Num.getUtils().sub(y_alpha, y_beta);
+            results_cand_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha, y_beta);
 
             if (x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero
                     // curve.
@@ -285,7 +285,7 @@ public abstract class Deconvolution_DNC_PwAffine {
                 // The origin (first segment, id 0) stays as is, the remainder needs to be
                 // constructed.
                 // Compute the second segment
-                Num next_x_coord = Num.getFactory().createZero();
+                Num next_x_coord = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
                 Num next_y_coord = results_cand_burst;
 
                 LinearSegment current_candidate_segment = candidate_tmp.getSegment(1);
@@ -296,9 +296,9 @@ public abstract class Deconvolution_DNC_PwAffine {
                 current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
                 // The length of this segment is defined by the following one's y-coordinate:
-                next_x_coord = Num.getUtils().sub(x_inflect_alpha, x_inflect_beta);
-                next_y_coord = Num.getUtils().add(results_cand_burst,
-                        Num.getUtils().mult(next_x_coord, current_beta_segment.getGrad()));
+                next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_inflect_alpha, x_inflect_beta);
+                next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(results_cand_burst,
+                        Num.getUtils(Calculator.getInstance().getNumBackend()).mult(next_x_coord, current_beta_segment.getGrad()));
 
                 LinearSegment prev_beta_segment;
                 Num current_segment_length;
@@ -320,15 +320,15 @@ public abstract class Deconvolution_DNC_PwAffine {
                     current_candidate_segment.setY(next_y_coord);
                     current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
 
-                    current_segment_length = Num.getUtils().sub(prev_beta_segment.getX(),
+                    current_segment_length = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(prev_beta_segment.getX(),
                             current_beta_segment.getX());
-                    next_x_coord = Num.getUtils().add(next_x_coord, current_segment_length); // Prev > current
+                    next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(next_x_coord, current_segment_length); // Prev > current
                     // because we
                     // iterate j in
                     // decreasing
                     // order.
-                    next_y_coord = Num.getUtils().add(current_candidate_segment.getY(),
-                            Num.getUtils().mult(current_segment_length, current_beta_segment.getGrad()));
+                    next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(current_candidate_segment.getY(),
+                            Num.getUtils(Calculator.getInstance().getNumBackend()).mult(current_segment_length, current_beta_segment.getGrad()));
                 }
 
                 // Add a horizontal line at the end.
