@@ -62,7 +62,7 @@
         <dependency>
             <groupId>de.uni_kl.cs.discodnc</groupId>
             <artifactId>NumBackend</artifactId>
-            <version>[1.0]</version>
+            <version>1.0</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/NumBackend-1.0.jar</systemPath>
         </dependency>
@@ -81,43 +81,29 @@
 						<artifactId>rtc</artifactId>
 						<scope>system</scope>
 						<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+						<version>1.2.beta.100</version>
 					</dependency>
 					<dependency>
 						<groupId>org.junit.platform</groupId>
 						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>${junit.platform.version}</version>
 					</dependency>
 					<dependency>
 						<groupId>org.junit.jupiter</groupId>
 						<artifactId>junit-jupiter-engine</artifactId>
+						<version>${junit.jupiter.version}</version>
 					</dependency>
 					<dependency>
 						<groupId>org.junit.jupiter</groupId>
 						<artifactId>junit-jupiter-api</artifactId>
+						<version>${junit.jupiter.version}</version>
 					</dependency>
 					<dependency>
 						<groupId>org.junit.jupiter</groupId>
 						<artifactId>junit-jupiter-params</artifactId>
+						<version>${junit.jupiter.version}</version>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.9.1</version>
-				<executions>
-					<execution>
-						<id>add-test-source</id>
-						<phase>generate-test-sources</phase>
-						<goals>
-							<goal>add-test-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/functional_test/java</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -185,18 +171,22 @@
 							<dependency>
 								<groupId>org.junit.platform</groupId>
 								<artifactId>junit-platform-surefire-provider</artifactId>
+								<version>${junit.platform.version}</version>
 							</dependency>
 							<dependency>
 								<groupId>org.junit.jupiter</groupId>
 								<artifactId>junit-jupiter-engine</artifactId>
+								<version>${junit.jupiter.version}</version>
 							</dependency>
 							<dependency>
 								<groupId>org.junit.jupiter</groupId>
 								<artifactId>junit-jupiter-api</artifactId>
+								<version>${junit.jupiter.version}</version>
 							</dependency>
 							<dependency>
 								<groupId>org.junit.jupiter</groupId>
 								<artifactId>junit-jupiter-params</artifactId>
+								<version>${junit.jupiter.version}</version>
 							</dependency>
 						</dependencies>
 					</plugin>
