@@ -206,29 +206,75 @@ public class Server {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // String Conversions
+    // --------------------------------------------------------------------------------------------------------------
+    
+    private StringBuffer commonStringPrefix() {
+    	StringBuffer server_str_prefix = new StringBuffer();
+
+     	server_str_prefix.append("Server(");
+     	server_str_prefix.append(alias);
+     	server_str_prefix.append(", ");
+     	server_str_prefix.append(Integer.toString(id));
+     	
+     	return server_str_prefix;
+    }
 
     public String toShortString() {
-        return alias;
+    	StringBuffer server_str = commonStringPrefix();
+    	
+    	server_str.append(")");
+    	
+        return server_str.toString();
+    }
+    
+    private StringBuffer commonStringPrefix2() {
+    	StringBuffer server_str_prefix = commonStringPrefix();
+
+    	server_str_prefix.append(", ");
+    	server_str_prefix.append(multiplexing.toString());
+    	server_str_prefix.append(", ");
+    	server_str_prefix.append(service_curve.toString());
+     	
+     	return server_str_prefix;
+    }
+    
+    private StringBuffer commonMaxScString() {
+    	StringBuffer server_msc_str = new StringBuffer();
+    	
+    	server_msc_str.append(max_service_curve.toString());
+    	server_msc_str.append(", ");
+    	server_msc_str.append(Boolean.toString(use_gamma));
+    	server_msc_str.append(", ");
+    	server_msc_str.append(Boolean.toString(use_extra_gamma));
+    	
+    	return server_msc_str;
     }
 
     @Override
     public String toString() {
-        String result_str = "Server(" + alias + ", " + multiplexing.toString() + ", " + service_curve.toString();
-
-        if (max_service_curve_flag) {
-            result_str += ", " + max_service_curve.toString();
-            result_str += ", " + Boolean.toString(use_gamma);
-            result_str += ", " + Boolean.toString(use_extra_gamma);
+        StringBuffer server_str = commonStringPrefix2();
+    	
+    	if (max_service_curve_flag) {
+    		server_str.append(", ");
+        	server_str.append(commonMaxScString());
         }
-
-        result_str += ")";
-
-        return result_str;
+    	
+    	server_str.append(")");
+    	
+    	return server_str.toString();
     }
 
     public String toExtendedString() {
-        return "Server(" + alias + ", " + multiplexing.toString() + ", " + service_curve.toString() + ", "
-                + max_service_curve.toString() + ", " + Boolean.toString(use_gamma) + ", "
-                + Boolean.toString(use_extra_gamma) + ")";
+        StringBuffer server_str = commonStringPrefix2();
+
+        server_str.append(", ");
+    	server_str.append(commonMaxScString());
+    	
+    	server_str.append(")");
+    	
+    	return server_str.toString();
     }
 }
