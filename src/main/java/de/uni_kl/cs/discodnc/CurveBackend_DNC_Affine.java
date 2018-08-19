@@ -51,4 +51,21 @@ public enum CurveBackend_DNC_Affine implements CurveBackend {
 	public LinearSegment.Builder getLinearSegmentFactory() {
 		return LinearSegment_DNC.getBuilder();
 	}
+
+    @Override
+    public String toString() {
+    	 StringBuffer curve_backend_str = new StringBuffer();
+
+         curve_backend_str.append("Curve");
+         curve_backend_str.append(":");
+         curve_backend_str.append(this.name());
+         
+         curve_backend_str.append(", ");
+
+         curve_backend_str.append("Operations");
+         curve_backend_str.append(":");
+         curve_backend_str.append(MinPlus_DNC_Affine.MINPLUS_DNC_AFFINE.name());
+
+         return curve_backend_str.toString();
+    }
 }

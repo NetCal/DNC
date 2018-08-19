@@ -30,17 +30,6 @@
 
 package de.uni_kl.cs.discodnc.nc.analyses;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.math3.util.Pair;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -58,6 +47,17 @@ import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.math3.util.Pair;
 
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
@@ -177,12 +177,12 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
      */
     protected static ServiceCurve computePartialPMOOServiceCurve(Path path, ServiceCurve[] service_curves,
                                                                  List<Flow> cross_flow_substitutes, Map<Flow, Integer> flow_tb_iter_map, int[] server_rl_iters) {
-        Num T = Num.getFactory().createZero();
-        Num R = Num.getFactory().createPositiveInfinity();
-        Num sum_bursts = Num.getFactory().createZero();
-        Num sum_latencyterms = Num.getFactory().createZero();
+        Num T = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        Num R = Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+        Num sum_bursts = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        Num sum_latencyterms = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 
-        Num compute = Num.getUtils();
+        Num compute = Num.getUtils(Calculator.getInstance().getNumBackend());
         
         double sum_r_at_s;
 
@@ -211,7 +211,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             T = compute.add(T, current_rl.getLatency());
 
             // Compute and store sum of rates of all passing flows
-            Num sum_r = Num.getFactory().createZero();
+            Num sum_r = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
                 Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
@@ -250,10 +250,10 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         T = compute.add(T, compute.div(compute.add(sum_bursts, sum_latencyterms), R));
 
-        if (T == Num.getFactory().getPositiveInfinity()) {
+		if (T == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
             return Curve.getFactory().createZeroService();
         }
-        if (R == Num.getFactory().getPositiveInfinity()) {
+		if (R == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
             return Curve.getFactory().createDelayedInfiniteBurst(T);
         }
 
@@ -281,8 +281,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
 
-        ((PmooResults) result).setDelayBound(Num.getFactory().createPositiveInfinity());
-        ((PmooResults) result).setBacklogBound(Num.getFactory().createPositiveInfinity());
+        ((PmooResults) result).setDelayBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
+        ((PmooResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
             // Single flow of interest, i.e., fifo per micro flow holds

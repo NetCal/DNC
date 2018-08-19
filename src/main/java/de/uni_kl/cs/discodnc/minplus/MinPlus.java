@@ -24,6 +24,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
+
 package de.uni_kl.cs.discodnc.minplus;
 
 import java.util.Set;
@@ -35,6 +36,10 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 public interface MinPlus {
 
+	// ------------------------------------------------------------
+	// Convolution
+	// ------------------------------------------------------------
+	
 	// Service Curves
 	ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception;
 

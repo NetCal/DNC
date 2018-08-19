@@ -33,6 +33,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AnalysisConfig {
+    public enum Multiplexing {
+        ARBITRARY, FIFO
+    }
+
+    public enum MuxDiscipline {
+        SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
+    }
+
+    public enum GammaFlag {
+        SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
+    }
+
+    public enum ArrivalBoundMethod {
+		PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, TMA,
+		PER_FLOW_SFA, PER_FLOW_PMOO, PER_FLOW_TMA, 
+		PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
+    }
+    
     private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
     /**
      * Whether to use maximum service curves in output bound computation
@@ -48,22 +66,21 @@ public class AnalysisConfig {
             Collections.singleton(ArrivalBoundMethod.PBOO_CONCATENATION));
     private boolean remove_duplicate_arrival_bounds = true;
     private boolean flow_prolongation = false;
-    private boolean ab_consider_tfa_nodeBacklog = false;
+    private boolean server_backlog_arrival_bound = false;
     
     public AnalysisConfig() {
     }
     
     public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
                           Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
-                          boolean ab_consider_tfa_nodeBacklog) {
+                          boolean server_backlog_arrival_bound) {
         this.multiplexing_discipline = multiplexing_discipline;
         this.use_gamma = use_gamma;
         this.use_extra_gamma = use_extra_gamma;
         this.arrival_bound_methods.clear();
         this.arrival_bound_methods.addAll(arrival_bound_methods);
-
         this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
-        this.ab_consider_tfa_nodeBacklog = ab_consider_tfa_nodeBacklog;
+        this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
     public MuxDiscipline multiplexingDiscipline() {
@@ -137,8 +154,12 @@ public class AnalysisConfig {
         remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds_flag;
     }
 
-    public boolean abConsiderTFANodeBacklog() {
-        return ab_consider_tfa_nodeBacklog;
+    public boolean serverBacklogArrivalBound() {
+        return server_backlog_arrival_bound;
+    }
+
+    public void setServerBacklogArrivalBound(boolean server_backlog_arrival_bound) {
+        this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
     public boolean useFlowProlongation() {
@@ -149,10 +170,6 @@ public class AnalysisConfig {
         flow_prolongation = prolong_flows;
     }
 
-    public void setAbConsiderTFANodeBacklog(boolean consider_backlog_bound) {
-        ab_consider_tfa_nodeBacklog = consider_backlog_bound;
-    }
-
     /**
      * Returns a deep copy of this analysis configuration.
      *
@@ -160,7 +177,7 @@ public class AnalysisConfig {
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
         return new AnalysisConfig(multiplexing_discipline, use_gamma, use_extra_gamma, arrival_bound_methods,
-                remove_duplicate_arrival_bounds, ab_consider_tfa_nodeBacklog);
+                remove_duplicate_arrival_bounds, server_backlog_arrival_bound);
     }
 
     @Override
@@ -177,21 +194,5 @@ public class AnalysisConfig {
         }
 
         return analysis_config_str.toString();
-    }
-
-    public enum Multiplexing {
-        ARBITRARY, FIFO
-    }
-
-    public enum MuxDiscipline {
-        SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
-    }
-
-    public enum GammaFlag {
-        SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
-    }
-
-    public enum ArrivalBoundMethod {
-        PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, PER_FLOW_SFA, PER_FLOW_PMOO, PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
     }
 }

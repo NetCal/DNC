@@ -37,8 +37,8 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.misc.CheckUtils;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.utils.CheckUtils;
 
 public abstract class Convolution_DNC_Affine {
 
@@ -67,16 +67,16 @@ public abstract class Convolution_DNC_Affine {
                 rate = service_curve_1.getUltAffineRate();
                 break;
             case 3:
-                rate = Num.getFactory().createPositiveInfinity();
+                rate = Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
                 break;
             case 0:
             default:
-                rate = Num.getUtils().min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+                rate = Num.getUtils(Calculator.getInstance().getNumBackend()).min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
                 break;
         }
 
         return Curve.getFactory().createRateLatency(rate,
-                Num.getUtils().add(service_curve_1.getLatency(), service_curve_2.getLatency()));
+                Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
 
@@ -225,10 +225,10 @@ public abstract class Convolution_DNC_Affine {
         Num latency_msc_1 = max_service_curve_1.getLatency();
         Num latency_msc_2 = max_service_curve_2.getLatency();
 
-        if (latency_msc_1.equals(Num.getFactory().getPositiveInfinity())) {
+        if (latency_msc_1.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
             return max_service_curve_2.copy();
         }
-        if (latency_msc_2.equals(Num.getFactory().getPositiveInfinity())) {
+        if (latency_msc_2.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
             return max_service_curve_1.copy();
         }
 
@@ -242,7 +242,7 @@ public abstract class Convolution_DNC_Affine {
                         .createArrivalCurve(Curve.removeLatency(max_service_curve_2)));
         MaxServiceCurve result = Curve.getFactory().createMaxServiceCurve(ac_intermediate);
         result = (MaxServiceCurve) Curve.shiftRight(result,
-                Num.getUtils().add(latency_msc_1, latency_msc_2));
+                Num.getUtils(Calculator.getInstance().getNumBackend()).add(latency_msc_1, latency_msc_2));
         Curve.beautify(result);
 
         return result;

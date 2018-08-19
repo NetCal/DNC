@@ -28,7 +28,10 @@
 
 package de.uni_kl.cs.discodnc.demos;
 
-import de.uni_kl.cs.discodnc.curves.*;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;

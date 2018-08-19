@@ -37,10 +37,11 @@ public interface CurveBackend {
 	Curve getCurveFactory();
 	
 	LinearSegment.Builder getLinearSegmentFactory();
+
+    @Override
+    String toString();
 	
 	default void checkDependencies() {
 		
 	}
-	
-	// TODO toString method
 }

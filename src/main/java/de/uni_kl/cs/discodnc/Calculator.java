@@ -30,11 +30,12 @@ package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
+import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 public final class Calculator {
 	private static Calculator instance = new Calculator();
-	private NumImpl NUM_IMPLEMENTATION = NumImpl.REAL_DOUBLE_PRECISION;
 	private CurveBackend CURVE_BACKEND = CurveBackend_DNC_PwAffine.DNC_PWAFFINE;
+	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -49,15 +50,15 @@ public final class Calculator {
 		return instance;
 	}
 
-	public NumImpl getNumImpl() {
-		return NUM_IMPLEMENTATION;
+	public NumBackend getNumBackend() {
+		return NUM_BACKEND;
 	}
 
-	public boolean setNumImpl(NumImpl num_impl) {
-		if (NUM_IMPLEMENTATION == num_impl) {
+	public boolean setNumBackend(NumBackend backend) {
+		if (NUM_BACKEND == backend) {
 			return false;
 		} else {
-			NUM_IMPLEMENTATION = num_impl;
+			NUM_BACKEND = backend;
 			return true;
 		}
 	}
@@ -119,7 +120,7 @@ public final class Calculator {
 	public String toString() {
 		StringBuffer calculator_config_str = new StringBuffer();
 
-		calculator_config_str.append(getNumImpl().toString());
+		calculator_config_str.append(getNumBackend().toString());
 		calculator_config_str.append(", ");
 		calculator_config_str.append(getCurveBackend().toString());
 
@@ -145,10 +146,6 @@ public final class Calculator {
 		}
 
 		return calculator_config_str.toString();
-	}
-
-	public enum NumImpl {
-		REAL_SINGLE_PRECISION, REAL_DOUBLE_PRECISION, RATIONAL_INTEGER, RATIONAL_BIGINTEGER
 	}
 	
 	public MinPlus getMinPlus() {
