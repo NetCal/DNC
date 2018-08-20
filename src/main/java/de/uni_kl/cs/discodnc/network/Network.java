@@ -455,7 +455,7 @@ public class Network {
 	// Links
 	// --------------------------------------------------------------------------------------------
 	public Link addLink(Server source, Server destination) throws Exception {
-		String alias = link_default_name_prefix + Integer.toString(link_id_counter);
+		String alias = link_default_name_prefix.concat(Integer.toString(link_id_counter));
 		return addLink(alias, source, destination);
 	}
 
@@ -534,12 +534,12 @@ public class Network {
 	// ---------------------------------------------------------------------------------------------
 	@SuppressWarnings("rawtypes")
 	public Flow addFlow(ArrivalCurve arrival_curve, List path) throws Exception {
-		String alias = flow_default_name_prefix + Integer.toString(flow_id_counter);
+		String alias = flow_default_name_prefix.concat(Integer.toString(flow_id_counter));
 		return addFlow(alias, arrival_curve, path);
 	}
 
 	protected Flow addFlow(ArrivalCurve arrival_curve, Path path) throws Exception {
-		String alias = flow_default_name_prefix + Integer.toString(flow_id_counter);
+		String alias = flow_default_name_prefix.concat(Integer.toString(flow_id_counter));
 		return addFlowToNetwork(alias, arrival_curve, path);
 	}
 
@@ -557,7 +557,7 @@ public class Network {
 	 *             Could not create a path from the given source/sink-pair.
 	 */
 	public Flow addFlow(ArrivalCurve arrival_curve, Server source, Server sink) throws Exception {
-		String alias = flow_default_name_prefix + Integer.toString(flow_id_counter);
+		String alias = flow_default_name_prefix.concat(Integer.toString(flow_id_counter));
 		return addFlow(alias, arrival_curve, source, sink);
 	}
 
@@ -627,7 +627,7 @@ public class Network {
 	 *             The given server is not in the network.
 	 */
 	public Flow addFlow(ArrivalCurve arrival_curve, Server single_hop) throws Exception {
-		String alias = flow_default_name_prefix + Integer.toString(flow_id_counter);
+		String alias = flow_default_name_prefix.concat(Integer.toString(flow_id_counter));
 		return addFlow(alias, arrival_curve, single_hop);
 	}
 
