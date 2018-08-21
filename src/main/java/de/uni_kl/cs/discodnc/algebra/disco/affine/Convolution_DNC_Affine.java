@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc.affine;
+package de.uni_kl.cs.discodnc.algebra.disco.affine;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -27,12 +27,12 @@
 
 package de.uni_kl.cs.discodnc;
 
+import de.uni_kl.cs.discodnc.algebra.MinPlus;
+import de.uni_kl.cs.discodnc.algebra.disco.affine.MinPlus_DNC_Affine;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
-import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.curves.dnc.affine.Curve_DNC_Affine;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
-import de.uni_kl.cs.discodnc.minplus.dnc.affine.MinPlus_DNC_Affine;
+import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_DNC;
+import de.uni_kl.cs.discodnc.curves.disco.affine.Curve_DNC_Affine;
 
 public enum CurveBackend_DNC_Affine implements CurveBackend {
 	DNC_AFFINE;

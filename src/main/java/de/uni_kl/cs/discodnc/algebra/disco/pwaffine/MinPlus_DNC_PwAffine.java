@@ -25,9 +25,11 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
+package de.uni_kl.cs.discodnc.algebra.disco.pwaffine;
 
 import java.util.Set;
+
+import de.uni_kl.cs.discodnc.algebra.MinPlus;
 
 // Due to name collisions, these classes are not imported,
 // they are referenced by their fully qualified names.
@@ -38,7 +40,6 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public enum MinPlus_DNC_PwAffine implements MinPlus {
 	MINPLUS_DNC_PWAFFINE;

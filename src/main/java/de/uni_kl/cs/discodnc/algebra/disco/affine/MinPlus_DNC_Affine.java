@@ -25,15 +25,15 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc.affine;
+package de.uni_kl.cs.discodnc.algebra.disco.affine;
 
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.algebra.MinPlus;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
 public enum MinPlus_DNC_Affine implements MinPlus {
 	MINPLUS_DNC_AFFINE;

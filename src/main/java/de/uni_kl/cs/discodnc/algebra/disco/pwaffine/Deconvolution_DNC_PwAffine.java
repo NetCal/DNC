@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus.dnc.pwaffine;
+package de.uni_kl.cs.discodnc.algebra.disco.pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;

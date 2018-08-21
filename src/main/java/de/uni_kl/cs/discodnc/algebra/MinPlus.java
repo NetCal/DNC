@@ -25,7 +25,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.minplus;
+package de.uni_kl.cs.discodnc.algebra;
 
 import java.util.Set;
 
