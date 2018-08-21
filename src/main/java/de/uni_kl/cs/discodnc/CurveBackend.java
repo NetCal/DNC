@@ -40,6 +40,22 @@ public interface CurveBackend {
 
     @Override
     String toString();
+    
+    default String assembleString(String curve_backend_name, String min_plus_name) {
+    	StringBuffer name = new StringBuffer();
+
+        name.append("Curve");
+        name.append(":");
+        name.append(curve_backend_name);
+        
+        name.append(", ");
+
+        name.append("Operations");
+        name.append(":");
+        name.append(min_plus_name);
+    	
+    	return name.toString();
+    }
 	
 	default void checkDependencies() {
 		
