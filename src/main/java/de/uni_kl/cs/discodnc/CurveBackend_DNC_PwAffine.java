@@ -39,7 +39,7 @@ public enum CurveBackend_DNC_PwAffine implements CurveBackend {
 
 	@Override
 	public MinPlus getMinPlus() {
-		return MinPlus_DNC_PwAffine.MINPLUS_DNC;
+		return MinPlus_DNC_PwAffine.MINPLUS_DNC_PWAFFINE;
 	}
 
 	@Override
@@ -54,6 +54,6 @@ public enum CurveBackend_DNC_PwAffine implements CurveBackend {
 
     @Override
     public String toString() {
-        return assembleString(this.name(), MinPlus_DNC_PwAffine.MINPLUS_DNC.name());
+        return assembleString(this.name(), MinPlus_DNC_PwAffine.MINPLUS_DNC_PWAFFINE.name());
     }
 }
