@@ -292,51 +292,82 @@ public class Path {
     public int hashCode() {
         return (int) Arrays.hashCode(path_servers.toArray()) * Arrays.hashCode(path_links.toArray());
     }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // String Conversions
+    // --------------------------------------------------------------------------------------------------------------
 
-    // Print path as series of servers (short representation)
+    /**
+     * Print path as series of servers (short representation).
+     * 
+     * @return String representation of the path.
+     */
     public String toShortString() {
         if (path_servers.isEmpty()) {
             return "{}";
         }
+        
+    	StringBuffer path_str = new StringBuffer();
 
-        String result_str = "{";
-        for (Server s : path_servers) {
-            result_str = result_str.concat(s.toShortString() + ",");
+    	path_str.append("{");
+    	for (Server s : path_servers) {
+    		path_str.append(s.toShortString());
+        	path_str.append(",");
         }
-        result_str = result_str.substring(0, result_str.length() - 1); // Remove the trailing comma.
-        return result_str.concat("}");
+    	
+    	path_str.deleteCharAt(path_str.length()-1); // Remove the trailing comma.
+    	path_str.append("}");
+         
+    	return path_str.toString();
     }
 
+    /**
+     * Print path as series of links (short representation).
+     *  
+     * @return String representation of the path.
+     */
     @Override
-    // Print path as series of links (short representation)
     public String toString() {
         if (path_links.isEmpty()) {
-            return toShortString();
+        	return toShortString();
         }
+        
+        StringBuffer path_str = new StringBuffer();
 
-        String result_str = "{";
-
+    	path_str.append("{");
         for (Link l : path_links) {
-            result_str = result_str.concat(l.toString() + ",");
+        	path_str.append(l.toString());
+        	path_str.append(",");
         }
-        result_str = result_str.substring(0, result_str.length() - 1); // Remove the trailing comma.
-
-        return result_str.concat("}");
+        
+    	path_str.deleteCharAt(path_str.length()-1); // Remove the trailing comma.
+    	path_str.append("}");
+         
+    	return path_str.toString();
     }
 
-    // Print path as series of links (extended representation)
+    
+    /**
+     * Print path as series of links (extended representation).
+     * 
+     * @return String representation of the path.
+     */
     public String toExtendedString() {
         if (path_links.isEmpty()) {
-            return toShortString();
+        	return toShortString();
         }
+        
+        StringBuffer path_str = new StringBuffer();
 
-        String result_str = "{";
-
+    	path_str.append("{");
         for (Link l : path_links) {
-            result_str = result_str.concat(l.toExtendedString() + ",");
+        	path_str.append(l.toExtendedString());
+        	path_str.append(",");
         }
-        result_str = result_str.substring(0, result_str.length() - 1); // Remove the trailing comma.
-
-        return result_str.concat("}");
+        
+    	path_str.deleteCharAt(path_str.length()-1); // Remove the trailing comma.
+    	path_str.append("}");
+         
+    	return path_str.toString();
     }
 }
