@@ -60,16 +60,13 @@ public enum MinPlus_DNC_PwAffine implements MinPlus {
 		return Convolution_DNC_PwAffine.convolve(service_curve_1, service_curve_2);
 	}
 
-	// Java won't let us call this method "convolve" because it does not care about
-	// the Sets' types; tells that there's already another method taking the same
-	// arguments.
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_SCs_SCs(java.util.Set, java.util.Set)
+	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(java.util.Set, java.util.Set)
 	 */
 	@Override
-	public Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1,
+	public Set<ServiceCurve> convolve(Set<ServiceCurve> service_curves_1,
 			Set<ServiceCurve> service_curves_2) throws Exception {
-		return Convolution_DNC_PwAffine.convolve_SCs_SCs(service_curves_1, service_curves_2);
+		return Convolution_DNC_PwAffine.convolve(service_curves_1, service_curves_2);
 	}
 
 	// Arrival Curves

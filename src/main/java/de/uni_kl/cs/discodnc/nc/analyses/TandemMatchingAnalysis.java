@@ -193,7 +193,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		for ( List<Path> combination : sub_path_combinations ) {					// Every sub_path_combination
 			Set<ServiceCurve> betas_e2e_combination = new HashSet<ServiceCurve>();	// will have a set of end-to-end left-over service curves
 			for ( Path sub_path : combination ) {									// computed as the convolution of its partial left-over service curves.
-				betas_e2e_combination = Calculator.getInstance().getMinPlus().convolve_SCs_SCs( 
+				betas_e2e_combination = Calculator.getInstance().getMinPlus().convolve( 
 						betas_e2e_combination, getSubTandemServiceCurves( flow_of_interest, sub_path, new HashSet<Flow>( flows_to_serve ) ));
 			}
 			betas_e2e.addAll( betas_e2e_combination );

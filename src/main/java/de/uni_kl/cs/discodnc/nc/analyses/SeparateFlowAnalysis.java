@@ -152,7 +152,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             	betas_lo_server.add(server.getServiceCurve());
         		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
                 ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
-                betas_lo_path = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server);
+                betas_lo_path = Calculator.getInstance().getMinPlus().convolve(betas_lo_path, betas_lo_server);
         		continue;
             }
             
@@ -227,7 +227,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
 
-            betas_lo_path = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_path, betas_lo_server);
+            betas_lo_path = Calculator.getInstance().getMinPlus().convolve(betas_lo_path, betas_lo_server);
         }
         result.betas_e2e = betas_lo_path;
         

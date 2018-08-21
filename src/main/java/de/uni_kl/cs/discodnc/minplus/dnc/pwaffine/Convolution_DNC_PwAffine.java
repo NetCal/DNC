@@ -159,10 +159,7 @@ public abstract class Convolution_DNC_PwAffine {
         return result;
     }
 
-    // Java won't let me call this method "convolve" because it does not care about
-    // the Sets' types; tells that there's already another method taking the same
-    // arguments.
-    public static Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2) {
+    public static Set<ServiceCurve> convolve(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2) {
         Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 
         // An empty or null set does is not interpreted as a convolution with a null

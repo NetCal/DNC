@@ -150,7 +150,7 @@ public class PbooArrivalBound_Concatenation extends AbstractArrivalBound impleme
 			}
 
 			// Combine into the sub-path's left-over service curve
-			betas_lo_subpath = Calculator.getInstance().getMinPlus().convolve_SCs_SCs(betas_lo_subpath, betas_lo_s);
+			betas_lo_subpath = Calculator.getInstance().getMinPlus().convolve(betas_lo_subpath, betas_lo_s);
 		}
 
 		// Next we need to know the arrival bound of f_xfcaller at the server

@@ -43,10 +43,7 @@ public interface MinPlus {
 	// Service Curves
 	ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception;
 
-	// Java won't let us call this method "convolve" because it does not care about
-	// the Sets' types; tells that there's already another method taking the same
-	// arguments.
-	Set<ServiceCurve> convolve_SCs_SCs(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2)
+	Set<ServiceCurve> convolve(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2)
 			throws Exception;
 
 	// Arrival Curves
@@ -60,12 +57,14 @@ public interface MinPlus {
 	// Arrival Curves and Max Service Curves
 	Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve)
 			throws Exception;
+	
 	Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve)
 			throws Exception;
 	
 	// ------------------------------------------------------------
 	// Deconvolution
 	// ------------------------------------------------------------
+	
 	Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) throws Exception;
 
 	Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves) throws Exception;
