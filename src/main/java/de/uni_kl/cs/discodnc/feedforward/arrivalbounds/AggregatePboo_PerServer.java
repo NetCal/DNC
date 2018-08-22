@@ -39,12 +39,12 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBound;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
+import de.uni_kl.cs.discodnc.network.server_graph.Flow;
+import de.uni_kl.cs.discodnc.network.server_graph.Path;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
-import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Turn;
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
-import de.uni_kl.cs.discodnc.server_graph.Path;
-import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;

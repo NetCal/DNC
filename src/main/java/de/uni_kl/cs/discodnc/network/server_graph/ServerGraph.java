@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.server_graph;
+package de.uni_kl.cs.discodnc.network.server_graph;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;

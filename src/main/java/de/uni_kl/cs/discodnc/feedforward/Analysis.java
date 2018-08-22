@@ -32,9 +32,9 @@ package de.uni_kl.cs.discodnc.feedforward;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
-import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.network.server_graph.Flow;
+import de.uni_kl.cs.discodnc.network.server_graph.Path;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 
 public interface Analysis {
     static TotalFlowAnalysis performTfaEnd2End(ServerGraph network, Flow flow_of_interest) throws Exception {

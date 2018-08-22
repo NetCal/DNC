@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.server_graph;
+package de.uni_kl.cs.discodnc.network.server_graph;
 
 public class Turn {
     private int id;

@@ -28,7 +28,7 @@
 
 package de.uni_kl.cs.discodnc.feedforward;
 
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 
 public abstract class AbstractArrivalBound implements ArrivalBound {
     protected ServerGraph server_graph;

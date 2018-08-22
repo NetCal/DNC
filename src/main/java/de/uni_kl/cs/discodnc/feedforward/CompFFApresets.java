@@ -10,7 +10,7 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 
 public class CompFFApresets {
 	private ServerGraph network;

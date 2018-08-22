@@ -39,10 +39,10 @@ import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_Concatenati
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_PerServer;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePmoo;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregateTandemMatching;
-import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Turn;
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
-import de.uni_kl.cs.discodnc.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.Flow;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;

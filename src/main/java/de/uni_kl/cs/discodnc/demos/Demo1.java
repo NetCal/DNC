@@ -36,9 +36,9 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
-import de.uni_kl.cs.discodnc.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.Flow;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 
 public class Demo1 {
 

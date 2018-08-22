@@ -30,10 +30,10 @@ package de.uni_kl.cs.discodnc.bounds;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
+import de.uni_kl.cs.discodnc.network.server_graph.Path;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.numbers.Num;
-import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
-import de.uni_kl.cs.discodnc.server_graph.Path;
-import de.uni_kl.cs.discodnc.server_graph.Server;
 
 import java.util.Set;
 
