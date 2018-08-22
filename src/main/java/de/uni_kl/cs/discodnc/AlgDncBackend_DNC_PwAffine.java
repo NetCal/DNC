@@ -35,11 +35,11 @@ import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.curves.disco.pwaffine.Curve_DNC_PwAffine;
 
 public enum AlgDncBackend_DNC_PwAffine implements AlgDncBackend {
-	DNC_PWAFFINE;
+	DISCO_PWAFFINE;
 
 	@Override
 	public MinPlus getMinPlus() {
-		return MinPlus_DNC_PwAffine.MINPLUS_DNC_PWAFFINE;
+		return MinPlus_DNC_PwAffine.MINPLUS_DISCO_PWAFFINE;
 	}
 
 	@Override
@@ -54,6 +54,6 @@ public enum AlgDncBackend_DNC_PwAffine implements AlgDncBackend {
 
     @Override
     public String toString() {
-        return assembleString(this.name(), MinPlus_DNC_PwAffine.MINPLUS_DNC_PWAFFINE.name());
+        return assembleString(this.name(), MinPlus_DNC_PwAffine.MINPLUS_DISCO_PWAFFINE.name());
     }
 }

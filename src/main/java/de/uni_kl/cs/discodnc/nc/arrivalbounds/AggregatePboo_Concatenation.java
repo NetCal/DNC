@@ -164,7 +164,7 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 
 		// TODO This implementation only works for token-bucket arrivals. 
 		if (configuration.serverBacklogArrivalBound()
-				&& Calculator.getInstance().getCurveBackend() == AlgDncBackend_DNC_Affine.DNC_AFFINE) {
+				&& Calculator.getInstance().getCurveBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
 			Server last_hop_xtx = link.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);

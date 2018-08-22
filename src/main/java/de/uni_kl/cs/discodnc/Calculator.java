@@ -34,7 +34,7 @@ import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 public final class Calculator {
 	private static Calculator instance = new Calculator();
-	private AlgDncBackend CURVE_BACKEND = AlgDncBackend_DNC_PwAffine.DNC_PWAFFINE;
+	private AlgDncBackend CURVE_BACKEND = AlgDncBackend_DNC_PwAffine.DISCO_PWAFFINE;
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;

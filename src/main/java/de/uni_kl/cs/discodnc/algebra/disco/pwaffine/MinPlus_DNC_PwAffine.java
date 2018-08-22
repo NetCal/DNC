@@ -42,7 +42,7 @@ import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 public enum MinPlus_DNC_PwAffine implements MinPlus {
-	MINPLUS_DNC_PWAFFINE;
+	MINPLUS_DISCO_PWAFFINE;
   
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching

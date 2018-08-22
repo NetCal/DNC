@@ -36,7 +36,7 @@ import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 public enum MinPlus_DNC_Affine implements MinPlus {
-	MINPLUS_DNC_AFFINE;
+	MINPLUS_DISCO_AFFINE;
   
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
