@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.bounds.disco;
+package de.uni_kl.cs.discodnc.bounds.disco.pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;

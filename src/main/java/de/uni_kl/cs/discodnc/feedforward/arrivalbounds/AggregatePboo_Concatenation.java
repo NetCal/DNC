@@ -29,7 +29,7 @@
 package de.uni_kl.cs.discodnc.feedforward.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.bounds.disco.Bound;
+import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
