@@ -35,11 +35,11 @@ import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.SinkTree_AffineCurves;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 
 import java.util.ArrayList;
 
@@ -83,7 +83,7 @@ public class Backlog {
 		return result;
 	}
 
-	public static double derivePmooSinkTreeTbRl(Network tree, Server root,
+	public static double derivePmooSinkTreeTbRl(ServerGraph tree, Server root,
                                                 AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
 		SinkTree_AffineCurves sink_tree_bound = new SinkTree_AffineCurves(tree);
 		ArrivalCurve arrivals_at_root = tree.getSourceFlowArrivalCurve(root);

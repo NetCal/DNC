@@ -28,17 +28,17 @@
 
 package de.uni_kl.cs.discodnc.feedforward;
 
-import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 
 public abstract class AbstractArrivalBound implements ArrivalBound {
-    protected Network network;
+    protected ServerGraph network;
     protected AnalysisConfig configuration;
 
-    public Network getNetwork() {
+    public ServerGraph getNetwork() {
         return network;
     }
 
-    public void setNetwork(Network network) {
+    public void setNetwork(ServerGraph network) {
         this.network = network;
     }
 

@@ -40,11 +40,11 @@ import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;
@@ -57,7 +57,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	private AggregatePmoo() {
 	}
 
-	public AggregatePmoo(Network network, AnalysisConfig configuration) {
+	public AggregatePmoo(ServerGraph network, AnalysisConfig configuration) {
 		this.network = network;
 		this.configuration = configuration;
 	}

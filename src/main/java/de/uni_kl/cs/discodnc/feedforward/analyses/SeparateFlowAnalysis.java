@@ -39,12 +39,12 @@ import de.uni_kl.cs.discodnc.feedforward.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.Analysis;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;
@@ -60,13 +60,13 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     private SeparateFlowAnalysis() {
     }
 
-    public SeparateFlowAnalysis(Network network) {
+    public SeparateFlowAnalysis(ServerGraph network) {
         super.network = network;
         super.configuration = new AnalysisConfig();
         super.result = new SeparateFlowResults();
     }
 
-    public SeparateFlowAnalysis(Network network, AnalysisConfig configuration) {
+    public SeparateFlowAnalysis(ServerGraph network, AnalysisConfig configuration) {
         super.network = network;
         super.configuration = configuration;
         super.result = new SeparateFlowResults();
@@ -122,7 +122,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     	return tandemAnalysis(network,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
     }
 
-    public static SeparateFlowResults tandemAnalysis(Network network, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
+    public static SeparateFlowResults tandemAnalysis(ServerGraph network, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
             throws Exception {
     	SeparateFlowResults result = new SeparateFlowResults();
         Set<ServiceCurve> betas_lo_path = new HashSet<ServiceCurve>();

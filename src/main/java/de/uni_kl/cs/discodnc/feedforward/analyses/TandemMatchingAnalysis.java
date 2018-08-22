@@ -40,12 +40,12 @@ import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.Bound;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -64,13 +64,13 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		return ((TandemMatchingResults) result).betas_e2e;
 	}
 	
-	public TandemMatchingAnalysis( Network network ) {
+	public TandemMatchingAnalysis( ServerGraph network ) {
         super.network = network;
         super.configuration = new AnalysisConfig();
 		super.result = new TandemMatchingResults();
 	}
 	
-	public TandemMatchingAnalysis( Network network, AnalysisConfig configuration ) {
+	public TandemMatchingAnalysis( ServerGraph network, AnalysisConfig configuration ) {
         super.network = network;
         super.configuration = configuration;
 		super.result = new TandemMatchingResults();

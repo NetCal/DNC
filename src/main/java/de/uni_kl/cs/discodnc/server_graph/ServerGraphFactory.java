@@ -26,12 +26,12 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.network;
+package de.uni_kl.cs.discodnc.server_graph;
 
-public interface NetworkFactory {
-    Network createNetwork();
+public interface ServerGraphFactory {
+    ServerGraph createNetwork();
 
-    Network getNetwork();
+    ServerGraph getNetwork();
 
     void reinitializeCurves();
 }

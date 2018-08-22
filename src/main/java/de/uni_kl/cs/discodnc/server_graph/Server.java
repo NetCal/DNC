@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.network;
+package de.uni_kl.cs.discodnc.server_graph;
 
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;

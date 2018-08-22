@@ -29,19 +29,19 @@
 package de.uni_kl.cs.discodnc.feedforward;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 
 import java.util.Set;
 
 public interface ArrivalBound {
-    Network getNetwork();
+    ServerGraph getNetwork();
 
     // --------------------------------------------------------------------------------------------------------------
     // Interface
     // --------------------------------------------------------------------------------------------------------------
-    void setNetwork(Network network);
+    void setNetwork(ServerGraph network);
 
     public AnalysisConfig getConfiguration();
 

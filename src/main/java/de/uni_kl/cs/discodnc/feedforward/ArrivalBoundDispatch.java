@@ -39,10 +39,10 @@ import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_Concatenati
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_PerServer;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePmoo;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregateTandemMatching;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;
@@ -55,7 +55,7 @@ public abstract class ArrivalBoundDispatch {
 	// Arrival Bound Dispatching
 	// --------------------------------------------------------------------------------------------------------------
 
-	public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Server server)
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Server server)
 			throws Exception {
 		return computeArrivalBounds(network, configuration, server, network.getFlows(server), Flow.NULL_FLOW);
 	}
@@ -80,7 +80,7 @@ public abstract class ArrivalBoundDispatch {
 	 *             Potential exception raised in the called function
 	 *             computeArrivalBounds.
 	 */
-	public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Server server,
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Server server,
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(
@@ -145,7 +145,7 @@ public abstract class ArrivalBoundDispatch {
 		return arrival_bounds;
 	}
 
-	public static Set<ArrivalCurve> computeArrivalBounds(Network network, AnalysisConfig configuration, Link link,
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Link link,
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {

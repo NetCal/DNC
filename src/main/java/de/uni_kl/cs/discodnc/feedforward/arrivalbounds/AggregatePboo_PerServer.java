@@ -39,12 +39,12 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBound;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.Collections;
@@ -57,7 +57,7 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 	private AggregatePboo_PerServer() {
 	}
 
-	public AggregatePboo_PerServer(Network network, AnalysisConfig configuration) {
+	public AggregatePboo_PerServer(ServerGraph network, AnalysisConfig configuration) {
 		this.network = network;
 		this.configuration = configuration;
 	}

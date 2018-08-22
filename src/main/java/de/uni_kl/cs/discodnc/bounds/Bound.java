@@ -30,10 +30,10 @@ package de.uni_kl.cs.discodnc.bounds;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 
 import java.util.Set;
 
@@ -79,7 +79,7 @@ public final class Bound {
     // Delay
     // --------------------------------------------------------------------------------------------------------------
 
-    public static double backlogPmooSinkTreeTbRl(Network tree, Server root,
+    public static double backlogPmooSinkTreeTbRl(ServerGraph tree, Server root,
                                                  AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
 //        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
 //                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {

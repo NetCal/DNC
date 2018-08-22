@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.network;
+package de.uni_kl.cs.discodnc.server_graph;
 
 public class Link {
     private int id;

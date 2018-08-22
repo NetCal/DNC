@@ -32,10 +32,10 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.util.HashMap;
@@ -45,13 +45,13 @@ import java.util.Set;
 
 public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
     private static SinkTree_AffineCurves instance = new SinkTree_AffineCurves();
-    protected Network network;
+    protected ServerGraph network;
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();
 
     private SinkTree_AffineCurves() {
     }
 
-    public SinkTree_AffineCurves(Network tree) {
+    public SinkTree_AffineCurves(ServerGraph tree) {
         this.network = tree;
     }
 

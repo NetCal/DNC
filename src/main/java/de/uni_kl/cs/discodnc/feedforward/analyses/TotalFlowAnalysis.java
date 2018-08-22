@@ -40,11 +40,11 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Path;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Path;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -57,13 +57,13 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     private TotalFlowAnalysis() {
     }
 
-    public TotalFlowAnalysis(Network network) {
+    public TotalFlowAnalysis(ServerGraph network) {
         super.network = network;
         super.configuration = new AnalysisConfig();
         super.result = new TotalFlowResults();
     }
 
-    public TotalFlowAnalysis(Network network, AnalysisConfig configuration) {
+    public TotalFlowAnalysis(ServerGraph network, AnalysisConfig configuration) {
         super.network = network;
         super.configuration = configuration;
         super.result = new TotalFlowResults();

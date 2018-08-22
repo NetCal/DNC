@@ -35,9 +35,9 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.server_graph.Flow;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 
 public class Demo2 {
 
@@ -58,7 +58,7 @@ public class Demo2 {
         ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
         MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
-        Network network = new Network();
+        ServerGraph network = new ServerGraph();
 
         Server s0 = network.addServer(service_curve, max_service_curve);
         s0.setUseGamma(false);

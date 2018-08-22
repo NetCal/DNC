@@ -10,10 +10,10 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 
 public class CompFFApresets {
-	private Network network;
+	private ServerGraph network;
 	
 	public TotalFlowAnalysis tf_analysis;		// TFA + aggrPBOOAB
 	public SeparateFlowAnalysis sf_analysis;	// SFA + aggrPBOOAB
@@ -29,7 +29,7 @@ public class CompFFApresets {
 	public SeparateFlowAnalysis sfa_MMB18AB;	// SFA + aggrAB + segrPMOOAB
 	public PmooAnalysis pmoo_MMB18AB;			// PMOO + aggrAB + segrPMOOAB
 	
-	public CompFFApresets( Network network ) {
+	public CompFFApresets( ServerGraph network ) {
 		this.network = network;
 
 		// --------------------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ public class CompFFApresets {
 		pmoo_MMB18AB = new PmooAnalysis( network, pmoo_MMB_config );
 	}
 	
-	public Network getNetwork() {
+	public ServerGraph getNetwork() {
 		return network;
 	}
 }

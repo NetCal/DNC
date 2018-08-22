@@ -31,8 +31,8 @@ package de.uni_kl.cs.discodnc.feedforward;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 
 import java.util.HashMap;
 import java.util.Map;

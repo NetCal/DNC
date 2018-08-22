@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.network;
+package de.uni_kl.cs.discodnc.server_graph;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -52,28 +52,27 @@ import org.apache.commons.math3.util.Pair;
 import java.util.Set;
 
 /**
- * Servers in a network object correspond to buffers that may be shared by
- * different flows, i.e., a network corresponds to the server graph of a
- * (physical) network.
+ * Servers in a server graph object correspond to buffers that may be shared by
+ * different flows.
  * <p>
  * That means the path of a flow is a sequence of buffers crossed by it and the
- * analysis operating on a network handles Server objects as such.
+ * analysis operating on a server graph handles Server objects as such.
  * <p>
- * Please consider this when modeling a network for analysis. E.g., assuming
+ * Please consider this when modeling a server graph for analysis. E.g., assuming
  * output buffering in a simple wireless sensor network with one transceiver per
  * node there is a 1:1-relation between network graph connecting wireless sensor
- * nodes and servers in the DiscoDNC network.
+ * nodes and servers in the DiscoDNC server graph.
  * <p>
  * A flows path, however, is a sequence of crossed buffers. As a flow usually
  * does not reach the output buffer of its sink, the path should not contain a
- * link to it. Otherwise the flow interference pattern of the network will be
+ * link to it. Otherwise the flow interference pattern of the server graph will be
  * too pessimistic, yet, the results remain valid.
  * <p>
  * In practice, on can model a sink explicitly by setting the server's service
  * curve to be an infinite burst after without delay ( see
  * ServiceCurve.createZeroDelayBurst() ).
  */
-public class Network {
+public class ServerGraph {
 	private Set<Server> servers;
 	private Set<Link> links;
 	private Set<Flow> flows;
@@ -97,7 +96,7 @@ public class Network {
 	private int flow_id_counter = 0;
 	private Map<Integer, Flow> map__id__flow;
 
-	public Network() {
+	public ServerGraph() {
 		servers = new HashSet<Server>();
 		links = new HashSet<Link>();
 		flows = new HashSet<Flow>();
@@ -273,7 +272,7 @@ public class Network {
 
 	public void removeServer(Server s) throws Exception {
 		if (!servers.contains(s)) {
-			throw new Exception("Server to be removed is not in this network's list of servers");
+			throw new Exception("Server to be removed is not in this server graph's list of servers");
 		}
 
 		remove(Collections.singleton(s), getIncidentLinks(s), map__server__flows.get(s));
@@ -461,15 +460,15 @@ public class Network {
 
 	public Link addLink(String alias, Server source, Server destination) throws Exception {
 		if (!servers.contains(source)) {
-			throw new Exception("link's source not present in the network");
+			throw new Exception("link's source not present in the server graph");
 		}
 		if (!servers.contains(destination)) {
-			throw new Exception("link's destination not present in the network");
+			throw new Exception("link's destination not present in the server graph");
 		}
 
 		try {
-			// This implicitly signals the caller that the link was already present in the
-			// network
+			// This implicitly signals the caller that the link was 
+			// already present in the server graph
 			// by returning a link with a name different to the given one
 			Link link = findLink(source, destination);
 			return link;
@@ -489,7 +488,7 @@ public class Network {
 
 	public void removeLink(Link l) throws Exception {
 		if (!links.contains(l)) {
-			throw new Exception("Link to be removed is not in this network's list of links");
+			throw new Exception("Link to be removed is not in this server graph's list of links");
 		}
 
 		remove(new HashSet<Server>(), Collections.singleton(l), map__link__flows.get(l));
@@ -510,7 +509,7 @@ public class Network {
 	 *            The link's destination.
 	 * @return The link from src to dest.
 	 * @throws Exception
-	 *             No link from src to snk found in this network.
+	 *             No link from src to snk found in this server graph.
 	 */
 	public Link findLink(Server src, Server dest) throws Exception {
 		Set<Link> connecting_link_as_set = SetUtils.getIntersection(getInLinks(dest), getOutLinks(src));
@@ -540,11 +539,11 @@ public class Network {
 
 	protected Flow addFlow(ArrivalCurve arrival_curve, Path path) throws Exception {
 		String alias = flow_default_name_prefix.concat(Integer.toString(flow_id_counter));
-		return addFlowToNetwork(alias, arrival_curve, path);
+		return addFlowToServerGraph(alias, arrival_curve, path);
 	}
 
 	/**
-	 * Creates a flow and adds it to the network.
+	 * Creates a flow and adds it to the server graph.
 	 *
 	 * @param arrival_curve
 	 *            The flow's arrival curve.
@@ -552,7 +551,7 @@ public class Network {
 	 *            Source for shortest path routing.
 	 * @param sink
 	 *            Sink for shortest path routing.
-	 * @return The flow created and added to the network.
+	 * @return The flow created and added to the server graph.
 	 * @throws Exception
 	 *             Could not create a path from the given source/sink-pair.
 	 */
@@ -562,7 +561,7 @@ public class Network {
 	}
 
 	/**
-	 * Creates a flow and adds it to the network.
+	 * Creates a flow and adds it to the server graph.
 	 *
 	 * @param alias
 	 *            The flow's user defined-alias.
@@ -572,7 +571,7 @@ public class Network {
 	 *            Source for shortest path routing.
 	 * @param sink
 	 *            Sink for shortest path routing.
-	 * @return The flow created and added to the network.
+	 * @return The flow created and added to the server graph.
 	 * @throws Exception
 	 *             Could not create a path from the given source/sink-pair.
 	 */
@@ -581,11 +580,11 @@ public class Network {
 			return addFlow(arrival_curve, sink);
 		}
 
-		return addFlowToNetwork(alias, arrival_curve, getShortestPath(source, sink));
+		return addFlowToServerGraph(alias, arrival_curve, getShortestPath(source, sink));
 	}
 
 	/**
-	 * Creates a flow and adds it to the network.
+	 * Creates a flow and adds it to the server graph.
 	 *
 	 * @param alias
 	 *            The flow's user defined-alias.
@@ -593,9 +592,9 @@ public class Network {
 	 *            The flow's arrival curve.
 	 * @param path
 	 *            The flows path as a list of servers or links.
-	 * @return The flow created and added to the network.
+	 * @return The flow created and added to the server graph.
 	 * @throws Exception
-	 *             The given path is not entirely in the network.
+	 *             The given path is not entirely in the server graph.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Flow addFlow(String alias, ArrivalCurve arrival_curve, List path) throws Exception {
@@ -606,25 +605,25 @@ public class Network {
 		Object element_of_path = path.get(0);
 
 		if (element_of_path instanceof Server) {
-			return addFlowToNetwork(alias, arrival_curve, createPathFromServers(path));
+			return addFlowToServerGraph(alias, arrival_curve, createPathFromServers(path));
 		}
 		if (element_of_path instanceof Link) {
-			return addFlowToNetwork(alias, arrival_curve, createPathFromLinks(path));
+			return addFlowToServerGraph(alias, arrival_curve, createPathFromLinks(path));
 		}
 
 		throw new Exception("Could not create the path for flow " + alias);
 	}
 
 	/**
-	 * Creates a flow and adds it to the network.
+	 * Creates a flow and adds it to the server graph.
 	 *
 	 * @param arrival_curve
 	 *            The flow's arrival curve.
 	 * @param single_hop
-	 *            The single hop the flow takes in the network.
-	 * @return The flow created and added to the network.
+	 *            The single hop the flow takes in the server graph.
+	 * @return The flow created and added to the server graph.
 	 * @throws Exception
-	 *             The given server is not in the network.
+	 *             The given server is not in the server graph.
 	 */
 	public Flow addFlow(ArrivalCurve arrival_curve, Server single_hop) throws Exception {
 		String alias = flow_default_name_prefix.concat(Integer.toString(flow_id_counter));
@@ -632,31 +631,31 @@ public class Network {
 	}
 
 	/**
-	 * Creates a flow and adds it to the network.
+	 * Creates a flow and adds it to the server graph.
 	 *
 	 * @param alias
 	 *            The flow's user defined-alias.
 	 * @param arrival_curve
 	 *            The flow's arrival curve.
 	 * @param single_hop
-	 *            The single hop the flow takes in the network.
-	 * @return The flow created and added to the network.
+	 *            The single hop the flow takes in the server graph.
+	 * @return The flow created and added to the server graph.
 	 * @throws Exception
-	 *             The given server is not in the network.
+	 *             The given server is not in the server graph.
 	 */
 	public Flow addFlow(String alias, ArrivalCurve arrival_curve, Server single_hop) throws Exception {
-		return addFlowToNetwork(alias, arrival_curve, createPath(single_hop));
+		return addFlowToServerGraph(alias, arrival_curve, createPath(single_hop));
 	}
 
 	// Needed to be named differently due to a collision of the method's signature
 	// with a user visible one's
-	private Flow addFlowToNetwork(String alias, ArrivalCurve arrival_curve, Path path) throws Exception {
+	private Flow addFlowToServerGraph(String alias, ArrivalCurve arrival_curve, Path path) throws Exception {
 		if (!servers.containsAll(path.getServers())) {
-			throw new Exception("Some servers on the given flow's path are not present in the network");
+			throw new Exception("Some servers on the given flow's path are not present in the server graph");
 		}
 		if (!path.getLinks().isEmpty()) {
 			if (!links.containsAll(path.getLinks())) {
-				throw new Exception("Some links on the given flow's path are not present in the network");
+				throw new Exception("Some links on the given flow's path are not present in the server graph");
 			}
 		}
 
@@ -678,16 +677,16 @@ public class Network {
 	}
 
 	/**
-	 * Removes a flow from the network.
+	 * Removes a flow from the server graph.
 	 *
 	 * @param f
 	 *            The flow to be removed.
 	 * @throws Exception
-	 *             Flow to be removed is not in this network's list of flows.
+	 *             Flow to be removed is not in this server graph's list of flows.
 	 */
 	public void removeFlow(Flow f) throws Exception {
 		if (!flows.contains(f)) {
-			throw new Exception("Flow to be removed is not in this network's list of flows");
+			throw new Exception("Flow to be removed is not in this server graph's list of flows");
 		}
 
 		remove(new HashSet<Server>(), new HashSet<Link>(), Collections.singleton(f));
@@ -1039,7 +1038,7 @@ public class Network {
 	// --------------------------------------------------------------------------------------------
 	public Path createPath(Server server) throws Exception {
 		if (!servers.contains(server)) {
-			throw new Exception("Server to create path from is not in the network");
+			throw new Exception("Server to create path from is not in the server graph");
 		}
 
 		return new Path(new LinkedList<Server>(Collections.singleton(server)), new LinkedList<Link>());
@@ -1047,8 +1046,8 @@ public class Network {
 
 	public Path createPath(Link link) throws Exception {
 		if (!links.contains(link)) { // Implicitly contains the case that at least one server the link connects is
-			// not in the network
-			throw new Exception("Link to create path from is not in the network");
+			// not in the server graph
+			throw new Exception("Link to create path from is not in the server graph");
 		}
 
 		LinkedList<Server> path_servers = new LinkedList<Server>();
@@ -1086,7 +1085,7 @@ public class Network {
 					path_links.add(findLink(path_servers.get(i), path_servers.get(i + 1)));
 				} catch (Exception e) {
 					throw new Exception(
-							"At least two consecutive servers to create the path from are not connected by a link in the network");
+							"At least two consecutive servers to create the path from are not connected by a link in the server graph");
 				}
 			}
 		}
@@ -1101,7 +1100,7 @@ public class Network {
 		for (int i = 0; i < path_links.size() - 1; i++) {
 			Link l_i = path_links.get(i);
 			if (!links.contains(l_i)) {
-				throw new Exception("At least one link to create path from is not in the network");
+				throw new Exception("At least one link to create path from is not in the server graph");
 			}
 			if (l_i.getDest() != path_links.get(i + 1).getSource()) {
 				throw new Exception("At least two consecutive links to create the path from are not connected");
@@ -1110,7 +1109,7 @@ public class Network {
 		}
 		Link l_last = path_links.get(path_links.size() - 1);
 		if (!links.contains(l_last)) {
-			throw new Exception("Last link to create path from is not in the network");
+			throw new Exception("Last link to create path from is not in the server graph");
 		}
 		path_servers.add(l_last.getSource());
 		path_servers.add(l_last.getDest());
@@ -1128,8 +1127,8 @@ public class Network {
 				Link l_i = path_links.get(i);
 
 				if (!links.contains(l_i)) { // Implicitly contains the case that at least one server the link connects
-					// is not in the network
-					throw new Exception("At least one link to create path from is not in the network");
+					// is not in the server graph
+					throw new Exception("At least one link to create path from is not in the server graph");
 				}
 				if (l_i.getDest() != path_links.get(i + 1).getSource()) {
 					throw new Exception("At least two consecutive links to create the path from are not connected");
@@ -1142,8 +1141,8 @@ public class Network {
 			}
 			Link l_last = path_links.get(path_links.size() - 1);
 			if (!links.contains(l_last)) { // Implicitly contains the case that at least one server the link connects is
-				// not in the network
-				throw new Exception("Last link to create path from is not in the network");
+				// not in the server graph
+				throw new Exception("Last link to create path from is not in the server graph");
 			}
 		}
 
@@ -1319,24 +1318,24 @@ public class Network {
 	// --------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a deep copy of this network.
+	 * Creates a deep copy of this server graph.
 	 *
 	 * @return The copy.
 	 * @throws Exception
 	 *             Signals problems while instantiating the copy.
 	 */
-	public Network copy() throws Exception {
-		Network network_new = new Network();
+	public ServerGraph copy() throws Exception {
+		ServerGraph sg_new = new ServerGraph();
 
 		// Copy servers
 		// We cannot use some addServer( s_old.copy() ) because servers can only be
-		// created via a network.
-		// They need an network determined id. (Hard design decision at the moment)
+		// created via a server graph.
+		// They need an server graph determined id. (Hard design decision at the moment)
 		Map<Server, Server> map__s_old__s_new = new HashMap<Server, Server>();
 		Server s_new;
 
 		for (Server s_old : servers) {
-			s_new = network_new.addServer(s_old.getAlias(), s_old.getServiceCurve().copy(),
+			s_new = sg_new.addServer(s_old.getAlias(), s_old.getServiceCurve().copy(),
 					s_old.getMaxServiceCurve().copy(), s_old.multiplexingDiscipline(), s_old.useGamma(),
 					s_old.useExtraGamma());
 			map__s_old__s_new.put(s_old, s_new);
@@ -1344,21 +1343,21 @@ public class Network {
 
 		// Copy links
 		// We cannot use some addLink( l_old.copy() ) because links can only be created
-		// via a network.
-		// They need an network determined id. (Hard design decision at the moment)
+		// via a server graph.
+		// They need an server graph determined id. (Hard design decision at the moment)
 		Map<Link, Link> map__l_old__l_new = new HashMap<Link, Link>();
 		Link l_new;
 
 		for (Link l_old : links) {
-			l_new = network_new.addLink(l_old.getAlias(), map__s_old__s_new.get(l_old.getSource()),
+			l_new = sg_new.addLink(l_old.getAlias(), map__s_old__s_new.get(l_old.getSource()),
 					map__s_old__s_new.get(l_old.getDest()));
 			map__l_old__l_new.put(l_old, l_new);
 		}
 
 		// Copy flows
 		// We cannot use some addFlow( f_old.copy() ) because flows can only be created
-		// via a network.
-		// They need an network determined id. (Hard design decision at the moment)
+		// via a server graph.
+		// They need an server graph determined id. (Hard design decision at the moment)
 		Path f_old_path;
 		Path f_new_path;
 
@@ -1384,10 +1383,10 @@ public class Network {
 			}
 
 			f_new_path = new Path(f_path_new_s, f_path_new_l);
-			network_new.addFlowToNetwork(f_old.getAlias(), f_old.getArrivalCurve(), f_new_path);
+			sg_new.addFlowToServerGraph(f_old.getAlias(), f_old.getArrivalCurve(), f_new_path);
 		}
 
-		return network_new;
+		return sg_new;
 	}
 
 	public void saveAs(String output_path, String file_name) throws Exception {
@@ -1406,7 +1405,7 @@ public class Network {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("/* \n");
-		sb.append(" * This file is compatible with the Disco Deterministic Network Calculator v2.4 \"Chimera\".\n");
+		sb.append(" * This file is compatible with the Disco Deterministic Network Calculator v2.5 \"Chimera\".\n");
 		sb.append(" *\n");
 		sb.append(" * The Disco Deterministic Network Calculator (DiscoDNC) is free software;\n");
 		sb.append(" * you can redistribute it and/or modify it under the terms of the \n");
@@ -1433,23 +1432,23 @@ public class Network {
 		sb.append("\n");
 		sb.append("import Multiplexing;\n");
 		sb.append("\n");
-		sb.append("import Network;\n");
-		sb.append("import NetworkFactory;\n");
+		sb.append("import ServerGraph;\n");
+		sb.append("import ServerGraphFactory;\n");
 		sb.append("import Server;\n");
 		sb.append("\n");
 
-		sb.append("public class " + file_name + " implements NetworkFactory {");
-		sb.append("\tprivate Network network;\n");
+		sb.append("public class " + file_name + " implements ServerGraphFactory {");
+		sb.append("\tprivate ServerGraph sg;\n");
 		sb.append("\n");
 
 		// Server creation
 		int i_servers_func = 1;
 		int i_servers_lines = 0;
 		sb.append("\tpublic void createServers" + Integer.toString(i_servers_func)
-				+ "( Network network, Server[] servers ) throws Exception {\n");
+				+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 		for (Server s : servers) {
 			sb.append("\t\tservers[" + s.getId() + "] = ");
-			sb.append("network.addServer( ");
+			sb.append("sg.addServer( ");
 			sb.append("\"" + s.getAlias() + "\"" + ", ");
 			sb.append("CurvePwAffine.getFactory().createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )"
 					+ ", ");
@@ -1468,7 +1467,7 @@ public class Network {
 				sb.append("\t}\n");
 				sb.append("\n");
 				sb.append("\tpublic void createServers" + Integer.toString(i_servers_func)
-						+ "( Network network, Server[] servers ) throws Exception {\n");
+						+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 			}
 		}
 		sb.append("\t}\n");
@@ -1478,9 +1477,9 @@ public class Network {
 		int i_links_func = 1;
 		int i_links_lines = 0;
 		sb.append("\tpublic void createLinks" + Integer.toString(i_links_func)
-				+ "( Network network, Server[] servers ) throws Exception {\n");
+				+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 		for (Link l : links) {
-			sb.append("\t\tnetwork.addLink( ");
+			sb.append("\t\tsg.addLink( ");
 			sb.append("\"" + l.getAlias() + "\"" + ", ");
 			sb.append("servers[" + l.getSource().getId() + "]" + ", ");
 			sb.append("servers[" + l.getDest().getId() + "]");
@@ -1494,7 +1493,7 @@ public class Network {
 				sb.append("\t}\n");
 				sb.append("\n");
 				sb.append("\tpublic void createLinks" + Integer.toString(i_links_func)
-						+ "( Network network, Server[] servers ) throws Exception {\n");
+						+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 			}
 		}
 		sb.append("\t}\n");
@@ -1504,7 +1503,7 @@ public class Network {
 		int i_flows_func = 1;
 		int i_flows_lines = 0;
 		sb.append("\tpublic void createFlows" + Integer.toString(i_flows_func)
-				+ "( Network network, Server[] servers ) throws Exception {\n");
+				+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 		sb.append("\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();\n");
 		i_flows_lines++;
 		sb.append("\n");
@@ -1515,7 +1514,7 @@ public class Network {
 				sb.append(" );\n");
 				i_flows_lines++;
 			}
-			sb.append("\t\tnetwork.addFlow( ");
+			sb.append("\t\tsg.addFlow( ");
 			sb.append("\"" + f.getAlias() + "\"" + ", ");
 			sb.append("CurvePwAffine.getFactory().createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )"
 					+ ", ");
@@ -1532,7 +1531,7 @@ public class Network {
 				sb.append("\t}\n");
 				sb.append("\n");
 				sb.append("\tpublic void createFlows" + Integer.toString(i_flows_func)
-						+ "( Network network, Server[] servers ) throws Exception {\n");
+						+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 				sb.append("\t\tLinkedList<Server> servers_on_path_s = new LinkedList<Server>();\n");
 				i_flows_lines++;
 			}
@@ -1541,38 +1540,38 @@ public class Network {
 
 		sb.append("\n");
 		sb.append("\tpublic " + file_name + "() {\n");
-		sb.append("\t\tnetwork = createNetwork();");
+		sb.append("\t\tsg = createServerGraph();");
 		sb.append("\t}\n");
 		sb.append("\n");
 
-		sb.append("\tpublic Network createNetwork() {\n");
+		sb.append("\tpublic ServerGraph createServerGraph() {\n");
 		sb.append("\t\tServer[] servers = new Server[" + numServers() + "];\n");
-		sb.append("\t\tnetwork = new Network();\n");
+		sb.append("\t\tsg = new ServerGraph();\n");
 		sb.append("\t\ttry{\n");
 		for (int i = 1; i <= i_servers_func; i++) {
-			sb.append("\t\t\tcreateServers" + Integer.toString(i) + "( network, servers );\n");
+			sb.append("\t\t\tcreateServers" + Integer.toString(i) + "( sg, servers );\n");
 		}
 		for (int i = 1; i <= i_links_func; i++) {
-			sb.append("\t\t\tcreateLinks" + Integer.toString(i) + "( network, servers );\n");
+			sb.append("\t\t\tcreateLinks" + Integer.toString(i) + "( sg, servers );\n");
 		}
 		for (int i = 1; i <= i_flows_func; i++) {
-			sb.append("\t\t\tcreateFlows" + Integer.toString(i) + "( network, servers );\n");
+			sb.append("\t\t\tcreateFlows" + Integer.toString(i) + "( sg, servers );\n");
 		}
 
 		sb.append("\t\t} catch (Exception e) {\n");
 		sb.append("\t\t\te.printStackTrace();\n");
 		sb.append("\t\t}\n");
-		sb.append("\t\treturn network;\n");
+		sb.append("\t\treturn sg;\n");
 		sb.append("\t}\n");
 		sb.append("\n");
 
-		sb.append("\tpublic Network getNetwork() {\n");
-		sb.append("\t\treturn network;");
+		sb.append("\tpublic ServerGraph getServerGraph() {\n");
+		sb.append("\t\treturn sg;");
 		sb.append("\t}");
 		sb.append("\n");
 
 		sb.append("\tpublic void reinitializeCurves() {\n");
-		sb.append("\t\tnetwork = createNetwork();");
+		sb.append("\t\tsg = createServerGraph();");
 		sb.append("\t}");
 
 		sb.append("}\n");
@@ -1590,34 +1589,34 @@ public class Network {
 	@Override
 	/**
 	 *
-	 * Print the network in pseudo code creating it.
+	 * Print the server graph in pseudo code.
 	 *
 	 */
 	public String toString() {
 		if (numServers() == 0) {
-			return "empty network.";
+			return "empty server graph.";
 		}
 
-		StringBuffer network_str = new StringBuffer();
+		StringBuffer sg_str = new StringBuffer();
 		for (Server s : servers) {
-			network_str.append(s.toString());
-			network_str.append("\n");
+			sg_str.append(s.toString());
+			sg_str.append("\n");
 		}
 
-		network_str.append("\n");
+		sg_str.append("\n");
 		for (Link l : links) {
-			network_str.append(l.toString());
-			network_str.append("\n");
+			sg_str.append(l.toString());
+			sg_str.append("\n");
 		}
 
-		network_str.append("\n");
+		sg_str.append("\n");
 		for (Flow f : flows) {
-			network_str.append(f.toString());
-			network_str.append("\n");
+			sg_str.append(f.toString());
+			sg_str.append("\n");
 		}
 
-		network_str.deleteCharAt(network_str.length() - 1); // Remove the line break at the end.
+		sg_str.deleteCharAt(sg_str.length() - 1); // Remove the line break at the end.
 
-		return network_str.toString();
+		return sg_str.toString();
 	}
 }

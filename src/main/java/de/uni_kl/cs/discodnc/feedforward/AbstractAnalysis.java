@@ -30,19 +30,19 @@
 package de.uni_kl.cs.discodnc.feedforward;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.server_graph.Server;
 
 import java.util.Map;
 import java.util.Set;
 
 public abstract class AbstractAnalysis {
-    protected Network network;
+    protected ServerGraph network;
     protected AnalysisConfig configuration;
     protected AnalysisResults result;
 
-    public Network getNetwork() {
+    public ServerGraph getNetwork() {
         return network;
     }
 
