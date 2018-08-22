@@ -25,7 +25,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.bounds;
+package de.uni_kl.cs.discodnc.bounds.disco;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;

@@ -31,7 +31,7 @@
 package de.uni_kl.cs.discodnc.feedforward.analyses;
 
 import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.bounds.Bound;
+import de.uni_kl.cs.discodnc.bounds.disco.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AbstractAnalysis;
