@@ -28,11 +28,11 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc.analyses;
+package de.uni_kl.cs.discodnc.feedforward.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.AnalysisResults;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisResults;
 import de.uni_kl.cs.discodnc.network.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 

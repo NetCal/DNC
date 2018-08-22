@@ -29,7 +29,7 @@ package de.uni_kl.cs.discodnc.bounds;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;
 import de.uni_kl.cs.discodnc.network.Server;

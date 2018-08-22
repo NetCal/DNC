@@ -1,7 +1,9 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
- * Copyright (C) 2013 - 2018 Steffen Bondorf
+ * Copyright (C) 2005 - 2007 Frank A. Zdarsky
+ * Copyright (C) 2008 - 2010 Andreas Kiefer
+ * Copyright (C) 2011 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * Distributed Computer Systems (DISCO) Lab
@@ -26,26 +28,38 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc.feedforward.analyses;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisResults;
+import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
+import java.util.Map;
 import java.util.Set;
 
-public interface ArrivalBound {
-    Network getNetwork();
+public class PmooResults extends AnalysisResults {
+    protected Set<ServiceCurve> betas_e2e;
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Interface
-    // --------------------------------------------------------------------------------------------------------------
-    void setNetwork(Network network);
+    protected PmooResults() {
+    }
 
-    public AnalysisConfig getConfiguration();
+    protected PmooResults(Num delay_bound, Num backlog_bound, Set<ServiceCurve> betas_e2e,
+                          Map<Server, Set<ArrivalCurve>> map__server__alphas) {
 
-    public void setConfiguration(AnalysisConfig configuration);
+        super(delay_bound, backlog_bound, map__server__alphas);
 
-    Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception;
+        this.betas_e2e = betas_e2e;
+    }
+
+    @Override
+    protected void setDelayBound(Num delay_bound) {
+        super.setDelayBound(delay_bound);
+    }
+
+    @Override
+    protected void setBacklogBound(Num backlog_bound) {
+        super.setBacklogBound(backlog_bound);
+    }
 }

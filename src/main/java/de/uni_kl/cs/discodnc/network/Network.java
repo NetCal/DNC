@@ -32,7 +32,7 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import java.io.File;

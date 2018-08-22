@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc.feedforward;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;

@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc.arrivalbounds;
+package de.uni_kl.cs.discodnc.feedforward.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;

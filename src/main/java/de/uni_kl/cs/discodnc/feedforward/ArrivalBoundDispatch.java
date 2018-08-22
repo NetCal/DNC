@@ -26,19 +26,19 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc.feedforward;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
-import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregatePboo_Concatenation;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregatePboo_PerServer;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregatePmoo;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregateTandemMatching;
+import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.analyses.TandemMatchingAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_Concatenation;
+import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_PerServer;
+import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePmoo;
+import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregateTandemMatching;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;

@@ -26,27 +26,26 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc;
+package de.uni_kl.cs.discodnc.feedforward;
 
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.network.Flow;
+import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
 
-public abstract class AbstractArrivalBound implements ArrivalBound {
-    protected Network network;
-    protected AnalysisConfig configuration;
+import java.util.Set;
 
-    public Network getNetwork() {
-        return network;
-    }
+public interface ArrivalBound {
+    Network getNetwork();
 
-    public void setNetwork(Network network) {
-        this.network = network;
-    }
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface
+    // --------------------------------------------------------------------------------------------------------------
+    void setNetwork(Network network);
 
-    public AnalysisConfig getConfiguration() {
-        return configuration;
-    }
+    public AnalysisConfig getConfiguration();
 
-    public void setConfiguration(AnalysisConfig configuration) {
-        this.configuration = configuration;
-    }
+    public void setConfiguration(AnalysisConfig configuration);
+
+    Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception;
 }

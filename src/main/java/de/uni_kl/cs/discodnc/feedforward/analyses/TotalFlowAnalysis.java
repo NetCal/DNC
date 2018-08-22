@@ -28,18 +28,18 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc.analyses;
+package de.uni_kl.cs.discodnc.feedforward.analyses;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
-import de.uni_kl.cs.discodnc.nc.Analysis;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
+import de.uni_kl.cs.discodnc.feedforward.AbstractAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.Analysis;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
+import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Network;
 import de.uni_kl.cs.discodnc.network.Path;

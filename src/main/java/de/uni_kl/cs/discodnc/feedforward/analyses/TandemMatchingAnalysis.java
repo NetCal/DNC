@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.nc.analyses;
+package de.uni_kl.cs.discodnc.feedforward.analyses;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -40,12 +40,6 @@ import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.Bound;
-import de.uni_kl.cs.discodnc.nc.AbstractAnalysis;
-import de.uni_kl.cs.discodnc.nc.Analysis;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.nc.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.discodnc.nc.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -55,6 +49,12 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.feedforward.AbstractAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.Analysis;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
+import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 
 public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis {
 	@SuppressWarnings("unused")
