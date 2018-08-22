@@ -52,17 +52,17 @@ public class CompFFApresets {
 		//   (Steffen Bondorf, Jens B. Schmitt),
 		//   In Proc. of the Int. Conference on Performance Evaluation Methodologies and Tools (ValueTools), 2015.
 		Set<ArrivalBoundMethod> aggrAB = new HashSet<ArrivalBoundMethod>();
-		aggrAB.add( ArrivalBoundMethod.PBOO_CONCATENATION );
-		aggrAB.add( ArrivalBoundMethod.PMOO );
+		aggrAB.add( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
+		aggrAB.add( ArrivalBoundMethod.AGGR_PMOO );
 		
 		// aggrAB + aggrPMOOAB can outperform aggrAB. See:	
 		//   Catching Corner Cases in Network Calculus – Flow Segregation Can Improve Accuracy 
 		//   (Steffen Bondorf, Paul Nikolaus, Jens B. Schmitt),
 		//   In Proc. of the Int. GI/ITG Conference on Measurement, Modelling and Evaluation of Computing Systems (MMB), 2018.
 		Set<ArrivalBoundMethod> MMB18AB = new HashSet<ArrivalBoundMethod>();
-		MMB18AB.add( ArrivalBoundMethod.PBOO_CONCATENATION );
-		MMB18AB.add( ArrivalBoundMethod.PMOO );
-		MMB18AB.add( ArrivalBoundMethod.PER_FLOW_PMOO );
+		MMB18AB.add( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
+		MMB18AB.add( ArrivalBoundMethod.AGGR_PMOO );
+		MMB18AB.add( ArrivalBoundMethod.SEGR_PMOO );
 		
 
 		// --------------------------------------------------------------------------------------------------------------
@@ -86,33 +86,33 @@ public class CompFFApresets {
 		
 		// TFA + aggrPBOOAB
 		AnalysisConfig tfa_config = base_config.copy();
-		tfa_config.setArrivalBoundMethod( ArrivalBoundMethod.PBOO_CONCATENATION );
+		tfa_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
 		tf_analysis = new TotalFlowAnalysis( network, tfa_config );
 		
 		// SFA + aggrPBOOAB
 		AnalysisConfig sfa_config = base_config.copy();
-		sfa_config.setArrivalBoundMethod( ArrivalBoundMethod.PBOO_CONCATENATION );
+		sfa_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
 		sf_analysis = new SeparateFlowAnalysis( network, sfa_config );
 
 		// PMOO + aggrPMOOAB
 		AnalysisConfig pmoo_config = base_config.copy();
-		pmoo_config.setArrivalBoundMethod( ArrivalBoundMethod.PMOO );
+		pmoo_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PMOO );
 		pmoo_analysis = new PmooAnalysis( network, pmoo_config );
 
 		
 		// TFA + segrPBOOAB
 		AnalysisConfig tfa_segr_config = base_config.copy();
-		tfa_segr_config.setArrivalBoundMethod( ArrivalBoundMethod.PER_FLOW_SFA );
+		tfa_segr_config.setArrivalBoundMethod( ArrivalBoundMethod.SEGR_PBOO );
 		tfa_segrPBOOAB = new TotalFlowAnalysis( network, tfa_segr_config );
 		
 		// SFA + segrPBOOAB
 		AnalysisConfig sfa_segr_config = base_config.copy();
-		sfa_segr_config.setArrivalBoundMethod( ArrivalBoundMethod.PER_FLOW_SFA );
+		sfa_segr_config.setArrivalBoundMethod( ArrivalBoundMethod.SEGR_PBOO );
 		sfa_segrPBOOAB = new SeparateFlowAnalysis( network, sfa_segr_config );
 
 		// PMOO + segrPMOOAB
 		AnalysisConfig pmoo_segr_config = base_config.copy();
-		pmoo_segr_config .setArrivalBoundMethod( ArrivalBoundMethod.PER_FLOW_PMOO );
+		pmoo_segr_config .setArrivalBoundMethod( ArrivalBoundMethod.SEGR_PMOO );
 		pmoo_segrPMOOAB = new PmooAnalysis( network, pmoo_segr_config );
 
 		

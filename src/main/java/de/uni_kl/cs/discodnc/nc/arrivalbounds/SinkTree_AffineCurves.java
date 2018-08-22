@@ -43,19 +43,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class PmooArrivalBound_SinkTreeTbRl { //extends AbstractArrivalBound {
-    private static PmooArrivalBound_SinkTreeTbRl instance = new PmooArrivalBound_SinkTreeTbRl();
+public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
+    private static SinkTree_AffineCurves instance = new SinkTree_AffineCurves();
     protected Network network;
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();
 
-    private PmooArrivalBound_SinkTreeTbRl() {
+    private SinkTree_AffineCurves() {
     }
 
-    public PmooArrivalBound_SinkTreeTbRl(Network tree) {
+    public SinkTree_AffineCurves(Network tree) {
         this.network = tree;
     }
 
-    public static PmooArrivalBound_SinkTreeTbRl getInstance() {
+    public static SinkTree_AffineCurves getInstance() {
         return instance;
     }
 

@@ -54,18 +54,18 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TandemMatchingArrivalBound extends AbstractArrivalBound implements ArrivalBound {
-	private static TandemMatchingArrivalBound instance = new TandemMatchingArrivalBound();
+public class AggregateTandemMatching extends AbstractArrivalBound implements ArrivalBound {
+	private static AggregateTandemMatching instance = new AggregateTandemMatching();
 
-	private TandemMatchingArrivalBound() {
+	private AggregateTandemMatching() {
 	}
 
-	public TandemMatchingArrivalBound( Network network, AnalysisConfig configuration ) {
+	public AggregateTandemMatching( Network network, AnalysisConfig configuration ) {
 		this.network = network;
 		this.configuration = configuration;
 	}
 
-	public static TandemMatchingArrivalBound getInstance() {
+	public static AggregateTandemMatching getInstance() {
 		return instance;
 	}
 	

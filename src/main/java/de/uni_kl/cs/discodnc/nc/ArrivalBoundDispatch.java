@@ -35,10 +35,10 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.nc.analyses.TandemMatchingAnalysis;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_Concatenation;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.PbooArrivalBound_PerHop;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.PmooArrivalBound;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.TandemMatchingArrivalBound;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregatePboo_Concatenation;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregatePboo_PerServer;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregatePmoo;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.AggregateTandemMatching;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -158,38 +158,41 @@ public abstract class ArrivalBoundDispatch {
 			Set<ArrivalCurve> arrival_bounds_tmp = new HashSet<ArrivalCurve>();
 
 			switch (arrival_bound_method) {
-			case PBOO_PER_HOP:
-				PbooArrivalBound_PerHop pboo_per_hop = PbooArrivalBound_PerHop.getInstance();
-				pboo_per_hop.setNetwork(network);
-				pboo_per_hop.setConfiguration(configuration);
-				arrival_bounds_tmp = pboo_per_hop.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+			case AGGR_PBOO_PER_SERVER:
+				AggregatePboo_PerServer aggr_pboo_per_server = AggregatePboo_PerServer.getInstance();
+				aggr_pboo_per_server.setNetwork(network);
+				aggr_pboo_per_server.setConfiguration(configuration);
+				arrival_bounds_tmp = aggr_pboo_per_server.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
-			case PBOO_CONCATENATION:
-				PbooArrivalBound_Concatenation pboo_concatenation = PbooArrivalBound_Concatenation.getInstance();
-				pboo_concatenation.setNetwork(network);
-				pboo_concatenation.setConfiguration(configuration);
-				arrival_bounds_tmp = pboo_concatenation.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+			case AGGR_PBOO_CONCATENATION:
+				AggregatePboo_Concatenation aggr_pboo_concatenation = AggregatePboo_Concatenation.getInstance();
+				aggr_pboo_concatenation.setNetwork(network);
+				aggr_pboo_concatenation.setConfiguration(configuration);
+				arrival_bounds_tmp = aggr_pboo_concatenation.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
-			case PMOO:
-				PmooArrivalBound pmoo_arrival_bound = PmooArrivalBound.getInstance();
-				pmoo_arrival_bound.setNetwork(network);
-				pmoo_arrival_bound.setConfiguration(configuration);
-				arrival_bounds_tmp = pmoo_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+			case AGGR_PMOO:
+				AggregatePmoo aggr_pmoo = AggregatePmoo.getInstance();
+				aggr_pmoo.setNetwork(network);
+				aggr_pmoo.setConfiguration(configuration);
+				arrival_bounds_tmp = aggr_pmoo.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
-			/* There are no integration tests for TMA or the per-flow arrival bounds. */
+			/* 
+			 * There are no functional tests for Tandem Matching-based arrival bounding
+			 * or segregate arrival bounding methods. 
+			 */
 				
-			case TMA:
-				TandemMatchingArrivalBound tm_arrival_bound = TandemMatchingArrivalBound.getInstance();
-				tm_arrival_bound.setNetwork(network);
-				tm_arrival_bound.setConfiguration(configuration);
-				arrival_bounds_tmp = tm_arrival_bound.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+			case AGGR_TM:
+				AggregateTandemMatching aggr_tm = AggregateTandemMatching.getInstance();
+				aggr_tm.setNetwork(network);
+				aggr_tm.setConfiguration(configuration);
+				arrival_bounds_tmp = aggr_tm.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
-			case PER_FLOW_SFA:
+			case SEGR_PBOO:
 				for (Flow flow : flows_to_bound) {
 					SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
 					sfa.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
@@ -204,9 +207,9 @@ public abstract class ArrivalBoundDispatch {
 			 * Catching Corner Cases in Network Calculus - Flow Segregation Can Improve Accuracy.
 			 * Steffen Bondorf, Paul Nikolaus and Jens B. Schmitt,
 			 * In Proceedings of 19th International GI/ITG Conference on 
-			 * Measurement, Modelling and Evaluation of Computing Systems, 2018.
+			 * Measurement, Modelling and Evaluation of Computing Systems (MMB), 2018.
 			 */
-			case PER_FLOW_PMOO:
+			case SEGR_PMOO:
 				for (Flow flow : flows_to_bound) {
 					PmooAnalysis pmoo = new PmooAnalysis(network);
 					pmoo.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
@@ -216,7 +219,7 @@ public abstract class ArrivalBoundDispatch {
 				}
 				break;
 
-			case PER_FLOW_TMA:
+			case SEGR_TM:
 				for (Flow flow : flows_to_bound) {
 					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network);
 					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
@@ -227,8 +230,8 @@ public abstract class ArrivalBoundDispatch {
 				break;
 
 			default:
-				System.out.println("Executing default arrival bounding: PBOO_CONCATENATION");
-				PbooArrivalBound_Concatenation default_ab = new PbooArrivalBound_Concatenation(network, configuration);
+				System.out.println("Executing default arrival bounding: AGGR_PBOO_CONCATENATION");
+				AggregatePboo_Concatenation default_ab = new AggregatePboo_Concatenation(network, configuration);
 				arrival_bounds_tmp = default_ab.computeArrivalBound(link, flows_to_bound, flow_of_interest);
 				break;
 			}

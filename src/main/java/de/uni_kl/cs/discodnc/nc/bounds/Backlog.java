@@ -34,7 +34,7 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.nc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.nc.arrivalbounds.PmooArrivalBound_SinkTreeTbRl;
+import de.uni_kl.cs.discodnc.nc.arrivalbounds.SinkTree_AffineCurves;
 import de.uni_kl.cs.discodnc.network.Flow;
 import de.uni_kl.cs.discodnc.network.Link;
 import de.uni_kl.cs.discodnc.network.Network;
@@ -85,30 +85,30 @@ public class Backlog {
 
 	public static double derivePmooSinkTreeTbRl(Network tree, Server root,
                                                 AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
-		PmooArrivalBound_SinkTreeTbRl sink_tree_bound = new PmooArrivalBound_SinkTreeTbRl(tree);
+		SinkTree_AffineCurves sink_tree_bound = new SinkTree_AffineCurves(tree);
 		ArrivalCurve arrivals_at_root = tree.getSourceFlowArrivalCurve(root);
 
 		for (Link link : tree.getInLinks(root)) {
 			switch (sink_tree_ab) {
-			case PMOO_SINKTREE_TBRL_CONV:
+			case SINKTREE_AFFINE_CONV:
 				// will only be one curve
 				arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
 						.computeArrivalBoundDeConvolution(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next());
 				break;
 
-			case PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV:
+			case SINKTREE_AFFINE_CONV_DECONV:
 				arrivals_at_root = Curve.add(arrivals_at_root,
 						sink_tree_bound.computeArrivalBoundDeConvolutionTBRL(link, tree.getFlows(link), Flow.NULL_FLOW)
 								.iterator().next()); // will only be one curve
 				break;
 
-			case PMOO_SINKTREE_TBRL_HOMO:
+			case SINKTREE_AFFINE_HOMO:
 				// will only be one curve
 				arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
 						.computeArrivalBoundHomogeneous(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next());
 				break;
 
-			case PMOO_SINKTREE_TBRL:
+			case SINKTREE_AFFINE:
 			default:
 				// will only be one curve
 				arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound

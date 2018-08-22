@@ -46,9 +46,9 @@ public class AnalysisConfig {
     }
 
     public enum ArrivalBoundMethod {
-		PBOO_PER_HOP, PBOO_CONCATENATION, PMOO, TMA,
-		PER_FLOW_SFA, PER_FLOW_PMOO, PER_FLOW_TMA, 
-		PMOO_SINKTREE_TBRL, PMOO_SINKTREE_TBRL_CONV, PMOO_SINKTREE_TBRL_CONV_TBRL_DECONV, PMOO_SINKTREE_TBRL_HOMO
+		AGGR_PBOO_PER_SERVER, AGGR_PBOO_CONCATENATION, AGGR_PMOO, AGGR_TM,
+		SEGR_PBOO, SEGR_PMOO, SEGR_TM, 
+		SINKTREE_AFFINE, SINKTREE_AFFINE_CONV, SINKTREE_AFFINE_CONV_DECONV, SINKTREE_AFFINE_HOMO
     }
     
     private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
@@ -63,7 +63,7 @@ public class AnalysisConfig {
      */
     private GammaFlag use_extra_gamma = GammaFlag.SERVER_LOCAL;
     private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
-            Collections.singleton(ArrivalBoundMethod.PBOO_CONCATENATION));
+            Collections.singleton(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION));
     private boolean remove_duplicate_arrival_bounds = true;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
@@ -109,7 +109,7 @@ public class AnalysisConfig {
 
     public void defaultArrivalBoundMethods() {
         clearArrivalBoundMethods();
-        arrival_bound_methods.add(ArrivalBoundMethod.PBOO_CONCATENATION);
+        arrival_bound_methods.add(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION);
     }
 
     public void clearArrivalBoundMethods() {

@@ -51,18 +51,18 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PmooArrivalBound extends AbstractArrivalBound implements ArrivalBound {
-	private static PmooArrivalBound instance = new PmooArrivalBound();
+public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound {
+	private static AggregatePmoo instance = new AggregatePmoo();
 
-	private PmooArrivalBound() {
+	private AggregatePmoo() {
 	}
 
-	public PmooArrivalBound(Network network, AnalysisConfig configuration) {
+	public AggregatePmoo(Network network, AnalysisConfig configuration) {
 		this.network = network;
 		this.configuration = configuration;
 	}
 
-	public static PmooArrivalBound getInstance() {
+	public static AggregatePmoo getInstance() {
 		return instance;
 	}
 
