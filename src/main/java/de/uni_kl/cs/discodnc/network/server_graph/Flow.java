@@ -29,11 +29,11 @@
 
 package de.uni_kl.cs.discodnc.network.server_graph;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.Curve;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
 
 /**
  * Class representing flows through the network.

@@ -36,8 +36,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.apache.commons.math3.util.Pair;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.numbers.Num;
@@ -55,6 +53,8 @@ import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
+
+import org.apache.commons.math3.util.Pair;
 
 public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis {
 	@SuppressWarnings("unused")

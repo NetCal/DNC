@@ -28,13 +28,6 @@
 
 package de.uni_kl.cs.discodnc.network.server_graph;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.utils.SetUtils;
-
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -46,6 +39,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 import org.apache.commons.math3.util.Pair;
 

@@ -29,13 +29,13 @@
 
 package de.uni_kl.cs.discodnc.feedforward;
 
+import java.util.Map;
+import java.util.Set;
+
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import java.util.Map;
-import java.util.Set;
 
 public abstract class AbstractAnalysis {
     protected ServerGraph server_graph;

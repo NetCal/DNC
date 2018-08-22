@@ -28,16 +28,16 @@
 
 package de.uni_kl.cs.discodnc.network.server_graph;
 
-import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 /**
  * A flows path is a sequence of crossed buffers -- either represented by the

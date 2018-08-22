@@ -29,17 +29,17 @@
 
 package de.uni_kl.cs.discodnc.curves.disco.pwaffine;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_Disco;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>

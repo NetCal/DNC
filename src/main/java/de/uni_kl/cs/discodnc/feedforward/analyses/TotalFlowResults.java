@@ -30,15 +30,15 @@
 
 package de.uni_kl.cs.discodnc.feedforward.analyses;
 
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisResults;
-import de.uni_kl.cs.discodnc.network.server_graph.Server;
-import de.uni_kl.cs.discodnc.numbers.Num;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.feedforward.AnalysisResults;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class TotalFlowResults extends AnalysisResults {
     protected Map<Server, Set<Num>> map__server__D_server;

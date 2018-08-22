@@ -28,16 +28,16 @@
 
 package de.uni_kl.cs.discodnc.bounds.disco.pwaffine;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Output {
     private Output() {

@@ -29,15 +29,15 @@
 
 package de.uni_kl.cs.discodnc.feedforward;
 
-import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.network.server_graph.Server;
-import de.uni_kl.cs.discodnc.numbers.Num;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 public class AnalysisResults {
 	public Map<Server, Set<ArrivalCurve>> map__server__alphas;

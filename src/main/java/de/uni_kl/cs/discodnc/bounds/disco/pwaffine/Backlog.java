@@ -29,6 +29,8 @@
 
 package de.uni_kl.cs.discodnc.bounds.disco.pwaffine;
 
+import java.util.ArrayList;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -40,8 +42,6 @@ import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import java.util.ArrayList;
 
 public class Backlog {
 	private Backlog() {

@@ -28,12 +28,12 @@
 
 package de.uni_kl.cs.discodnc.feedforward;
 
+import java.util.Set;
+
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
-
-import java.util.Set;
 
 public interface ArrivalBound {
     ServerGraph getServerGraph();

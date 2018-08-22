@@ -28,6 +28,10 @@
 
 package de.uni_kl.cs.discodnc.feedforward.arrivalbounds;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
@@ -49,10 +53,6 @@ import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class AggregateTandemMatching extends AbstractArrivalBound implements ArrivalBound {
 	private static AggregateTandemMatching instance = new AggregateTandemMatching();
