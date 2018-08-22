@@ -28,32 +28,36 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.algebra.MinPlus;
-import de.uni_kl.cs.discodnc.algebra.disco.pwaffine.MinPlus_DNC_PwAffine;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
-import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.curves.disco.pwaffine.Curve_DNC_PwAffine;
 
-public enum CurveBackend_DNC_PwAffine implements CurveBackend {
-	DNC_PWAFFINE;
-
-	@Override
-	public MinPlus getMinPlus() {
-		return MinPlus_DNC_PwAffine.MINPLUS_DNC_PWAFFINE;
-	}
-
-	@Override
-	public Curve getCurveFactory() {
-		return Curve_DNC_PwAffine.getFactory();
-	}
-
-	@Override
-	public LinearSegment.Builder getLinearSegmentFactory() {
-		return LinearSegment_DNC.getBuilder();
-	}
+public interface AlgDncBackend {
+	MinPlus getMinPlus();
+	
+	Curve getCurveFactory();
+	
+	LinearSegment.Builder getLinearSegmentFactory();
 
     @Override
-    public String toString() {
-        return assembleString(this.name(), MinPlus_DNC_PwAffine.MINPLUS_DNC_PWAFFINE.name());
+    String toString();
+    
+    default String assembleString(String curve_backend_name, String min_plus_name) {
+    	StringBuffer name = new StringBuffer();
+
+        name.append("CurveBackend");
+        name.append(":");
+        name.append(curve_backend_name);
+        
+        name.append(", ");
+
+        name.append("AlegraBackend");
+        name.append(":");
+        name.append(min_plus_name);
+    	
+    	return name.toString();
     }
+	
+	default void checkDependencies() {
+		
+	}
 }

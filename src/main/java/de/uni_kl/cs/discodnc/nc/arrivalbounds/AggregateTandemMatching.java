@@ -29,7 +29,7 @@
 package de.uni_kl.cs.discodnc.nc.arrivalbounds;
 
 import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.CurveBackend_DNC_Affine;
+import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -147,7 +147,7 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 		// TODO This implementation only works for token-bucket arrivals. 
 		// It disregards the potential shift in inflection points not present in this burst cap variant.
 		if (configuration.serverBacklogArrivalBound()
-				&& Calculator.getInstance().getCurveBackend() == CurveBackend_DNC_Affine.DNC_AFFINE) {
+				&& Calculator.getInstance().getCurveBackend() == AlgDncBackend_DNC_Affine.DNC_AFFINE) {
 			Server last_hop_xtx = link.getSource();
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
 			tfa.deriveBoundsAtServer(last_hop_xtx);

@@ -34,7 +34,7 @@ import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_DNC;
 import de.uni_kl.cs.discodnc.curves.disco.affine.Curve_DNC_Affine;
 
-public enum CurveBackend_DNC_Affine implements CurveBackend {
+public enum AlgDncBackend_DNC_Affine implements AlgDncBackend {
 	DNC_AFFINE;
 
 	@Override
