@@ -43,7 +43,7 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Path;
 import de.uni_kl.cs.discodnc.server_graph.Server;
@@ -64,14 +64,14 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     private PmooAnalysis() {
     }
 
-    public PmooAnalysis(ServerGraph network) {
-        super.network = network;
+    public PmooAnalysis(ServerGraph server_graph) {
+        super.server_graph = server_graph;
         super.configuration = new AnalysisConfig();
         super.result = new PmooResults();
     }
 
-    public PmooAnalysis(ServerGraph network, AnalysisConfig configuration) {
-        super.network = network;
+    public PmooAnalysis(ServerGraph server_graph, AnalysisConfig configuration) {
+        super.server_graph = server_graph;
         super.configuration = configuration;
         super.result = new PmooResults();
     }
@@ -161,7 +161,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
     /**
      * Calculates the partial PMOO service curve for the given flow set by combining
-     * all servers having an outgoing link contained in the given link-path. For
+     * all servers having an outgoing turn contained in the given turn path. For
      * each flow considers only one of its token bucket components (selected via the
      * flow_tb_iter_map) and for each service curve considers only one rate latency
      * curve (selected via the server_rl_iters).
@@ -321,10 +321,10 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Set<Flow> flows_of_lower_priority = new HashSet<Flow>(flows_to_serve);
         flows_of_lower_priority.add(flow_of_interest);
 
-        Set<Flow> cross_flows = network.getFlows(path);
+        Set<Flow> cross_flows = server_graph.getFlows(path);
         cross_flows.removeAll(flows_of_lower_priority);
 
-        Map<Path, Set<Flow>> xtx_subpath_grouped_original = network.groupFlowsPerSubPath(path, cross_flows);
+        Map<Path, Set<Flow>> xtx_subpath_grouped_original = server_graph.groupFlowsPerSubPath(path, cross_flows);
         Map<Set<Flow>, LinkedList<Path>> prolongations = getProlongationsToSubpaths(path, xtx_subpath_grouped_original);
 
         if (prolongations.isEmpty()) {
@@ -406,16 +406,16 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
                             boolean aggr_potential = false;
                             subpaths_src = common_path_new.getSource();
-                            Link inlink_xfs = xfs.iterator().next().getPrecedingLink(subpaths_src);
-                            Link inlink_subpath_flows;
+                            Turn inturn_xfs = xfs.iterator().next().getPrecedingTurn(subpaths_src);
+                            Turn inturn_subpath_flows;
                             for (Flow f : value_flows) {
                             	try {
-                                    inlink_subpath_flows = f.getPrecedingLink(subpaths_src);
-                                    if (inlink_subpath_flows.equals(inlink_xfs)) {
+                                    inturn_subpath_flows = f.getPrecedingTurn(subpaths_src);
+                                    if (inturn_subpath_flows.equals(inturn_xfs)) {
                                         aggr_potential = true;
                                         continue;
                                     }
-                                // There's an exception thrown by getPrecedingLink if f is originating in subpaths_src
+                                // There's an exception thrown by getPrecedingTurn if f is originating in subpaths_src
                                 } catch (Exception e) {
                                 } 
                             }
@@ -477,8 +477,8 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         // First create the required sets.
         // Saves us from checking for an existing set every time.
-        Link inlink_flow;
-        Map<Pair<Path, Link>, Set<Flow>> xtx_subpath_grouped_inlink_original = new HashMap<Pair<Path, Link>, Set<Flow>>();
+        Turn inturn_flow;
+        Map<Pair<Path, Turn>, Set<Flow>> xtx_subpath_grouped_inturn_original = new HashMap<Pair<Path, Turn>, Set<Flow>>();
 
         for (Entry<Path, Set<Flow>> entry : xtx_subpath_grouped_original.entrySet()) {
             subpath_src = entry.getKey().getSource();
@@ -489,18 +489,18 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                     continue;
                 }
 
-                inlink_flow = flow.getPath().getPrecedingLink(subpath_src);
-                Set<Flow> flows_inlink = new HashSet<Flow>();
-                flows_inlink.add(flow);
+                inturn_flow = flow.getPath().getPrecedingTurn(subpath_src);
+                Set<Flow> flows_inturn = new HashSet<Flow>();
+                flows_inturn.add(flow);
 
-                Pair<Path, Link> key_pair = new Pair<Path, Link>(entry.getKey(), inlink_flow);
+                Pair<Path, Turn> key_pair = new Pair<Path, Turn>(entry.getKey(), inturn_flow);
 
                 // .put returns the previous value associated with key,
                 // or null if there was no mapping for key
-                Set<Flow> prev_flows_inlink = xtx_subpath_grouped_inlink_original.put(key_pair, flows_inlink);
+                Set<Flow> prev_flows_inturn = xtx_subpath_grouped_inturn_original.put(key_pair, flows_inturn);
 
-                if (prev_flows_inlink != null) {
-                    flows_inlink.addAll(prev_flows_inlink);
+                if (prev_flows_inturn != null) {
+                    flows_inturn.addAll(prev_flows_inturn);
                 }
             }
         }
@@ -509,7 +509,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         Server path_snk = path.getSink();
         LinkedList<Path> prolonged_paths;
-        for (Entry<Pair<Path, Link>, Set<Flow>> entry : xtx_subpath_grouped_inlink_original.entrySet()) {
+        for (Entry<Pair<Path, Turn>, Set<Flow>> entry : xtx_subpath_grouped_inturn_original.entrySet()) {
             Path current_subpath = entry.getKey().getKey();
             subpath_src = current_subpath.getSource();
             subpath_snk = current_subpath.getSink();
@@ -533,16 +533,16 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                     continue;
                 }
 
-                // Are there flow coming via the same inlink so prolongation has an effect?
-                if (xtx_subpath_grouped_inlink_original
-                        .get(new Pair<Path, Link>(potential_path, entry.getKey().getValue())) == null) {
+                // Are there flow coming via the same inturn so prolongation has an effect?
+                if (xtx_subpath_grouped_inturn_original
+                        .get(new Pair<Path, Turn>(potential_path, entry.getKey().getValue())) == null) {
                     continue;
                 }
 
                 // "fast" neglects the left-over operation that is the source of uncertainty we
                 // previously used as an excuse for exhaustive stuff.
                 // Maybe weigh with the flows' alpha and the length of their previously
-                // traversed network
+                // traversed server graph
 
                 prolonged_paths.add(potential_path);
             }
@@ -561,9 +561,9 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Set<Flow> flows_of_lower_priority = new HashSet<Flow>(flows_to_serve);
         flows_of_lower_priority.add(flow_of_interest);
 
-        Set<Flow> cross_flows = network.getFlows(path);
+        Set<Flow> cross_flows = server_graph.getFlows(path);
         cross_flows.removeAll(flows_of_lower_priority);
-        Map<Path, Set<Flow>> xtx_subpath_grouped = network.groupFlowsPerSubPath(path, cross_flows);
+        Map<Path, Set<Flow>> xtx_subpath_grouped = server_graph.groupFlowsPerSubPath(path, cross_flows);
 
         if (xtx_subpath_grouped.isEmpty()) {
             return new HashSet<ServiceCurve>(Collections.singleton(path.getServiceCurve()));
@@ -579,7 +579,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         // Derive the cross-flow substitutes with their arrival bound
         Set<List<Flow>> cross_flow_substitutes_set = new HashSet<List<Flow>>();
         cross_flow_substitutes_set.add(new LinkedList<Flow>());
-        Set<List<Flow>> arrival_bounds_link_permutations = new HashSet<List<Flow>>();
+        Set<List<Flow>> arrival_bounds_turn_permutations = new HashSet<List<Flow>>();
 
         for (Map.Entry<Path, Set<Flow>> entry : xtx_subpath_grouped.entrySet()) {
             // Create a single substitute flow
@@ -593,7 +593,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             substitute_flow_alias = substitute_flow_alias.concat("}");
 
             // Derive the substitute flow's arrival bound
-            Set<ArrivalCurve> alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+            Set<ArrivalCurve> alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
                     entry.getKey().getSource(), entry.getValue(), Flow.NULL_FLOW);
             // entry.getKey().getSource() because entry.getKey() is the common subpath of
             // path (above variable), i.e., start of interference on path.
@@ -608,7 +608,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             // * take the existing flow substitutes (that belong to different subpaths)
             // * and "multiply" the cross_flow_substitutes_set, i.e., create a new set each.
 
-            arrival_bounds_link_permutations.clear();
+            arrival_bounds_turn_permutations.clear();
             List<Flow> flow_list_tmp = new LinkedList<Flow>();
             for (ArrivalCurve alpha : alphas_xf_group) {
                 Curve.beautify(alpha);
@@ -621,15 +621,15 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                     flow_list_tmp.add(Flow.createDummyFlow(substitute_flow_alias, alpha, entry.getKey()));
 
                     // Add this list to the set of permutations
-                    arrival_bounds_link_permutations.add(new LinkedList<Flow>(flow_list_tmp));
+                    arrival_bounds_turn_permutations.add(new LinkedList<Flow>(flow_list_tmp));
                     // Prevent interaction with the clear() operation above.
                 }
             }
             // Override cross_flow_substitutes_set for the next cross-flow substitute and
             // its arrival bounds.
             cross_flow_substitutes_set.clear();
-            cross_flow_substitutes_set.addAll(arrival_bounds_link_permutations);
-            arrival_bounds_link_permutations.clear();
+            cross_flow_substitutes_set.addAll(arrival_bounds_turn_permutations);
+            arrival_bounds_turn_permutations.clear();
 
             if (result.map__server__alphas.get(entry.getKey().getSource()) == null) {
                 result.map__server__alphas.put(entry.getKey().getSource(), alphas_xf_group);

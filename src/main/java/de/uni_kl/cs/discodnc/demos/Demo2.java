@@ -68,7 +68,7 @@ public class Demo2 {
         s1.setUseGamma(false);
         s1.setUseExtraGamma(false);
 
-        network.addLink(s0, s1);
+        network.addTurn(s0, s1);
 
         ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 

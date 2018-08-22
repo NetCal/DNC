@@ -41,31 +41,31 @@ import java.util.List;
 
 /**
  * A flows path is a sequence of crossed buffers -- either represented by the
- * sequence servers (said buffers) or links connecting them.
+ * sequence servers (said buffers) or turns connecting them.
  * <p>
  * Remember for modeling purpose: A flow usually does not reach the output
- * buffer of its sink. Therefore a flow's path should not contain a link to it.
+ * buffer of its sink. Therefore a flow's path should not contain a turn to it.
  * Otherwise the flow interference pattern of the network will be too
  * pessimistic, yet, the results remain valid.
  */
 public class Path {
     private LinkedList<Server> path_servers;
-    private LinkedList<Link> path_links;
+    private LinkedList<Turn> path_turns;
 
     private Path() {
         path_servers = new LinkedList<Server>();
-        path_links = new LinkedList<Link>();
+        path_turns = new LinkedList<Turn>();
     }
 
-    protected Path(List<Server> path_servers, List<Link> path_links) {
-        // Sanity check should have been done by the network
+    protected Path(List<Server> path_servers, List<Turn> path_turns) {
+        // Sanity check should have been done by the server graph
         this.path_servers = new LinkedList<Server>(path_servers);
-        this.path_links = new LinkedList<Link>(path_links);
+        this.path_turns = new LinkedList<Turn>(path_turns);
     }
 
     protected Path(Path path) {
         this.path_servers = path.getServers();
-        this.path_links = path.getLinks();
+        this.path_turns = path.getTurns();
     }
 
     // Can be visible.
@@ -74,7 +74,7 @@ public class Path {
         path_servers = new LinkedList<Server>();
         path_servers.add(single_hop);
         
-        path_links = new LinkedList<Link>();
+        path_turns = new LinkedList<Turn>();
     }
 
     public static Path createEmptyPath() {
@@ -97,12 +97,12 @@ public class Path {
         return path_servers.size();
     }
 
-    public int numLinks() {
-        return path_links.size();
+    public int numTurns() {
+        return path_turns.size();
     }
 
-    public LinkedList<Link> getLinks() {
-        return new LinkedList<Link>(path_links);
+    public LinkedList<Turn> getTurns() {
+        return new LinkedList<Turn>(path_turns);
     }
 
     public LinkedList<Server> getServers() {
@@ -125,7 +125,7 @@ public class Path {
         }
 
         if (from == to) {
-            return new Path(new LinkedList<Server>(Collections.singleton(from)), new LinkedList<Link>());
+            return new Path(new LinkedList<Server>(Collections.singleton(from)), new LinkedList<Turn>());
         }
 
         int from_index = path_servers.indexOf(from);
@@ -137,41 +137,41 @@ public class Path {
         LinkedList<Server> subpath_servers = new LinkedList<Server>(path_servers.subList(from_index, to_index));
         subpath_servers.add(to);
 
-        List<Link> subpath_links = new LinkedList<Link>();
+        List<Turn> subpath_turns = new LinkedList<Turn>();
         if (subpath_servers.size() > 1) {
-            for (Link l : path_links) {
+            for (Turn l : path_turns) {
                 Server src_l = l.getSource();
                 Server snk_l = l.getDest();
                 if (subpath_servers.contains(src_l) && subpath_servers.contains(snk_l)) {
-                    subpath_links.add(l);
+                    subpath_turns.add(l);
                 }
             }
         }
 
-        return new Path(subpath_servers, subpath_links);
+        return new Path(subpath_servers, subpath_turns);
     }
 
-    public Link getPrecedingLink(Server s) throws Exception {
-        for (Link l : path_links) {
+    public Turn getPrecedingTurn(Server s) throws Exception {
+        for (Turn l : path_turns) {
             if (l.getDest().equals(s)) {
                 return l;
             }
         }
-        throw new Exception("No preceding link on the path found");
+        throw new Exception("No preceding turn on the path found");
     }
 
-    public Link getSucceedingLink(Server s) throws Exception {
-        for (Link l : path_links) {
+    public Turn getSucceedingTurn(Server s) throws Exception {
+        for (Turn l : path_turns) {
             if (l.getSource().equals(s)) {
                 return l;
             }
         }
-        throw new Exception("No succeeding link on the path found");
+        throw new Exception("No succeeding turn on the path found");
     }
     
     public Server getPrecedingServer(Server s) throws Exception {
         try {
-            return getPrecedingLink(s).getSource();
+            return getPrecedingTurn(s).getSource();
         } catch (Exception e) {
             throw new Exception("No preceding server on the path found");
         }
@@ -179,7 +179,7 @@ public class Path {
 
     public Server getSucceedingServer(Server s) throws Exception {
         try {
-            return getSucceedingLink(s).getDest();
+            return getSucceedingTurn(s).getDest();
         } catch (Exception e) {
             throw new Exception("No succeeding server on the path found");
         }
@@ -231,7 +231,7 @@ public class Path {
 
     /**
      * Returns the convolution of the maximum service curves of all servers on the
-     * given link path <code>path</code> that have the useExtraGamma flag set.<br>
+     * given turn path <code>path</code> that have the useExtraGamma flag set.<br>
      * If a server either has no maximum service curve set or useExtraGamma is
      * disabled, calculations take place with the default maximum service curve,
      * i.e., the zero delay burst curve, so the result will not be influenced.
@@ -256,7 +256,7 @@ public class Path {
 
     /**
      * Returns the convolution of the maximum service curves of all servers on the
-     * given link path <code>path</code><br>
+     * given turn path <code>path</code><br>
      * If a server has no maximum service curve, calculations take place with the
      * default maximum service curve, i.e., the zero delay burst curve, so the
      * result will not be influenced.
@@ -285,12 +285,12 @@ public class Path {
         }
 
         Path p = (Path) obj;
-        return path_servers.equals(p.getServers()) && path_links.equals(p.getLinks());
+        return path_servers.equals(p.getServers()) && path_turns.equals(p.getTurns());
     }
 
     @Override
     public int hashCode() {
-        return (int) Arrays.hashCode(path_servers.toArray()) * Arrays.hashCode(path_links.toArray());
+        return (int) Arrays.hashCode(path_servers.toArray()) * Arrays.hashCode(path_turns.toArray());
     }
     
     // --------------------------------------------------------------------------------------------------------------
@@ -322,20 +322,20 @@ public class Path {
     }
 
     /**
-     * Print path as series of links (short representation).
+     * Print path as series of turns (short representation).
      *  
      * @return String representation of the path.
      */
     @Override
     public String toString() {
-        if (path_links.isEmpty()) {
+        if (path_turns.isEmpty()) {
         	return toShortString();
         }
         
         StringBuffer path_str = new StringBuffer();
 
     	path_str.append("{");
-        for (Link l : path_links) {
+        for (Turn l : path_turns) {
         	path_str.append(l.toString());
         	path_str.append(",");
         }
@@ -348,19 +348,19 @@ public class Path {
 
     
     /**
-     * Print path as series of links (extended representation).
+     * Print path as series of turns (extended representation).
      * 
      * @return String representation of the path.
      */
     public String toExtendedString() {
-        if (path_links.isEmpty()) {
+        if (path_turns.isEmpty()) {
         	return toShortString();
         }
         
         StringBuffer path_str = new StringBuffer();
 
     	path_str.append("{");
-        for (Link l : path_links) {
+        for (Turn l : path_turns) {
         	path_str.append(l.toExtendedString());
         	path_str.append(",");
         }

@@ -40,7 +40,7 @@ import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_PerServer;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePmoo;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregateTandemMatching;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
@@ -108,44 +108,44 @@ public abstract class ArrivalBoundDispatch {
 			}
 		}
 
-		// Get cross-traffic from each predecessor. Call per link in order to get
+		// Get cross-traffic from each predecessor. Call per turn in order to get
 		// splitting points.
-		Set<ArrivalCurve> arrival_bounds_link;
-		Set<ArrivalCurve> arrival_bounds_link_permutations = new HashSet<ArrivalCurve>();
+		Set<ArrivalCurve> arrival_bounds_turn;
+		Set<ArrivalCurve> arrival_bounds_turn_permutations = new HashSet<ArrivalCurve>();
 
-		Iterator<Link> in_link_iter = network.getInLinks(server).iterator();
-		while (in_link_iter.hasNext()) {
+		Iterator<Turn> in_turn_iter = network.getInTurns(server).iterator();
+		while (in_turn_iter.hasNext()) {
 
-			Link in_l = in_link_iter.next();
+			Turn in_l = in_turn_iter.next();
 			Set<Flow> f_xfcaller_in_l = SetUtils.getIntersection(network.getFlows(in_l), f_xfcaller_server);
 			f_xfcaller_in_l.remove(flow_of_interest);
 
-			if (f_xfcaller_in_l.isEmpty()) { // Do not check links without flows of interest
+			if (f_xfcaller_in_l.isEmpty()) { // Do not check turns without flows of interest
 				continue;
 			}
 
-			arrival_bounds_link = computeArrivalBounds(network, configuration, in_l, f_xfcaller_in_l, flow_of_interest);
+			arrival_bounds_turn = computeArrivalBounds(network, configuration, in_l, f_xfcaller_in_l, flow_of_interest);
 
 			// Add the new bounds to the others:
-			// * Consider all the permutations of different bounds per in link.
+			// * Consider all the permutations of different bounds per in turn.
 			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
-			for (ArrivalCurve arrival_bound_link : arrival_bounds_link) {
-				Curve.beautify(arrival_bound_link);
+			for (ArrivalCurve arrival_bound_turn : arrival_bounds_turn) {
+				Curve.beautify(arrival_bound_turn);
 
 				for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-					arrival_bounds_link_permutations.add(Curve.add(arrival_bound_link, arrival_bound_exiting));
+					arrival_bounds_turn_permutations.add(Curve.add(arrival_bound_turn, arrival_bound_exiting));
 				}
 			}
 
 			arrival_bounds.clear();
-			arrival_bounds.addAll(arrival_bounds_link_permutations);
-			arrival_bounds_link_permutations.clear();
+			arrival_bounds.addAll(arrival_bounds_turn_permutations);
+			arrival_bounds_turn_permutations.clear();
 		}
 
 		return arrival_bounds;
 	}
 
-	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Link link,
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Turn turn,
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
@@ -162,21 +162,21 @@ public abstract class ArrivalBoundDispatch {
 				AggregatePboo_PerServer aggr_pboo_per_server = AggregatePboo_PerServer.getInstance();
 				aggr_pboo_per_server.setNetwork(network);
 				aggr_pboo_per_server.setConfiguration(configuration);
-				arrival_bounds_tmp = aggr_pboo_per_server.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				arrival_bounds_tmp = aggr_pboo_per_server.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 
 			case AGGR_PBOO_CONCATENATION:
 				AggregatePboo_Concatenation aggr_pboo_concatenation = AggregatePboo_Concatenation.getInstance();
 				aggr_pboo_concatenation.setNetwork(network);
 				aggr_pboo_concatenation.setConfiguration(configuration);
-				arrival_bounds_tmp = aggr_pboo_concatenation.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				arrival_bounds_tmp = aggr_pboo_concatenation.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 
 			case AGGR_PMOO:
 				AggregatePmoo aggr_pmoo = AggregatePmoo.getInstance();
 				aggr_pmoo.setNetwork(network);
 				aggr_pmoo.setConfiguration(configuration);
-				arrival_bounds_tmp = aggr_pmoo.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				arrival_bounds_tmp = aggr_pmoo.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 
 			/* 
@@ -188,14 +188,14 @@ public abstract class ArrivalBoundDispatch {
 				AggregateTandemMatching aggr_tm = AggregateTandemMatching.getInstance();
 				aggr_tm.setNetwork(network);
 				aggr_tm.setConfiguration(configuration);
-				arrival_bounds_tmp = aggr_tm.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				arrival_bounds_tmp = aggr_tm.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
 			case SEGR_PBOO:
 				for (Flow flow : flows_to_bound) {
 					SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
-					sfa.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+					sfa.performAnalysis(flow, flow.getSubPath(flow.getSource(), turn.getSource()));
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
 							singleFlowABs(configuration, flow.getArrivalCurve(), sfa.getLeftOverServiceCurves()));
@@ -212,7 +212,7 @@ public abstract class ArrivalBoundDispatch {
 			case SEGR_PMOO:
 				for (Flow flow : flows_to_bound) {
 					PmooAnalysis pmoo = new PmooAnalysis(network);
-					pmoo.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+					pmoo.performAnalysis(flow, flow.getSubPath(flow.getSource(), turn.getSource()));
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
 							singleFlowABs(configuration, flow.getArrivalCurve(), pmoo.getLeftOverServiceCurves()));
@@ -222,7 +222,7 @@ public abstract class ArrivalBoundDispatch {
 			case SEGR_TM:
 				for (Flow flow : flows_to_bound) {
 					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network);
-					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), link.getSource()));
+					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), turn.getSource()));
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
 							singleFlowABs(configuration, flow.getArrivalCurve(), tma.getLeftOverServiceCurves()));
@@ -232,7 +232,7 @@ public abstract class ArrivalBoundDispatch {
 			default:
 				System.out.println("Executing default arrival bounding: AGGR_PBOO_CONCATENATION");
 				AggregatePboo_Concatenation default_ab = new AggregatePboo_Concatenation(network, configuration);
-				arrival_bounds_tmp = default_ab.computeArrivalBound(link, flows_to_bound, flow_of_interest);
+				arrival_bounds_tmp = default_ab.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 			}
 

@@ -33,7 +33,7 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Server;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
@@ -45,14 +45,14 @@ import java.util.Set;
 
 public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
     private static SinkTree_AffineCurves instance = new SinkTree_AffineCurves();
-    protected ServerGraph network;
+    protected ServerGraph server_graph;
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();
 
     private SinkTree_AffineCurves() {
     }
 
     public SinkTree_AffineCurves(ServerGraph tree) {
-        this.network = tree;
+        this.server_graph = tree;
     }
 
     public static SinkTree_AffineCurves getInstance() {
@@ -68,18 +68,18 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
      * arrival bound directly, i.e., it does not compute and store the entire curves
      * resulting from intermediate computations in order to do so.
      *
-     * @param link             Link flow arrive on.
+     * @param turn             Turn flows arrive on.
      * @param f_xfcaller       Flows to bound.
      * @param flow_of_interest The flow of interest to handle with lowest priority.
      * @return Arrival bound.
      * @throws Exception Unable to get the flow's sub path for service curve convolution.
      */
-    public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
+    public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
             throws Exception {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         // Get flows of interest
-        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, network.getFlows(link));
+        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, server_graph.getFlows(turn));
         f_xfcaller_server.remove(flow_of_interest);
         if (f_xfcaller_server.isEmpty()) {
             return result;
@@ -96,7 +96,7 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
             R = 0.0;
             B = 0.0;
 
-            arrival_bound = ab_cache.getEntry(link, f);
+            arrival_bound = ab_cache.getEntry(turn, f);
             if (arrival_bound != null) {
                 R = arrival_bound.getUltAffineRate().doubleValue();
                 B = arrival_bound.getBurst().doubleValue();
@@ -106,12 +106,12 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
 
                 double sum_T = 0.0;
 
-                for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
+                for (Server s : f.getSubPath(f.getSource(), turn.getSource()).getServers()) {
                     sum_T = sum_T + s.getServiceCurve().getLatency().doubleValue();
                 }
                 B += R * sum_T;
 
-                ab_cache.addEntry(link, f, Curve.getFactory().createTokenBucket(R, B));
+                ab_cache.addEntry(turn, f, Curve.getFactory().createTokenBucket(R, B));
             }
             sum_R += R;
             sum_B += B;
@@ -126,18 +126,18 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
      * on entire curves instead of restricting to the relevant values like
      * computeArrivalBound does.
      *
-     * @param link             Link flow arrive on.
+     * @param turn             Turn flows arrive on.
      * @param f_xfcaller       Flows to bound.
      * @param flow_of_interest The flow of interest to handle with lowest priority.
      * @return Arrival bound.
      * @throws Exception Unable to get the flow's sub path for service curve convolution.
      */
-    public Set<ArrivalCurve> computeArrivalBoundDeConvolution(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
+    public Set<ArrivalCurve> computeArrivalBoundDeConvolution(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
             throws Exception {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         // Get flows of interest
-        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, network.getFlows(link));
+        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, server_graph.getFlows(turn));
         f_xfcaller_server.remove(flow_of_interest);
 
         if (f_xfcaller_server.isEmpty()) {
@@ -148,15 +148,15 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
         ArrivalCurve arrival_bound_f = Curve.getFactory().createZeroArrivals();
         ServiceCurve sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
         for (Flow f : f_xfcaller_server) {
-            arrival_bound_f = ab_cache.getEntry(link, f);
+            arrival_bound_f = ab_cache.getEntry(turn, f);
             if (arrival_bound_f == null) {
                 sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
-                for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
+                for (Server s : f.getSubPath(f.getSource(), turn.getSource()).getServers()) {
                     sc_s_subpath = Calculator.getInstance().getMinPlus().convolve(sc_s_subpath, s.getServiceCurve());
                 }
                 arrival_bound_f = Calculator.getInstance().getMinPlus().deconvolve(f.getArrivalCurve(), sc_s_subpath);
             }
-            ab_cache.addEntry(link, f, arrival_bound_f);
+            ab_cache.addEntry(turn, f, arrival_bound_f);
             arrival_bound = Curve.add(arrival_bound, arrival_bound_f);
         }
 
@@ -170,18 +170,18 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
      * convolution and deconvolution operation, respectively, to directly compute
      * the relevant parameters defining the resulting curves.
      *
-     * @param link             Link flow arrive on.
+     * @param turn             Turn flows arrive on.
      * @param f_xfcaller       Flows to bound.
      * @param flow_of_interest The flow of interest to handle with lowest priority.
      * @return Arrival bound.
      * @throws Exception Unable to get the flow's sub path for service curve convolution.
      */
-    public Set<ArrivalCurve> computeArrivalBoundDeConvolutionTBRL(Link link, Set<Flow> f_xfcaller,
+    public Set<ArrivalCurve> computeArrivalBoundDeConvolutionTBRL(Turn turn, Set<Flow> f_xfcaller,
                                                                   Flow flow_of_interest) throws Exception {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         // Get flows of interest
-        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, network.getFlows(link));
+        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, server_graph.getFlows(turn));
         f_xfcaller_server.remove(flow_of_interest);
 
         if (f_xfcaller_server.isEmpty()) {
@@ -192,15 +192,15 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
         ArrivalCurve arrival_bound_f = Curve.getFactory().createZeroArrivals();
         ServiceCurve sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
         for (Flow f : f_xfcaller_server) {
-            arrival_bound_f = ab_cache.getEntry(link, f);
+            arrival_bound_f = ab_cache.getEntry(turn, f);
             if (arrival_bound_f == null) {
                 sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
-                for (Server s : f.getSubPath(f.getSource(), link.getSource()).getServers()) {
+                for (Server s : f.getSubPath(f.getSource(), turn.getSource()).getServers()) {
                     sc_s_subpath = Calculator.getInstance().getMinPlus().convolve(sc_s_subpath, s.getServiceCurve());
                 }
                 arrival_bound_f = Calculator.getInstance().getMinPlus().deconvolve(f.getArrivalCurve(), sc_s_subpath);
             }
-            ab_cache.addEntry(link, f, arrival_bound_f);
+            ab_cache.addEntry(turn, f, arrival_bound_f);
             arrival_bound = Curve.add(arrival_bound, arrival_bound_f);
         }
 
@@ -209,24 +209,24 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
     }
 
     /**
-     * In homogeneous networks we can simply multiply the common latency with the
+     * In homogeneous server_graphs we can simply multiply the common latency with the
      * length of a flow's path instead of iterating over its servers and sum up for
      * each one's value individually.
      * <p>
      * This code path works similar to computeArrivalBound in the sense that it does
      * not operate on intermediate curves.
      *
-     * @param link             Link flow arrive on.
+     * @param turn             Turn flows arrive on.
      * @param f_xfcaller       Flows to bound.
      * @param flow_of_interest The flow of interest to handle with lowest priority.
      * @return Arrival bounds.
      */
-    public Set<ArrivalCurve> computeArrivalBoundHomogeneous(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
+    public Set<ArrivalCurve> computeArrivalBoundHomogeneous(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
             throws Exception {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
 
         // Get flows of interest
-        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, network.getFlows(link));
+        Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_xfcaller, server_graph.getFlows(turn));
         f_xfcaller_server.remove(flow_of_interest);
         if (f_xfcaller_server.size() == 0) {
             return result;
@@ -240,7 +240,7 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
         for (Flow f : f_xfcaller_server) {
             sum_R += f.getArrivalCurve().getUltAffineRate().doubleValue();
 
-            sum_T = f.getSubPath(f.getSource(), link.getSource()).numServers()
+            sum_T = f.getSubPath(f.getSource(), turn.getSource()).numServers()
                     * f.getSource().getServiceCurve().getLatency().doubleValue();
             sum_B += f.getArrivalCurve().getBurst().doubleValue()
                     + f.getArrivalCurve().getUltAffineRate().doubleValue() * sum_T;
@@ -252,7 +252,7 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
 }
 
 // We use a specialized cache here that stores arrival bounds for single flows
-// on specific links.
+// on specific turns.
 // See
 // "Boosting Sensor Network Calculus by Thoroughly Bounding Cross-Traffic"
 // (Steffen Bondorf and Jens B. Schmitt),
@@ -260,29 +260,29 @@ public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
 // (INFOCOM 2015).
 // for more details.
 class PmooSinkTreeTbRlABCache {
-    Map<Link, Map<Flow, ArrivalCurve>> map__link__entries = new HashMap<Link, Map<Flow, ArrivalCurve>>();
+    Map<Turn, Map<Flow, ArrivalCurve>> map__turn__entries = new HashMap<Turn, Map<Flow, ArrivalCurve>>();
 
-    protected ArrivalCurve getEntry(Link link, Flow flow) {
-        Map<Flow, ArrivalCurve> entries_link = map__link__entries.get(link);
-        if (entries_link != null) {
-            return entries_link.get(flow);
+    protected ArrivalCurve getEntry(Turn turn, Flow flow) {
+        Map<Flow, ArrivalCurve> entries_turn = map__turn__entries.get(turn);
+        if (entries_turn != null) {
+            return entries_turn.get(flow);
         } else {
             // Anticipated following addEntry
-            entries_link = new HashMap<Flow, ArrivalCurve>();
-            map__link__entries.put(link, entries_link);
+            entries_turn = new HashMap<Flow, ArrivalCurve>();
+            map__turn__entries.put(turn, entries_turn);
 
             return null;
         }
     }
 
-    protected void addEntry(Link link, Flow flow, ArrivalCurve arrival_bound) {
-        Map<Flow, ArrivalCurve> entries_link = map__link__entries.get(link);
-        if (entries_link == null) {
-            entries_link = new HashMap<Flow, ArrivalCurve>();
-            map__link__entries.put(link, entries_link);
-            entries_link = map__link__entries.get(link);
+    protected void addEntry(Turn turn, Flow flow, ArrivalCurve arrival_bound) {
+        Map<Flow, ArrivalCurve> entries_turn = map__turn__entries.get(turn);
+        if (entries_turn == null) {
+            entries_turn = new HashMap<Flow, ArrivalCurve>();
+            map__turn__entries.put(turn, entries_turn);
+            entries_turn = map__turn__entries.get(turn);
         }
 
-        entries_link.put(flow, arrival_bound);
+        entries_turn.put(flow, arrival_bound);
     }
 }

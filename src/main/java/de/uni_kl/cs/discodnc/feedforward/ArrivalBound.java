@@ -30,22 +30,22 @@ package de.uni_kl.cs.discodnc.feedforward;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 
 import java.util.Set;
 
 public interface ArrivalBound {
-    ServerGraph getNetwork();
+    ServerGraph getServerGraph();
 
     // --------------------------------------------------------------------------------------------------------------
     // Interface
     // --------------------------------------------------------------------------------------------------------------
-    void setNetwork(ServerGraph network);
+    void setNetwork(ServerGraph server_graph);
 
     public AnalysisConfig getConfiguration();
 
     public void setConfiguration(AnalysisConfig configuration);
 
-    Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception;
+    Set<ArrivalCurve> computeArrivalBound(Turn turn, Flow flow_of_interest) throws Exception;
 }

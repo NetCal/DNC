@@ -53,7 +53,7 @@ public class Flow {
 
     private String alias;
     /**
-     * The link path the flow traverses incl explicit sink
+     * The turn path the flow traverses incl explicit sink
      */
     private Path path;
 
@@ -61,7 +61,7 @@ public class Flow {
      * @param id    The flow's id (unique).
      * @param alias The flow's alias (not necessarily unique).
      * @param ac    The flow's arrival curve.
-     * @param path  The link path the flow traverses.
+     * @param path  The turn path the flow traverses.
      */
     protected Flow(int id, String alias, ArrivalCurve ac, Path path) {
         this.id = id;
@@ -82,7 +82,7 @@ public class Flow {
      *
      * @param alias The flow's alias (not necessarily unique).
      * @param ac    The flow's arrival curve.
-     * @param path  The link path the flow traverses.
+     * @param path  The turn path the flow traverses.
      * @return a dummy flow
      */
     public static Flow createDummyFlow(String alias, ArrivalCurve ac, Path path) {
@@ -186,8 +186,8 @@ public class Flow {
         return new LinkedList<Server>(path.getServers());
     }
 
-    public List<Link> getLinksOnPath() throws Exception {
-        return new LinkedList<Link>(path.getLinks());
+    public List<Turn> getTurnsOnPath() throws Exception {
+        return new LinkedList<Turn>(path.getTurns());
     }
 
     /**
@@ -200,12 +200,12 @@ public class Flow {
         return path.getSubPath(from, to);
     }
 
-    public Link getPrecedingLink(Server s) throws Exception {
-        return path.getPrecedingLink(s);
+    public Turn getPrecedingTurn(Server s) throws Exception {
+        return path.getPrecedingTurn(s);
     }
 
-    public Link getSucceedingLink(Server s) throws Exception {
-        return path.getSucceedingLink(s);
+    public Turn getSucceedingTurn(Server s) throws Exception {
+        return path.getSucceedingTurn(s);
     }
 
     public Server getPrecedingServer(Server s) throws Exception {

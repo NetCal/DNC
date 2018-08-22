@@ -41,7 +41,7 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Path;
 import de.uni_kl.cs.discodnc.server_graph.Server;
@@ -60,14 +60,14 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     private SeparateFlowAnalysis() {
     }
 
-    public SeparateFlowAnalysis(ServerGraph network) {
-        super.network = network;
+    public SeparateFlowAnalysis(ServerGraph server_graph) {
+        super.server_graph = server_graph;
         super.configuration = new AnalysisConfig();
         super.result = new SeparateFlowResults();
     }
 
-    public SeparateFlowAnalysis(ServerGraph network, AnalysisConfig configuration) {
-        super.network = network;
+    public SeparateFlowAnalysis(ServerGraph server_graph, AnalysisConfig configuration) {
+        super.server_graph = server_graph;
         super.configuration = configuration;
         super.result = new SeparateFlowResults();
     }
@@ -95,7 +95,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        result = tandemAnalysis(network, flow_of_interest, path, Collections.singleton(flow_of_interest), configuration);
+        result = tandemAnalysis(server_graph, flow_of_interest, path, Collections.singleton(flow_of_interest), configuration);
 
         Num delay_bound__beta_e2e;
         Num backlog_bound__beta_e2e;
@@ -119,10 +119,10 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
     
     @Deprecated
     protected Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve) throws Exception {
-    	return tandemAnalysis(network,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
+    	return tandemAnalysis(server_graph,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
     }
 
-    public static SeparateFlowResults tandemAnalysis(ServerGraph network, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
+    public static SeparateFlowResults tandemAnalysis(ServerGraph server_graph, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
             throws Exception {
     	SeparateFlowResults result = new SeparateFlowResults();
         Set<ServiceCurve> betas_lo_path = new HashSet<ServiceCurve>();
@@ -130,19 +130,19 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 
         // This version iterates over the servers on the path and 
         // computes the service curve set hop-by-hop.
-        // You could also call network.getFlowsPerServer( path, {foi} \cup {flows_to_serve} )
+        // You could also call server_graph.getFlowsPerServer( path, {foi} \cup {flows_to_serve} )
         // and use that result. That would be more abstract and in line with the PMOO
         // analysis's way.
 
         // Convolve all left over service curves, server by server
 
-        Link link_from_prev_s;
+        Turn turn_from_prev_s;
         Set<Flow> f_xxfcaller_server_onpath;
         Set<Flow> f_xxfcaller_server_src;
         
         for (Server server : path.getServers()) {
 			// Find the set of flows that interfere, either already on or coming off the common_subpath. 
-            Set<Flow> f_xxfcaller_server = network.getFlows(server);
+            Set<Flow> f_xxfcaller_server = server_graph.getFlows(server);
             f_xxfcaller_server.removeAll(flows_to_serve);	// We compute their beta l.o.
             f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
 
@@ -166,13 +166,13 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 				
 				Path foi_path = flow_of_interest.getPath();
 	        	if( foi_path.getServers().contains(server) && !foi_path.isSource(server) ) { 
-	        		link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
-	        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, network.getFlows(link_from_prev_s));
+	        		turn_from_prev_s = server_graph.findTurn(foi_path.getPrecedingServer(server), server);
+	        		f_xxfcaller_server_onpath = SetUtils.getIntersection(f_xxfcaller_server, server_graph.getFlows(turn_from_prev_s));
 	        	}
 			}
                     	
         	// The interfering flows originating at the current server.
-        	f_xxfcaller_server_src = network.getSourceFlows(server);
+        	f_xxfcaller_server_src = server_graph.getSourceFlows(server);
         	f_xxfcaller_server_src.remove(flow_of_interest);
         	f_xxfcaller_server_src.removeAll(flows_to_serve);
 
@@ -187,19 +187,19 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         	List<Set<ArrivalCurve>> ac_sets_to_combine = new LinkedList<Set<ArrivalCurve>>();
         	
         	if(!f_xxfcaller_server_src.isEmpty()) {
-        		ac_sets_to_combine.add(Collections.singleton(network.getSourceFlowArrivalCurve(server, f_xxfcaller_server_src)));
+        		ac_sets_to_combine.add(Collections.singleton(server_graph.getSourceFlowArrivalCurve(server, f_xxfcaller_server_src)));
         	}
         	
         	if(!f_xxfcaller_server_onpath.isEmpty()) {
         		ac_sets_to_combine.add(
-        				ArrivalBoundDispatch.computeArrivalBounds(network, configuration ,server, f_xxfcaller_server_onpath, flow_of_interest));
+        				ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration ,server, f_xxfcaller_server_onpath, flow_of_interest));
         	}
         	
         	// If, during this method's use in arrival bounding, we already left the foi's path,
 			// flow_of_interest was set to Flow.NULL_FLOW before. If not, do it again now, that won't harm.
         	if(!f_xxfcaller_server.isEmpty()) {
         		ac_sets_to_combine.add(
-        			ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW));
+        			ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration, server, f_xxfcaller_server, Flow.NULL_FLOW));
         	}
         	
         	if( ac_sets_to_combine.isEmpty() ) {

@@ -29,9 +29,9 @@
 package de.uni_kl.cs.discodnc.server_graph;
 
 public interface ServerGraphFactory {
-    ServerGraph createNetwork();
+    ServerGraph createServerGraph();
 
-    ServerGraph getNetwork();
+    ServerGraph getServerGraph();
 
     void reinitializeCurves();
 }

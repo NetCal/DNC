@@ -37,9 +37,9 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.SinkTree_AffineCurves;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Server;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 
 import java.util.ArrayList;
 
@@ -88,31 +88,31 @@ public class Backlog {
 		SinkTree_AffineCurves sink_tree_bound = new SinkTree_AffineCurves(tree);
 		ArrivalCurve arrivals_at_root = tree.getSourceFlowArrivalCurve(root);
 
-		for (Link link : tree.getInLinks(root)) {
+		for (Turn turn : tree.getInTurns(root)) {
 			switch (sink_tree_ab) {
 			case SINKTREE_AFFINE_CONV:
 				// will only be one curve
 				arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
-						.computeArrivalBoundDeConvolution(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next());
+						.computeArrivalBoundDeConvolution(turn, tree.getFlows(turn), Flow.NULL_FLOW).iterator().next());
 				break;
 
 			case SINKTREE_AFFINE_CONV_DECONV:
 				arrivals_at_root = Curve.add(arrivals_at_root,
-						sink_tree_bound.computeArrivalBoundDeConvolutionTBRL(link, tree.getFlows(link), Flow.NULL_FLOW)
+						sink_tree_bound.computeArrivalBoundDeConvolutionTBRL(turn, tree.getFlows(turn), Flow.NULL_FLOW)
 								.iterator().next()); // will only be one curve
 				break;
 
 			case SINKTREE_AFFINE_HOMO:
 				// will only be one curve
 				arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
-						.computeArrivalBoundHomogeneous(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next());
+						.computeArrivalBoundHomogeneous(turn, tree.getFlows(turn), Flow.NULL_FLOW).iterator().next());
 				break;
 
 			case SINKTREE_AFFINE:
 			default:
 				// will only be one curve
 				arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
-						.computeArrivalBound(link, tree.getFlows(link), Flow.NULL_FLOW).iterator().next());
+						.computeArrivalBound(turn, tree.getFlows(turn), Flow.NULL_FLOW).iterator().next());
 				break;
 			}
 		}

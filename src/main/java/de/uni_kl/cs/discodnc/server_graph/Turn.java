@@ -28,13 +28,13 @@
 
 package de.uni_kl.cs.discodnc.server_graph;
 
-public class Link {
+public class Turn {
     private int id;
     private String alias;
     private Server src;
     private Server dest;
 
-    protected Link(int id, String alias, Server source, Server destination) {
+    protected Turn(int id, String alias, Server source, Server destination) {
         this.id = id;
         this.alias = alias;
         src = source;
@@ -63,11 +63,11 @@ public class Link {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Link)) {
+        if (obj == null || !(obj instanceof Turn)) {
             return false;
         }
 
-        Link l = (Link) obj;
+        Turn l = (Turn) obj;
         return (this.src != null ? this.src.equals(l.src) : l.src == null)
                 && (this.dest != null ? this.dest.equals(l.dest) : l.dest == null);
     }
@@ -82,46 +82,46 @@ public class Link {
     // --------------------------------------------------------------------------------------------------------------
 
     private StringBuffer commonStringPrefix() {
-    	StringBuffer link_str_prefix = new StringBuffer();
+    	StringBuffer turn_str_prefix = new StringBuffer();
 
-     	link_str_prefix.append("Link(");
-     	link_str_prefix.append(alias);
-     	link_str_prefix.append(", ");
-     	link_str_prefix.append(Integer.toString(id));
+     	turn_str_prefix.append("Turn(");
+     	turn_str_prefix.append(alias);
+     	turn_str_prefix.append(", ");
+     	turn_str_prefix.append(Integer.toString(id));
      	
-     	return link_str_prefix;
+     	return turn_str_prefix;
     }
     
     public String toShortString() {
-    	StringBuffer link_str = commonStringPrefix();
+    	StringBuffer turn_str = commonStringPrefix();
     	
-    	link_str.append(")");
+    	turn_str.append(")");
     	
-        return link_str.toString();
+        return turn_str.toString();
     }
 
     @Override
     public String toString() {
-    	StringBuffer link_str = new StringBuffer();
+    	StringBuffer turn_str = new StringBuffer();
 
-     	link_str.append(",");
-     	link_str.append(src.toShortString());
-     	link_str.append(", ");
-     	link_str.append(dest.toShortString());
-     	link_str.append(")");
+     	turn_str.append(",");
+     	turn_str.append(src.toShortString());
+     	turn_str.append(", ");
+     	turn_str.append(dest.toShortString());
+     	turn_str.append(")");
      	
-     	return link_str.toString();
+     	return turn_str.toString();
     }
 
     public String toExtendedString() {
-    	StringBuffer link_str = new StringBuffer();
+    	StringBuffer turn_str = new StringBuffer();
 
-     	link_str.append(",");
-     	link_str.append(src.toExtendedString());
-     	link_str.append(", ");
-     	link_str.append(dest.toExtendedString());
-     	link_str.append(")");
+     	turn_str.append(",");
+     	turn_str.append(src.toExtendedString());
+     	turn_str.append(", ");
+     	turn_str.append(dest.toExtendedString());
+     	turn_str.append(")");
      	
-     	return link_str.toString();
+     	return turn_str.toString();
     }
 }

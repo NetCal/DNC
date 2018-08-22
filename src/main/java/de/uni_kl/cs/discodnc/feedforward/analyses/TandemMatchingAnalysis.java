@@ -42,7 +42,7 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.Bound;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Path;
 import de.uni_kl.cs.discodnc.server_graph.Server;
@@ -64,14 +64,14 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		return ((TandemMatchingResults) result).betas_e2e;
 	}
 	
-	public TandemMatchingAnalysis( ServerGraph network ) {
-        super.network = network;
+	public TandemMatchingAnalysis(ServerGraph server_graph) {
+        super.server_graph = server_graph;
         super.configuration = new AnalysisConfig();
 		super.result = new TandemMatchingResults();
 	}
 	
-	public TandemMatchingAnalysis( ServerGraph network, AnalysisConfig configuration ) {
-        super.network = network;
+	public TandemMatchingAnalysis(ServerGraph server_graph, AnalysisConfig configuration) {
+        super.server_graph = server_graph;
         super.configuration = configuration;
 		super.result = new TandemMatchingResults();
 	}
@@ -124,23 +124,23 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 	}
 	
 	public static List<List<Path>> getAllSubPathCombinations( Path path ) {
-		List<Link> path_links = path.getLinks();
-		int path_length = path_links.size();
+		List<Turn> path_turns = path.getTurns();
+		int path_length = path_turns.size();
 
 		List<List<Path>> sub_path_combinations = new LinkedList<List<Path>>();
 		
-		// Get all binary combinations (Link = cut it Y/N)
-		// Store as list of links to cut
+		// Get all binary combinations (turn = cut it Y/N)
+		// Store as list of turns to cut
 
 		sub_path_combinations.add( new LinkedList<Path>( Collections.singleton( path ) ) );	
 		
 		for ( int i = 1; i < (int) Math.pow( 2, path_length ); i++ ) {
 			String s = Integer.toBinaryString( i );
 			
-			LinkedList<Link> cuts = new LinkedList<Link>();
+			LinkedList<Turn> cuts = new LinkedList<Turn>();
 			for( int j = s.length() - 1; j >= 0; j-- ) {
 				if( s.charAt( j ) == '1' ) {
-					cuts.add( path_links.get( s.length() - j - 1) );
+					cuts.add( path_turns.get( s.length() - j - 1) );
 				}
 			}
 
@@ -210,9 +210,9 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		Set<Flow> flows_of_lower_priority = new HashSet<Flow>( flows_to_serve );
 		flows_of_lower_priority.add( flow_of_interest );
 		
-		Set<Flow> cross_flows = network.getFlows( path );
+		Set<Flow> cross_flows = server_graph.getFlows( path );
 		cross_flows.removeAll( flows_of_lower_priority );
-		Map<Pair<Link,Path>,Set<Flow>> xtx_subpath_grouped = network.groupFlowsPerInlinkSubPath( path, cross_flows );
+		Map<Pair<Turn,Path>,Set<Flow>> xtx_subpath_grouped = server_graph.groupFlowsPerInturnSubPath( path, cross_flows );
 		
 		if( xtx_subpath_grouped.isEmpty() ) {
 			return new HashSet<ServiceCurve>( Collections.singleton( path.getServiceCurve() ) );
@@ -221,11 +221,11 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		// Derive the cross-flow substitutes with their arrival bound
 		Set<List<Flow>> cross_flow_substitutes_set = new HashSet<List<Flow>>();
 		cross_flow_substitutes_set.add( new LinkedList<Flow>() );
-		Set<List<Flow>> arrival_bounds_link_permutations = new HashSet<List<Flow>>();
+		Set<List<Flow>> arrival_bounds_turn_permutations = new HashSet<List<Flow>>();
 
 		Server path_src;
 		
-		for ( Entry<Pair<Link,Path>,Set<Flow>> entry : xtx_subpath_grouped.entrySet() ) {
+		for ( Entry<Pair<Turn,Path>,Set<Flow>> entry : xtx_subpath_grouped.entrySet() ) {
 		// Create a single substitute flow 
 			
 			path_src = entry.getKey().getSecond().getSource();
@@ -244,14 +244,14 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 
 			Path foi_path = flow_of_interest.getPath();
 			
-	 		if( foi_path.getLinks().contains( entry.getKey().getFirst() ) ) {
-	 			alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds( network, configuration, path_src, entry.getValue(), flow_of_interest );
+	 		if( foi_path.getTurns().contains( entry.getKey().getFirst() ) ) {
+	 			alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds( server_graph, configuration, path_src, entry.getValue(), flow_of_interest );
 	 		} else {
 	 			// We are leaving the flow_of_interest's path with this arrival bounding.
 	 			// Therefore, worst-case arbitrary multiplexing cannot be modeled with 
 				// assigning lowest prioritization to the flow of interest anymore (cf. rejoining flows)
 	 			// and we call computeArrivalBounds with Flow.NULL_FLOW instead of flow_of_interest.
-			 	alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds( network, configuration, path_src, entry.getValue(), Flow.NULL_FLOW );
+			 	alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds( server_graph, configuration, path_src, entry.getValue(), Flow.NULL_FLOW );
 	 		}
 
 			// Add the new bounds to the others by creating all the permutations.
@@ -259,7 +259,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 			// * take the existing flow substitutes (that belong to different subpaths)
 			// * and "multiply" the cross_flow_substitutes_set, i.e., create a new set each.
 	 		
-			arrival_bounds_link_permutations.clear();
+			arrival_bounds_turn_permutations.clear();
  			List<Flow> flow_list_tmp = new LinkedList<Flow>();
  			for( ArrivalCurve alpha : alphas_xf_group ) {
  				Curve.beautify(alpha);
@@ -271,13 +271,13 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 	 				flow_list_tmp.add( Flow.createDummyFlow( substitute_flow_alias, alpha, entry.getKey().getSecond() ) );
 	 				
 	 				// Add this list to the set of permutations
-	 				arrival_bounds_link_permutations.add( new LinkedList<Flow>( flow_list_tmp ) ); // Prevent interaction with the clear() operation above.
+	 				arrival_bounds_turn_permutations.add( new LinkedList<Flow>( flow_list_tmp ) ); // Prevent interaction with the clear() operation above.
 	 			}
 	 		} 
 	 		// Override cross_flow_substitutes_set for the next cross-flow substitute and its arrival bounds.
 			cross_flow_substitutes_set.clear();
-			cross_flow_substitutes_set.addAll( arrival_bounds_link_permutations );
-			arrival_bounds_link_permutations.clear();
+			cross_flow_substitutes_set.addAll( arrival_bounds_turn_permutations );
+			arrival_bounds_turn_permutations.clear();
 			
 			if ( result.map__server__alphas.get( path_src ) == null ) {
 				result.map__server__alphas.put( path_src, alphas_xf_group );

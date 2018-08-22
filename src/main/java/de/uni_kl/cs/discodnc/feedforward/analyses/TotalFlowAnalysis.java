@@ -57,14 +57,14 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     private TotalFlowAnalysis() {
     }
 
-    public TotalFlowAnalysis(ServerGraph network) {
-        super.network = network;
+    public TotalFlowAnalysis(ServerGraph server_graph) {
+        super.server_graph = server_graph;
         super.configuration = new AnalysisConfig();
         super.result = new TotalFlowResults();
     }
 
-    public TotalFlowAnalysis(ServerGraph network, AnalysisConfig configuration) {
-        super.network = network;
+    public TotalFlowAnalysis(ServerGraph server_graph, AnalysisConfig configuration) {
+        super.server_graph = server_graph;
         super.configuration = configuration;
         super.result = new TotalFlowResults();
     }
@@ -92,10 +92,10 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
         // Here's the difference to SFA:
         // TFA needs the arrival bound of all flows at the server, including the flow of
         // interest.
-        Set<ArrivalCurve> alphas_server = ArrivalBoundDispatch.computeArrivalBounds(network, configuration, server);
+        Set<ArrivalCurve> alphas_server = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration, server);
         // Although the TFA has a flow of interest, DO NOT call
-        // computeArrivalBounds( Network network, AnalysisConfig configuration, Server
-        // 							server, Set<Flow> flows_to_bound, Flow flow_of_interest ).
+        // computeArrivalBounds(ServerGraph server_graph, AnalysisConfig configuration, Server
+        // 							server, Set<Flow> flows_to_bound, Flow flow_of_interest).
         // Otherwise, we would not get the flow of interest's arrivals at this server.
 
         Set<Num> delay_bounds_server = new HashSet<Num>();
@@ -117,7 +117,7 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
 
             // Is this a single flow, i.e., does fifo per micro flow hold?
             boolean fifo_per_micro_flow = false;
-            if (network.getFlows(server).size() == 1) {
+            if (server_graph.getFlows(server).size() == 1) {
                 fifo_per_micro_flow = true;
             }
 

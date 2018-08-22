@@ -65,7 +65,7 @@ import java.util.Set;
  * <p>
  * A flows path, however, is a sequence of crossed buffers. As a flow usually
  * does not reach the output buffer of its sink, the path should not contain a
- * link to it. Otherwise the flow interference pattern of the server graph will be
+ * turn to it. Otherwise the flow interference pattern of the server graph will be
  * too pessimistic, yet, the results remain valid.
  * <p>
  * In practice, on can model a sink explicitly by setting the server's service
@@ -74,23 +74,23 @@ import java.util.Set;
  */
 public class ServerGraph {
 	private Set<Server> servers;
-	private Set<Link> links;
+	private Set<Turn> turns;
 	private Set<Flow> flows;
 
-	private Map<Server, Set<Link>> map__server__in_links;
-	private Map<Server, Set<Link>> map__server__out_links;
+	private Map<Server, Set<Turn>> map__server__in_turns;
+	private Map<Server, Set<Turn>> map__server__out_turns;
 
 	private Map<Server, Set<Flow>> map__server__flows;
 	private Map<Server, Set<Flow>> map__server__source_flows;
 
-	private Map<Link, Set<Flow>> map__link__flows;
+	private Map<Turn, Set<Flow>> map__turn__flows;
 
 	private String server_default_name_prefix = "s";
 	private int server_id_counter = 0;
 	private Map<Integer, Server> map__id__server;
 
-	private String link_default_name_prefix = "l";
-	private int link_id_counter = 0;
+	private String turn_default_name_prefix = "t";
+	private int turn_id_counter = 0;
 
 	private String flow_default_name_prefix = "f";
 	private int flow_id_counter = 0;
@@ -98,24 +98,24 @@ public class ServerGraph {
 
 	public ServerGraph() {
 		servers = new HashSet<Server>();
-		links = new HashSet<Link>();
+		turns = new HashSet<Turn>();
 		flows = new HashSet<Flow>();
 
 		map__id__server = new HashMap<Integer, Server>();
 		map__id__flow = new HashMap<Integer, Flow>();
 
-		map__server__in_links = new HashMap<Server, Set<Link>>();
-		map__server__out_links = new HashMap<Server, Set<Link>>();
+		map__server__in_turns = new HashMap<Server, Set<Turn>>();
+		map__server__out_turns = new HashMap<Server, Set<Turn>>();
 
 		map__server__flows = new HashMap<Server, Set<Flow>>();
 		map__server__source_flows = new HashMap<Server, Set<Flow>>();
 
-		map__link__flows = new HashMap<Link, Set<Flow>>();
+		map__turn__flows = new HashMap<Turn, Set<Flow>>();
 	}
 
-	private void remove(Set<Server> servers_to_remove, Set<Link> links_to_remove, Set<Flow> flows_to_remove) {
+	private void remove(Set<Server> servers_to_remove, Set<Turn> turns_to_remove, Set<Flow> flows_to_remove) {
 		// Make sure that you do not remove a map's key before the according entries:
-		// (flows before servers and links) & (links before servers)
+		// (flows before servers and turns) & (turns before servers)
 
 		// prevent ConcurrentModificationException
 		Set<Flow> flows_to_remove_cpy = new HashSet<Flow>(flows_to_remove);
@@ -124,8 +124,8 @@ public class ServerGraph {
 			flows.remove(f);
 			map__id__flow.remove(f.getId());
 
-			for (Link l : f.getPath().getLinks()) {
-				map__link__flows.get(l).remove(f);
+			for (Turn t : f.getPath().getTurns()) {
+				map__turn__flows.get(t).remove(f);
 			}
 
 			for (Server s : f.getPath().getServers()) {
@@ -136,14 +136,14 @@ public class ServerGraph {
 		}
 
 		// prevent ConcurrentModificationException
-		Set<Link> links_to_remove_cpy = new HashSet<Link>(links_to_remove);
+		Set<Turn> turns_to_remove_cpy = new HashSet<Turn>(turns_to_remove);
 
-		for (Link l : links_to_remove_cpy) {
-			links.remove(l);
+		for (Turn t : turns_to_remove_cpy) {
+			turns.remove(t);
 
-			map__link__flows.remove(l);
-			map__server__in_links.get(l.getDest()).remove(l);
-			map__server__out_links.get(l.getSource()).remove(l);
+			map__turn__flows.remove(t);
+			map__server__in_turns.get(t.getDest()).remove(t);
+			map__server__out_turns.get(t.getSource()).remove(t);
 		}
 
 		// prevent ConcurrentModificationException
@@ -156,8 +156,8 @@ public class ServerGraph {
 
 			map__server__flows.remove(s);
 
-			map__server__in_links.remove(s);
-			map__server__out_links.remove(s);
+			map__server__in_turns.remove(s);
+			map__server__out_turns.remove(s);
 			map__server__source_flows.remove(s);
 		}
 	}
@@ -256,8 +256,8 @@ public class ServerGraph {
 	}
 
 	private void updateServerAdditionInternally(Server new_server) {
-		map__server__in_links.put(new_server, new HashSet<Link>());
-		map__server__out_links.put(new_server, new HashSet<Link>());
+		map__server__in_turns.put(new_server, new HashSet<Turn>());
+		map__server__out_turns.put(new_server, new HashSet<Turn>());
 
 		map__server__flows.put(new_server, new HashSet<Flow>());
 		map__server__source_flows.put(new_server, new HashSet<Flow>());
@@ -275,7 +275,7 @@ public class ServerGraph {
 			throw new Exception("Server to be removed is not in this server graph's list of servers");
 		}
 
-		remove(Collections.singleton(s), getIncidentLinks(s), map__server__flows.get(s));
+		remove(Collections.singleton(s), getIncidentTurns(s), map__server__flows.get(s));
 	}
 
 	public Set<Flow> getSourceFlows(Server source) {
@@ -358,26 +358,26 @@ public class ServerGraph {
 	}
 
 	public int inDegree(Server s) {
-		return getInLinks(s).size();
+		return getInTurns(s).size();
 	}
 
 	public int outDegree(Server s) {
-		return getOutLinks(s).size();
+		return getOutTurns(s).size();
 	}
 
 	/**
 	 * Returns a new set consisting of references to the servers.
 	 *
 	 * @param s
-	 *            The server whose inlinks are returned.
-	 * @return The incoming links of s.
+	 *            The server whose inturns are returned.
+	 * @return The incoming turns of s.
 	 */
-	public Set<Link> getInLinks(Server s) {
-		Set<Link> outLinks = map__server__in_links.get(s);
-		if (outLinks == null) {
-			return new HashSet<Link>();
+	public Set<Turn> getInTurns(Server s) {
+		Set<Turn> outTurns = map__server__in_turns.get(s);
+		if (outTurns == null) {
+			return new HashSet<Turn>();
 		} else {
-			return new HashSet<Link>(map__server__in_links.get(s));
+			return new HashSet<Turn>(map__server__in_turns.get(s));
 		}
 	}
 
@@ -385,34 +385,34 @@ public class ServerGraph {
 	 * Returns a new set consisting of references to the servers.
 	 *
 	 * @param s
-	 *            The server whose outlinks are returned.
-	 * @return The outgoing links of s.
+	 *            The server whose outturns are returned.
+	 * @return The outgoing turns of s.
 	 */
-	public Set<Link> getOutLinks(Server s) {
-		Set<Link> outLinks = map__server__out_links.get(s);
-		if (outLinks == null) {
-			return new HashSet<Link>();
+	public Set<Turn> getOutTurns(Server s) {
+		Set<Turn> outTurns = map__server__out_turns.get(s);
+		if (outTurns == null) {
+			return new HashSet<Turn>();
 		} else {
-			return new HashSet<Link>(map__server__out_links.get(s));
+			return new HashSet<Turn>(map__server__out_turns.get(s));
 		}
 	}
 
 	/**
-	 * Returns a new set consisting of references to the links.
+	 * Returns a new set consisting of references to the turns.
 	 *
 	 * @param s
-	 *            The server whose inlinks and outlinks are returned.
-	 * @return The incident links.
+	 *            The server whose inturns and outturns are returned.
+	 * @return The incident turns.
 	 */
-	public Set<Link> getIncidentLinks(Server s) {
-		return SetUtils.getUnion(getInLinks(s), getOutLinks(s));
+	public Set<Turn> getIncidentTurns(Server s) {
+		return SetUtils.getUnion(getInTurns(s), getOutTurns(s));
 	}
 
 	/**
 	 * Returns a new set consisting of references to the servers.
 	 *
 	 * @param s
-	 *            The server whose inlink sources and outlink destinations are
+	 *            The server whose inturn sources and outturn destinations are
 	 *            returned.
 	 * @return The neighboring servers of s.
 	 */
@@ -424,13 +424,13 @@ public class ServerGraph {
 	 * Returns a new set consisting of references to the servers.
 	 *
 	 * @param s
-	 *            The server whose inlink sources are returned.
-	 * @return The source servers of incoming links of s
+	 *            The server whose inturn sources are returned.
+	 * @return The source servers of incoming turns of s
 	 */
 	public Set<Server> getPredecessors(Server s) {
 		Set<Server> predecessors = new HashSet<Server>();
-		for (Link l : getInLinks(s)) {
-			predecessors.add(l.getSource());
+		for (Turn t : getInTurns(s)) {
+			predecessors.add(t.getSource());
 		}
 		return predecessors;
 	}
@@ -439,87 +439,87 @@ public class ServerGraph {
 	 * Returns a new set consisting of references to the servers.
 	 *
 	 * @param s
-	 *            The server whose outlink destinations are returned.
-	 * @return The sink servers of outgoing links of s.
+	 *            The server whose outturn destinations are returned.
+	 * @return The sink servers of outgoing turns of s.
 	 */
 	public Set<Server> getSuccessors(Server s) {
 		Set<Server> successors = new HashSet<Server>();
-		for (Link l : getOutLinks(s)) {
-			successors.add(l.getDest());
+		for (Turn t : getOutTurns(s)) {
+			successors.add(t.getDest());
 		}
 		return successors;
 	}
 
 	// --------------------------------------------------------------------------------------------
-	// Links
+	// Turns
 	// --------------------------------------------------------------------------------------------
-	public Link addLink(Server source, Server destination) throws Exception {
-		String alias = link_default_name_prefix.concat(Integer.toString(link_id_counter));
-		return addLink(alias, source, destination);
+	public Turn addTurn(Server source, Server destination) throws Exception {
+		String alias = turn_default_name_prefix.concat(Integer.toString(turn_id_counter));
+		return addTurn(alias, source, destination);
 	}
 
-	public Link addLink(String alias, Server source, Server destination) throws Exception {
+	public Turn addTurn(String alias, Server source, Server destination) throws Exception {
 		if (!servers.contains(source)) {
-			throw new Exception("link's source not present in the server graph");
+			throw new Exception("turn's source not present in the server graph");
 		}
 		if (!servers.contains(destination)) {
-			throw new Exception("link's destination not present in the server graph");
+			throw new Exception("turn's destination not present in the server graph");
 		}
 
 		try {
-			// This implicitly signals the caller that the link was 
+			// This implicitly signals the caller that the turn was 
 			// already present in the server graph
-			// by returning a link with a name different to the given one
-			Link link = findLink(source, destination);
-			return link;
+			// by returning a turn with a name different to the given one
+			Turn turn = findTurn(source, destination);
+			return turn;
 		} catch (Exception e) {
-			Link new_link = new Link(link_id_counter, alias, source, destination);
-			link_id_counter++;
+			Turn new_turn = new Turn(turn_id_counter, alias, source, destination);
+			turn_id_counter++;
 
-			map__link__flows.put(new_link, new HashSet<Flow>());
+			map__turn__flows.put(new_turn, new HashSet<Flow>());
 
-			map__server__in_links.get(destination).add(new_link);
-			map__server__out_links.get(source).add(new_link);
+			map__server__in_turns.get(destination).add(new_turn);
+			map__server__out_turns.get(source).add(new_turn);
 
-			links.add(new_link);
-			return new_link;
+			turns.add(new_turn);
+			return new_turn;
 		}
 	}
 
-	public void removeLink(Link l) throws Exception {
-		if (!links.contains(l)) {
-			throw new Exception("Link to be removed is not in this server graph's list of links");
+	public void removeTurn(Turn t) throws Exception {
+		if (!turns.contains(t)) {
+			throw new Exception("Turn to be removed is not in this server graph's list of turns");
 		}
 
-		remove(new HashSet<Server>(), Collections.singleton(l), map__link__flows.get(l));
+		remove(new HashSet<Server>(), Collections.singleton(t), map__turn__flows.get(t));
 	}
 
-	public Set<Link> getLinks() {
-		return new HashSet<Link>(links);
+	public Set<Turn> getTurns() {
+		return new HashSet<Turn>(turns);
 	}
 
-	public int numLinks() {
-		return links.size();
+	public int numTurns() {
+		return turns.size();
 	}
 
 	/**
 	 * @param src
-	 *            The link's source.
+	 *            The turn's source.
 	 * @param dest
-	 *            The link's destination.
-	 * @return The link from src to dest.
+	 *            The turn's destination.
+	 * @return The turn from src to dest.
 	 * @throws Exception
-	 *             No link from src to snk found in this server graph.
+	 *             No turn from src to snk found in this server graph.
 	 */
-	public Link findLink(Server src, Server dest) throws Exception {
-		Set<Link> connecting_link_as_set = SetUtils.getIntersection(getInLinks(dest), getOutLinks(src));
-		if (connecting_link_as_set.isEmpty()) {
-			throw new Exception("No link between " + src.toString() + " and " + dest.toString() + " found.");
+	public Turn findTurn(Server src, Server dest) throws Exception {
+		Set<Turn> connecting_turn_as_set = SetUtils.getIntersection(getInTurns(dest), getOutTurns(src));
+		if (connecting_turn_as_set.isEmpty()) {
+			throw new Exception("No turn between " + src.toString() + " and " + dest.toString() + " found.");
 		} else {
-			if (connecting_link_as_set.size() > 1) {
-				throw new Exception("Too many links between " + src.toString() + " and " + dest.toString() + " found.");
+			if (connecting_turn_as_set.size() > 1) {
+				throw new Exception("Too many turns between " + src.toString() + " and " + dest.toString() + " found.");
 			} else {
-				return connecting_link_as_set.iterator().next();
+				return connecting_turn_as_set.iterator().next();
 			}
 		}
 	}
@@ -591,7 +591,7 @@ public class ServerGraph {
 	 * @param arrival_curve
 	 *            The flow's arrival curve.
 	 * @param path
-	 *            The flows path as a list of servers or links.
+	 *            The flows path as a list of servers or turns.
 	 * @return The flow created and added to the server graph.
 	 * @throws Exception
 	 *             The given path is not entirely in the server graph.
@@ -607,8 +607,8 @@ public class ServerGraph {
 		if (element_of_path instanceof Server) {
 			return addFlowToServerGraph(alias, arrival_curve, createPathFromServers(path));
 		}
-		if (element_of_path instanceof Link) {
-			return addFlowToServerGraph(alias, arrival_curve, createPathFromLinks(path));
+		if (element_of_path instanceof Turn) {
+			return addFlowToServerGraph(alias, arrival_curve, createPathFromTurns(path));
 		}
 
 		throw new Exception("Could not create the path for flow " + alias);
@@ -653,9 +653,9 @@ public class ServerGraph {
 		if (!servers.containsAll(path.getServers())) {
 			throw new Exception("Some servers on the given flow's path are not present in the server graph");
 		}
-		if (!path.getLinks().isEmpty()) {
-			if (!links.containsAll(path.getLinks())) {
-				throw new Exception("Some links on the given flow's path are not present in the server graph");
+		if (!path.getTurns().isEmpty()) {
+			if (!turns.containsAll(path.getTurns())) {
+				throw new Exception("Some turns on the given flow's path are not present in the server graph");
 			}
 		}
 
@@ -666,8 +666,8 @@ public class ServerGraph {
 		
 		map__server__source_flows.get(path.getSource()).add(new_flow);
 
-		for (Link l : path.getLinks()) {
-			map__link__flows.get(l).add(new_flow);
+		for (Turn t : path.getTurns()) {
+			map__turn__flows.get(t).add(new_flow);
 		}
 		for (Server s : path.getServers()) {
 			map__server__flows.get(s).add(new_flow);
@@ -689,7 +689,7 @@ public class ServerGraph {
 			throw new Exception("Flow to be removed is not in this server graph's list of flows");
 		}
 
-		remove(new HashSet<Server>(), new HashSet<Link>(), Collections.singleton(f));
+		remove(new HashSet<Server>(), new HashSet<Turn>(), Collections.singleton(f));
 	}
 
 	public Set<Flow> getFlows() {
@@ -714,12 +714,12 @@ public class ServerGraph {
 		return flow;
 	}
 
-	public Set<Flow> getFlows(Link l) {
-		if (l == null) {
+	public Set<Flow> getFlows(Turn t) {
+		if (t == null) {
 			return new HashSet<Flow>();
 		}
 
-		Set<Flow> flows = map__link__flows.get(l);
+		Set<Flow> flows = map__turn__flows.get(t);
 		if (flows != null) {
 			return new HashSet<Flow>(flows);
 		} else {
@@ -727,11 +727,11 @@ public class ServerGraph {
 		}
 	}
 
-	public Set<Flow> getFlows(Set<Link> links) {
+	public Set<Flow> getFlows(Set<Turn> turns) {
 		HashSet<Flow> flows = new HashSet<Flow>();
 
-		for (Link l : links) {
-			flows.addAll(map__link__flows.get(l));
+		for (Turn t : turns) {
+			flows.addAll(map__turn__flows.get(t));
 		}
 
 		return flows;
@@ -809,7 +809,7 @@ public class ServerGraph {
 		LinkedList<Server> servers = p.getServers();
 		int n = servers.size();
 
-		// Flows with the same egress server (independent of the out link) can be
+		// Flows with the same egress server (independent of the out turn) can be
 		// aggregated for PMOO's and OBA's arrival bound calculation.
 		// This still preserves the demultiplexing considerations. Note that the last
 		// server contains all remaining flows by default.
@@ -863,7 +863,7 @@ public class ServerGraph {
 		LinkedList<Server> servers = p.getServers();
 		int n = servers.size();
 
-		// Flows with the same egress server (independent of the out link) can be
+		// Flows with the same egress server (independent of the out turn) can be
 		// aggregated for PMOO's and OBA's arrival bound calculation.
 		// This still preserves the demultiplexing considerations. Note that the last
 		// server contains all remaining flows by default.
@@ -900,7 +900,7 @@ public class ServerGraph {
 		return map__path__set_flows;
 	}
 	
-	// TODO Unify with groupFlowsPerInlinkSubPath
+	// TODO Unify with groupFlowsPerInturnSubPath
 	private Map<Pair<Server,Path>,Set<Flow>> groupFlowsPerSubPathInternal( Path p, Set<Flow> flows_to_group ) throws Exception {
 		Map<Pair<Server,Path>,Set<Flow>> map__path__set_flows = new HashMap<Pair<Server,Path>,Set<Flow>>();
 				
@@ -918,7 +918,7 @@ public class ServerGraph {
 		LinkedList<Server> servers = p.getServers();
 		int n = servers.size();
 		
-		// Flows with the same egress server (independent of the out link) can be aggregated for PMOO's and OBA's arrival bound calculation.
+		// Flows with the same egress server (independent of the out turn) can be aggregated for PMOO's and OBA's arrival bound calculation.
 		// This still preserves the demultiplexing considerations. Note that the last server contains all remaining flows by default.
  		Map<Server,Set<Flow>> map__server__leaving_flows = getServerLeavingFlowsMap( p );
 		
@@ -940,7 +940,7 @@ public class ServerGraph {
 	 				continue;
 	 			}
 	 			
-	 			// TODO Put sorting by inlink here
+	 			// TODO Put sorting by inturn here
 
 		 		map__path__set_flows.put( new Pair<Server,Path>( s_i, p.getSubPath(s_i, s_j_egress) ), s_i_ingress__s_j_egress );
 				
@@ -958,28 +958,28 @@ public class ServerGraph {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<Pair<Link,Path>,Set<Flow>> groupFlowsPerInlinkSubPath( Path p, Set<Flow> flows_to_group ) throws Exception {
+	public Map<Pair<Turn,Path>,Set<Flow>> groupFlowsPerInturnSubPath( Path p, Set<Flow> flows_to_group ) throws Exception {
 		Map<Pair<Server,Path>,Set<Flow>> starting_set = groupFlowsPerSubPathInternal( p, flows_to_group );
-		Map<Pair<Link,Path>,Set<Flow>> results_set = new HashMap<Pair<Link,Path>,Set<Flow>>();
+		Map<Pair<Turn,Path>,Set<Flow>> results_set = new HashMap<Pair<Turn,Path>,Set<Flow>>();
 		
-		Set<Flow> flows_in_l, flows_in_link_grouped = new HashSet<Flow>();
+		Set<Flow> flows_on_t, flows_on_turn_grouped = new HashSet<Flow>();
 		for ( Entry<Pair<Server,Path>,Set<Flow>> entry : starting_set.entrySet() ) {
 			
-			flows_in_link_grouped.clear(); // Reusing this set reference works because the getDifference below creates a new set to return.
-			for( Link in_l : getInLinks(  entry.getKey().getFirst() ) ) {
+			flows_on_turn_grouped.clear(); // Reusing this set reference works because the getDifference below creates a new set to return.
+			for( Turn on_t : getInTurns(  entry.getKey().getFirst() ) ) {
 				
-				flows_in_l = SetUtils.getIntersection( getFlows( in_l ), entry.getValue() );
-				if( !flows_in_l.isEmpty() ) {
-					results_set.put( new Pair<Link,Path>( in_l, entry.getKey().getSecond() ), flows_in_l );
-					flows_in_link_grouped.addAll( new HashSet<Flow>( flows_in_l ) );
+				flows_on_t = SetUtils.getIntersection( getFlows( on_t ), entry.getValue() );
+				if( !flows_on_t.isEmpty() ) {
+					results_set.put( new Pair<Turn,Path>( on_t, entry.getKey().getSecond() ), flows_on_t );
+					flows_on_turn_grouped.addAll( new HashSet<Flow>( flows_on_t ) );
 				}
 			}
 			
-			Set<Flow> remaining_flows = SetUtils.getDifference( entry.getValue(), flows_in_link_grouped );
+			Set<Flow> remaining_flows = SetUtils.getDifference( entry.getValue(), flows_on_turn_grouped );
 			if( !remaining_flows.isEmpty() ) {
-				Link dummy = new Link( -1, "dummy", entry.getKey().getFirst(), entry.getKey().getFirst() );
-				Pair<Link,Path> link_path = new Pair<Link,Path>( dummy, entry.getKey().getSecond() );
-				results_set.put( link_path, remaining_flows );
+				Turn dummy = new Turn( -1, "dummy", entry.getKey().getFirst(), entry.getKey().getFirst() );
+				Pair<Turn,Path> turn_path = new Pair<Turn,Path>( dummy, entry.getKey().getSecond() );
+				results_set.put( turn_path, remaining_flows );
 			}
 		}
 		
@@ -1041,20 +1041,20 @@ public class ServerGraph {
 			throw new Exception("Server to create path from is not in the server graph");
 		}
 
-		return new Path(new LinkedList<Server>(Collections.singleton(server)), new LinkedList<Link>());
+		return new Path(new LinkedList<Server>(Collections.singleton(server)), new LinkedList<Turn>());
 	}
 
-	public Path createPath(Link link) throws Exception {
-		if (!links.contains(link)) { // Implicitly contains the case that at least one server the link connects is
+	public Path createPath(Turn t) throws Exception {
+		if (!turns.contains(t)) { // Implicitly contains the case that at least one server the turn connects is
 			// not in the server graph
-			throw new Exception("Link to create path from is not in the server graph");
+			throw new Exception("Turn to create path from is not in the server graph");
 		}
 
 		LinkedList<Server> path_servers = new LinkedList<Server>();
-		path_servers.add(link.getSource());
-		path_servers.add(link.getDest());
+		path_servers.add(t.getSource());
+		path_servers.add(t.getDest());
 
-		return new Path(path_servers, new LinkedList<Link>(Collections.singleton(link)));
+		return new Path(path_servers, new LinkedList<Turn>(Collections.singleton(t)));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -1068,85 +1068,85 @@ public class ServerGraph {
 		if (element_of_path instanceof Server) {
 			return createPathFromServers(path);
 		}
-		if (element_of_path instanceof Link) {
-			return createPathFromLinks(path);
+		if (element_of_path instanceof Turn) {
+			return createPathFromTurns(path);
 		}
 
 		throw new Exception("Could not create path");
 	}
 
 	private Path createPathFromServers(List<Server> path_servers) throws Exception {
-		List<Link> path_links = new LinkedList<Link>();
+		List<Turn> path_turns = new LinkedList<Turn>();
 
-		// Sanity check + path_links construction:
+		// Sanity check + path_turns construction:
 		if (path_servers.size() > 1) {
 			for (int i = 0; i < path_servers.size() - 1; i++) {
 				try {
-					path_links.add(findLink(path_servers.get(i), path_servers.get(i + 1)));
+					path_turns.add(findTurn(path_servers.get(i), path_servers.get(i + 1)));
 				} catch (Exception e) {
 					throw new Exception(
-							"At least two consecutive servers to create the path from are not connected by a link in the server graph");
+							"At least two consecutive servers to create the path from are not connected by a turn in the server graph");
 				}
 			}
 		}
 
-		return createPath(path_servers, path_links);
+		return createPath(path_servers, path_turns);
 	}
 
-	private Path createPathFromLinks(List<Link> path_links) throws Exception {
+	private Path createPathFromTurns(List<Turn> path_turns) throws Exception {
 		LinkedList<Server> path_servers = new LinkedList<Server>();
 
 		// Sanity checks + path_servers construction:
-		for (int i = 0; i < path_links.size() - 1; i++) {
-			Link l_i = path_links.get(i);
-			if (!links.contains(l_i)) {
-				throw new Exception("At least one link to create path from is not in the server graph");
+		for (int i = 0; i < path_turns.size() - 1; i++) {
+			Turn t_i = path_turns.get(i);
+			if (!turns.contains(t_i)) {
+				throw new Exception("At least one turn to create path from is not in the server graph");
 			}
-			if (l_i.getDest() != path_links.get(i + 1).getSource()) {
-				throw new Exception("At least two consecutive links to create the path from are not connected");
+			if (t_i.getDest() != path_turns.get(i + 1).getSource()) {
+				throw new Exception("At least two consecutive turns to create the path from are not connected");
 			}
-			path_servers.add(l_i.getSource());
+			path_servers.add(t_i.getSource());
 		}
-		Link l_last = path_links.get(path_links.size() - 1);
-		if (!links.contains(l_last)) {
-			throw new Exception("Last link to create path from is not in the server graph");
+		Turn t_last = path_turns.get(path_turns.size() - 1);
+		if (!turns.contains(t_last)) {
+			throw new Exception("Last turn to create path from is not in the server graph");
 		}
-		path_servers.add(l_last.getSource());
-		path_servers.add(l_last.getDest());
+		path_servers.add(t_last.getSource());
+		path_servers.add(t_last.getDest());
 
-		return new Path(path_servers, path_links);
+		return new Path(path_servers, path_turns);
 	}
 
-	public Path createPath(List<Server> path_servers, List<Link> path_links) throws Exception {
+	public Path createPath(List<Server> path_servers, List<Turn> path_turns) throws Exception {
 		// Sanity checks:
 		if (path_servers.isEmpty()) {
 			throw new Exception("A path without servers cannot be created.");
 		}
-		if (!path_links.isEmpty()) {
-			for (int i = 0; i < path_links.size() - 1; i++) {
-				Link l_i = path_links.get(i);
+		if (!path_turns.isEmpty()) {
+			for (int i = 0; i < path_turns.size() - 1; i++) {
+				Turn t_i = path_turns.get(i);
 
-				if (!links.contains(l_i)) { // Implicitly contains the case that at least one server the link connects
+				if (!turns.contains(t_i)) { // Implicitly contains the case that at least one server the turn connects
 					// is not in the server graph
-					throw new Exception("At least one link to create path from is not in the server graph");
+					throw new Exception("At least one turn to create path from is not in the server graph");
 				}
-				if (l_i.getDest() != path_links.get(i + 1).getSource()) {
-					throw new Exception("At least two consecutive links to create the path from are not connected");
+				if (t_i.getDest() != path_turns.get(i + 1).getSource()) {
+					throw new Exception("At least two consecutive turns to create the path from are not connected");
 				}
 
-				if (path_servers.get(i) != l_i.getSource() || path_servers.get(i + 1) != l_i.getDest()) {
+				if (path_servers.get(i) != t_i.getSource() || path_servers.get(i + 1) != t_i.getDest()) {
 					throw new Exception(
-							"At least two consecutive servers to create the path from are not connected by the corresponding link of the given list");
+							"At least two consecutive servers to create the path from are not connected by the corresponding turn of the given list");
 				}
 			}
-			Link l_last = path_links.get(path_links.size() - 1);
-			if (!links.contains(l_last)) { // Implicitly contains the case that at least one server the link connects is
+			Turn t_last = path_turns.get(path_turns.size() - 1);
+			if (!turns.contains(t_last)) { // Implicitly contains the case that at least one server the turn connects is
 				// not in the server graph
-				throw new Exception("Last link to create path from is not in the server graph");
+				throw new Exception("Last turn to create path from is not in the server graph");
 			}
 		}
 
-		return new Path(path_servers, path_links);
+		return new Path(path_servers, path_turns);
 	}
 
 	/**
@@ -1171,7 +1171,7 @@ public class ServerGraph {
 		map__server__joining_flows.put(path_source, flows_joining);
 
 		for (Server s : servers_iteration) {
-			flows_joining = SetUtils.getDifference(getFlows(s), getFlows(path.getPrecedingLink(s)));
+			flows_joining = SetUtils.getDifference(getFlows(s), getFlows(path.getPrecedingTurn(s)));
 
 			// Results in an empty set if there a no joining flow at server s
 			map__server__joining_flows.put(s, flows_joining);
@@ -1190,7 +1190,7 @@ public class ServerGraph {
 
 		for (Server s : servers_iteration) {
 			// Results in an empty set if there a no joining flow at server s
-			map__server__leaving_flows.put(s, SetUtils.getDifference(getFlows(s), getFlows(path.getSucceedingLink(s))));
+			map__server__leaving_flows.put(s, SetUtils.getDifference(getFlows(s), getFlows(path.getSucceedingTurn(s))));
 		}
 
 		// Default for last server
@@ -1214,10 +1214,10 @@ public class ServerGraph {
 	public Path getShortestPath(Server src, Server snk) throws Exception {
 		Set<Server> visited = new HashSet<Server>();
 
-		Map<Server, LinkedList<Link>> paths_links = new HashMap<Server, LinkedList<Link>>();
+		Map<Server, LinkedList<Turn>> paths_turns = new HashMap<Server, LinkedList<Turn>>();
 		Map<Server, LinkedList<Server>> paths_servers = new HashMap<Server, LinkedList<Server>>();
 
-		paths_links.put(src, new LinkedList<Link>());
+		paths_turns.put(src, new LinkedList<Turn>());
 		paths_servers.put(src, new LinkedList<Server>(Collections.singleton(src)));
 
 		LinkedList<Server> queue = new LinkedList<Server>();
@@ -1231,7 +1231,7 @@ public class ServerGraph {
 			Set<Server> successors_s = getSuccessors(s);
 			for (Server successor : successors_s) {
 
-				LinkedList<Link> path_links_tmp = new LinkedList<Link>(paths_links.get(s));
+				LinkedList<Turn> path_turns_tmp = new LinkedList<Turn>(paths_turns.get(s));
 
 				LinkedList<Server> path_servers_tmp;
 				if (paths_servers.containsKey(s)) {
@@ -1240,18 +1240,18 @@ public class ServerGraph {
 					path_servers_tmp = new LinkedList<Server>(Collections.singleton(src));
 				}
 
-				path_links_tmp.add(findLink(s, successor));
+				path_turns_tmp.add(findTurn(s, successor));
 				path_servers_tmp.add(successor);
 
 				if (!visited.contains(successor)) {
-					paths_links.put(successor, path_links_tmp);
+					paths_turns.put(successor, path_turns_tmp);
 					paths_servers.put(successor, path_servers_tmp);
 
 					queue.add(successor);
 					visited.add(successor);
 				} else {
-					if (paths_links.get(successor).size() > path_links_tmp.size()) {
-						paths_links.put(successor, path_links_tmp);
+					if (paths_turns.get(successor).size() > path_turns_tmp.size()) {
+						paths_turns.put(successor, path_turns_tmp);
 						paths_servers.put(successor, path_servers_tmp);
 
 						queue.add(successor);
@@ -1260,13 +1260,13 @@ public class ServerGraph {
 			}
 		}
 
-		if (paths_links.get(snk) == null) {
+		if (paths_turns.get(snk) == null) {
 			throw new Exception("No path from server " + src.getId() + " to server " + snk.getId() + " found");
 		}
 
 		// No sanity checks needed after a shortest path calculation, so you can create
 		// a new path directly instead of calling 'createPath'
-		return new Path(paths_servers.get(snk), paths_links.get(snk));
+		return new Path(paths_servers.get(snk), paths_turns.get(snk));
 	}
 
 	/**
@@ -1341,17 +1341,17 @@ public class ServerGraph {
 			map__s_old__s_new.put(s_old, s_new);
 		}
 
-		// Copy links
-		// We cannot use some addLink( l_old.copy() ) because links can only be created
+		// Copy turns
+		// We cannot use some addTurn( t_old.copy() ) because turns can only be created
 		// via a server graph.
 		// They need an server graph determined id. (Hard design decision at the moment)
-		Map<Link, Link> map__l_old__l_new = new HashMap<Link, Link>();
-		Link l_new;
+		Map<Turn, Turn> map__t_old__t_new = new HashMap<Turn, Turn>();
+		Turn t_new;
 
-		for (Link l_old : links) {
-			l_new = sg_new.addLink(l_old.getAlias(), map__s_old__s_new.get(l_old.getSource()),
-					map__s_old__s_new.get(l_old.getDest()));
-			map__l_old__l_new.put(l_old, l_new);
+		for (Turn t_old : turns) {
+			t_new = sg_new.addTurn(t_old.getAlias(), map__s_old__s_new.get(t_old.getSource()),
+					map__s_old__s_new.get(t_old.getDest()));
+			map__t_old__t_new.put(t_old, t_new);
 		}
 
 		// Copy flows
@@ -1364,8 +1364,8 @@ public class ServerGraph {
 		List<Server> f_path_old_s;
 		List<Server> f_path_new_s;
 
-		List<Link> f_path_old_l;
-		List<Link> f_path_new_l;
+		List<Turn> f_path_old_t;
+		List<Turn> f_path_new_t;
 
 		for (Flow f_old : flows) {
 			f_old_path = f_old.getPath();
@@ -1376,13 +1376,13 @@ public class ServerGraph {
 				f_path_new_s.add(map__s_old__s_new.get(s));
 			}
 
-			f_path_old_l = f_old_path.getLinks();
-			f_path_new_l = new LinkedList<Link>();
-			for (Link l : f_path_old_l) {
-				f_path_new_l.add(map__l_old__l_new.get(l));
+			f_path_old_t = f_old_path.getTurns();
+			f_path_new_t = new LinkedList<Turn>();
+			for (Turn t : f_path_old_t) {
+				f_path_new_t.add(map__t_old__t_new.get(t));
 			}
 
-			f_new_path = new Path(f_path_new_s, f_path_new_l);
+			f_new_path = new Path(f_path_new_s, f_path_new_t);
 			sg_new.addFlowToServerGraph(f_old.getAlias(), f_old.getArrivalCurve(), f_new_path);
 		}
 
@@ -1473,26 +1473,26 @@ public class ServerGraph {
 		sb.append("\t}\n");
 		sb.append("\n");
 
-		// Link creation
-		int i_links_func = 1;
-		int i_links_lines = 0;
-		sb.append("\tpublic void createLinks" + Integer.toString(i_links_func)
+		// Turn creation
+		int i_turns_func = 1;
+		int i_turns_lines = 0;
+		sb.append("\tpublic void createTurns" + Integer.toString(i_turns_func)
 				+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
-		for (Link l : links) {
-			sb.append("\t\tsg.addLink( ");
-			sb.append("\"" + l.getAlias() + "\"" + ", ");
-			sb.append("servers[" + l.getSource().getId() + "]" + ", ");
-			sb.append("servers[" + l.getDest().getId() + "]");
+		for (Turn t : turns) {
+			sb.append("\t\tsg.addTurn( ");
+			sb.append("\"" + t.getAlias() + "\"" + ", ");
+			sb.append("servers[" + t.getSource().getId() + "]" + ", ");
+			sb.append("servers[" + t.getDest().getId() + "]");
 			sb.append(" );\n");
 
-			i_links_lines++;
+			i_turns_lines++;
 
-			if ((i_links_lines / 500) >= i_links_func) {
-				i_links_func++;
+			if ((i_turns_lines / 500) >= i_turns_func) {
+				i_turns_func++;
 
 				sb.append("\t}\n");
 				sb.append("\n");
-				sb.append("\tpublic void createLinks" + Integer.toString(i_links_func)
+				sb.append("\tpublic void createTurns" + Integer.toString(i_turns_func)
 						+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
 			}
 		}
@@ -1551,8 +1551,8 @@ public class ServerGraph {
 		for (int i = 1; i <= i_servers_func; i++) {
 			sb.append("\t\t\tcreateServers" + Integer.toString(i) + "( sg, servers );\n");
 		}
-		for (int i = 1; i <= i_links_func; i++) {
-			sb.append("\t\t\tcreateLinks" + Integer.toString(i) + "( sg, servers );\n");
+		for (int i = 1; i <= i_turns_func; i++) {
+			sb.append("\t\t\tcreateTurns" + Integer.toString(i) + "( sg, servers );\n");
 		}
 		for (int i = 1; i <= i_flows_func; i++) {
 			sb.append("\t\t\tcreateFlows" + Integer.toString(i) + "( sg, servers );\n");
@@ -1604,8 +1604,8 @@ public class ServerGraph {
 		}
 
 		sg_str.append("\n");
-		for (Link l : links) {
-			sg_str.append(l.toString());
+		for (Turn t : turns) {
+			sg_str.append(t.toString());
 			sg_str.append("\n");
 		}
 

@@ -41,7 +41,7 @@ import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Path;
 import de.uni_kl.cs.discodnc.server_graph.Server;
@@ -57,8 +57,8 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	private AggregatePmoo() {
 	}
 
-	public AggregatePmoo(ServerGraph network, AnalysisConfig configuration) {
-		this.network = network;
+	public AggregatePmoo(ServerGraph server_graph, AnalysisConfig configuration) {
+		this.server_graph = server_graph;
 		this.configuration = configuration;
 	}
 
@@ -66,8 +66,8 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 		return instance;
 	}
 
-	public Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception {
-		return computeArrivalBound(link, network.getFlows(link), flow_of_interest);
+	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Flow flow_of_interest) throws Exception {
+		return computeArrivalBound(turn, server_graph.getFlows(turn), flow_of_interest);
 	}
 
 	/**
@@ -80,8 +80,8 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	 * It then concatenates all servers between the splitting point (inclusive) and
 	 * <code>server</code> (exclusive).
 	 *
-	 * @param link
-	 *            The link that all flows of interest flow into.
+	 * @param turn
+	 *            The turn that all flows of interest flow into.
 	 * @param f_xfcaller
 	 *            The set of flows of interest.
 	 * @param flow_of_interest
@@ -90,7 +90,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	 * @throws Exception
 	 *             If any of the sanity checks fails.
 	 */
-	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
+	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
 				Collections.singleton(Curve.getFactory().createZeroArrivals()));
@@ -98,10 +98,10 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
-		// Get the common sub-path of f_xfcaller flows crossing the given link
+		// Get the common sub-path of f_xfcaller flows crossing the given turn
 		// soi == server of interference
-		Server soi = link.getDest();
-		Set<Flow> f_soi = network.getFlows(soi);
+		Server soi = turn.getDest();
+		Set<Flow> f_soi = server_graph.getFlows(soi);
 		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
 		f_xfcaller_soi.remove(flow_of_interest);
 		if (f_xfcaller_soi.isEmpty()) {
@@ -110,12 +110,12 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 
 		if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
 				|| (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
-						&& link.getSource().multiplexingDiscipline() == Multiplexing.FIFO)) {
+						&& turn.getSource().multiplexingDiscipline() == Multiplexing.FIFO)) {
 			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
 		}
 
-		Server common_subpath_src = network.findSplittingServer(soi, f_xfcaller_soi);
-		Server common_subpath_dest = link.getSource();
+		Server common_subpath_src = server_graph.findSplittingServer(soi, f_xfcaller_soi);
+		Server common_subpath_dest = turn.getSource();
 		Path common_subpath;
 		Set<ServiceCurve> betas_loxfcaller_subpath = new HashSet<ServiceCurve>();
 
@@ -124,10 +124,10 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 		if (common_subpath.numServers() == 1) {
 			common_subpath = new Path(common_subpath_src);
 
-			Set<Flow> f_xxfcaller = network.getFlows(common_subpath_src);
+			Set<Flow> f_xxfcaller = server_graph.getFlows(common_subpath_src);
 			f_xxfcaller.removeAll(f_xfcaller_soi);
 			f_xxfcaller.remove(flow_of_interest);
-			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 					common_subpath_src, f_xxfcaller, flow_of_interest);
 
 			ServiceCurve null_service = Curve.getFactory().createZeroService();
@@ -140,7 +140,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 				}
 			}
 		} else {
-			PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+			PmooAnalysis pmoo = new PmooAnalysis(server_graph, configuration);
 			betas_loxfcaller_subpath = pmoo.getServiceCurves(flow_of_interest, common_subpath, f_xfcaller_soi);
 		}
 
@@ -160,7 +160,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 		// bound of the sub-path
 		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered
 		// by this call of computeArrivalBound
-		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
 		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 

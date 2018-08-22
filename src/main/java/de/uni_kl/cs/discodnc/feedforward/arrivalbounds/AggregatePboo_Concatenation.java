@@ -41,7 +41,7 @@ import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.server_graph.Flow;
-import de.uni_kl.cs.discodnc.server_graph.Link;
+import de.uni_kl.cs.discodnc.server_graph.Turn;
 import de.uni_kl.cs.discodnc.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.server_graph.Path;
 import de.uni_kl.cs.discodnc.server_graph.Server;
@@ -57,8 +57,8 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 	private AggregatePboo_Concatenation() {
 	}
 
-	public AggregatePboo_Concatenation(ServerGraph network, AnalysisConfig configuration) {
-		this.network = network;
+	public AggregatePboo_Concatenation(ServerGraph server_graph, AnalysisConfig configuration) {
+		this.server_graph = server_graph;
 		this.configuration = configuration;
 	}
 
@@ -66,11 +66,11 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 		return instance;
 	}
 
-	public Set<ArrivalCurve> computeArrivalBound(Link link, Flow flow_of_interest) throws Exception {
-		return computeArrivalBound(link, network.getFlows(link), flow_of_interest);
+	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Flow flow_of_interest) throws Exception {
+		return computeArrivalBound(turn, server_graph.getFlows(turn), flow_of_interest);
 	}
 
-	public Set<ArrivalCurve> computeArrivalBound(Link link, Set<Flow> f_xfcaller, Flow flow_of_interest)
+	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
 				Collections.singleton(Curve.getFactory().createZeroArrivals()));
@@ -78,10 +78,10 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 			return alphas_xfcaller;
 		}
 
-		// Get the servers on common sub-path of f_xfcaller flows crossing link
+		// Get the servers on common sub-path of f_xfcaller flows crossing turn
 		// loi == location of interference
-		Server loi = link.getDest();
-		Set<Flow> f_loi = network.getFlows(loi);
+		Server loi = turn.getDest();
+		Set<Flow> f_loi = server_graph.getFlows(loi);
 		Set<Flow> f_xfcaller_loi = SetUtils.getIntersection(f_loi, f_xfcaller);
 		f_xfcaller_loi.remove(flow_of_interest);
 		if (f_xfcaller_loi.size() == 0) {
@@ -93,8 +93,8 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 		// There's not a big potential to increase performance as the PBOO arrival bound
 		// implicitly handles this situation by only iterating over one server in the
 		// for loop.
-		Server common_subpath_src = network.findSplittingServer(loi, f_xfcaller_loi);
-		Server common_subpath_dest = link.getSource();
+		Server common_subpath_src = server_graph.findSplittingServer(loi, f_xfcaller_loi);
+		Server common_subpath_dest = turn.getSource();
 		Flow f_representative = f_xfcaller_loi.iterator().next();
 		Path common_subpath = f_representative.getSubPath(common_subpath_src, common_subpath_dest);
 
@@ -102,30 +102,30 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 		// individual left over service curves
 		Set<ServiceCurve> betas_lo_subpath = new HashSet<ServiceCurve>();
 		Set<ServiceCurve> betas_lo_s;
-		Link link_from_prev_s;
+		Turn turn_from_prev_s;
 		Path foi_path = flow_of_interest.getPath();
 		for (Server server : common_subpath.getServers()) {
 			try {
-				link_from_prev_s = network.findLink(foi_path.getPrecedingServer(server), server);
+				turn_from_prev_s = server_graph.findTurn(foi_path.getPrecedingServer(server), server);
 			} catch (Exception e) { // Reached the path's first server
-				link_from_prev_s = null; // reset to null
+				turn_from_prev_s = null; // reset to null
 			}
 
-			Set<Flow> f_xxfcaller_server = network.getFlows(server);
+			Set<Flow> f_xxfcaller_server = server_graph.getFlows(server);
 			f_xxfcaller_server.removeAll(f_xfcaller);
 			f_xxfcaller_server.remove(flow_of_interest);
 
 			Set<Flow> f_xxfcaller_server_path = SetUtils.getIntersection(f_xxfcaller_server,
-					network.getFlows(link_from_prev_s));
+					server_graph.getFlows(turn_from_prev_s));
 
 			// Convert f_xfoi_server to f_xfoi_server_offpath
 			f_xxfcaller_server.removeAll(f_xxfcaller_server_path);
 
 			// If we are off the path of interest, flow_of_interest is Flow.NULL_FLOW
 			// already.
-			Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+			Set<ArrivalCurve> alpha_xxfcaller_path = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 					server, f_xxfcaller_server_path, flow_of_interest);
-			Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(network,
+			Set<ArrivalCurve> alpha_xxfcaller_offpath = ArrivalBoundDispatch.computeArrivalBounds(server_graph,
 					configuration, server, f_xxfcaller_server, Flow.NULL_FLOW);
 
 			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
@@ -158,16 +158,16 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 		// deconvolve it with beta_lo_s to get the arrival bound of the sub-path.
 		// Note that flows f_xfcaller that originate in 'common_subpath_src' are covered
 		// by this call of computeArrivalBound.
-		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(network, configuration,
+		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
 		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
 		// TODO This implementation only works for token-bucket arrivals. 
 		if (configuration.serverBacklogArrivalBound()
 				&& Calculator.getInstance().getCurveBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
-			Server last_hop_xtx = link.getSource();
+			Server last_hop_xtx = turn.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
-			TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+			TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph, configuration);
 			tfa.deriveBoundsAtServer(last_hop_xtx);
 
 			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);

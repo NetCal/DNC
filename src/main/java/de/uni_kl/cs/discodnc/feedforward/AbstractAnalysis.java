@@ -38,12 +38,12 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class AbstractAnalysis {
-    protected ServerGraph network;
+    protected ServerGraph server_graph;
     protected AnalysisConfig configuration;
     protected AnalysisResults result;
 
     public ServerGraph getNetwork() {
-        return network;
+        return server_graph;
     }
 
     @Override
