@@ -30,12 +30,6 @@ package de.uni_kl.cs.discodnc.algebra.disco.pwaffine;
 import java.util.Set;
 
 import de.uni_kl.cs.discodnc.algebra.MinPlus;
-
-// Due to name collisions, these classes are not imported,
-// they are referenced by their fully qualified names.
-//import ch.ethz.rtc.kernel.Curve;
-//import Curve;
-
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
