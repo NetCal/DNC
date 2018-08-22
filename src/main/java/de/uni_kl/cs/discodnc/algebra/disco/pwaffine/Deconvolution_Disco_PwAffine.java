@@ -43,7 +43,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public abstract class Deconvolution_DNC_PwAffine {
+public abstract class Deconvolution_Disco_PwAffine {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();

@@ -39,7 +39,7 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.utils.CheckUtils;
 
-public abstract class Deconvolution_DNC_Affine {
+public abstract class Deconvolution_Disco_Affine {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();

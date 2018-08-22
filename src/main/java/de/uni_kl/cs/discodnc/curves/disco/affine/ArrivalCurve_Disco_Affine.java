@@ -30,45 +30,49 @@
 package de.uni_kl.cs.discodnc.curves.disco.affine;
 
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public class ServiceCurve_DNC_Affine extends Curve_DNC_Affine implements ServiceCurve {
+public class ArrivalCurve_Disco_Affine extends Curve_Disco_Affine implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    public ServiceCurve_DNC_Affine() {
+    public ArrivalCurve_Disco_Affine() {
         super();
     }
 
-    public ServiceCurve_DNC_Affine(int segment_count) {
+    public ArrivalCurve_Disco_Affine(int segment_count) {
         super(segment_count);
     }
 
-    public ServiceCurve_DNC_Affine(Curve curve) {
-        copy(curve);
+    public ArrivalCurve_Disco_Affine(Curve curve) {
+        super(curve);
+        forceThroughOrigin();
 
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
-            // !isConvex()
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+            // !isConcave()
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
-    public ServiceCurve_DNC_Affine(String service_curve_str) throws Exception {
-        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) { // Smallest
+    public ArrivalCurve_Disco_Affine(String arrival_curve_str) throws Exception {
+        if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) { // Smallest
             // possible
             // string:
             // {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(service_curve_str);
+        initializeCurve(arrival_curve_str);
+        forceThroughOrigin();
 
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { // too strong
             // requirement:
-            // !isConvex()
-            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+            // !isConcave()
+            System.out.println(toString());
+            throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
@@ -76,20 +80,20 @@ public class ServiceCurve_DNC_Affine extends Curve_DNC_Affine implements Service
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public ServiceCurve_DNC_Affine copy() {
-        ServiceCurve_DNC_Affine sc_copy = new ServiceCurve_DNC_Affine();
-        sc_copy.copy(this);
-        return sc_copy;
+    public ArrivalCurve_Disco_Affine copy() {
+        ArrivalCurve_Disco_Affine ac_copy = new ArrivalCurve_Disco_Affine();
+        ac_copy.copy(this);
+        return ac_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof ServiceCurve_DNC_Affine) && super.equals(obj);
+        return (obj instanceof ArrivalCurve_Disco_Affine) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "SC".hashCode() * super.hashCode();
+        return "AC".hashCode() * super.hashCode();
     }
 
     /**
@@ -99,6 +103,6 @@ public class ServiceCurve_DNC_Affine extends Curve_DNC_Affine implements Service
      */
     @Override
     public String toString() {
-        return "SC" + super.toString();
+        return "AC" + super.toString();
     }
 }

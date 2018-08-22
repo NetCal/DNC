@@ -2,7 +2,7 @@
  * This file is part of the Disco Deterministic Network Calculator.
  *
  * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2016 Steffen Bondorf
+ * Copyright (C) 2013 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
  * disco | Distributed Computer Systems Lab
@@ -27,78 +27,65 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.disco.affine;
+package de.uni_kl.cs.discodnc.curves.disco.pwaffine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public class MaxServiceCurve_DNC_Affine extends Curve_DNC_Affine implements MaxServiceCurve {
+public class ServiceCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements ServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
-    protected MaxServiceCurve_DNC_Affine() {
+    public ServiceCurve_Disco_PwAffine() {
         super();
     }
 
-    public MaxServiceCurve_DNC_Affine(int segment_count) {
+    public ServiceCurve_Disco_PwAffine(int segment_count) {
         super(segment_count);
     }
 
-    public MaxServiceCurve_DNC_Affine(Curve curve) {
+    public ServiceCurve_Disco_PwAffine(Curve curve) {
         copy(curve);
 
-        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isAlmostConcave()
-            // ) {
-            throw new RuntimeException(
-                    "Maximum service curves can only be created from wide-sense increasing functions.");
+        // Too strong requirement: !isConvex()
+        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
-
-        forceThroughOrigin();
     }
 
-    public MaxServiceCurve_DNC_Affine(String max_service_curve_str) throws Exception {
-        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest
-            // possible
-            // string:
-            // {(0,0),0}
+    public ServiceCurve_Disco_PwAffine(String service_curve_str) throws Exception {
+        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) {
+        	// Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
-        initializeCurve(max_service_curve_str);
+        initializeCurve(service_curve_str);
 
-        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isAlmostConcave()
-            // ) {
-            throw new RuntimeException(
-                    "Maximum service curves can only be created from wide-sense increasing functions.");
+        // Too strong requirement: !isConvex()
+        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
-
-        forceThroughOrigin();
     }
 
     // --------------------------------------------------------------------------------------------------------------
     // Interface Implementations
     // --------------------------------------------------------------------------------------------------------------
     @Override
-    public MaxServiceCurve_DNC_Affine copy() {
-        MaxServiceCurve_DNC_Affine msc_copy = new MaxServiceCurve_DNC_Affine();
-        msc_copy.copy(this);
-
-        return msc_copy;
+    public ServiceCurve_Disco_PwAffine copy() {
+        ServiceCurve_Disco_PwAffine sc_copy = new ServiceCurve_Disco_PwAffine();
+        sc_copy.copy(this);
+        return sc_copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MaxServiceCurve_DNC_Affine) && super.equals(obj);
+        return (obj instanceof ServiceCurve_Disco_PwAffine) && super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return "MSC".hashCode() * super.hashCode();
+        return "SC".hashCode() * super.hashCode();
     }
 
     /**
@@ -108,6 +95,6 @@ public class MaxServiceCurve_DNC_Affine extends Curve_DNC_Affine implements MaxS
      */
     @Override
     public String toString() {
-        return "MSC" + super.toString();
+        return "SC" + super.toString();
     }
 }

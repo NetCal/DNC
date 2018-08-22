@@ -27,35 +27,25 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.algebra.disco.pwaffine;
+package de.uni_kl.cs.discodnc.algebra.disco.affine;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.utils.CheckUtils;
 
-import java.util.HashSet;
-import java.util.Set;
-
-public abstract class Convolution_DNC_PwAffine {
+public abstract class Convolution_Disco_Affine {
 
     // ------------------------------------------------------------
     // Service Curves
     // ------------------------------------------------------------
-
-    /**
-     * Returns the convolution of two curve, which must be convex
-     *
-     * @param service_curve_1 The first curve to convolve with.
-     * @param service_curve_2 The second curve to convolve with.
-     * @return The convolved curve.
-     */
     public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
-        // null checks will be done by convolve_SC_SC_Generic( ... ).
         switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
                 return service_curve_2.copy();
@@ -68,97 +58,31 @@ public abstract class Convolution_DNC_PwAffine {
                 break;
         }
 
-        // Shortcut: only go here if there is at least one delayed infinite burst
-        if (service_curve_1.isDelayedInfiniteBurst() || service_curve_2.isDelayedInfiniteBurst()) {
-            if (service_curve_1.isDelayedInfiniteBurst()
-                    && service_curve_2.isDelayedInfiniteBurst()) {
-                return Curve.getFactory().createDelayedInfiniteBurst(
-                		Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
-            }
-
-            if (service_curve_1.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
-                return Curve.getFactory().createServiceCurve(
-                        Curve.shiftRight(service_curve_2, service_curve_1.getLatency()));
-            }
-
-            if (service_curve_2.isDelayedInfiniteBurst()) { // service_curve_2 is not a delayed infinite burst
-                return Curve.getFactory().createServiceCurve(
-                        Curve.shiftRight(service_curve_1, service_curve_2.getLatency()));
-            }
+        Num rate;
+        switch (CheckUtils.inputDelayedInfiniteBurstCheck(service_curve_1, service_curve_2)) {
+            case 1:
+                rate = service_curve_2.getUltAffineRate();
+                break;
+            case 2:
+                rate = service_curve_1.getUltAffineRate();
+                break;
+            case 3:
+                rate = Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+                break;
+            case 0:
+            default:
+                rate = Num.getUtils(Calculator.getInstance().getNumBackend()).min(service_curve_1.getUltAffineRate(), service_curve_2.getUltAffineRate());
+                break;
         }
 
-        ServiceCurve zero_service = Curve.getFactory().createZeroService();
-        if (service_curve_1.equals(zero_service) || service_curve_2.equals(zero_service)) {
-            return zero_service;
-        }
-
-        ServiceCurve result = Curve.getFactory().createServiceCurve();
-
-        Num x = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-        Num y = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(); // Functions pass though the origin
-        Num grad = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-        LinearSegment s = LinearSegment.createLinearSegment(x, y, grad, false);
-        result.addSegment(s);
-
-        int i1 = (service_curve_1.isRealDiscontinuity(0)) ? 1 : 0;
-        int i2 = (service_curve_2.isRealDiscontinuity(0)) ? 1 : 0;
-        if (i1 > 0 || i2 > 0) {
-            x = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-            y = Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_1.fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()),
-                    service_curve_2.fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()));
-            grad = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-            s = LinearSegment.createLinearSegment(x, y, grad, true);
-
-            result.addSegment(s);
-        }
-
-        while (i1 < service_curve_1.getSegmentCount() || i2 < service_curve_2.getSegmentCount()) {
-            if (service_curve_1.getSegment(i1).getGrad().lt(service_curve_2.getSegment(i2).getGrad())) {
-                if (i1 + 1 >= service_curve_1.getSegmentCount()) {
-                    result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
-                    break;
-                }
-
-                x = Num.getUtils(Calculator.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curve_1.getSegment(i1 + 1).getX(),
-                                service_curve_1.getSegment(i1).getX())));
-                y = Num.getUtils(Calculator.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curve_1.getSegment(i1 + 1).getY(),
-                                service_curve_1.getSegment(i1).getY())));
-                grad = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-                s = LinearSegment.createLinearSegment(x, y, grad, true);
-
-                result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_1.getSegment(i1).getGrad());
-                result.addSegment(s);
-
-                i1++;
-            } else {
-                if (i2 + 1 >= service_curve_2.getSegmentCount()) {
-                    result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
-                    break;
-                }
-
-                x = Num.getUtils(Calculator.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getX(),
-                        (Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curve_2.getSegment(i2 + 1).getX(),
-                                service_curve_2.getSegment(i2).getX())));
-                y = Num.getUtils(Calculator.getInstance().getNumBackend()).add(result.getSegment(result.getSegmentCount() - 1).getY(),
-                        (Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curve_2.getSegment(i2 + 1).getY(),
-                                service_curve_2.getSegment(i2).getY())));
-                grad = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-                s = LinearSegment.createLinearSegment(x, y, grad, true);
-
-                result.getSegment(result.getSegmentCount() - 1).setGrad(service_curve_2.getSegment(i2).getGrad());
-                result.addSegment(s);
-
-                i2++;
-            }
-        }
-
-        Curve.beautify(result);
-
-        return result;
+        return Curve.getFactory().createRateLatency(rate,
+                Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_1.getLatency(), service_curve_2.getLatency()));
     }
 
+
+    // Java won't let me call this method "convolve" because it does not care about
+    // the Sets' types; tells that there's already another method taking the same
+    // arguments.
     public static Set<ServiceCurve> convolve(Set<ServiceCurve> service_curves_1, Set<ServiceCurve> service_curves_2) {
         Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 
@@ -317,7 +241,7 @@ public abstract class Convolution_DNC_PwAffine {
                         .createArrivalCurve(Curve.removeLatency(max_service_curve_2)));
         MaxServiceCurve result = Curve.getFactory().createMaxServiceCurve(ac_intermediate);
         result = (MaxServiceCurve) Curve.shiftRight(result,
-        		Num.getUtils(Calculator.getInstance().getNumBackend()).add(latency_msc_1, latency_msc_2));
+                Num.getUtils(Calculator.getInstance().getNumBackend()).add(latency_msc_1, latency_msc_2));
         Curve.beautify(result);
 
         return result;
@@ -357,8 +281,8 @@ public abstract class Convolution_DNC_PwAffine {
         // Similar to convolve_ACs_EGamma
         ArrivalCurve msc_as_ac = Curve.getFactory()
                 .createArrivalCurve(Curve.removeLatency(maximum_service_curve));
-        // Abuse the ArrivalCurve class here for convenience.
-        
+        // Abuse the ArrivalCurve class here for convenience. 
+
         for (ArrivalCurve ac : arrival_curves) {
             result.add(Curve.shiftRight(convolve(ac, msc_as_ac), msc_latency));
         }
@@ -395,7 +319,7 @@ public abstract class Convolution_DNC_PwAffine {
         Set<ArrivalCurve> result = new HashSet<ArrivalCurve>();
         
         // Abuse the ArrivalCurve class here for convenience.
-        ArrivalCurve extra_gamma_as_ac = Curve.getFactory().createArrivalCurve(extra_gamma_curve);
+        ArrivalCurve extra_gamma_as_ac = Curve.getFactory().createArrivalCurve(extra_gamma_curve); 
         for (ArrivalCurve ac : arrival_curves) {
             result.add(convolve(ac, extra_gamma_as_ac));
         }

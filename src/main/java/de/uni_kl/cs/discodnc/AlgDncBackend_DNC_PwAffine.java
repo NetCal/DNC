@@ -28,32 +28,32 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.algebra.MinPlus;
-import de.uni_kl.cs.discodnc.algebra.disco.pwaffine.MinPlus_DNC_PwAffine;
+import de.uni_kl.cs.discodnc.algebra.disco.pwaffine.MinPlus_Disco_PwAffine;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
-import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.curves.disco.pwaffine.Curve_DNC_PwAffine;
+import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_Disco;
+import de.uni_kl.cs.discodnc.curves.disco.pwaffine.Curve_Disco_PwAffine;
 
 public enum AlgDncBackend_DNC_PwAffine implements AlgDncBackend {
 	DISCO_PWAFFINE;
 
 	@Override
 	public MinPlus getMinPlus() {
-		return MinPlus_DNC_PwAffine.MINPLUS_DISCO_PWAFFINE;
+		return MinPlus_Disco_PwAffine.MINPLUS_DISCO_PWAFFINE;
 	}
 
 	@Override
 	public Curve getCurveFactory() {
-		return Curve_DNC_PwAffine.getFactory();
+		return Curve_Disco_PwAffine.getFactory();
 	}
 
 	@Override
 	public LinearSegment.Builder getLinearSegmentFactory() {
-		return LinearSegment_DNC.getBuilder();
+		return LinearSegment_Disco.getBuilder();
 	}
 
     @Override
     public String toString() {
-        return assembleString(this.name(), MinPlus_DNC_PwAffine.MINPLUS_DISCO_PWAFFINE.name());
+        return assembleString(this.name(), MinPlus_Disco_PwAffine.MINPLUS_DISCO_PWAFFINE.name());
     }
 }

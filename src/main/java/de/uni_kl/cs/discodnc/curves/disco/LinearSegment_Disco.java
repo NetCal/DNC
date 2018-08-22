@@ -40,7 +40,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
  * point (<code>x0</code>,<code>y0</code>) is excluded from the segment,
  * otherwise is included.
  */
-public class LinearSegment_DNC implements LinearSegment {
+public class LinearSegment_Disco implements LinearSegment {
     /**
      * The x-coordinate of the linear segment's starting point.
      */
@@ -69,7 +69,7 @@ public class LinearSegment_DNC implements LinearSegment {
     /**
      * The default constructor.
      */
-    protected LinearSegment_DNC() {
+    protected LinearSegment_Disco() {
         x = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
         y = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
         grad = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
@@ -84,21 +84,21 @@ public class LinearSegment_DNC implements LinearSegment {
      * @param grad     The segments gradient.
      * @param leftopen Set the segment to be left-open.
      */
-    public LinearSegment_DNC(Num x, Num y, Num grad, boolean leftopen) {
+    public LinearSegment_Disco(Num x, Num y, Num grad, boolean leftopen) {
         this.x = x;
         this.y = y;
         this.grad = grad;
         this.leftopen = leftopen;
     }
 
-    public LinearSegment_DNC(LinearSegment segment) {
+    public LinearSegment_Disco(LinearSegment segment) {
         x = segment.getX();
         y = segment.getY();
         grad = segment.getGrad();
         leftopen = segment.isLeftopen();
     }
 
-    public LinearSegment_DNC(String segment_str) throws Exception {
+    public LinearSegment_Disco(String segment_str) throws Exception {
         // Is this segment left-open?
         leftopen = false;
         switch (segment_str.charAt(0)) {
@@ -202,18 +202,18 @@ public class LinearSegment_DNC implements LinearSegment {
      * @return a copy of this instance.
      */
     @Override
-    public LinearSegment_DNC copy() {
-        LinearSegment_DNC copy = new LinearSegment_DNC(x.copy(), y.copy(), grad.copy(), leftopen);
+    public LinearSegment_Disco copy() {
+        LinearSegment_Disco copy = new LinearSegment_Disco(x.copy(), y.copy(), grad.copy(), leftopen);
         return copy;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof LinearSegment_DNC)) {
+        if (obj == null || !(obj instanceof LinearSegment_Disco)) {
             return false;
         }
 
-        LinearSegment_DNC other = (LinearSegment_DNC) obj;
+        LinearSegment_Disco other = (LinearSegment_Disco) obj;
         boolean result;
         result = this.x.equals(other.getX());
         result = result && this.y.equals(other.getY());
@@ -252,12 +252,12 @@ public class LinearSegment_DNC implements LinearSegment {
 
 		@Override
 		public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-			return new LinearSegment_DNC(x, y, grad, leftopen);
+			return new LinearSegment_Disco(x, y, grad, leftopen);
 		}
 
 		@Override
 		public LinearSegment createHorizontalLine(double y) {
-				return new LinearSegment_DNC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+				return new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
 	                Num.getFactory(Calculator.getInstance().getNumBackend()).create(y), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 	    }
     	
