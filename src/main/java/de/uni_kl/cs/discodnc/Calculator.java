@@ -28,13 +28,13 @@
 
 package de.uni_kl.cs.discodnc;
 
+import de.uni_kl.cs.discodnc.algebra.MinPlus;
 import de.uni_kl.cs.discodnc.curves.Curve;
-import de.uni_kl.cs.discodnc.minplus.MinPlus;
 import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 public final class Calculator {
 	private static Calculator instance = new Calculator();
-	private CurveBackend CURVE_BACKEND = CurveBackend_DNC_PwAffine.DNC_PWAFFINE;
+	private AlgDncBackend CURVE_BACKEND = AlgDncBackend_DNC_PwAffine.DISCO_PWAFFINE;
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
@@ -63,14 +63,14 @@ public final class Calculator {
 		}
 	}
 
-	public CurveBackend getCurveBackend() {
+	public AlgDncBackend getCurveBackend() {
 		return CURVE_BACKEND;
 	}
 
 	private void checkDependencies() {
 		CURVE_BACKEND.checkDependencies();
 	}
-	public boolean setCurveBackend(CurveBackend curve_backend) {
+	public boolean setCurveBackend(AlgDncBackend curve_backend) {
 		checkDependencies();
 
 		if (CURVE_BACKEND == curve_backend) {
