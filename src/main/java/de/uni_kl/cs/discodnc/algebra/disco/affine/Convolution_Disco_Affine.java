@@ -158,12 +158,11 @@ public abstract class Convolution_Disco_Affine {
             return zero_arrival;
         }
 
-        Curve zero_delay_infinite_burst = (Curve) Curve.getFactory()
-                .createZeroDelayInfiniteBurst();
-        if (((Curve)arrival_curve_1).equals(zero_delay_infinite_burst)) {
+        ArrivalCurve infinite_arrivals = Curve.getFactory().createInfiniteArrivals();
+        if (arrival_curve_1.equals(infinite_arrivals)) {
             return arrival_curve_2.copy();
         }
-        if (((Curve)arrival_curve_2).equals(zero_delay_infinite_burst)) {
+        if (arrival_curve_2.equals(infinite_arrivals)) {
             return arrival_curve_1.copy();
         }
 
