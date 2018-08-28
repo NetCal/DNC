@@ -33,7 +33,7 @@ In order to checkout all submodules, use the command `git submodule update --ini
 This small guide assumes you cloned the DiscoDNC repository, executed the above commands to pull the submodules, and created an Eclipse project from the code.
 You might also be able to do all this from Eclipse using its EGit plugin.
 
-These steps were tested with Eclipse Juno only.
+These steps were tested with Eclipse Photon only.
 
 ## Add Profiles
 Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
