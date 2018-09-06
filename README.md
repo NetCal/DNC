@@ -33,7 +33,7 @@ In order to checkout all submodules, use the command `git submodule update --ini
 This small guide assumes you cloned the DiscoDNC repository, executed the above commands to pull the submodules, and created an Eclipse project from the code.
 You might also be able to do all this from Eclipse using its EGit plugin.
 
-These steps were tested with Eclipse Juno only.
+These steps were tested with Eclipse Photon only.
 
 ## Add Profiles
 Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
@@ -53,10 +53,7 @@ On click, there are suggestions. Two offerings are to ignore this error.
 Choose the second on (globally ignore error cause) to prevent changes to the pom.xml file.
 
 ## Add Source Folders
-Go to your Project's Properties > Java Build Path > Source and add
-* `src/experiments/java`
-* `src/mpa_ext/java`
-* `src/functional_test/java`
+Select "eclipse" maven profile in eclipse to import source folders automatically.
 
 ## Tests
 * In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
