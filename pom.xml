@@ -22,9 +22,9 @@
     <developers>
         <developer>
             <name>Steffen Bondorf</name>
-            <email>bondorf@cs.uni-kl.de</email>
-            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
-            <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+            <email>steffen.bondorf@ntnu.no</email>
+            <organization>NTNU - Norwegian University of Science and Technology</organization>
+            <organizationUrl>https://www.ntnu.edu</organizationUrl>
         </developer>
     </developers>
 
