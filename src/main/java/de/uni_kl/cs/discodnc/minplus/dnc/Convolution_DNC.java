@@ -30,7 +30,6 @@
 package de.uni_kl.cs.discodnc.minplus.dnc;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
@@ -293,12 +292,11 @@ public abstract class Convolution_DNC {
             return zero_arrival;
         }
 
-        Curve zero_delay_infinite_burst = (Curve)CurvePwAffine.getFactory()
-                .createZeroDelayInfiniteBurst();
-        if (((Curve)arrival_curve_1).equals(zero_delay_infinite_burst)) {
+        ArrivalCurve unbounded_arrivals = CurvePwAffine.getFactory().createUnboundedArrivals();
+        if (arrival_curve_1.equals(unbounded_arrivals)) {
             return arrival_curve_2.copy();
         }
-        if (((Curve)arrival_curve_2).equals(zero_delay_infinite_burst)) {
+        if (arrival_curve_2.equals(unbounded_arrivals)) {
             return arrival_curve_1.copy();
         }
 
