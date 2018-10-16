@@ -10,7 +10,7 @@
 
     <groupId>de.uni_kl.cs.discodnc</groupId>
     <artifactId>DiscoDNC</artifactId>
-    <version>2.4.4pre</version>
+    <version>2.4.4</version>
 	
     <licenses>
         <license>
