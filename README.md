@@ -53,10 +53,7 @@ On click, there are suggestions. Two offerings are to ignore this error.
 Choose the second on (globally ignore error cause) to prevent changes to the pom.xml file.
 
 ## Add Source Folders
-Go to your Project's Properties > Java Build Path > Source and add
-* `src/experiments/java`
-* `src/mpa_ext/java`
-* `src/functional_test/java`
+Select "eclipse" maven profile in eclipse to import source folders automatically.
 
 ## Tests
 * In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
