@@ -11,8 +11,8 @@
  *
  *
  * The Disco Deterministic Network Calculator (DiscoDNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -33,80 +33,172 @@ import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.minplus.MinPlus;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
- * A flows path is a sequence of crossed buffers -- either represented by the
- * sequence servers (said buffers) or links connecting them.
- * <p>
- * Remember for modeling purpose: A flow usually does not reach the output
- * buffer of its sink. Therefore a flow's path should not contain a link to it.
- * Otherwise the flow interference pattern of the network will be too
- * pessimistic, yet, the results remain valid.
+ *
+ * A multicast path is a collection of unicast paths
+ *
+ * A unicast path inside a multicast one is a sequence of crossed buffers -- either represented by
+ * the sequence servers (said buffers) or links connecting them.
+ * Each unicast path is identified by an 'id'. In order to access a specific unicast path
+ * inside a multicast one you must pass it as a parameter
+ *  Ex. getServers() -> access the first unicast path available (used for unicast flows)
+ *      getServers(id) -> access a specific unicast path
+ *
+ * Remember for modeling purpose:
+ * A flow usually does not reach the output buffer of its sink.
+ * Therefore a flow's path should not contain a link to it.
+ * Otherwise the flow interference pattern of the network will be too pessimistic,
+ * yet, the results remain valid.
+ *
+ * @author Steffen Bondorf
+ *
  */
+
 public class Path {
-    private LinkedList<Server> path_servers;
-    private LinkedList<Link> path_links;
+    private Map<Integer, UnicastPath> id_to_path = new HashMap<>();
+    private Set<UnicastPath> paths = new HashSet<>(); //list of unicast paths
 
-    private Path() {
-        path_servers = new LinkedList<Server>();
-        path_links = new LinkedList<Link>();
-    }
+    // is used to generate the unique Id of the serverPaths
+    private int serverPathNum = 0;
 
-    protected Path(List<Server> path_servers, List<Link> path_links) {
+    private Path() {}
+
+    protected Path( List<Server> path_servers, List<Link> path_links ) {
         // Sanity check should have been done by the network
-        this.path_servers = new LinkedList<Server>(path_servers);
-        this.path_links = new LinkedList<Link>(path_links);
+        this.paths.add(new UnicastPath(path_servers,path_links));
+        id_to_path.put(0, paths.iterator().next());
     }
 
-    protected Path(Path path) {
-        this.path_servers = path.getServers();
-        this.path_links = path.getLinks();
+    protected Path( Path path ) {
+        for(UnicastPath unicast_path : path.paths){
+            UnicastPath new_unicast_path = new UnicastPath(unicast_path);
+            paths.add(new_unicast_path);
+            id_to_path.put(new_unicast_path.id, new_unicast_path);
+        }
     }
 
     // Can be visible.
     // There's no way to create a single hop path not possible to take in a network.
-    public Path(Server single_hop) {
-        path_servers = new LinkedList<Server>();
-        path_servers.add(single_hop);
-        
-        path_links = new LinkedList<Link>();
+    public Path( Server single_hop ) {
+        this.paths.add(new UnicastPath(new LinkedList<>(Collections.singleton(single_hop)), new LinkedList<>()));
+        this.id_to_path.put(this.paths.iterator().next().id, this.paths.iterator().next());
     }
 
     public static Path createEmptyPath() {
         return new Path();
     }
 
-    public Server getSource() {
-        return path_servers.get(0);
+    // There is only a single source in a multicast flow
+    public Server getSource(){
+        return paths.iterator().next().getSource();
     }
-    
+
     public boolean isSource(Server s) {
-    	return path_servers.indexOf(s) == 0;
+        return paths.iterator().next().getSource().equals(s);
     }
 
-    public Server getSink() {
-        return path_servers.get(path_servers.size() - 1);
+    public Server getSink(){
+        return paths.iterator().next().getSink();
     }
 
-    public int numServers() {
-        return path_servers.size();
+    public Server getSink(int id) throws Exception{
+        return getUnicastPath(id).getSink();
     }
 
-    public int numLinks() {
-        return path_links.size();
+    public Set<Server> getSinks(){
+        Set<Server> sinks = new HashSet<>();
+        for(UnicastPath unicast_path : paths){
+            sinks.add(unicast_path.getSink());
+        }
+        return sinks;
+    }
+
+    public int numServers(){
+        return getAllServers().size();
+    }
+
+    public int numServers(int id) throws Exception{
+        return getUnicastPath(id).getServers().size();
+    }
+
+    public int numLinks(){
+        return getAllLinks().size();
     }
 
     public LinkedList<Link> getLinks() {
-        return new LinkedList<Link>(path_links);
+        return new LinkedList<>( paths.iterator().next().getLinks() );
+    }
+
+    public LinkedList<Link> getLinks(int id) throws Exception{
+        return new LinkedList<>(getUnicastPath(id).getLinks());
+    }
+
+    public Set<Link> getAllLinks(){
+        Set<Link> allLinks = new HashSet<>();
+        for(UnicastPath server_path : paths){
+            allLinks.addAll(server_path.getLinks());
+        }
+        return allLinks;
     }
 
     public LinkedList<Server> getServers() {
-        return new LinkedList<Server>(path_servers);
+        return new LinkedList<>( paths.iterator().next().getServers() );
+    }
+
+    public LinkedList<Server> getServers(int id) throws Exception{
+        return new LinkedList<>(getUnicastPath(id).getServers());
+    }
+
+    public Set<Server> getAllServers(){
+        Set<Server> allServers = new HashSet<>();
+        for(UnicastPath server_path : paths){
+            allServers.addAll(server_path.getServers());
+        }
+        return allServers;
+    }
+
+    /**
+     * Gives a Path class that models one of the unicast paths
+     * @param id of the unicast path
+     * @return
+     * @throws Exception
+     */
+    public Path asUnicastPath(int id) throws Exception{
+        UnicastPath unicast_path = getUnicastPath(id);
+        return new Path(unicast_path.getServers(),unicast_path.getLinks());
+
+    }
+
+    private UnicastPath getUnicastPath(int id) throws Exception{
+        if(id_to_path.containsKey(id)){
+            return id_to_path.get(id);
+        }
+        throw new Exception("No Unicast Path with id " + id + " was found");
+    }
+
+    /**
+     * Returns the Ids for the unicast paths
+     * @return
+     */
+    public Set<Integer> getIds(){
+        return id_to_path.keySet();
+    }
+
+    /**
+     * Return the respective unicast path id for a given sink
+     * @param s
+     * @return
+     * @throws Exception
+     */
+    public int getIdFromSink(Server s) throws Exception {
+        for(int id : getIds()){
+            if(getSink(id).equals(s)){
+                return id;
+            }
+        }
+        throw new Exception("Server " + s + " is not present in the flow's paths");
     }
 
     /**
@@ -116,70 +208,148 @@ public class Path {
      * @throws Exception No subpath found; most probably an input parameter problem.
      */
     public Path getSubPath(Server from, Server to) throws Exception {
+        return getSubPath(from, to, 0);
+    }
+
+    /**
+     *
+     * @param from Source, inclusive.
+     * @param to Sink, inclusive.
+     * @param id identifier of unicast path
+     * @return The subpath.
+     * @throws Exception No subpath found; most probably an input parameter problem.
+     */
+    public Path getSubPath( Server from, Server to, int id ) throws Exception {
+        LinkedList<Server> server_path = getServers(id);
         // All other sanity check should have been passed when this object was created
-        if (!path_servers.contains(from)) {
-            throw new Exception("Cannot create a subpath if source is not in it.");
+        if( !server_path.contains( from ) ) {
+            throw new Exception( "Cannot create a subpath if source is not in it." );
         }
-        if (!path_servers.contains(to)) {
-            throw new Exception("Cannot create a subpath if sink is not in it.");
-        }
-
-        if (from == to) {
-            return new Path(new LinkedList<Server>(Collections.singleton(from)), new LinkedList<Link>());
+        if( !server_path.contains( to ) ) {
+            throw new Exception( "Cannot create a subpath if sink is not in it." );
         }
 
-        int from_index = path_servers.indexOf(from);
-        int to_index = path_servers.indexOf(to);
-        if (from_index >= to_index) {
-            throw new Exception("Cannot create sub-path from " + from.toString() + " to " + to.toString());
+        if( from == to ) {
+            return new Path( new LinkedList<Server>( Collections.singleton( from ) ) , new LinkedList<Link>() );
+        }
+
+        int from_index = server_path.indexOf( from );
+        int to_index = server_path.indexOf( to );
+        if ( from_index >= to_index ) {
+            throw new Exception( "Cannot create sub-path from " + from.toString() + " to " + to.toString() );
         }
         // subList: 'from' is inclusive but 'to' is exclusive
-        LinkedList<Server> subpath_servers = new LinkedList<Server>(path_servers.subList(from_index, to_index));
-        subpath_servers.add(to);
+        LinkedList<Server> subpath_servers = new LinkedList<Server>( server_path.subList( from_index, to_index ) );
+        subpath_servers.add( to );
 
         List<Link> subpath_links = new LinkedList<Link>();
-        if (subpath_servers.size() > 1) {
-            for (Link l : path_links) {
+        if ( subpath_servers.size() > 1 ) {
+            for ( Link l : getLinks(id) ) {
                 Server src_l = l.getSource();
                 Server snk_l = l.getDest();
-                if (subpath_servers.contains(src_l) && subpath_servers.contains(snk_l)) {
-                    subpath_links.add(l);
+                if ( subpath_servers.contains( src_l ) && subpath_servers.contains( snk_l ) ) {
+                    subpath_links.add( l );
                 }
             }
         }
 
-        return new Path(subpath_servers, subpath_links);
+        return new Path( subpath_servers, subpath_links );
     }
 
-    public Link getPrecedingLink(Server s) throws Exception {
-        for (Link l : path_links) {
-            if (l.getDest().equals(s)) {
+
+    public Link getPrecedingLink( Server s ) throws Exception {
+        UnicastPath unicast_path = paths.iterator().next();
+        for( Link l: unicast_path.getLinks() ) {
+            if ( l.getDest().equals( s ) ) {
                 return l;
             }
         }
-        throw new Exception("No preceding link on the path found");
+        throw new Exception( "No preceding link on the path found" );
     }
 
+    public Link getPrecedingLink( Server s, int id ) throws Exception {
+        UnicastPath unicast_path = getUnicastPath(id);
+        for( Link l: unicast_path.getLinks() ) {
+            if ( l.getDest().equals( s ) ) {
+                return l;
+            }
+        }
+        throw new Exception( "No preceding link on the path found" );
+    }
+
+    /**
+     * For unicast flows
+     * @param s
+     * @return
+     * @throws Exception
+     */
     public Link getSucceedingLink(Server s) throws Exception {
-        for (Link l : path_links) {
+        return getSucceedingLink(s, 0);
+    }
+
+    public Link getSucceedingLink( Server s, int id ) throws Exception {
+        UnicastPath unicast_path = getUnicastPath(id);
+        for (Link l : unicast_path.getLinks()) {
             if (l.getSource().equals(s)) {
                 return l;
             }
         }
         throw new Exception("No succeeding link on the path found");
     }
-    
-    public Server getPrecedingServer(Server s) throws Exception {
-        try {
-            return getPrecedingLink(s).getSource();
-        } catch (Exception e) {
-            throw new Exception("No preceding server on the path found");
+
+    public HashSet<Link> getSucceedingLinks( Server s ) throws Exception {
+        HashSet<Link> succeeding_links = new HashSet<Link>();
+        for( Link l: getAllLinks() ) {
+            if ( l.getSource().equals( s ) ) {
+                succeeding_links.add( l );
+            }
+        }
+        if( succeeding_links.isEmpty() ) {
+            throw new Exception( "No succeeding link on the path found" );
+        } else {
+            return succeeding_links;
+        }
+    }
+
+    public Server getPrecedingServer( Server s ) throws Exception {
+        try{
+            return getPrecedingLink( s ).getSource();
+        } catch ( Exception e ) {
+            throw new Exception( "No preceding server on the path found" );
+        }
+    }
+
+    public Server getPrecedingServer( Server s, int id ) throws Exception {
+        try{
+            return getPrecedingLink( s, id ).getSource();
+        } catch ( Exception e ) {
+            throw new Exception( "No preceding server on the path found" );
         }
     }
 
     public Server getSucceedingServer(Server s) throws Exception {
         try {
             return getSucceedingLink(s).getDest();
+        } catch (Exception e) {
+            throw new Exception("No succeeding server on the path found");
+        }
+    }
+
+    public Server getSucceedingServer(Server s, int id) throws Exception {
+        try {
+            return getSucceedingLink(s, id).getDest();
+        } catch (Exception e) {
+            throw new Exception("No succeeding server on the path found");
+        }
+    }
+
+    public Set<Server> getSucceedingServers(Server s) throws Exception {
+        try {
+            Set<Server> servers = new HashSet<>();
+            for(Link l : getSucceedingLinks(s)){
+                servers.add(l.getDest());
+            }
+            return servers;
         } catch (Exception e) {
             throw new Exception("No succeeding server on the path found");
         }
@@ -194,6 +364,12 @@ public class Path {
     public ServiceCurve getServiceCurve() throws Exception {
         Collection<Server> servers = getServers();
         return getServiceCurve(servers);
+    }
+
+    public ServiceCurve getServiceCurve(int id) throws Exception
+    {
+        Collection<Server> servers = getServers(id);
+        return getServiceCurve( servers );
     }
 
     private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
@@ -220,6 +396,12 @@ public class Path {
         return getGamma(servers);
     }
 
+    public MaxServiceCurve getGamma(int id) throws Exception
+    {
+        Collection<Server> servers = getServers(id);
+        return getGamma( servers );
+    }
+
     private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
         MaxServiceCurve gamma_total = CurvePwAffine.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
@@ -242,6 +424,12 @@ public class Path {
     public MaxServiceCurve getExtraGamma() throws Exception {
         Collection<Server> servers = getServers();
         return getExtraGamma(servers);
+    }
+
+    public MaxServiceCurve getExtraGamma(int id) throws Exception
+    {
+        Collection<Server> servers = getServers(id);
+        return getExtraGamma( servers );
     }
 
     private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
@@ -279,28 +467,28 @@ public class Path {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals( Object obj ) {
         if (obj == null || !(obj instanceof Path)) {
             return false;
         }
 
         Path p = (Path) obj;
-        return path_servers.equals(p.getServers()) && path_links.equals(p.getLinks());
+        return paths.equals(p.paths);
     }
 
     @Override
     public int hashCode() {
-        return (int) Arrays.hashCode(path_servers.toArray()) * Arrays.hashCode(path_links.toArray());
+        return paths.hashCode();
     }
 
     // Print path as series of servers (short representation)
     public String toShortString() {
-        if (path_servers.isEmpty()) {
+        if (paths.isEmpty()) {
             return "{}";
         }
 
         String result_str = "{";
-        for (Server s : path_servers) {
+        for (Server s : getAllServers()) {
             result_str = result_str.concat(s.toShortString() + ",");
         }
         result_str = result_str.substring(0, result_str.length() - 1); // Remove the trailing comma.
@@ -310,33 +498,186 @@ public class Path {
     @Override
     // Print path as series of links (short representation)
     public String toString() {
-        if (path_links.isEmpty()) {
-            return toShortString();
+        if(this.paths.size() <= 1){
+            if( getLinks().isEmpty() ) {
+                return toShortString();
+            }
+
+            String result_str = "{";
+
+            for( Link l : getLinks() ) {
+                result_str = result_str.concat( l.toString() + "," );
+            }
+            result_str = result_str.substring( 0, result_str.length()-1 ); // Remove the trailing comma.
+
+            return result_str.concat( "}" );
+        }
+        else {
+            String result_str = "{";
+            for(int id : this.id_to_path.keySet()){
+                result_str = result_str.concat("|" + id + ":");
+                try{
+                    for( Link l : getLinks(id) ) {
+                        result_str = result_str.concat( l.toString() + "," );
+                    }
+                    result_str = result_str.substring( 0, result_str.length()-1 ); // Remove the trailing comma.
+
+                    result_str = result_str.concat( "|" );
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+            return result_str.concat( "}" );
+
         }
 
-        String result_str = "{";
-
-        for (Link l : path_links) {
-            result_str = result_str.concat(l.toString() + ",");
-        }
-        result_str = result_str.substring(0, result_str.length() - 1); // Remove the trailing comma.
-
-        return result_str.concat("}");
     }
 
     // Print path as series of links (extended representation)
     public String toExtendedString() {
-        if (path_links.isEmpty()) {
+        if( getLinks().isEmpty() ) {
             return toShortString();
         }
 
         String result_str = "{";
 
-        for (Link l : path_links) {
-            result_str = result_str.concat(l.toExtendedString() + ",");
+        for( Link l : getLinks() ) {
+            result_str = result_str.concat( l.toExtendedString() + "," );
         }
-        result_str = result_str.substring(0, result_str.length() - 1); // Remove the trailing comma.
+        result_str = result_str.substring( 0, result_str.length()-1 ); // Remove the trailing comma.
 
-        return result_str.concat("}");
+        return result_str.concat( "}" );
     }
+
+    /**
+     * Given a list of servers, returns if it is a valid unicast path to the multicast path or not
+     * @param server_list
+     * @return
+     */
+    public boolean isValidPath(List<Server> server_list){
+        //A unicast path cannot be null or empty
+        if(server_list == null || server_list.isEmpty()){
+            return false;
+        }
+
+        for(UnicastPath unicast_path : paths){
+
+            //All unicast paths share the same source
+            if(!server_list.get(0).equals(unicast_path.getSource())){
+                return false;
+            }
+
+            //One unicast path cannot contain the sink of another
+            if(unicast_path.servers_path.contains(server_list.get(server_list.size() - 1))){
+                return false;
+            }
+
+            //Get the smaller one as the size to use
+            int size;
+            if(server_list.size() < unicast_path.servers_path.size()){
+                size = server_list.size();
+            }
+            else{
+                size = unicast_path.servers_path.size();
+            }
+
+            //Check if the paths differ at some point
+            boolean isDifferent = false;
+            for(int i = 0; i < size; i++){
+                if(!server_list.get(i).equals(unicast_path.servers_path.get(i))){
+                    isDifferent = true;
+                }
+            }
+            if(!isDifferent){
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    /**
+     * Adds a new unicast path to a multicast path
+     * @param server_list
+     * @param link_list
+     * @return
+     */
+    public boolean addUnicastPath(List<Server> server_list, List<Link> link_list){
+        if(!isValidPath(server_list)){
+            return false;
+        }
+        UnicastPath new_unicast_path = new UnicastPath(server_list,link_list);
+        paths.add(new_unicast_path);
+        id_to_path.put(new_unicast_path.getId(), new_unicast_path);
+
+        return true;
+    }
+
+    //Obs: If a multicast path is used, some unicast paths may be added before a problem is found
+    public boolean addUnicastPath(Path path){
+        for(UnicastPath unicast_path : path.paths){
+            if(!addUnicastPath(unicast_path.servers_path, unicast_path.links_path)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Helper class that represents a unicast path inside a multicast one
+     */
+    public class UnicastPath{
+        private LinkedList<Server> servers_path;
+        private LinkedList<Link> links_path;
+        private int id;
+        UnicastPath(List<Server> servers_path, List<Link> links_path){
+            this.servers_path = new LinkedList<>(servers_path);
+            this.links_path = new LinkedList<>(links_path);
+            id = serverPathNum;
+            serverPathNum++;
+        }
+
+        UnicastPath(UnicastPath old_unicast_path){
+            this.servers_path = new LinkedList<>(old_unicast_path.getServers());
+            this.links_path = new LinkedList<>(old_unicast_path.getLinks());
+            id = serverPathNum;
+            serverPathNum++;
+        }
+
+        public LinkedList<Server> getServers() {
+            return servers_path;
+        }
+
+        LinkedList<Link> getLinks() {
+            return links_path;
+        }
+
+        public Server getSource(){
+            return servers_path.getFirst();
+        }
+
+        public Server getSink() { return servers_path.getLast(); }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof UnicastPath)) {
+                return false;
+            }
+
+            UnicastPath up = (UnicastPath) obj;
+            return servers_path.equals(up.servers_path);
+        }
+
+        @Override
+        public int hashCode() {
+            return servers_path.hashCode();
+        }
+    }
+
 }
