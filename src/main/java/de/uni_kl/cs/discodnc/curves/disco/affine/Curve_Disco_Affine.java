@@ -1330,7 +1330,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	public Curve_Disco_Affine createCurve(List<LinearSegment> segments) {
-		// TODO Assume there are more than two segments, defining either a valid mTB or mRL.
+		// Assume there are more than two segments, defining either a valid mTB or mRL.
 		// The first segment passes through the origin, the second defines best known lateny or burstiness.
 		// The last segment defines least arrival rate or largest service rate, respectively.
 		// Choosing the second segment for an affine curve from the given ones is thus finding a reasonable tradeoff.
@@ -1344,7 +1344,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 			segment_size = 2;
 		}
 		//Curve_DNC_Affine c_dnc = new Curve_DNC_Affine(segments.size());
-		Curve_Disco_Affine c_dnc = new Curve_Disco_Affine(segments.size());
+		Curve_Disco_Affine c_dnc = new Curve_Disco_Affine(segment_size);
 		for (int i = 0; i < segment_size; i++) {
 			LinearSegment s = null;
 			if(i == 0) {
@@ -1353,16 +1353,16 @@ public class Curve_Disco_Affine implements Curve_Affine {
 			else
 			{
 				s = segments.get( segments.size() - 1);
-				Num temp = Num.getUtils().create(-1);
-				Num x2 = Num.getUtils().add(Num.getUtils().mult(Num.getUtils().div(s.getY(), s.getGrad()), temp), s.getX());
-				Num y2 = Num.getUtils().add(Num.getUtils().mult(Num.getUtils().mult( s.getX(), s.getGrad()),temp), s.getY());
+				Num temp = Num.getUtils(Calculator.getInstance().getNumBackend()).create(-1);
+				Num x2 = Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).div(s.getY(), s.getGrad()), temp), s.getX());
+				Num y2 = Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).mult( s.getX(), s.getGrad()),temp), s.getY());
 				if(x2.leqZero()){
-					s.setX(Num.getUtils().createZero());
+					s.setX(Num.getUtils(Calculator.getInstance().getNumBackend()).createZero());
 					s.setY(y2);
 				}
 				else{
 					s.setX(x2);
-					s.setY(Num.getUtils().createZero());
+					s.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).createZero());
 				}
 
 			}
