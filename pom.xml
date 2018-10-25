@@ -1,233 +1,341 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <name>DiscoDNC - The Disco Deterministic Network Calculator</name>
-    <description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>DiscoDNC - The Disco Deterministic Network Calculator</name>
+	<description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of
         communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s
         end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the
         Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.
-    </description>
-    <url>discodnc.cs.uni-kl.de</url>
+	</description>
+	<url>discodnc.cs.uni-kl.de</url>
 
-    <groupId>de.uni_kl.cs.discodnc</groupId>
-    <artifactId>DiscoDNC</artifactId>
-    <version>2.5.0-SNAPSHOT</version>
+	<groupId>de.uni_kl.cs.discodnc</groupId>
+	<artifactId>DiscoDNC</artifactId>
+	<version>2.5.0-SNAPSHOT</version>
 
-    <licenses>
-        <license>
-            <name>GNU General Lesser Public License (LGPL) version 2.1</name>
-            <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>GNU General Lesser Public License (LGPL) version 2.1</name>
+			<url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
+		</license>
+	</licenses>
 
-    <developers>
-        <developer>
-            <name>Steffen Bondorf</name>
-            <email>bondorf@cs.uni-kl.de</email>
-            <organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
-            <organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
-        </developer>
-        <developer>
-            <name>Zoltan Matyas</name>
-            <email>matyesz79@gmail.com</email>
-            <organization></organization>
-            <organizationUrl></organizationUrl>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<name>Steffen Bondorf</name>
+			<email>bondorf@cs.uni-kl.de</email>
+			<organization>Distributed Computer Systems (DISCO) Lab at TU Kaiserslautern</organization>
+			<organizationUrl>https://disco.cs.uni-kl.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Zoltan Matyas</name>
+			<email>matyesz79@gmail.com</email>
+			<organization></organization>
+			<organizationUrl></organizationUrl>
+		</developer>
+	</developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/NetCal/DiscoDNC.git</connection>
-        <developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
-        <url>https://github.com/NetCal/DiscoDNC/tree/v2.5</url>
-<!--
-        <url>https://github.com/NetCal/DiscoDNCext_MPARTC/tree/v2.5</url>
-        <url>https://github.com/NetCal/DiscoDNC_tests/tree/v2.5</url>
-        <url>https://github.com/NetCal/DiscoDNC/tree/v2.5_experiments</url>
--->
-    </scm>
+	<scm>
+		<connection>scm:git:git://github.com/NetCal/DiscoDNC.git</connection>
+		<developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
+		<url>https://github.com/NetCal/DiscoDNC/tree/v2.5</url>
+	</scm>
 
-    <properties>
-        <maven.test.skip>true</maven.test.skip>
-        <maven.compiler.source>10</maven.compiler.source>
-        <maven.compiler.target>10</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+	<properties>
+		<maven.compiler.source>10</maven.compiler.source>
+		<maven.compiler.target>10</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<junit.platform.version>1.2.0</junit.platform.version>
+		<junit.jupiter.version>5.2.0</junit.jupiter.version>
+		<apache.commons.version.from>3.0</apache.commons.version.from>
+		<apache.commons.version.to>3.6.1</apache.commons.version.to>
+		<numbackend.version>1.0</numbackend.version>
+		<maven.plugin.surefire.version>2.22.0</maven.plugin.surefire.version>
+		<maven.plugin.versions.version>2.5</maven.plugin.versions.version>
+		<maven.build-helper.plugin.version>3.0.0</maven.build-helper.plugin.version>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>[3.0,3.6.1]</version>
-        </dependency>
-        <dependency>
-            <groupId>de.uni_kl.cs.discodnc</groupId>
-            <artifactId>NumBackend</artifactId>
-            <version>[1.0]</version>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>[${apache.commons.version.from},${apache.commons.version.to}]</version>
+		</dependency>
+		<dependency>
+			<groupId>de.uni_kl.cs.discodnc</groupId>
+			<artifactId>NumBackend</artifactId>
+			<version>${numbackend.version}</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/NumBackend-1.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>[5.2.0]</version>
-        </dependency>
-    </dependencies>
+		</dependency>
+	</dependencies>
 
-    <profiles>
-        <profile>
-            <id>tests</id>
-            <properties>
-                <maven.test.skip>false</maven.test.skip>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>test-jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.21.0</version>
-                        <configuration>
-                            <includes>
-                                <include>**/*Test*</include>
-                            </includes>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.junit.platform</groupId>
-                                <artifactId>junit-platform-surefire-provider</artifactId>
-                                <version>[1.2.0]</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-engine</artifactId>
-                                <version>[5.2.0]</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-api</artifactId>
-                                <version>[5.2.0]</version>
-                            </dependency>
+	<build>
+		<plugins>
+			<!-- run the unit tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.plugin.surefire.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>ch.ethz.rtc.kernel</groupId>
+						<artifactId>rtc</artifactId>
+						<scope>system</scope>
+						<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+						<version>1.2.beta.100</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>${junit.platform.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>${junit.jupiter.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-api</artifactId>
+						<version>${junit.jupiter.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-params</artifactId>
+						<version>${junit.jupiter.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+			    <!-- Remove Milestone and RC versions from dependencies -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${maven.plugin.versions.version}</version>
+				<configuration>
+					<rulesUri>file://${basedir}/version-number-rules.xml</rulesUri>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-                            <dependency>
-                                <groupId>ch.ethz.rtc.kernel</groupId>
-                                <artifactId>rtc</artifactId>
-                                <scope>system</scope>
-                                <systemPath>${project.basedir}/lib/rtc.jar</systemPath>
-                                <version>1.2.beta.100</version>
-                            </dependency>
+	<profiles>
+		<profile>
+			<!-- To build tests jar that includes all sources classes and sources 
+				of the tests (no experiments) (we should decide whether to use the core and 
+				extentsion as dep. from the maven repo or add it as classes to the jar) -->
+			<id>tests</id>
+			<build>
+				<finalName>DiscoDNC_tests-${project.version}</finalName>
 
-                        </dependencies>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.12.4</version>
-                        <configuration>
-                            <skipTests>true</skipTests>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>${maven.build-helper.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>add-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>src/functional_test/java</source>
+										<source>src/mpa_ext/java</source>
+									</sources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>add-test-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-test-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>src/functional_test/java</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ch.ethz.rtc.kernel</groupId>
+					<artifactId>rtc</artifactId>
+					<scope>system</scope>
+					<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>junit-jupiter-params</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
 
-        <profile>
-            <id>mpa</id>
-            <dependencies>
-                <dependency>
-                    <groupId>ch.ethz.rtc.kernel</groupId>
-                    <artifactId>rtc</artifactId>
-                    <scope>system</scope>
-                    <systemPath>${project.basedir}/lib/rtc.jar</systemPath>
-                    <version>1.2.beta.100</version>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.7</version>
-                        <executions>
-                            <execution>
-                                <id>add-source</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/mpa_ext</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+		<profile>
+			<!-- Classes and sources of the extension functionality (no tests, no 
+				experiments) (we should decide whether to use the core as dep. from the maven 
+				repo or add it as classes to the jar) -->
+			<id>mpa</id>
+			<build>
+				<finalName>DiscoDNC_ext-${project.version}</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>${maven.build-helper.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>add-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>src/mpa_ext</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ch.ethz.rtc.kernel</groupId>
+					<artifactId>rtc</artifactId>
+					<scope>system</scope>
+					<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+				</dependency>
+			</dependencies>
+		</profile>
 
-        <profile>
-            <id>exp</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.7</version>
-                        <executions>
-                            <execution>
-                                <id>add-source</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/experiments</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+		<profile>
+			<!-- classes and sources of the experiments functionality (no experiments) 
+				(we should decide whether to use the core and extension as dep. from the 
+				maven repo or add it as classes to the jar) -->
+			<id>ext</id>
+			<build>
+				<finalName>DiscoDNC_experiments-${project.version}</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>${maven.build-helper.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>add-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>src/experiments</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
-        <profile>
-            <!-- Eclipse users need to activate this profile manually.
-                Go to your project's properties, Maven and add
-                eclipse (all lower case) to your Active Maven Profiles. -->
-            <id>eclipse</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.jupiter</groupId>
-                    <artifactId>junit-jupiter-engine</artifactId>
-                    <version>[5.2.0]</version>
-                    <scope>test</scope>
-                </dependency>
+		<profile>
+			<!-- Eclipse users need to activate this profile manually. Go to your 
+				project's properties, Maven and add eclipse (all lower case) to your Active 
+				Maven Profiles. -->
+			<id>eclipse</id>
+			<!-- Source directories -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>${maven.build-helper.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>add-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>src/experiments/java</source>
+										<source>src/functional_test/java</source>
+										<source>src/mpa_ext/java</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ch.ethz.rtc.kernel</groupId>
+					<artifactId>rtc</artifactId>
+					<scope>system</scope>
+					<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+				</dependency>
+				<dependency>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>junit-jupiter-engine</artifactId>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.junit.platform</groupId>
+					<artifactId>junit-platform-launcher</artifactId>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>junit-jupiter-params</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-launcher</artifactId>
-                    <version>[1.2.0]</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
+	<!-- Define common dependency versions in one place -->
+	<dependencyManagement>
+		<dependencies>
+			<!-- External RTC -->
+			<dependency>
+				<groupId>ch.ethz.rtc.kernel</groupId>
+				<artifactId>rtc</artifactId>
+				<scope>system</scope>
+				<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+				<version>1.2.beta.100</version>
+			</dependency>
+			<!-- JUnit -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.platform</groupId>
+				<artifactId>junit-platform-launcher</artifactId>
+				<version>${junit.platform.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>${junit.jupiter.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
