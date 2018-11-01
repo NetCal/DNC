@@ -51,7 +51,7 @@ public abstract class Deconvolution_Disco_Affine {
                 results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
+                results.add(Curve.getFactory().createInfiniteArrivals());
                 return results;
             default:
         }
@@ -78,7 +78,7 @@ public abstract class Deconvolution_Disco_Affine {
                 results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
+                results.add(Curve.getFactory().createInfiniteArrivals());
                 return results;
             default:
         }
@@ -90,7 +90,7 @@ public abstract class Deconvolution_Disco_Affine {
                 results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
+                results.add(Curve.getFactory().createInfiniteArrivals());
                 return results;
             default:
         }
@@ -112,7 +112,7 @@ public abstract class Deconvolution_Disco_Affine {
             case 3:
                 return Curve.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
+                return Curve.getFactory().createInfiniteArrivals();
             default:
         }
 
@@ -142,7 +142,7 @@ public abstract class Deconvolution_Disco_Affine {
                 results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
+                results.add(Curve.getFactory().createInfiniteArrivals());
                 return results;
             default:
         }
@@ -154,7 +154,7 @@ public abstract class Deconvolution_Disco_Affine {
                 results.add(Curve.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst());
+                results.add(Curve.getFactory().createInfiniteArrivals());
                 return results;
             default:
         }
@@ -181,7 +181,7 @@ public abstract class Deconvolution_Disco_Affine {
             case 3:
                 return Curve.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) Curve.getFactory().createZeroDelayInfiniteBurst();
+                return Curve.getFactory().createInfiniteArrivals();
             default:
         }
 
