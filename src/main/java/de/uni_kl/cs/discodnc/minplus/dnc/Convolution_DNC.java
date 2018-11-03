@@ -316,7 +316,7 @@ public abstract class Convolution_DNC {
             return arrival_curves.iterator().next().copy();
         }
 
-        ArrivalCurve arrival_curve_result = (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+        ArrivalCurve arrival_curve_result = CurvePwAffine.getFactory().createUnboundedArrivals();
         for (ArrivalCurve arrival_curve_2 : arrival_curves) {
             arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
         }

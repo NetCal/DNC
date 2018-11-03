@@ -61,7 +61,7 @@ public abstract class Deconvolution_DNC {
                 results.add(CurvePwAffine.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add(CurvePwAffine.getFactory().createUnboundedArrivals());
                 return results;
             default:
         }
@@ -94,7 +94,7 @@ public abstract class Deconvolution_DNC {
                 results.add(CurvePwAffine.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add(CurvePwAffine.getFactory().createUnboundedArrivals());
                 return results;
             default:
         }
@@ -106,7 +106,7 @@ public abstract class Deconvolution_DNC {
                 results.add(CurvePwAffine.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add(CurvePwAffine.getFactory().createUnboundedArrivals());
                 return results;
             default:
         }
@@ -134,7 +134,7 @@ public abstract class Deconvolution_DNC {
             case 3:
                 return CurvePwAffine.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+                return CurvePwAffine.getFactory().createUnboundedArrivals();
             default:
         }
 
@@ -168,7 +168,7 @@ public abstract class Deconvolution_DNC {
                 results.add(CurvePwAffine.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add(CurvePwAffine.getFactory().createUnboundedArrivals());
                 return results;
             default:
         }
@@ -180,7 +180,7 @@ public abstract class Deconvolution_DNC {
                 results.add(CurvePwAffine.getFactory().createZeroArrivals());
                 return results;
             case 2:
-                results.add((ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst());
+                results.add(CurvePwAffine.getFactory().createUnboundedArrivals());
                 return results;
             default:
         }
@@ -206,7 +206,7 @@ public abstract class Deconvolution_DNC {
             case 3:
                 return CurvePwAffine.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+                return CurvePwAffine.getFactory().createUnboundedArrivals();
             default:
         }
 
@@ -242,7 +242,7 @@ public abstract class Deconvolution_DNC {
             case 3:
                 return CurvePwAffine.getFactory().createZeroArrivals();
             case 2:
-                return (ArrivalCurve) CurvePwAffine.getFactory().createZeroDelayInfiniteBurst();
+                return CurvePwAffine.getFactory().createUnboundedArrivals();
             default:
         }
         // }
