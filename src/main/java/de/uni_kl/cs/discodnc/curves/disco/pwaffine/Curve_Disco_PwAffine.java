@@ -1200,10 +1200,6 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		return new MaxServiceCurve_Disco_PwAffine(curve);
 	}
 
-	public MaxServiceCurve_Disco_PwAffine createInfiniteMaxService() {
-		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
-	}
-
 	public MaxServiceCurve_Disco_PwAffine createZeroDelayInfiniteBurstMSC() {
 		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}

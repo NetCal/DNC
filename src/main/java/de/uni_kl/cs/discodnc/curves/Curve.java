@@ -751,8 +751,6 @@ public interface Curve {
 
     MaxServiceCurve createMaxServiceCurve(Curve curve);
 
-    MaxServiceCurve createInfiniteMaxService();
-
     MaxServiceCurve createZeroDelayInfiniteBurstMSC();
 
     MaxServiceCurve createDelayedInfiniteBurstMSC(double delay);
