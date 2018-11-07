@@ -1,10 +1,10 @@
-Changes for v2.5.0
-------------------
-* Refactoring: tests, experiments and MPA RTC curve backend moved into git submoduls.
+Changes in v2.5.0-SNAPSHOT
+--------------------------
+* Refactoring: tests, experiments and MPA RTC curve backend moved into git submodules.
 * ArrivalCurve createUnboundedArrivals() is now ArrivalCurve createInfiniteArrivals().
 
-since v2.4.3 "Chimera"
-----------------------
+v2.4.4 "Chimera" (2018-Oct-16)
+------------------------------
 * Num interface and its implementations: 
   - Major code refactoring and cleanup.
   - Epsilons (for rounding purposes) are no longer included.
@@ -14,6 +14,7 @@ since v2.4.3 "Chimera"
 * PwAffine Curves and implementations:
   - Refactored code handling discontinuities (used with token bucket arrival curves).
   - No usage of a machine epsilon required anymore.
+* Convolution: Replace cast from ServiceCurve to Curve by creating a proper ArrivalCurve for unbounded arrivals.
 * Performance improvement for getSourceFlowArrivalCurve in case there is only a single such flow.
 * Remove unnecessary cast from Num to Num when bounding backlogs.
 * Code cleanups.
@@ -36,15 +37,6 @@ v2.4.2 "Chimera" (2018-Jul-04)
 
 v2.4.1 "Chimera" (2018-May-07)
 ------------------------------
-<<<<<<< HEAD
-* Refactoring: tests, experiments and MPA RTC curve backend moved into git submoduls.
-* Tests
-  - They now correctly consider the configured Curve and Num implementation (GitHub Issue #1).
-  - Each test only works with a single instance of its respective network instead of creating one per test configuration.
-* Added a class with presets with most common flow of interest analysis and arrival bounding configurations
-  for algebraic compositional feed-forward analysis (compFFA): de.uni_kl.cs.discodnc.nc.CompFFApresets. 
-  - Demo4 uses the presets instead of analyses instances implicitly using the default configuration.
-=======
 * Tests
   - They now correctly consider the configures Curve and Num implementation (GitHub Issue #1).
   - Each test only works with a single instance of its respective network instead of creating one per test config.
@@ -53,7 +45,6 @@ v2.4.1 "Chimera" (2018-May-07)
 * Added a class with presets with most common flow of interest analysis and arrival bounding configurations
   for algebraic compositional feed-forward analysis (compFFA): de.uni_kl.cs.discodnc.nc.CompFFApresets. 
   - Demo4 uses the presets instead of analyses instances implicitly using the defailt configuration.
->>>>>>> 43fe1571eb6fc0bc65102d6f9af37f103e40c4d1
 * Our current TFA AB burst reduction implementation is only applicable to TB arrivals.
   - We now skip reducing the reduction for arrival curves with >2 segments.
 * Network: You can now get a flow by its ID.
