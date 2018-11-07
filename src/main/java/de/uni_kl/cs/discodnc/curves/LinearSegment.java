@@ -27,31 +27,19 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import de.uni_kl.cs.discodnc.curves.dnc.LinearSegment_DNC;
-import de.uni_kl.cs.discodnc.curves.mpa_rtc_pwaffine.LinearSegment_MPARTC_PwAffine;
-import de.uni_kl.cs.discodnc.nc.CalculatorConfig;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public interface LinearSegment {
-    static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
-        switch (CalculatorConfig.getInstance().getCurveImpl()) {
-            case MPA_RTC:
-                return new LinearSegment_MPARTC_PwAffine(x.doubleValue(), y.doubleValue(), grad.doubleValue());
-            case DNC:
-            default:
-                return new LinearSegment_DNC(x, y, grad, leftopen);
-        }
+	
+	static LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen) {
+		LinearSegment.Builder builder = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
+        return builder.createLinearSegment(x, y, grad, leftopen);
     }
 
     static LinearSegment createHorizontalLine(double y) {
-        switch (CalculatorConfig.getInstance().getCurveImpl()) {
-            case MPA_RTC:
-                return new LinearSegment_MPARTC_PwAffine(0.0, y, 0.0);
-            case DNC:
-            default:
-                return new LinearSegment_DNC(Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(),
-                        Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).create(y), Num.getFactory(CalculatorConfig.getInstance().getNumBackend()).createZero(), false);
-        }
+    	LinearSegment.Builder builder = Calculator.getInstance().getCurveBackend().getLinearSegmentFactory();
+        return builder.createHorizontalLine(y);
     }
 
     /**
@@ -68,8 +56,8 @@ public interface LinearSegment {
     static LinearSegment add(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = createHorizontalLine(0.0);
         result.setX(x);
-        result.setY(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(s1.f(x), s2.f(x)));
-        result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).add(s1.getGrad(), s2.getGrad()));
+        result.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).add(s1.f(x), s2.f(x)));
+        result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).add(s1.getGrad(), s2.getGrad()));
         result.setLeftopen(leftopen);
         return result;
     }
@@ -88,8 +76,8 @@ public interface LinearSegment {
     static LinearSegment sub(LinearSegment s1, LinearSegment s2, Num x, boolean leftopen) {
         LinearSegment result = createHorizontalLine(0.0);
         result.setX(x);
-        result.setY(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(s1.f(x), s2.f(x)));
-        result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).sub(s1.getGrad(), s2.getGrad()));
+        result.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(s1.f(x), s2.f(x)));
+        result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(s1.getGrad(), s2.getGrad()));
         result.setLeftopen(leftopen);
         return result;
     }
@@ -115,7 +103,7 @@ public interface LinearSegment {
         result.setX(x);
         if (crossed || f1_x.eq(f2_x)) {
             result.setY(f1_x);
-            result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).min(s1.getGrad(), s2.getGrad()));
+            result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).min(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.lt(f2_x)) {
             result.setY(f1_x);
             result.setGrad(s1.getGrad());
@@ -147,7 +135,7 @@ public interface LinearSegment {
         result.setX(x);
         if (crossed || f1_x.eq(f2_x)) {
             result.setY(f1_x);
-            result.setGrad(Num.getUtils(CalculatorConfig.getInstance().getNumBackend()).max(s1.getGrad(), s2.getGrad()));
+            result.setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).max(s1.getGrad(), s2.getGrad()));
         } else if (f1_x.gt(f2_x)) {
             result.setY(f1_x);
             result.setGrad(s1.getGrad());
@@ -178,11 +166,6 @@ public interface LinearSegment {
 
     boolean isLeftopen();
 
-    // --------------------------------------------------------------------------------------------------------------
-    // Factory
-    // --------------------------------------------------------------------------------------------------------------
-    // In contrast to the Curve factory, it does not dispatch to other factories.
-
     void setLeftopen(boolean leftopen);
 
     Num getXIntersectionWith(LinearSegment other);
@@ -201,4 +184,10 @@ public interface LinearSegment {
 
     @Override
     String toString();
+    
+    interface Builder {
+    	public LinearSegment createLinearSegment(Num x, Num y, Num grad, boolean leftopen);
+    	
+    	public LinearSegment createHorizontalLine(double y);
+    }
 }

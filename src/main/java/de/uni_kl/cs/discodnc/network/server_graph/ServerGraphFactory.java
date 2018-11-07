@@ -1,9 +1,10 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
+ * Copyright (C) 2017 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
- * disco | Distributed Computer Systems Lab
+ * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
  * http://discodnc.cs.uni-kl.de
@@ -25,18 +26,12 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves;
+package de.uni_kl.cs.discodnc.network.server_graph;
 
-public interface ServiceCurve extends Curve {
-    @Override
-    ServiceCurve copy();
+public interface ServerGraphFactory {
+    ServerGraph createServerGraph();
 
-    @Override
-    boolean equals(Object obj);
+    ServerGraph getServerGraph();
 
-    @Override
-    int hashCode();
-
-    @Override
-    String toString();
+    void reinitializeCurves();
 }

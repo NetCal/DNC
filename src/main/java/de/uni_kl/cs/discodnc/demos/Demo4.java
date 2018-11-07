@@ -29,17 +29,17 @@
 package de.uni_kl.cs.discodnc.demos;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.CurvePwAffine;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.nc.CompFFApresets;
-import de.uni_kl.cs.discodnc.nc.analyses.PmooAnalysis;
-import de.uni_kl.cs.discodnc.nc.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.nc.analyses.TotalFlowAnalysis;
-import de.uni_kl.cs.discodnc.network.Flow;
-import de.uni_kl.cs.discodnc.network.Link;
-import de.uni_kl.cs.discodnc.network.Network;
-import de.uni_kl.cs.discodnc.network.Server;
+import de.uni_kl.cs.discodnc.feedforward.CompFFApresets;
+import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
+import de.uni_kl.cs.discodnc.network.server_graph.Flow;
+import de.uni_kl.cs.discodnc.network.server_graph.Server;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 
 import java.util.LinkedList;
 
@@ -59,57 +59,57 @@ public class Demo4 {
     }
 
     public void run() throws Exception {
-        ServiceCurve service_curve = CurvePwAffine.getFactory().createRateLatency(10.0e6, 0.01);
-        MaxServiceCurve max_service_curve = CurvePwAffine.getFactory().createRateLatencyMSC(100.0e6, 0.001);
+        ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
+        MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
-        Network network = new Network();
+        ServerGraph sg = new ServerGraph();
 
         int numServers = 9;
         Server[] servers = new Server[numServers];
 
         for (int i = 1; i < numServers; i++) {
-            servers[i] = network.addServer(service_curve, max_service_curve);
+            servers[i] = sg.addServer(service_curve, max_service_curve);
             servers[i].setUseGamma(false);
             servers[i].setUseExtraGamma(false);
         }
 
-        network.addLink(servers[1], servers[2]);
-        Link l_1_3 = network.addLink(servers[1], servers[3]);
-        Link l_2_4 = network.addLink(servers[2], servers[4]);
-        Link l_3_4 = network.addLink(servers[3], servers[4]);
-        Link l_4_5 = network.addLink(servers[4], servers[5]);
-        Link l_5_6 = network.addLink(servers[5], servers[6]);
-        Link l_6_7 = network.addLink(servers[6], servers[7]);
-        Link l_7_8 = network.addLink(servers[7], servers[8]);
+        sg.addTurn(servers[1], servers[2]);
+        Turn t_1_3 = sg.addTurn(servers[1], servers[3]);
+        Turn t_2_4 = sg.addTurn(servers[2], servers[4]);
+        Turn t_3_4 = sg.addTurn(servers[3], servers[4]);
+        Turn t_4_5 = sg.addTurn(servers[4], servers[5]);
+        Turn t_5_6 = sg.addTurn(servers[5], servers[6]);
+        Turn t_6_7 = sg.addTurn(servers[6], servers[7]);
+        Turn t_7_8 = sg.addTurn(servers[7], servers[8]);
 
-        ArrivalCurve arrival_curve = CurvePwAffine.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
+        ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
-        LinkedList<Link> path0 = new LinkedList<Link>();
+        LinkedList<Turn> path0 = new LinkedList<Turn>();
 
-        // Links need to be ordered from source server to sink server when defining a
+        // Turns need to be ordered from source server to sink server when defining a
         // path manually
-        path0.add(l_2_4);
-        path0.add(l_4_5);
-        path0.add(l_5_6);
-        path0.add(l_6_7);
-        path0.add(l_7_8);
+        path0.add(t_2_4);
+        path0.add(t_4_5);
+        path0.add(t_5_6);
+        path0.add(t_6_7);
+        path0.add(t_7_8);
 
-        network.addFlow(arrival_curve, path0);
+        sg.addFlow(arrival_curve, path0);
 
-        LinkedList<Link> path1 = new LinkedList<Link>();
-        path1.add(l_1_3);
-        path1.add(l_3_4);
-        path1.add(l_4_5);
-        path1.add(l_5_6);
+        LinkedList<Turn> path1 = new LinkedList<Turn>();
+        path1.add(t_1_3);
+        path1.add(t_3_4);
+        path1.add(t_4_5);
+        path1.add(t_5_6);
 
-        network.addFlow(arrival_curve, path1);
+        sg.addFlow(arrival_curve, path1);
 
-        CompFFApresets compffa_analyses = new CompFFApresets( network );
+        CompFFApresets compffa_analyses = new CompFFApresets( sg );
         TotalFlowAnalysis tfa = compffa_analyses.tf_analysis;
         SeparateFlowAnalysis sfa = compffa_analyses.sf_analysis;
         PmooAnalysis pmoo = compffa_analyses.pmoo_analysis;
         
-        for (Flow flow_of_interest : network.getFlows()) {
+        for (Flow flow_of_interest : sg.getFlows()) {
 
             System.out.println("Flow of interest : " + flow_of_interest.toString());
             System.out.println();

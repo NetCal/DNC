@@ -1,9 +1,10 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
+ * Copyright (C) 2013 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
- * disco | Distributed Computer Systems Lab
+ * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
  * http://discodnc.cs.uni-kl.de
@@ -25,18 +26,27 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves;
+package de.uni_kl.cs.discodnc.feedforward;
 
-public interface ServiceCurve extends Curve {
-    @Override
-    ServiceCurve copy();
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 
-    @Override
-    boolean equals(Object obj);
+public abstract class AbstractArrivalBound implements ArrivalBound {
+    protected ServerGraph server_graph;
+    protected AnalysisConfig configuration;
 
-    @Override
-    int hashCode();
+    public ServerGraph getServerGraph() {
+        return server_graph;
+    }
 
-    @Override
-    String toString();
+    public void setNetwork(ServerGraph server_graph) {
+        this.server_graph = server_graph;
+    }
+
+    public AnalysisConfig getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(AnalysisConfig configuration) {
+        this.configuration = configuration;
+    }
 }

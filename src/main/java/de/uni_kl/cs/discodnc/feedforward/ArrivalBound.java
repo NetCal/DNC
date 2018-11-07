@@ -1,9 +1,10 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
+ * Copyright (C) 2013 - 2018 Steffen Bondorf
  * Copyright (C) 2017+ The DiscoDNC contributors
  *
- * disco | Distributed Computer Systems Lab
+ * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
  * http://discodnc.cs.uni-kl.de
@@ -25,18 +26,26 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves;
+package de.uni_kl.cs.discodnc.feedforward;
 
-public interface ServiceCurve extends Curve {
-    @Override
-    ServiceCurve copy();
+import java.util.Set;
 
-    @Override
-    boolean equals(Object obj);
+import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.network.server_graph.Flow;
+import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 
-    @Override
-    int hashCode();
+public interface ArrivalBound {
+    ServerGraph getServerGraph();
 
-    @Override
-    String toString();
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface
+    // --------------------------------------------------------------------------------------------------------------
+    void setNetwork(ServerGraph server_graph);
+
+    public AnalysisConfig getConfiguration();
+
+    public void setConfiguration(AnalysisConfig configuration);
+
+    Set<ArrivalCurve> computeArrivalBound(Turn turn, Flow flow_of_interest) throws Exception;
 }

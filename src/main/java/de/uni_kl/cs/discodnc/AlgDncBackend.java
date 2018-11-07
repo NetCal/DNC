@@ -1,9 +1,9 @@
 /*
  * This file is part of the Disco Deterministic Network Calculator.
  *
- * Copyright (C) 2017+ The DiscoDNC contributors
+ * Copyright (C) 2018+ The DiscoDNC contributors
  *
- * disco | Distributed Computer Systems Lab
+ * Distributed Computer Systems (DISCO) Lab
  * University of Kaiserslautern, Germany
  *
  * http://discodnc.cs.uni-kl.de
@@ -25,18 +25,39 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves;
+package de.uni_kl.cs.discodnc;
 
-public interface ServiceCurve extends Curve {
-    @Override
-    ServiceCurve copy();
+import de.uni_kl.cs.discodnc.algebra.MinPlus;
+import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.LinearSegment;
 
-    @Override
-    boolean equals(Object obj);
-
-    @Override
-    int hashCode();
+public interface AlgDncBackend {
+	MinPlus getMinPlus();
+	
+	Curve getCurveFactory();
+	
+	LinearSegment.Builder getLinearSegmentFactory();
 
     @Override
     String toString();
+    
+    default String assembleString(String curve_backend_name, String min_plus_name) {
+    	StringBuffer name = new StringBuffer();
+
+        name.append("CurveBackend");
+        name.append(":");
+        name.append(curve_backend_name);
+        
+        name.append(", ");
+
+        name.append("AlegraBackend");
+        name.append(":");
+        name.append(min_plus_name);
+    	
+    	return name.toString();
+    }
+	
+	default void checkDependencies() {
+		
+	}
 }
