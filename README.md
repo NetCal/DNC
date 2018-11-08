@@ -55,7 +55,7 @@ Choose the second on (globally ignore error cause) to prevent changes to the pom
 ## Add Source Folders
 Select "eclipse" maven profile in eclipse to import source folders automatically.
 
-## Tests
+## Functional Tests
 * In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
 * You need to change the output folder, e.g., create `target/func-test-classes` for this purpose.
 * To run a test from within Eclipse, you need to add this folder to the test's classpath. Otherwise, it will break with a "class not found" exception. Go to Run Configurations ..., select your test > Classpath > select User Entries > click Advanced > Add Folder to do so.   
