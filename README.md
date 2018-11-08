@@ -33,7 +33,7 @@ In order to checkout all submodules, use the command `git submodule update --ini
 This small guide assumes you cloned the DiscoDNC repository, executed the above commands to pull the submodules, and created an Eclipse project from the code.
 You might also be able to do all this from Eclipse using its EGit plugin.
 
-These steps were tested with Eclipse Photon only.
+These steps were thoroughly tested with Eclipse Photon. Some steps have been adapted to work with Eclipse 2018-09.
 
 ## Add Profiles
 Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
@@ -58,7 +58,9 @@ Select "eclipse" maven profile in eclipse to import source folders automatically
 ## Functional Tests
 * In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
 * You need to change the output folder, e.g., create `target/func-test-classes` for this purpose.
-* To run a test from within Eclipse, you need to add this folder to the test's classpath. Otherwise, it will break with a "class not found" exception. Go to Run Configurations ..., select your test > Classpath > select User Entries > click Advanced > Add Folder to do so.   
+* To run a test from within Eclipse, you need to add this folder to the test's classpath. Otherwise, it will break with a "class not found" exception.
+  * Eclipse **Photon**:  Navigate to Run Configurations ... > your test > Classpath > select User Entries > click Advanced > Add Folder to do so.
+  * Eclipse **2018-09**: Navigate to Run Configurations ... > your test > Dependencies > select Classpath Entries > click Advanced > Add Folder 
 
 # Compile jars with Maven
 
