@@ -34,6 +34,8 @@ import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
 public class ServiceCurve_Disco_Affine extends Curve_Disco_Affine implements ServiceCurve {
+	protected final static ServiceCurve_Disco_Affine INFINITE_SERVICE = (new ServiceCurve_Disco_Affine()).createZeroDelayInfiniteBurst();
+	
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------
