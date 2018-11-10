@@ -34,8 +34,6 @@ import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 
 public class MaxServiceCurve_Disco_Affine extends Curve_Disco_Affine implements MaxServiceCurve {
-	protected final static MaxServiceCurve_Disco_Affine INFINITE_MAX_SERVICE = (new MaxServiceCurve_Disco_Affine()).createZeroDelayInfiniteBurstMSC();
-	
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------

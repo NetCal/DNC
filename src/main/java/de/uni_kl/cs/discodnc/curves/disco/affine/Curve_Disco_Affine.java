@@ -1096,10 +1096,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return new ServiceCurve_Disco_Affine(curve);
 	}
 
-	public ServiceCurve_Disco_Affine getZeroService() {
-		return ServiceCurve_Disco_Affine.ZERO_SERVICE;
-	}
-
 	public ServiceCurve_Disco_Affine createZeroService() {
 		return new ServiceCurve_Disco_Affine(); // ServiceCurveDNC constructor's default behavior
 	}
@@ -1164,16 +1160,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return createArrivalCurve(Curve.removeLatency(curve));
 	}
 
-	public ArrivalCurve_Disco_Affine getZeroArrivals() {
-		return ArrivalCurve_Disco_Affine.ZERO_ARRIVALS;
-	}
-
 	public ArrivalCurve_Disco_Affine createZeroArrivals() {
 		return new ArrivalCurve_Disco_Affine(); // ArrivalCurveDNC constructor's default behavior
-	}
-
-	public ArrivalCurve_Disco_Affine getInfiniteArrivals() {
-		return ArrivalCurve_Disco_Affine.INFINITE_ARRIVALS;
 	}
 
 	public ArrivalCurve_Disco_Affine createInfiniteArrivals() {
@@ -1227,10 +1215,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 
 	public MaxServiceCurve_Disco_Affine createInfiniteMaxService() {
 		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
-	}
-
-	public MaxServiceCurve_Disco_Affine getZeroDelayInfiniteBurstMSC() {
-		return MaxServiceCurve_Disco_Affine.INFINITE_MAX_SERVICE;
 	}
 
 	public MaxServiceCurve_Disco_Affine createZeroDelayInfiniteBurstMSC() {

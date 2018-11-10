@@ -1087,10 +1087,6 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		return new ServiceCurve_Disco_PwAffine(curve);
 	}
 
-	public ServiceCurve_Disco_PwAffine getZeroService() {
-		return ServiceCurve_Disco_PwAffine.ZERO_SERVICE;
-	}
-
 	public ServiceCurve_Disco_PwAffine createZeroService() {
 		return new ServiceCurve_Disco_PwAffine(); // ServiceCurveDNC constructor's default behavior
 	}
@@ -1155,16 +1151,8 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		return createArrivalCurve(Curve.removeLatency(curve));
 	}
 
-	public ArrivalCurve_Disco_PwAffine getZeroArrivals() {
-		return ArrivalCurve_Disco_PwAffine.ZERO_ARRIVALS;
-	}
-
 	public ArrivalCurve_Disco_PwAffine createZeroArrivals() {
 		return new ArrivalCurve_Disco_PwAffine(); // ArrivalCurveDNC constructor's default behavior
-	}
-
-	public ArrivalCurve_Disco_PwAffine getInfiniteArrivals() {
-		return ArrivalCurve_Disco_PwAffine.INFINITE_ARRIVALS;
 	}
 
 	public ArrivalCurve_Disco_PwAffine createInfiniteArrivals() {
@@ -1214,10 +1202,6 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 
 	public MaxServiceCurve_Disco_PwAffine createMaxServiceCurve(Curve curve) {
 		return new MaxServiceCurve_Disco_PwAffine(curve);
-	}
-
-	public MaxServiceCurve_Disco_PwAffine getZeroDelayInfiniteBurstMSC() {
-		return MaxServiceCurve_Disco_PwAffine.INFINITE_MAX_SERVICE;
 	}
 
 	public MaxServiceCurve_Disco_PwAffine createZeroDelayInfiniteBurstMSC() {

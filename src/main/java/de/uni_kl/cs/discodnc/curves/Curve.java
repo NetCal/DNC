@@ -682,6 +682,8 @@ public interface Curve {
     void addSegment(LinearSegment s);
     
     Curve createZeroCurve();
+    
+    ServiceCurve createZeroService();
 
     Curve createCurve(List<LinearSegment> segments);
 
@@ -700,10 +702,6 @@ public interface Curve {
     ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
 
     ServiceCurve createServiceCurve(Curve curve);
-
-    ServiceCurve getZeroService();
-
-    ServiceCurve createZeroService();
 
     ServiceCurve createZeroDelayInfiniteBurst();
 
@@ -731,11 +729,7 @@ public interface Curve {
 
     ArrivalCurve createArrivalCurve(Curve curve, boolean remove_latency);
 
-    ArrivalCurve getZeroArrivals();
-
     ArrivalCurve createZeroArrivals();
-
-    ArrivalCurve getInfiniteArrivals();
 
     ArrivalCurve createInfiniteArrivals();
 
@@ -758,8 +752,6 @@ public interface Curve {
     MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception;
 
     MaxServiceCurve createMaxServiceCurve(Curve curve);
-
-    MaxServiceCurve getZeroDelayInfiniteBurstMSC();
 
     MaxServiceCurve createZeroDelayInfiniteBurstMSC();
 
