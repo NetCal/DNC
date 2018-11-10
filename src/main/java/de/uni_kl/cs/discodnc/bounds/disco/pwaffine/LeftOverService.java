@@ -174,15 +174,15 @@ public final class LeftOverService {
     	ArrivalCurve ZERO_ARRIVALS = Curve.getFactory().createZeroArrivals();
     	ArrivalCurve INFINITE_ARRIVALS = Curve.getFactory().createInfiniteArrivals();
     	
-    	if(arrival_curve.equals(INFINITE_ARRIVALS)
-    			|| service_curve.equals(ZERO_SERVICE)) {
+    	if(INFINITE_ARRIVALS.equals(arrival_curve)
+    			|| ZERO_SERVICE.equals(service_curve)) {
     		return new Pair<Boolean,ServiceCurve>(true,ZERO_SERVICE);
     	} else { // The else-clause is not required. It indicates that the following if-clause cannot be moved before the previous one.
-	    	if(service_curve.equals(INFINITE_SERVICE)) {
+	    	if(INFINITE_SERVICE.equals(service_curve)) {
 	    		return new Pair<Boolean,ServiceCurve>(true,INFINITE_SERVICE);
 	    	}
     	}
-    	if(arrival_curve.equals(ZERO_ARRIVALS)) {
+    	if(ZERO_ARRIVALS.equals(arrival_curve)) {
     		return new Pair<Boolean,ServiceCurve>(true,service_curve.copy());
     	}
     	
