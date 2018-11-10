@@ -34,6 +34,9 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 
 public class ArrivalCurve_Disco_Affine extends Curve_Disco_Affine implements ArrivalCurve {
+	protected final static ArrivalCurve_Disco_Affine ZERO_ARRIVALS = (new ArrivalCurve_Disco_Affine()).createZeroArrivals();
+	protected final static ArrivalCurve_Disco_Affine INFINITE_ARRIVALS = (new ArrivalCurve_Disco_Affine()).createInfiniteArrivals();
+	
     // --------------------------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------------------------

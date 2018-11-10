@@ -168,11 +168,11 @@ public final class LeftOverService {
     }
     
     private static Pair<Boolean,ServiceCurve> computeSpecialValues(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-    	ServiceCurve ZERO_SERVICE = Curve.getFactory().createZeroService();
+    	ServiceCurve ZERO_SERVICE = Curve.getFactory().getZeroService();
     	ServiceCurve INFINITE_SERVICE = Curve.getFactory().getZeroDelayInfiniteBurst();
     	
-    	ArrivalCurve ZERO_ARRIVALS = Curve.getFactory().createZeroArrivals();
-    	ArrivalCurve INFINITE_ARRIVALS = Curve.getFactory().createInfiniteArrivals();
+    	ArrivalCurve ZERO_ARRIVALS = Curve.getFactory().getZeroArrivals();
+    	ArrivalCurve INFINITE_ARRIVALS = Curve.getFactory().getInfiniteArrivals();
     	
     	if(INFINITE_ARRIVALS.equals(arrival_curve)
     			|| ZERO_SERVICE.equals(service_curve)) {
