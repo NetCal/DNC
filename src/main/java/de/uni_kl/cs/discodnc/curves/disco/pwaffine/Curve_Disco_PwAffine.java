@@ -1090,10 +1090,6 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 	public ServiceCurve_Disco_PwAffine createZeroService() {
 		return new ServiceCurve_Disco_PwAffine(); // ServiceCurveDNC constructor's default behavior
 	}
-	
-	public ServiceCurve_Disco_PwAffine getZeroDelayInfiniteBurst() {
-		return ServiceCurve_Disco_PwAffine.INFINITE_SERVICE;
-	}
 
 	/**
 	 * Creates an infinite burst curve with zero delay.

@@ -1100,10 +1100,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return new ServiceCurve_Disco_Affine(); // ServiceCurveDNC constructor's default behavior
 	}
 
-	public ServiceCurve_Disco_Affine getZeroDelayInfiniteBurst() {
-		return ServiceCurve_Disco_Affine.INFINITE_SERVICE;
-	}
-	
 	/**
 	 * Creates an infinite burst curve with zero delay.
 	 *
