@@ -167,6 +167,15 @@ public final class LeftOverService {
     	}
     }
     
+    /**
+     * Try to compute the left-over service curve for special arrival or service curve values like zero or infinite.
+     * In case we find infinite service and infinite arrivals, 
+     * we define the indeterminate form resulting from \infty - \infty as zero service. 
+     * 
+     * @param service_curve The service curve to be subtracted from. 
+     * @param arrival_curve The arrival curve to subtract from the service curve.
+     * @return A pair consisting of a boolean and a service curve. The boolean indicates the validity of the returned service curve. 
+     */
     private static Pair<Boolean,ServiceCurve> computeSpecialValues(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
     	ServiceCurve ZERO_SERVICE = Curve.getFactory().createZeroService();
     	ServiceCurve INFINITE_SERVICE = Curve.getFactory().createZeroDelayInfiniteBurst();
@@ -185,7 +194,6 @@ public final class LeftOverService {
     	if(ZERO_ARRIVALS.equals(arrival_curve)) {
     		return new Pair<Boolean,ServiceCurve>(true,service_curve.copy());
     	}
-    	
     	
     	// In case the caller disregards that there was no match to special values,
     	// we provide the worst-case left-over service: 0.
