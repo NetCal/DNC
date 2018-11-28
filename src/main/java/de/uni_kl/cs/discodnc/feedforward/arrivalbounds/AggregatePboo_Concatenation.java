@@ -35,20 +35,20 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
+import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AbstractArrivalBound;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBound;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 public class AggregatePboo_Concatenation extends AbstractArrivalBound implements ArrivalBound {

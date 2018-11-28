@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.feedforward;
+package de.uni_kl.cs.discodnc;
 
 import java.util.Collections;
 import java.util.HashSet;

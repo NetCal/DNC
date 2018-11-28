@@ -1,16 +1,15 @@
-package de.uni_kl.cs.discodnc.feedforward;
+package de.uni_kl.cs.discodnc;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.ArrivalBoundMethod;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.GammaFlag;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
-import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
-import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.feedforward.analyses.TotalFlowAnalysis;
+import de.uni_kl.cs.discodnc.AnalysisConfig.ArrivalBoundMethod;
+import de.uni_kl.cs.discodnc.AnalysisConfig.GammaFlag;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
+import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public class CompFFApresets {
 	private ServerGraph network;

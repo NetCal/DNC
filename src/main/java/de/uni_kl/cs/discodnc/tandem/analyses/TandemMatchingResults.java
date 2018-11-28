@@ -1,12 +1,12 @@
-package de.uni_kl.cs.discodnc.feedforward.analyses;
+package de.uni_kl.cs.discodnc.tandem.analyses;
 
 import java.util.Map;
 import java.util.Set;
 
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.tandem.AnalysisResults;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisResults;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 
 public class TandemMatchingResults extends AnalysisResults {

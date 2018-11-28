@@ -33,13 +33,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.analyses.PmooAnalysis;
-import de.uni_kl.cs.discodnc.feedforward.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.feedforward.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_Concatenation;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_PerServer;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePmoo;
@@ -48,6 +46,9 @@ import de.uni_kl.cs.discodnc.network.server_graph.Flow;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
+import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
 public abstract class ArrivalBoundDispatch {

@@ -27,11 +27,12 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.feedforward;
+package de.uni_kl.cs.discodnc.tandem;
 
 import java.util.Map;
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
