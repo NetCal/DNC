@@ -33,6 +33,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.math3.util.Pair;
+
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -94,14 +96,12 @@ public final class LeftOverService {
      * @return The FIFO service curve
      */
     public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-        if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())
-                || service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
-            return service_curve.copy();
-        }
-        if (service_curve.equals(Curve.getFactory().createZeroService())) {
-            return Curve.getFactory().createZeroService();
-        }
-
+    	Pair<Boolean,ServiceCurve> special_cases = computeSpecialValues(service_curve, arrival_curve);
+    	
+    	if(special_cases.getFirst().booleanValue() == true) {
+    		return special_cases.getSecond(); 
+    	}
+    	
         if (Calculator.getInstance().exec_fifo_mux_checks()) {
             if (!arrival_curve.isConcave()) {
                 throw new IllegalArgumentException("Arrival curve must be concave.");
@@ -158,15 +158,45 @@ public final class LeftOverService {
      * @return The FIFO service curve
      */
     public static ServiceCurve arbMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-        if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())
-                || service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
-            return service_curve.copy();
-        }
-        if (service_curve.equals(Curve.getFactory().createZeroService())) {
-            return Curve.getFactory().createZeroService();
-        }
-
-        return Curve.getFactory().createServiceCurve(
-                Curve.boundAtXAxis(Curve.sub(service_curve, arrival_curve)));
+    	Pair<Boolean,ServiceCurve> special_cases = computeSpecialValues(service_curve, arrival_curve);
+    	
+    	if(special_cases.getFirst().booleanValue() == true) {
+    		return special_cases.getSecond(); 
+    	} else {
+            return Curve.getFactory().createServiceCurve(Curve.boundAtXAxis(Curve.sub(service_curve, arrival_curve)));
+    	}
+    }
+    
+    /**
+     * Try to compute the left-over service curve for special arrival or service curve values like zero or infinite.
+     * In case we find infinite service and infinite arrivals, 
+     * we define the indeterminate form resulting from \infty - \infty as zero service. 
+     * 
+     * @param service_curve The service curve to be subtracted from. 
+     * @param arrival_curve The arrival curve to subtract from the service curve.
+     * @return A pair consisting of a boolean and a service curve. The boolean indicates the validity of the returned service curve. 
+     */
+    private static Pair<Boolean,ServiceCurve> computeSpecialValues(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
+    	ServiceCurve ZERO_SERVICE = Curve.getFactory().createZeroService();
+    	ServiceCurve INFINITE_SERVICE = Curve.getFactory().createZeroDelayInfiniteBurst();
+    	
+    	ArrivalCurve ZERO_ARRIVALS = Curve.getFactory().createZeroArrivals();
+    	ArrivalCurve INFINITE_ARRIVALS = Curve.getFactory().createInfiniteArrivals();
+    	
+    	if(INFINITE_ARRIVALS.equals(arrival_curve)
+    			|| ZERO_SERVICE.equals(service_curve)) {
+    		return new Pair<Boolean,ServiceCurve>(true,ZERO_SERVICE);
+    	} else { // The else-clause is not required. It indicates that the following if-clause cannot be moved before the previous one.
+	    	if(INFINITE_SERVICE.equals(service_curve)) {
+	    		return new Pair<Boolean,ServiceCurve>(true,INFINITE_SERVICE);
+	    	}
+    	}
+    	if(ZERO_ARRIVALS.equals(arrival_curve)) {
+    		return new Pair<Boolean,ServiceCurve>(true,service_curve.copy());
+    	}
+    	
+    	// In case the caller disregards that there was no match to special values,
+    	// we provide the worst-case left-over service: 0.
+    	return new Pair<Boolean,ServiceCurve>(false,ZERO_SERVICE);
     }
 }
