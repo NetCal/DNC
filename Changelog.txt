@@ -1,7 +1,27 @@
 Changes in v2.5.0-SNAPSHOT
 --------------------------
-* Refactoring: tests, experiments and MPA RTC curve backend moved into git submodules.
+Refactoring:
+* There is now a highest-level Calculator class instead of CalculatorConfig for configurations that cannot be changed at runtime.
+  - It also hold a member variable for the algebraic DNC backend and we included presets for using either affine or piecewise affine curves.
+* We moved and renamed many classes to better reflect the current state of DNC.
+  - "dnc", when not used in "discodnc", was renamed to "disco" to better reflect the code's origin.
+  - The package "minplus" was renamed to the more general "algebra" and disco's implementations for affine an piecewise affine curves were split up.
+  - The packages of in network were moved to network.server_graph and renamed to clarify that we work wit the turn model, not the big switch model
+    - Network was renamed to ServerGraph, NetworkFactory to ServerGraphFactory, Link to Turn.
+  - Package "nc" was renamed to feedforward and class naming was improved to catch up with DNC theory.
+    - PbooArrivalBound_Concatenation -> AggregatePboo_Concatenation, PbooArrivalBound_PerHop -> AggregatePboo_PerServer
+    - PmooArrivalBound -> AggregatePmoo
+    - TandemMatchingArrivalBound -> AggregateTandemMatching
+    - PmooArrivalBound_SinkTreeTbRl -> SinkTree_AffineCurves
+* Code paths for affine and piecewise affine curves were better separated  
+* Functional tests, experiments and MPA RTC curve backend moved into git submodules.
+
+Other changes and additions:
+* Major overhaul of our pom.xml Maven build configuration.
 * ArrivalCurve createUnboundedArrivals() is now ArrivalCurve createInfiniteArrivals().
+* Left-over Service: the indeterminate form resulting from subtracting infinite arrivals from infinite service will return zero service.
+* Improvements, fixes and documentation improvements.
+
 
 v2.4.4 "Chimera" (2018-Oct-16)
 ------------------------------
