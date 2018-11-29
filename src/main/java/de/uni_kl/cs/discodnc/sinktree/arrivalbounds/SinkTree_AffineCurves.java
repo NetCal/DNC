@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.feedforward.arrivalbounds;
+package de.uni_kl.cs.discodnc.sinktree.arrivalbounds;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,7 +43,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
 
-public class SinkTree_AffineCurves { //extends AbstractArrivalBound {
+public class SinkTree_AffineCurves {
     private static SinkTree_AffineCurves instance = new SinkTree_AffineCurves();
     protected ServerGraph server_graph;
     private PmooSinkTreeTbRlABCache ab_cache = new PmooSinkTreeTbRlABCache();

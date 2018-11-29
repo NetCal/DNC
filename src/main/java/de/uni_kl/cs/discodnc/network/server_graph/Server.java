@@ -28,10 +28,10 @@
 
 package de.uni_kl.cs.discodnc.network.server_graph;
 
+import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
 
 public class Server {
     private int id;

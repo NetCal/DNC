@@ -29,9 +29,9 @@ package de.uni_kl.cs.discodnc.bounds.disco.pwaffine;
 
 import java.util.Set;
 
+import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;

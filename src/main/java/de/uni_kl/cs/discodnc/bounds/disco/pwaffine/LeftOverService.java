@@ -35,13 +35,13 @@ import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
 
+import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 

@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.feedforward;
+package de.uni_kl.cs.discodnc.tandem;
 
 import java.util.HashMap;
 import java.util.Map;

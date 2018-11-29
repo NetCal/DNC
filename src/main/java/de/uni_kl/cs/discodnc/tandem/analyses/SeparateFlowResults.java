@@ -28,58 +28,38 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.feedforward.analyses;
+package de.uni_kl.cs.discodnc.tandem.analyses;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisResults;
+import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.tandem.AnalysisResults;
 
-public class TotalFlowResults extends AnalysisResults {
-    protected Map<Server, Set<Num>> map__server__D_server;
-    protected Map<Server, Set<Num>> map__server__B_server;
+public class SeparateFlowResults extends AnalysisResults {
+    protected Set<ServiceCurve> betas_e2e;
+    protected Map<Server, Set<ServiceCurve>> map__server__betas_lo;
 
-    protected TotalFlowResults() {
+    protected SeparateFlowResults() {
         super();
-        map__server__D_server = new HashMap<Server, Set<Num>>();
-        map__server__B_server = new HashMap<Server, Set<Num>>();
+        betas_e2e = new HashSet<ServiceCurve>();
+        map__server__betas_lo = new HashMap<Server, Set<ServiceCurve>>();
     }
 
-    protected TotalFlowResults(Num delay_bound, Map<Server, Set<Num>> map__server__D_server, Num backlog_bound,
-                               Map<Server, Set<Num>> map__server__B_server, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+    protected SeparateFlowResults(Num delay_bound, Num backlog_bound, Set<ServiceCurve> betas_e2e,
+                                  Map<Server, Set<ServiceCurve>> map__server__betas_lo, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
 
         super(delay_bound, backlog_bound, map__server__alphas);
 
-        this.map__server__D_server = map__server__D_server;
-        this.map__server__B_server = map__server__B_server;
-    }
-
-    public String getServerDelayBoundMapString() {
-        if (map__server__D_server.isEmpty()) {
-            return "{}";
-        }
-
-        StringBuffer result_str = new StringBuffer("{");
-        for (Entry<Server, Set<Num>> entry : map__server__D_server.entrySet()) {
-            result_str.append(entry.getKey().toShortString());
-            result_str.append("={");
-            for (Num delay_bound : entry.getValue()) {
-                result_str.append(delay_bound.toString());
-                result_str.append(",");
-            }
-            result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
-            result_str.append("}");
-            result_str.append(", ");
-        }
-        result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
-        result_str.append("}");
-
-        return result_str.toString();
+        this.betas_e2e = betas_e2e;
+        this.map__server__betas_lo = map__server__betas_lo;
     }
 
     @Override
@@ -91,18 +71,27 @@ public class TotalFlowResults extends AnalysisResults {
     protected void setBacklogBound(Num backlog_bound) {
         super.setBacklogBound(backlog_bound);
     }
+    
+    public Set<ServiceCurve> getBetasE2E() {
+    	return Collections.unmodifiableSet(betas_e2e);
+    }
+    
+    public Map<Server, Set<ServiceCurve>> getBetasServerMap() {
+    	return Collections.unmodifiableMap(map__server__betas_lo);
+    }
 
-    public String getServerBacklogBoundMapString() {
-        if (map__server__B_server.isEmpty()) {
+    public String getServerLeftOverBetasMapString() {
+        if (map__server__betas_lo.isEmpty()) {
             return "{}";
         }
 
         StringBuffer result_str = new StringBuffer("{");
-        for (Entry<Server, Set<Num>> entry : map__server__B_server.entrySet()) {
+
+        for (Entry<Server, Set<ServiceCurve>> entry : map__server__betas_lo.entrySet()) {
             result_str.append(entry.getKey().toShortString());
             result_str.append("={");
-            for (Num delay_bound : entry.getValue()) {
-                result_str.append(delay_bound.toString());
+            for (ServiceCurve beta_lo : entry.getValue()) {
+                result_str.append(beta_lo.toString());
                 result_str.append(",");
             }
             result_str.deleteCharAt(result_str.length() - 1); // Remove the trailing comma.
@@ -110,6 +99,7 @@ public class TotalFlowResults extends AnalysisResults {
             result_str.append(", ");
         }
         result_str.delete(result_str.length() - 2, result_str.length()); // Remove the trailing blank space and comma.
+
         result_str.append("}");
 
         return result_str.toString();

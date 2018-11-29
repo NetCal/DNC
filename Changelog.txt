@@ -8,12 +8,12 @@ Refactoring:
   - The package "minplus" was renamed to the more general "algebra" and disco's implementations for affine an piecewise affine curves were split up.
   - The packages of in network were moved to network.server_graph and renamed to clarify that we work wit the turn model, not the big switch model
     - Network was renamed to ServerGraph, NetworkFactory to ServerGraphFactory, Link to Turn.
-  - Package "nc" was renamed to feedforward and class naming was improved to catch up with DNC theory.
+  - Package "nc" was split up and renamed to feedforward, tandem or sinktree. Class naming was improved to catch up with DNC theory.
     - PbooArrivalBound_Concatenation -> AggregatePboo_Concatenation, PbooArrivalBound_PerHop -> AggregatePboo_PerServer
     - PmooArrivalBound -> AggregatePmoo
     - TandemMatchingArrivalBound -> AggregateTandemMatching
     - PmooArrivalBound_SinkTreeTbRl -> SinkTree_AffineCurves
-* Code paths for affine and piecewise affine curves were better separated  
+* Code paths for affine and piecewise affine curves were better separated.
 * Functional tests, experiments and MPA RTC curve backend moved into git submodules.
 
 Other changes and additions:

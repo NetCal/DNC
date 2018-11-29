@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.feedforward.analyses;
+package de.uni_kl.cs.discodnc.tandem.analyses;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,18 +36,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.numbers.Num;
+import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
+import de.uni_kl.cs.discodnc.tandem.Analysis;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
-import de.uni_kl.cs.discodnc.feedforward.AbstractAnalysis;
-import de.uni_kl.cs.discodnc.feedforward.Analysis;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.feedforward.AnalysisConfig.MuxDiscipline;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
