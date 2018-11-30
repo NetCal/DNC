@@ -205,7 +205,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             }
 
             Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
-            ServiceCurve current_rl = Calculator.getInstance().getCurve().createServiceCurve(tmpcurve);
+            ServiceCurve current_rl = Calculator.getInstance().getCurveFactory().createServiceCurve(tmpcurve);
 
             // Sum up latencies
             T = compute.add(T, current_rl.getLatency());
@@ -215,7 +215,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             for (Flow f : present_flows) {
                 ArrivalCurve bound = f.getArrivalCurve();
                 Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-                ArrivalCurve current_tb = Calculator.getInstance().getCurve().createArrivalCurve(ac);
+                ArrivalCurve current_tb = Calculator.getInstance().getCurveFactory().createArrivalCurve(ac);
                 sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
             }
 
@@ -244,7 +244,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         for (Flow f : cross_flow_substitutes) {
             ArrivalCurve bound = f.getArrivalCurve();
             Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-            ArrivalCurve current_tb = Calculator.getInstance().getCurve().createArrivalCurve(ac);
+            ArrivalCurve current_tb = Calculator.getInstance().getCurveFactory().createArrivalCurve(ac);
             sum_bursts = compute.add(sum_bursts, current_tb.getBurst());
         }
 
