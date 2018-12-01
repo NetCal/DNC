@@ -104,6 +104,7 @@ public class Turn {
     public String toString() {
     	StringBuffer turn_str = commonStringPrefix();
 
+    	turn_str.append(", ");
      	turn_str.append(src.toShortString());
      	turn_str.append(", ");
      	turn_str.append(dest.toShortString());
@@ -115,6 +116,7 @@ public class Turn {
     public String toExtendedString() {
     	StringBuffer turn_str = commonStringPrefix();
 
+    	turn_str.append(", ");
      	turn_str.append(src.toExtendedString());
      	turn_str.append(", ");
      	turn_str.append(dest.toExtendedString());
