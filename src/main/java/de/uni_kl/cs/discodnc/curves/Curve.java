@@ -48,7 +48,7 @@ public interface Curve {
     // --------------------------------------------------------------------------------------------------------------
 
     static Curve getFactory() {
-        return Calculator.getInstance().getCurve();
+        return Calculator.getInstance().getCurveFactory();
     }
 
     // --------------------------------------------------------------------------------------------------------------

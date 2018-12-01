@@ -34,8 +34,10 @@ import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
 public final class Calculator {
 	private static Calculator instance = new Calculator();
-	private AlgDncBackend CURVE_BACKEND = AlgDncBackend_DNC_PwAffine.DISCO_PWAFFINE;
+	
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
+	
+	private AlgDncBackend DNC_BACKEND = AlgDncBackend_DNC_PwAffine.DISCO_PWAFFINE;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;
@@ -54,29 +56,38 @@ public final class Calculator {
 		return NUM_BACKEND;
 	}
 
-	public boolean setNumBackend(NumBackend backend) {
-		if (NUM_BACKEND == backend) {
+	public boolean setNumBackend(NumBackend num_backend) {
+		if (NUM_BACKEND == num_backend) {
 			return false;
 		} else {
-			NUM_BACKEND = backend;
+			NUM_BACKEND = num_backend;
 			return true;
 		}
 	}
 
-	public AlgDncBackend getCurveBackend() {
-		return CURVE_BACKEND;
+	public AlgDncBackend getDncBackend() {
+		return DNC_BACKEND;
+	}
+	
+	public Curve getCurveFactory() {
+		return DNC_BACKEND.getCurveFactory();
+	}
+	
+	public MinPlus getMinPlus() {
+		return DNC_BACKEND.getMinPlus();
 	}
 
 	private void checkDependencies() {
-		CURVE_BACKEND.checkDependencies();
+		DNC_BACKEND.checkDependencies();
 	}
-	public boolean setCurveBackend(AlgDncBackend curve_backend) {
+	
+	public boolean setCurveBackend(AlgDncBackend alg_dnc_backend) {
 		checkDependencies();
 
-		if (CURVE_BACKEND == curve_backend) {
+		if (DNC_BACKEND == alg_dnc_backend) {
 			return false;
 		}
-		CURVE_BACKEND = curve_backend;
+		DNC_BACKEND = alg_dnc_backend;
 		return true;
 	}
 
@@ -122,7 +133,8 @@ public final class Calculator {
 
 		calculator_config_str.append(getNumBackend().toString());
 		calculator_config_str.append(", ");
-		calculator_config_str.append(getCurveBackend().toString());
+		
+		calculator_config_str.append(getDncBackend().toString());
 
 		if (exec_arrival_curve_checks()) {
 			calculator_config_str.append(", ");
@@ -146,13 +158,5 @@ public final class Calculator {
 		}
 
 		return calculator_config_str.toString();
-	}
-	
-	public MinPlus getMinPlus() {
-		return CURVE_BACKEND.getMinPlus();
-	}
-	
-	public Curve getCurve() {
-		return CURVE_BACKEND.getCurveFactory();
 	}
 }

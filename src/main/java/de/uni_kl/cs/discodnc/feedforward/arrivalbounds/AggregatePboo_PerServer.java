@@ -158,7 +158,7 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 		// TODO This implementation only works for token-bucket arrivals. 
 		// It disregards the potential shift in inflection points not present in this burst cap variant.
 		if (configuration.serverBacklogArrivalBound()
-				&& Calculator.getInstance().getCurveBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
+				&& Calculator.getInstance().getDncBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
 			Server last_hop_xtx = turn.getSource();
 			// For the DiscoDNC, it is easiest to use TFA to compute the server's backlog bound. 
 			TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph, configuration);
