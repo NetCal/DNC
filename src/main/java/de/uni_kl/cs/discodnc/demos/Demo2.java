@@ -119,8 +119,8 @@ public class Demo2 {
             System.out.println();
 
             // PMOO
-            // If no analysis configuration is given, the defaults are used
             System.out.println("--- PMOO Analysis ---");
+            // If no analysis configuration is given, the defaults are used
             PmooAnalysis pmoo = new PmooAnalysis(network);
 
             try {
