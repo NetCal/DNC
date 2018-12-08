@@ -34,7 +34,6 @@ import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
-import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public final class Bound {
@@ -78,15 +77,6 @@ public final class Bound {
     // --------------------------------------------------------------------------------------------------------------
     // Delay
     // --------------------------------------------------------------------------------------------------------------
-
-    public static double backlogPmooSinkTreeTbRl(ServerGraph tree, Server root,
-                                                 AnalysisConfig.ArrivalBoundMethod sink_tree_ab) throws Exception {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Backlog.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
-//        }
-        return Backlog.derivePmooSinkTreeTbRl(tree, root, sink_tree_ab);
-    }
 
     public static Num delayARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 //        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
