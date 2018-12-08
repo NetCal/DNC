@@ -37,10 +37,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public final class Bound {
-    private Bound() {
-    }
-    
+public abstract class Bound {
     // --------------------------------------------------------------------------------------------------------------
     // Backlog
     // --------------------------------------------------------------------------------------------------------------

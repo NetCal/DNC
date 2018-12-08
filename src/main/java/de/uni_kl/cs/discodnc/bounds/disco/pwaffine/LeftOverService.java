@@ -45,10 +45,7 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public final class LeftOverService {
-    private LeftOverService() {
-    }
-
+public abstract class LeftOverService {
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, Server server,
                                             Set<ArrivalCurve> arrival_curves) {
         if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
