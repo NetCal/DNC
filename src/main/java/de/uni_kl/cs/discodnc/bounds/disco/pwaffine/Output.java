@@ -39,7 +39,7 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 
-public abstract class Output {
+public final class Output {
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
                                             Server server) throws Exception {
         return compute(configuration, arrival_curves, server, Collections.singleton(server.getServiceCurve()));

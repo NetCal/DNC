@@ -43,7 +43,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.sinktree.arrivalbounds.SinkTree_AffineCurves;
 
-public abstract class Backlog {
+public final class Backlog {
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 		if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();

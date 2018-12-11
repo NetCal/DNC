@@ -31,7 +31,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.discodnc.curves.Curve;
 
-public abstract class CheckUtils {
+public final class CheckUtils {
 
 	// --------------------------------------------------------------------------------------------------------------
 	// Generic Input Checks
