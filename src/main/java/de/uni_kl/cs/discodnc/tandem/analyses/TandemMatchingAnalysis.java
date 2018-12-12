@@ -89,11 +89,11 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 
 	public void performAnalysis( Flow flow_of_interest, Path path ) throws Exception
 	{
-		if( configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO )
+		if( configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO )
 		{
 			throw new Exception( "Cutting analysis is not available for FIFO multiplexing nodes" );
 		} else {
-			if( configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL ) {
+			if( configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL ) {
 				for( Server s : path.getServers() ) {
 					if( s.multiplexing() == Multiplexing.FIFO ) {
 						throw new Exception( "Cutting analysis is not available for FIFO multiplexing nodes" );

@@ -48,8 +48,8 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 public final class LeftOverService {
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, Server server,
                                             Set<ArrivalCurve> arrival_curves) {
-        if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO
-                || (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL
+        if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
+                || (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
                 && server.multiplexing() == Multiplexing.FIFO)) {
             return fifoMux(server.getServiceCurve(), arrival_curves);
         } else {
@@ -59,7 +59,7 @@ public final class LeftOverService {
 
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, ServiceCurve service_curve,
                                             Set<ArrivalCurve> arrival_curves) {
-        if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO) {
+        if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO) {
             return LeftOverService.fifoMux(service_curve, arrival_curves);
         } else {
             return LeftOverService.arbMux(service_curve, arrival_curves);

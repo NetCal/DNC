@@ -122,8 +122,8 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
 
             Num delay_bound_server_alpha;
-            if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO
-                    || (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL
+            if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
+                    || (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
                     && server.multiplexing() == Multiplexing.FIFO)
                     || fifo_per_micro_flow) {
                 delay_bound_server_alpha = Bound.delayFIFO(alpha_candidate, beta_server);

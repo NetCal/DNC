@@ -89,8 +89,8 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
-		if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO
-				|| (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL
+		if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
+				|| (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
 						&& turn.getSource().multiplexing() == Multiplexing.FIFO)) {
 			throw new Exception( "Tandem matching arrival bounding is not available for FIFO multiplexing nodes" );
 		}

@@ -76,7 +76,7 @@ public class CompFFApresets {
 		base_config.setUseGamma( GammaFlag.GLOBALLY_OFF );
 		base_config.setUseExtraGamma( GammaFlag.GLOBALLY_OFF );
 		
-		base_config.setMultiplexingEnforcement( MultiplexingEnforcement.GLOBAL_ARBITRARY );
+		base_config.enforceMultiplexing( MultiplexingEnforcement.GLOBAL_ARBITRARY );
 
 		
 		// --------------------------------------------------------------------------------------------------------------

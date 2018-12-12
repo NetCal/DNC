@@ -90,11 +90,11 @@ public class AnalysisConfig {
         this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
-    public MultiplexingEnforcement multiplexingEnforcement() {
+    public MultiplexingEnforcement enforceMultiplexing() {
         return multiplexing_enforcement;
     }
 
-    public void setMultiplexingEnforcement(MultiplexingEnforcement enforcement) {
+    public void enforceMultiplexing(MultiplexingEnforcement enforcement) {
         multiplexing_enforcement = enforcement;
     }
 
@@ -191,7 +191,7 @@ public class AnalysisConfig {
     public String toString() {
         StringBuffer analysis_config_str = new StringBuffer();
 
-        analysis_config_str.append(multiplexingEnforcement().toString());
+        analysis_config_str.append(enforceMultiplexing().toString());
         analysis_config_str.append(", ");
         analysis_config_str.append(arrivalBoundMethods().toString());
 

@@ -285,7 +285,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     }
 
     public void performAnalysis(Flow flow_of_interest, Path path) throws Exception {
-        if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO) {
+        if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO) {
             throw new Exception("PMOO analysis is not available for FIFO multiplexing nodes");
         }
 
@@ -314,7 +314,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
     public Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
             throws Exception {
-        if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL) {
+        if (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL) {
             for (Server s : path.getServers()) {
                 if (s.multiplexing() == Multiplexing.FIFO) {
                     throw new Exception("PMOO analysis is not available for FIFO multiplexing nodes");

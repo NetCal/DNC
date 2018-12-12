@@ -108,8 +108,8 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
-		if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO
-				|| (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL
+		if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
+				|| (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
 						&& turn.getSource().multiplexing() == Multiplexing.FIFO)) {
 			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
 		}
