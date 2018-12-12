@@ -39,7 +39,7 @@ import java.util.Map.Entry;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
@@ -89,13 +89,13 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 
 	public void performAnalysis( Flow flow_of_interest, Path path ) throws Exception
 	{
-		if( configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO )
+		if( configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO )
 		{
 			throw new Exception( "Cutting analysis is not available for FIFO multiplexing nodes" );
 		} else {
-			if( configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL ) {
+			if( configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL ) {
 				for( Server s : path.getServers() ) {
-					if( s.multiplexingDiscipline() == Multiplexing.FIFO ) {
+					if( s.multiplexing() == Multiplexing.FIFO ) {
 						throw new Exception( "Cutting analysis is not available for FIFO multiplexing nodes" );
 					}
 				}

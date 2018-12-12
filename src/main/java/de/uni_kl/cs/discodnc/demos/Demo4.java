@@ -69,8 +69,8 @@ public class Demo4 {
 
         for (int i = 1; i < numServers; i++) {
             servers[i] = sg.addServer(service_curve, max_service_curve);
-            servers[i].setUseGamma(false);
-            servers[i].setUseExtraGamma(false);
+            servers[i].useMaxSC(false);
+            servers[i].useMaxScRate(false);
         }
 
         sg.addTurn(servers[1], servers[2]);
