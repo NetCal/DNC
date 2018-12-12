@@ -123,8 +123,8 @@ public class Server {
         this.max_service_curve = max_service_curve;
 
         max_service_curve_flag = true;
-        this.use_gamma = true;
-        this.use_extra_gamma = true;
+        this.use_gamma = use_gamma;
+        this.use_extra_gamma = use_extra_gamma;
 
         return true;
     }
