@@ -659,37 +659,53 @@ public interface Curve {
     // --------------------------------------------------------------------------------------------------------------
     // Interface
     // --------------------------------------------------------------------------------------------------------------
+
+    // ------------------------------------------------------------
+    // Curves (generic)
+    // ------------------------------------------------------------
+
+    // Construction
+    Curve createZeroCurve();
+
+    Curve createHorizontal(Num y);
+
+    Curve createCurve(List<LinearSegment> segments);
     
-    Curve copy();
-
-    void copy(Curve curve);
-
-    // Curve's segments (incl. manipulation)
+    // Segments
     LinearSegment getSegment(int pos);
 
     int getSegmentCount();
 
-    // Curve properties
+    int getSegmentDefining(Num x);
+
+    void addSegment(LinearSegment s);
+
+    // Properties
     boolean isConvex();
 
     boolean isConcave();
 
-    // Curve function values
+    // Function Values
+    Num f(Num x);
+
+    Num fLimitRight(Num x);
+
+    Num f_inv(Num y);
+
+    Num f_inv(Num y, boolean rightmost);
+
+    Num getLatency();
+
+    Num getBurst();
+    
     Num getUltAffineRate();
-    
-    int getSegmentDefining(Num x);
 
-    void addSegment(LinearSegment s);
-    
-    Curve createZeroCurve();
-    
-    ServiceCurve createZeroService();
+    Num getGradientLimitRight(Num x);
 
-    Curve createCurve(List<LinearSegment> segments);
+    // Copying
+    Curve copy();
 
-    Curve createHorizontal(double y);
-
-    Curve createHorizontal(Num y);
+    void copy(Curve curve);
 
     // ------------------------------------------------------------
     // Service Curves
@@ -702,6 +718,8 @@ public interface Curve {
     ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
 
     ServiceCurve createServiceCurve(Curve curve);
+
+    ServiceCurve createZeroService();
 
     ServiceCurve createZeroDelayInfiniteBurst();
 
@@ -804,24 +822,6 @@ public interface Curve {
     boolean isConcaveIn(Num a, Num b);
 
     boolean isConvexIn(Num a, Num b);
-
-    // ------------------------------------------------------------
-    // Function Values
-    // ------------------------------------------------------------
-    
-    Num f(Num x);
-
-    Num fLimitRight(Num x);
-
-    Num f_inv(Num y);
-
-    Num f_inv(Num y, boolean rightmost);
-
-    Num getLatency();
-
-    Num getBurst();
-
-    Num getGradientLimitRight(Num x);
 
     // ------------------------------------------------------------
     // Methods to override

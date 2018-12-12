@@ -1056,10 +1056,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return new Curve_Disco_Affine(); // CurveDNC constructor's default behavior
 	}
 
-	public Curve_Disco_Affine createHorizontal(double y) {
-		return createHorizontal(Num.getFactory(Calculator.getInstance().getNumBackend()).create(y));
-	}
-
 	/**
 	 * Creates a horizontal curve.
 	 *
