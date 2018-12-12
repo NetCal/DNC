@@ -13,6 +13,10 @@ Refactoring:
     - PmooArrivalBound -> AggregatePmoo
     - TandemMatchingArrivalBound -> AggregateTandemMatching
     - PmooArrivalBound_SinkTreeTbRl -> SinkTree_AffineCurves
+  - Gamma -- the Maximum Service Curve
+    - Renamed to (variations of) MaxSC and MaxScRate.
+    - Global use of either is now called enforcement as it overrides the server-local setting correctly.
+  - Multiplexing: Clarified naming of the multiplexing discipline and globally enforced behavior.    
 * Code paths for affine and piecewise affine curves were better separated.
 * Functional tests, experiments and MPA RTC curve backend moved into git submodules.
 
