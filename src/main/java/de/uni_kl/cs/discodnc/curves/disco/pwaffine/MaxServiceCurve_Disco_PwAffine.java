@@ -47,14 +47,12 @@ public class MaxServiceCurve_Disco_PwAffine extends Curve_Disco_PwAffine impleme
 
     public MaxServiceCurve_Disco_PwAffine(Curve curve) {
         copy(curve);
+        forceThroughOrigin();
 
         // Too strong requirement: !isAlmostConcave()
         if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) {
-            throw new RuntimeException(
-                    "Maximum service curves can only be created from wide-sense increasing functions.");
+            throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
         }
-
-        forceThroughOrigin();
     }
 
     public MaxServiceCurve_Disco_PwAffine(String max_service_curve_str) throws Exception {
@@ -64,13 +62,12 @@ public class MaxServiceCurve_Disco_PwAffine extends Curve_Disco_PwAffine impleme
         }
 
         initializeCurve(max_service_curve_str);
+        forceThroughOrigin();
         
         // Too strong requirement: !isAlmostConcave()
         if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
         }
-
-        forceThroughOrigin();
     }
 
     // --------------------------------------------------------------------------------------------------------------
