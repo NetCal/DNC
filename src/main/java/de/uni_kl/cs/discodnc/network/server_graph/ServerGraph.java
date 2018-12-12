@@ -191,7 +191,7 @@ public class ServerGraph {
 	// With given maximum service curve
 
 	/**
-	 * By default the server's use_gamma and use_extra_gamma are enabled
+	 * By default the server's use_max_sc and use_max_sc_output_rate are enabled
 	 *
 	 * @param service_curve
 	 *            The server's service curve.
@@ -204,7 +204,7 @@ public class ServerGraph {
 	}
 
 	/**
-	 * By default the server's use_gamma and use_extra_gamma are enabled
+	 * By default the server's use_max_sc and use_max_sc_output_rate are enabled
 	 *
 	 * @param alias
 	 *            The server's user-defined alias.
@@ -218,38 +218,32 @@ public class ServerGraph {
 		return addServer(alias, service_curve, max_service_curve, Multiplexing.ARBITRARY, true, true);
 	}
 
-	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve, boolean use_gamma,
-			boolean use_extra_gamma) {
-		return addServer(service_curve, max_service_curve, Multiplexing.ARBITRARY, use_gamma,
-				use_extra_gamma);
+	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve, boolean use_max_sc, boolean use_max_sc_output_rate) {
+		return addServer(service_curve, max_service_curve, Multiplexing.ARBITRARY, use_max_sc, use_max_sc_output_rate);
 	}
 
-	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			Multiplexing multiplexing) {
+	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing) {
 		return addServer(alias, service_curve, max_service_curve, multiplexing, true, true);
 	}
 
-	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			Multiplexing multiplexing) {
+	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve, Multiplexing multiplexing) {
 		return addServer(service_curve, max_service_curve, multiplexing, true, true);
 	}
 
-	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			boolean use_gamma, boolean use_extra_gamma) {
-		return addServer(alias, service_curve, max_service_curve, Multiplexing.ARBITRARY, use_gamma,
-				use_extra_gamma);
+	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve, boolean use_max_sc, boolean use_max_sc_output_rate) {
+		return addServer(alias, service_curve, max_service_curve, Multiplexing.ARBITRARY, use_max_sc, use_max_sc_output_rate);
 	}
 
 	public Server addServer(ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
+							Multiplexing multiplexing, boolean use_max_sc, boolean use_max_sc_output_rate) {
 		String alias = server_default_name_prefix + Integer.toString(server_id_counter);
-		return addServer(alias, service_curve, max_service_curve, multiplexing, use_gamma, use_extra_gamma);
+		return addServer(alias, service_curve, max_service_curve, multiplexing, use_max_sc, use_max_sc_output_rate);
 	}
 
 	public Server addServer(String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-			Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
+							Multiplexing multiplexing, boolean use_max_sc, boolean use_max_sc_output_rate) {
 		Server new_server = new Server(server_id_counter, alias, service_curve.copy(), max_service_curve.copy(),
-				multiplexing, use_gamma, use_extra_gamma);
+										multiplexing, use_max_sc, use_max_sc_output_rate);
 		updateServerAdditionInternally(new_server);
 
 		return new_server;
@@ -1336,8 +1330,8 @@ public class ServerGraph {
 
 		for (Server s_old : servers) {
 			s_new = sg_new.addServer(s_old.getAlias(), s_old.getServiceCurve().copy(),
-					s_old.getMaxServiceCurve().copy(), s_old.multiplexing(), s_old.useGamma(),
-					s_old.useExtraGamma());
+					s_old.getMaxServiceCurve().copy(), s_old.multiplexing(), s_old.useMaxSC(),
+					s_old.useMaxScRate());
 			map__s_old__s_new.put(s_old, s_new);
 		}
 
@@ -1455,8 +1449,8 @@ public class ServerGraph {
 			sb.append("CurvePwAffine.getFactory().createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString()
 					+ "\" )" + ", ");
 			sb.append("Multiplexing." + s.multiplexing() + ", ");
-			sb.append(s.useGamma() + ", ");
-			sb.append(s.useExtraGamma());
+			sb.append(s.useMaxSC() + ", ");
+			sb.append(s.useMaxScRate());
 			sb.append(" );\n");
 
 			i_servers_lines++;

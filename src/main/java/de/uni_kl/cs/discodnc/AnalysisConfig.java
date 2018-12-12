@@ -46,7 +46,7 @@ public class AnalysisConfig {
         SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
     }
 
-    public enum GammaFlag {
+    public enum MaxScEnforcement {
         SERVER_LOCAL, GLOBALLY_ON, GLOBALLY_OFF
     }
 
@@ -61,14 +61,14 @@ public class AnalysisConfig {
     /**
      * Whether to use maximum service curves in output bound computation
      */
-    private GammaFlag use_gamma = GammaFlag.SERVER_LOCAL;
+    private MaxScEnforcement enforce_max_sc = MaxScEnforcement.SERVER_LOCAL;
     
     /**
      * Whether to constrain the output bound further through convolution with the
      * maximum service curve's rate as the server cannot output data faster than
      * this rate.
      */
-    private GammaFlag use_extra_gamma = GammaFlag.SERVER_LOCAL;
+    private MaxScEnforcement enforce_max_sc_output_rate = MaxScEnforcement.SERVER_LOCAL;
     private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
             Collections.singleton(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION));
     private boolean remove_duplicate_arrival_bounds = true;
@@ -78,12 +78,12 @@ public class AnalysisConfig {
     public AnalysisConfig() {
     }
     
-    public AnalysisConfig(MultiplexingEnforcement enforcement, GammaFlag use_gamma, GammaFlag use_extra_gamma,
+    public AnalysisConfig(MultiplexingEnforcement multiplexing_enforcement, MaxScEnforcement enforce_max_sc, MaxScEnforcement enforce_max_sc_output_rate,
                           Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
                           boolean server_backlog_arrival_bound) {
-        this.multiplexing_enforcement = enforcement;
-        this.use_gamma = use_gamma;
-        this.use_extra_gamma = use_extra_gamma;
+        this.multiplexing_enforcement = multiplexing_enforcement;
+        this.enforce_max_sc = enforce_max_sc;
+        this.enforce_max_sc_output_rate = enforce_max_sc_output_rate;
         this.arrival_bound_methods.clear();
         this.arrival_bound_methods.addAll(arrival_bound_methods);
         this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
@@ -98,20 +98,20 @@ public class AnalysisConfig {
         multiplexing_enforcement = enforcement;
     }
 
-    public GammaFlag useGamma() {
-        return use_gamma;
+    public MaxScEnforcement enforceMaxSC() {
+        return enforce_max_sc;
     }
 
-    public void setUseGamma(GammaFlag use_gamma_flag) {
-        use_gamma = use_gamma_flag;
+    public void enforceMaxSC(MaxScEnforcement enforcement) {
+        this.enforce_max_sc = enforcement;
     }
 
-    public GammaFlag useExtraGamma() {
-        return use_extra_gamma;
+    public MaxScEnforcement enforceMaxScOutputRate() {
+        return enforce_max_sc_output_rate;
     }
 
-    public void setUseExtraGamma(GammaFlag use_extra_gamma_flag) {
-        use_extra_gamma = use_extra_gamma_flag;
+    public void enforceMaxScOutputRate(MaxScEnforcement enforcement) {
+        enforce_max_sc_output_rate = enforcement;
     }
 
     public void defaultArrivalBoundMethods() {
@@ -183,7 +183,7 @@ public class AnalysisConfig {
      * @return The copy.
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
-        return new AnalysisConfig(multiplexing_enforcement, use_gamma, use_extra_gamma, arrival_bound_methods,
+        return new AnalysisConfig(multiplexing_enforcement, enforce_max_sc, enforce_max_sc_output_rate, arrival_bound_methods,
                 remove_duplicate_arrival_bounds, server_backlog_arrival_bound);
     }
 

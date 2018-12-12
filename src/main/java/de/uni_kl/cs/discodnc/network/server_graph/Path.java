@@ -207,59 +207,10 @@ public class Path {
 
     /**
      * Returns the convolution of the maximum service curves of all servers on the
-     * given lnik path <code>path</code> that have the useGamma flag set.<br>
-     * If a server either has no maximum service curve set or useGamma is disabled,
+     * given lnik path <code>path</code> that have the useMaxSC flag set.<br>
+     * If a server either has no maximum service curve set or useMaxSC is disabled,
      * calculations take place with the default maximum service curve, i.e., the
      * zero delay burst curve, so the result will not be influenced.
-     *
-     * @return The convolved curve
-     * @throws Exception
-     */
-    public MaxServiceCurve getGamma() throws Exception {
-        Collection<Server> servers = getServers();
-        return getGamma(servers);
-    }
-
-    private MaxServiceCurve getGamma(Collection<Server> servers) throws Exception {
-        MaxServiceCurve gamma_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
-        for (Server s : servers) {
-            gamma_total = Calculator.getInstance().getMinPlus().convolve(gamma_total, s.getGamma());
-        }
-
-        return gamma_total;
-    }
-
-    /**
-     * Returns the convolution of the maximum service curves of all servers on the
-     * given turn path <code>path</code> that have the useExtraGamma flag set.<br>
-     * If a server either has no maximum service curve set or useExtraGamma is
-     * disabled, calculations take place with the default maximum service curve,
-     * i.e., the zero delay burst curve, so the result will not be influenced.
-     *
-     * @return The convolved curve
-     * @throws Exception
-     */
-    public MaxServiceCurve getExtraGamma() throws Exception {
-        Collection<Server> servers = getServers();
-        return getExtraGamma(servers);
-    }
-
-    private MaxServiceCurve getExtraGamma(Collection<Server> servers) throws Exception {
-        MaxServiceCurve extra_gamma_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
-        for (Server s : servers) {
-            extra_gamma_total = Calculator.getInstance().getMinPlus().convolve(extra_gamma_total, s.getExtraGamma());
-        }
-        // extra_gamma_total.removeLatency(); // Already done by s.getExtraGamma()
-
-        return extra_gamma_total;
-    }
-
-    /**
-     * Returns the convolution of the maximum service curves of all servers on the
-     * given turn path <code>path</code><br>
-     * If a server has no maximum service curve, calculations take place with the
-     * default maximum service curve, i.e., the zero delay burst curve, so the
-     * result will not be influenced.
      *
      * @return The convolved curve
      * @throws Exception
@@ -270,14 +221,68 @@ public class Path {
     }
 
     private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
-        MaxServiceCurve max_service_curve_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+        MaxServiceCurve max_sc_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         for (Server s : servers) {
-            max_service_curve_total = Calculator.getInstance().getMinPlus().convolve(max_service_curve_total, s.getMaxServiceCurve());
+            max_sc_path = Calculator.getInstance().getMinPlus().convolve(max_sc_path, s.getMaxServiceCurve());
         }
 
-        return max_service_curve_total;
+        return max_sc_path;
     }
 
+    public MaxServiceCurve getStoredMaxSC() throws Exception {
+        Collection<Server> servers = getServers();
+        return getStoredMaxSC(servers);
+    }
+
+    private MaxServiceCurve getStoredMaxSC(Collection<Server> servers) throws Exception {
+        MaxServiceCurve max_sc_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+        for (Server s : servers) {
+            max_sc_path = Calculator.getInstance().getMinPlus().convolve(max_sc_path, s.getStoredMaxSC());
+        }
+
+        return max_sc_path;
+    }
+
+    /**
+     * Returns the convolution of the maximum service curves of all servers on the
+     * given turn path <code>path</code> that have the useMaxScRate flag set.<br>
+     * If a server either has no maximum service curve set or useMaxScRate is
+     * disabled, calculations take place with the default maximum service curve,
+     * i.e., the zero delay burst curve, so the result will not be influenced.
+     *
+     * @return The convolved curve
+     * @throws Exception
+     */
+    public MaxServiceCurve getMaxScRate() throws Exception {
+        Collection<Server> servers = getServers();
+        return getMaxScRate(servers);
+    }
+
+    private MaxServiceCurve getMaxScRate(Collection<Server> servers) throws Exception {
+        MaxServiceCurve max_sc_rate_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+        for (Server s : servers) {
+            max_sc_rate_path = Calculator.getInstance().getMinPlus().convolve(max_sc_rate_path, s.getMaxScRate());
+        }
+        // max_sc_rate_path.removeLatency(); // Already done by s.getMaxScRate()
+
+        return max_sc_rate_path;
+    }
+    
+    public MaxServiceCurve getStoredMaxScRate() throws Exception {
+        Collection<Server> servers = getServers();
+        return getStoredMaxScRate(servers);
+    }
+
+    private MaxServiceCurve getStoredMaxScRate(Collection<Server> servers) throws Exception {
+        MaxServiceCurve max_sc_rate_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+        for (Server s : servers) {
+            max_sc_rate_path = Calculator.getInstance().getMinPlus().convolve(max_sc_rate_path, s.getStoredMaxScRate());
+        }
+        // max_sc_rate_path.removeLatency(); // Already done by s.getStoredMaxScRate()
+
+        return max_sc_rate_path;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof Path)) {

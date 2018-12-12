@@ -55,10 +55,10 @@ public interface MinPlus {
 	MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2) throws Exception;
 
 	// Arrival Curves and Max Service Curves
-	Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve)
+	Set<Curve> convolve_ACs_MaxSC(Set<ArrivalCurve> arrival_curves, MaxServiceCurve maximum_service_curve)
 			throws Exception;
 	
-	Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve)
+	Set<ArrivalCurve> convolve_ACs_MaxScRate(Set<ArrivalCurve> arrival_curves, MaxServiceCurve extra_gamma_curve)
 			throws Exception;
 	
 	// ------------------------------------------------------------
