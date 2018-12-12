@@ -1516,7 +1516,7 @@ public class ServerGraph {
 					+ ", ");
 			sb.append("servers_on_path_s");
 			sb.append(" );\n");
-			sb.append("\t\tservers_on_path_s.clear();");
+			sb.append("\t\tservers_on_path_s.clear();\n");
 			sb.append("\n");
 
 			i_flows_lines += 3;
@@ -1562,8 +1562,8 @@ public class ServerGraph {
 		sb.append("\n");
 
 		sb.append("\tpublic ServerGraph getServerGraph() {\n");
-		sb.append("\t\treturn sg;");
-		sb.append("\t}");
+		sb.append("\t\treturn sg;\n");
+		sb.append("\t}\n");
 		sb.append("\n");
 
 		sb.append("\tpublic void reinitializeCurves() {\n");
