@@ -1336,7 +1336,7 @@ public class ServerGraph {
 
 		for (Server s_old : servers) {
 			s_new = sg_new.addServer(s_old.getAlias(), s_old.getServiceCurve().copy(),
-					s_old.getMaxServiceCurve().copy(), s_old.multiplexingDiscipline(), s_old.useGamma(),
+					s_old.getMaxServiceCurve().copy(), s_old.multiplexing(), s_old.useGamma(),
 					s_old.useExtraGamma());
 			map__s_old__s_new.put(s_old, s_new);
 		}
@@ -1454,7 +1454,7 @@ public class ServerGraph {
 					+ ", ");
 			sb.append("CurvePwAffine.getFactory().createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString()
 					+ "\" )" + ", ");
-			sb.append("Multiplexing." + s.multiplexingDiscipline() + ", ");
+			sb.append("Multiplexing." + s.multiplexing() + ", ");
 			sb.append(s.useGamma() + ", ");
 			sb.append(s.useExtraGamma());
 			sb.append(" );\n");

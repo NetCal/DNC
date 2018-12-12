@@ -38,7 +38,7 @@ import org.apache.commons.math3.util.Pair;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -48,9 +48,9 @@ import de.uni_kl.cs.discodnc.numbers.Num;
 public final class LeftOverService {
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, Server server,
                                             Set<ArrivalCurve> arrival_curves) {
-        if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
-                || (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
-                && server.multiplexingDiscipline() == Multiplexing.FIFO)) {
+        if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO
+                || (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL
+                && server.multiplexing() == Multiplexing.FIFO)) {
             return fifoMux(server.getServiceCurve(), arrival_curves);
         } else {
             return LeftOverService.arbMux(server.getServiceCurve(), arrival_curves);
@@ -59,7 +59,7 @@ public final class LeftOverService {
 
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, ServiceCurve service_curve,
                                             Set<ArrivalCurve> arrival_curves) {
-        if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO) {
+        if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO) {
             return LeftOverService.fifoMux(service_curve, arrival_curves);
         } else {
             return LeftOverService.arbMux(service_curve, arrival_curves);

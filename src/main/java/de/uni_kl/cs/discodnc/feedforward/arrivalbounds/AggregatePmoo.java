@@ -35,7 +35,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -108,9 +108,9 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
-		if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
-				|| (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
-						&& turn.getSource().multiplexingDiscipline() == Multiplexing.FIFO)) {
+		if (configuration.multiplexingEnforcement() == MultiplexingEnforcement.GLOBAL_FIFO
+				|| (configuration.multiplexingEnforcement() == MultiplexingEnforcement.SERVER_LOCAL
+						&& turn.getSource().multiplexing() == Multiplexing.FIFO)) {
 			throw new Exception("PMOO arrival bounding is not available for FIFO multiplexing nodes");
 		}
 

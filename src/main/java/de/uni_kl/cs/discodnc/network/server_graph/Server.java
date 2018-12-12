@@ -69,7 +69,7 @@ public class Server {
      * @param alias             The server's alias (not necessarily unique).
      * @param service_curve     The server's service curve.
      * @param max_service_curve The server's maximum service curve.
-     * @param multiplexing      The server's flow multiplexing discipline.
+     * @param multiplexing      The server's flow multiplexing setting.
      * @param use_gamma         Convolve the maximum service curve with the arrival curve before
      *                          deriving an output bound.
      * @param use_extra_gamma   Convolve the output bound with the maximum service curve.
@@ -191,12 +191,12 @@ public class Server {
         this.use_extra_gamma = use_extra_gamma;
     }
 
-    public Multiplexing multiplexingDiscipline() {
+    public Multiplexing multiplexing() {
         return multiplexing;
     }
 
-    public void setMultiplexingDiscipline(Multiplexing mux) {
-        multiplexing = mux;
+    public void setMultiplexing(Multiplexing multiplexing) {
+        this.multiplexing = multiplexing;
     }
 
     public String getAlias() {

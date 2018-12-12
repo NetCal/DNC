@@ -42,7 +42,7 @@ public class AnalysisConfig {
         ARBITRARY, FIFO
     }
 
-    public enum MuxDiscipline {
+    public enum MultiplexingEnforcement {
         SERVER_LOCAL, GLOBAL_ARBITRARY, GLOBAL_FIFO
     }
 
@@ -56,7 +56,7 @@ public class AnalysisConfig {
 		SINKTREE_AFFINE_MINPLUS, SINKTREE_AFFINE_DIRECT, SINKTREE_AFFINE_HOMO
     }
     
-    private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
+    private MultiplexingEnforcement multiplexing_enforcement = MultiplexingEnforcement.SERVER_LOCAL;
     
     /**
      * Whether to use maximum service curves in output bound computation
@@ -78,10 +78,10 @@ public class AnalysisConfig {
     public AnalysisConfig() {
     }
     
-    public AnalysisConfig(MuxDiscipline multiplexing_discipline, GammaFlag use_gamma, GammaFlag use_extra_gamma,
+    public AnalysisConfig(MultiplexingEnforcement enforcement, GammaFlag use_gamma, GammaFlag use_extra_gamma,
                           Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
                           boolean server_backlog_arrival_bound) {
-        this.multiplexing_discipline = multiplexing_discipline;
+        this.multiplexing_enforcement = enforcement;
         this.use_gamma = use_gamma;
         this.use_extra_gamma = use_extra_gamma;
         this.arrival_bound_methods.clear();
@@ -90,12 +90,12 @@ public class AnalysisConfig {
         this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
-    public MuxDiscipline multiplexingDiscipline() {
-        return multiplexing_discipline;
+    public MultiplexingEnforcement multiplexingEnforcement() {
+        return multiplexing_enforcement;
     }
 
-    public void setMultiplexingDiscipline(MuxDiscipline mux_discipline) {
-        multiplexing_discipline = mux_discipline;
+    public void setMultiplexingEnforcement(MultiplexingEnforcement enforcement) {
+        multiplexing_enforcement = enforcement;
     }
 
     public GammaFlag useGamma() {
@@ -183,7 +183,7 @@ public class AnalysisConfig {
      * @return The copy.
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
-        return new AnalysisConfig(multiplexing_discipline, use_gamma, use_extra_gamma, arrival_bound_methods,
+        return new AnalysisConfig(multiplexing_enforcement, use_gamma, use_extra_gamma, arrival_bound_methods,
                 remove_duplicate_arrival_bounds, server_backlog_arrival_bound);
     }
 
@@ -191,7 +191,7 @@ public class AnalysisConfig {
     public String toString() {
         StringBuffer analysis_config_str = new StringBuffer();
 
-        analysis_config_str.append(multiplexingDiscipline().toString());
+        analysis_config_str.append(multiplexingEnforcement().toString());
         analysis_config_str.append(", ");
         analysis_config_str.append(arrivalBoundMethods().toString());
 
