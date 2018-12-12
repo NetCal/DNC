@@ -34,7 +34,7 @@ import java.util.Set;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
@@ -89,9 +89,9 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		}
 
-		if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
-				|| (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
-						&& turn.getSource().multiplexingDiscipline() == Multiplexing.FIFO)) {
+		if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
+				|| (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
+						&& turn.getSource().multiplexing() == Multiplexing.FIFO)) {
 			throw new Exception( "Tandem matching arrival bounding is not available for FIFO multiplexing nodes" );
 		}
 

@@ -67,12 +67,12 @@ public class Demo1 {
         Server s0 = network.addServer(service_curve, max_service_curve);
         // Creating a server with a maximum service curve automatically triggers the
         // following setting
-        // s0.setUseGamma( true );
-        // s0.setUseExtraGamma( true );
+        // s0.useMaxSC( true );
+        // s0.useMaxScRate( true );
         // , however, disabling the use of a maximum service curve in a configuration
         // overrides it.
-        configuration.setUseGamma(AnalysisConfig.GammaFlag.GLOBALLY_ON);
-        configuration.setUseExtraGamma(AnalysisConfig.GammaFlag.GLOBALLY_ON);
+        configuration.enforceMaxSC(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
+        configuration.enforceMaxScOutputRate(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
 
         Flow flow_of_interest = network.addFlow(arrival_curve, s0);
 

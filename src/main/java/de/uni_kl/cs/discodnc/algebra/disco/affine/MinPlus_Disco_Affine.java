@@ -96,7 +96,7 @@ public enum MinPlus_Disco_Affine implements MinPlus {
 	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_ACs_MSC(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
 	 */
 	@Override
-	public Set<Curve> convolve_ACs_MSC(Set<ArrivalCurve> arrival_curves,
+	public Set<Curve> convolve_ACs_MaxSC(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve maximum_service_curve) throws Exception {
 		return Convolution_Disco_Affine.convolve_ACs_MSC(arrival_curves, maximum_service_curve);
 	}
@@ -105,7 +105,7 @@ public enum MinPlus_Disco_Affine implements MinPlus {
 	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_ACs_EGamma(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
 	 */
 	@Override
-	public Set<ArrivalCurve> convolve_ACs_EGamma(Set<ArrivalCurve> arrival_curves,
+	public Set<ArrivalCurve> convolve_ACs_MaxScRate(Set<ArrivalCurve> arrival_curves,
 			MaxServiceCurve extra_gamma_curve) throws Exception {
 		return Convolution_Disco_Affine.convolve_ACs_EGamma(arrival_curves, extra_gamma_curve);
 	}

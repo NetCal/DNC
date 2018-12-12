@@ -37,7 +37,7 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -122,9 +122,9 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
             }
 
             Num delay_bound_server_alpha;
-            if (configuration.multiplexingDiscipline() == MuxDiscipline.GLOBAL_FIFO
-                    || (configuration.multiplexingDiscipline() == MuxDiscipline.SERVER_LOCAL
-                    && server.multiplexingDiscipline() == Multiplexing.FIFO)
+            if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
+                    || (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
+                    && server.multiplexing() == Multiplexing.FIFO)
                     || fifo_per_micro_flow) {
                 delay_bound_server_alpha = Bound.delayFIFO(alpha_candidate, beta_server);
             } else {

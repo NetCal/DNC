@@ -61,12 +61,12 @@ public class Demo3 {
         ServerGraph network = new ServerGraph();
 
         Server s0 = network.addServer(service_curve, max_service_curve);
-        s0.setUseGamma(false);
-        s0.setUseExtraGamma(false);
+        s0.useMaxSC(false);
+        s0.useMaxScRate(false);
 
         Server s1 = network.addServer(service_curve, max_service_curve);
-        s1.setUseGamma(false);
-        s1.setUseExtraGamma(false);
+        s1.useMaxSC(false);
+        s1.useMaxScRate(false);
 
         network.addTurn(s0, s1);
 

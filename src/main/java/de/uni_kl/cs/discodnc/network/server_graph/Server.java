@@ -49,14 +49,14 @@ public class Server {
     /**
      * Whether to use maximum service curves in output bound computation
      */
-    private boolean use_gamma = false;
+    private boolean use_max_sc = false;
 
     /**
      * Whether to constrain the output bound further through convolution with the
      * maximum service curve's rate as the server cannot output data faster than
      * this rate.
      */
-    private boolean use_extra_gamma = false;
+    private boolean use_max_sc_output_rate = false;
 
     private Multiplexing multiplexing = Multiplexing.ARBITRARY;
 
@@ -65,25 +65,25 @@ public class Server {
     }
 
     /**
-     * @param id                The server's id (unique).
-     * @param alias             The server's alias (not necessarily unique).
-     * @param service_curve     The server's service curve.
-     * @param max_service_curve The server's maximum service curve.
-     * @param multiplexing      The server's flow multiplexing discipline.
-     * @param use_gamma         Convolve the maximum service curve with the arrival curve before
-     *                          deriving an output bound.
-     * @param use_extra_gamma   Convolve the output bound with the maximum service curve.
+     * @param id						The server's id (unique).
+     * @param alias						The server's alias (not necessarily unique).
+     * @param service_curve				The server's service curve.
+     * @param max_service_curve			The server's maximum service curve.
+     * @param multiplexing				The server's flow multiplexing setting.
+     * @param use_max_sc				Convolve the maximum service curve with the arrival curve before
+     *                          		deriving an output bound.
+     * @param use_max_sc_output_rate	Convolve the output bound with the maximum service curve.
      */
     protected Server(int id, String alias, ServiceCurve service_curve, MaxServiceCurve max_service_curve,
-                     Multiplexing multiplexing, boolean use_gamma, boolean use_extra_gamma) {
+                     Multiplexing multiplexing, boolean use_max_sc, boolean use_max_sc_output_rate) {
         this.id = id;
         this.alias = alias;
         this.service_curve = service_curve;
         this.max_service_curve = max_service_curve;
         max_service_curve_flag = true;
         this.multiplexing = multiplexing;
-        this.use_gamma = use_gamma;
-        this.use_extra_gamma = use_extra_gamma;
+        this.use_max_sc = use_max_sc;
+        this.use_max_sc_output_rate = use_max_sc_output_rate;
     }
 
     protected Server(int id, String alias, ServiceCurve service_curve, Multiplexing multiplexing) {
@@ -110,7 +110,7 @@ public class Server {
     }
 
     /**
-     * Setting a maximum service curve also enables useGamma and useExtraGamma.
+     * Setting a maximum service curve also enables useMaxSC and useMaxScRate.
      *
      * @param max_service_curve The maximum service curve.
      * @return Signals success of the operation.
@@ -119,12 +119,12 @@ public class Server {
         return setMaxServiceCurve(max_service_curve, true, true);
     }
 
-    public boolean setMaxServiceCurve(MaxServiceCurve max_service_curve, boolean use_gamma, boolean use_extra_gamma) {
+    public boolean setMaxServiceCurve(MaxServiceCurve max_service_curve, boolean use_max_sc, boolean use_max_sc_output_rate) {
         this.max_service_curve = max_service_curve;
 
         max_service_curve_flag = true;
-        this.use_gamma = true;
-        this.use_extra_gamma = true;
+        this.use_max_sc = use_max_sc;
+        this.use_max_sc_output_rate = use_max_sc_output_rate;
 
         return true;
     }
@@ -133,28 +133,19 @@ public class Server {
         max_service_curve = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
 
         max_service_curve_flag = false;
-        use_gamma = false;
-        use_extra_gamma = false;
+        use_max_sc = false;
+        use_max_sc_output_rate = false;
 
         return true;
     }
 
     /**
+     * This function always returns the default zero delay burst curve if the useMaxSC flag is not set.
+     * 
      * @return A copy of the maximum service curve
      */
     public MaxServiceCurve getMaxServiceCurve() {
-        return max_service_curve; // No need to check max_service_curve_set as it will always be at least a zero
-        // delay infinite burst curve
-    }
-
-    /**
-     * In contrast to <code>getMaxServiceCurve()</code> this function always returns
-     * the default zero delay burst curve if the useGamma flag is not set.
-     *
-     * @return The gamma curve
-     */
-    public MaxServiceCurve getGamma() {
-        if (use_gamma == false) {
+        if (use_max_sc == false) {
             return Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         } else {
             return max_service_curve;
@@ -162,41 +153,55 @@ public class Server {
     }
 
     /**
-     * In contrast to <code>getMaxServiceCurve()</code> this function always returns
-     * the default zero delay burst curve if the useExtraGamma flag is not set.
-     *
-     * @return The gamma curve
+     * @return The stored maximum service curve
      */
-    public MaxServiceCurve getExtraGamma() {
-        if (use_extra_gamma == false) {
+    public MaxServiceCurve getStoredMaxSC() {
+    	return max_service_curve;
+    }
+
+    /**
+     * In contrast to <code>getMaxServiceCurve()</code> this function always returns
+     * the default zero delay burst curve if the useMaxScRate flag is not set.
+     *
+     * @return The maximum service curve
+     */
+    public MaxServiceCurve getMaxScRate() {
+        if (use_max_sc_output_rate == false) {
             return Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         } else {
             return (MaxServiceCurve) Curve.removeLatency(max_service_curve);
         }
     }
 
-    public boolean useGamma() {
-        return use_gamma;
+    /**
+     * @return The stored maximum service curve rate
+     */
+    public MaxServiceCurve getStoredMaxScRate() {
+    	return (MaxServiceCurve) Curve.removeLatency(max_service_curve);
     }
 
-    public void setUseGamma(boolean use_gamma) {
-        this.use_gamma = use_gamma;
+    public boolean useMaxSC() {
+        return use_max_sc;
     }
 
-    public boolean useExtraGamma() {
-        return use_extra_gamma;
+    public void useMaxSC(boolean use_max_sc) {
+        this.use_max_sc = use_max_sc;
     }
 
-    public void setUseExtraGamma(boolean use_extra_gamma) {
-        this.use_extra_gamma = use_extra_gamma;
+    public boolean useMaxScRate() {
+        return use_max_sc_output_rate;
     }
 
-    public Multiplexing multiplexingDiscipline() {
+    public void useMaxScRate(boolean use_max_sc_output_rate) {
+        this.use_max_sc_output_rate = use_max_sc_output_rate;
+    }
+
+    public Multiplexing multiplexing() {
         return multiplexing;
     }
 
-    public void setMultiplexingDiscipline(Multiplexing mux) {
-        multiplexing = mux;
+    public void setMultiplexing(Multiplexing multiplexing) {
+        this.multiplexing = multiplexing;
     }
 
     public String getAlias() {
@@ -246,9 +251,9 @@ public class Server {
     	
     	server_msc_str.append(max_service_curve.toString());
     	server_msc_str.append(", ");
-    	server_msc_str.append(Boolean.toString(use_gamma));
+    	server_msc_str.append(Boolean.toString(use_max_sc));
     	server_msc_str.append(", ");
-    	server_msc_str.append(Boolean.toString(use_extra_gamma));
+    	server_msc_str.append(Boolean.toString(use_max_sc_output_rate));
     	
     	return server_msc_str;
     }

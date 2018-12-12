@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_kl.cs.discodnc.AnalysisConfig.ArrivalBoundMethod;
-import de.uni_kl.cs.discodnc.AnalysisConfig.GammaFlag;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MuxDiscipline;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MaxScEnforcement;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
@@ -73,10 +73,10 @@ public class CompFFApresets {
 		AnalysisConfig base_config = new AnalysisConfig();
 		base_config.setRemoveDuplicateArrivalBounds( true );
 		
-		base_config.setUseGamma( GammaFlag.GLOBALLY_OFF );
-		base_config.setUseExtraGamma( GammaFlag.GLOBALLY_OFF );
+		base_config.enforceMaxSC( MaxScEnforcement.GLOBALLY_OFF );
+		base_config.enforceMaxScOutputRate( MaxScEnforcement.GLOBALLY_OFF );
 		
-		base_config.setMultiplexingDiscipline( MuxDiscipline.GLOBAL_ARBITRARY );
+		base_config.enforceMultiplexing( MultiplexingEnforcement.GLOBAL_ARBITRARY );
 
 		
 		// --------------------------------------------------------------------------------------------------------------
