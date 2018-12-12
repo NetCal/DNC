@@ -37,7 +37,7 @@ import java.util.Set;
  * A tiny collection of convenience methods useful in dealing with sets but not
  * provided directly by Java's set classes.
  */
-public class SetUtils {
+public final class SetUtils {
     /**
      * Returns the set difference between the set <code>s1</code> and the set
      * <code>s2</code>.

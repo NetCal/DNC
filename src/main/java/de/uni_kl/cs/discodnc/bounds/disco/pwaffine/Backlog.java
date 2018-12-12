@@ -37,10 +37,7 @@ import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
-public class Backlog {
-	private Backlog() {
-	}
-
+public final class Backlog {
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 		if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
