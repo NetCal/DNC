@@ -32,6 +32,11 @@ import de.uni_kl.cs.discodnc.algebra.MinPlus;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.numbers.NumBackend;
 
+/**
+ * This class contains configuration settings for the calculator 
+ * that cannot be changed at runtime without risking to cause an exception.
+ * For example, the different number and curve backends are incompatible with each other.
+ */
 public final class Calculator {
 	private static Calculator instance = new Calculator();
 	

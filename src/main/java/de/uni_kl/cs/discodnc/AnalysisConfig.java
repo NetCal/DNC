@@ -32,6 +32,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class contains configuration settings that are considered during the analysis,
+ * e.g., the multiplexing behavior of servers and the arrival bounding methods to use.
+ * These settings can be changed at runtime.
+ */
 public class AnalysisConfig {
     public enum Multiplexing {
         ARBITRARY, FIFO
@@ -52,10 +57,12 @@ public class AnalysisConfig {
     }
     
     private MuxDiscipline multiplexing_discipline = MuxDiscipline.SERVER_LOCAL;
+    
     /**
      * Whether to use maximum service curves in output bound computation
      */
     private GammaFlag use_gamma = GammaFlag.SERVER_LOCAL;
+    
     /**
      * Whether to constrain the output bound further through convolution with the
      * maximum service curve's rate as the server cannot output data faster than
