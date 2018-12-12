@@ -1422,13 +1422,12 @@ public class ServerGraph {
 		sb.append("\n");
 		sb.append("import java.util.LinkedList;\n");
 		sb.append("\n");
+		sb.append("import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;\n");
 		sb.append("import de.uni_kl.cs.discodnc.curves.Curve;\n");
 		sb.append("\n");
-		sb.append("import Multiplexing;\n");
-		sb.append("\n");
-		sb.append("import ServerGraph;\n");
-		sb.append("import ServerGraphFactory;\n");
-		sb.append("import Server;\n");
+		sb.append("import de.uni_kl.cs.discodnc.network.server_graph.Server;\n");
+		sb.append("import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;\n");
+		sb.append("import de.uni_kl.cs.discodnc.network.server_graph.ServerGraphFactory;\n");
 		sb.append("\n");
 
 		sb.append("public class " + file_name + " implements ServerGraphFactory {");
