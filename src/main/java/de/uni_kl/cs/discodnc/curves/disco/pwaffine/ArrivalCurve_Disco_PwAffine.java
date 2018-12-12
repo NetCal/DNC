@@ -48,16 +48,17 @@ public class ArrivalCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements
     public ArrivalCurve_Disco_PwAffine(Curve curve) {
         super(curve);
         forceThroughOrigin();
-        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) {
+        
         // Too strong requirement: !isConcave()
+        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) {
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
     }
 
     public ArrivalCurve_Disco_PwAffine(String arrival_curve_str) throws Exception {
+    	// Smallest possible string: {(0,0),0}
         if (arrival_curve_str == null || arrival_curve_str.isEmpty() || arrival_curve_str.length() < 9) {
-        	// Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 

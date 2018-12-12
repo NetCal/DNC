@@ -48,10 +48,8 @@ public class MaxServiceCurve_Disco_PwAffine extends Curve_Disco_PwAffine impleme
     public MaxServiceCurve_Disco_PwAffine(Curve curve) {
         copy(curve);
 
-        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isAlmostConcave()
-            // ) {
+        // Too strong requirement: !isAlmostConcave()
+        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException(
                     "Maximum service curves can only be created from wide-sense increasing functions.");
         }
@@ -60,21 +58,16 @@ public class MaxServiceCurve_Disco_PwAffine extends Curve_Disco_PwAffine impleme
     }
 
     public MaxServiceCurve_Disco_PwAffine(String max_service_curve_str) throws Exception {
-        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) { // Smallest
-            // possible
-            // string:
-            // {(0,0),0}
+    	// Smallest possible string: {(0,0),0}
+        if (max_service_curve_str == null || max_service_curve_str.isEmpty() || max_service_curve_str.length() < 9) {
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
         initializeCurve(max_service_curve_str);
-
-        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) { // too strong
-            // requirement:
-            // !isAlmostConcave()
-            // ) {
-            throw new RuntimeException(
-                    "Maximum service curves can only be created from wide-sense increasing functions.");
+        
+        // Too strong requirement: !isAlmostConcave()
+        if (Calculator.getInstance().exec_max_service_curve_checks() && !isWideSenseIncreasing()) {
+            throw new RuntimeException("Maximum service curves can only be created from wide-sense increasing functions.");
         }
 
         forceThroughOrigin();

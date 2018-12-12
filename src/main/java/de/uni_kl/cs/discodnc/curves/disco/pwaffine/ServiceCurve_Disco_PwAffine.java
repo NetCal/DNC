@@ -55,8 +55,8 @@ public class ServiceCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements
     }
 
     public ServiceCurve_Disco_PwAffine(String service_curve_str) throws Exception {
+    	// Smallest possible string: {(0,0),0}
         if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) {
-        	// Smallest possible string: {(0,0),0}
             throw new RuntimeException("Invalid string representation of a service curve.");
         }
 
