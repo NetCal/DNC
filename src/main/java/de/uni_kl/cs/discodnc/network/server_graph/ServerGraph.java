@@ -1571,8 +1571,8 @@ public class ServerGraph {
 		sb.append("\n");
 
 		sb.append("\tpublic void reinitializeCurves() {\n");
-		sb.append("\t\tsg = createServerGraph();");
-		sb.append("\t}");
+		sb.append("\t\tsg = createServerGraph();\n");
+		sb.append("\t}\n");
 
 		sb.append("}\n");
 
