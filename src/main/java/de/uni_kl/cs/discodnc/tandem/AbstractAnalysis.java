@@ -43,7 +43,7 @@ public abstract class AbstractAnalysis {
     protected AnalysisConfig configuration;
     protected AnalysisResults result;
 
-    public ServerGraph getNetwork() {
+    public ServerGraph getServerGraph() {
         return server_graph;
     }
 

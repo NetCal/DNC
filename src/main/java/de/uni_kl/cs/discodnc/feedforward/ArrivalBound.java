@@ -42,7 +42,7 @@ public interface ArrivalBound {
     // --------------------------------------------------------------------------------------------------------------
     // Interface
     // --------------------------------------------------------------------------------------------------------------
-    void setNetwork(ServerGraph server_graph);
+    void setServerGraph(ServerGraph server_graph);
 
     public AnalysisConfig getConfiguration();
 

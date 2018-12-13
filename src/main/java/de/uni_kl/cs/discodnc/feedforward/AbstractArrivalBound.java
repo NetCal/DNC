@@ -39,7 +39,7 @@ public abstract class AbstractArrivalBound implements ArrivalBound {
         return server_graph;
     }
 
-    public void setNetwork(ServerGraph server_graph) {
+    public void setServerGraph(ServerGraph server_graph) {
         this.server_graph = server_graph;
     }
 

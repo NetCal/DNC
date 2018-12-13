@@ -41,7 +41,6 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
-import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.tandem.Analysis;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
@@ -53,6 +52,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
+import de.uni_kl.cs.discodnc.numbers.Num;
 
 import org.apache.commons.math3.util.Pair;
 

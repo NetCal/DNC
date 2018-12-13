@@ -38,41 +38,41 @@ import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public interface Analysis {
-    static TotalFlowAnalysis performTfaEnd2End(ServerGraph network, Flow flow_of_interest) throws Exception {
-        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
+    static TotalFlowAnalysis performTfaEnd2End(ServerGraph server_graph, Flow flow_of_interest) throws Exception {
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph);
         tfa.performAnalysis(flow_of_interest);
         return tfa;
     }
 
-    static TotalFlowAnalysis performTfaEnd2End(ServerGraph network, AnalysisConfig configuration,
+    static TotalFlowAnalysis performTfaEnd2End(ServerGraph server_graph, AnalysisConfig configuration,
                                                Flow flow_of_interest) throws Exception {
-        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph, configuration);
         tfa.performAnalysis(flow_of_interest);
         return tfa;
     }
 
-    static SeparateFlowAnalysis performSfaEnd2End(ServerGraph network, Flow flow_of_interest) throws Exception {
-        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
+    static SeparateFlowAnalysis performSfaEnd2End(ServerGraph server_graph, Flow flow_of_interest) throws Exception {
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(server_graph);
         sfa.performAnalysis(flow_of_interest);
         return sfa;
     }
 
-    static SeparateFlowAnalysis performSfaEnd2End(ServerGraph network, AnalysisConfig configuration,
+    static SeparateFlowAnalysis performSfaEnd2End(ServerGraph server_graph, AnalysisConfig configuration,
                                                   Flow flow_of_interest) throws Exception {
-        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(server_graph, configuration);
         sfa.performAnalysis(flow_of_interest);
         return sfa;
     }
 
-    static PmooAnalysis performPmooEnd2End(ServerGraph network, Flow flow_of_interest) throws Exception {
-        PmooAnalysis pmoo = new PmooAnalysis(network);
+    static PmooAnalysis performPmooEnd2End(ServerGraph server_graph, Flow flow_of_interest) throws Exception {
+        PmooAnalysis pmoo = new PmooAnalysis(server_graph);
         pmoo.performAnalysis(flow_of_interest);
         return pmoo;
     }
 
-    static PmooAnalysis performPmooEnd2End(ServerGraph network, AnalysisConfig configuration, Flow flow_of_interest)
+    static PmooAnalysis performPmooEnd2End(ServerGraph server_graph, AnalysisConfig configuration, Flow flow_of_interest)
             throws Exception {
-        PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+        PmooAnalysis pmoo = new PmooAnalysis(server_graph, configuration);
         pmoo.performAnalysis(flow_of_interest);
         return pmoo;
     }

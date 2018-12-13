@@ -56,9 +56,9 @@ public abstract class ArrivalBoundDispatch {
 	// Arrival Bound Dispatching
 	// --------------------------------------------------------------------------------------------------------------
 
-	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Server server)
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph server_graph, AnalysisConfig configuration, Server server)
 			throws Exception {
-		return computeArrivalBounds(network, configuration, server, network.getFlows(server), Flow.NULL_FLOW);
+		return computeArrivalBounds(server_graph, configuration, server, server_graph.getFlows(server), Flow.NULL_FLOW);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public abstract class ArrivalBoundDispatch {
 	 * {flows_to_bound} \ {flow_of_interest}.
 	 * <p>
 	 * To bound all flows in flows_to_bound, please call, e.g.,
-	 * computeArrivalBounds( network, flows_to_bound, Flow.NULL_FLOW )
+	 * computeArrivalBounds( server_graph, flows_to_bound, Flow.NULL_FLOW )
 	 *
 	 * @param server
 	 *            The server seeing the arrival bound.
@@ -81,8 +81,8 @@ public abstract class ArrivalBoundDispatch {
 	 *             Potential exception raised in the called function
 	 *             computeArrivalBounds.
 	 */
-	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Server server,
-			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph server_graph, AnalysisConfig configuration, Server server,
+															Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(
 				Collections.singleton(Curve.getFactory().createZeroArrivals()));
@@ -90,7 +90,7 @@ public abstract class ArrivalBoundDispatch {
 			return arrival_bounds;
 		}
 
-		Set<Flow> f_server = network.getFlows(server);
+		Set<Flow> f_server = server_graph.getFlows(server);
 		Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_server, flows_to_bound);
 		if (f_xfcaller_server.isEmpty()) {
 			return arrival_bounds;
@@ -98,10 +98,10 @@ public abstract class ArrivalBoundDispatch {
 
 		// Get cross-traffic originating in server
 		Set<Flow> f_xfcaller_sourceflows_server = SetUtils.getIntersection(f_xfcaller_server,
-				network.getSourceFlows(server));
+				server_graph.getSourceFlows(server));
 		if( !f_xfcaller_sourceflows_server.isEmpty() ) {
 			f_xfcaller_sourceflows_server.remove(flow_of_interest);
-			ArrivalCurve alpha_xfcaller_sourceflows_server = network.getSourceFlowArrivalCurve(server,f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
+			ArrivalCurve alpha_xfcaller_sourceflows_server = server_graph.getSourceFlowArrivalCurve(server,f_xfcaller_sourceflows_server); // Will at least be a zeroArrivalCurve
 			arrival_bounds = new HashSet<ArrivalCurve>(Collections.singleton(alpha_xfcaller_sourceflows_server));
 
 			if (f_xfcaller_sourceflows_server.containsAll(f_xfcaller_server)) {
@@ -114,18 +114,18 @@ public abstract class ArrivalBoundDispatch {
 		Set<ArrivalCurve> arrival_bounds_turn;
 		Set<ArrivalCurve> arrival_bounds_turn_permutations = new HashSet<ArrivalCurve>();
 
-		Iterator<Turn> in_turn_iter = network.getInTurns(server).iterator();
+		Iterator<Turn> in_turn_iter = server_graph.getInTurns(server).iterator();
 		while (in_turn_iter.hasNext()) {
 
 			Turn in_l = in_turn_iter.next();
-			Set<Flow> f_xfcaller_in_l = SetUtils.getIntersection(network.getFlows(in_l), f_xfcaller_server);
+			Set<Flow> f_xfcaller_in_l = SetUtils.getIntersection(server_graph.getFlows(in_l), f_xfcaller_server);
 			f_xfcaller_in_l.remove(flow_of_interest);
 
 			if (f_xfcaller_in_l.isEmpty()) { // Do not check turns without flows of interest
 				continue;
 			}
 
-			arrival_bounds_turn = computeArrivalBounds(network, configuration, in_l, f_xfcaller_in_l, flow_of_interest);
+			arrival_bounds_turn = computeArrivalBounds(server_graph, configuration, in_l, f_xfcaller_in_l, flow_of_interest);
 
 			// Add the new bounds to the others:
 			// * Consider all the permutations of different bounds per in turn.
@@ -146,7 +146,7 @@ public abstract class ArrivalBoundDispatch {
 		return arrival_bounds;
 	}
 
-	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph network, AnalysisConfig configuration, Turn turn,
+	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph server_graph, AnalysisConfig configuration, Turn turn,
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
@@ -161,21 +161,21 @@ public abstract class ArrivalBoundDispatch {
 			switch (arrival_bound_method) {
 			case AGGR_PBOO_PER_SERVER:
 				AggregatePboo_PerServer aggr_pboo_per_server = AggregatePboo_PerServer.getInstance();
-				aggr_pboo_per_server.setNetwork(network);
+				aggr_pboo_per_server.setServerGraph(server_graph);
 				aggr_pboo_per_server.setConfiguration(configuration);
 				arrival_bounds_tmp = aggr_pboo_per_server.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 
 			case AGGR_PBOO_CONCATENATION:
 				AggregatePboo_Concatenation aggr_pboo_concatenation = AggregatePboo_Concatenation.getInstance();
-				aggr_pboo_concatenation.setNetwork(network);
+				aggr_pboo_concatenation.setServerGraph(server_graph);
 				aggr_pboo_concatenation.setConfiguration(configuration);
 				arrival_bounds_tmp = aggr_pboo_concatenation.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 
 			case AGGR_PMOO:
 				AggregatePmoo aggr_pmoo = AggregatePmoo.getInstance();
-				aggr_pmoo.setNetwork(network);
+				aggr_pmoo.setServerGraph(server_graph);
 				aggr_pmoo.setConfiguration(configuration);
 				arrival_bounds_tmp = aggr_pmoo.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
@@ -187,7 +187,7 @@ public abstract class ArrivalBoundDispatch {
 				
 			case AGGR_TM:
 				AggregateTandemMatching aggr_tm = AggregateTandemMatching.getInstance();
-				aggr_tm.setNetwork(network);
+				aggr_tm.setServerGraph(server_graph);
 				aggr_tm.setConfiguration(configuration);
 				arrival_bounds_tmp = aggr_tm.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
@@ -195,7 +195,7 @@ public abstract class ArrivalBoundDispatch {
 			// This arrival bound is known to be inferior to PMOO and the PBOO_* variants.
 			case SEGR_PBOO:
 				for (Flow flow : flows_to_bound) {
-					SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
+					SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(server_graph);
 					sfa.performAnalysis(flow, flow.getSubPath(flow.getSource(), turn.getSource()));
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
@@ -212,7 +212,7 @@ public abstract class ArrivalBoundDispatch {
 			 */
 			case SEGR_PMOO:
 				for (Flow flow : flows_to_bound) {
-					PmooAnalysis pmoo = new PmooAnalysis(network);
+					PmooAnalysis pmoo = new PmooAnalysis(server_graph);
 					pmoo.performAnalysis(flow, flow.getSubPath(flow.getSource(), turn.getSource()));
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
@@ -222,7 +222,7 @@ public abstract class ArrivalBoundDispatch {
 
 			case SEGR_TM:
 				for (Flow flow : flows_to_bound) {
-					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(network);
+					TandemMatchingAnalysis tma = new TandemMatchingAnalysis(server_graph);
 					tma.performAnalysis(flow, flow.getSubPath(flow.getSource(), turn.getSource()));
 
 					arrival_bounds_tmp = getPermutations(arrival_bounds_tmp,
@@ -232,7 +232,7 @@ public abstract class ArrivalBoundDispatch {
 
 			default:
 				System.out.println("Executing default arrival bounding: AGGR_PBOO_CONCATENATION");
-				AggregatePboo_Concatenation default_ab = new AggregatePboo_Concatenation(network, configuration);
+				AggregatePboo_Concatenation default_ab = new AggregatePboo_Concatenation(server_graph, configuration);
 				arrival_bounds_tmp = default_ab.computeArrivalBound(turn, flows_to_bound, flow_of_interest);
 				break;
 			}
