@@ -206,7 +206,7 @@ public class AnalysisConfig {
 
         if (removeDuplicateArrivalBounds()) {
             analysis_config_str.append(", ");
-            analysis_config_str.append("remove duplicate ABs");
+            analysis_config_str.append("remove_duplicate_ABs");
         }
 
         if (useFlowProlongation()) {
