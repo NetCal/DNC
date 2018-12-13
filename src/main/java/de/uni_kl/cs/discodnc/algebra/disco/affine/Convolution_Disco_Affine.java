@@ -215,11 +215,6 @@ public abstract class Convolution_Disco_Affine {
             default:
         }
 
-        if (Calculator.getInstance().exec_max_service_curve_checks()
-                && (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
-            throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
-        }
-
         Num latency_msc_1 = max_service_curve_1.getLatency();
         Num latency_msc_2 = max_service_curve_2.getLatency();
 
