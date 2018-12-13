@@ -672,6 +672,14 @@ public interface Curve {
     Curve createCurve(List<LinearSegment> segments);
     
     // Segments
+    /**
+     * Curves are defined by a numbered sequence of linear segments.
+     * This method returns the segment at the given position in curve-defining sequence.
+     * The first segment is by definition at position 0.
+     * 
+     * @param pos Position of the segment to return.
+     * @return The linear segment at position pos.
+     */
     LinearSegment getSegment(int pos);
 
     int getSegmentCount();
