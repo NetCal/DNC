@@ -59,7 +59,7 @@ public class AnalysisConfig {
     private MultiplexingEnforcement multiplexing_enforcement = MultiplexingEnforcement.SERVER_LOCAL;
     
     /**
-     * Whether to use maximum service curves in output bound computation
+     * Whether to use maximum service curves in output bound computation.
      */
     private MaxScEnforcement enforce_max_sc = MaxScEnforcement.SERVER_LOCAL;
     
@@ -69,8 +69,7 @@ public class AnalysisConfig {
      * this rate.
      */
     private MaxScEnforcement enforce_max_sc_output_rate = MaxScEnforcement.SERVER_LOCAL;
-    private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(
-            Collections.singleton(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION));
+    private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(Collections.singleton(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION));
     private boolean remove_duplicate_arrival_bounds = true;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
@@ -203,6 +202,11 @@ public class AnalysisConfig {
         
         analysis_config_str.append(", ");
         analysis_config_str.append(arrivalBoundMethods().toString());
+        
+        if (serverBacklogArrivalBound()) {
+            analysis_config_str.append(", ");
+            analysis_config_str.append("cap_AB_by_backlog_bound");
+        }
 
         if (removeDuplicateArrivalBounds()) {
             analysis_config_str.append(", ");
