@@ -209,6 +209,11 @@ public class AnalysisConfig {
             analysis_config_str.append("remove duplicate ABs");
         }
 
+        if (useFlowProlongation()) {
+            analysis_config_str.append(", ");
+            analysis_config_str.append("flow_prolongation");
+        }
+
         return analysis_config_str.toString();
     }
 }
