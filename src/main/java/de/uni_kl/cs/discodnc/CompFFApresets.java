@@ -9,6 +9,7 @@ import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public class CompFFApresets {
@@ -24,6 +25,9 @@ public class CompFFApresets {
 	
 	public SeparateFlowAnalysis sfa_aggrAB;		// SFA + aggrAB
 	public PmooAnalysis pmoo_aggrAB;			// PMOO + aggrAB
+	
+	public TandemMatchingAnalysis tandem_matching_analysis;			// TFA + aggrTMAB	
+	public TandemMatchingAnalysis tandem_matching_bcap_analysis;	// TFA + aggrTMAB + Burst Cap by server backlog
 
 	public SeparateFlowAnalysis sfa_MMB18AB;	// SFA + aggrAB + segrPMOOAB
 	public PmooAnalysis pmoo_MMB18AB;			// PMOO + aggrAB + segrPMOOAB
@@ -124,6 +128,18 @@ public class CompFFApresets {
 		AnalysisConfig pmoo_aggrAB_config = base_config.copy();
 		pmoo_aggrAB_config.setArrivalBoundMethods( aggrAB );
 		pmoo_aggrAB = new PmooAnalysis( network, pmoo_aggrAB_config );
+
+		
+		// TMA
+		AnalysisConfig tma_config = base_config.copy();
+		tma_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_TM );
+		tandem_matching_analysis = new TandemMatchingAnalysis( network, tma_config );
+		
+		// TMA + AB cap
+		AnalysisConfig tma_bcap_config = base_config.copy();
+		tma_bcap_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_TM );
+		tma_bcap_config.setServerBacklogArrivalBound(true);
+		tandem_matching_bcap_analysis = new TandemMatchingAnalysis( network, tma_bcap_config );
 
 		
 		// SFA + MMB18AB
