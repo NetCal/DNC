@@ -192,6 +192,15 @@ public class AnalysisConfig {
         StringBuffer analysis_config_str = new StringBuffer();
 
         analysis_config_str.append(enforceMultiplexing().toString());
+        
+        analysis_config_str.append(", ");
+        analysis_config_str.append("MaxSC ");
+        analysis_config_str.append(enforceMaxSC());
+        
+        analysis_config_str.append(", ");
+        analysis_config_str.append("MaxSC_output_rate ");
+        analysis_config_str.append(enforceMaxScOutputRate());
+        
         analysis_config_str.append(", ");
         analysis_config_str.append(arrivalBoundMethods().toString());
 
