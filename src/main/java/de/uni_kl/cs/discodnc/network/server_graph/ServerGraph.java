@@ -1399,7 +1399,7 @@ public class ServerGraph {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("/* \n");
-		sb.append(" * This file is compatible with the Disco Deterministic Network Calculator v2.5 \"Chimera\".\n");
+		sb.append(" * This file is compatible with the Disco Deterministic Network Calculator v2.5.\n");
 		sb.append(" *\n");
 		sb.append(" * The Disco Deterministic Network Calculator (DiscoDNC) is free software;\n");
 		sb.append(" * you can redistribute it and/or modify it under the terms of the \n");
@@ -1422,17 +1422,18 @@ public class ServerGraph {
 		sb.append("\n");
 		sb.append("import java.util.LinkedList;\n");
 		sb.append("\n");
-		sb.append("import CurvePwAffine;\n");
+		sb.append("import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;\n");
+		sb.append("import de.uni_kl.cs.discodnc.curves.Curve;\n");
 		sb.append("\n");
-		sb.append("import Multiplexing;\n");
-		sb.append("\n");
-		sb.append("import ServerGraph;\n");
-		sb.append("import ServerGraphFactory;\n");
-		sb.append("import Server;\n");
+		sb.append("import de.uni_kl.cs.discodnc.network.server_graph.Server;\n");
+		sb.append("import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;\n");
+		sb.append("import de.uni_kl.cs.discodnc.network.server_graph.ServerGraphFactory;\n");
 		sb.append("\n");
 
 		sb.append("public class " + file_name + " implements ServerGraphFactory {");
+		sb.append("\n");
 		sb.append("\tprivate ServerGraph sg;\n");
+		sb.append("\tprivate static Curve factory = Curve.getFactory();\n");
 		sb.append("\n");
 
 		// Server creation
@@ -1440,13 +1441,14 @@ public class ServerGraph {
 		int i_servers_lines = 0;
 		sb.append("\tpublic void createServers" + Integer.toString(i_servers_func)
 				+ "( ServerGraph sg, Server[] servers ) throws Exception {\n");
+		
 		for (Server s : servers) {
 			sb.append("\t\tservers[" + s.getId() + "] = ");
 			sb.append("sg.addServer( ");
 			sb.append("\"" + s.getAlias() + "\"" + ", ");
-			sb.append("CurvePwAffine.getFactory().createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )"
+			sb.append("factory.createServiceCurve( \"" + s.getServiceCurve().toString() + "\" )"
 					+ ", ");
-			sb.append("CurvePwAffine.getFactory().createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString()
+			sb.append("factory.createMaxServiceCurve( \"" + s.getMaxServiceCurve().toString()
 					+ "\" )" + ", ");
 			sb.append("Multiplexing." + s.multiplexing() + ", ");
 			sb.append(s.useMaxSC() + ", ");
@@ -1510,11 +1512,11 @@ public class ServerGraph {
 			}
 			sb.append("\t\tsg.addFlow( ");
 			sb.append("\"" + f.getAlias() + "\"" + ", ");
-			sb.append("CurvePwAffine.getFactory().createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )"
+			sb.append("factory.createArrivalCurve( \"" + f.getArrivalCurve().toString() + "\" )"
 					+ ", ");
 			sb.append("servers_on_path_s");
 			sb.append(" );\n");
-			sb.append("\t\tservers_on_path_s.clear();");
+			sb.append("\t\tservers_on_path_s.clear();\n");
 			sb.append("\n");
 
 			i_flows_lines += 3;
@@ -1534,7 +1536,7 @@ public class ServerGraph {
 
 		sb.append("\n");
 		sb.append("\tpublic " + file_name + "() {\n");
-		sb.append("\t\tsg = createServerGraph();");
+		sb.append("\t\tsg = createServerGraph();\n");
 		sb.append("\t}\n");
 		sb.append("\n");
 
@@ -1560,13 +1562,13 @@ public class ServerGraph {
 		sb.append("\n");
 
 		sb.append("\tpublic ServerGraph getServerGraph() {\n");
-		sb.append("\t\treturn sg;");
-		sb.append("\t}");
+		sb.append("\t\treturn sg;\n");
+		sb.append("\t}\n");
 		sb.append("\n");
 
 		sb.append("\tpublic void reinitializeCurves() {\n");
-		sb.append("\t\tsg = createServerGraph();");
-		sb.append("\t}");
+		sb.append("\t\tsg = createServerGraph();\n");
+		sb.append("\t}\n");
 
 		sb.append("}\n");
 
