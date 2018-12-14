@@ -114,7 +114,7 @@ public class Demo4 {
             System.out.println("Flow of interest : " + flow_of_interest.toString());
             System.out.println();
 
-            // Analyze the network
+            // Analyze the server graph
             // TFA
             System.out.println("--- Total Flow Analysis ---");
             try {

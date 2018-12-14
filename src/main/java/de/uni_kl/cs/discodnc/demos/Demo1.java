@@ -61,10 +61,10 @@ public class Demo1 {
         ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
         MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
-        ServerGraph network = new ServerGraph();
+        ServerGraph sg = new ServerGraph();
         AnalysisConfig configuration = new AnalysisConfig();
 
-        Server s0 = network.addServer(service_curve, max_service_curve);
+        Server s0 = sg.addServer(service_curve, max_service_curve);
         // Creating a server with a maximum service curve automatically triggers the
         // following setting
         // s0.useMaxSC( true );
@@ -74,15 +74,15 @@ public class Demo1 {
         configuration.enforceMaxSC(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
         configuration.enforceMaxScOutputRate(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
 
-        Flow flow_of_interest = network.addFlow(arrival_curve, s0);
+        Flow flow_of_interest = sg.addFlow(arrival_curve, s0);
 
         System.out.println("Flow of interest : " + flow_of_interest.toString());
         System.out.println();
 
-        // Analyze the network
+        // Analyze the server graph
         // TFA
         System.out.println("--- Total Flow Analysis ---");
-        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(sg, configuration);
 
         try {
             tfa.performAnalysis(flow_of_interest);
@@ -100,7 +100,7 @@ public class Demo1 {
 
         // SFA
         System.out.println("--- Separated Flow Analysis ---");
-        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(sg, configuration);
 
         try {
             sfa.performAnalysis(flow_of_interest);
@@ -118,7 +118,7 @@ public class Demo1 {
 
         // PMOO
         System.out.println("--- PMOO Analysis ---");
-        PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+        PmooAnalysis pmoo = new PmooAnalysis(sg, configuration);
 
         try {
             pmoo.performAnalysis(flow_of_interest);
