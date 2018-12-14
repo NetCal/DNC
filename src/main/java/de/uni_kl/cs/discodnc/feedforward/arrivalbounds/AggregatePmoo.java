@@ -39,6 +39,7 @@ import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBound;
@@ -93,9 +94,9 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(Curve.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		}
 
 		// Get the common sub-path of f_xfcaller flows crossing the given turn
@@ -105,7 +106,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
 		f_xfcaller_soi.remove(flow_of_interest);
 		if (f_xfcaller_soi.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		}
 
 		if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
@@ -130,7 +131,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 					common_subpath_src, f_xxfcaller, flow_of_interest);
 
-			ServiceCurve null_service = Curve.getFactory().createZeroService();
+			ServiceCurve null_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
 
 			for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
 					alphas_xxfcaller)) {
@@ -149,7 +150,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 		if (betas_loxfcaller_subpath.isEmpty()) {
 			System.out.println("No service left over during PMOO arrival bounding!");
 			alphas_xfcaller.clear();
-			alphas_xfcaller.add(Curve.getFactory().createInfiniteArrivals());
+			alphas_xfcaller.add(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
 			return alphas_xfcaller;
 		}
 

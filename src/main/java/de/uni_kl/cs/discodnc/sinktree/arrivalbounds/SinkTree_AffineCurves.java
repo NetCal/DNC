@@ -35,6 +35,7 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
@@ -84,13 +85,13 @@ public class SinkTree_AffineCurves {
             return Calculator.getInstance().getCurveFactory().createZeroArrivals();
         }
 
-        ArrivalCurve arrival_bound = Curve.getFactory().createZeroArrivals();
-        ArrivalCurve arrival_bound_f = Curve.getFactory().createZeroArrivals();
-        ServiceCurve sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
+        ArrivalCurve arrival_bound = Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
+        ArrivalCurve arrival_bound_f = Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
+        ServiceCurve sc_s_subpath = Curve_ConstantPool.INFINITE_SERVICE_CURVE.get();
         for (Flow f : f_xfcaller_server) {
             arrival_bound_f = ab_cache.getEntry(turn, f);
             if (arrival_bound_f == null) {
-                sc_s_subpath = Curve.getFactory().createZeroDelayInfiniteBurst();
+                sc_s_subpath = Curve_ConstantPool.INFINITE_SERVICE_CURVE.get();
                 for (Server s : f.getSubPath(f.getSource(), turn.getSource()).getServers()) {
                     sc_s_subpath = Calculator.getInstance().getMinPlus().convolve(sc_s_subpath, s.getServiceCurve());
                 }

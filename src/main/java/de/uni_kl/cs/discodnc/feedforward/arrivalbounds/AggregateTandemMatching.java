@@ -32,14 +32,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
-import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
-import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
+import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBound;
@@ -76,7 +77,7 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		}
 
 		// Get the common sub-path of f_xfcaller flows crossing the given turn
@@ -86,7 +87,7 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 		Set<Flow> f_xfcaller_soi = SetUtils.getIntersection(f_soi, f_xfcaller);
 		f_xfcaller_soi.remove(flow_of_interest);
 		if (f_xfcaller_soi.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		}
 
 		if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
@@ -111,7 +112,7 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 			Set<ArrivalCurve> alphas_xxfcaller = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 					common_subpath_src, f_xxfcaller, flow_of_interest);
 
-			ServiceCurve null_service = Curve.getFactory().createZeroService();
+			ServiceCurve null_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
 
 			for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
 					alphas_xxfcaller)) {
@@ -129,7 +130,7 @@ public class AggregateTandemMatching extends AbstractArrivalBound implements Arr
 		// service curve in this set
 		if (betas_loxfcaller_subpath.isEmpty()) {
 			System.out.println( "No service left over during TMA arrival bounding!" );
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createInfiniteArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get()));
 		}
 
 		// Get arrival bound at the splitting point:

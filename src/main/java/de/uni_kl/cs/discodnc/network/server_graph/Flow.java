@@ -34,12 +34,13 @@ import java.util.List;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 
 /**
  * Class representing flows through the network.
  */
 public class Flow {
-    public static final Flow NULL_FLOW = createDummyFlow("null", Curve.getFactory().createZeroArrivals(),
+    public static final Flow NULL_FLOW = createDummyFlow("null", Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get(),
             Path.createEmptyPath());
 
     /**

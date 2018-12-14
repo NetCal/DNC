@@ -41,6 +41,7 @@ import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.numbers.Num;
@@ -174,26 +175,21 @@ public final class LeftOverService {
      * @return A pair consisting of a boolean and a service curve. The boolean indicates the validity of the returned service curve. 
      */
     private static Pair<Boolean,ServiceCurve> computeSpecialValues(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-    	ServiceCurve ZERO_SERVICE = Curve.getFactory().createZeroService();
-    	ServiceCurve INFINITE_SERVICE = Curve.getFactory().createZeroDelayInfiniteBurst();
     	
-    	ArrivalCurve ZERO_ARRIVALS = Curve.getFactory().createZeroArrivals();
-    	ArrivalCurve INFINITE_ARRIVALS = Curve.getFactory().createInfiniteArrivals();
-    	
-    	if(INFINITE_ARRIVALS.equals(arrival_curve)
-    			|| ZERO_SERVICE.equals(service_curve)) {
-    		return new Pair<Boolean,ServiceCurve>(true,ZERO_SERVICE);
+    	if(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get().equals(arrival_curve)
+    			|| Curve_ConstantPool.ZERO_SERVICE_CURVE.get().equals(service_curve)) {
+    		return new Pair<Boolean,ServiceCurve>(true,Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
     	} else { // The else-clause is not required. It indicates that the following if-clause cannot be moved before the previous one.
-	    	if(INFINITE_SERVICE.equals(service_curve)) {
-	    		return new Pair<Boolean,ServiceCurve>(true,INFINITE_SERVICE);
+	    	if(Curve_ConstantPool.INFINITE_SERVICE_CURVE.get().equals(service_curve)) {
+	    		return new Pair<Boolean,ServiceCurve>(true,Curve_ConstantPool.INFINITE_SERVICE_CURVE.get());
 	    	}
     	}
-    	if(ZERO_ARRIVALS.equals(arrival_curve)) {
+    	if(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get().equals(arrival_curve)) {
     		return new Pair<Boolean,ServiceCurve>(true,service_curve.copy());
     	}
     	
     	// In case the caller disregards that there was no match to special values,
     	// we provide the worst-case left-over service: 0.
-    	return new Pair<Boolean,ServiceCurve>(false,ZERO_SERVICE);
+    	return new Pair<Boolean,ServiceCurve>(false,Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
     }
 }

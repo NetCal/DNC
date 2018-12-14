@@ -39,13 +39,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.math3.util.Pair;
+
 import de.uni_kl.cs.discodnc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
@@ -56,8 +59,6 @@ import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.tandem.Analysis;
-
-import org.apache.commons.math3.util.Pair;
 
 public class PmooAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")
@@ -112,14 +113,14 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             i++;
         }
 
-        ServiceCurve beta_total = Curve.getFactory().createZeroService();
+        ServiceCurve beta_total = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
 
         boolean more_combinations = true;
         while (more_combinations) {
             // Compute service curve for this combination
             ServiceCurve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
                     flow_tb_iter_map, server_rl_iters);
-            if (!beta.equals(Curve.getFactory().createZeroService())) {
+            if (!beta.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())) {
                 beta_total = Curve.max(beta_total, beta);
             }
 
@@ -189,7 +190,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         
         Set<Flow> present_flows = new HashSet<Flow>();
         for (Server s : path.getServers()) {
-        	if (s.getServiceCurve().equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
+        	if (s.getServiceCurve().equals(Curve_ConstantPool.INFINITE_SERVICE_CURVE.get())) {
         		delta0 = true;
         	} else {
         		delta0 = false;
@@ -209,11 +210,11 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             ServiceCurve current_rl;
 
             if(delta0) {
-                current_rl = Curve.getFactory().createZeroDelayInfiniteBurst();
+                current_rl = Curve_ConstantPool.INFINITE_SERVICE_CURVE.get();
             } else {
             	// Check for stability constraint violation
             	if(sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-                    return Curve.getFactory().createZeroService();
+                    return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
                 }
             	
             	Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
@@ -239,7 +240,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             if(!delta0) {
             	Num Ri = compute.sub(current_rl.getUltAffineRate(), sum_r);
 	            if (Ri.leqZero()) {
-	                return Curve.getFactory().createZeroService();
+	                return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
 	            }
             	R = compute.min(R, Ri);
             }
@@ -265,7 +266,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         T = compute.add(T, compute.div(compute.add(sum_bursts, sum_latencyterms), R));
 
 		if (T == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
-            return Curve.getFactory().createZeroService();
+            return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
         }
 		if (R == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
             return Curve.getFactory().createDelayedInfiniteBurst(T);
@@ -467,7 +468,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         });
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(Curve.getFactory().createZeroService());
+            betas_e2e.add(Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
         }
         return betas_e2e;
     }
@@ -653,7 +654,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         }
 
         // Derive the left-over service curves
-        ServiceCurve null_service = Curve.getFactory().createZeroService();
+        ServiceCurve null_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
         for (List<Flow> xtx_substitutes : cross_flow_substitutes_set) {
             ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
 
@@ -663,7 +664,7 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         }
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(Curve.getFactory().createZeroService());
+            betas_e2e.add(Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
         }
         return betas_e2e;
     }

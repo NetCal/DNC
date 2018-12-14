@@ -28,6 +28,8 @@
 
 package de.uni_kl.cs.discodnc.demos;
 
+import java.util.LinkedList;
+
 import de.uni_kl.cs.discodnc.CompFFApresets;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -40,8 +42,6 @@ import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
-
-import java.util.LinkedList;
 
 public class Demo4 {
 

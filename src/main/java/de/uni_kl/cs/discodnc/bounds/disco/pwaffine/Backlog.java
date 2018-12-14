@@ -34,18 +34,19 @@ import java.util.ArrayList;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
 public final class Backlog {
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-		if (arrival_curve.equals(Curve.getFactory().createZeroArrivals())) {
+		if (arrival_curve.equals(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get())) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 		}
 		if (service_curve.isDelayedInfiniteBurst()) {
 			return arrival_curve.f(service_curve.getLatency());
 		}
-		if (service_curve.equals(Curve.getFactory().createZeroService()) // We know from above that the
+		if (service_curve.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()) // We know from above that the
 				// arrivals are not zero.
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();

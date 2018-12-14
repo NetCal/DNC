@@ -33,18 +33,19 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.discodnc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
-import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
-import de.uni_kl.cs.discodnc.tandem.Analysis;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
@@ -53,8 +54,8 @@ import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.numbers.Num;
-
-import org.apache.commons.math3.util.Pair;
+import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
+import de.uni_kl.cs.discodnc.tandem.Analysis;
 
 public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis {
 	@SuppressWarnings("unused")
@@ -287,7 +288,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		}
 		
 		// Derive the left-over service curves
-		ServiceCurve null_service = Curve.getFactory().createZeroService();
+		ServiceCurve null_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
 		for( List<Flow> xtx_substitutes : cross_flow_substitutes_set ) {
 			ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve( path, xtx_substitutes );
 			
@@ -297,7 +298,7 @@ public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis
 		}
 
 		if( betas_e2e.isEmpty() ) {
-			betas_e2e.add( Curve.getFactory().createZeroService() );
+			betas_e2e.add( Curve_ConstantPool.ZERO_SERVICE_CURVE.get() );
 		}
 		return betas_e2e;
 	}

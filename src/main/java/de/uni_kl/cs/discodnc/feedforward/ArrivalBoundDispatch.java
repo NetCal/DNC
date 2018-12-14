@@ -37,6 +37,7 @@ import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_Concatenation;
 import de.uni_kl.cs.discodnc.feedforward.arrivalbounds.AggregatePboo_PerServer;
@@ -85,7 +86,7 @@ public abstract class ArrivalBoundDispatch {
 															Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		Set<ArrivalCurve> arrival_bounds = new HashSet<ArrivalCurve>(
-				Collections.singleton(Curve.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		if (flows_to_bound.isEmpty()) {
 			return arrival_bounds;
 		}
@@ -150,7 +151,7 @@ public abstract class ArrivalBoundDispatch {
 			Set<Flow> flows_to_bound, Flow flow_of_interest) throws Exception {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		}
 
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();

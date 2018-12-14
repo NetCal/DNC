@@ -37,6 +37,7 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -52,15 +53,15 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                results.add(Curve.getFactory().createZeroArrivals());
+                results.add(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get());
                 return results;
             case 2:
-                results.add(Curve.getFactory().createInfiniteArrivals());
+                results.add(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
                 return results;
             default:
         }
         if (arrival_curves.isEmpty()) {
-            results.add(Curve.getFactory().createZeroArrivals());
+            results.add(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get());
             return results;
         }
 
@@ -79,10 +80,10 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                results.add(Curve.getFactory().createZeroArrivals());
+                results.add(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get());
                 return results;
             case 2:
-                results.add(Curve.getFactory().createInfiniteArrivals());
+                results.add(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
                 return results;
             default:
         }
@@ -91,10 +92,10 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                results.add(Curve.getFactory().createZeroArrivals());
+                results.add(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get());
                 return results;
             case 2:
-                results.add(Curve.getFactory().createInfiniteArrivals());
+                results.add(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
                 return results;
             default:
         }
@@ -114,22 +115,22 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                return Curve.getFactory().createZeroArrivals();
+                return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
             case 2:
-                return Curve.getFactory().createInfiniteArrivals();
+                return Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get();
             default:
         }
 
-        if (service_curve.equals(Curve.getFactory().createZeroDelayInfiniteBurst())
+        if (service_curve.equals(Curve_ConstantPool.INFINITE_SERVICE_CURVE.get())
                 || (service_curve.isDelayedInfiniteBurst() && service_curve.getLatency().doubleValue() == 0.0)
-                || (arrival_curve.equals(Curve.getFactory().createZeroArrivals()))) {
+                || (arrival_curve.equals(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()))) {
             return arrival_curve.copy();
         }
-        if (service_curve.equals(Curve.getFactory().createZeroService())
+        if (service_curve.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())
 				|| service_curve.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (service_curve.getUltAffineRate().eqZero()
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
-            return Curve.getFactory().createZeroArrivals();
+            return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
         }
         return deconvolve_mTB_mRL(arrival_curve, service_curve);
     }
@@ -143,10 +144,10 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                results.add(Curve.getFactory().createZeroArrivals());
+                results.add(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get());
                 return results;
             case 2:
-                results.add(Curve.getFactory().createInfiniteArrivals());
+                results.add(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
                 return results;
             default:
         }
@@ -155,10 +156,10 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                results.add(Curve.getFactory().createZeroArrivals());
+                results.add(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get());
                 return results;
             case 2:
-                results.add(Curve.getFactory().createInfiniteArrivals());
+                results.add(Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
                 return results;
             default:
         }
@@ -191,23 +192,23 @@ public abstract class Deconvolution_Disco_PwAffine {
                 break;
             case 1:
             case 3:
-                return Curve.getFactory().createZeroArrivals();
+                return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
             case 2:
-                return Curve.getFactory().createInfiniteArrivals();
+                return Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get();
             default:
         }
         // }
 
         if (curve_1.getUltAffineRate().gt(curve_2.getUltAffineRate())) { // Violation of the stability constraint
-            return Curve.getFactory().createInfiniteArrivals();
+            return Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get();
         }
-        if (curve_2.equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
+        if (curve_2.equals(Curve_ConstantPool.INFINITE_SERVICE_CURVE.get())) {
             return Curve.getFactory().createArrivalCurve((Curve_PwAffine) curve_1);
         }
-        if (curve_2.equals(Curve.getFactory().createZeroService())
+        if (curve_2.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())
         		|| curve_2.getLatency().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
-            return Curve.getFactory().createZeroArrivals();
+            return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
         }
         if (Calculator.getInstance().exec_deconvolution_checks()) {
             if (!((Curve_PwAffine) curve_1).isAlmostConcave()) {

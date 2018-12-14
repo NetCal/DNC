@@ -30,6 +30,7 @@ package de.uni_kl.cs.discodnc.network.server_graph;
 
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
@@ -37,7 +38,7 @@ public class Server {
     private int id;
     private String alias;
 
-    private ServiceCurve service_curve = Curve.getFactory().createZeroService();
+    private ServiceCurve service_curve = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
     /**
      * A zero delay burst curve lets the influence of the maximum service curve
      * vanish

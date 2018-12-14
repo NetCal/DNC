@@ -43,6 +43,7 @@ import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBoundDispatch;
 import de.uni_kl.cs.discodnc.network.server_graph.Flow;
@@ -150,7 +151,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
             
             if(f_xxfcaller_server.isEmpty()) {
             	betas_lo_server.add(server.getServiceCurve());
-        		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
+        		result.map__server__alphas.put(server, Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
                 ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);
                 betas_lo_path = Calculator.getInstance().getMinPlus().convolve(betas_lo_path, betas_lo_server);
         		continue;
@@ -204,7 +205,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
         	
         	if( ac_sets_to_combine.isEmpty() ) {
         		betas_lo_server.add(server.getServiceCurve());
-        		result.map__server__alphas.put(server, Collections.singleton(Curve.getFactory().createZeroArrivals()));
+        		result.map__server__alphas.put(server, Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
         	} else {
         		Iterator<Set<ArrivalCurve>> ac_set_iterator = ac_sets_to_combine.iterator();
         		Set<ArrivalCurve> alpha_xfois = new HashSet<ArrivalCurve>(ac_set_iterator.next());

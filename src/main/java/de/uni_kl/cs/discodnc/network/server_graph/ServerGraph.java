@@ -39,17 +39,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.math3.util.Pair;
 
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.utils.SetUtils;
-
-import org.apache.commons.math3.util.Pair;
-
-import java.util.Set;
 
 /**
  * Servers in a server graph object correspond to buffers that may be shared by
@@ -1007,7 +1007,7 @@ public class ServerGraph {
 	 * @return An aggregate arrival curve.
 	 */
 	public ArrivalCurve getSourceFlowArrivalCurve(Server source, Set<Flow> source_flows) {
-		ArrivalCurve a_out = Curve.getFactory().createZeroArrivals();
+		ArrivalCurve a_out = Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
 
 		// Returns an empty set if one of the arguments is null
 		Set<Flow> source_flows_internal = SetUtils.getIntersection(map__server__source_flows.get(source), source_flows);
