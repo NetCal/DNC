@@ -92,10 +92,10 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	 */
 	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(Curve.getFactory().createZeroArrivals()));
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+		
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
+			return alphas_xfcaller;
 		}
 
 		// Get the common sub-path of f_xfcaller flows crossing the given turn
