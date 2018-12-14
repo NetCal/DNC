@@ -37,6 +37,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public class Demo3 {
@@ -129,6 +130,23 @@ public class Demo3 {
                 System.out.println("backlog bound   : " + pmoo.getBacklogBound());
             } catch (Exception e) {
                 System.out.println("PMOO analysis failed");
+                e.printStackTrace();
+            }
+
+            System.out.println();
+
+            // TMA
+            System.out.println("--- Tandem Matching Analysis ---");
+            TandemMatchingAnalysis tma = new TandemMatchingAnalysis(sg);
+            
+            try {
+            	tma.performAnalysis(flow_of_interest);
+                System.out.println("e2e TMA SCs     : " + tma.getLeftOverServiceCurves());
+                System.out.println("xtx per server  : " + tma.getServerAlphasMapString());
+                System.out.println("delay bound     : " + tma.getDelayBound());
+                System.out.println("backlog bound   : " + tma.getBacklogBound());
+            } catch (Exception e) {
+                System.out.println("TMA analysis failed");
                 e.printStackTrace();
             }
 
