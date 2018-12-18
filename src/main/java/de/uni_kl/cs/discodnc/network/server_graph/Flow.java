@@ -33,7 +33,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
-import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 
 /**

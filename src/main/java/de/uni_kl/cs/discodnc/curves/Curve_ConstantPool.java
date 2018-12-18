@@ -80,6 +80,7 @@ public enum Curve_ConstantPool {
      * Returns the value of the constant from the pool.
      * @return T the constant casted to type T
      */
+    @SuppressWarnings("unchecked")
     public <T extends Curve> T get() {
         final String key = getKey();
         Curve result = pool.get(key);
@@ -87,7 +88,7 @@ public enum Curve_ConstantPool {
             result = createCurve();
             pool.put(key, result);
          }
-        return (T) result;
+       return (T) result;
      }
 
     private static String getKey() {
