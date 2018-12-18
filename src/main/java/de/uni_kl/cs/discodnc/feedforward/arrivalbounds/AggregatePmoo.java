@@ -38,6 +38,7 @@ import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
+import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AbstractArrivalBound;
@@ -92,10 +93,10 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 	 */
 	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
-		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
+
+		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(Collections.singleton(Curve.getFactory().createZeroArrivals()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
-			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
+			return alphas_xfcaller;
 		}
 
 		// Get the common sub-path of f_xfcaller flows crossing the given turn
