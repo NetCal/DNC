@@ -38,6 +38,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
+import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public class Demo1 {
@@ -61,10 +62,10 @@ public class Demo1 {
         ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
         MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
-        ServerGraph network = new ServerGraph();
+        ServerGraph sg = new ServerGraph();
         AnalysisConfig configuration = new AnalysisConfig();
 
-        Server s0 = network.addServer(service_curve, max_service_curve);
+        Server s0 = sg.addServer(service_curve, max_service_curve);
         // Creating a server with a maximum service curve automatically triggers the
         // following setting
         // s0.useMaxSC( true );
@@ -74,15 +75,15 @@ public class Demo1 {
         configuration.enforceMaxSC(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
         configuration.enforceMaxScOutputRate(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
 
-        Flow flow_of_interest = network.addFlow(arrival_curve, s0);
+        Flow flow_of_interest = sg.addFlow(arrival_curve, s0);
 
         System.out.println("Flow of interest : " + flow_of_interest.toString());
         System.out.println();
 
-        // Analyze the network
+        // Analyze the server graph
         // TFA
         System.out.println("--- Total Flow Analysis ---");
-        TotalFlowAnalysis tfa = new TotalFlowAnalysis(network, configuration);
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(sg, configuration);
 
         try {
             tfa.performAnalysis(flow_of_interest);
@@ -100,7 +101,7 @@ public class Demo1 {
 
         // SFA
         System.out.println("--- Separated Flow Analysis ---");
-        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network, configuration);
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(sg, configuration);
 
         try {
             sfa.performAnalysis(flow_of_interest);
@@ -118,7 +119,7 @@ public class Demo1 {
 
         // PMOO
         System.out.println("--- PMOO Analysis ---");
-        PmooAnalysis pmoo = new PmooAnalysis(network, configuration);
+        PmooAnalysis pmoo = new PmooAnalysis(sg, configuration);
 
         try {
             pmoo.performAnalysis(flow_of_interest);
@@ -128,6 +129,23 @@ public class Demo1 {
             System.out.println("backlog bound   : " + pmoo.getBacklogBound());
         } catch (Exception e) {
             System.out.println("PMOO analysis failed");
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        // TMA
+        System.out.println("--- Tandem Matching Analysis ---");
+        TandemMatchingAnalysis tma = new TandemMatchingAnalysis(sg, configuration);
+        
+        try {
+        	tma.performAnalysis(flow_of_interest);
+            System.out.println("e2e TMA SCs     : " + tma.getLeftOverServiceCurves());
+            System.out.println("xtx per server  : " + tma.getServerAlphasMapString());
+            System.out.println("delay bound     : " + tma.getDelayBound());
+            System.out.println("backlog bound   : " + tma.getBacklogBound());
+        } catch (Exception e) {
+            System.out.println("TMA analysis failed");
             e.printStackTrace();
         }
 
