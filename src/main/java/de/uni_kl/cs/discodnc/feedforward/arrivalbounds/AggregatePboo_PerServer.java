@@ -32,12 +32,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_kl.cs.discodnc.Calculator;
-import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.AlgDncBackend_DNC_Affine;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
+import de.uni_kl.cs.discodnc.Calculator;
+import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.feedforward.AbstractArrivalBound;
 import de.uni_kl.cs.discodnc.feedforward.ArrivalBound;
@@ -73,7 +74,7 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 	public Set<ArrivalCurve> computeArrivalBound(Turn turn, Set<Flow> f_xfcaller, Flow flow_of_interest)
 			throws Exception {
 		Set<ArrivalCurve> alphas_xfcaller = new HashSet<ArrivalCurve>(
-				Collections.singleton(Curve.getFactory().createZeroArrivals()));
+				Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
 		if (f_xfcaller == null || f_xfcaller.isEmpty()) {
 			return alphas_xfcaller;
 		}
@@ -144,11 +145,11 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 			// Check if there's any service left on this path. If not, the set only contains
 			// a null-service curve.
 			if (betas_lo_s.size() == 1
-					&& betas_lo_s.iterator().next().equals(Curve.getFactory().createZeroService())) {
+					&& betas_lo_s.iterator().next().equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())) {
 				System.out.println("No service left over during PBOO arrival bounding!");
 				alphas_xfcaller.clear();
 				alphas_xfcaller.add(Curve.getFactory()
-						.createArrivalCurve(Curve.getFactory().createZeroDelayInfiniteBurst()));
+						.createArrivalCurve((Curve)Curve_ConstantPool.INFINITE_SERVICE_CURVE.get()));
 				return alphas_xfcaller;
 			}
 			

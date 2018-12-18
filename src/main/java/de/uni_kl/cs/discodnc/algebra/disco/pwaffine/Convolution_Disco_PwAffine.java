@@ -35,6 +35,7 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -62,7 +63,7 @@ public abstract class Convolution_Disco_PwAffine {
             case 2:
                 return service_curve_1.copy();
             case 3:
-                return Curve.getFactory().createZeroService();
+                return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
             case 0:
             default:
                 break;
@@ -87,7 +88,7 @@ public abstract class Convolution_Disco_PwAffine {
             }
         }
 
-        ServiceCurve zero_service = Curve.getFactory().createZeroService();
+        ServiceCurve zero_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
         if (service_curve_1.equals(zero_service) || service_curve_2.equals(zero_service)) {
             return zero_service;
         }
@@ -178,7 +179,7 @@ public abstract class Convolution_Disco_PwAffine {
                 }
                 return clone;
             case 3:
-                results.add(Curve.getFactory().createZeroService());
+                results.add(Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
                 return results;
             case 0:
             default:
@@ -196,7 +197,7 @@ public abstract class Convolution_Disco_PwAffine {
                 }
                 return clone;
             case 3:
-                results.add(Curve.getFactory().createZeroService());
+                results.add(Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
                 return results;
             case 0:
             default:
@@ -224,17 +225,17 @@ public abstract class Convolution_Disco_PwAffine {
             case 2:
                 return arrival_curve_1.copy();
             case 3:
-                return Curve.getFactory().createZeroArrivals();
+                return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
             default:
                 break;
         }
 
-        ArrivalCurve zero_arrival = Curve.getFactory().createZeroArrivals();
+        ArrivalCurve zero_arrival = Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
         if (arrival_curve_1.equals(zero_arrival) || arrival_curve_2.equals(zero_arrival)) {
             return zero_arrival;
         }
 
-        ArrivalCurve infinite_arrivals = Curve.getFactory().createInfiniteArrivals();
+        ArrivalCurve infinite_arrivals = Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get();
         if (arrival_curve_1.equals(infinite_arrivals)) {
             return arrival_curve_2.copy();
         }
@@ -252,13 +253,13 @@ public abstract class Convolution_Disco_PwAffine {
     public static ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) {
         // Custom null and empty checks for this single argument method.
         if (arrival_curves == null || arrival_curves.isEmpty()) {
-            return Curve.getFactory().createZeroArrivals();
+            return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
         }
         if (arrival_curves.size() == 1) {
             return arrival_curves.iterator().next().copy();
         }
 
-        ArrivalCurve arrival_curve_result = Curve.getFactory().createInfiniteArrivals();
+        ArrivalCurve arrival_curve_result = Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get();
         for (ArrivalCurve arrival_curve_2 : arrival_curves) {
             arrival_curve_result = convolve(arrival_curve_result, arrival_curve_2);
         }

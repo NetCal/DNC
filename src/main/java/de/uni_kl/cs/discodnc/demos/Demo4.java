@@ -28,6 +28,8 @@
 
 package de.uni_kl.cs.discodnc.demos;
 
+import java.util.LinkedList;
+
 import de.uni_kl.cs.discodnc.CompFFApresets;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
@@ -39,10 +41,7 @@ import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.network.server_graph.Turn;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
-
-import java.util.LinkedList;
 
 public class Demo4 {
 
@@ -109,14 +108,13 @@ public class Demo4 {
         TotalFlowAnalysis tfa = compffa_analyses.tf_analysis;
         SeparateFlowAnalysis sfa = compffa_analyses.sf_analysis;
         PmooAnalysis pmoo = compffa_analyses.pmoo_analysis;
-        TandemMatchingAnalysis tma = compffa_analyses.tandem_matching_analysis;
         
         for (Flow flow_of_interest : sg.getFlows()) {
 
             System.out.println("Flow of interest : " + flow_of_interest.toString());
             System.out.println();
 
-            // Analyze the server graph
+            // Analyze the network
             // TFA
             System.out.println("--- Total Flow Analysis ---");
             try {
@@ -159,21 +157,6 @@ public class Demo4 {
                 System.out.println("backlog bound   : " + pmoo.getBacklogBound());
             } catch (Exception e) {
                 System.out.println("PMOO analysis failed");
-                e.printStackTrace();
-            }
-
-            System.out.println();
-
-            // TMA
-            System.out.println("--- Tandem Matching Analysis ---");
-            try {
-            	tma.performAnalysis(flow_of_interest);
-                System.out.println("e2e TMA SCs     : " + tma.getLeftOverServiceCurves());
-                System.out.println("xtx per server  : " + tma.getServerAlphasMapString());
-                System.out.println("delay bound     : " + tma.getDelayBound());
-                System.out.println("backlog bound   : " + tma.getBacklogBound());
-            } catch (Exception e) {
-                System.out.println("TMA analysis failed");
                 e.printStackTrace();
             }
 

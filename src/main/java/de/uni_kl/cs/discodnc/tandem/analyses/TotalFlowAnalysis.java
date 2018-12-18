@@ -34,10 +34,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.math3.util.Pair;
+
 import de.uni_kl.cs.discodnc.AnalysisConfig;
-import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
+import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
@@ -49,8 +51,6 @@ import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.tandem.AbstractAnalysis;
 import de.uni_kl.cs.discodnc.tandem.Analysis;
-
-import org.apache.commons.math3.util.Pair;
 
 public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
     @SuppressWarnings("unused")

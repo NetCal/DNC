@@ -37,7 +37,6 @@ import de.uni_kl.cs.discodnc.network.server_graph.Server;
 import de.uni_kl.cs.discodnc.network.server_graph.ServerGraph;
 import de.uni_kl.cs.discodnc.tandem.analyses.PmooAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.SeparateFlowAnalysis;
-import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public class Demo2 {
@@ -59,32 +58,32 @@ public class Demo2 {
         ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
         MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
 
-        ServerGraph sg = new ServerGraph();
+        ServerGraph network = new ServerGraph();
 
-        Server s0 = sg.addServer(service_curve, max_service_curve);
+        Server s0 = network.addServer(service_curve, max_service_curve);
         s0.useMaxSC(false);
         s0.useMaxScRate(false);
 
-        Server s1 = sg.addServer(service_curve, max_service_curve);
+        Server s1 = network.addServer(service_curve, max_service_curve);
         s1.useMaxSC(false);
         s1.useMaxScRate(false);
 
-        sg.addTurn(s0, s1);
+        network.addTurn(s0, s1);
 
         ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
 
-        sg.addFlow(arrival_curve, s1);
-        sg.addFlow(arrival_curve, s0, s1);
+        network.addFlow(arrival_curve, s1);
+        network.addFlow(arrival_curve, s0, s1);
 
-        for (Flow flow_of_interest : sg.getFlows()) {
+        for (Flow flow_of_interest : network.getFlows()) {
             System.out.println("Flow of interest : " + flow_of_interest.toString());
             System.out.println();
 
-            // Analyze the server graph
+            // Analyze the network
             // TFA
             System.out.println("--- Total Flow Analysis ---");
             // If no analysis configuration is given, the defaults are used
-            TotalFlowAnalysis tfa = new TotalFlowAnalysis(sg);
+            TotalFlowAnalysis tfa = new TotalFlowAnalysis(network);
 
             try {
                 tfa.performAnalysis(flow_of_interest);
@@ -103,7 +102,7 @@ public class Demo2 {
             // SFA
             System.out.println("--- Separated Flow Analysis ---");
             // If no analysis configuration is given, the defaults are used
-            SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(sg);
+            SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(network);
 
             try {
                 sfa.performAnalysis(flow_of_interest);
@@ -122,7 +121,7 @@ public class Demo2 {
             // PMOO
             System.out.println("--- PMOO Analysis ---");
             // If no analysis configuration is given, the defaults are used
-            PmooAnalysis pmoo = new PmooAnalysis(sg);
+            PmooAnalysis pmoo = new PmooAnalysis(network);
 
             try {
                 pmoo.performAnalysis(flow_of_interest);
@@ -132,24 +131,6 @@ public class Demo2 {
                 System.out.println("backlog bound   : " + pmoo.getBacklogBound());
             } catch (Exception e) {
                 System.out.println("PMOO analysis failed");
-                e.printStackTrace();
-            }
-
-            System.out.println();
-
-            // TMA
-            System.out.println("--- Tandem Matching Analysis ---");
-            // If no analysis configuration is given, the defaults are used
-            TandemMatchingAnalysis tma = new TandemMatchingAnalysis(sg);
-            
-            try {
-            	tma.performAnalysis(flow_of_interest);
-                System.out.println("e2e TMA SCs     : " + tma.getLeftOverServiceCurves());
-                System.out.println("xtx per server  : " + tma.getServerAlphasMapString());
-                System.out.println("delay bound     : " + tma.getDelayBound());
-                System.out.println("backlog bound   : " + tma.getBacklogBound());
-            } catch (Exception e) {
-                System.out.println("TMA analysis failed");
                 e.printStackTrace();
             }
 

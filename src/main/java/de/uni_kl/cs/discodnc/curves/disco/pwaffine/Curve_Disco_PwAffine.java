@@ -36,6 +36,7 @@ import java.util.List;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_Disco;
@@ -657,10 +658,10 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		Curve.beautify(other_cpy);
 
 		if (this_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
-			this_cpy = this.createZeroCurve();
+			this_cpy = Curve_ConstantPool.ZERO_CURVE.get();
 		}
 		if (other_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
-			other_cpy = this.createZeroCurve();
+			other_cpy = Curve_ConstantPool.ZERO_CURVE.get();
 		}
 
 		int this_segment_length = this_cpy.segments.length;

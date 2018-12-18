@@ -107,7 +107,7 @@ public interface Curve {
         // In case that we've removed everything, the curve had infinite latency, so
         // return the NULL curve.
         if (result.getSegmentCount() == 0) {
-            return getFactory().createZeroCurve();
+            return Curve_ConstantPool.ZERO_CURVE.get();
         }
 
         // Shift remaining segments left by latency
@@ -394,7 +394,7 @@ public interface Curve {
      * @return The resulting curve.
      */
     static Curve computeResultingCurve(Curve curve1, Curve curve2, Curve.CurveOperation operator) {
-        Curve ZERO_DELAY_INFINITE_BURST = Curve.getFactory().createZeroDelayInfiniteBurst();
+        Curve ZERO_DELAY_INFINITE_BURST = Curve_ConstantPool.INFINITE_SERVICE_CURVE.get();
 
         switch (operator) {
             case ADD:
