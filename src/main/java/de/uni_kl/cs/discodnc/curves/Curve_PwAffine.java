@@ -80,8 +80,8 @@ public interface Curve_PwAffine extends Curve_Affine {
     void copy(Curve curve);
 
     // (Composition of) Rate latencies
-    boolean isRateLatency();
+    List<Curve_Affine> getRL_Components();
 
     // (Composition of) Token buckets
-    boolean isTokenBucket();
+    List<Curve_Affine> getTB_Components();
 }
