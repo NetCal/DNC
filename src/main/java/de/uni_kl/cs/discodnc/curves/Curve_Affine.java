@@ -27,8 +27,6 @@
 
 package de.uni_kl.cs.discodnc.curves;
 
-import java.util.List;
-
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.numbers.Num;
 
@@ -81,9 +79,5 @@ public interface Curve_Affine extends Curve {
 
     boolean isRateLatency();
 
-    List<Curve_Affine> getRL_Components();
-
     boolean isTokenBucket();
-
-    List<Curve_Affine> getTB_Components();
 }
