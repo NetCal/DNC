@@ -13,7 +13,7 @@ import de.uni_kl.cs.discodnc.tandem.analyses.TandemMatchingAnalysis;
 import de.uni_kl.cs.discodnc.tandem.analyses.TotalFlowAnalysis;
 
 public class CompFFApresets {
-	private ServerGraph network;
+	private ServerGraph server_graph;
 	
 	public TotalFlowAnalysis tf_analysis;		// TFA + aggrPBOOAB
 	public SeparateFlowAnalysis sf_analysis;	// SFA + aggrPBOOAB
@@ -32,8 +32,8 @@ public class CompFFApresets {
 	public SeparateFlowAnalysis sfa_MMB18AB;	// SFA + aggrAB + segrPMOOAB
 	public PmooAnalysis pmoo_MMB18AB;			// PMOO + aggrAB + segrPMOOAB
 	
-	public CompFFApresets( ServerGraph network ) {
-		this.network = network;
+	public CompFFApresets( ServerGraph server_graph ) {
+		this.server_graph = server_graph;
 
 		// --------------------------------------------------------------------------------------------------------------
 		// Arrival Bounding Configurations and Documentation
@@ -90,70 +90,70 @@ public class CompFFApresets {
 		// TFA + aggrPBOOAB
 		AnalysisConfig tfa_config = base_config.copy();
 		tfa_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
-		tf_analysis = new TotalFlowAnalysis( network, tfa_config );
+		tf_analysis = new TotalFlowAnalysis( server_graph, tfa_config );
 		
 		// SFA + aggrPBOOAB
 		AnalysisConfig sfa_config = base_config.copy();
 		sfa_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
-		sf_analysis = new SeparateFlowAnalysis( network, sfa_config );
+		sf_analysis = new SeparateFlowAnalysis( server_graph, sfa_config );
 
 		// PMOO + aggrPMOOAB
 		AnalysisConfig pmoo_config = base_config.copy();
 		pmoo_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PMOO );
-		pmoo_analysis = new PmooAnalysis( network, pmoo_config );
+		pmoo_analysis = new PmooAnalysis( server_graph, pmoo_config );
 
 		
 		// TFA + segrPBOOAB
 		AnalysisConfig tfa_segr_config = base_config.copy();
 		tfa_segr_config.setArrivalBoundMethod( ArrivalBoundMethod.SEGR_PBOO );
-		tfa_segrPBOOAB = new TotalFlowAnalysis( network, tfa_segr_config );
+		tfa_segrPBOOAB = new TotalFlowAnalysis( server_graph, tfa_segr_config );
 		
 		// SFA + segrPBOOAB
 		AnalysisConfig sfa_segr_config = base_config.copy();
 		sfa_segr_config.setArrivalBoundMethod( ArrivalBoundMethod.SEGR_PBOO );
-		sfa_segrPBOOAB = new SeparateFlowAnalysis( network, sfa_segr_config );
+		sfa_segrPBOOAB = new SeparateFlowAnalysis( server_graph, sfa_segr_config );
 
 		// PMOO + segrPMOOAB
 		AnalysisConfig pmoo_segr_config = base_config.copy();
 		pmoo_segr_config .setArrivalBoundMethod( ArrivalBoundMethod.SEGR_PMOO );
-		pmoo_segrPMOOAB = new PmooAnalysis( network, pmoo_segr_config );
+		pmoo_segrPMOOAB = new PmooAnalysis( server_graph, pmoo_segr_config );
 
 		
 		// SFA + aggrAB
 		AnalysisConfig sfa_aggrAB_config = base_config.copy();
 		sfa_aggrAB_config.setArrivalBoundMethods( aggrAB );
-		sfa_aggrAB = new SeparateFlowAnalysis( network, sfa_aggrAB_config );
+		sfa_aggrAB = new SeparateFlowAnalysis( server_graph, sfa_aggrAB_config );
 
 		// PMOO + aggrAB
 		AnalysisConfig pmoo_aggrAB_config = base_config.copy();
 		pmoo_aggrAB_config.setArrivalBoundMethods( aggrAB );
-		pmoo_aggrAB = new PmooAnalysis( network, pmoo_aggrAB_config );
+		pmoo_aggrAB = new PmooAnalysis( server_graph, pmoo_aggrAB_config );
 
 		
 		// TMA
 		AnalysisConfig tma_config = base_config.copy();
 		tma_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_TM );
-		tandem_matching_analysis = new TandemMatchingAnalysis( network, tma_config );
+		tandem_matching_analysis = new TandemMatchingAnalysis( server_graph, tma_config );
 		
 		// TMA + AB cap
 		AnalysisConfig tma_bcap_config = base_config.copy();
 		tma_bcap_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_TM );
 		tma_bcap_config.setServerBacklogArrivalBound(true);
-		tandem_matching_bcap_analysis = new TandemMatchingAnalysis( network, tma_bcap_config );
+		tandem_matching_bcap_analysis = new TandemMatchingAnalysis( server_graph, tma_bcap_config );
 
 		
 		// SFA + MMB18AB
 		AnalysisConfig sfa_MMB_config = base_config.copy();
 		sfa_MMB_config.setArrivalBoundMethods( MMB18AB );
-		sfa_MMB18AB = new SeparateFlowAnalysis( network, sfa_MMB_config );
+		sfa_MMB18AB = new SeparateFlowAnalysis( server_graph, sfa_MMB_config );
 
 		// PMOO + MMB18AB
 		AnalysisConfig pmoo_MMB_config = base_config.copy();
 		pmoo_MMB_config.setArrivalBoundMethods( MMB18AB );
-		pmoo_MMB18AB = new PmooAnalysis( network, pmoo_MMB_config );
+		pmoo_MMB18AB = new PmooAnalysis( server_graph, pmoo_MMB_config );
 	}
 	
-	public ServerGraph getNetwork() {
-		return network;
+	public ServerGraph getServerGraph() {
+		return server_graph;
 	}
 }
