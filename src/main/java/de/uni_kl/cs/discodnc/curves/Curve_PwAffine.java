@@ -38,7 +38,7 @@ import de.uni_kl.cs.discodnc.numbers.Num;
  * linear segments, curves may be ascribed as (compositions of) rate latency and
  * token bucket functions.
  */
-public interface Curve_PwAffine extends Curve {
+public interface Curve_PwAffine extends Curve_Affine {
 
     // // Specific piecewise affine curve shapes
 
@@ -82,10 +82,6 @@ public interface Curve_PwAffine extends Curve {
     // (Composition of) Rate latencies
     boolean isRateLatency();
 
-    List<Curve_PwAffine> getRL_Components();
-
     // (Composition of) Token buckets
     boolean isTokenBucket();
-
-    List<Curve_PwAffine> getTB_Components();
 }

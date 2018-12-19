@@ -36,6 +36,7 @@ import java.util.List;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.Curve;
+import de.uni_kl.cs.discodnc.curves.Curve_Affine;
 import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;
 import de.uni_kl.cs.discodnc.curves.Curve_PwAffine;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
@@ -117,8 +118,8 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		this.has_rate_latency_meta_info = has_rate_latency_meta_info;
 	}
 
-	public List<Curve_PwAffine> getRL_Components() {
-		List<Curve_PwAffine> tmp = new LinkedList<>();
+	public List<Curve_Affine> getRL_Components() {
+		List<Curve_Affine> tmp = new LinkedList<>();
 		if (this.is_rate_latency) {
 			tmp.add(this.copy());
 		} else {
@@ -145,8 +146,8 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		this.has_token_bucket_meta_info = has_token_bucket_meta_info;
 	}
 
-	public List<Curve_PwAffine> getTB_Components() {
-		List<Curve_PwAffine> tmp = new LinkedList<>();
+	public List<Curve_Affine> getTB_Components() {
+		List<Curve_Affine> tmp = new LinkedList<>();
 		for (int i = 0; i < token_buckets.size(); i++) {
 			tmp.add(token_buckets.get(i));
 		}
