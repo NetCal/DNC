@@ -48,7 +48,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 
 	// Service Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ServiceCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
 	 */
 	@Override
 	public ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) throws Exception {
@@ -56,7 +56,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(java.util.Set, java.util.Set)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve(java.util.Set, java.util.Set)
 	 */
 	@Override
 	public Set<ServiceCurve> convolve(Set<ServiceCurve> service_curves_1,
@@ -66,7 +66,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 
 	// Arrival Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ArrivalCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ArrivalCurve)
 	 */
 	@Override
 	public ArrivalCurve convolve(ArrivalCurve arrival_curve_1, ArrivalCurve arrival_curve_2) throws Exception {
@@ -74,7 +74,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(java.util.Set)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve(java.util.Set)
 	 */
 	@Override
 	public ArrivalCurve convolve(Set<ArrivalCurve> arrival_curves) throws Exception {
@@ -83,7 +83,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 
 	// Maximum Service Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.MaxServiceCurve, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve(de.uni_kl.cs.discodnc.curves.MaxServiceCurve, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
 	 */
 	@Override
 	public MaxServiceCurve convolve(MaxServiceCurve max_service_curve_1, MaxServiceCurve max_service_curve_2)
@@ -93,7 +93,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 
 	// Arrival Curves and Max Service Curves
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_ACs_MSC(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve_ACs_MSC(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
 	 */
 	@Override
 	public Set<Curve> convolve_ACs_MaxSC(Set<ArrivalCurve> arrival_curves,
@@ -102,7 +102,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#convolve_ACs_EGamma(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#convolve_ACs_EGamma(java.util.Set, de.uni_kl.cs.discodnc.curves.MaxServiceCurve)
 	 */
 	@Override
 	public Set<ArrivalCurve> convolve_ACs_MaxScRate(Set<ArrivalCurve> arrival_curves,
@@ -114,7 +114,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	// Deconvolution
 	// ------------------------------------------------------------
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(java.util.Set, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#deconvolve(java.util.Set, de.uni_kl.cs.discodnc.curves.ServiceCurve)
 	 */
 	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve)
@@ -123,7 +123,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(java.util.Set, java.util.Set)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#deconvolve(java.util.Set, java.util.Set)
 	 */
 	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves)
@@ -132,7 +132,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#deconvolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve)
 	 */
 	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) throws Exception {
@@ -140,7 +140,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve, boolean)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#deconvolve(de.uni_kl.cs.discodnc.curves.ArrivalCurve, de.uni_kl.cs.discodnc.curves.ServiceCurve, boolean)
 	 */
 	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
@@ -149,7 +149,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.uni_kl.cs.discodnc.minplus.IMinPlus#deconvolve_almostConcCs_SCs(java.util.Set, java.util.Set)
+	 * @see de.uni_kl.cs.discodnc.algebra.IMinPlus#deconvolve_almostConcCs_SCs(java.util.Set, java.util.Set)
 	 */
 	@Override
 	public Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
