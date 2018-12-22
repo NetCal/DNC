@@ -57,6 +57,7 @@
 		<maven.plugin.surefire.version>2.22.1</maven.plugin.surefire.version>
 		<maven.plugin.versions.version>2.5</maven.plugin.versions.version>
 		<maven.build-helper.plugin.version>3.0.0</maven.build-helper.plugin.version>
+		<maven.download.plugin.version>1.4.1</maven.download.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -86,7 +87,7 @@
 						<groupId>ch.ethz.rtc.kernel</groupId>
 						<artifactId>rtc</artifactId>
 						<scope>system</scope>
-						<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+						<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
 						<version>1.2.beta.100</version>
 					</dependency>
 					<dependency>
@@ -131,7 +132,6 @@
 			<id>tests</id>
 			<build>
 				<finalName>DiscoDNC_tests-${project.version}</finalName>
-
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -172,7 +172,7 @@
 					<groupId>ch.ethz.rtc.kernel</groupId>
 					<artifactId>rtc</artifactId>
 					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+					<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
 				</dependency>
 				<dependency>
 					<groupId>org.junit.jupiter</groupId>
@@ -189,6 +189,26 @@
 			<build>
 				<finalName>DiscoDNC_ext-${project.version}</finalName>
 				<plugins>
+					<!-- get the RTC MPA jar -->
+					<plugin>
+						<groupId>com.googlecode.maven-download-plugin</groupId>
+						<artifactId>download-maven-plugin</artifactId>
+						<version>${maven.download.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>get-mpa-rtc</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>wget</goal>
+								</goals>
+								<configuration>
+									<url>http://www.mpa.ethz.ch/static/download.php?file=RTCToolbox_bin.zip</url>
+									<unpack>true</unpack>
+									<outputDirectory>${project.basedir}/lib/</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
@@ -215,7 +235,7 @@
 					<groupId>ch.ethz.rtc.kernel</groupId>
 					<artifactId>rtc</artifactId>
 					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+					<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -287,7 +307,7 @@
 					<groupId>ch.ethz.rtc.kernel</groupId>
 					<artifactId>rtc</artifactId>
 					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+					<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
 				</dependency>
 				<dependency>
 					<groupId>org.junit.jupiter</groupId>
@@ -310,12 +330,12 @@
 	<!-- Define common dependency versions in one place -->
 	<dependencyManagement>
 		<dependencies>
-			<!-- External RTC -->
+ 			<!-- External RTC -->
 			<dependency>
 				<groupId>ch.ethz.rtc.kernel</groupId>
 				<artifactId>rtc</artifactId>
 				<scope>system</scope>
-				<systemPath>${project.basedir}/lib/rtc.jar</systemPath>
+				<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
 				<version>1.2.beta.100</version>
 			</dependency>
 			<!-- JUnit -->
