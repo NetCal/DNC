@@ -67,7 +67,7 @@ Select "eclipse" maven profile in eclipse to import source folders automatically
 Use the following maven profiles for compiling jars the different parts of the DiscoDNC
 
 * `mvn package` - builds the base code in `src/main`
-* `mvn package -P mpa` - builds the base code and the MPARTC wrappers in `src/mpa_ext`
+* `mvn package -P mpa` - builds the base code and the MPA RTC wrappers in `src/mpa_ext`
 * `mvn package -P exp` - builds the base code and the experiment classes in `src/experiments`
 * `mvn package -P tests,mpa` - builds an additional jar for the test classes, note that you also need the `mpa` profile, since the classes are needed for running the tests
 * the profiles can also be combined as needed
