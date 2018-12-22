@@ -53,7 +53,7 @@ On click, there are suggestions. Two offerings are to ignore this error.
 Choose the second on (globally ignore error cause) to prevent changes to the pom.xml file.
 
 ## Add Source Folders
-Select "eclipse" maven profile in eclipse to import source folders automatically.
+Select "eclipse" Maven profile in eclipse to import source folders automatically.
 
 ## Functional Tests
 * In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
