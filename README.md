@@ -38,22 +38,31 @@ These steps were thoroughly tested with Eclipse Photon. Some steps have been ada
 ## Add Profiles
 Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
 
-## Maven Lifecycle Mapping Error (pom.xml Error)
-Initially, the error console will show this error:<br />
-> Plugin execution not covered by lifecycle configuration: org.codehaus.mojo:build-helper-maven-plugin:1.7:add-source (execution: add-source, phase: generate-sources) Maven Project Build Lifecycle Mapping Problem
+## Maven Lifecycle Mapping Error (pom.xml Errors)
+Initially, the error console will show these errors:<br />
+> Plugin execution not covered by lifecycle configuration: org.codehaus.mojo:build-helper-maven-plugin:1.7:add-source (execution: add-source, phase: generate-sources)
 
-Additionally, it will be shown as an error of our pom.xml build file.
-To resolve it, got to Eclipse's the pom.xml view, Overview tab where you will find 
+> Plugin execution not covered by lifecycle configuration: com.googlecode.maven-download-plugin:download-maven-plugin:1.4.1:wget (execution: get-mpa-rtc, phase: validate)
+
+Additionally, the according lines in the pom.xml will be marked to contain errors.
+To resolve this, got to Eclipse's the pom.xml view, Overview tab where you will find 
 > Plugin execution not covered by lifecycle configuration: org.codehaus.mojo.build (Click for details)
 
+> Plugin execution not covered by lifecycle configuration: com.googlecode.maven-do (Click for details)
+
 above the Overview caption.
-On click, there are suggestions. Two offerings are to ignore this error.
-* Mark goal add-source as ignored in pom.xml
-* Mark goal add-source as ignored in eclipse preferences
+On click, there are two suggestions to ignore this error:
+* Mark goal add-source (or wget) as ignored in pom.xml
+* Mark goal add-source (or wget) as ignored in eclipse preferences
 Choose the second on (globally ignore error cause) to prevent changes to the pom.xml file.
 
 ## Add Source Folders
-Select "eclipse" maven profile in eclipse to import source folders automatically.
+Select "eclipse" Maven profile in eclipse to import source folders automatically.
+
+## Get the rtc.jar to run the MPA RTC Curve Backend and the Tests 
+Use Maven: Run a build with goal 'validate'.
+
+Manually: Download the file from http://www.mpa.ethz.ch/static/download.php?file=RTCToolbox_bin.zip and unpack it in the /lib folder. 
 
 ## Functional Tests
 * In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
@@ -67,7 +76,7 @@ Select "eclipse" maven profile in eclipse to import source folders automatically
 Use the following maven profiles for compiling jars the different parts of the DiscoDNC
 
 * `mvn package` - builds the base code in `src/main`
-* `mvn package -P mpa` - builds the base code and the MPARTC wrappers in `src/mpa_ext`
-* `mvn package -P ext` - builds the base code and the experiment classes in `src/experiments`
+* `mvn package -P mpa` - builds the base code and the MPA RTC wrappers in `src/mpa_ext`
+* `mvn package -P exp` - builds the base code and the experiment classes in `src/experiments`
 * `mvn package -P tests,mpa` - builds an additional jar for the test classes, note that you also need the `mpa` profile, since the classes are needed for running the tests
 * the profiles can also be combined as needed
