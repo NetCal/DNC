@@ -224,7 +224,7 @@
 			<!-- classes and sources of the experiments functionality (no experiments) 
 				(we should decide whether to use the core and extension as dep. from the 
 				maven repo or add it as classes to the jar) -->
-			<id>ext</id>
+			<id>exp</id>
 			<build>
 				<finalName>DiscoDNC_experiments-${project.version}</finalName>
 				<plugins>
