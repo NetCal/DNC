@@ -25,7 +25,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.bounds.disco.pwaffine;
+package de.uni_kl.cs.discodnc.bounds.disco.pw_affine;
 
 import java.util.Set;
 

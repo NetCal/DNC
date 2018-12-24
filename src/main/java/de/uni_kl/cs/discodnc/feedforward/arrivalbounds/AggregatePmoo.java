@@ -36,7 +36,7 @@ import java.util.Set;
 import de.uni_kl.cs.discodnc.AnalysisConfig;
 import de.uni_kl.cs.discodnc.AnalysisConfig.Multiplexing;
 import de.uni_kl.cs.discodnc.AnalysisConfig.MultiplexingEnforcement;
-import de.uni_kl.cs.discodnc.bounds.disco.pwaffine.Bound;
+import de.uni_kl.cs.discodnc.bounds.disco.pw_affine.Bound;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.Curve_ConstantPool;

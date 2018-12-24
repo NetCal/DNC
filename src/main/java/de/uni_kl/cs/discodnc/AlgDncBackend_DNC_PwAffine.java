@@ -28,11 +28,11 @@
 package de.uni_kl.cs.discodnc;
 
 import de.uni_kl.cs.discodnc.algebra.MinPlus;
-import de.uni_kl.cs.discodnc.algebra.disco.pwaffine.MinPlus_Disco_PwAffine;
+import de.uni_kl.cs.discodnc.algebra.disco.pw_affine.MinPlus_Disco_PwAffine;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.LinearSegment;
 import de.uni_kl.cs.discodnc.curves.disco.LinearSegment_Disco;
-import de.uni_kl.cs.discodnc.curves.disco.pwaffine.Curve_Disco_PwAffine;
+import de.uni_kl.cs.discodnc.curves.disco.pw_affine.Curve_Disco_PwAffine;
 
 public enum AlgDncBackend_DNC_PwAffine implements AlgDncBackend {
 	DISCO_PWAFFINE;

@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.curves.disco.pwaffine;
+package de.uni_kl.cs.discodnc.curves.disco.pw_affine;
 
 import de.uni_kl.cs.discodnc.Calculator;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
