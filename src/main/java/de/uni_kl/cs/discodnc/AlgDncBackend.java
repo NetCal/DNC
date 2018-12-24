@@ -41,7 +41,7 @@ public interface AlgDncBackend {
     @Override
     String toString();
     
-    default String assembleString(String curve_backend_name, String min_plus_name) {
+    default String assembleString(String curve_backend_name, String alg_backend_name) {
     	StringBuffer name = new StringBuffer();
 
         name.append("CurveBackend");
@@ -50,9 +50,9 @@ public interface AlgDncBackend {
         
         name.append(", ");
 
-        name.append("AlegraBackend");
+        name.append("AlgebraBackend");
         name.append(":");
-        name.append(min_plus_name);
+        name.append(alg_backend_name);
     	
     	return name.toString();
     }

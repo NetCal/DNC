@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.algebra.disco.pwaffine;
+package de.uni_kl.cs.discodnc.algebra.disco.pw_affine;
 
 import java.util.HashSet;
 import java.util.Set;

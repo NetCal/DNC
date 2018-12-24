@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.algebra.disco.pwaffine;
+package de.uni_kl.cs.discodnc.algebra.disco.con_pw_affine;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -44,7 +44,25 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.numbers.Num;
 import de.uni_kl.cs.discodnc.utils.CheckUtils;
 
-public abstract class Deconvolution_Disco_PwAffine {
+/**
+ * Deconvolution for convex or (almost) concave, (almost) continuous functions.
+ * 
+ * Functions of this class are defined by 
+ * - the maximum over multiple rate-latency curves (mRL, convex functions),
+ * - the minimum over multiple token-bucket curves (mTB, almost concave/continuous functions as f(0)=0),
+ * - the delayed infinite burst functions \delta_{T} used in the min/max above.
+ * 
+ * The deconvolution of piecewise affine curves implemented in the original dnclib 
+ * was based on a flawed result (for pw affine but working for affine curves) presented in
+ * 
+ * 		Improving Performance Bounds in Feed-Forward Networks by Paying Multiplexing Only Once
+ * 		(Jens Schmitt, Frank A. Zdarsky, Ivan Martinovic),
+ * 		In Proc. of the 14th GI/ITG MMB, 2008.
+ * 
+ * This replacement, implemented since the version 2.2.5 (2015-Sep-29), is however 
+ * restricted to the above class of curves. 
+ */
+public abstract class Deconvolution_Disco_ConPwAffine {
 
     public static Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve) {
         Set<ArrivalCurve> results = new HashSet<ArrivalCurve>();
@@ -132,7 +150,7 @@ public abstract class Deconvolution_Disco_PwAffine {
                 && service_curve.getSegment(service_curve.getSegmentCount() - 1).getY().eqZero())) {
             return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
         }
-        return deconvolve_mTB_mRL(arrival_curve, service_curve);
+        return deconvolve_con_pw_affine(arrival_curve, service_curve);
     }
 
     public static Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
@@ -169,7 +187,7 @@ public abstract class Deconvolution_Disco_PwAffine {
             for (Curve pwa_c : curves) {
                 latency = pwa_c.getLatency();
                 results.add(Curve.getFactory().createArrivalCurve(Curve.shiftRight(
-                        deconvolve_mTB_mRL(Curve.shiftLeftClipping(pwa_c, latency), sc),
+                        deconvolve_con_pw_affine(Curve.shiftLeftClipping(pwa_c, latency), sc),
                         latency)));
             }
         }
@@ -185,7 +203,7 @@ public abstract class Deconvolution_Disco_PwAffine {
      * @param curve_2 The convex service curve.
      * @return The deconvolved curve, an arrival curve.
      */
-    private static ArrivalCurve deconvolve_mTB_mRL(Curve curve_1, Curve curve_2) {
+    private static ArrivalCurve deconvolve_con_pw_affine(Curve curve_1, Curve curve_2) {
         // if( CalculatorConfig.OPERATOR_INPUT_CHECKS ) {
         switch (CheckUtils.inputNullCheck(curve_1, curve_2)) {
             case 0:
