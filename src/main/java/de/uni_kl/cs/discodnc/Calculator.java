@@ -42,7 +42,7 @@ public final class Calculator {
 	
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
 	
-	private AlgDncBackend DNC_BACKEND = AlgDncBackend_DNC_PwAffine.DISCO_PWAFFINE;
+	private AlgDncBackend DNC_BACKEND = AlgDncBackend_DNC_ConPwAffine.DISCO_CONPWAFFINE;
 	
 	private boolean ARRIVAL_CURVE_CHECKS = false;
 	private boolean SERVICE_CURVE_CHECKS = false;

@@ -27,7 +27,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.bounds.disco.pw_affine;
+package de.uni_kl.cs.discodnc.bounds;
 
 import java.util.HashSet;
 import java.util.List;

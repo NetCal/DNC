@@ -25,18 +25,19 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.algebra.disco.pw_affine;
+package de.uni_kl.cs.discodnc.algebra.disco.con_pw_affine;
 
 import java.util.Set;
 
 import de.uni_kl.cs.discodnc.algebra.MinPlus;
+import de.uni_kl.cs.discodnc.algebra.disco.pw_affine.Convolution_Disco_PwAffine;
 import de.uni_kl.cs.discodnc.curves.ArrivalCurve;
 import de.uni_kl.cs.discodnc.curves.Curve;
 import de.uni_kl.cs.discodnc.curves.MaxServiceCurve;
 import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 
-public enum MinPlus_Disco_PwAffine implements MinPlus {
-	MINPLUS_DISCO_PWAFFINE;
+public enum MinPlus_Disco_ConPwAffine implements MinPlus {
+	MINPLUS_DISCO_CONPWAFFINE;
   
 	// --------------------------------------------------------------------------------------------------------------
 	// Min-Plus-Operation Dispatching
@@ -119,7 +120,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, ServiceCurve service_curve)
 			throws Exception {
-		return Deconvolution_Disco_PwAffine.deconvolve(arrival_curves, service_curve);
+		return Deconvolution_Disco_ConPwAffine.deconvolve(arrival_curves, service_curve);
 	}
 
 	/* (non-Javadoc)
@@ -128,7 +129,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> deconvolve(Set<ArrivalCurve> arrival_curves, Set<ServiceCurve> service_curves)
 			throws Exception {
-		return Deconvolution_Disco_PwAffine.deconvolve(arrival_curves, service_curves);
+		return Deconvolution_Disco_ConPwAffine.deconvolve(arrival_curves, service_curves);
 	}
 
 	/* (non-Javadoc)
@@ -145,7 +146,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
 			boolean tb_rl_optimized) throws Exception {
-		return Deconvolution_Disco_PwAffine.deconvolve(arrival_curve, service_curve);
+		return Deconvolution_Disco_ConPwAffine.deconvolve(arrival_curve, service_curve);
 	}
 
 	/* (non-Javadoc)
@@ -154,7 +155,7 @@ public enum MinPlus_Disco_PwAffine implements MinPlus {
 	@Override
 	public Set<ArrivalCurve> deconvolve_almostConcCs_SCs(Set<Curve> curves,
 			Set<ServiceCurve> service_curves) throws Exception {
-		return Deconvolution_Disco_PwAffine.deconvolve_almostConcCs_SCs(curves, service_curves);
+		return Deconvolution_Disco_ConPwAffine.deconvolve_almostConcCs_SCs(curves, service_curves);
 	}
 	
 }

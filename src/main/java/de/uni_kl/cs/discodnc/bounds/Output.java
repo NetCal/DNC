@@ -26,7 +26,7 @@
  *
  */
 
-package de.uni_kl.cs.discodnc.bounds.disco.pw_affine;
+package de.uni_kl.cs.discodnc.bounds;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -40,6 +40,10 @@ import de.uni_kl.cs.discodnc.curves.ServiceCurve;
 import de.uni_kl.cs.discodnc.network.server_graph.Path;
 import de.uni_kl.cs.discodnc.network.server_graph.Server;
 
+/**
+ * The output bound makes use of the deconvolution. Therefore, it inherits the restrictions 
+ * of the min-plus algebra implementation configured in Calculator.  
+ */
 public final class Output {
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, 
     										Set<ArrivalCurve> arrival_curves, Server server) throws Exception {
