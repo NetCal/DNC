@@ -186,16 +186,13 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
         Num compute = Num.getUtils(Calculator.getInstance().getNumBackend());
         
         double sum_r_at_s;
-        boolean delta0 = false;
-        
+
         Set<Flow> present_flows = new HashSet<Flow>();
         for (Server s : path.getServers()) {
-        	if (s.getServiceCurve().equals(Curve_ConstantPool.INFINITE_SERVICE_CURVE.get())) {
-        		delta0 = true;
-        	} else {
-        		delta0 = false;
+        	if(s.getServiceCurve().equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
+        		continue;
         	}
-        			
+        		
             sum_r_at_s = 0.0;
             int i = path.getServers().indexOf(s);
             // Add incoming flows
@@ -206,20 +203,14 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
                     sum_r_at_s += f.getArrivalCurve().getUltAffineRate().doubleValue();
                 }
             }
-            
-            ServiceCurve current_rl;
 
-            if(delta0) {
-                current_rl = Curve_ConstantPool.INFINITE_SERVICE_CURVE.get();
-            } else {
-            	// Check for stability constraint violation
-            	if(sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-                    return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
-                }
-            	
-            	Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
-                current_rl = Calculator.getInstance().getCurveFactory().createServiceCurve(tmpcurve);
+            // Check for stability constraint violation
+            if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
+                return Curve.getFactory().createZeroService();
             }
+
+            Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
+            ServiceCurve current_rl = Calculator.getInstance().getCurveFactory().createServiceCurve(tmpcurve);
 
             // Sum up latencies
             T = compute.add(T, current_rl.getLatency());
@@ -234,16 +225,15 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
             }
 
             // Update latency terms (increments)
-            sum_latencyterms = compute.add(sum_latencyterms, compute.mult(sum_r, current_rl.getLatency()));
+            sum_latencyterms = compute.add(sum_latencyterms,
+                    compute.mult(sum_r, current_rl.getLatency()));
 
-            // Compute left-over rate; update min, catch that delta0 has a zero rate.
-            if(!delta0) {
-            	Num Ri = compute.sub(current_rl.getUltAffineRate(), sum_r);
-	            if (Ri.leqZero()) {
-	                return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
-	            }
-            	R = compute.min(R, Ri);
+            // Compute left-over rate; update min
+            Num Ri = compute.sub(current_rl.getUltAffineRate(), sum_r);
+            if (Ri.leqZero()) {
+                return Curve.getFactory().createZeroService();
             }
+            R = compute.min(R, Ri);
 
             // Remove all outgoing flows from the set of present flows
             Set<Flow> leaving_flows = new HashSet<Flow>();
