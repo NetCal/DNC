@@ -189,10 +189,6 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         Set<Flow> present_flows = new HashSet<Flow>();
         for (Server s : path.getServers()) {
-        	if(s.getServiceCurve().equals(Curve.getFactory().createZeroDelayInfiniteBurst())) {
-        		continue;
-        	}
-        		
             sum_r_at_s = 0.0;
             int i = path.getServers().indexOf(s);
             // Add incoming flows
