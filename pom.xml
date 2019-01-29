@@ -187,7 +187,7 @@
 				repo or add it as classes to the jar) -->
 			<id>mpa</id>
 			<build>
-				<finalName>DNC_ext-${project.version}</finalName>
+				<finalName>NetCal-DNC-${project.version}</finalName>
 				<plugins>
 					<!-- get the RTC MPA jar -->
 					<plugin>
