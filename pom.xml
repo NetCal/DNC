@@ -4,17 +4,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>DiscoDNC - The Disco Deterministic Network Calculator</name>
-	<description>Deterministic Network Calculus (DNC) is a methodology for worst-case modeling and analysis of
+	<name>DNC - The Deterministic Network Calculator</name>
+	<description>Deterministic Network Calculus is a methodology for worst-case modeling and analysis of
         communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s
         end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the
-        Disco Deterministic Network Calculator (DiscoDNC) automates the derivation of bounds.
+        Deterministic Network Calculator (DNC) automates the derivation of bounds.
 	</description>
-	<url>discodnc.cs.uni-kl.de</url>
+	<url>networkcalculus.org</url>
 
-	<groupId>de.uni_kl.cs.discodnc</groupId>
-	<artifactId>DiscoDNC</artifactId>
-	<version>2.5.0-SNAPSHOT</version>
+	<groupId>org.networkcalculus.dnc</groupId>
+	<artifactId>DNC</artifactId>
+	<version>2.5.0</version>
 
 	<licenses>
 		<license>
@@ -39,9 +39,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/NetCal/DiscoDNC.git</connection>
-		<developerConnection>scm:git:ssh://github.com/NetCal/DiscoDNC.git</developerConnection>
-		<url>https://github.com/NetCal/DiscoDNC/tree/v2.5</url>
+		<connection>scm:git:git://github.com/NetCal/DNC.git</connection>
+		<developerConnection>scm:git:ssh://github.com/NetCal/DNC.git</developerConnection>
+		<url>https://github.com/NetCal/DNC/</url>
 	</scm>
 
 	<properties>
@@ -53,7 +53,7 @@
 		<junit.jupiter.version>5.3.2</junit.jupiter.version>
 		<apache.commons.version.from>3.0</apache.commons.version.from>
 		<apache.commons.version.to>3.6.1</apache.commons.version.to>
-		<numbackend.version>1.0</numbackend.version>
+		<numbackend.version>1.0.0</numbackend.version>
 		<maven.plugin.surefire.version>2.22.1</maven.plugin.surefire.version>
 		<maven.plugin.versions.version>2.5</maven.plugin.versions.version>
 		<maven.build-helper.plugin.version>3.0.0</maven.build-helper.plugin.version>
@@ -67,11 +67,11 @@
 			<version>[${apache.commons.version.from},${apache.commons.version.to}]</version>
 		</dependency>
 		<dependency>
-			<groupId>de.uni_kl.cs.discodnc</groupId>
-			<artifactId>NumBackend</artifactId>
+			<groupId>org.networkcalculus.dnc</groupId>
+			<artifactId>NetCal-NumBackend</artifactId>
 			<version>${numbackend.version}</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/NumBackend-1.0.jar</systemPath>
+			<systemPath>${project.basedir}/lib/NetCal-NumBackend-1.0.0.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -131,7 +131,7 @@
 				extentsion as dep. from the maven repo or add it as classes to the jar) -->
 			<id>tests</id>
 			<build>
-				<finalName>DiscoDNC_tests-${project.version}</finalName>
+				<finalName>DNC_func_tests-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -146,7 +146,7 @@
 								</goals>
 								<configuration>
 									<sources>
-										<source>src/functional_test/java</source>
+										<source>src/functional_tests/java</source>
 										<source>src/mpa_ext/java</source>
 									</sources>
 								</configuration>
@@ -187,7 +187,7 @@
 				repo or add it as classes to the jar) -->
 			<id>mpa</id>
 			<build>
-				<finalName>DiscoDNC_ext-${project.version}</finalName>
+				<finalName>DNC_ext-${project.version}</finalName>
 				<plugins>
 					<!-- get the RTC MPA jar -->
 					<plugin>
@@ -246,7 +246,7 @@
 				maven repo or add it as classes to the jar) -->
 			<id>exp</id>
 			<build>
-				<finalName>DiscoDNC_experiments-${project.version}</finalName>
+				<finalName>DNC_experiments-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -293,7 +293,7 @@
 								<configuration>
 									<sources>
 										<source>src/experiments/java</source>
-										<source>src/functional_test/java</source>
+										<source>src/functional_tests/java</source>
 										<source>src/mpa_ext/java</source>
 									</sources>
 								</configuration>

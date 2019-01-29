@@ -1,9 +1,9 @@
 [submodule "src/mpa_ext"]
 	path = src/mpa_ext
-	url = git@github.com:NetCal/DiscoDNCext_MPARTC.git
+	url = git@github.com:NetCal/DNCext_MPARTC.git
 [submodule "src/test"]
-	path = src/functional_test
-	url = git@github.com:NetCal/DiscoDNC_tests.git
+	path = src/functional_tests
+	url = git@github.com:NetCal/DNC_func_tests.git
 [submodule "src/experiments"]
 	path = src/experiments
-	url = git@github.com:NetCal/DiscoDNC_experiments.git
+	url = git@github.com:NetCal/DNC_experiments.git
