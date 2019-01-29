@@ -4,6 +4,6 @@
 [submodule "src/test"]
 	path = src/functional_tests
 	url = git@github.com:NetCal/DNC_func_tests.git
-[submodule "src/experiments"]
-	path = src/experiments
-	url = git@github.com:NetCal/DNC_experiments.git
+[submodule "src/functional_tests"]
+	path = src/functional_tests
+	url = https://github.com/NetCal/DNC_func_tests
