@@ -1,5 +1,5 @@
-Changes in v2.5.0-SNAPSHOT
---------------------------
+Changes in the NetworkCalculus.org DNC v2.5.0
+---------------------------------------------
 Rebranding to NetworkCalculus.org DNC
   - Packages are prefixed org.networkcalculus.dnc.
   - Repository names/prefixes were reduced to DNC.
