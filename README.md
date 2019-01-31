@@ -4,7 +4,7 @@ Deterministic Network Calculus is a methodology for worst-case modeling and anal
 
 ### Academic Attribution
 
-The NetworkCalculus.org DNC was derived from the the Disco Deterministic Network Calculator (DiscoDNC). If you use it for research, please include the following reference in any resulting publication:
+The NetworkCalculus.org DNC was derived from the the [Disco Deterministic Network Calculator (DiscoDNC)](disco.networkcalculus.org). If you use it for research, please include the following reference in any resulting publication:
 
 ```plain
 @inproceedings{DiscoDNCv2,
