@@ -41,11 +41,11 @@ import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
 import org.networkcalculus.dnc.numbers.Num;
 
 /**
- * Class representing a piecewise linear curve, defined on [0,inf).<br>
- * The curve is stored as an array of <code>LinearSegment</code> objects. Each
+ * Class representing a piecewise linear Affine curve, defined on [0,1].<br>
+ * The curve is stored as an array of <code>LinearSegment_DNC</code> objects. Each
  * of these objects defines a linear piece of the curve from one inflection
  * point up to, but not including, the next. It is possible to define
- * discontinuities by defining two subsequent <code>LinearSegment</code>
+ * discontinuities by defining two subsequent <code>LinearSegment_DNC</code>
  * instances which start at the same inflection point. In this case, the second
  * segment needs to have <code>leftopen</code> set to <code>true</code> to
  * indicate that the inflection point is excluded from the second segment.<br>
@@ -68,30 +68,45 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	protected List<Curve_Disco_Affine> token_buckets = new LinkedList<Curve_Disco_Affine>();
 
 	/**
-	 * Creates a <code>CurveDNC</code> instance with a single segment on the x-axis.
+	 * Creates a AffineCurve_DNC instance with 1 segment of type LinearSegment_DNC.
+	 * @param
+	 *
+	 * @return
 	 */
 	protected Curve_Disco_Affine() {
-		createNewCurve(1, false);
+		createNewCurve(1);
 	}
 
+	/**
+	 * Creates a copy of <code>AffineCurve_DNC</code> instance, same as the passed <code>curve</code>.
+	 * @param
+	 *
+	 * @return
+	 */
 	protected Curve_Disco_Affine(Curve curve) {
 		copy(curve);
 	}
 
 	/**
-	 * Creates a <code>Curve</code> instance with <code>segment_count</code> empty
-	 * <code>LinearSegment</code> instances.
-	 *
+	 * Creates a <code>AffineCurve_DNC</code> instance with <code>segment_count<code/> number of
+	 * <code>LinearSegment_DNC<code/>.
 	 * @param segment_count
-	 *            the number of segments
+	 *           Number of segments in the curve.
+	 *           In case of Affine cure, at max the number of segments can be Two
+	 * @return
+	 *           In case of Affine cure, at max the number of segments can be Two
 	 */
 	protected Curve_Disco_Affine(int segment_count) {
-		// // TODO requires fix to Curve's boundAtXAxis.
-//		if (segment_count < 0 || segment_count > 2) {
-//			throw new IndexOutOfBoundsException("Affine curves can have at most two segments (given count was " + segment_count + ")!");
-//		}
-		createNewCurve(segment_count, false);
+		createNewCurve(segment_count);
 	}
+
+	/**
+	 * Returns an instance of <code>AffineCurve_DNC</code> with one segment of
+	 * <code>LinearSegment_DNC<code/>.
+	 * @param
+	 * @return
+	 * 			An instance of <code>AffineCurve_DNC</code>
+	 */
 
 	public static Curve_Disco_Affine getFactory() {
 		return instance;
@@ -100,25 +115,67 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// --------------------------------------------------------------------------------------------------------------
 	// Interface Implementations
 	// --------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Verifies weather the curve is RateLatency or not and
+	 * Decomposes the cure into rate latency components if it is a Rate latency curve.
+	 *
+	 * @param
+	 *
+	 * @return <code>is_rate_latency</code>
+	 * 		Returns weather the give curve is Rate latency curve or not
+	 */
 	public boolean isRateLatency() {
 		decomposeIntoRateLatencies();
 		return is_rate_latency;
 	}
 
+	/**
+	 * Verifies weather the curve is TokenBucket or not
+	 * Decomposes the cure into Token bucket components if it is a Token bucket curve
+	 *
+	 * @param
+	 *
+	 * @return <code>is_token_bucket</code>
+	 *
+	 */
 	public boolean isTokenBucket() {
 		decomposeIntoTokenBuckets();
 		return is_token_bucket;
 	}
 
+	/**
+	 * Returns weather the curve already has Rate Latency meta info or not
+	 *
+	 * @param
+	 *
+	 * @return <>code</>has_rate_latency_meta_info<>code</>
+	 * 		Returns weather or not the give curve has Rate latency meta info
+	 */
 	public boolean hasRateLatencyMetaInfo() {
 		return has_rate_latency_meta_info;
 	}
 
+	/**
+	 * Sets the has_rate_latency_meta_info to the passed arguments
+	 *
+	 * @param has_rate_latency_meta_info
+	 * 		Its a boolean which tells weather the curve has Rate latency metainfo or not
+	 *
+	 * @return void
+	 *
+	 */
 	public void setRL_MetaInfo(boolean has_rate_latency_meta_info) {
 		this.has_rate_latency_meta_info = has_rate_latency_meta_info;
 	}
 
+	/**
+	 * Returns the Rate latency components of calling curve instance.
+	 *
+	 * @param
+	 *
+	 * @return tmp
+	 * 		List of type CurveAffine
+	 */
 	public List<Curve_Affine> getRL_Components() {
 		List<Curve_Affine> tmp = new LinkedList<>();
 		if (this.is_rate_latency) {
@@ -131,6 +188,14 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return tmp;
 	}
 
+	/**
+	 * Updates the rate_latencies of the calling object with the passed rate_latencies.
+	 *
+	 * @param rate_latencies
+	 * 			List of Curves each of which represent a Rate latency component.
+	 * @return void
+	 *
+	 */
 	public void setRL_Components(List<Curve> rate_latencies) {
 		List<Curve_Disco_Affine> tmp = new LinkedList<>();
 		for (int i = 0; i < rate_latencies.size(); i++) {
@@ -139,15 +204,42 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		this.rate_latencies = tmp;
 	}
 
+	/**
+	 * Returns weather the curve already has Token bucket meta info or not
+	 *
+	 * @param
+	 *
+	 * @return has_token_bucket_meta_info
+	 * 		Weather or not the give curve has Token bucket meta info
+	 */
 	public boolean hasTokenBucketMetaInfo() {
 		return has_token_bucket_meta_info;
 	}
 
+	/**
+	 * Update the has_token_bucket_meta_info of the calling object to the passed argument
+	 *
+	 * @param has_token_bucket_meta_info
+	 *
+	 * @return
+	 *
+	 */
 	public void setTB_MetaInfo(boolean has_token_bucket_meta_info) {
 		this.has_token_bucket_meta_info = has_token_bucket_meta_info;
 	}
 
+	/**
+	 * Returns the Token bucket components of the curve
+	 *
+	 * @param
+	 *
+	 * @return tmp
+	 * 		A list of Tocken bucket components
+	 * 		Note: In this can it should be only one
+	 *
+	 */
 	public List<Curve_Affine> getTB_Components() {
+		/*If its a Affine Token bucket curve then there should be only two segments */
 		List<Curve_Affine> tmp = new LinkedList<>();
 		for (int i = 0; i < token_buckets.size(); i++) {
 			tmp.add(token_buckets.get(i));
@@ -155,48 +247,63 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return tmp;
 	}
 
+	/**
+	 * Updates the token_buckets of the calling object with the passed token_buckets components.
+	 *
+	 * @param token_buckets
+	 *		List of Curves, each of them representing a Token bucket component
+	 *		Note :  In this case, at max there can be only one token bucket component
+	 * @return this.token_buckets
+	 * 		updated token_buckets of the calling instance
+	 */
 	public void setTB_Components(List<Curve> token_buckets) {
+	/* TODO	List<AffineCurve_DNC> tmp = new LinkedList<>();
+		tmp.add((Curve_DNC_Affine) token_buckets.get(0));*/
+				
 		List<Curve_Disco_Affine> tmp = new LinkedList<>();
 		for (int i = 0; i < token_buckets.size(); i++) {
 			tmp.add((Curve_Disco_Affine) token_buckets.get(i));
 		}
 		this.token_buckets = tmp;
 	}
-
-	private void createNewCurve(int segment_count, boolean empty) {
-		if (!empty) { // old default
-			createZeroSegmentsCurve(segment_count);
-		} else { // potential new default, tests work
-			segments = new LinearSegment_Disco[segment_count];
-			// Initialize Elements of array, not only array itself
-			segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
-					Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
-
-			for (int i = 1; i < segment_count; i++) {
-				segments[i] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
-						Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), true);
-			}
+	/**
+	 *	Creates an Affine cure with maximum of 2 segments.
+	 *
+	 * @param segment_count
+	 *		Number of segments to be created
+	 * @return
+	 *
+	 */
+	private void createNewCurve(int segment_count) {
+		if (segment_count < 0 || segment_count > 2) {
+			throw new IndexOutOfBoundsException("Affine curves can have at most two segments (given count was "
+					+ segment_count + ")!");
 		}
-	}
-
-	private void createZeroSegmentsCurve(int segment_count) {
 		segments = new LinearSegment_Disco[segment_count];
+		if(0 == segment_count){
 
-		if (segment_count == 0) {
 			return;
 		}
 
 		segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
 				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
-
-		for (int i = 1; i < segment_count; i++) {
-			segments[i] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
+		if(segment_count > 1)
+		{
+			segments[1] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
 					Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), true);
 		}
+
 	}
 
 	// Accepts string representations of Curve, ArrivalCurve, ServiceCurve, and
 	// MaxServiceCurve
+	/**
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	protected void initializeCurve(String curve_str) throws Exception {
 		if (curve_str.substring(0, 2).equals("AC") || curve_str.substring(0, 2).equals("SC")) {
 			curve_str = curve_str.substring(2);
@@ -224,6 +331,14 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		Curve.beautify(this);
 	}
 
+	/** Add a segment at 0,0 with grad 0 if its not present already
+	 * If Affine cure case, the first segment is always at 0,0 and with grad 0
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	protected void forceThroughOrigin() {
 		if (getSegment(0).getY().gtZero()) {
 			addSegment(0, new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
@@ -233,6 +348,14 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		}
 	}
 
+	/**
+	 * Resets the Rate latency and Token bucket meta info
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	private void clearMetaInfo() {
 		has_token_bucket_meta_info = false;
 		is_token_bucket = false;
@@ -246,7 +369,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Returns a copy of this instance.
 	 *
-	 * @return a copy of this instance.
+	 * @param
+	 *
+	 * @return  c_copy
+	 * 		A copy of this instance.
+	 *
 	 */
 	@Override
 	public Curve_Disco_Affine copy() {
@@ -255,6 +382,13 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return c_copy;
 	}
 
+	/**
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	@Override
 	public void copy(Curve curve) {
 		LinearSegment_Disco[] segments = new LinearSegment_Disco[curve.getSegmentCount()];
@@ -285,6 +419,15 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Starting at 0.
 	 */
+	/**
+	 * Returns the segment at position pos
+	 *
+	 * @param pos
+	 *		The position of segment in the curve to be fetched.
+	 *		Note: In this case, the position can be either 0 or 1
+	 * @return
+	 *
+	 */
 	public LinearSegment_Disco getSegment(int pos) {
 		if (pos < 0 || pos > segments.length - 1) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
@@ -293,9 +436,12 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * Returns the number of segments in this curve.
+	 *Returns the number of segments in the curve. At max this can be 2
 	 *
-	 * @return the number of segments
+	 * @param
+	 *
+	 * @return segments.length
+	 * 		Total number of segments in the curve
 	 */
 	public int getSegmentCount() {
 		return segments.length;
@@ -314,8 +460,9 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * previous segment defines <code>x</code>.
 	 *
 	 * @param x
-	 *            the x-coordinate
-	 * @return the index of the segment into the array.
+	 *      The x-coordinate
+	 * @return i or -1
+	 * 		The index of the segment into the array.
 	 */
 	public int getSegmentDefining(Num x) {
 		for (int i = segments.length - 1; i >= 0; i--) {
@@ -341,8 +488,9 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * the current segment, rather than the previous segment.
 	 *
 	 * @param x
-	 *            the x-coordinate
-	 * @return the index of the segment into the array.
+	 *   	The x-coordinate
+	 * @return i or -1
+	 * 		The index of the segment into the array.
 	 */
 	public int getSegmentLimitRight(Num x) {
 		if (x.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
@@ -357,8 +505,22 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return -1;
 	}
 
+	/**
+	 * Insets the segment at position pos
+	 *
+	 * @param pos
+	 * 		The position at which the segment s has to be inserted.
+	 * @param s
+	 *		The linear segment to be inserted
+	 * @return
+	 *
+	 */
 	public void setSegment(int pos, LinearSegment s) {
-		if (pos < 0 || pos >= segments.length) {
+		if (pos > 1) {
+			throw new IndexOutOfBoundsException("Cannot insert at position " + pos +
+					". Affine curves can have at most two segments!");
+		}
+		if (pos < 0 || pos >= segments.length ) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
 		}
 		if (s == null) {
@@ -376,7 +538,21 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		clearMetaInfo();
 	}
 
+	/**
+	 * Setting the this.segments to the passes segments
+	 * 		Note: Since this is an affine curve, the segments count of passed segment cannot exceed 2
+	 *
+	 * @param segments
+	 * 		Segments to be set to this.segments
+	 * @return
+	 *
+	 */
 	protected void setSegments(LinearSegment[] segments) {
+		if(segments.length > 2){
+			throw new IndexOutOfBoundsException("Affine curves can have at most two segments (given count was "
+					+ segments.length + ")!");
+
+		}
 		if (segments instanceof LinearSegment_Disco[]) {
 			this.segments = (LinearSegment_Disco[]) segments;
 		} else {
@@ -396,6 +572,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 * @param s
 	 *            the segment to be added.
+	 * @return
+	 *
 	 */
 	public void addSegment(LinearSegment s) {
 		addSegment(segments.length, s);
@@ -412,13 +590,26 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *            the index into the segment array to add the new segment.
 	 * @param s
 	 *            the segment to be added.
+	 * @return
+	 *
 	 */
 	public void addSegment(int pos, LinearSegment s) {
+
+		if (pos > 1) {
+			throw new IndexOutOfBoundsException("Cannot insert at position " + pos +
+					". Affine curves can have at most two segments!");
+		}
+
 		if (pos < 0 || pos > segments.length) {
 			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
 		}
 		if (s == null) {
 			throw new IllegalArgumentException("Tried to insert null!");
+		}
+
+		if(2 <= segments.length){
+			throw new IndexOutOfBoundsException("Cannot add anymore segments. " +
+					"Affine curves can have at most two segments!");
 		}
 
 		LinearSegment_Disco s_dnc;
@@ -446,6 +637,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 * @param pos
 	 *            the index of the segment to be removed.
+	 * @return
+	 *
 	 */
 	public void removeSegment(int pos) {
 		if (pos < 0 || pos >= segments.length) {
@@ -475,7 +668,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return (pos + 1 < segments.length
 				&& segments[pos + 1].getX().eq(segments[pos].getX()));
 	}
-
 	/**
 	 * Returns whether the inflection point is a real discontinuity, i.e. the y0 of
 	 * the leftopen segment differs from the previous one.
@@ -508,7 +700,10 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Tests whether the curve is wide-sense increasing.
 	 *
-	 * @return whether the curve is wide-sense increasing.
+	 * @param
+	 *
+	 * @return	True/False
+	 * 		whether the curve is wide-sense increasing.
 	 */
 	public boolean isWideSenseIncreasing() {
 		Num y = Num.getFactory(Calculator.getInstance().getNumBackend()).getNegativeInfinity(); // No need to create an object as this value is only
@@ -523,9 +718,12 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * Tests whether the curve is convex.
+	 * Test whether the curve us convex
+	 * @param
 	 *
-	 * @return whether the curve is convex.
+	 * @return True/False
+	 * 	Returns whether the curve is Convex or not
+	 *
 	 */
 	public boolean isConvex() {
 		return isConvexIn(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity());
@@ -571,6 +769,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Tests whether the curve is concave.
 	 *
+	 * @param
+	 *
 	 * @return whether the curve is concave.
 	 */
 	public boolean isConcave() {
@@ -607,7 +807,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 			if (gradient.gt(last_gradient)) {
 				return false;
 			}
-			last_gradient = gradient;
 		}
 		return true;
 	}
@@ -615,6 +814,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Tests whether the curve is almost concave, i.e. it is concave once its
 	 * function value is larger than 0.
+	 *
+	 * @param
 	 *
 	 * @return whether the curve is almost concave.
 	 */
@@ -644,6 +845,15 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return true;
 	}
 
+	/**
+	 * To check whether this object instance is equal to the passing instance
+	 *
+	 * @param obj
+	 * 		Some object.
+	 *
+	 * @return True/False
+	 * 		True if the passed object is similar to calling object
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof Curve_Disco_Affine)) {
@@ -678,6 +888,14 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		return true;
 	}
 
+	/**
+	 * To generate the hash code of a curve based on its segments
+	 *
+	 * @param
+	 *
+	 * @return Arrays.hashCode(segments)
+	 * 		Hash value of this curve
+	 */
 	@Override
 	public int hashCode() {
 		return Arrays.hashCode(segments);
@@ -686,7 +904,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Returns a string representation of this curve.
 	 *
+	 * @param
+	 *
 	 * @return the curve represented as a string.
+	 * 		Eg: {(0,0),0;(0,1),1}
+	 *
 	 */
 	@Override
 	public String toString() {
@@ -708,6 +930,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @param x
 	 *            the x-coordinate
 	 * @return the function value
+	 *
 	 */
 	public Num f(Num x) {
 		int i = getSegmentDefining(x);
@@ -725,6 +948,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @param x
 	 *            the x-coordinate
 	 * @return the function value
+	 *
 	 */
 	public Num fLimitRight(Num x) {
 		int i = getSegmentLimitRight(x);
@@ -746,6 +970,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @param y
 	 *            the y-coordinate
 	 * @return the smallest x value
+	 *
 	 */
 	public Num f_inv(Num y) {
 		return f_inv(y, false);
@@ -762,6 +987,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *            Return the rightmost x coordinate instaed of the leftmost one
 	 *            (default).
 	 * @return The smallest x value.
+	 *
 	 */
 	public Num f_inv(Num y, boolean rightmost) {
 		int i = getSegmentFirstAtValue(y);
@@ -791,6 +1017,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @param y
 	 *            the y-coordinate
 	 * @return the segment number
+	 *
 	 */
 	private int getSegmentFirstAtValue(Num y) {
 		if (segments.length == 0 || segments[0].getY().gt(y)) {
@@ -814,7 +1041,10 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * Returns the x-coordinate of the inflection point after which the function
 	 * values are greater than zero.
 	 *
+	 * @param
+	 *
 	 * @return the latency of this curve.
+	 *
 	 */
 	public Num getLatency() {
 		if (isRateLatency()) {
@@ -847,7 +1077,12 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * @return the burstiness
+	 * Returns the burst of the cure
+	 *
+	 * @param
+	 *
+	 * @return
+	 * 	the burstiness
 	 */
 	public Num getBurst() {
 		if (isTokenBucket()) {
@@ -868,6 +1103,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @param x
 	 *            the x-coordinate
 	 * @return the function value
+	 *
 	 */
 	public Num getGradientLimitRight(Num x) {
 		int i = getSegmentLimitRight(x);
@@ -880,7 +1116,10 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	/**
 	 * Returns the gradient of the last segment.
 	 *
+	 * @param
+	 *
 	 * @return the rate of the ultimately affine part.
+	 *
 	 */
 	public Num getUltAffineRate() {
 		return segments[segments.length - 1].getGrad();
@@ -889,23 +1128,49 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------
 	// Specific curve shapes
 	// ------------------------------------------------------------
-	// Burst delay
+	/**
+	 *	Returns whether or not the curve is delayed infinite burst
+	 *
+	 * @param
+	 *
+	 * @return is_delayed_infinite_burst
+	 * 	Returns True if the cureve is delayed infinite burst otherwise Flase
+	 *
+	 */
 	public boolean isDelayedInfiniteBurst() {
 		return is_delayed_infinite_burst;
 	}
 
-	// Rate latency
+	/**
+	 * Decomposes the curve into Rate latency components and returns if its a rate latency curve
+	 *
+	 * @param
+	 *
+	 * @return is_rate_latency
+	 * 		Returns true if the curve has one rate latency component otherwise false
+	 *
+	 */
 	public boolean getRL_Property() {
 		decomposeIntoRateLatencies();
 		return is_rate_latency;
 	}
 
+	/**
+	 * Setter method for the flag is_rate_latency
+	 *
+	 * @param is_rate_latency
+	 * 		Boolean to be set
+	 * @return
+	 *
+	 */
 	public void setRateLateny(boolean is_rate_latency) {
 		this.is_rate_latency = is_rate_latency;
 	}
 
 	/**
 	 * Returns the number of rate latency curves the curve can be decomposed into.
+	 *
+	 * @param
 	 *
 	 * @return the number of rate latency curves
 	 */
@@ -921,6 +1186,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @param i
 	 *            the number of the rate latency curve
 	 * @return the rate latency curve
+	 *
 	 */
 	public Curve_Disco_Affine getRL_Component(int i) {
 		decomposeIntoRateLatencies();
@@ -931,6 +1197,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * Decomposes this curve into a list of rate latency curves and stores this list
 	 * in the curve's <code>rate_latencies</code> field.<br>
 	 * Note: Curve must be convex.
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
 	 */
 	private void decomposeIntoRateLatencies() {
 		if (has_rate_latency_meta_info == true) {
@@ -966,12 +1237,23 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		has_rate_latency_meta_info = true;
 	}
 
+	/**
+	 * Setter method for is_token_bucket flag
+	 *
+	 * @param  is_token_bucket
+	 * 		Boolean representing weather or not its token bucket
+	 * @return
+	 *
+	 */
 	public void setTokenBucket(boolean is_token_bucket) {
 		this.is_token_bucket = is_token_bucket;
 	}
 
 	/**
 	 * Returns the number of token buckets the curve can be decomposed into.
+	 * 		Note: In this case, it can be maximum 1
+	 *
+	 * @param
 	 *
 	 * @return the number of token buckets
 	 */
@@ -997,6 +1279,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * Decomposes this curve into a list of token bucket curves and stores this list
 	 * in the curve's <code>token_buckets</code> field.<br>
 	 * Note: Curve must be concave.
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
 	 */
 	private void decomposeIntoTokenBuckets() {
 		if (has_token_bucket_meta_info == true) {
@@ -1034,8 +1321,15 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------
 	// DNC compliance
 	// ------------------------------------------------------------
+	/*
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	public Curve_Disco_Affine createCurve(List<LinearSegment> segments) {
-		// TODO Assume there are more than two segments, defining either a valid mTB or mRL.
+		// Assume there are more than two segments, defining either a valid mTB or mRL.
 		// The first segment passes through the origin, the second defines best known lateny or burstiness.
 		// The last segment defines least arrival rate or largest service rate, respectively.
 		// Choosing the second segment for an affine curve from the given ones is thus finding a reasonable tradeoff.
@@ -1043,24 +1337,59 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		// I.e., the second segment of our affine curve should be defined by the last one of the givens segments by
 		// extending it to the front such that it either intersects with, i.e.,, then starts at,
 		// the x-axis (defining a new service curve latency) or the y-axis (defining a new arrival curve burstiness).
-		Curve_Disco_Affine c_dnc = new Curve_Disco_Affine(segments.size());
-		for (int i = 0; i < segments.size(); i++) {
-			c_dnc.setSegment(i, segments.get(i));
+		int segment_size = segments.size();
+		if(segment_size > 2)
+		{
+			segment_size = 2;
+		}
+		//Curve_DNC_Affine c_dnc = new Curve_DNC_Affine(segments.size());
+		Curve_Disco_Affine c_dnc = new Curve_Disco_Affine(segment_size);
+		for (int i = 0; i < segment_size; i++) {
+			LinearSegment s = null;
+			if(i == 0) {
+				s = segments.get(i);
+			}
+			else
+			{
+				s = segments.get( segments.size() - 1);
+				Num temp = Num.getUtils(Calculator.getInstance().getNumBackend()).create(-1);
+				Num x2 = Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).div(s.getY(), s.getGrad()), temp), s.getX());
+				Num y2 = Num.getUtils(Calculator.getInstance().getNumBackend()).add(Num.getUtils(Calculator.getInstance().getNumBackend()).mult(Num.getUtils(Calculator.getInstance().getNumBackend()).mult( s.getX(), s.getGrad()),temp), s.getY());
+				if(x2.leqZero()){
+					s.setX(Num.getUtils(Calculator.getInstance().getNumBackend()).createZero());
+					s.setY(y2);
+				}
+				else{
+					s.setX(x2);
+					s.setY(Num.getUtils(Calculator.getInstance().getNumBackend()).createZero());
+				}
+
+			}
+			c_dnc.setSegment(i, s);
 		}
 		Curve.beautify(c_dnc);
 		return c_dnc;
 	}
 
+	/**
+	 * This creates an instance of AffineCurve_DNC with 1 segment
+	 *
+	 * @param
+	 *
+	 * @return
+	 * 		An instance of AffineCurve_DNC
+	 */
 	public Curve_Disco_Affine createZeroCurve() {
 		return new Curve_Disco_Affine(); // CurveDNC constructor's default behavior
 	}
 
 	/**
-	 * Creates a horizontal curve.
+	 * This creates an instance of AffineCurve_DNC with rate 0 and burst equal to y. ie a horizontal curve
 	 *
 	 * @param y
-	 *            the y-intercept of the curve
-	 * @return a <code>Curve</code> instance
+	 *		The burst value
+	 * @return c_dnc
+	 * 		An instance of AffineCurve_DNC
 	 */
 	public Curve_Disco_Affine createHorizontal(Num y) {
 		Curve_Disco_Affine c_dnc = new Curve_Disco_Affine();
@@ -1075,49 +1404,128 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------
 	// DNC compliance
 	// ------------------------------------------------------------
+	/**
+	 * This creates an instance of Affine Service curve with number of segments equal to 1
+	 *
+	 * @param
+	 *
+	 * @return
+	 *		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createServiceCurve() {
 		return new ServiceCurve_Disco_Affine();
 	}
 
+	/**
+	 * This creates an instance of Affine Service curve with number of segments equal to passed segment_count
+	 *
+	 * @param segment_count
+	 * 		The number of segments to be created
+	 * @return
+	 *		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createServiceCurve(int segment_count) {
 		return new ServiceCurve_Disco_Affine(segment_count);
 	}
 
+	/**
+	 * This creates an instance of Affine Service curve from the string representation of the curve
+	 *
+	 * @param service_curve_str
+	 * 		The string representation of curve
+	 * @return
+	 *		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createServiceCurve(String service_curve_str) throws Exception {
 		return new ServiceCurve_Disco_Affine(service_curve_str);
 	}
 
+	/**
+	 * This creates an instance of Affine Service curve same as the passed curve instance
+	 *
+	 * @param curve
+	 * 		An instance of Curve
+	 * @return
+	 * 		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createServiceCurve(Curve curve) {
 		return new ServiceCurve_Disco_Affine(curve);
 	}
 
+	/**
+	 * This creates an Affine service curve with one segment
+	 *
+	 * @param
+	 *
+	 * @return
+	 * 		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createZeroService() {
 		return new ServiceCurve_Disco_Affine(); // ServiceCurveDNC constructor's default behavior
 	}
 
 	/**
-	 * Creates an infinite burst curve with zero delay.
+	 *	Wrapper to create Affine service cure with 0 delay and infinite burst.
 	 *
-	 * @return a <code>ServiceCurve</code> instance
+	 * @param
+	 *
+	 * @return
+	 * 		An instance of AffineServiceCurve_DNC
 	 */
 	public ServiceCurve_Disco_Affine createZeroDelayInfiniteBurst() {
 		return createDelayedInfiniteBurst(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}
 
+	/**
+	 *	Wrapper to create Affine service cure with delay and infinite burst when delay is passed as double
+	 *
+	 * @param delay
+	 *		The delay in the Rate
+	 * @return
+	 * 		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createDelayedInfiniteBurst(double delay) {
 		return createDelayedInfiniteBurst(Num.getFactory(Calculator.getInstance().getNumBackend()).create(delay));
 	}
 
+	/**
+	 *	This create's Affine service cure with delay and infinite burst
+	 *
+	 * @param delay
+	 *		The delay in the Rate
+	 * @return sc_dnc
+	 * 		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createDelayedInfiniteBurst(Num delay) {
 		ServiceCurve_Disco_Affine sc_dnc = new ServiceCurve_Disco_Affine();
 		makeDelayedInfiniteBurst(sc_dnc, delay);
 		return sc_dnc;
 	}
 
+	/**
+	 * Wrapper to create Rate latency for the AffineServiceCurve_DNC with rate and latency passed as double
+	 *
+	 * @param rate
+	 * 		The rate of the curve
+	 * @param latency
+	 * 		The latency of the curve
+	 * @return
+	 * 		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createRateLatency(double rate, double latency) {
 		return createRateLatency(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(latency));
 	}
 
+	/**
+	 * Wrapper to create Rate latency for the AffineServiceCurve_DNC
+	 *
+	 * @param rate
+	 * 		The rate of the curve
+	 * @param latency
+	 * 		The latency of the curve
+	 * @return sc_dnc
+	 * 		An instance of AffineServiceCurve_DNC
+	 */
 	public ServiceCurve_Disco_Affine createRateLatency(Num rate, Num latency) {
 		ServiceCurve_Disco_Affine sc_dnc = new ServiceCurve_Disco_Affine();
 		makeRateLatency(sc_dnc, rate, latency);
@@ -1131,50 +1539,140 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------
 	// DNC compliance
 	// ------------------------------------------------------------
+	/**
+	 * To create affine arrival curve with number of segments equal to one
+	 *
+	 * @param
+	 *
+	 * @return
+	 *		An instance of AffineArrivalCurve_DNC
+	 */
 	public ArrivalCurve_Disco_Affine createArrivalCurve() {
 		return new ArrivalCurve_Disco_Affine();
 	}
 
+	/**
+	 * This creates an affine arrival curve with segments equal to the passed segment_count
+	 *
+	 * @param segment_count
+	 *		The number of segments to be created for the Affine arrival curve
+	 * @return
+	 *		An instance of AffineArrivalCurve_DNC
+	 */
 	public ArrivalCurve_Disco_Affine createArrivalCurve(int segment_count) {
 		return new ArrivalCurve_Disco_Affine(segment_count);
 	}
 
+	/**
+	 * This creates an affine arrival curve from the passed string representation of curve
+	 *
+	 * @param arrival_curve_str
+	 * 		A string representation of the curve
+	 * @return
+	 * 		An instance of AffineArrivalCurve_DNC
+	 */
 	public ArrivalCurve_Disco_Affine createArrivalCurve(String arrival_curve_str) throws Exception {
 		return new ArrivalCurve_Disco_Affine(arrival_curve_str);
 	}
 
+	/**
+	 * This creates an affine arrival curve from the passed curve
+	 *
+	 * @param curve
+	 *		An instance of the type Curve
+	 * @return
+	 * 		An instance of AffineArrivalCurve_DNC
+	 */
 	public ArrivalCurve_Disco_Affine createArrivalCurve(Curve curve) {
 		return new ArrivalCurve_Disco_Affine(curve);
 	}
 
+	/**
+	 * //TODO
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	public ArrivalCurve_Disco_Affine createArrivalCurve(Curve curve, boolean remove_latency) {
 		return createArrivalCurve(Curve.removeLatency(curve));
 	}
 
+	/**
+	 * To create an Affine arrival Curve with 1 segment
+	 *
+	 * @param
+	 *
+	 * @return
+	 * 		An instance of AffineArrivalCurve_DNC
+	 */
 	public ArrivalCurve_Disco_Affine createZeroArrivals() {
 		return new ArrivalCurve_Disco_Affine(); // ArrivalCurveDNC constructor's default behavior
 	}
-
+	/**
+	Documentation TODO
+	*/
 	public ArrivalCurve_Disco_Affine createInfiniteArrivals() {
 		ArrivalCurve_Disco_Affine ac_dnc = new ArrivalCurve_Disco_Affine(); 
 		makeDelayedInfiniteBurst(ac_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 		return ac_dnc;
 	}
 
+	/**
+	 * Wrapper to create Affine arrival curve with 0 burst and 0 latency.
+	 *
+	 * @param rate
+	 * 		The rate of the curve to be created
+	 * @return
+	 * 		An instance of AffineArrivalCurve_DNC
+	 *
+	 */
 	public ArrivalCurve_Disco_Affine createPeakArrivalRate(double rate) {
 		return createPeakArrivalRate(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate));
 	}
 
+	/**
+	 * To create a Affine arrival curve with 0 burst and 0 latency
+	 *
+	 * @param rate
+	 * 		The rate of the curve to be created
+	 *
+	 * @return ac_dnc
+	 * 		An instance of AffineArrivalCurve_DNC
+	 *
+	 */
 	public ArrivalCurve_Disco_Affine createPeakArrivalRate(Num rate) {
 		ArrivalCurve_Disco_Affine ac_dnc = new ArrivalCurve_Disco_Affine();
 		makePeakRate(ac_dnc, rate);
 		return ac_dnc;
 	}
 
+	/**
+	 * To create a token bucket affine arrival curve.
+	 *
+	 * @param rate
+	 *		The rate of the affine curve
+	 * @param burst
+	 * 		The burst of the affine curve
+	 * @return ac_dnc
+	 * 		An instance of AffineArrivalCurve_DNC with Token bucket.
+	 *
+	 */
 	public ArrivalCurve_Disco_Affine createTokenBucket(double rate, double burst) {
 		return createTokenBucket(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(burst));
 	}
 
+	/**
+	 * To create a token bucket affine arrival curve.
+	 *
+	 * @param rate
+	 *		The rate of the affine curve
+	 * @param burst
+	 * 		The burst of the affine curve
+	 * @return ac_dnc
+	 * 		An instance of AffineArrivalCurve_DNC with Token bucket.
+	 *
+	 */
 	public ArrivalCurve_Disco_Affine createTokenBucket(Num rate, Num burst) {
 		ArrivalCurve_Disco_Affine ac_dnc = new ArrivalCurve_Disco_Affine();
 		makeTokenBucket(ac_dnc, rate, burst);
@@ -1188,44 +1686,133 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------
 	// DNC compliance
 	// ------------------------------------------------------------
+	/**
+	 * To create a 	AffineMaxServiceCurve_DNC with 1 segment
+	 *
+	 * @param
+	 *
+	 * @return
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 *
+	 */
 	public MaxServiceCurve_Disco_Affine createMaxServiceCurve() {
 		return new MaxServiceCurve_Disco_Affine();
 	}
 
+	/**
+	 *	Wrapper to create Max service curve DNC with segments equal to segment_count
+	 *
+	 * @param segment_count
+	 *		The number of segments to be created for this curve instance.
+	 *		Note: In this case, it cannot be more than 2
+	 * @return
+	 *
+	 */
 	public MaxServiceCurve_Disco_Affine createMaxServiceCurve(int segment_count) {
 		return new MaxServiceCurve_Disco_Affine(segment_count);
 	}
 
+	/**
+	 *	Wrapper to create Max service curve DNC from string representation
+	 *
+	 * @param max_service_curve_str
+	 * 		The string representation of the curve
+	 * @return
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 */
 	public MaxServiceCurve_Disco_Affine createMaxServiceCurve(String max_service_curve_str) throws Exception {
 		return new MaxServiceCurve_Disco_Affine(max_service_curve_str);
 	}
 
+	/**
+	 * Wrapper method to create a Max service curve DNC from an existing curve.
+	 *
+	 * @param curve
+	 *
+	 * @return
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 *
+	 */
 	public MaxServiceCurve_Disco_Affine createMaxServiceCurve(Curve curve) {
 		return new MaxServiceCurve_Disco_Affine(curve);
 	}
 
+	/**
+	 * wrapper method to create delayed infinite curve for AffineMaxServiceCurve_DNC
+	 *
+	 * @param
+	 *
+	 * @return
+	 *
+	 */
 	public MaxServiceCurve_Disco_Affine createInfiniteMaxService() {
 		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}
 
+	/**
+	 * A wrapper method AffineMaxServiceCurve_DNC curve having infinite burst with zero delay
+	 *
+	 * @param
+	 *
+	 * @return
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 */
 	public MaxServiceCurve_Disco_Affine createZeroDelayInfiniteBurstMSC() {
 		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 	}
 
+	/**
+	 * A wrapper method AffineMaxServiceCurve_DNC curve having infinite burst with delay
+	 *
+	 * @param delay
+	 * 		The latency of the affine curve
+	 * @return
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 */
 	public MaxServiceCurve_Disco_Affine createDelayedInfiniteBurstMSC(double delay) {
 		return createDelayedInfiniteBurstMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).create(delay));
 	}
 
+	/**
+	 * To create a AffineMaxServiceCurve_DNC curve having infinite burst with delay
+	 *
+	 * @param delay
+	 * 		The latency of the affine curve
+	 * @return msc_dnc
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 */
 	public MaxServiceCurve_Disco_Affine createDelayedInfiniteBurstMSC(Num delay) {
 		MaxServiceCurve_Disco_Affine msc_dnc = new MaxServiceCurve_Disco_Affine();
 		makeDelayedInfiniteBurst(msc_dnc, delay);
 		return msc_dnc;
 	}
 
+	/**
+	 * A wrapper to create a Service curve with Rate latency with rate and latency represented in double
+	 *
+	 * @param rate
+	 * 		The rate of the curve
+	 * @param latency
+	 * 		The Rate latency component of the curve
+	 * @return msc_dnc
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 *
+	 */
 	public MaxServiceCurve_Disco_Affine createRateLatencyMSC(double rate, double latency) {
 		return createRateLatencyMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(latency));
 	}
 
+	/**
+	 * To create a Service curve with Rate latency
+	 *
+	 * @param rate
+	 * 		The rate of the curve
+	 * @param latency
+	 * 		The Rate latency component of the curve
+	 * @return msc_dnc
+	 * 		An instance of AffineMaxServiceCurve_DNC
+	 *
+	 */
 	public MaxServiceCurve_Disco_Affine createRateLatencyMSC(Num rate, Num latency) {
 		MaxServiceCurve_Disco_Affine msc_dnc = new MaxServiceCurve_Disco_Affine();
 		makeRateLatency(msc_dnc, rate, latency);
@@ -1235,12 +1822,32 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------------------------
 	// Curve assembly
 	// ------------------------------------------------------------------------------
+	/**
+	 * To create a curve with Rate 0 and burst y, ie a horizontal curve.
+	 *
+	 * @param c_dnc
+	 * 		An instance of AffineCurve_DNC to which segments have to be created
+	 * @param y
+	 *		The burst component if any.
+	 * @return
+	 *
+	 */
 	private void makeHorizontal(Curve_Disco_Affine c_dnc, Num y) {
 		LinearSegment_Disco segment = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), y,
 				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
 		c_dnc.setSegments(new LinearSegment_Disco[] { segment });
 	}
 
+	/**
+	 * To create a curve with infinite burst
+	 *
+	 * @param c_dnc
+	 * 		An instance of AffineCurve_DNC to which segments have to be created
+	 * @param delay
+	 * 		The latency of the affine curve
+	 * @return
+	 *
+	 */
 	private void makeDelayedInfiniteBurst(Curve_Disco_Affine c_dnc, Num delay) {
 		if (delay.ltZero()) {
 			throw new IllegalArgumentException("Delayed infinite burst curve must have delay >= 0.0");
@@ -1258,6 +1865,17 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		c_dnc.is_delayed_infinite_burst = true;
 	}
 
+	/**
+	 * To create a curve which had no burst and latency.
+     *  Note: This is a special case of Affine curve which is both Rate latency and Token bucket cure with
+     *          Burst(Token bucket component) and Latency (Rate Latency component) set to 0.
+	 * @param c_dnc
+	 * 		An instance of AffineCurve_DNC to which segments have to be created
+	 * @param rate
+	 *		Rate of the linear segment
+	 * @return
+	 *
+	 */
 	private void makePeakRate(Curve_Disco_Affine c_dnc, Num rate) {
 		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
 			throw new IllegalArgumentException(
@@ -1267,16 +1885,29 @@ public class Curve_Disco_Affine implements Curve_Affine {
 			makeHorizontal(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 			return;
 		}
-
+		/*Since both latency and burst are 0 and rate is positive, its a line passing through origin*/
 		LinearSegment_Disco[] segments = new LinearSegment_Disco[1];
 
 		segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), rate, false);
 
 		c_dnc.setSegments(segments);
+		/*Since the line is passing through origin, it satisifies the criteria of both RL and TB with latency and burst = 0*/
 		c_dnc.is_rate_latency = true; // with latency 0
 		c_dnc.is_token_bucket = true; // with burstiness 0
 	}
 
+	/**
+	 * Create a Rate latency curve based on the passed rate and latency
+	 *
+	 * @param c_dnc
+	 * 		The curve to which the Rate latency has to be created
+	 * @param rate
+	 * 		The rate of the affine curve
+	 * @param latency
+	 *		Latency of the affine curve
+	 * @return
+	 *
+	 */
 	private void makeRateLatency(Curve_Disco_Affine c_dnc, Num rate, Num latency) {
 		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
 			makeDelayedInfiniteBurst(c_dnc, latency);
@@ -1302,6 +1933,18 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		c_dnc.is_rate_latency = true;
 	}
 
+	/**
+	 * Create a Token bucket affine curve based on the passed rate and burst
+	 *
+	 * @param c_dnc
+	 * 		The curve to which the Token bucket has to be created
+	 * @param rate
+	 * 		The rate of the affine curve
+	 * @param burst
+	 *		Burst of the affine curve
+	 * @return
+	 *
+	 */
 	private void makeTokenBucket(Curve_Disco_Affine c_dnc, Num rate, Num burst) {
 		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
 				|| burst.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
