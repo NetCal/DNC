@@ -35,8 +35,8 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.numbers.Num;
 import org.networkcalculus.dnc.utils.CheckUtils;
+import org.networkcalculus.num.Num;
 
 public abstract class Deconvolution_Disco_Affine {
 

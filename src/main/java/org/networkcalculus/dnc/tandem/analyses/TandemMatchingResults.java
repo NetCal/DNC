@@ -32,8 +32,8 @@ import java.util.Set;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.numbers.Num;
 import org.networkcalculus.dnc.tandem.AnalysisResults;
+import org.networkcalculus.num.Num;
 
 public class TandemMatchingResults extends AnalysisResults {
 	protected Set<ServiceCurve> betas_e2e;

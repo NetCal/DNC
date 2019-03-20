@@ -29,7 +29,7 @@ package org.networkcalculus.dnc.curves.disco;
 
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.LinearSegment;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 /**
  * Class representing linear segments of a curve. A linear segments starts at

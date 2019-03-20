@@ -36,8 +36,8 @@ import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.MaxServiceCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.numbers.Num;
 import org.networkcalculus.dnc.utils.CheckUtils;
+import org.networkcalculus.num.Num;
 
 public abstract class Convolution_Disco_Affine {
 

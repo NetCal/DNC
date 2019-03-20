@@ -35,7 +35,7 @@ import java.util.Set;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 public class AnalysisResults {
 	public Map<Server, Set<ArrivalCurve>> map__server__alphas;
