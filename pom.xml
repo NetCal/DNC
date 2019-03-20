@@ -13,7 +13,7 @@
 	<url>networkcalculus.org</url>
 
 	<groupId>org.networkcalculus.dnc</groupId>
-	<artifactId>DNC</artifactId>
+	<artifactId>NetCal-DNC</artifactId>
 	<version>2.5.0</version>
 
 	<licenses>
@@ -131,7 +131,7 @@
 				extentsion as dep. from the maven repo or add it as classes to the jar) -->
 			<id>tests</id>
 			<build>
-				<finalName>DNC_func_tests-${project.version}</finalName>
+				<finalName>NetCal-DNC_func_tests-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -246,7 +246,7 @@
 				maven repo or add it as classes to the jar) -->
 			<id>exp</id>
 			<build>
-				<finalName>DNC_experiments-${project.version}</finalName>
+				<finalName>NetCal-DNC_experiments-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
