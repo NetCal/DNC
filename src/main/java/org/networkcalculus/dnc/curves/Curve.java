@@ -30,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 /**
  * Interface for wide-sense increasing, plain curves.

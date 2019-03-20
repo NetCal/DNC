@@ -39,7 +39,7 @@ import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.Curve_PwAffine;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 /**
  * Class representing a piecewise linear curve, defined on [0,inf).<br>

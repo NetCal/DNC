@@ -42,7 +42,7 @@ import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 public final class LeftOverService {
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, Server server,

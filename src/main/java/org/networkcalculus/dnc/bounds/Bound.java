@@ -32,7 +32,7 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 public final class Bound {
     // --------------------------------------------------------------------------------------------------------------
