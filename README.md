@@ -57,7 +57,7 @@ On click, there are two suggestions to ignore this error:
 * Mark goal add-source (or wget) as ignored in pom.xml
 * Mark goal add-source (or wget) as ignored in eclipse preferences
 
-Choose the second on (globally ignore error cause) to prevent changes to the `pom.xml` file.
+Choose the second one (globally ignore error cause) to prevent changes to the `pom.xml` file.
 
 ## Add Source Folders
 Select "eclipse" Maven profile in eclipse to import source folders automatically.
