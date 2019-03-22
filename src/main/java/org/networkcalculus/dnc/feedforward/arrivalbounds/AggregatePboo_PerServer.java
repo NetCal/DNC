@@ -46,9 +46,9 @@ import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
-import org.networkcalculus.dnc.numbers.Num;
 import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
 import org.networkcalculus.dnc.utils.SetUtils;
+import org.networkcalculus.num.Num;
 
 public class AggregatePboo_PerServer extends AbstractArrivalBound implements ArrivalBound {
 	private static AggregatePboo_PerServer instance = new AggregatePboo_PerServer();

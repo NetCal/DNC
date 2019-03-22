@@ -38,7 +38,7 @@ import org.networkcalculus.dnc.curves.Curve_Affine;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 /**
  * Class representing a piecewise linear Affine curve, defined on [0,1].<br>

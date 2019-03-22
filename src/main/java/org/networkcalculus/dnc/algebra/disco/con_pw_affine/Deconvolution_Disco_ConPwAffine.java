@@ -39,8 +39,8 @@ import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.Curve_PwAffine;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.numbers.Num;
 import org.networkcalculus.dnc.utils.CheckUtils;
+import org.networkcalculus.num.Num;
 
 /**
  * Deconvolution for convex or (almost) concave, (almost) continuous functions.

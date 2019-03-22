@@ -28,51 +28,53 @@ The DNC consists of 4 parts, that are located in 4 different repositories:
 * the test files in `src/functional_tests` are in [DNC\_func\_tests](https://github.com/NetCal/DNC_func_tests) and 
 * the experiment in `src/experiments` are in [DNC\_experiments](https://github.com/NetCal/DNC_experiments). 
 
-In order to checkout all submodules, use the command `git submodule update --init --recursive`.
+In order to get all submodules, use the command `git submodule update --init --recursive`.
 
 # Development with Eclipse
-This small guide assumes you cloned the DNC repository, executed the above commands to pull the submodules, and created an Eclipse project from the code.
-You might also be able to do all this from Eclipse using its EGit plugin.
 
-These steps were initially tested with Eclipse Photon. Some steps have later been adapted to work with Eclipse 2018-09.
+This small guide assumes you have installed Eclipse 2019-03, a Java 12 JDK and a git command line client.
 
-## Add Profiles
-Go to the project properties > Maven and add "eclipse,tests,exp,mpa" (no quotes) to your active profiles.
+## Setting up the Project in Eclipse
+* Navigate to you Eclipse workspace directory, clone the DNC repository to it and pull the submodules.
 
-## Maven Lifecycle Mapping Error (pom.xml Errors)
-Initially, the error console will show these errors:<br />
-> Plugin execution not covered by lifecycle configuration: org.codehaus.mojo:build-helper-maven-plugin:1.7:add-source (execution: add-source, phase: generate-sources)
->
-> Plugin execution not covered by lifecycle configuration: com.googlecode.maven-download-plugin:download-maven-plugin:1.4.1:wget (execution: get-mpa-rtc, phase: validate)
+* In Eclipse, navigate to `File > New > Java Project`, use the name `DNC` and click `Finish` (you do not need to create a module-info in the next dialog). This creates a `DNC` project in your workbench.
 
-Additionally, the according lines in the pom.xml will be marked to contain errors.
-To resolve this, got to Eclipse's the pom.xml view, Overview tab where you will find 
-> Plugin execution not covered by lifecycle configuration: org.codehaus.mojo.build (Click for details)
->
-> Plugin execution not covered by lifecycle configuration: com.googlecode.maven-do (Click for details)
+* Right-click on `DNC` and select `Configure > Convert to Maven Project`. Your workspace will be rebuilt accordingly.
 
-above the Overview caption.
-On click, there are two suggestions to ignore this error:
-
-* Mark goal add-source (or wget) as ignored in pom.xml
-* Mark goal add-source (or wget) as ignored in eclipse preferences
-
-Choose the second on (globally ignore error cause) to prevent changes to the `pom.xml` file.
-
-## Add Source Folders
-Select "eclipse" Maven profile in eclipse to import source folders automatically.
+## Add and Use Profiles
+* Right-click on the project `DNC`and select `Properties`. In the new window, navigate to `Maven` and add `eclipse,tests,exp,mpa` to your Active Maven Profiles (comma separated). Click `Apply and Close` and confirm that your `DNC` project will be updated.
 
 ## Get the rtc.jar to run the MPA RTC Curve Backend and the Tests 
-Useing Maven: Run a build with goal 'validate'.
+First, make sure you are connected to the Internet. You can then get the dependency in different ways:
 
-Manually: Download the file from http://www.mpa.ethz.ch/static/download.php?file=RTCToolbox_bin.zip and unpack it in the /lib folder. 
+* Using Maven (in gerneral): Run a build with goal 'validate'.
+
+* Using Eclipse's Maven integration: 
+  - Right-click on the project `DNC` and select `Run As > Maven build...`. In the new window, add `validate` to the (empty) Goals-field and then click `Run`.
+  - Right-click on the project `DNC` and select `Maven > Update Project...`. In the new window, check that `DNC` is selected and click `OK`.
+
+* Manual install: Download the file from http://www.mpa.ethz.ch/static/download.php?file=RTCToolbox_bin.zip and unpack it in the `DNC` project's /lib folder. 
+
+## Maven Lifecycle Mapping Error caused by pom.xml
+In your `DNC` project, dougle-click on `pom.xml`. This opens the `pom` editor view. Select its `Overview` tab. In the title, you will get (an abbreviation of) this error:
+
+> Plugin execution not covered by lifecycle configuration: com.googlecode.maven-download-plugin:download-maven-plugin:1.4.1:wget (execution: get-mpa-rtc, phase: validate)
+
+As we just used the `wget` plugin in the `validate` phase to get the `rtc.jar` dependency, it is safe to ignore. Clicking on it, there are two alternatives to ignore the error:
+
+* Mark goal wget as ignored in pom.xml
+* Mark goal wget as ignored in eclipse preferences
+
+Choose the second one (globally ignore error cause) to prevent changes to the `pom.xml` file.
 
 ## Functional Tests
-* In the above dialog to add source folders, change "Contains test sources:" of src/functional_test/java to Yes.
-* You need to change the output folder, e.g., create `target/func-test-classes` for this purpose.
-* To run a test from within Eclipse, you need to add this folder to the test's classpath. Otherwise, it will break with a "class not found" exception.
-  * Eclipse **Photon**:  Navigate to Run Configurations ... > your test > Classpath > select User Entries > click Advanced > Add Folder to do so.
-  * Eclipse **2018-09**: Navigate to Run Configurations ... > your test > Dependencies > select Classpath Entries > click Advanced > Add Folder 
+
+You can run the functional tests to check if you installation succeeded. We use the Eclipse Maven plugin to run the JUnit tests.
+
+Right-click on the project `DNC` and select `Run As > Maven test`. The Eclipse console will show outputs like this:
+
+> [INFO] Running org.networkcalculus.dnc.func\_tests.S\_1SC\_2F\_2AC\_Test </br>
+> [INFO] Tests run: 6272, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.498 s - in org.networkcalculus.dnc.func_tests.S\_1SC\_2F\_2AC\_Test
 
 # Compile jars with Maven
 

@@ -28,7 +28,7 @@ package org.networkcalculus.dnc;
 
 import org.networkcalculus.dnc.algebra.MinPlus;
 import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.numbers.NumBackend;
+import org.networkcalculus.num.NumBackend;
 
 /**
  * This class contains configuration settings for the calculator 

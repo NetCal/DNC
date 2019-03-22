@@ -34,7 +34,7 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 public final class Backlog {
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {

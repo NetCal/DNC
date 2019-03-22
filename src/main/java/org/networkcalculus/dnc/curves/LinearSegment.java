@@ -26,7 +26,7 @@
 package org.networkcalculus.dnc.curves;
 
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 public interface LinearSegment {
 	

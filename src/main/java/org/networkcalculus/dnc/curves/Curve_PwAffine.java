@@ -28,7 +28,7 @@ package org.networkcalculus.dnc.curves;
 import java.util.List;
 
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.numbers.Num;
+import org.networkcalculus.num.Num;
 
 /**
  * Interface for piecewise affine curves, including convenience functions used
