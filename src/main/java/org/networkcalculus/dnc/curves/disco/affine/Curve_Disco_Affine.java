@@ -331,7 +331,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		Curve.beautify(this);
 	}
 
-	/** Add a segment at 0,0 with grad 0 if its not present already
+	/** 
+	 * Add a segment at 0,0 with grad 0 if its not present already
 	 * If Affine cure case, the first segment is always at 0,0 and with grad 0
 	 *
 	 * @param
@@ -1321,7 +1322,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	// ------------------------------------------------------------
 	// DNC compliance
 	// ------------------------------------------------------------
-	/*
+	/**
 	 *
 	 * @param
 	 *
