@@ -142,7 +142,11 @@ public abstract class ArrivalBoundDispatch {
 			arrival_bounds_turn_permutations.clear();
 		}
 
-		return arrival_bounds;
+		if( configuration.convolveAlternativeArrivalBounds() ) {
+			return new HashSet<ArrivalCurve>( Collections.singleton( Calculator.getInstance().getMinPlus().convolve( arrival_bounds ) ) );
+		} else {
+			return new HashSet<ArrivalCurve>( arrival_bounds );
+		}
 	}
 
 	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph server_graph, AnalysisConfig configuration, Turn turn,
@@ -153,7 +157,7 @@ public abstract class ArrivalBoundDispatch {
 		}
 
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
-
+		
 		for (AnalysisConfig.ArrivalBoundMethod arrival_bound_method : configuration.arrivalBoundMethods()) {
 			Set<ArrivalCurve> arrival_bounds_tmp = new HashSet<ArrivalCurve>();
 
@@ -236,9 +240,12 @@ public abstract class ArrivalBoundDispatch {
 				break;
 			}
 
-			addArrivalBounds(configuration, arrival_bounds_tmp, arrival_bounds_xfcaller);
+			arrival_bounds_xfcaller.addAll( arrival_bounds_tmp );
 		}
-
+		
+		if( configuration.convolveAlternativeArrivalBounds() ) {
+			arrival_bounds_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( Calculator.getInstance().getMinPlus().convolve( arrival_bounds_xfcaller ) ) );
+		}
 		return arrival_bounds_xfcaller;
 	}
 
@@ -272,37 +279,5 @@ public abstract class ArrivalBoundDispatch {
 		}
 
 		return arrival_bounds_merged;
-	}
-
-	private static void addArrivalBounds(AnalysisConfig configuration, Set<ArrivalCurve> arrival_bounds_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
-		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
-			arrival_bounds.addAll(arrival_bounds_to_merge);
-		} else {
-			for (ArrivalCurve arrival_bound : arrival_bounds_to_merge) {
-				addArrivalBounds(configuration, arrival_bound, arrival_bounds);
-			}
-		}
-	}
-
-	private static void addArrivalBounds(AnalysisConfig configuration, ArrivalCurve arrival_bound_to_merge,
-			Set<ArrivalCurve> arrival_bounds) {
-		if (configuration.arrivalBoundMethods().size() == 1) { // In this case there can only be one arrival bound
-			arrival_bounds.add(arrival_bound_to_merge);
-		} else {
-			if (!configuration.removeDuplicateArrivalBounds() || (configuration.removeDuplicateArrivalBounds()
-					&& !isDuplicate(arrival_bound_to_merge, arrival_bounds))) {
-				arrival_bounds.add(arrival_bound_to_merge);
-			}
-		}
-	}
-
-	private static boolean isDuplicate(ArrivalCurve arrival_bound_to_check, Set<ArrivalCurve> arrival_bounds) {
-		for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
-			if (arrival_bound_to_check.equals(arrival_bound_existing)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -1,3 +1,7 @@
+Changes since DNC v2.5.0
+------------------------
+* Removal of duplicate arrival bounds was replaced with their convolution.
+
 Changes in the NetworkCalculus.org DNC v2.5.0
 ---------------------------------------------
 Rebranding to NetworkCalculus.org DNC

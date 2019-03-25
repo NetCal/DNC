@@ -100,7 +100,7 @@ public class CompFFApresets {
 		Calculator.getInstance().disableAllChecks();
 		
 		AnalysisConfig base_config = new AnalysisConfig();
-		base_config.setRemoveDuplicateArrivalBounds( true );
+		base_config.setConvolveAlternativeArrivalBounds( true );
 		
 		base_config.enforceMaxSC( MaxScEnforcement.GLOBALLY_OFF );
 		base_config.enforceMaxScOutputRate( MaxScEnforcement.GLOBALLY_OFF );
