@@ -338,6 +338,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	protected void forceThroughOrigin() {
+		// Implicit assumption: getSegment(0).getY().eqZero() is true
 		if (getSegment(0).getY().gtZero()) {
 			Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
 			
