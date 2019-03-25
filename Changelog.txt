@@ -2,6 +2,7 @@ Changes since DNC v2.5.0
 ------------------------
 * Removal of duplicate arrival bounds was replaced with their convolution.
 * Maven can now run the functional tests properly.
+* Simplifications of the affine curve code to make use of the shape assumptions. 
 * The Readme was updated. It provides the minimal steps to set up Eclipse for development.
 * Various small typo fixes, dependency updates, infrastructure updates.
 
