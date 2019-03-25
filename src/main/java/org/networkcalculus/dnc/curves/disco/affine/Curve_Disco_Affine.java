@@ -41,11 +41,11 @@ import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
 import org.networkcalculus.num.Num;
 
 /**
- * Class representing a piecewise linear Affine curve, defined on [0,1].<br>
- * The curve is stored as an array of <code>LinearSegment_DNC</code> objects. Each
+ * Class representing a piecewise linear affine curve, defined on [0,1].<br>
+ * The curve is stored as an array of <code>LinearSegment</code> objects. Each
  * of these objects defines a linear piece of the curve from one inflection
  * point up to, but not including, the next. It is possible to define
- * discontinuities by defining two subsequent <code>LinearSegment_DNC</code>
+ * discontinuities by defining two subsequent <code>LinearSegment</code>
  * instances which start at the same inflection point. In this case, the second
  * segment needs to have <code>leftopen</code> set to <code>true</code> to
  * indicate that the inflection point is excluded from the second segment.<br>
@@ -68,7 +68,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	protected List<Curve_Disco_Affine> token_buckets = new LinkedList<Curve_Disco_Affine>();
 
 	/**
-	 * Creates a AffineCurve_DNC instance with 1 segment of type LinearSegment_DNC.
+	 * Creates a <code>Curve_Disco_Affine</code> instance with 1 segment of type LinearSegment.
+	 * 
 	 * @param
 	 *
 	 * @return
@@ -78,7 +79,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * Creates a copy of <code>AffineCurve_DNC</code> instance, same as the passed <code>curve</code>.
+	 * Creates a copy of the passed <code>Curve_Disco_Affine</code> instance <code>curve</code>.
+	 * 
 	 * @param
 	 *
 	 * @return
@@ -88,8 +90,9 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * Creates a <code>AffineCurve_DNC</code> instance with <code>segment_count<code/> number of
-	 * <code>LinearSegment_DNC<code/>.
+	 * Creates a <code>Curve_Disco_Affine</code> instance with <code>segment_count<code/> number of
+	 * <code>LinearSegment<code/>.
+	 * 
 	 * @param segment_count
 	 *           Number of segments in the curve.
 	 *           In case of Affine cure, at max the number of segments can be Two
@@ -101,11 +104,12 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * Returns an instance of <code>AffineCurve_DNC</code> with one segment of
-	 * <code>LinearSegment_DNC<code/>.
+	 * Returns an instance of <code>Curve_Disco_Affine</code> with one segment of
+	 * <code>LinearSegment<code/>.
+	 * 
 	 * @param
 	 * @return
-	 * 			An instance of <code>AffineCurve_DNC</code>
+	 * 			An instance of <code>Curve_Disco_Affine</code>
 	 */
 
 	public static Curve_Disco_Affine getFactory() {
