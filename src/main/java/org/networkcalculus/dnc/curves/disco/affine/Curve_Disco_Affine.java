@@ -1365,7 +1365,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		{
 			segment_size = 2;
 		}
-		//Curve_DNC_Affine c_dnc = new Curve_DNC_Affine(segments.size());
+
 		Curve_Disco_Affine c_dnc = new Curve_Disco_Affine(segment_size);
 		for (int i = 0; i < segment_size; i++) {
 			LinearSegment s = null;
