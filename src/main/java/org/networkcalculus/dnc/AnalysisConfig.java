@@ -68,7 +68,7 @@ public class AnalysisConfig {
      */
     private MaxScEnforcement enforce_max_sc_output_rate = MaxScEnforcement.SERVER_LOCAL;
     private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(Collections.singleton(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION));
-    private boolean remove_duplicate_arrival_bounds = true;
+    private boolean convolve_alternative_arrival_bounds = true;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
     
@@ -76,14 +76,14 @@ public class AnalysisConfig {
     }
     
     public AnalysisConfig(MultiplexingEnforcement multiplexing_enforcement, MaxScEnforcement enforce_max_sc, MaxScEnforcement enforce_max_sc_output_rate,
-                          Set<ArrivalBoundMethod> arrival_bound_methods, boolean remove_duplicate_arrival_bounds,
+                          Set<ArrivalBoundMethod> arrival_bound_methods, boolean convolve_alternative_arrival_bounds,
                           boolean server_backlog_arrival_bound) {
         this.multiplexing_enforcement = multiplexing_enforcement;
         this.enforce_max_sc = enforce_max_sc;
         this.enforce_max_sc_output_rate = enforce_max_sc_output_rate;
         this.arrival_bound_methods.clear();
         this.arrival_bound_methods.addAll(arrival_bound_methods);
-        this.remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds;
+        this.convolve_alternative_arrival_bounds = convolve_alternative_arrival_bounds;
         this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
@@ -150,12 +150,12 @@ public class AnalysisConfig {
         }
     }
 
-    public boolean removeDuplicateArrivalBounds() {
-        return remove_duplicate_arrival_bounds;
+    public boolean convolveAlternativeArrivalBounds() {
+        return convolve_alternative_arrival_bounds;
     }
 
-    public void setRemoveDuplicateArrivalBounds(boolean remove_duplicate_arrival_bounds_flag) {
-        remove_duplicate_arrival_bounds = remove_duplicate_arrival_bounds_flag;
+    public void setConvolveAlternativeArrivalBounds(boolean convolve_alt_abs) {
+        convolve_alternative_arrival_bounds = convolve_alt_abs;
     }
 
     public boolean serverBacklogArrivalBound() {
@@ -181,7 +181,7 @@ public class AnalysisConfig {
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
         return new AnalysisConfig(multiplexing_enforcement, enforce_max_sc, enforce_max_sc_output_rate, arrival_bound_methods,
-                remove_duplicate_arrival_bounds, server_backlog_arrival_bound);
+                convolve_alternative_arrival_bounds, server_backlog_arrival_bound);
     }
 
     @Override
@@ -206,9 +206,9 @@ public class AnalysisConfig {
             analysis_config_str.append("cap_AB_by_backlog_bound");
         }
 
-        if (removeDuplicateArrivalBounds()) {
+        if (convolveAlternativeArrivalBounds()) {
             analysis_config_str.append(", ");
-            analysis_config_str.append("remove_duplicate_ABs");
+            analysis_config_str.append("convolve_ABs");
         }
 
         if (useFlowProlongation()) {
