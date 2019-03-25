@@ -197,11 +197,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	public void setRL_Components(List<Curve> rate_latencies) {
-		List<Curve_Disco_Affine> tmp = new LinkedList<>();
-		for (int i = 0; i < rate_latencies.size(); i++) {
-			tmp.add((Curve_Disco_Affine) rate_latencies.get(i));
+		if(isRateLatency()) {
+			List<Curve_Disco_Affine> tmp = new LinkedList<>();
+			tmp.add(this.copy());
+			this.rate_latencies = tmp;
 		}
-		this.rate_latencies = tmp;
 	}
 
 	/**
@@ -257,14 +257,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * 		updated token_buckets of the calling instance
 	 */
 	public void setTB_Components(List<Curve> token_buckets) {
-	/* TODO	List<AffineCurve_DNC> tmp = new LinkedList<>();
-		tmp.add((Curve_DNC_Affine) token_buckets.get(0));*/
-				
-		List<Curve_Disco_Affine> tmp = new LinkedList<>();
-		for (int i = 0; i < token_buckets.size(); i++) {
-			tmp.add((Curve_Disco_Affine) token_buckets.get(i));
+		if(isTokenBucket()) {
+			List<Curve_Disco_Affine> tmp = new LinkedList<>();
+			tmp.add(this.copy());
+			this.token_buckets = tmp;
 		}
-		this.token_buckets = tmp;
 	}
 	/**
 	 *	Creates an Affine cure with maximum of 2 segments.
@@ -1208,34 +1205,35 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		if (has_rate_latency_meta_info == true) {
 			return;
 		}
-
-		if (Calculator.getInstance().exec_service_curve_checks() && !this.isConvex()) {
-			if (this.equals(this.createZeroDelayInfiniteBurst())) {
-				rate_latencies = new ArrayList<Curve_Disco_Affine>();
-				rate_latencies.add(this.createRateLatency(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity(),
-						Num.getFactory(Calculator.getInstance().getNumBackend()).createZero()));
-			} else {
-				throw new RuntimeException("Can only decompose convex service curves into rate latency curves.");
+		
+		rate_latencies = new ArrayList<Curve_Disco_Affine>();
+		
+		switch(segments.length) {
+		case 1:
+			if(segments[0].getX().eqZero() 
+					&& segments[0].getY().eqZero()
+					&& segments[0].getGrad().isFinite()) {
+				rate_latencies.add(createRateLatency(segments[0].getGrad(), segments[0].getX()));
+				is_rate_latency = true;
+				has_rate_latency_meta_info = true;
 			}
-		} else {
-			rate_latencies = new ArrayList<Curve_Disco_Affine>();
-			for (int i = 0; i < segments.length; i++) {
-				if (segments[i].getY().eq(0.0) && segments[i].getGrad().eq(0.0)) {
-					continue;
-				}
-				Num rate = segments[i].getGrad();
-				Num latency = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i].getX(),
-						Num.getUtils(Calculator.getInstance().getNumBackend()).div(segments[i].getY(), segments[i].getGrad()));
-				if (latency.ltZero()) {
-					continue;
-				}
-				rate_latencies.add(this.createRateLatency(rate, latency));
+			break;
+		case 2:
+			if(segments[0].getX().eqZero() 
+					&& segments[0].getY().eqZero()
+					&& segments[0].getGrad().eqZero()
+					&& segments[1].getX().geqZero() 
+					&& segments[1].getY().eqZero()
+					&& segments[1].getGrad().geqZero()) {
+				rate_latencies.add(createRateLatency(segments[1].getGrad(), segments[1].getX()));
+				is_rate_latency = true;
+				has_rate_latency_meta_info = true;
 			}
+			break;
+		default:
+			throw new RuntimeException("Amount of segments out of permissible range for an affine curve: " 
+										+ Integer.toString(segments.length));
 		}
-
-		is_rate_latency = rate_latencies.size() == 1;
-
-		has_rate_latency_meta_info = true;
 	}
 
 	/**
@@ -1290,25 +1288,35 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		if (has_token_bucket_meta_info == true) {
 			return;
 		}
-
-		if (Calculator.getInstance().exec_arrival_curve_checks() && !this.isConcave()) {
-			throw new RuntimeException("Can only decompose concave arrival curves into token buckets.");
-		}
-
+		
 		token_buckets = new ArrayList<Curve_Disco_Affine>();
-		for (int i = 0; i < segments.length; i++) {
-			if (isDiscontinuity(i)) {
-				continue;
+		
+		switch(segments.length) {
+		case 1:
+			if(segments[0].getX().eqZero() 
+					&& segments[0].getY().eqZero() // TODO Check here when relaxing the assumption that a TB passes through the origin. 
+					&& segments[0].getGrad().isFinite()) {
+				token_buckets.add(createTokenBucket(segments[0].getGrad(), segments[0].getY()));
+				is_token_bucket = true;
+				has_token_bucket_meta_info = true;
 			}
-			Num rate = segments[i].getGrad();
-			Num burst = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i].getY(),
-					Num.getUtils(Calculator.getInstance().getNumBackend()).mult(segments[i].getX(), segments[i].getGrad()));
-			token_buckets.add(this.createTokenBucket(rate, burst));
+			break;
+		case 2:
+			if(segments[0].getX().eqZero() 
+					&& segments[0].getY().eqZero()
+					&& segments[0].getGrad().eqZero()
+					&& segments[1].getX().eqZero() 
+					&& segments[1].getY().geqZero()
+					&& segments[1].getGrad().geqZero()) {
+				token_buckets.add(createTokenBucket(segments[1].getGrad(), segments[1].getY()));
+				is_token_bucket = true;
+				has_token_bucket_meta_info = true;
+			}
+			break;
+		default:
+			throw new RuntimeException("Amount of segments out of permissible range for an affine curve: " 
+										+ Integer.toString(segments.length));
 		}
-
-		is_token_bucket = token_buckets.size() == 1;
-
-		has_token_bucket_meta_info = true;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------
