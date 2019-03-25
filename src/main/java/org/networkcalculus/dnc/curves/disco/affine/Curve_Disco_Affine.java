@@ -339,8 +339,9 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 */
 	protected void forceThroughOrigin() {
 		if (getSegment(0).getY().gtZero()) {
-			addSegment(0, new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
-					Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false));
+			Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+			
+			addSegment(0, new LinearSegment_Disco(num.createZero(), num.createZero(), num.createZero(), false));
 
 			getSegment(1).setLeftopen(true);
 		}
@@ -724,7 +725,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	public boolean isConvex() {
-		return isConvexIn(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity());
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		return isConvexIn(num.getZero(), num.getPositiveInfinity());
 	}
 
 	/**
@@ -772,7 +774,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @return whether the curve is concave.
 	 */
 	public boolean isConcave() {
-		return isConcaveIn(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity());
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		return isConcaveIn(num.getZero(), num.getPositiveInfinity());
 	}
 
 	/**
@@ -864,10 +867,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		Curve.beautify(this_cpy);
 		Curve.beautify(other_cpy);
 
-		if (this_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		if (this_cpy.getLatency() == num.getPositiveInfinity()) {
 			this_cpy = Curve_ConstantPool.ZERO_CURVE.get();
 		}
-		if (other_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
+		if (other_cpy.getLatency() == num.getPositiveInfinity()) {
 			other_cpy = Curve_ConstantPool.ZERO_CURVE.get();
 		}
 
@@ -989,20 +993,22 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 */
 	public Num f_inv(Num y, boolean rightmost) {
 		int i = getSegmentFirstAtValue(y);
+
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		
 		if (i < 0) {
-			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
+			return num.createNaN();
 		}
 		if (rightmost) {
-			while (i < segments.length && segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+			while (i < segments.length && segments[i].getGrad().equals(num.getZero())) {
 				i++;
 			}
 			if (i >= segments.length) {
-				return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+				return num.createPositiveInfinity();
 			}
 		}
-		if (!segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
-			return Num.getUtils(Calculator.getInstance().getNumBackend()).add(segments[i].getX(),
-					Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y, segments[i].getY()), segments[i].getGrad()));
+		if (!segments[i].getGrad().equals(num.getZero())) {
+			return num.add(segments[i].getX(), num.div(num.sub(y, segments[i].getY()), segments[i].getGrad()));
 		} else {
 			return segments[i].getX();
 		}
@@ -1045,32 +1051,35 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	public Num getLatency() {
+
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		
 		if (isRateLatency()) {
 			if (segments.length == 2) { // Rate latency other than a simple rate function
 				return segments[1].getX().copy();
 			} else { // Single-segment rate functions have latency 0
-				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+				return num.createZero();
 			}
 		} else {
 			Curve.beautify(this);
-			if (segments[0].getY().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
-				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+			if (segments[0].getY().gt(num.getZero())) {
+				return num.createZero();
 			}
 			for (int i = 0; i < segments.length; i++) {
 				Num y0 = segments[i].getY();
-				if (y0.lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
-					y0 = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+				if (y0.lt(num.getZero())) {
+					y0 = num.createZero();
 				}
-				if (y0.gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()) || (y0.geq(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())
-						&& segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()))) {
+				if (y0.gt(num.getZero()) || (y0.geq(num.getZero())
+						&& segments[i].getGrad().gt(num.getZero()))) {
 					return segments[i].getX();
 				}
-				if (y0.lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()) || segments[i].getGrad().lt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+				if (y0.lt(num.getZero()) || segments[i].getGrad().lt(num.getZero())) {
 					System.out.println("RemoveLatency of " + this.toString());
 					throw new RuntimeException("Should have avoided neg. gradients elsewhere...");
 				}
 			}
-			return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+			return num.createPositiveInfinity();
 		}
 	}
 
@@ -1522,7 +1531,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * 		An instance of AffineServiceCurve_DNC
 	 */
 	public ServiceCurve_Disco_Affine createRateLatency(double rate, double latency) {
-		return createRateLatency(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(latency));
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		return createRateLatency(num.create(rate), num.create(latency));
 	}
 
 	/**
@@ -1668,7 +1678,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	public ArrivalCurve_Disco_Affine createTokenBucket(double rate, double burst) {
-		return createTokenBucket(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(burst));
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		return createTokenBucket(num.create(rate), num.create(burst));
 	}
 
 	/**
@@ -1808,7 +1819,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	public MaxServiceCurve_Disco_Affine createRateLatencyMSC(double rate, double latency) {
-		return createRateLatencyMSC(Num.getFactory(Calculator.getInstance().getNumBackend()).create(rate), Num.getFactory(Calculator.getInstance().getNumBackend()).create(latency));
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		return createRateLatencyMSC(num.create(rate), num.create(latency));
 	}
 
 	/**
@@ -1842,8 +1854,8 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	private void makeHorizontal(Curve_Disco_Affine c_dnc, Num y) {
-		LinearSegment_Disco segment = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), y,
-				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		LinearSegment_Disco segment = new LinearSegment_Disco(num.createZero(), y, num.createZero(), false);
 		c_dnc.setSegments(new LinearSegment_Disco[] { segment });
 	}
 
@@ -1863,12 +1875,11 @@ public class Curve_Disco_Affine implements Curve_Affine {
 		}
 
 		LinearSegment_Disco[] segments = new LinearSegment_Disco[2];
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
 
-		segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
-				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
+		segments[0] = new LinearSegment_Disco(num.createZero(), num.createZero(), num.createZero(), false);
 
-		segments[1] = new LinearSegment_Disco(delay, Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity(),
-				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), true);
+		segments[1] = new LinearSegment_Disco(delay, num.createPositiveInfinity(), num.createZero(), true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_delayed_infinite_burst = true;
@@ -1894,13 +1905,16 @@ public class Curve_Disco_Affine implements Curve_Affine {
 			makeHorizontal(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 			return;
 		}
-		/*Since both latency and burst are 0 and rate is positive, its a line passing through origin*/
+		
+		/* Since both latency and burst are 0 and rate is positive, its a line passing through origin */
 		LinearSegment_Disco[] segments = new LinearSegment_Disco[1];
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
 
-		segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), rate, false);
+		segments[0] = new LinearSegment_Disco(num.createZero(), num, rate, false);
 
 		c_dnc.setSegments(segments);
-		/*Since the line is passing through origin, it satisifies the criteria of both RL and TB with latency and burst = 0*/
+		
+		/* Since the line is passing through origin, it satisifies the criteria of both RL and TB with latency and burst = 0 */
 		c_dnc.is_rate_latency = true; // with latency 0
 		c_dnc.is_token_bucket = true; // with burstiness 0
 	}
@@ -1918,11 +1932,12 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	private void makeRateLatency(Curve_Disco_Affine c_dnc, Num rate, Num latency) {
-		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		if (rate.equals(num.getPositiveInfinity())) {
 			makeDelayedInfiniteBurst(c_dnc, latency);
 			return;
 		}
-		if (rate.eqZero() || latency.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
+		if (rate.eqZero() || latency.equals(num.getPositiveInfinity())) {
 			makeHorizontal(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
 			return;
 		}
@@ -1933,10 +1948,9 @@ public class Curve_Disco_Affine implements Curve_Affine {
 
 		LinearSegment_Disco[] segments = new LinearSegment_Disco[2];
 
-		segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
-				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
+		segments[0] = new LinearSegment_Disco(num.createZero(), num.createZero(), num.createZero(), false);
 
-		segments[1] = new LinearSegment_Disco(latency, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), rate, true);
+		segments[1] = new LinearSegment_Disco(latency, num.createZero(), rate, true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_rate_latency = true;
@@ -1955,9 +1969,10 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 *
 	 */
 	private void makeTokenBucket(Curve_Disco_Affine c_dnc, Num rate, Num burst) {
-		if (rate.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())
-				|| burst.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity())) {
-			makeDelayedInfiniteBurst(c_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+		if (rate.equals(num.getPositiveInfinity())
+				|| burst.equals(num.getPositiveInfinity())) {
+			makeDelayedInfiniteBurst(c_dnc, num.createZero());
 			return;
 		}
 		if (rate.eqZero()) { // burst is finite
@@ -1971,10 +1986,9 @@ public class Curve_Disco_Affine implements Curve_Affine {
 
 		LinearSegment_Disco[] segments = new LinearSegment_Disco[2];
 
-		segments[0] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(),
-				Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), false);
+		segments[0] = new LinearSegment_Disco(num.createZero(), num.createZero(), num.createZero(), false);
 
-		segments[1] = new LinearSegment_Disco(Num.getFactory(Calculator.getInstance().getNumBackend()).createZero(), burst, rate, true);
+		segments[1] = new LinearSegment_Disco(num.createZero(), burst, rate, true);
 
 		c_dnc.setSegments(segments);
 		c_dnc.is_token_bucket = true;
