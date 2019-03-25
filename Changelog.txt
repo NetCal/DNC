@@ -6,8 +6,8 @@ Changes since DNC v2.5.0
 * The Readme was updated. It provides the minimal steps to set up Eclipse for development.
 * Various small typo fixes, dependency updates, infrastructure updates.
 
-Changes in the NetworkCalculus.org DNC v2.5.0
----------------------------------------------
+Changes in the NetworkCalculus.org DNC v2.5.0 (2019-Jan-29)
+-----------------------------------------------------------
 Rebranding to NetworkCalculus.org DNC
   - Packages are prefixed org.networkcalculus.dnc.
   - Repository names/prefixes were reduced to DNC.
