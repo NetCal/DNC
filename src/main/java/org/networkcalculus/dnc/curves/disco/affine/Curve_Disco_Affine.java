@@ -1612,7 +1612,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	}
 
 	/**
-	 * //TODO
 	 * @param
 	 *
 	 * @return
@@ -1633,9 +1632,6 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	public ArrivalCurve_Disco_Affine createZeroArrivals() {
 		return new ArrivalCurve_Disco_Affine(); // ArrivalCurveDNC constructor's default behavior
 	}
-	/**
-	Documentation TODO
-	*/
 	public ArrivalCurve_Disco_Affine createInfiniteArrivals() {
 		ArrivalCurve_Disco_Affine ac_dnc = new ArrivalCurve_Disco_Affine(); 
 		makeDelayedInfiniteBurst(ac_dnc, Num.getFactory(Calculator.getInstance().getNumBackend()).createZero());
