@@ -41,7 +41,7 @@ import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
 import org.networkcalculus.num.Num;
 
 /**
- * Class representing a piecewise linear affine curve, defined on [0,1].<br>
+ * Class representing a piecewise linear affine curve, defined on [0,inf), by at most two segments.<br>
  * The curve is stored as an array of <code>LinearSegment</code> objects. Each
  * of these objects defines a linear piece of the curve from one inflection
  * point up to, but not including, the next. It is possible to define
