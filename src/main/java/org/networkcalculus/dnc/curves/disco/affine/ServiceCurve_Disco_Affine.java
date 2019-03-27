@@ -27,9 +27,9 @@
 
 package org.networkcalculus.dnc.curves.disco.affine;
 
-import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
 
 public class ServiceCurve_Disco_Affine extends Curve_Disco_Affine implements ServiceCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ public class ServiceCurve_Disco_Affine extends Curve_Disco_Affine implements Ser
         copy(curve);
 
         // Too strong requirement: !isConvex()
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+        if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }
@@ -61,7 +61,7 @@ public class ServiceCurve_Disco_Affine extends Curve_Disco_Affine implements Ser
         initializeCurve(service_curve_str);
 
         // Too strong requirement: !isConvex()
-        if (Calculator.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+        if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
             throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
         }
     }

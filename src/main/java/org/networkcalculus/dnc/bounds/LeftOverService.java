@@ -98,7 +98,7 @@ public final class LeftOverService {
     		return special_cases.getSecond(); 
     	}
     	
-        if (Calculator.getInstance().exec_fifo_mux_checks()) {
+        if (Bound.exec_fifo_mux_checks()) {
             if (!arrival_curve.isConcave()) {
                 throw new IllegalArgumentException("Arrival curve must be concave.");
             }

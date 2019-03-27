@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.networkcalculus.dnc.Calculator;
+import org.networkcalculus.dnc.algebra.disco.MinPlus_Disco_Configuration;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -290,7 +291,7 @@ public abstract class Convolution_Disco_PwAffine {
             default:
         }
 
-        if (Calculator.getInstance().exec_max_service_curve_checks()
+        if (MinPlus_Disco_Configuration.getInstance().exec_max_service_curve_checks()
                 && (!max_service_curve_1.isAlmostConcave() || !max_service_curve_2.isAlmostConcave())) {
             throw new IllegalArgumentException("Both maximum service curves must be almost concave!");
         }

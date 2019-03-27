@@ -27,9 +27,9 @@
 
 package org.networkcalculus.dnc.curves.disco.pw_affine;
 
-import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
+import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
 
 public class ArrivalCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements ArrivalCurve {
     // --------------------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ public class ArrivalCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements
         forceThroughOrigin();
         
         // Too strong requirement: !isConcave()
-        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) {
+        if (Curves_Disco_Configuration.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) {
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }
@@ -64,7 +64,7 @@ public class ArrivalCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements
         forceThroughOrigin();
 
         // Too strong requirement: !isConcave()
-        if (Calculator.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
+        if (Curves_Disco_Configuration.getInstance().exec_arrival_curve_checks() && !isWideSenseIncreasing()) { 
             System.out.println(toString());
             throw new RuntimeException("Arrival curves can only be created from wide-sense increasing functions.");
         }

@@ -38,6 +38,7 @@ import org.networkcalculus.dnc.curves.Curve_Affine;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.Curve_PwAffine;
 import org.networkcalculus.dnc.curves.LinearSegment;
+import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
 import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
 import org.networkcalculus.num.Num;
 
@@ -937,7 +938,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 			return;
 		}
 
-		if (Calculator.getInstance().exec_service_curve_checks() && !this.isConvex()) {
+		if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !this.isConvex()) {
 			if (this.equals(this.createZeroDelayInfiniteBurst())) {
 				rate_latencies = new ArrayList<Curve_Disco_PwAffine>();
 				rate_latencies.add(this.createRateLatency(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity(),
@@ -1003,7 +1004,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 			return;
 		}
 
-		if (Calculator.getInstance().exec_arrival_curve_checks() && !this.isConcave()) {
+		if (Curves_Disco_Configuration.getInstance().exec_arrival_curve_checks() && !this.isConcave()) {
 			throw new RuntimeException("Can only decompose concave arrival curves into token buckets.");
 		}
 

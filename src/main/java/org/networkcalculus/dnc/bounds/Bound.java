@@ -36,6 +36,25 @@ import org.networkcalculus.num.Num;
 
 public final class Bound {
     // --------------------------------------------------------------------------------------------------------------
+    // Configuration
+    // --------------------------------------------------------------------------------------------------------------
+	
+	private static final boolean FIFO_MUX_CHECKS = false;
+
+	public static boolean exec_fifo_mux_checks() {
+		return FIFO_MUX_CHECKS;
+	}
+
+	@Override
+	public String toString() {
+		if(FIFO_MUX_CHECKS) {
+			return "FIFO checks";
+		} else {
+			return "All bound-operation checks are disabled";
+		}
+	}
+	
+    // --------------------------------------------------------------------------------------------------------------
     // Backlog
     // --------------------------------------------------------------------------------------------------------------
 

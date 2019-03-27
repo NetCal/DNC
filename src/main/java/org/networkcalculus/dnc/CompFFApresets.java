@@ -97,8 +97,6 @@ public class CompFFApresets {
 		// Calculator Configurations
 		// --------------------------------------------------------------------------------------------------------------
 		
-		Calculator.getInstance().disableAllChecks();
-		
 		AnalysisConfig base_config = new AnalysisConfig();
 		base_config.setConvolveAlternativeArrivalBounds( true );
 		

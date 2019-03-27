@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.networkcalculus.dnc.Calculator;
+import org.networkcalculus.dnc.algebra.disco.MinPlus_Disco_Configuration;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -226,7 +227,7 @@ public abstract class Deconvolution_Disco_ConPwAffine {
                 || (curve_2.getUltAffineRate().eqZero() && curve_2.getSegment(1).getY().eqZero())) {
             return Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get();
         }
-        if (Calculator.getInstance().exec_deconvolution_checks()) {
+        if (MinPlus_Disco_Configuration.getInstance().exec_deconvolution_checks()) {
             if (!((Curve_PwAffine) curve_1).isAlmostConcave()) {
                 throw new IllegalArgumentException("Arrival curve of deconvolution must be almost concave.");
             }
