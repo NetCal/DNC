@@ -26,7 +26,7 @@
 package org.networkcalculus.dnc;
 
 import org.networkcalculus.dnc.algebra.MinPlus;
-import org.networkcalculus.dnc.algebra.disco.affine.MinPlus_Disco_Affine;
+import org.networkcalculus.dnc.algebra.disco.MinPlus_Disco_Affine;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
