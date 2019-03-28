@@ -69,6 +69,7 @@ public class AnalysisConfig {
     private MaxScEnforcement enforce_max_sc_output_rate = MaxScEnforcement.SERVER_LOCAL;
     private Set<ArrivalBoundMethod> arrival_bound_methods = new HashSet<ArrivalBoundMethod>(Collections.singleton(ArrivalBoundMethod.AGGR_PBOO_CONCATENATION));
     private boolean convolve_alternative_arrival_bounds = true;
+	private boolean arrival_bounds_caching = true;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
     
@@ -76,7 +77,8 @@ public class AnalysisConfig {
     }
     
     public AnalysisConfig(MultiplexingEnforcement multiplexing_enforcement, MaxScEnforcement enforce_max_sc, MaxScEnforcement enforce_max_sc_output_rate,
-                          Set<ArrivalBoundMethod> arrival_bound_methods, boolean convolve_alternative_arrival_bounds,
+                          Set<ArrivalBoundMethod> arrival_bound_methods, 
+                          boolean convolve_alternative_arrival_bounds, boolean arrival_bounds_caching, 
                           boolean server_backlog_arrival_bound) {
         this.multiplexing_enforcement = multiplexing_enforcement;
         this.enforce_max_sc = enforce_max_sc;
@@ -84,6 +86,7 @@ public class AnalysisConfig {
         this.arrival_bound_methods.clear();
         this.arrival_bound_methods.addAll(arrival_bound_methods);
         this.convolve_alternative_arrival_bounds = convolve_alternative_arrival_bounds;
+		this.arrival_bounds_caching = arrival_bounds_caching;
         this.server_backlog_arrival_bound = server_backlog_arrival_bound;
     }
 
@@ -153,6 +156,14 @@ public class AnalysisConfig {
     public boolean convolveAlternativeArrivalBounds() {
         return convolve_alternative_arrival_bounds;
     }
+    
+	public boolean useArrivalBoundsCache() {
+		return arrival_bounds_caching;
+	}
+	
+	public void setUseArrivalBoundsCache( boolean use_cache ) {
+		arrival_bounds_caching = use_cache;
+	}
 
     public void setConvolveAlternativeArrivalBounds(boolean convolve_alt_abs) {
         convolve_alternative_arrival_bounds = convolve_alt_abs;
@@ -180,8 +191,10 @@ public class AnalysisConfig {
      * @return The copy.
      */
     public AnalysisConfig copy() { // deep copy as primitive data types are copied by value
-        return new AnalysisConfig(multiplexing_enforcement, enforce_max_sc, enforce_max_sc_output_rate, arrival_bound_methods,
-                convolve_alternative_arrival_bounds, server_backlog_arrival_bound);
+        return new AnalysisConfig(multiplexing_enforcement, enforce_max_sc, enforce_max_sc_output_rate, 
+					        		arrival_bound_methods,
+					                convolve_alternative_arrival_bounds, arrival_bounds_caching,
+					                server_backlog_arrival_bound);
     }
 
     @Override

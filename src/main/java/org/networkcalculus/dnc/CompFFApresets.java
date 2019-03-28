@@ -99,6 +99,7 @@ public class CompFFApresets {
 		
 		AnalysisConfig base_config = new AnalysisConfig();
 		base_config.setConvolveAlternativeArrivalBounds( true );
+		base_config.setUseArrivalBoundsCache( true );
 		
 		base_config.enforceMaxSC( MaxScEnforcement.GLOBALLY_OFF );
 		base_config.enforceMaxScOutputRate( MaxScEnforcement.GLOBALLY_OFF );
