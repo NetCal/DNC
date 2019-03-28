@@ -59,33 +59,7 @@ public final class Bound {
     // --------------------------------------------------------------------------------------------------------------
 
     public static Num backlog(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Backlog.derive(arrival_curve, service_curve);
-//        }
         return Backlog.derive(arrival_curve,service_curve);
-
-        // TODO: Sample of envisioned future solution, exemplified by (potentially incomplete) RTC MPA toolbox calls.
-        /*
-        Curve a = ((Curve_MPARTC_PwAffine) arrival_curve).getRtc_curve();
-        Curve b = ((Curve_MPARTC_PwAffine) service_curve).getRtc_curve();
-
-        double result = a.yXPlusEpsilon(0);
-
-        // TODO: RTC equivalent for inflection points? There should be a better way
-        ArrayList<Num> xcoords2 = CurvePwAffine.computeInflectionPointsX(arrival_curve, service_curve);
-        ArrayList<Double> xcoords = new ArrayList<>();
-        for (int i = 0; i < xcoords2.size(); i++) {
-            xcoords.add(xcoords2.get(i).doubleValue());
-        }
-        for (int i = 0; i < xcoords.size(); i++) {
-            double ip_x = xcoords.get(i);
-
-            double backlog = a.yXPlusEpsilon(ip_x) - b.yXPlusEpsilon(ip_x);
-            result = Math.max(result, backlog);
-        }
-        return Num.getFactory().create(result);
-        */
     }
     
     // --------------------------------------------------------------------------------------------------------------
@@ -93,18 +67,10 @@ public final class Bound {
     // --------------------------------------------------------------------------------------------------------------
 
     public static Num delayARB(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Delay.deriveARB(arrival_curve, service_curve);
-//        }
         return Delay.deriveARB(arrival_curve, service_curve);
     }
 
     public static Num delayFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Delay.deriveFIFO(arrival_curve, service_curve);
-//        }
         return Delay.deriveFIFO(arrival_curve, service_curve);
     }
 
@@ -112,53 +78,27 @@ public final class Bound {
     // left-over Service
     // --------------------------------------------------------------------------------------------------------------
 
-    public static Set<ServiceCurve> leftOverService(AnalysisConfig configuration, Server server,
-                                               Set<ArrivalCurve> arrival_curves) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return LeftOverService.compute(configuration, server, arrival_curves);
-//        }
+    public static Set<ServiceCurve> leftOverService(AnalysisConfig configuration, Server server, Set<ArrivalCurve> arrival_curves) {
         return LeftOverService.compute(configuration, server, arrival_curves);
     }
 
-    public static Set<ServiceCurve> leftOverService(AnalysisConfig configuration, ServiceCurve service_curve,
-                                               Set<ArrivalCurve> arrival_curves) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return LeftOverService.compute(configuration, service_curve, arrival_curves);
-//        }
+    public static Set<ServiceCurve> leftOverService(AnalysisConfig configuration, ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
         return LeftOverService.compute(configuration, service_curve, arrival_curves);
     }
 
     public static Set<ServiceCurve> leftOverServiceFIFO(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return LeftOverService.fifoMux(service_curve, arrival_curves);
-//        }
         return LeftOverService.fifoMux(service_curve, arrival_curves);
     }
 
     public static ServiceCurve leftOverServiceFIFO(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return LeftOverService.fifoMux(service_curve, arrival_curve);
-//        }
         return LeftOverService.fifoMux(service_curve, arrival_curve);
     }
 
     public static Set<ServiceCurve> leftOverServiceARB(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return LeftOverService.arbMux(service_curve, arrival_curves);
-//        }
         return LeftOverService.arbMux(service_curve, arrival_curves);
     }
 
     public static ServiceCurve leftOverServiceARB(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return LeftOverService.arbMux(service_curve, arrival_curve);
-//        }
         return LeftOverService.arbMux(service_curve, arrival_curve);
     }
 
@@ -166,30 +106,15 @@ public final class Bound {
     // Output
     // --------------------------------------------------------------------------------------------------------------
 
-    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
-                                               Server server) throws Exception {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Output.compute(configuration, arrival_curves, server);
-//        }
+    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server) throws Exception {
         return Output.compute(configuration, arrival_curves, server);
     }
 
-    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
-                                               Server server, Set<ServiceCurve> betas_lo) throws Exception {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Output.compute(configuration, arrival_curves, server, betas_lo);
-//        }
+    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Server server, Set<ServiceCurve> betas_lo) throws Exception {
         return Output.compute(configuration, arrival_curves, server, betas_lo);
     }
 
-    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path,
-                                               Set<ServiceCurve> betas_lo) throws Exception {
-//        if (CalculatorConfig.getInstance().getOperationImpl().equals(CalculatorConfig.OperationImpl.DNC)
-//                || CalculatorConfig.getInstance().getCurveImpl().equals(CalculatorConfig.CurveImpl.DNC)) {
-//            return Output.compute(configuration, arrival_curves, path, betas_lo);
-//        }
+    public static Set<ArrivalCurve> output(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves, Path path, Set<ServiceCurve> betas_lo) throws Exception {
         return Output.compute(configuration, arrival_curves, path, betas_lo);
     }
 }
