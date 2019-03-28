@@ -41,12 +41,6 @@ public final class Calculator {
 	private NumBackend NUM_BACKEND = NumBackend.REAL_DOUBLE_PRECISION;
 	
 	private AlgDncBackend DNC_BACKEND = AlgDncBackend_DNC_ConPwAffine.DISCO_CONPWAFFINE;
-	
-	private boolean ARRIVAL_CURVE_CHECKS = false;
-	private boolean SERVICE_CURVE_CHECKS = false;
-	private boolean MAX_SERVICE_CURVE_CHECKS = false;
-	private boolean FIFO_MUX_CHECKS = false;
-	private boolean DECONVOLUTION_CHECKS = false;
 
 	protected Calculator() {
 	}
@@ -94,42 +88,6 @@ public final class Calculator {
 		return true;
 	}
 
-	public void disableAllChecks() {
-		ARRIVAL_CURVE_CHECKS = false;
-		SERVICE_CURVE_CHECKS = false;
-		MAX_SERVICE_CURVE_CHECKS = false;
-		FIFO_MUX_CHECKS = false;
-		DECONVOLUTION_CHECKS = false;
-	}
-
-	public void enableAllChecks() {
-		ARRIVAL_CURVE_CHECKS = true;
-		SERVICE_CURVE_CHECKS = true;
-		MAX_SERVICE_CURVE_CHECKS = true;
-		FIFO_MUX_CHECKS = true;
-		DECONVOLUTION_CHECKS = true;
-	}
-
-	public boolean exec_arrival_curve_checks() {
-		return ARRIVAL_CURVE_CHECKS;
-	}
-
-	public boolean exec_service_curve_checks() {
-		return SERVICE_CURVE_CHECKS;
-	}
-
-	public boolean exec_max_service_curve_checks() {
-		return MAX_SERVICE_CURVE_CHECKS;
-	}
-
-	public boolean exec_fifo_mux_checks() {
-		return FIFO_MUX_CHECKS;
-	}
-
-	public boolean exec_deconvolution_checks() {
-		return DECONVOLUTION_CHECKS;
-	}
-
 	@Override
 	public String toString() {
 		StringBuffer calculator_config_str = new StringBuffer();
@@ -138,27 +96,6 @@ public final class Calculator {
 		calculator_config_str.append(", ");
 		
 		calculator_config_str.append(getDncBackend().toString());
-
-		if (exec_arrival_curve_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("AC checks");
-		}
-		if (exec_service_curve_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("SC checks");
-		}
-		if (exec_max_service_curve_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("MSC checks");
-		}
-		if (exec_fifo_mux_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("FIFO checks");
-		}
-		if (exec_deconvolution_checks()) {
-			calculator_config_str.append(", ");
-			calculator_config_str.append("deconv checks");
-		}
 
 		return calculator_config_str.toString();
 	}
