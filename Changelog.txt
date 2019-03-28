@@ -1,4 +1,4 @@
-Changes since DNC v2.5.0
+DNC v2.5.1 (2019-Mar-29)
 ------------------------
 * Removal of duplicate arrival bounds was replaced with their convolution.
 * Maven can now run the functional tests properly.
