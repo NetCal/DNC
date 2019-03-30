@@ -41,16 +41,12 @@ import org.networkcalculus.dnc.network.server_graph.Turn;
 
 public class ArrivalBoundCache {
 	private Map<Server,Set<CacheEntryServer>> map__server__entries = new HashMap<Server,Set<CacheEntryServer>>();
-	private Map<Flow,Set<CacheEntryServer>> map__foi__s_entries = new HashMap<Flow,Set<CacheEntryServer>>();
-	
 	private Map<Turn,Set<CacheEntryTurn>> map__turn__entries = new HashMap<Turn,Set<CacheEntryTurn>>();
 	
 	protected ArrivalBoundCache() {};
 	
 	protected void clearCache() {
 		map__server__entries = new HashMap<Server,Set<CacheEntryServer>>();
-		map__foi__s_entries = new HashMap<Flow,Set<CacheEntryServer>>();
-		
 		map__turn__entries = new HashMap<Turn,Set<CacheEntryTurn>>();
 	}
 
@@ -85,7 +81,6 @@ public class ArrivalBoundCache {
 		if ( entry != null ) {
 			// get(...) cannot return null as the entry was already confirmed to exist.
 			map__server__entries.get( server ).remove( entry );
-			map__foi__s_entries.get( flow_of_interest ).remove( entry );
 		}
 		
 		Set<ArrivalCurve> arrival_bounds_stored;
