@@ -103,7 +103,7 @@ public interface Curve {
         }
 
         // In case that we've removed everything, the curve had infinite latency, so
-        // return the NULL curve.
+        // return the zero curve.
         if (result.getSegmentCount() == 0) {
             return Curve_ConstantPool.ZERO_CURVE.get();
         }
