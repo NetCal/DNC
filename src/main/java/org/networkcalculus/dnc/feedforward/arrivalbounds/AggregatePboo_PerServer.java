@@ -156,30 +156,32 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 
 		// TODO This implementation only works for token-bucket arrivals. 
 		// It disregards the potential shift in inflection points not present in this burst cap variant.
-		if (configuration.serverBacklogArrivalBound()
-				&& Calculator.getInstance().getDncBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
-			Server last_hop_xtx = turn.getSource();
-			// For the DNC, it is easiest to use TFA to compute the server's backlog bound. 
-			TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph, configuration);
-			tfa.deriveBoundsAtServer(last_hop_xtx);
-
-			Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
-			Num tfa_backlog_bound_min = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity();
-
-			for (Num tfa_backlog_bound : tfa_backlog_bounds) {
-				if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {
-					tfa_backlog_bound_min = tfa_backlog_bound;
+		if (configuration.serverBacklogArrivalBound()) {
+			if(Calculator.getInstance().getDncBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
+				Server last_hop_xtx = turn.getSource();
+				// For the DNC, it is easiest to use TFA to compute the server's backlog bound. 
+				TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph, configuration);
+				tfa.deriveBoundsAtServer(last_hop_xtx);
+	
+				Set<Num> tfa_backlog_bounds = tfa.getServerBacklogBoundMap().get(last_hop_xtx);
+				Num tfa_backlog_bound_min = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity();
+	
+				for (Num tfa_backlog_bound : tfa_backlog_bounds) {
+					if (tfa_backlog_bound.leq(tfa_backlog_bound_min)) {
+						tfa_backlog_bound_min = tfa_backlog_bound;
+					}
 				}
-			}
-
-			// Reduce the burst: Here's the limitation.
-			// It disregards the potential shift in inflection points not present in this burst cap variant.
-			for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
-				if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
-					// If the burst is >0 then there are at least two segments and
-					// the second holds the burst as its y-axis value
-					alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min);
+	
+				// Reduce the burst: Here's the limitation.
+				// It disregards the potential shift in inflection points not present in this burst cap variant.
+				for (ArrivalCurve alpha_xfcaller : alphas_xfcaller) {
+					if (alpha_xfcaller.getBurst().gt(tfa_backlog_bound_min)) {
+						// If the burst is >0 then there are at least two segments and the second holds the burst as its y-axis value.
+						alpha_xfcaller.getSegment(1).setY(tfa_backlog_bound_min);
+					}
 				}
+			} else {
+				System.out.println("INFO: Capping output burstiness was not executed as it currently only works for DISCO_AFFINE curves.");
 			}
 		}
 

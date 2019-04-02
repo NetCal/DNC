@@ -75,6 +75,8 @@ public class AnalysisConfig {
     public AnalysisConfig() {
     }
     
+    // TODO If ArrivalBoundMethod.AGGR_PMOO is the only arrival bound method, then the server_backlog_arrival_bound cannot imporve the results.
+    //		It just causes more effort. Notify the user but do not spam the terminal output with too many messages.
     public AnalysisConfig(MultiplexingEnforcement multiplexing_enforcement, MaxScEnforcement enforce_max_sc, MaxScEnforcement enforce_max_sc_output_rate,
                           Set<ArrivalBoundMethod> arrival_bound_methods, boolean convolve_alternative_arrival_bounds,
                           boolean server_backlog_arrival_bound) {
