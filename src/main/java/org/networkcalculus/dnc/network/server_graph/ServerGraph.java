@@ -1066,7 +1066,7 @@ public class ServerGraph {
 		throw new Exception("Could not create path");
 	}
 
-	private Path createPathFromServers(List<Server> path_servers) throws Exception {
+	public Path createPathFromServers(List<Server> path_servers) throws Exception {
 		List<Turn> path_turns = new LinkedList<Turn>();
 
 		// Sanity check + path_turns construction:
