@@ -30,15 +30,27 @@ import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.num.Num;
 
-public class NumericalTerm { // {+,-}number * t{path}
+public class NumericalTerm { // {+,-}value * t{path}
 	Operator operator;
-	Num number;
+	Num value;
 	Path path;
 	
-	NumericalTerm ( Operator operator, Num number, Path path ) {
+	public NumericalTerm ( Operator operator, Num number, Path path ) {
 		this.operator = operator;
-		this.number = number;
+		this.value = number;
 		this.path = path;
+	}
+	
+	public Operator getOperator() {
+		return operator;
+	}
+	
+	public Num getValue() {
+		return value;
+	}
+	
+	public Path getPath() {
+		return path;
 	}
 	
 	@Override
@@ -55,7 +67,7 @@ public class NumericalTerm { // {+,-}number * t{path}
 				break;
 		}
 
-		result_str.append( number.toString() );
+		result_str.append( value.toString() );
 		result_str.append( " " );
 		
 		if( path != null ) {
@@ -83,7 +95,7 @@ public class NumericalTerm { // {+,-}number * t{path}
 				break;
 		}
 
-		result_str.append( number.toString() );
+		result_str.append( value.toString() );
 		result_str.append( " " );
 		
 		if( path != null ) {

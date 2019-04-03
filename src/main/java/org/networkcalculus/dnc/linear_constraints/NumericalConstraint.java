@@ -28,6 +28,7 @@ package org.networkcalculus.dnc.linear_constraints;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
 
@@ -36,12 +37,24 @@ public class NumericalConstraint {
 	Relation relation;
 	HashSet<NumericalTerm> num_terms;
 	
-	NumericalConstraint( HashSet<Pair<Operator,FlowLocationTime>> flow_shape_terms,
+	public NumericalConstraint( HashSet<Pair<Operator,FlowLocationTime>> flow_shape_terms,
 							Relation relation,
 							HashSet<NumericalTerm> num_terms ) {
 		this.flow_shape_terms = flow_shape_terms;
 		this.relation = relation;
 		this.num_terms = num_terms;
+	}
+	
+	public Set<Pair<Operator,FlowLocationTime>> getFlowShapeTerms() {
+		return flow_shape_terms;
+	}
+	
+	public Relation getRelation() {
+		return relation;
+	}
+	
+	public Set<NumericalTerm> getNumTerms() {
+		return num_terms;
 	}
 	
 	@Override
@@ -138,10 +151,10 @@ public class NumericalConstraint {
 		for( NumericalTerm term : pure_numbers ) {
 			switch( term.operator ) {
 			case PLUS:
-				result += term.number.doubleValue();
+				result += term.value.doubleValue();
 				break;
 			case MINUS:
-				result -= term.number.doubleValue();
+				result -= term.value.doubleValue();
 				break;
 			}
 		}

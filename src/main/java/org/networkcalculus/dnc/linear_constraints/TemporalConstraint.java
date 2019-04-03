@@ -34,10 +34,22 @@ public class TemporalConstraint {
 	Relation relation;
 	Path path2;
 	
-	TemporalConstraint( Path path1, Relation relation, Path path2 ) {
+	public TemporalConstraint( Path path1, Relation relation, Path path2 ) {
 		this.path1 = path1;
 		this.relation = relation;
 		this.path2 = path2;
+	}
+	
+	public Path getPath1() {
+		return path1;
+	}
+	
+	public Relation getRelation() {
+		return relation;
+	}
+	
+	public Path getPath2() {
+		return path2;
 	}
 	
 	@Override

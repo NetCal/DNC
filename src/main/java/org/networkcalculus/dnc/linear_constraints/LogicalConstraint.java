@@ -35,13 +35,25 @@ public class LogicalConstraint {
 	Relation relation;
 	FlowLocationTime flow_shape_2;
 	
-	LogicalConstraint( Flow flow,
+	public LogicalConstraint( Flow flow,
 							Server server1, Path path1,
 							Relation relation,
 							Server server2, Path path2 ) {
 		this.flow_shape_1 = new FlowLocationTime( flow, server1, path1 );
 		this.relation = relation;
 		this.flow_shape_2 = new FlowLocationTime( flow, server2, path2 );
+	}
+	
+	public FlowLocationTime getFlow1Shape() {
+		return flow_shape_1;
+	}
+	
+	public Relation getRelation() {
+		return relation;
+	}
+	
+	public FlowLocationTime getFlow2Shape() {
+		return flow_shape_2;
 	}
 	
 	@Override

@@ -46,6 +46,13 @@ import org.apache.commons.math3.util.Pair;
 
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
+import org.networkcalculus.dnc.linear_constraints.FlowLocationTime;
+import org.networkcalculus.dnc.linear_constraints.LogicalConstraint;
+import org.networkcalculus.dnc.linear_constraints.NumericalConstraint;
+import org.networkcalculus.dnc.linear_constraints.NumericalTerm;
+import org.networkcalculus.dnc.linear_constraints.Operator;
+import org.networkcalculus.dnc.linear_constraints.Relation;
+import org.networkcalculus.dnc.linear_constraints.TemporalConstraint;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
@@ -509,7 +516,7 @@ public class UniqueLinearProgram {
 		
 		TemporalConstraint constr_path1 = null;
 		for( TemporalConstraint constr : constraints_path1 ) {
-			if( constr.path2.equals( path2 ) ) {
+			if( constr.getPath2().equals( path2 ) ) {
 				constr_path1 = constr;
 				break;
 			}
@@ -517,7 +524,7 @@ public class UniqueLinearProgram {
 
 		TemporalConstraint constr_path2 = null;
 		for( TemporalConstraint constr : constraints_path2 ) {
-			if( constr.path2.equals( path1 ) ) {
+			if( constr.getPath2().equals( path1 ) ) {
 				constr_path2 = constr;
 				break;
 			}
@@ -543,8 +550,8 @@ public class UniqueLinearProgram {
 			constraint = constr_path2;
 		}
 		
-		Relation relation = constraint.relation;
-		if( constraint.path1.equals( path1 ) 
+		Relation relation = constraint.getRelation();
+		if( constraint.getPath1().equals( path1 ) 
 				|| relation == Relation.E ) {
 			return relation;
 		} else {
@@ -848,9 +855,9 @@ public class UniqueLinearProgram {
 		for( Flow flow : pi_flow.keySet() ) {
 			for( TemporalConstraint constraint : temp_constraints ) {
 				nonDecreasingAtSource_constraints.add( new LogicalConstraint( flow,
-																				explicit_src, constraint.path1,
-																				constraint.relation,
-																				explicit_src, constraint.path2 ) );
+																				explicit_src, constraint.getPath1(),
+																				constraint.getRelation(),
+																				explicit_src, constraint.getPath2() ) );
 			}
 		}
 	}

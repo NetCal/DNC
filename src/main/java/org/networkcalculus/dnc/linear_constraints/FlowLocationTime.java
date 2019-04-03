@@ -36,10 +36,22 @@ public class FlowLocationTime {
 	Server server;
 	Path path; // will be used to determine the time instant t{path}
 	
-	FlowLocationTime( Flow flow, Server server, Path path ) {
+	public FlowLocationTime( Flow flow, Server server, Path path ) {
 		this.flow = flow;
 		this.server = server;
 		this.path = path;
+	}
+	
+	public Flow getFlow() {
+		return flow;
+	}
+	
+	public Server getServer() {
+		return server;
+	}
+	
+	public Path getPath() {
+		return path;
 	}
 
 	@Override
