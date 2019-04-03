@@ -593,36 +593,38 @@ public class UniqueLinearProgram {
 					left_side.add( flow_shape_term );
 				}
 
-				// Create right side: "numerical terms".
-				// TODO Decomposition of service curves into token buckets.
-				HashSet<NumericalTerm> right_side = new HashSet<NumericalTerm>();
-				Num beta_rate = server_j.getServiceCurve().getUltAffineRate();
-				Num beta_latency = server_j.getServiceCurve().getLatency();
-				
-				NumericalTerm beta_pi = new NumericalTerm( Operator.MINUS, beta_rate, pair_jpi_pi.getFirst() );
-				NumericalTerm beta_jpi = new NumericalTerm( Operator.PLUS, beta_rate, pair_jpi_pi.getSecond() );
-				NumericalTerm latency = new NumericalTerm( Operator.MINUS, num_operations_factory.mult( beta_latency, beta_rate ), null );
-				
-				right_side.add( latency );
-				right_side.add( beta_pi );
-				right_side.add( beta_jpi );
-	
-				s2c_constraints.add( new NumericalConstraint( left_side, Relation.GE, right_side ) );
+				// Create right side: "numerical terms"
+				HashSet<NumericalTerm> right_side;
+				for( int i = 0; i < server_j.getServiceCurve().getRL_ComponentCount(); i++) { // Does the internal decomposition if not yet done.
+					right_side = new HashSet<NumericalTerm>();
+					Num beta_rate = server_j.getServiceCurve().getRL_Component(i).getUltAffineRate();
+					Num beta_latency = server_j.getServiceCurve().getRL_Component(i).getLatency();
+					
+					NumericalTerm beta_pi = new NumericalTerm( Operator.MINUS, beta_rate, pair_jpi_pi.getFirst() );
+					NumericalTerm beta_jpi = new NumericalTerm( Operator.PLUS, beta_rate, pair_jpi_pi.getSecond() );
+					NumericalTerm latency = new NumericalTerm( Operator.MINUS, num_operations_factory.mult( beta_latency, beta_rate ), null );
+					
+					right_side.add( latency );
+					right_side.add( beta_pi );
+					right_side.add( beta_jpi );
+		
+					s2c_constraints.add( new NumericalConstraint( left_side, Relation.GE, right_side ) );
+				}
 				
 				// Positivity constraint.
-				// TODO Decomposition of service curves into token buckets.
-				// Create left side: "numerical terms".
+
+				// Create left side: "flow shapes" stay the same.
+				// Create right side: "numerical terms" bounding at the x-axis.
 				right_side = new HashSet<NumericalTerm>();
 				NumericalTerm zero = new NumericalTerm( Operator.PLUS, num_operations_factory.getZero(), null );
 				right_side.add( zero );
 				
-				// Create right side: "flow shapes" stays the same.
 				s2c_constraints.add( new NumericalConstraint( left_side, Relation.GE, right_side ) );
 			}
 			
 
 			
-			// 2nd part ("Moreover for all ...").
+			// 2nd part (starts with "Moreover for all ..." in the INFOCOM 2010 paper).
 			
 			/* FIXME: Concurrent modification of path_pairs_to_check_against
 			 * Don't worry, it will never be triggered. Here's why:
@@ -689,20 +691,23 @@ public class UniqueLinearProgram {
 						}
 
 						// Create right side: "numerical terms".
-						// TODO Decomposition of service curves into token buckets.
-						HashSet<NumericalTerm> right_side = new HashSet<NumericalTerm>();
-						Num beta_rate = server_j.getServiceCurve().getUltAffineRate();
-						Num beta_latency = server_j.getServiceCurve().getLatency();
 						
-						NumericalTerm beta_path1 = new NumericalTerm( Operator.MINUS, beta_rate, path1 );
-						NumericalTerm beta_path2 = new NumericalTerm( Operator.PLUS, beta_rate, path2 );
-						NumericalTerm latency = new NumericalTerm( Operator.MINUS, num_operations_factory.mult( beta_latency, beta_rate ), null );
-						
-						right_side.add( latency );
-						right_side.add( beta_path1 );
-						right_side.add( beta_path2 );
-			
-						s2c_constraints.add( new NumericalConstraint( left_side, Relation.GE, right_side ) );
+						HashSet<NumericalTerm> right_side;
+						for( int i = 0; i < server_j.getServiceCurve().getRL_ComponentCount(); i++) { // Does the internal decomposition if not yet done.
+							right_side = new HashSet<NumericalTerm>();
+							Num beta_rate = server_j.getServiceCurve().getRL_Component(i).getUltAffineRate();
+							Num beta_latency = server_j.getServiceCurve().getRL_Component(i).getLatency();
+							
+							NumericalTerm beta_path1 = new NumericalTerm( Operator.MINUS, beta_rate, path1 );
+							NumericalTerm beta_path2 = new NumericalTerm( Operator.PLUS, beta_rate, path2 );
+							NumericalTerm latency = new NumericalTerm( Operator.MINUS, num_operations_factory.mult( beta_latency, beta_rate ), null );
+							
+							right_side.add( latency );
+							right_side.add( beta_path1 );
+							right_side.add( beta_path2 );
+				
+							s2c_constraints.add( new NumericalConstraint( left_side, Relation.GE, right_side ) );
+						}
 						
 						path_pairs_to_check_against.add( current_path_pair );
 					}
@@ -916,20 +921,22 @@ public class UniqueLinearProgram {
 					left_side.add( flow_shape_term );
 
 					// Create right side: "numerical terms".
-					// TODO Decomposition of arrival curves into token buckets.
-					HashSet<NumericalTerm> right_side = new HashSet<NumericalTerm>();
-					Num alpha_rate = flow.getArrivalCurve().getUltAffineRate();
-					Num alpha_burst = flow.getArrivalCurve().getBurst();
-					
-					NumericalTerm burst = new NumericalTerm( Operator.PLUS, alpha_burst, null );
-					NumericalTerm alpha_t1 = new NumericalTerm( Operator.PLUS, alpha_rate, path1 );
-					NumericalTerm alpha_t2 = new NumericalTerm( Operator.MINUS, alpha_rate, path2 );
-					
-					right_side.add( burst );
-					right_side.add( alpha_t1 );
-					right_side.add( alpha_t2 );
-		
-					arrival_constraints.add( new NumericalConstraint( left_side, Relation.LE, right_side ) );
+					HashSet<NumericalTerm> right_side;
+					for( int i = 0; i < flow.getArrivalCurve().getTB_ComponentCount(); i++) { // Does the internal decomposition if not yet done.
+						right_side = new HashSet<NumericalTerm>();
+						Num alpha_rate = flow.getArrivalCurve().getTB_Component(i).getUltAffineRate();
+						Num alpha_burst = flow.getArrivalCurve().getTB_Component(i).getBurst();
+						
+						NumericalTerm burst = new NumericalTerm( Operator.PLUS, alpha_burst, null );
+						NumericalTerm alpha_t1 = new NumericalTerm( Operator.PLUS, alpha_rate, path1 );
+						NumericalTerm alpha_t2 = new NumericalTerm( Operator.MINUS, alpha_rate, path2 );
+						
+						right_side.add( burst );
+						right_side.add( alpha_t1 );
+						right_side.add( alpha_t2 );
+			
+						arrival_constraints.add( new NumericalConstraint( left_side, Relation.LE, right_side ) );
+					}
 				}
 				
 				paths_to_check_against.add( current_path );
@@ -1245,6 +1252,7 @@ public class UniqueLinearProgram {
 				try{
 					result = Double.parseDouble( line.substring( line.indexOf( "Objective =" )+12 ) );
 				} catch (Exception e) {
+					e.printStackTrace();
 					result = Double.NaN;
 				}
 				break;
