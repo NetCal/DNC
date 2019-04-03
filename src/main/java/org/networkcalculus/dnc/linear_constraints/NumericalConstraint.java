@@ -24,32 +24,43 @@
  *
  */
 
-package org.networkcalculus.dnc.feedforward.ulp;
+package org.networkcalculus.dnc.linear_constraints;
 
-import org.networkcalculus.dnc.network.server_graph.Path;
-import org.networkcalculus.dnc.network.server_graph.Server;
+import java.util.HashSet;
+import java.util.LinkedList;
 
-public class TemporalConstraint {
-	Path path1;
+import org.apache.commons.math3.util.Pair;
+
+public class NumericalConstraint {
+	HashSet<Pair<Operator,FlowLocationTime>> flow_shape_terms;
 	Relation relation;
-	Path path2;
+	HashSet<NumericalTerm> num_terms;
 	
-	TemporalConstraint( Path path1, Relation relation, Path path2 ) {
-		this.path1 = path1;
+	NumericalConstraint( HashSet<Pair<Operator,FlowLocationTime>> flow_shape_terms,
+							Relation relation,
+							HashSet<NumericalTerm> num_terms ) {
+		this.flow_shape_terms = flow_shape_terms;
 		this.relation = relation;
-		this.path2 = path2;
+		this.num_terms = num_terms;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuffer result_str = new StringBuffer();
-
-		result_str.append( "t" );
-		result_str.append( "{" );
-		for( Server server : path1.getServers() ) {
-			result_str.append( server.getAlias() );
+		
+		for( Pair<Operator,FlowLocationTime> flow_term : flow_shape_terms ) {
+			switch( flow_term.getFirst() ) {
+				case PLUS:
+				default:
+					result_str.append( " + " );
+					break;
+				case MINUS:
+					result_str.append( " - " );
+					break;
+			}
+			
+			result_str.append( flow_term.getSecond().toString() );
 		}
-		result_str.append( "}" );
 		
 		switch( relation ) {
 			case L:
@@ -70,35 +81,39 @@ public class TemporalConstraint {
 				break;
 		}
 
-		result_str.append( "t" );
-		result_str.append( "{" );
-		for( Server server : path2.getServers() ) {
-			result_str.append( server.getAlias() );
+		for( NumericalTerm term : num_terms ) {
+			result_str.append( term.toString() );
 		}
-		result_str.append( "}" );
 		
 		return result_str.toString();
 	}
-
+	
 	public String toCPLEXstring() {
 		StringBuffer result_str = new StringBuffer();
-
-		result_str.append( "t" );
-		result_str.append( "{" );
-		for( Server server : path1.getServers() ) {
-			result_str.append( server.getAlias() );
-		}
-		result_str.append( "}" );
-
-		result_str.append( " - " );
-
-		result_str.append( "t" );
-		result_str.append( "{" );
-		for( Server server : path2.getServers() ) {
-			result_str.append( server.getAlias() );
-		}
-		result_str.append( "}" );
 		
+		for( Pair<Operator,FlowLocationTime> flow_term : flow_shape_terms ) {
+			switch( flow_term.getFirst() ) {
+				case PLUS:
+				default:
+					result_str.append( " + " );
+					break;
+				case MINUS:
+					result_str.append( " - " );
+					break;
+			}
+			
+			result_str.append( flow_term.getSecond().toString() );
+		}
+
+		// num_terms include a + or - 
+		LinkedList<NumericalTerm> pure_numbers = new LinkedList<NumericalTerm>();
+		for( NumericalTerm term : num_terms ) {
+			if( term.path == null ) {
+				pure_numbers.add( term );
+			} else {
+				result_str.append( term.toInversedString() );
+			}
+		}
 		
 		switch( relation ) {
 			case L:
@@ -118,26 +133,21 @@ public class TemporalConstraint {
 				result_str.append( " > " );
 				break;
 		}
-
-		result_str.append( " 0 " );
 		
-		return result_str.toString();
-	}
-	
-	@Override
-	public boolean equals( Object obj ) {
-		if ( obj == null || !( obj instanceof TemporalConstraint ) ) {
-			return false;
+		double result = 0;
+		for( NumericalTerm term : pure_numbers ) {
+			switch( term.operator ) {
+			case PLUS:
+				result += term.number.doubleValue();
+				break;
+			case MINUS:
+				result -= term.number.doubleValue();
+				break;
+			}
 		}
 
-		TemporalConstraint constraint = (TemporalConstraint) obj;
-		return path1.equals( constraint.path1 )
-				&& relation.equals( constraint.relation )
-				&& path2.equals( constraint.path2 );
-	}
-	
-	@Override
-	public int hashCode() {
-		return (int) path1.hashCode() * relation.hashCode() * path2.hashCode();
+		result_str.append( Double.toString( result ) );
+		
+		return result_str.toString();
 	}
 }

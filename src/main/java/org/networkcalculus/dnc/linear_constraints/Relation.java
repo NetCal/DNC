@@ -24,7 +24,7 @@
  *
  */
 
-package org.networkcalculus.dnc.feedforward.ulp;
+package org.networkcalculus.dnc.linear_constraints;
 
 public enum Relation {
 	L,

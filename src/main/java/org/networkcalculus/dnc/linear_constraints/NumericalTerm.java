@@ -24,7 +24,7 @@
  *
  */
 
-package org.networkcalculus.dnc.feedforward.ulp;
+package org.networkcalculus.dnc.linear_constraints;
 
 import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;

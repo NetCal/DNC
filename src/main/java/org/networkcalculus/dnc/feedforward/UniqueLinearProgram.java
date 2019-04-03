@@ -94,7 +94,7 @@ public class UniqueLinearProgram {
 	boolean print_debug = false;
 	
 	static String lp_file_output_path = System.getProperty("user.dir") + 
-										"/src/main/java/org/networkcalculus/dnc/feedforward/ulp/output/";
+										"/src/main/java/org/networkcalculus/dnc/feedforward/ulp_output/";
 	
 	HashMap<Path,Integer> map__path__id;
 	
