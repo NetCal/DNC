@@ -89,7 +89,7 @@ import org.networkcalculus.num.Num;
  * TODO
  * - Decomposition of of conPwAffine curves.
  */
-public class ULP {
+public class UniqueLinearProgram {
 	boolean debug = false;
 	boolean print_debug = false;
 	
@@ -128,9 +128,9 @@ public class ULP {
 	Path empty_path;
 	
 	@SuppressWarnings("unused")
-	private ULP() {}
+	private UniqueLinearProgram() {}
 	
-	public ULP( ServerGraph network, Flow flow_of_interest ) throws Exception {
+	public UniqueLinearProgram( ServerGraph network, Flow flow_of_interest ) throws Exception {
 		this.server_graph = network;
 		this.flow_of_interest = flow_of_interest;
 		sink_of_interest = flow_of_interest.getSink();
