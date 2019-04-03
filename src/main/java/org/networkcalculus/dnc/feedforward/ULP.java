@@ -24,7 +24,7 @@
  *
  */
 
-package org.networkcalculus.dnc.feedforward.ulp;
+package org.networkcalculus.dnc.feedforward;
 
 import java.io.BufferedReader;
 import java.io.File;
