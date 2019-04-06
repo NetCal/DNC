@@ -25,7 +25,7 @@
  *
  */
 
-package org.networkcalculus.dnc.bounds;
+package org.networkcalculus.dnc.bounds.disco.pw_affine;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.num.Num;
 
-public final class Backlog {
+public final class Backlog_Disco_PwAffine {
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
 		if (arrival_curve.equals(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get())) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
