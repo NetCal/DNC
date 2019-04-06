@@ -26,11 +26,17 @@
 package org.networkcalculus.dnc;
 
 import org.networkcalculus.dnc.algebra.MinPlus;
+import org.networkcalculus.dnc.bounds.BoundingCurves;
+import org.networkcalculus.dnc.bounds.Bounds;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.LinearSegment;
 
 public interface AlgDncBackend {
 	MinPlus getMinPlus();
+
+	BoundingCurves getBoundingCurves();
+
+	Bounds getBounds();
 	
 	Curve getCurveFactory();
 	

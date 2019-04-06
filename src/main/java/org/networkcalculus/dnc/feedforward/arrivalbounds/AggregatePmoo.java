@@ -32,9 +32,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.networkcalculus.dnc.AnalysisConfig;
+import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -131,7 +131,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 
 			ServiceCurve null_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
 
-			for (ServiceCurve beta_loxfcaller_subpath : Bound.leftOverServiceARB(common_subpath_src.getServiceCurve(),
+			for (ServiceCurve beta_loxfcaller_subpath : Calculator.getInstance().getDncBackend().getBoundingCurves().leftOverServiceARB(common_subpath_src.getServiceCurve(),
 					alphas_xxfcaller)) {
 				if (!beta_loxfcaller_subpath.equals(null_service)) {
 					// Adding to the set, not adding up the curves
@@ -161,7 +161,7 @@ public class AggregatePmoo extends AbstractArrivalBound implements ArrivalBound 
 		// by this call of computeArrivalBound
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
-		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
+		alphas_xfcaller = Calculator.getInstance().getDncBackend().getBoundingCurves().output(configuration, alpha_xfcaller_src, common_subpath, betas_loxfcaller_subpath);
 
 		return alphas_xfcaller;
 	}

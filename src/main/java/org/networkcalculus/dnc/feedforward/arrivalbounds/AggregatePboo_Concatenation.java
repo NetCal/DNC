@@ -33,7 +33,6 @@ import java.util.Set;
 import org.networkcalculus.dnc.AlgDncBackend_DNC_Affine;
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -135,7 +134,7 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 			}
 
 			// Calculate the left-over service curve for this single server
-			betas_lo_s = Bound.leftOverService(configuration, server, alphas_xxfcaller_s);
+			betas_lo_s = Calculator.getInstance().getDncBackend().getBoundingCurves().leftOverService(configuration, server, alphas_xxfcaller_s);
 
 			// Check if there's any service left on this path. If not, the set only contains
 			// a null-service curve.
@@ -159,7 +158,7 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 		// by this call of computeArrivalBound.
 		Set<ArrivalCurve> alpha_xfcaller_src = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
 				common_subpath_src, f_xfcaller, flow_of_interest);
-		alphas_xfcaller = Bound.output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
+		alphas_xfcaller = Calculator.getInstance().getDncBackend().getBoundingCurves().output(configuration, alpha_xfcaller_src, common_subpath, betas_lo_subpath);
 
 		// TODO This implementation only works for token-bucket arrivals. 
 		if (configuration.serverBacklogArrivalBound()) {
