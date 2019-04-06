@@ -36,7 +36,6 @@ import org.apache.commons.math3.util.Pair;
 
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
@@ -106,7 +105,7 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
             // curve calculation
             ServiceCurve beta_server = server.getServiceCurve();
 
-            Num backlog_bound_server_alpha = Bound.backlog(alpha_candidate, beta_server);
+            Num backlog_bound_server_alpha = Calculator.getInstance().getDncBackend().getBounds().backlog(alpha_candidate, beta_server);
             backlog_bounds_server.add(backlog_bound_server_alpha);
 
             if (backlog_bound_server_alpha.leq(backlog_bound_s__min)) {
@@ -124,9 +123,9 @@ public class TotalFlowAnalysis extends AbstractAnalysis implements Analysis {
                     || (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL
                     && server.multiplexing() == Multiplexing.FIFO)
                     || fifo_per_micro_flow) {
-                delay_bound_server_alpha = Bound.delayFIFO(alpha_candidate, beta_server);
+                delay_bound_server_alpha = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(alpha_candidate, beta_server);
             } else {
-                delay_bound_server_alpha = Bound.delayARB(alpha_candidate, beta_server);
+                delay_bound_server_alpha = Calculator.getInstance().getDncBackend().getBounds().delayARB(alpha_candidate, beta_server);
             }
             delay_bounds_server.add(delay_bound_server_alpha);
 

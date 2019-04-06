@@ -41,7 +41,6 @@ import org.apache.commons.math3.util.Pair;
 
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
@@ -285,12 +284,12 @@ public class PmooAnalysis extends AbstractAnalysis implements Analysis {
 
         for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
             // Single flow of interest, i.e., fifo per micro flow holds
-            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e);
+            delay_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (delay_bound__beta_e2e.leq(result.getDelayBound())) {
                 ((PmooResults) result).setDelayBound(delay_bound__beta_e2e);
             }
 
-            backlog_bound__beta_e2e = Bound.backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
+            backlog_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (backlog_bound__beta_e2e.leq(result.getBacklogBound())) {
                 ((PmooResults) result).setBacklogBound(backlog_bound__beta_e2e);
             }
