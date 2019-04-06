@@ -24,7 +24,7 @@
  *
  */
 
-package org.networkcalculus.dnc.bounds;
+package org.networkcalculus.dnc.bounds.disco.con_pw_affine;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,7 +42,7 @@ import org.networkcalculus.dnc.network.server_graph.Server;
  * The output bound makes use of the deconvolution. Therefore, it inherits the restrictions 
  * of the min-plus algebra implementation configured in Calculator.  
  */
-public final class Output {
+public final class Output_Disco_ConPwAffine {
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, 
     										Set<ArrivalCurve> arrival_curves, Server server) throws Exception {
         return compute(configuration, arrival_curves, server, Collections.singleton(server.getServiceCurve()));

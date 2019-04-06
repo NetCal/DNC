@@ -25,7 +25,7 @@
  *
  */
 
-package org.networkcalculus.dnc.bounds;
+package org.networkcalculus.dnc.bounds.disco.pw_affine;
 
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
@@ -34,7 +34,7 @@ import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.num.Num;
 
-public final class Delay {
+public final class Delay_Disco_PwAffine {
     private static Num deriveForSpecialCurves(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         if (arrival_curve.equals(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get())) {
             return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();

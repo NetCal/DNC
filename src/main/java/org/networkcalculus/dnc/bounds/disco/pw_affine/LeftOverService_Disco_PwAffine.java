@@ -25,7 +25,7 @@
  *
  */
 
-package org.networkcalculus.dnc.bounds;
+package org.networkcalculus.dnc.bounds.disco.pw_affine;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +37,7 @@ import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
 import org.networkcalculus.dnc.Calculator;
+import org.networkcalculus.dnc.bounds.disco.BoundingCurves_Disco_Configuration;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -44,7 +45,7 @@ import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.num.Num;
 
-public final class LeftOverService {
+public final class LeftOverService_Disco_PwAffine {
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, Server server,
                                             Set<ArrivalCurve> arrival_curves) {
         if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO
@@ -52,16 +53,16 @@ public final class LeftOverService {
                 && server.multiplexing() == Multiplexing.FIFO)) {
             return fifoMux(server.getServiceCurve(), arrival_curves);
         } else {
-            return LeftOverService.arbMux(server.getServiceCurve(), arrival_curves);
+            return LeftOverService_Disco_PwAffine.arbMux(server.getServiceCurve(), arrival_curves);
         }
     }
 
     public static Set<ServiceCurve> compute(AnalysisConfig configuration, ServiceCurve service_curve,
                                             Set<ArrivalCurve> arrival_curves) {
         if (configuration.enforceMultiplexing() == MultiplexingEnforcement.GLOBAL_FIFO) {
-            return LeftOverService.fifoMux(service_curve, arrival_curves);
+            return LeftOverService_Disco_PwAffine.fifoMux(service_curve, arrival_curves);
         } else {
-            return LeftOverService.arbMux(service_curve, arrival_curves);
+            return LeftOverService_Disco_PwAffine.arbMux(service_curve, arrival_curves);
         }
     }
 
@@ -98,7 +99,7 @@ public final class LeftOverService {
     		return special_cases.getSecond(); 
     	}
     	
-        if (Bound.exec_fifo_mux_checks()) {
+        if (BoundingCurves_Disco_Configuration.getInstance().exec_fifo_mux_checks()) {
             if (!arrival_curve.isConcave()) {
                 throw new IllegalArgumentException("Arrival curve must be concave.");
             }
