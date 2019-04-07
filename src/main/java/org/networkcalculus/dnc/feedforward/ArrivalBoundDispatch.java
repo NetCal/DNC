@@ -129,8 +129,8 @@ public abstract class ArrivalBoundDispatch {
 				&& configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables, the cache does not check all of them.
 			ArrivalBoundCache.CacheEntryServer entry = getCache( configuration.arrivalBoundMethods() ).getCacheEntry( configuration, server, flows_to_bound, flow_of_interest );
 			if( entry != null && !entry.arrival_bounds.isEmpty()
-					&& (entry.arrival_bounds.size() > 1 && configuration.convolveAlternativeArrivalBounds())) { // Inconsistency between current cache content and current setting. 
-				
+					&& !(entry.arrival_bounds.size() > 1 && configuration.convolveAlternativeArrivalBounds()) // Inconsistency between current cache content and current setting.
+					) {
 				// Be cautious here! By using the original cache entry instead of the getArrivalBounds function, we need to repack the result in a new set manually!
 				return new HashSet<ArrivalCurve>( entry.arrival_bounds );
 			}
@@ -207,8 +207,8 @@ public abstract class ArrivalBoundDispatch {
 		if( configuration.useArrivalBoundsCache() && configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables.
 			ArrivalBoundCache.CacheEntryTurn entry = getCache( configuration.arrivalBoundMethods() ).getCacheEntry( configuration, turn, flows_to_bound, flow_of_interest );
 			if( entry != null && !entry.arrival_bounds.isEmpty()
-					&& (entry.arrival_bounds.size() > 1 && configuration.convolveAlternativeArrivalBounds())) { // Inconsistency between current cache content and current setting.
-				
+					&& !(entry.arrival_bounds.size() > 1 && configuration.convolveAlternativeArrivalBounds()) // Inconsistency between current cache content and current setting.
+					) {
 				// Be cautious here! By using the original cache entry instead of the getArrivalBounds function, we need to repack the result in a new set manually!
 				return new HashSet<ArrivalCurve>( entry.arrival_bounds );
 			}
