@@ -63,7 +63,8 @@ public abstract class ArrivalBoundDispatch {
 	
 	private static ArrivalBoundCache getCache( Set<ArrivalBoundMethod> ab_methods ) {
 		for ( Entry<Set<ArrivalBoundMethod>,ArrivalBoundCache> cache_entry : ab_caches.entrySet() ) {
-			if( cache_entry.getKey().containsAll( ab_methods ) && cache_entry.getKey().size() == ab_methods.size() ) {
+			if( cache_entry.getKey().size() == ab_methods.size()
+					&& cache_entry.getKey().containsAll( ab_methods ) ) {
 				return cache_entry.getValue();
 			}
 		}
