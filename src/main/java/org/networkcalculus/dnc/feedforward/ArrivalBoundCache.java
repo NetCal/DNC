@@ -65,7 +65,7 @@ public class ArrivalBoundCache {
 	 * @return
 	 * @throws Exception
 	 */
-	protected synchronized Set<ArrivalCurve> addArrivalBounds( AnalysisConfig configuration,
+	protected void addArrivalBounds( AnalysisConfig configuration,
 												  Server server,
 												  Set<Flow> bounded_flows,
 												  Flow flow_of_interest,
@@ -73,7 +73,7 @@ public class ArrivalBoundCache {
 		if( bounded_flows.contains( flow_of_interest )
 				|| bounded_flows.isEmpty()
 				|| arrival_bounds.isEmpty() ) {
-			return new HashSet<ArrivalCurve>();
+			return;
 		}
 		
 		// Remove possible old entry
@@ -96,8 +96,6 @@ public class ArrivalBoundCache {
 		// No need to check if the maps has entries for the server or the flow of interest.
 		// If missing they were created by the call to getCacheEntry(...) above.
 		map__server__entries.get( server ).add( entry );
-		
-		return arrival_bounds_stored;
 	}
 	
 	protected Set<ArrivalCurve> getArrivalBounds( AnalysisConfig configuration, Server server, Set<Flow> bounded_flows, Flow flow_of_interest ) {
@@ -122,7 +120,7 @@ public class ArrivalBoundCache {
 	 * @param flow_of_interest
 	 * @return
 	 */
-	protected synchronized CacheEntryServer getCacheEntry( AnalysisConfig configuration, Server server, Set<Flow> bounded_flows, Flow flow_of_interest ) {
+	protected CacheEntryServer getCacheEntry( AnalysisConfig configuration, Server server, Set<Flow> bounded_flows, Flow flow_of_interest ) {
 		// Most important feature is an efficient search
 		boolean return_null = false;
 		Set<CacheEntryServer> entries_s = map__server__entries.get( server );
@@ -166,7 +164,7 @@ public class ArrivalBoundCache {
 	 * @return
 	 * @throws Exception
 	 */
-	protected synchronized Set<ArrivalCurve> addArrivalBounds( AnalysisConfig configuration,
+	protected void addArrivalBounds( AnalysisConfig configuration,
 												  Turn turn,
 												  Set<Flow> bounded_flows,
 												  Flow flow_of_interest,
@@ -174,7 +172,7 @@ public class ArrivalBoundCache {
 		if( bounded_flows.contains( flow_of_interest )
 				|| bounded_flows.isEmpty()
 				|| arrival_bounds.isEmpty() ) {
-			return new HashSet<ArrivalCurve>();
+			return;
 		}
 		
 		// Remove possible old entry
@@ -195,8 +193,6 @@ public class ArrivalBoundCache {
 		entry = new CacheEntryTurn(configuration, turn, new HashSet<Flow>( bounded_flows ), flow_of_interest, arrival_bounds_stored );
 		
 		map__turn__entries.get( turn ).add( entry );
-
-		return arrival_bounds_stored;
 	}
 	
 	protected Set<ArrivalCurve> getArrivalBounds( AnalysisConfig configuration, Turn turn, Set<Flow> bounded_flows, Flow flow_of_interest ) {
@@ -208,7 +204,7 @@ public class ArrivalBoundCache {
 		}
 	}
 	
-	protected synchronized CacheEntryTurn getCacheEntry( AnalysisConfig configuration, Turn turn, Set<Flow> bounded_flows, Flow flow_of_interest ) {
+	protected CacheEntryTurn getCacheEntry( AnalysisConfig configuration, Turn turn, Set<Flow> bounded_flows, Flow flow_of_interest ) {
 		// Most important feature is an efficient search
 		boolean return_null = false;
 		Set<CacheEntryTurn> entries_l = map__turn__entries.get( turn );
