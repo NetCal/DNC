@@ -54,10 +54,9 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
 import org.networkcalculus.dnc.tandem.AbstractAnalysis;
-import org.networkcalculus.dnc.tandem.Analysis;
 import org.networkcalculus.num.Num;
 
-public class PmooAnalysis extends AbstractAnalysis implements Analysis {
+public class PmooAnalysis extends AbstractAnalysis {
     @SuppressWarnings("unused")
     private PmooAnalysis() {
     }

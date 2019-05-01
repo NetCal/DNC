@@ -49,11 +49,10 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
 import org.networkcalculus.dnc.tandem.AbstractAnalysis;
-import org.networkcalculus.dnc.tandem.Analysis;
 import org.networkcalculus.dnc.utils.SetUtils;
 import org.networkcalculus.num.Num;
 
-public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
+public class SeparateFlowAnalysis extends AbstractAnalysis {
     @SuppressWarnings("unused")
     private SeparateFlowAnalysis() {
     }
