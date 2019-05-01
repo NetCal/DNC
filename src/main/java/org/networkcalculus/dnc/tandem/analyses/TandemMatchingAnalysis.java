@@ -52,10 +52,9 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
 import org.networkcalculus.dnc.tandem.AbstractAnalysis;
-import org.networkcalculus.dnc.tandem.Analysis;
 import org.networkcalculus.num.Num;
 
-public class TandemMatchingAnalysis extends AbstractAnalysis implements Analysis {
+public class TandemMatchingAnalysis extends AbstractAnalysis {
 	@SuppressWarnings("unused")
 	private TandemMatchingAnalysis() {}
 
