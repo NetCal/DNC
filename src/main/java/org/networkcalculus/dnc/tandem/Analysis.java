@@ -43,7 +43,7 @@ import org.networkcalculus.num.Num;
 
 public interface Analysis {
     enum Analyses {
-        TFA, SFA, PMOO
+        TFA, SFA, PMOO, TMA
     }
     
     // ----------------------------------------------------------------------------------------------------
