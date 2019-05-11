@@ -1,6 +1,7 @@
 Changes since DNC v2.5.1
 ------------------------
 * Added the Arrival Bounds Cache.
+* The NetCal Num Backend is now in the Maven Central Repository, not bundled anymore. 
 
 DNC v2.5.1 (2019-Mar-29)
 ------------------------

@@ -53,7 +53,7 @@
 		<junit.jupiter.version>5.4.1</junit.jupiter.version>
 		<apache.commons.version.from>3.0</apache.commons.version.from>
 		<apache.commons.version.to>3.6.1</apache.commons.version.to>
-		<numbackend.version>1.1.0</numbackend.version>
+		<numbackend.version>1.1.1</numbackend.version>
 		<maven.plugin.surefire.version>2.22.1</maven.plugin.surefire.version>
 		<maven.plugin.versions.version>2.5</maven.plugin.versions.version>
 		<maven.build-helper.plugin.version>3.0.0</maven.build-helper.plugin.version>
@@ -67,11 +67,9 @@
 			<version>[${apache.commons.version.from},${apache.commons.version.to}]</version>
 		</dependency>
 		<dependency>
-			<groupId>org.networkcalculus.dnc</groupId>
-			<artifactId>NetCal-NumBackend</artifactId>
+			<groupId>org.networkcalculus.num</groupId>
+    		<artifactId>NetCal-NumBackend</artifactId>
 			<version>${numbackend.version}</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/NetCal-NumBackend-${numbackend.version}.jar</systemPath>
 		</dependency>
 	</dependencies>
 
