@@ -38,7 +38,6 @@ import java.util.Set;
 
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -50,11 +49,10 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
 import org.networkcalculus.dnc.tandem.AbstractAnalysis;
-import org.networkcalculus.dnc.tandem.Analysis;
 import org.networkcalculus.dnc.utils.SetUtils;
 import org.networkcalculus.num.Num;
 
-public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
+public class SeparateFlowAnalysis extends AbstractAnalysis {
     @SuppressWarnings("unused")
     private SeparateFlowAnalysis() {
     }
@@ -104,12 +102,12 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
         	// single flow of interest, i.e., FIFO per micro flow holds.
-            delay_bound__beta_e2e = Bound.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); 
+            delay_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); 
             if (delay_bound__beta_e2e.leq(result.getDelayBound())) {
                 ((SeparateFlowResults) result).setDelayBound(delay_bound__beta_e2e);
             }
 
-            backlog_bound__beta_e2e = Bound.backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
+            backlog_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (backlog_bound__beta_e2e.leq(result.getBacklogBound())) {
                 ((SeparateFlowResults) result).setBacklogBound(backlog_bound__beta_e2e);
             }
@@ -221,7 +219,7 @@ public class SeparateFlowAnalysis extends AbstractAnalysis implements Analysis {
                 }
 	             
                 // Calculate the left-over service curve for the flow of interest
-                betas_lo_server = Bound.leftOverService(configuration, server, alpha_xfois);
+                betas_lo_server = Calculator.getInstance().getDncBackend().getBoundingCurves().leftOverService(configuration, server, alpha_xfois);
                 result.map__server__alphas.put(server, alpha_xfois);
             }
             ((SeparateFlowResults) result).map__server__betas_lo.put(server, betas_lo_server);

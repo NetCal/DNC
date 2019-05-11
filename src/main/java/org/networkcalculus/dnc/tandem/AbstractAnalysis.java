@@ -36,7 +36,7 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.num.Num;
 
-public abstract class AbstractAnalysis {
+public abstract class AbstractAnalysis implements Analysis {
     protected ServerGraph server_graph;
     protected AnalysisConfig configuration;
     protected AnalysisResults result;

@@ -1,6 +1,14 @@
-Changes since DNC v2.5.1
+Changes since DNC v2.5.2
 ------------------------
 * Added the Arrival Bounds Cache.
+
+DNC v2.5.2 (2019-May-11)
+------------------------
+* The NetCal Num Backend is now in the Maven Central Repository, not bundled anymore.
+* The Analysis interface lists all methods found in AbstractAnalysis. 
+* Server backlog cap for output burstiness implementation only works for affine curves and PBOO.
+  It now verbosely states this in case of an incompatible analysis configuration.
+* Other small cleanups in various places, updated submodules.
 
 DNC v2.5.1 (2019-Mar-29)
 ------------------------

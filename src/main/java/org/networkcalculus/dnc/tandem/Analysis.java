@@ -27,15 +27,28 @@
 
 package org.networkcalculus.dnc.tandem;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.networkcalculus.dnc.AnalysisConfig;
+import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Path;
+import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.tandem.analyses.PmooAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.SeparateFlowAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
+import org.networkcalculus.num.Num;
 
 public interface Analysis {
+    enum Analyses {
+        TFA, SFA, PMOO, TMA
+    }
+    
+    // ----------------------------------------------------------------------------------------------------
+    // Convenience methods to start tandem analyses.
+    // ----------------------------------------------------------------------------------------------------
     static TotalFlowAnalysis performTfaEnd2End(ServerGraph server_graph, Flow flow_of_interest) throws Exception {
         TotalFlowAnalysis tfa = new TotalFlowAnalysis(server_graph);
         tfa.performAnalysis(flow_of_interest);
@@ -75,11 +88,23 @@ public interface Analysis {
         return pmoo;
     }
 
-    abstract void performAnalysis(Flow flow_of_interest) throws Exception;
+    // ----------------------------------------------------------------------------------------------------
+    // Methods to start an analysis.
+    // ----------------------------------------------------------------------------------------------------
+    void performAnalysis(Flow flow_of_interest) throws Exception;
 
-    abstract void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
+    void performAnalysis(Flow flow_of_interest, Path path) throws Exception;
 
-    enum Analyses {
-        TFA, SFA, PMOO
-    }
+    // ----------------------------------------------------------------------------------------------------
+    // Convenience methods to access results and the server graph.
+    // ----------------------------------------------------------------------------------------------------
+    Num getDelayBound();
+
+    Num getBacklogBound();
+    
+    Map<Server, Set<ArrivalCurve>> getServerAlphasMap();
+    
+    String getServerAlphasMapString();
+    
+    ServerGraph getServerGraph();
 }
