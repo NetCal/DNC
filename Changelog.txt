@@ -1,6 +1,7 @@
 Changes since DNC v2.5.2
 ------------------------
-* Modularized Bound Computation backend 
+* Modularized Bound Computation backend.
+* Rename Analysis* to TandemAnalysis* (see Github issue #76 for background). 
 
 DNC v2.5.2 (2019-May-11)
 ------------------------
