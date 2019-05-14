@@ -35,10 +35,10 @@ import java.util.Set;
 
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.tandem.AnalysisResults;
+import org.networkcalculus.dnc.tandem.TandemAnalysisResults;
 import org.networkcalculus.num.Num;
 
-public class TotalFlowResults extends AnalysisResults {
+public class TotalFlowResults extends TandemAnalysisResults {
     protected Map<Server, Set<Num>> map__server__D_server;
     protected Map<Server, Set<Num>> map__server__B_server;
 

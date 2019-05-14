@@ -37,18 +37,18 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.num.Num;
 
-public class AnalysisResults {
+public class TandemAnalysisResults {
 	public Map<Server, Set<ArrivalCurve>> map__server__alphas;
 	protected Num delay_bound;
 	protected Num backlog_bound;
 
-	public AnalysisResults() {
+	public TandemAnalysisResults() {
 		this.delay_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		this.backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		this.map__server__alphas = new HashMap<Server, Set<ArrivalCurve>>();
 	}
 
-	public AnalysisResults(Num delay_bound, Num backlog_bound, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+	public TandemAnalysisResults(Num delay_bound, Num backlog_bound, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
 		this.delay_bound = delay_bound;
 		this.backlog_bound = backlog_bound;
 		if (map__server__alphas == null) {

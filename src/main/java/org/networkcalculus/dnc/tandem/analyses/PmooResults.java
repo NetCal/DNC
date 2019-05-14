@@ -34,10 +34,10 @@ import java.util.Set;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.tandem.AnalysisResults;
+import org.networkcalculus.dnc.tandem.TandemAnalysisResults;
 import org.networkcalculus.num.Num;
 
-public class PmooResults extends AnalysisResults {
+public class PmooResults extends TandemAnalysisResults {
     protected Set<ServiceCurve> betas_e2e;
 
     protected PmooResults() {
