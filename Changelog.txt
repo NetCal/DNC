@@ -1,3 +1,7 @@
+Changes since DNC v2.5.2
+------------------------
+* Modularized Bound Computation backend 
+
 DNC v2.5.2 (2019-May-11)
 ------------------------
 * The NetCal Num Backend is now in the Maven Central Repository, not bundled anymore.
