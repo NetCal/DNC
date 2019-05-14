@@ -36,10 +36,10 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.num.Num;
 
-public abstract class AbstractAnalysis implements Analysis {
+public abstract class AbstractTandemAnalysis implements TandemAnalysis {
     protected ServerGraph server_graph;
     protected AnalysisConfig configuration;
-    protected AnalysisResults result;
+    protected TandemAnalysisResults result;
 
     public ServerGraph getServerGraph() {
         return server_graph;
