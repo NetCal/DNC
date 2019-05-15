@@ -939,9 +939,11 @@ public class UniqueLinearProgram {
 			}
 		}
 	}
-	
-	public void saveLpSolveDelayLP( String output_path ) throws Exception {
- 		
+
+	/**
+	 * The LP file created by this function can be read by LpSolve.
+	 */
+	public void saveDelayLPv1( String output_path ) throws Exception {
  		File file = new File( output_path );
  		Writer w = new OutputStreamWriter( new FileOutputStream(file), "UTF-8" );
  		PrintWriter pw = new PrintWriter(w);
@@ -1011,8 +1013,9 @@ public class UniqueLinearProgram {
 	
 	/**
 	 * Backlog at the flow of interest's sink.
+	 * The LP file created by this function can be read by LpSolve.
 	 */
-	public void saveLpSolveBacklogLP( String output_path ) throws Exception {
+	public void saveBacklogLPv1( String output_path ) throws Exception {
 		File file = new File( output_path );
  		Writer w = new OutputStreamWriter( new FileOutputStream(file), "UTF-8" );
  		PrintWriter pw = new PrintWriter(w);
@@ -1103,8 +1106,11 @@ public class UniqueLinearProgram {
 
  		return result.toString();
 	}
-	
-	public void saveCplexDelayLP( String output_path ) throws Exception {
+
+	/**
+	 * The LP file created by this function can be read by CPLEX and by Gurobi.
+	 */
+	public void saveDelayLPv2( String output_path ) throws Exception {
  		
  		File file = new File( output_path );
  		Writer w = new OutputStreamWriter( new FileOutputStream(file), "UTF-8" );
