@@ -92,10 +92,6 @@ import org.networkcalculus.num.Num;
  *  
  *  (TODO investigate effect of CPLEX parameter settings for integrality tolerance, optimality tolerance, etc.)
  */
-/*
- * TODO
- * - Decomposition of of conPwAffine curves.
- */
 public class UniqueLinearProgram {
 	boolean debug = false;
 	boolean print_debug = false;
