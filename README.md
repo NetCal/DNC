@@ -45,7 +45,7 @@ This small guide assumes you have installed Eclipse 2019-03, a Java 12 JDK and a
 * Right-click on the project `DNC`and select `Properties`. In the new window, navigate to `Maven` and add `eclipse,tests,exp,mpa` to your Active Maven Profiles (comma separated). Click `Apply and Close` and confirm that your `DNC` project will be updated.
 
 ## Get the rtc.jar to run the MPA RTC Curve Backend and the Tests 
-First, make sure you are connected to the Internet. You can then get the dependency in different ways:
+First, make sure you are connected to the Internet and that you have a ``lib`` folder in your ``DNC`` project. You can then get the dependency in different ways:
 
 * Using Maven (in gerneral): Run a build with goal 'validate'.
 
