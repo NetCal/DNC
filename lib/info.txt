@@ -1,1 +1,1 @@
-This file forces is the horfix to Git removing the empty lib folder. Downloading the RTC MPA files will fail without this folder
+This file forces is the hotfix to Git removing the empty lib folder. Downloading the RTC MPA files using Maven will fail without this folder.
