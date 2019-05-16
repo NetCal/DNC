@@ -7,5 +7,4 @@
 /target/
 /doc/
 /lib/*
-!/lib/NetCal-NumBackend-*.jar
-!/lib/NetCal-NumBackend-LICENSE
+!/lib/info.txt
