@@ -1,4 +1,4 @@
-Changes since DNC v2.5.2
+DNC v2.6.0 (2019-Jun-17)
 ------------------------
 * Added the Arrival Bounds Cache.
 * Added the Unique Linear Program (ULP) analysis.
