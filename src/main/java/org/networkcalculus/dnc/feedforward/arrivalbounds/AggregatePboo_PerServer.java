@@ -33,7 +33,6 @@ import java.util.Set;
 import org.networkcalculus.dnc.AlgDncBackend_DNC_Affine;
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -138,7 +137,7 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 			}
 
 			// Calculate the left-over service curve for this single server
-			betas_lo_s = Bound.leftOverService(configuration, server, alphas_xxfcaller_s);
+			betas_lo_s = Calculator.getInstance().getDncBackend().getBoundingCurves().leftOverService(configuration, server, alphas_xxfcaller_s);
 
 			// Check if there's any service left on this path. If not, the set only contains
 			// a null-service curve.
@@ -151,7 +150,7 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 				return alphas_xfcaller;
 			}
 			
-			alphas_xfcaller = Bound.output(configuration, alphas_xfcaller, server, betas_lo_s);
+			alphas_xfcaller = Calculator.getInstance().getDncBackend().getBoundingCurves().output(configuration, alphas_xfcaller, server, betas_lo_s);
 		}
 
 		// TODO This implementation only works for token-bucket arrivals. 

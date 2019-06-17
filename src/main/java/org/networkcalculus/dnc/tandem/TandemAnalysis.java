@@ -41,7 +41,7 @@ import org.networkcalculus.dnc.tandem.analyses.SeparateFlowAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
 import org.networkcalculus.num.Num;
 
-public interface Analysis {
+public interface TandemAnalysis {
     enum Analyses {
         TFA, SFA, PMOO, TMA
     }

@@ -27,6 +27,10 @@ package org.networkcalculus.dnc;
 
 import org.networkcalculus.dnc.algebra.MinPlus;
 import org.networkcalculus.dnc.algebra.disco.MinPlus_Disco_ConPwAffine;
+import org.networkcalculus.dnc.bounds.BoundingCurves;
+import org.networkcalculus.dnc.bounds.Bounds;
+import org.networkcalculus.dnc.bounds.disco.BoundingCurves_Disco_ConPwAffine;
+import org.networkcalculus.dnc.bounds.disco.Bounds_Disco_PwAffine;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
@@ -38,6 +42,16 @@ public enum AlgDncBackend_DNC_ConPwAffine implements AlgDncBackend {
 	@Override
 	public MinPlus getMinPlus() {
 		return MinPlus_Disco_ConPwAffine.MINPLUS_DISCO_CONPWAFFINE;
+	}
+
+	@Override
+	public BoundingCurves getBoundingCurves() {
+		return BoundingCurves_Disco_ConPwAffine.BOUNDINGCURVES_DISCO_CONPWAFFINE;
+	}
+
+	@Override
+	public Bounds getBounds() {
+		return Bounds_Disco_PwAffine.BOUNDS_DISCO_PWAFFINE;
 	}
 
 	@Override

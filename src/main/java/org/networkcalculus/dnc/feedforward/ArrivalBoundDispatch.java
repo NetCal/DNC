@@ -27,12 +27,17 @@
 package org.networkcalculus.dnc.feedforward;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
+import org.networkcalculus.dnc.AnalysisConfig.ArrivalBoundMethod;
+import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -51,6 +56,32 @@ import org.networkcalculus.dnc.tandem.analyses.TandemMatchingAnalysis;
 import org.networkcalculus.dnc.utils.SetUtils;
 
 public abstract class ArrivalBoundDispatch {
+	// --------------------------------------------------------------------------------------------------------------
+	// Arrival Bound Cache
+	// --------------------------------------------------------------------------------------------------------------
+	protected static Map<Set<ArrivalBoundMethod>,ArrivalBoundCache> ab_caches = new HashMap<Set<ArrivalBoundMethod>,ArrivalBoundCache>();
+	
+	private static ArrivalBoundCache getCache( Set<ArrivalBoundMethod> ab_methods ) {
+		for ( Entry<Set<ArrivalBoundMethod>,ArrivalBoundCache> cache_entry : ab_caches.entrySet() ) {
+			if( cache_entry.getKey().size() == ab_methods.size()
+					&& cache_entry.getKey().containsAll( ab_methods ) ) {
+				return cache_entry.getValue();
+			}
+		}
+		
+		// Reaching this code here means that there is
+		// no cache for this set of ab_methods in the set of caches yet.
+		// So we create one, add it to the map and return it.
+		ArrivalBoundCache new_ab_cache = new ArrivalBoundCache();
+		ab_caches.put( ab_methods, new_ab_cache );
+		
+		return new_ab_cache;
+	}
+	
+	public static void clearAllCaches() {
+		ab_caches.clear();
+	}
+	
 	// --------------------------------------------------------------------------------------------------------------
 	// Arrival Bound Dispatching
 	// --------------------------------------------------------------------------------------------------------------
@@ -93,6 +124,17 @@ public abstract class ArrivalBoundDispatch {
 		Set<Flow> f_xfcaller_server = SetUtils.getIntersection(f_server, flows_to_bound);
 		if (f_xfcaller_server.isEmpty()) {
 			return arrival_bounds;
+		}
+		
+		if( configuration.useArrivalBoundsCache() 
+				&& configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables, the cache does not check all of them.
+			ArrivalBoundCache.CacheEntryServer entry = getCache( configuration.arrivalBoundMethods() ).getCacheEntry( configuration, server, flows_to_bound, flow_of_interest );
+			if( entry != null && !entry.arrival_bounds.isEmpty()
+					&& !(entry.arrival_bounds.size() > 1 && configuration.convolveAlternativeArrivalBounds()) // Inconsistency between current cache content and current setting.
+					) {
+				// Be cautious here! By using the original cache entry instead of the getArrivalBounds function, we need to repack the result in a new set manually!
+				return new HashSet<ArrivalCurve>( entry.arrival_bounds );
+			}
 		}
 
 		// Get cross-traffic originating in server
@@ -143,10 +185,17 @@ public abstract class ArrivalBoundDispatch {
 		}
 
 		if( configuration.convolveAlternativeArrivalBounds() ) {
-			return new HashSet<ArrivalCurve>( Collections.singleton( Calculator.getInstance().getMinPlus().convolve( arrival_bounds ) ) );
-		} else {
-			return new HashSet<ArrivalCurve>( arrival_bounds );
+			arrival_bounds = new HashSet<ArrivalCurve>( Collections.singleton( Calculator.getInstance().getMinPlus().convolve( arrival_bounds ) ) );
+		} 
+		
+		if( configuration.useArrivalBoundsCache() 
+				&& configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables, the cache does not check all of them.
+			
+			// As we checked for an existing cache entry at the beginning (and returned it of present), we do not hav to care about the potential overwriting of a cache entry here. 
+			getCache( configuration.arrivalBoundMethods() ).addArrivalBounds( configuration, server, flows_to_bound, flow_of_interest, arrival_bounds );
 		}
+		
+		return new HashSet<ArrivalCurve>( arrival_bounds );
 	}
 
 	public static Set<ArrivalCurve> computeArrivalBounds(ServerGraph server_graph, AnalysisConfig configuration, Turn turn,
@@ -154,6 +203,16 @@ public abstract class ArrivalBoundDispatch {
 		flows_to_bound.remove(flow_of_interest);
 		if (flows_to_bound.isEmpty()) {
 			return new HashSet<ArrivalCurve>(Collections.singleton(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get()));
+		}
+		
+		if( configuration.useArrivalBoundsCache() && configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables.
+			ArrivalBoundCache.CacheEntryTurn entry = getCache( configuration.arrivalBoundMethods() ).getCacheEntry( configuration, turn, flows_to_bound, flow_of_interest );
+			if( entry != null && !entry.arrival_bounds.isEmpty()
+					&& !(entry.arrival_bounds.size() > 1 && configuration.convolveAlternativeArrivalBounds()) // Inconsistency between current cache content and current setting.
+					) {
+				// Be cautious here! By using the original cache entry instead of the getArrivalBounds function, we need to repack the result in a new set manually!
+				return new HashSet<ArrivalCurve>( entry.arrival_bounds );
+			}
 		}
 
 		Set<ArrivalCurve> arrival_bounds_xfcaller = new HashSet<ArrivalCurve>();
@@ -246,6 +305,14 @@ public abstract class ArrivalBoundDispatch {
 		if( configuration.convolveAlternativeArrivalBounds() ) {
 			arrival_bounds_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( Calculator.getInstance().getMinPlus().convolve( arrival_bounds_xfcaller ) ) );
 		}
+		
+		if( configuration.useArrivalBoundsCache() 
+				&& configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables, the cache does not check all of them.
+			
+			// As we checked for an existing cache entry before the for-loop (and returned it of present), we do not hav to care about the potential overwriting of a cache entry here. 
+			getCache( configuration.arrivalBoundMethods() ).addArrivalBounds( configuration, turn, flows_to_bound, flow_of_interest, arrival_bounds_xfcaller );
+		}
+		
 		return arrival_bounds_xfcaller;
 	}
 

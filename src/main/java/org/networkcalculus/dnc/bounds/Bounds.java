@@ -1,10 +1,6 @@
 /*
  * This file is part of the Deterministic Network Calculator (DNC).
  *
- * Copyright (C) 2005 - 2007 Frank A. Zdarsky
- * Copyright (C) 2008 - 2010 Andreas Kiefer
- * Copyright (C) 2011 - 2018 Steffen Bondorf
- * Copyright (C) 2017 - 2018 The DiscoDNC contributors
  * Copyright (C) 2019+ The DNC contributors
  *
  * http://networkcalculus.org
@@ -26,38 +22,25 @@
  *
  */
 
-package org.networkcalculus.dnc.tandem.analyses;
-
-import java.util.Map;
-import java.util.Set;
+package org.networkcalculus.dnc.bounds;
 
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.tandem.TandemAnalysisResults;
 import org.networkcalculus.num.Num;
 
-public class PmooResults extends TandemAnalysisResults {
-    protected Set<ServiceCurve> betas_e2e;
+public interface Bounds {
+	
+    // --------------------------------------------------------------------------------------------------------------
+    // Backlog
+    // --------------------------------------------------------------------------------------------------------------
 
-    protected PmooResults() {
-    }
+    Num backlog(ArrivalCurve arrival_curve, ServiceCurve service_curve);
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // Delay
+    // --------------------------------------------------------------------------------------------------------------
 
-    protected PmooResults(Num delay_bound, Num backlog_bound, Set<ServiceCurve> betas_e2e,
-                          Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+    Num delayARB(ArrivalCurve arrival_curve, ServiceCurve service_curve);
 
-        super(delay_bound, backlog_bound, map__server__alphas);
-
-        this.betas_e2e = betas_e2e;
-    }
-
-    @Override
-    protected void setDelayBound(Num delay_bound) {
-        super.setDelayBound(delay_bound);
-    }
-
-    @Override
-    protected void setBacklogBound(Num backlog_bound) {
-        super.setBacklogBound(backlog_bound);
-    }
+    Num delayFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve);
 }

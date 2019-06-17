@@ -38,7 +38,6 @@ import org.apache.commons.math3.util.Pair;
 
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.Bound;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
@@ -51,10 +50,10 @@ import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
-import org.networkcalculus.dnc.tandem.AbstractAnalysis;
+import org.networkcalculus.dnc.tandem.AbstractTandemAnalysis;
 import org.networkcalculus.num.Num;
 
-public class TandemMatchingAnalysis extends AbstractAnalysis {
+public class TandemMatchingAnalysis extends AbstractTandemAnalysis {
 	@SuppressWarnings("unused")
 	private TandemMatchingAnalysis() {}
 
@@ -109,12 +108,12 @@ public class TandemMatchingAnalysis extends AbstractAnalysis {
         ((TandemMatchingResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
 		
 		for( ServiceCurve beta_e2e : ((TandemMatchingResults) result).betas_e2e ) {
-			delay_bound__beta_e2e = Bound.delayFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // Single flow of interest, i.e., fifo per micro flow holds
+			delay_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().delayFIFO( flow_of_interest.getArrivalCurve(), beta_e2e ); // Single flow of interest, i.e., fifo per micro flow holds
 			if( delay_bound__beta_e2e.leq(result.getDelayBound()) ) {
 				 ((TandemMatchingResults) result).setDelayBound(delay_bound__beta_e2e);
 			}
 			
-			backlog_bound__beta_e2e = Bound.backlog( flow_of_interest.getArrivalCurve(), beta_e2e );
+			backlog_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().backlog( flow_of_interest.getArrivalCurve(), beta_e2e );
 			if( backlog_bound__beta_e2e.leq(result.getBacklogBound()) ) {
 				((TandemMatchingResults) result).setBacklogBound(backlog_bound__beta_e2e);
 			}

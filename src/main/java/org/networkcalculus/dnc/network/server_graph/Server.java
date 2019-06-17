@@ -59,7 +59,6 @@ public class Server {
 
     private Multiplexing multiplexing = Multiplexing.ARBITRARY;
 
-    @SuppressWarnings("unused")
     private Server() {
     }
 
@@ -91,6 +90,38 @@ public class Server {
         this.service_curve = service_curve;
         this.multiplexing = multiplexing;
     }
+    
+    // Required by the ULP optimization.
+    public static Server createExplicitSourceServer() {
+ 		Server explicit_src = new Server();
+
+ 		explicit_src.id = -1;
+ 		explicit_src.alias = "sSRC";
+ 		explicit_src.service_curve = Curve.getFactory().createZeroDelayInfiniteBurst();
+ 		explicit_src.max_service_curve = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+ 		explicit_src.max_service_curve_flag = false;
+ 		explicit_src.multiplexing = Multiplexing.ARBITRARY;
+ 		explicit_src.useMaxSC(false);
+ 		explicit_src.useMaxScRate(false);
+ 		
+ 		return explicit_src;
+ 	}
+
+    // Required by the ULP optimization.
+ 	public static Server createExplicitSinkServer() {
+ 		Server explicit_snk = new Server();
+
+ 		explicit_snk.id = -2;
+ 		explicit_snk.alias = "sSNK"; // Set to get String representation t{} in the single LP optimization
+ 		explicit_snk.service_curve = Curve.getFactory().createZeroDelayInfiniteBurst();
+ 		explicit_snk.max_service_curve = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+ 		explicit_snk.max_service_curve_flag = false;
+ 		explicit_snk.multiplexing = Multiplexing.ARBITRARY;
+ 		explicit_snk.useMaxSC(false);
+ 		explicit_snk.useMaxScRate(false);
+ 		
+ 		return explicit_snk;
+ 	}
 
     public int getId() {
         return id;

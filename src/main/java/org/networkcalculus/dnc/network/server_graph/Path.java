@@ -61,7 +61,7 @@ public class Path {
         this.path_turns = new LinkedList<Turn>(path_turns);
     }
 
-    protected Path(Path path) {
+    public Path(Path path) {
         this.path_servers = path.getServers();
         this.path_turns = path.getTurns();
     }
