@@ -27,6 +27,8 @@
 
 package org.networkcalculus.dnc.curves.disco.pw_affine;
 
+import java.util.Objects;
+
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
@@ -87,7 +89,7 @@ public class ArrivalCurve_Disco_PwAffine extends Curve_Disco_PwAffine implements
 
     @Override
     public int hashCode() {
-        return "AC".hashCode() * super.hashCode();
+    	return Objects.hash("AC", super.hashCode());
     }
 
     /**
