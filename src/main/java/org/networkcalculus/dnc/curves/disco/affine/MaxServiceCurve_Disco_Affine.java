@@ -27,6 +27,8 @@
 
 package org.networkcalculus.dnc.curves.disco.affine;
 
+import java.util.Objects;
+
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.MaxServiceCurve;
 import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
@@ -88,7 +90,7 @@ public class MaxServiceCurve_Disco_Affine extends Curve_Disco_Affine implements 
 
     @Override
     public int hashCode() {
-        return "MSC".hashCode() * super.hashCode();
+    	return Objects.hash("MSC", super.hashCode());
     }
 
     /**
