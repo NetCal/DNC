@@ -27,6 +27,8 @@
 
 package org.networkcalculus.dnc.curves.disco;
 
+import java.util.Objects;
+
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.num.Num;
@@ -223,7 +225,7 @@ public class LinearSegment_Disco implements LinearSegment {
 
     @Override
     public int hashCode() {
-        return x.hashCode() * y.hashCode() * grad.hashCode() * Boolean.hashCode(leftopen);
+    	return Objects.hash(x, y, grad, leftopen);
     }
 
     /**
