@@ -72,6 +72,11 @@
     		<artifactId>NetCal-NumBackend</artifactId>
 			<version>${numbackend.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.networkcalculus.model</groupId>
+            <artifactId>NetCal-NetworkModel</artifactId>
+            <version>${networkmodel.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>
