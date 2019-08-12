@@ -34,67 +34,67 @@ import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
 
 public class ServiceCurve_Disco_Affine extends Curve_Disco_Affine implements ServiceCurve {
-	// --------------------------------------------------------------------------------------------------------------
-	// Constructors
-	// --------------------------------------------------------------------------------------------------------------
-	public ServiceCurve_Disco_Affine() {
-		super();
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // --------------------------------------------------------------------------------------------------------------
+    public ServiceCurve_Disco_Affine() {
+        super();
+    }
 
-	public ServiceCurve_Disco_Affine(int segment_count) {
-		super(segment_count);
-	}
+    public ServiceCurve_Disco_Affine(int segment_count) {
+        super(segment_count);
+    }
 
-	public ServiceCurve_Disco_Affine(Curve curve) {
-		copy(curve);
+    public ServiceCurve_Disco_Affine(Curve curve) {
+        copy(curve);
 
-		// Too strong requirement: !isConvex()
-		if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
-			throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
-		}
-	}
+        // Too strong requirement: !isConvex()
+        if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+        }
+    }
 
-	public ServiceCurve_Disco_Affine(String service_curve_str) throws Exception {
-		// Smallest possible string: {(0,0),0}
-		if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) {
-			throw new RuntimeException("Invalid string representation of a service curve.");
-		}
+    public ServiceCurve_Disco_Affine(String service_curve_str) throws Exception {
+    	// Smallest possible string: {(0,0),0}
+        if (service_curve_str == null || service_curve_str.isEmpty() || service_curve_str.length() < 9) {
+            throw new RuntimeException("Invalid string representation of a service curve.");
+        }
 
-		initializeCurve(service_curve_str);
+        initializeCurve(service_curve_str);
 
-		// Too strong requirement: !isConvex()
-		if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
-			throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
-		}
-	}
+        // Too strong requirement: !isConvex()
+        if (Curves_Disco_Configuration.getInstance().exec_service_curve_checks() && !isWideSenseIncreasing()) {
+            throw new RuntimeException("Service curves can only be created from wide-sense increasing functions.");
+        }
+    }
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Interface Implementations
-	// --------------------------------------------------------------------------------------------------------------
-	@Override
-	public ServiceCurve_Disco_Affine copy() {
-		ServiceCurve_Disco_Affine sc_copy = new ServiceCurve_Disco_Affine();
-		sc_copy.copy(this);
-		return sc_copy;
-	}
+    // --------------------------------------------------------------------------------------------------------------
+    // Interface Implementations
+    // --------------------------------------------------------------------------------------------------------------
+    @Override
+    public ServiceCurve_Disco_Affine copy() {
+        ServiceCurve_Disco_Affine sc_copy = new ServiceCurve_Disco_Affine();
+        sc_copy.copy(this);
+        return sc_copy;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		return (obj instanceof ServiceCurve_Disco_Affine) && super.equals(obj);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof ServiceCurve_Disco_Affine) && super.equals(obj);
+    }
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 		return Objects.hash("SC", super.hashCode());
-	}
+    }
 
-	/**
-	 * Returns a string representation of this curve.
-	 *
-	 * @return the curve represented as a string.
-	 */
-	@Override
-	public String toString() {
-		return "SC" + super.toString();
-	}
+    /**
+     * Returns a string representation of this curve.
+     *
+     * @return the curve represented as a string.
+     */
+    @Override
+    public String toString() {
+        return "SC" + super.toString();
+    }
 }

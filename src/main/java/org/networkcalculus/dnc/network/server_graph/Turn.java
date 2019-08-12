@@ -29,99 +29,99 @@ package org.networkcalculus.dnc.network.server_graph;
 import java.util.Objects;
 
 public class Turn {
-	private int id;
-	private String alias;
-	private Server src;
-	private Server dest;
+    private int id;
+    private String alias;
+    private Server src;
+    private Server dest;
 
-	protected Turn(int id, String alias, Server source, Server destination) {
-		this.id = id;
-		this.alias = alias;
-		src = source;
-		dest = destination;
-	}
+    protected Turn(int id, String alias, Server source, Server destination) {
+        this.id = id;
+        this.alias = alias;
+        src = source;
+        dest = destination;
+    }
 
-	public Server getSource() {
-		return src;
-	}
+    public Server getSource() {
+        return src;
+    }
 
-	public Server getDest() {
-		return dest;
-	}
+    public Server getDest() {
+        return dest;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getAlias() {
-		return alias;
-	}
+    public String getAlias() {
+        return alias;
+    }
 
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Turn)) {
-			return false;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Turn)) {
+            return false;
+        }
 
-		Turn l = (Turn) obj;
+        Turn l = (Turn) obj;
 		return Objects.equals(this.src, l.src) && 
 				Objects.equals(this.dest, l.dest);
-	}
+    }
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 		return Objects.hash(src, dest);
-	}
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------
+    // String Conversions
+    // --------------------------------------------------------------------------------------------------------------
 
-	// --------------------------------------------------------------------------------------------------------------
-	// String Conversions
-	// --------------------------------------------------------------------------------------------------------------
+    private StringBuffer commonStringPrefix() {
+    	StringBuffer turn_str_prefix = new StringBuffer();
 
-	private StringBuffer commonStringPrefix() {
-		StringBuffer turn_str_prefix = new StringBuffer();
+     	turn_str_prefix.append("Turn(");
+     	turn_str_prefix.append(alias);
+     	turn_str_prefix.append(", ");
+     	turn_str_prefix.append(Integer.toString(id));
+     	
+     	return turn_str_prefix;
+    }
+    
+    public String toShortString() {
+    	StringBuffer turn_str = commonStringPrefix();
+    	
+    	turn_str.append(")");
+    	
+        return turn_str.toString();
+    }
 
-		turn_str_prefix.append("Turn(");
-		turn_str_prefix.append(alias);
-		turn_str_prefix.append(", ");
-		turn_str_prefix.append(Integer.toString(id));
+    @Override
+    public String toString() {
+    	StringBuffer turn_str = commonStringPrefix();
 
-		return turn_str_prefix;
-	}
+    	turn_str.append(", ");
+     	turn_str.append(src.toShortString());
+     	turn_str.append(", ");
+     	turn_str.append(dest.toShortString());
+     	turn_str.append(")");
+     	
+     	return turn_str.toString();
+    }
 
-	public String toShortString() {
-		StringBuffer turn_str = commonStringPrefix();
+    public String toExtendedString() {
+    	StringBuffer turn_str = commonStringPrefix();
 
-		turn_str.append(")");
-
-		return turn_str.toString();
-	}
-
-	@Override
-	public String toString() {
-		StringBuffer turn_str = commonStringPrefix();
-
-		turn_str.append(", ");
-		turn_str.append(src.toShortString());
-		turn_str.append(", ");
-		turn_str.append(dest.toShortString());
-		turn_str.append(")");
-
-		return turn_str.toString();
-	}
-
-	public String toExtendedString() {
-		StringBuffer turn_str = commonStringPrefix();
-
-		turn_str.append(", ");
-		turn_str.append(src.toExtendedString());
-		turn_str.append(", ");
-		turn_str.append(dest.toExtendedString());
-		turn_str.append(")");
-
-		return turn_str.toString();
-	}
+    	turn_str.append(", ");
+     	turn_str.append(src.toExtendedString());
+     	turn_str.append(", ");
+     	turn_str.append(dest.toExtendedString());
+     	turn_str.append(")");
+     	
+     	return turn_str.toString();
+    }
 }
