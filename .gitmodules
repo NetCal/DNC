@@ -7,3 +7,6 @@
 [submodule "src/functional_tests"]
 	path = src/functional_tests
 	url = https://github.com/NetCal/DNC_func_tests.git
+[submodule "src/networkmodel_converter"]
+	path = src/networkmodel_converter
+	url = https://github.com/NetCal/DNC_NetworkModel_converter.git
