@@ -28,6 +28,7 @@ package org.networkcalculus.dnc;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -200,6 +201,30 @@ public class AnalysisConfig {
     }
 
     @Override
+	public int hashCode() {
+		return Objects.hash(multiplexing_enforcement, enforce_max_sc, enforce_max_sc_output_rate, arrival_bound_methods,
+				convolve_alternative_arrival_bounds, server_backlog_arrival_bound);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AnalysisConfig other = (AnalysisConfig) obj;
+
+		return Objects.equals(this.multiplexing_enforcement, other.multiplexing_enforcement) &&
+				Objects.equals(this.enforce_max_sc, other.enforce_max_sc) &&
+				Objects.equals(this.enforce_max_sc_output_rate, other.enforce_max_sc_output_rate) &&
+				Objects.equals(this.arrival_bound_methods, other.arrival_bound_methods) &&
+				Objects.equals(this.convolve_alternative_arrival_bounds, other.convolve_alternative_arrival_bounds) &&
+				Objects.equals(this.server_backlog_arrival_bound, other.server_backlog_arrival_bound);
+	}
+
+	@Override
     public String toString() {
         StringBuffer analysis_config_str = new StringBuffer();
 

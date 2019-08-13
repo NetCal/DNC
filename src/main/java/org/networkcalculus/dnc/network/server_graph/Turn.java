@@ -26,6 +26,8 @@
 
 package org.networkcalculus.dnc.network.server_graph;
 
+import java.util.Objects;
+
 public class Turn {
     private int id;
     private String alias;
@@ -66,13 +68,13 @@ public class Turn {
         }
 
         Turn l = (Turn) obj;
-        return (this.src != null ? this.src.equals(l.src) : l.src == null)
-                && (this.dest != null ? this.dest.equals(l.dest) : l.dest == null);
+		return Objects.equals(this.src, l.src) && 
+				Objects.equals(this.dest, l.dest);
     }
 
     @Override
     public int hashCode() {
-        return (int) src.hashCode() * dest.hashCode();
+		return Objects.hash(src, dest);
     }
     
     // --------------------------------------------------------------------------------------------------------------

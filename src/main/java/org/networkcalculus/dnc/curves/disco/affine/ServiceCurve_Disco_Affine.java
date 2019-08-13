@@ -27,6 +27,8 @@
 
 package org.networkcalculus.dnc.curves.disco.affine;
 
+import java.util.Objects;
+
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.curves.disco.Curves_Disco_Configuration;
@@ -83,7 +85,7 @@ public class ServiceCurve_Disco_Affine extends Curve_Disco_Affine implements Ser
 
     @Override
     public int hashCode() {
-        return "SC".hashCode() * super.hashCode();
+		return Objects.hash("SC", super.hashCode());
     }
 
     /**

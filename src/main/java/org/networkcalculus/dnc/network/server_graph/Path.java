@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.Curve;
@@ -293,7 +294,7 @@ public class Path {
 
     @Override
     public int hashCode() {
-        return (int) Arrays.hashCode(path_servers.toArray()) * Arrays.hashCode(path_turns.toArray());
+    	return Objects.hash(path_servers, path_turns);
     }
     
     // --------------------------------------------------------------------------------------------------------------
