@@ -741,6 +741,14 @@ public class ServerGraph {
 		}
 	}
 
+	/**
+	 * Finds all the flows that cross at least one server on the path p.
+	 * @param p
+	 *            The path which the returned flows intersect.
+	 * @return Set of flows that cross at least one server on the path.
+	 * @throws Exception
+	 *			   Could not sort although there may be flows.
+	 */
 	public Set<Flow> getFlows(Path p) throws Exception {
 		Set<Flow> result = new HashSet<Flow>();
 		for (Set<Flow> flows : getFlowsPerServer(p, new HashSet<Flow>()).values()) {
