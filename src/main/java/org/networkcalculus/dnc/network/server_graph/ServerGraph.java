@@ -757,33 +757,6 @@ public class ServerGraph {
 		return result;
 	}
 
-    /**
-     * Finds all the flows that have exactly path p as their path.
-     * @param p
-     *             The path which all the returned flows have.
-     * @return Set of flows that have p as their path.
-     * @throws Exception
-     * 			   	Could not find although there may be flows.
-     */
-    public Set<Flow> getFlowsByPath(Path p) throws Exception {
-
-        Set<Flow> result = new HashSet<Flow>();;
-
-        if(p != null )
-        {
-            // all the flows that start at first server of the path p are potential candidates
-            Set<Flow> flows_source_p = getFlows(p.getSource());
-            for(Flow f : flows_source_p)
-            {
-                if(f.getPath().equals(p))
-                {
-                    result.add(f);
-                }
-            }
-        }
-        return result;
-    }
-
 	/**
 	 * Do not confuse with getServerJoiningFlowsMap
 	 *
