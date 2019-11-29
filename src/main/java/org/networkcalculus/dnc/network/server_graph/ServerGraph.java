@@ -743,16 +743,48 @@ public class ServerGraph {
 
 	/**
 	 * Finds all the flows that cross at least one server on the path p.
+	 *
 	 * @param p
-	 *            The path which the returned flows intersect.
+	 *            The path on which the returned flows intersect.
 	 * @return Set of flows that cross at least one server on the path.
 	 * @throws Exception
-	 *			   Could not sort although there may be flows.
 	 */
 	public Set<Flow> getFlows(Path p) throws Exception {
 		Set<Flow> result = new HashSet<Flow>();
 		for (Set<Flow> flows : getFlowsPerServer(p, new HashSet<Flow>()).values()) {
 			result.addAll(flows);
+		}
+		return result;
+	}
+
+	/**
+	 * Finds all the flows that have exactly path p as their path.
+	 *
+	 * @param p
+	 *             The path which all the returned flows have.
+	 * @return Set of flows that have p as their path.
+	 * @throws Exception
+	 *
+	 */
+	public Set<Flow> getFlowsByPath(Path p) throws Exception {
+
+		Set<Flow> result = new HashSet<Flow>();
+
+		if(p != null )
+		{
+			// all the flows that start at first server of the path p are potential candidates
+			Set<Flow> flows_source_p = getFlows(p.getSource());
+			for(Flow f : flows_source_p)
+			{
+				if(f.getPath().equals(p))
+				{
+					result.add(f);
+				}
+			}
+		}
+
+		else{
+			throw new RuntimeException();
 		}
 		return result;
 	}
@@ -766,7 +798,6 @@ public class ServerGraph {
 	 *            Flows to omit in the sorting operation.
 	 * @return Map from a server to the flows present at this servers.
 	 * @throws Exception
-	 *             Could not sort although there may be flows.
 	 */
 	public Map<Server, Set<Flow>> getFlowsPerServer(Path p, Set<Flow> excluded_flows) throws Exception {
 		Map<Server, Set<Flow>> map__server__set_flows = new HashMap<Server, Set<Flow>>();
@@ -788,7 +819,6 @@ public class ServerGraph {
 	 *            The path to split up and analyze for flows.
 	 * @return Map from a path to the flows taking exactly this tandem of servers.
 	 * @throws Exception
-	 *             Could not sort although there may be flows.
 	 */
 	public Map<Path, Set<Flow>> getFlowsPerSubPath(Path p) throws Exception {
 		Map<Path, Set<Flow>> map__path__set_flows = new HashMap<Path, Set<Flow>>();
@@ -1148,12 +1178,10 @@ public class ServerGraph {
 		return new Path(path_servers, path_turns);
 	}
 
+
 	/**
 	 * @param path
 	 *            The tandem of servers to check for flows.
-	 * @param flows_to_join
-	 *            Flows not in the return set<br>
-	 *            null will be handled as empty set of flows.
 	 * @return The joining flows.
 	 * @throws Exception
 	 *             Could not derive the joining flows even if there are.
