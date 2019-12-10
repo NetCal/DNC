@@ -759,29 +759,26 @@ public class ServerGraph {
 
 	/**
 	 * Finds all the flows that have exactly path p as their path.
-	 *
 	 * @param p
-	 *             The path which all the returned flows have.
+	 *            The path which all the returned flows have.
 	 * @return Set of flows that have p as their path.
 	 * @throws Exception
-	 *             If the path is null.
+	 *            If the path is null.
 	 */
 	public Set<Flow> getFlowsByPath(Path p) throws Exception {
-        // Throw a runtime exception if p is null.
-	    if(p == null) {
-            throw new RuntimeException("Path argument for method getFlowsByPath(Path p) in ServerGraph was null.");
-        }
-	    Set<Flow> result = new HashSet<Flow>();
-	    // All the flows that start at the first server of the path p are potential candidates.
-        Set<Flow> flows_source_p = getFlows(p.getSource());
-        for(Flow f : flows_source_p)
-        {
-            if(f.getPath().equals(p))
-            {
-                    result.add(f);
-            }
-        }
-        return result;
+		// Throw a runtime exception if p is null.
+		if(p == null) {
+			throw new RuntimeException("Path argument for method getFlowsByPath(Path p) in ServerGraph was null.");
+		}
+		Set<Flow> result = new HashSet<Flow>();
+		// All the flows that start at the first server of the path p are potential candidates.
+		Set<Flow> flows_source_p = getFlows(p.getSource());
+		for(Flow f : flows_source_p){
+			if(f.getPath().equals(p)){
+				result.add(f);
+			}
+		}
+		return result;
 	}
 
 	/**
