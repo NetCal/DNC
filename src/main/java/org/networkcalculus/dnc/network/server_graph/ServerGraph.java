@@ -764,7 +764,7 @@ public class ServerGraph {
 	 *             The path which all the returned flows have.
 	 * @return Set of flows that have p as their path.
 	 * @throws Exception
-	 *
+	 *             If the path is null.
 	 */
 	public Set<Flow> getFlowsByPath(Path p) throws Exception {
 
@@ -783,6 +783,7 @@ public class ServerGraph {
 			}
 		}
 
+		// throw a runtime exception if p is null
 		else{
 			throw new RuntimeException();
 		}
