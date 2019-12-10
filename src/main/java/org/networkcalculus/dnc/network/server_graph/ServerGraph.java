@@ -768,26 +768,25 @@ public class ServerGraph {
 	 */
 	public Set<Flow> getFlowsByPath(Path p) throws Exception {
 
-		Set<Flow> result = new HashSet<Flow>();
+        // throw a runtime exception if p is null
+	    if(p == null)
+        {
+            throw new RuntimeException("Path argument for method getFlowsByPath(Path p) in ServerGraph was null.");
+        }
 
-		if(p != null )
-		{
-			// all the flows that start at first server of the path p are potential candidates
-			Set<Flow> flows_source_p = getFlows(p.getSource());
-			for(Flow f : flows_source_p)
-			{
-				if(f.getPath().equals(p))
-				{
-					result.add(f);
-				}
-			}
-		}
-
-		// throw a runtime exception if p is null
-		else{
-			throw new RuntimeException();
-		}
-		return result;
+	    else{
+            Set<Flow> result = new HashSet<Flow>();
+            // all the flows that start at first server of the path p are potential candidates
+            Set<Flow> flows_source_p = getFlows(p.getSource());
+            for(Flow f : flows_source_p)
+            {
+                if(f.getPath().equals(p))
+                {
+                    result.add(f);
+                }
+            }
+            return result;
+        }
 	}
 
 	/**
