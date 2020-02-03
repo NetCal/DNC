@@ -54,7 +54,7 @@
 		<apache.commons.version.from>3.0</apache.commons.version.from>
 		<apache.commons.version.to>3.6.1</apache.commons.version.to>
 		<numbackend.version>1.1.1</numbackend.version>
-		<networkmodel.version>0.0.1-SNAPSHOT</networkmodel.version>
+		<networkmodel.version>1.0.0</networkmodel.version>
 		<maven.plugin.surefire.version>2.22.1</maven.plugin.surefire.version>
 		<maven.plugin.versions.version>2.5</maven.plugin.versions.version>
 		<maven.build-helper.plugin.version>3.0.0</maven.build-helper.plugin.version>
@@ -72,11 +72,11 @@
     		<artifactId>NetCal-NumBackend</artifactId>
 			<version>${numbackend.version}</version>
         	</dependency>
-        	<!-- dependency>
+        	<dependency>
             		<groupId>org.networkcalculus.model</groupId>
             		<artifactId>NetCal-NetworkModel</artifactId>
             		<version>${networkmodel.version}</version>
-        	</dependency-->
+        	</dependency>
 	</dependencies>
 
 	<build>
@@ -273,11 +273,11 @@
 			</build>
 		</profile>
         
-        <!-- profile-->
+        <profile>
             <!-- classes and sources for network model converter
                 (we should decide whether to use the core as dep. from the maven 
                 repo or add it as classes to the jar)--> 
-            <!-- id>model_converter</id>
+            <id>model_converter</id>
             <build>
                 <finalName>NetCal-DNC_networkmodel_converter-${project.version}</finalName>
                 <plugins>
@@ -309,7 +309,7 @@
                     <version>${networkmodel.version}</version>
                 </dependency>
             </dependencies>
-        </profile-->
+        </profile>
 		<profile>
 			<!-- Eclipse users need to activate this profile manually. Go to your 
 				project's properties, Maven and add eclipse (all lower case) to your Active 
