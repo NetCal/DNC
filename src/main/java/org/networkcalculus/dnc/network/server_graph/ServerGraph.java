@@ -568,7 +568,7 @@ public class ServerGraph {
 	 */
 	public Flow addFlow(String alias, ArrivalCurve arrival_curve, Server source, Server sink) throws Exception {
 		if (source == sink) {
-			return addFlow(arrival_curve, sink);
+			return addFlow(alias, arrival_curve, sink);
 		}
 
 		return addFlowToServerGraph(alias, arrival_curve, getShortestPath(source, sink));
