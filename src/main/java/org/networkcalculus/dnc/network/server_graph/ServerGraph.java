@@ -1046,7 +1046,7 @@ public class ServerGraph {
 					a_out = source_flows_internal.iterator().next().getArrivalCurve();
 				} else {
 					for (Flow f : source_flows_internal) {
-						a_out = Curve.add(a_out, f.getArrivalCurve());
+						a_out = Curve.getUtils().add(a_out, f.getArrivalCurve());
 					}
 				}
 			}

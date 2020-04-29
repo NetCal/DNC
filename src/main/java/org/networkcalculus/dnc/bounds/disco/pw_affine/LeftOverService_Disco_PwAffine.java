@@ -109,7 +109,7 @@ public final class LeftOverService_Disco_PwAffine {
             }
         }
 
-        List<Num> ycoords = Curve.computeInflectionPointsY(arrival_curve, service_curve);
+        List<Num> ycoords = Curve.getUtils().computeInflectionPointsY(arrival_curve, service_curve);
         for (int i = 0; i < ycoords.size(); i++) {
             Num ip_y = (ycoords.get(i));
             if (ip_y.lt(arrival_curve.getBurst())) {
@@ -123,9 +123,9 @@ public final class LeftOverService_Disco_PwAffine {
 
                 Num theta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_beta, x_alpha);
                 ServiceCurve beta_fifo = Curve.getFactory()
-                        .createServiceCurve(Curve.boundAtXAxis(Curve.min(
-                                Curve.sub(service_curve,
-                                        Curve.shiftRight(arrival_curve, theta)),
+                        .createServiceCurve(Curve.getUtils().boundAtXAxis(Curve.getUtils().min(
+                        		Curve.getUtils().sub(service_curve,
+                                		Curve.getUtils().shiftRight(arrival_curve, theta)),
                                 Curve.getFactory().createDelayedInfiniteBurst(x_beta))));
                 return beta_fifo;
             }
@@ -160,7 +160,7 @@ public final class LeftOverService_Disco_PwAffine {
     	if(special_cases.getFirst().booleanValue() == true) {
     		return special_cases.getSecond(); 
     	} else {
-            return Curve.getFactory().createServiceCurve(Curve.boundAtXAxis(Curve.sub(service_curve, arrival_curve)));
+            return Curve.getFactory().createServiceCurve(Curve.getUtils().boundAtXAxis(Curve.getUtils().sub(service_curve, arrival_curve)));
     	}
     }
     
