@@ -35,7 +35,7 @@ import org.networkcalculus.num.Num;
 /**
  * Interface for wide-sense increasing, plain curves.
  */
-public interface Curve {
+public interface Curve extends CurveFactory {
 
     enum CurveOperation {
         ADD, SUB, MIN, MAX
@@ -712,78 +712,6 @@ public interface Curve {
     Curve copy();
 
     void copy(Curve curve);
-
-    // ------------------------------------------------------------
-    // Service Curves
-    // ------------------------------------------------------------
-    
-    ServiceCurve createServiceCurve();
-
-    ServiceCurve createServiceCurve(int segment_count);
-
-    ServiceCurve createServiceCurve(String service_curve_str) throws Exception;
-
-    ServiceCurve createServiceCurve(Curve curve);
-
-    ServiceCurve createZeroService();
-
-    ServiceCurve createZeroDelayInfiniteBurst();
-
-    ServiceCurve createDelayedInfiniteBurst(double delay);
-
-    ServiceCurve createDelayedInfiniteBurst(Num delay);
-
-    ServiceCurve createRateLatency(double rate, double latency);
-
-    ServiceCurve createRateLatency(Num rate, Num latency);
-
-    // ------------------------------------------------------------
-    // Arrival Curves
-    // ------------------------------------------------------------
-
-    ArrivalCurve createArrivalCurve();
-
-    ArrivalCurve createArrivalCurve(int segment_count);
-
-    ArrivalCurve createArrivalCurve(String arrival_curve_str) throws Exception;
-
-    ArrivalCurve createArrivalCurve(Curve curve);
-
-    ArrivalCurve createArrivalCurve(Curve curve, boolean remove_latency);
-
-    ArrivalCurve createZeroArrivals();
-
-    ArrivalCurve createInfiniteArrivals();
-
-    ArrivalCurve createPeakArrivalRate(double rate);
-
-    ArrivalCurve createPeakArrivalRate(Num rate);
-
-    ArrivalCurve createTokenBucket(double rate, double burst);
-
-    ArrivalCurve createTokenBucket(Num rate, Num burst);
-
-    // ------------------------------------------------------------
-    // Maximum Service Curves
-    // ------------------------------------------------------------
-
-    MaxServiceCurve createMaxServiceCurve();
-
-    MaxServiceCurve createMaxServiceCurve(int segment_count);
-
-    MaxServiceCurve createMaxServiceCurve(String max_service_curve_str) throws Exception;
-
-    MaxServiceCurve createMaxServiceCurve(Curve curve);
-
-    MaxServiceCurve createZeroDelayInfiniteBurstMSC();
-
-    MaxServiceCurve createDelayedInfiniteBurstMSC(double delay);
-
-    MaxServiceCurve createDelayedInfiniteBurstMSC(Num delay);
-
-    MaxServiceCurve createRateLatencyMSC(double rate, double latency);
-
-    MaxServiceCurve createRateLatencyMSC(Num rate, Num latency);
 
     // ------------------------------------------------------------
     // Properties, Special Shapes etc.
