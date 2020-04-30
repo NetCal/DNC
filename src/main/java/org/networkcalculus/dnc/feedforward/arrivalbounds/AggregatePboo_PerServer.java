@@ -132,7 +132,7 @@ public class AggregatePboo_PerServer extends AbstractArrivalBound implements Arr
 			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
 			for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
 				for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
-					alphas_xxfcaller_s.add(Curve.add(arrival_curve_path, arrival_curve_offpath));
+					alphas_xxfcaller_s.add(Curve.getUtils().add(arrival_curve_path, arrival_curve_offpath));
 				}
 			}
 

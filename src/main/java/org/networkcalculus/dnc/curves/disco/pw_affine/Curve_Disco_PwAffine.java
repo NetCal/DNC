@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.Curve;
+import org.networkcalculus.dnc.curves.CurveUtils;
 import org.networkcalculus.dnc.curves.Curve_Affine;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.Curve_PwAffine;
@@ -56,6 +57,7 @@ import org.networkcalculus.num.Num;
  */
 public class Curve_Disco_PwAffine implements Curve_PwAffine {
 	private static Curve_Disco_PwAffine instance = new Curve_Disco_PwAffine();
+	private static CurveUtils utils = Calculator.getInstance().getDncBackend().getCurveUtils();
 
 	protected LinearSegment_Disco[] segments;
 
@@ -219,7 +221,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		for (int i = 0; i < segments_to_parse.length; i++) {
 			segments[i] = new LinearSegment_Disco(segments_to_parse[i]);
 		}
-		Curve.beautify(this);
+		utils.beautify(this);
 	}
 
 	protected void forceThroughOrigin() {
@@ -654,8 +656,8 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		Curve_Disco_PwAffine this_cpy = this.copy();
 		Curve_Disco_PwAffine other_cpy = ((Curve_Disco_PwAffine) obj).copy();
 
-		Curve.beautify(this_cpy);
-		Curve.beautify(other_cpy);
+		utils.beautify(this_cpy);
+		utils.beautify(other_cpy);
 
 		if (this_cpy.getLatency() == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
 			this_cpy = Curve_ConstantPool.ZERO_CURVE.get();
@@ -825,7 +827,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 			}
 		} else {
-			Curve.beautify(this);
+			utils.beautify(this);
 			if (segments[0].getY().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 				return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 			}
@@ -1040,7 +1042,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 		for (int i = 0; i < segments.size(); i++) {
 			c_dnc.setSegment(i, segments.get(i));
 		}
-		Curve.beautify(c_dnc);
+		utils.beautify(c_dnc);
 		return c_dnc;
 	}
 
@@ -1141,7 +1143,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine {
 	}
 
 	public ArrivalCurve_Disco_PwAffine createArrivalCurve(Curve curve, boolean remove_latency) {
-		return createArrivalCurve(Curve.removeLatency(curve));
+		return createArrivalCurve(utils.removeLatency(curve));
 	}
 
 	public ArrivalCurve_Disco_PwAffine createZeroArrivals() {
