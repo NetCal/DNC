@@ -28,7 +28,6 @@ package org.networkcalculus.dnc;
 
 import org.networkcalculus.dnc.algebra.MinPlus;
 import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.CurveUtils;
 import org.networkcalculus.num.NumBackend;
 
 /**
@@ -69,10 +68,6 @@ public final class Calculator {
 	
 	public Curve getCurveFactory() {
 		return DNC_BACKEND.getCurveFactory();
-	}
-	
-	public CurveUtils getCurveUtils() {
-		return DNC_BACKEND.getCurveUtils();
 	}
 	
 	public MinPlus getMinPlus() {

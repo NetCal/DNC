@@ -163,8 +163,8 @@ public abstract class Deconvolution_Disco_Affine {
             for (Curve pwa_c : curves) {
                 latency = pwa_c.getLatency();
                 results.add(Curve.getFactory().createArrivalCurve(
-                		Curve.getUtils().shiftRight(deconvolveTB_RL(
-                					Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftLeftClipping(pwa_c, latency)), sc),
+                			Curve.shiftRight(deconvolveTB_RL(
+                					Curve.getFactory().createArrivalCurve(Curve.shiftLeftClipping(pwa_c, latency)), sc),
                         latency)));
             }
         }

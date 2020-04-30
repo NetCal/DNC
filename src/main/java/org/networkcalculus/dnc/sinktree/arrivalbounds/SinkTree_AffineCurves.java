@@ -97,7 +97,7 @@ public class SinkTree_AffineCurves {
                 arrival_bound_f = Calculator.getInstance().getMinPlus().deconvolve(f.getArrivalCurve(), sc_s_subpath);
             }
             ab_cache.addEntry(turn, f, arrival_bound_f);
-            arrival_bound = Curve.getUtils().add(arrival_bound, arrival_bound_f);
+            arrival_bound = Curve.add(arrival_bound, arrival_bound_f);
         }
 
         return arrival_bound;

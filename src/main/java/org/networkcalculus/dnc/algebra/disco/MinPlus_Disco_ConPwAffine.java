@@ -136,6 +136,15 @@ public enum MinPlus_Disco_ConPwAffine implements MinPlus {
 	 */
 	@Override
 	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve) throws Exception {
+		return deconvolve(arrival_curve, service_curve, false);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.networkcalculus.dnc.algebra.IMinPlus#deconvolve(org.networkcalculus.dnc.curves.ArrivalCurve, org.networkcalculus.dnc.curves.ServiceCurve, boolean)
+	 */
+	@Override
+	public ArrivalCurve deconvolve(ArrivalCurve arrival_curve, ServiceCurve service_curve,
+			boolean tb_rl_optimized) throws Exception {
 		return Deconvolution_Disco_ConPwAffine.deconvolve(arrival_curve, service_curve);
 	}
 
