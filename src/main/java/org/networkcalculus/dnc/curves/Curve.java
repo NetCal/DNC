@@ -33,14 +33,14 @@ import org.networkcalculus.num.Num;
 /**
  * Interface for wide-sense increasing, plain curves.
  */
-public interface Curve extends CurveFactory {
+public interface Curve {
 
     // --------------------------------------------------------------------------------------------------------------
     // Factory
     // Easy factory and utils access
     // --------------------------------------------------------------------------------------------------------------
 
-    static Curve getFactory() {
+    static CurveFactory_Affine getFactory() {
         return Calculator.getInstance().getCurveFactory();
     }
 
@@ -66,17 +66,6 @@ public interface Curve extends CurveFactory {
     // --------------------------------------------------------------------------------------------------------------
     // Interface
     // --------------------------------------------------------------------------------------------------------------
-
-    // ------------------------------------------------------------
-    // Curves (generic)
-    // ------------------------------------------------------------
-
-    // Construction
-    Curve createZeroCurve();
-
-    Curve createHorizontal(Num y);
-
-    Curve createCurve(List<LinearSegment> segments);
     
     // Segments
     /**

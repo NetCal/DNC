@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.Curve;
+import org.networkcalculus.dnc.curves.CurveFactory_Affine;
 import org.networkcalculus.dnc.curves.CurveUtils;
 import org.networkcalculus.dnc.curves.Curve_Affine;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
@@ -53,7 +54,7 @@ import org.networkcalculus.num.Num;
  * All arithmetic operations on a curve return a new instance of class
  * <code>Curve</code>.<br>
  */
-public class Curve_Disco_Affine implements Curve_Affine {
+public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 	private static Curve_Disco_Affine instance = new Curve_Disco_Affine();
 	private static CurveUtils utils = Calculator.getInstance().getDncBackend().getCurveUtils();
 
@@ -113,7 +114,7 @@ public class Curve_Disco_Affine implements Curve_Affine {
 	 * @return
 	 * 			An instance of <code>Curve_Disco_Affine</code>
 	 */
-	public static Curve_Disco_Affine getFactory() {
+	public static CurveFactory_Affine getFactory() {
 		return instance;
 	}
 

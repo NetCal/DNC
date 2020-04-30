@@ -25,12 +25,25 @@
 
 package org.networkcalculus.dnc.curves;
 
+import java.util.List;
+
 import org.networkcalculus.num.Num;
 
 /**
  * Interface for wide-sense increasing, plain curves.
  */
-public interface CurveFactory {
+public interface CurveFactory_Affine {
+
+    // ------------------------------------------------------------
+    // Curves (generic)
+    // ------------------------------------------------------------
+
+    // Construction
+    Curve createZeroCurve();
+
+    Curve createHorizontal(Num y);
+
+    Curve createCurve(List<LinearSegment> segments);
 
     // ------------------------------------------------------------
     // Service Curves

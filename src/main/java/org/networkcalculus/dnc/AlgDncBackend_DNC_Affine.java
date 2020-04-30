@@ -31,7 +31,7 @@ import org.networkcalculus.dnc.bounds.BoundingCurves;
 import org.networkcalculus.dnc.bounds.Bounds;
 import org.networkcalculus.dnc.bounds.disco.BoundingCurves_Disco_ConPwAffine;
 import org.networkcalculus.dnc.bounds.disco.Bounds_Disco_PwAffine;
-import org.networkcalculus.dnc.curves.Curve;
+import org.networkcalculus.dnc.curves.CurveFactory_Affine;
 import org.networkcalculus.dnc.curves.CurveUtils;
 import org.networkcalculus.dnc.curves.LinearSegment;
 import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
@@ -57,7 +57,7 @@ public enum AlgDncBackend_DNC_Affine implements AlgDncBackend {
 	}
 
 	@Override
-	public Curve getCurveFactory() {
+	public CurveFactory_Affine getCurveFactory() {
 		return Curve_Disco_Affine.getFactory();
 	}
 
