@@ -185,8 +185,8 @@ public abstract class Deconvolution_Disco_ConPwAffine {
         for (ServiceCurve sc : service_curves) {
             for (Curve pwa_c : curves) {
                 latency = pwa_c.getLatency();
-                results.add(Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftRight(
-                        deconvolve_con_pw_affine(Curve.getUtils().shiftLeftClipping(pwa_c, latency), sc),
+                results.add(Curve.getFactory().createArrivalCurve(Curve.shiftRight(
+                        deconvolve_con_pw_affine(Curve.shiftLeftClipping(pwa_c, latency), sc),
                         latency)));
             }
         }
@@ -248,7 +248,7 @@ public abstract class Deconvolution_Disco_ConPwAffine {
             // above):
 
             x_inflect_beta = curve_2.getSegment(i).getX();
-            candidate_tmp = Curve.getUtils().shiftLeftClipping((Curve) curve_1, x_inflect_beta);
+            candidate_tmp = Curve.shiftLeftClipping((Curve) curve_1, x_inflect_beta);
 
             y_beta = curve_2.f(x_inflect_beta);
             if (y_beta.doubleValue() != 0.0) { // Need to lower the rest of the result candidate by y.
@@ -373,7 +373,7 @@ public abstract class Deconvolution_Disco_ConPwAffine {
         sup_curve = candidates_iter.next();
         while (candidates_iter.hasNext()) {
             additional_curve = candidates_iter.next();
-            sup_curve = Curve.getUtils().max((Curve) sup_curve, (Curve) additional_curve);
+            sup_curve = Curve.max((Curve) sup_curve, (Curve) additional_curve);
         }
 
         return Curve.getFactory().createArrivalCurve((Curve) sup_curve);
