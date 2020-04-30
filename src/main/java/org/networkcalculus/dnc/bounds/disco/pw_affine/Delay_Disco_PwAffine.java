@@ -59,7 +59,7 @@ public final class Delay_Disco_PwAffine {
             return result;
         }
 
-        return Curve.getXIntersection(arrival_curve, service_curve);
+        return Curve.getUtils().getXIntersection(arrival_curve, service_curve);
     }
 
     // Single flow to be bound, i.e., fifo per micro flow holds

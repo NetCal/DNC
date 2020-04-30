@@ -44,22 +44,22 @@ public final class Backlog_SinkTree {
 		for (Turn turn : tree.getInTurns(server)) {
 			switch (sink_tree_ab) {
 				case SINKTREE_AFFINE_HOMO:
-					arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
+					arrivals_at_root = Curve.getUtils().add(arrivals_at_root, sink_tree_bound
 							.computeArrivalBoundHomogeneous(turn, tree.getFlows(turn), Flow.NULL_FLOW));
 					continue; //implicit break
 	
 				case SINKTREE_AFFINE_DIRECT:
-					arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
+					arrivals_at_root = Curve.getUtils().add(arrivals_at_root, sink_tree_bound
 							.computeArrivalBoundDirect(turn, tree.getFlows(turn), Flow.NULL_FLOW));
 					continue; //implicit break
 					
 				case SINKTREE_AFFINE_MINPLUS:
 				default:
-					arrivals_at_root = Curve.add(arrivals_at_root, sink_tree_bound
+					arrivals_at_root = Curve.getUtils().add(arrivals_at_root, sink_tree_bound
 							.computeArrivalBoundMinPlusBackend(turn, tree.getFlows(turn), Flow.NULL_FLOW));
 					continue; //implicit break
 			}
 		}
-		return Curve.getMaxVerticalDeviation(arrivals_at_root, server.getServiceCurve()).doubleValue();
+		return Curve.getUtils().getMaxVerticalDeviation(arrivals_at_root, server.getServiceCurve()).doubleValue();
 	}
 }
