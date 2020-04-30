@@ -117,7 +117,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
             ServiceCurve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
                     flow_tb_iter_map, server_rl_iters);
             if (!beta.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())) {
-                beta_total = Curve.getUtils().max(beta_total, beta);
+                beta_total = Curve.max(beta_total, beta);
             }
 
             // First check whether there are more combinations of flow TBs
@@ -608,7 +608,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
             arrival_bounds_turn_permutations.clear();
             List<Flow> flow_list_tmp = new LinkedList<Flow>();
             for (ArrivalCurve alpha : alphas_xf_group) {
-            	Curve.getUtils().beautify(alpha);
+                Curve.beautify(alpha);
 
                 for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
                     // The new list of cross-flow substitutes = old list plus a new one with one of

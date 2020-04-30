@@ -172,10 +172,10 @@ public abstract class ArrivalBoundDispatch {
 			// * Consider all the permutations of different bounds per in turn.
 			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
 			for (ArrivalCurve arrival_bound_turn : arrival_bounds_turn) {
-				Curve.getUtils().beautify(arrival_bound_turn);
+				Curve.beautify(arrival_bound_turn);
 
 				for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-					arrival_bounds_turn_permutations.add(Curve.getUtils().add(arrival_bound_turn, arrival_bound_exiting));
+					arrival_bounds_turn_permutations.add(Curve.add(arrival_bound_turn, arrival_bound_exiting));
 				}
 			}
 
@@ -341,7 +341,7 @@ public abstract class ArrivalBoundDispatch {
 
 		for (ArrivalCurve alpha_1 : arrival_curves_1) {
 			for (ArrivalCurve alpha_2 : arrival_curves_2) {
-				arrival_bounds_merged.add(Curve.getUtils().add(alpha_1, alpha_2));
+				arrival_bounds_merged.add(Curve.add(alpha_1, alpha_2));
 			}
 		}
 
