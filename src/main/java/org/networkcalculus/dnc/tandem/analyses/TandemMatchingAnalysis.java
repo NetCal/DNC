@@ -259,7 +259,7 @@ public class TandemMatchingAnalysis extends AbstractTandemAnalysis {
 			arrival_bounds_turn_permutations.clear();
  			List<Flow> flow_list_tmp = new LinkedList<Flow>();
  			for( ArrivalCurve alpha : alphas_xf_group ) {
- 				Curve.beautify(alpha);
+ 				Curve.getUtils().beautify(alpha);
 	 			
 	 			for( List<Flow> f_subst_list : cross_flow_substitutes_set ) {
 	 				// The new list of cross-flow substitutes = old list plus a new one with one of the derived arrival bounds. 

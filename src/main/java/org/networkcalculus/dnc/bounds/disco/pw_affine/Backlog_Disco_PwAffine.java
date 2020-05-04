@@ -63,7 +63,7 @@ public final class Backlog_Disco_PwAffine {
 
 		Num result = arrival_curve.fLimitRight(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero());
 
-		ArrayList<Num> xcoords = Curve.computeInflectionPointsX(arrival_curve, service_curve);
+		ArrayList<Num> xcoords = Curve.getUtils().computeInflectionPointsX(arrival_curve, service_curve);
 		for (int i = 0; i < xcoords.size(); i++) {
 			Num ip_x = xcoords.get(i);
 

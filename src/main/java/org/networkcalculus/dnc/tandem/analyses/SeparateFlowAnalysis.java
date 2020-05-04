@@ -210,7 +210,7 @@ public class SeparateFlowAnalysis extends AbstractTandemAnalysis {
                 while(ac_set_iterator.hasNext()) {
                 	for(ArrivalCurve ac_new : ac_set_iterator.next()) {
                 		for(ArrivalCurve ac_existing : alpha_xfois) {
-                			ac_combinations_tmp.add(Curve.add(ac_new,ac_existing));
+                			ac_combinations_tmp.add(Curve.getUtils().add(ac_new,ac_existing));
                 		}
                 	}
             		alpha_xfois.clear();

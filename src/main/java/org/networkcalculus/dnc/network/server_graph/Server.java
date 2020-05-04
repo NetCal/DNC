@@ -199,7 +199,7 @@ public class Server {
         if (use_max_sc_output_rate == false) {
             return Curve.getFactory().createZeroDelayInfiniteBurstMSC();
         } else {
-            return (MaxServiceCurve) Curve.removeLatency(max_service_curve);
+            return (MaxServiceCurve) Curve.getUtils().removeLatency(max_service_curve);
         }
     }
 
@@ -207,7 +207,7 @@ public class Server {
      * @return The stored maximum service curve rate
      */
     public MaxServiceCurve getStoredMaxScRate() {
-    	return (MaxServiceCurve) Curve.removeLatency(max_service_curve);
+    	return (MaxServiceCurve) Curve.getUtils().removeLatency(max_service_curve);
     }
 
     public boolean useMaxSC() {
