@@ -49,16 +49,16 @@
 		<maven.compiler.target>13</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<junit.platform.version>1.4.1</junit.platform.version>
-		<junit.jupiter.version>5.4.1</junit.jupiter.version>
+		<junit.platform.version>1.6.2</junit.platform.version>
+		<junit.jupiter.version>5.6.2</junit.jupiter.version>
 		<apache.commons.version.from>3.0</apache.commons.version.from>
 		<apache.commons.version.to>3.6.1</apache.commons.version.to>
 		<numbackend.version>1.1.1</numbackend.version>
 		<networkmodel.version>1.0.0</networkmodel.version>
-		<maven.plugin.surefire.version>2.22.1</maven.plugin.surefire.version>
-		<maven.plugin.versions.version>2.5</maven.plugin.versions.version>
-		<maven.build-helper.plugin.version>3.0.0</maven.build-helper.plugin.version>
-		<maven.download.plugin.version>1.4.1</maven.download.plugin.version>
+		<maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
+		<maven.plugin.versions.version>2.7</maven.plugin.versions.version>
+		<maven.build-helper.plugin.version>3.1.0</maven.build-helper.plugin.version>
+		<maven.download.plugin.version>1.5.1</maven.download.plugin.version>
 	</properties>
 
 	<dependencies>
