@@ -231,7 +231,7 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
     }
 
     /**
-     * Returns the maximum horizontal deviation between the given two curves.
+     * Returns the maximum horizontal deviation of curve c2 from curve c1.
      *
      * @param c1 the first curve.
      * @param c2 the second curve.
@@ -259,7 +259,7 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
     }
 
     /**
-     * Returns the maximum vertical deviation between the given two curves.
+     * Returns the maximum vertical deviation of curve c2 from curve c1.
      *
      * @param c1 the first curve.
      * @param c2 the second curve.

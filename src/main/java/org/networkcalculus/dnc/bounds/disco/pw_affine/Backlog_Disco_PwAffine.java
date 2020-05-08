@@ -42,8 +42,8 @@ public final class Backlog_Disco_PwAffine {
 		if (service_curve.isDelayedInfiniteBurst()) {
 			return arrival_curve.f(service_curve.getLatency());
 		}
-		if (service_curve.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()) // We know from above that the
-				// arrivals are not zero.
+		// We know from above that the arrivals are not zero.
+		if (service_curve.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()) 
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
 		}

@@ -72,6 +72,6 @@ public final class Delay_Disco_PwAffine {
         
         return Num.getUtils(Calculator.getInstance().getNumBackend()).max
         			(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), 
-        				Curve.getUtils().getMaxHorizontalDeviation(arrival_curve, service_curve));
+        			Curve.getUtils().getMaxHorizontalDeviation(arrival_curve, service_curve));
     }
 }
