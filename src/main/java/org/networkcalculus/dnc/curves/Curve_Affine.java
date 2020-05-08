@@ -25,9 +25,6 @@
 
 package org.networkcalculus.dnc.curves;
 
-import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.num.Num;
-
 /**
  * Interface for affine curves, including convenience functions used
  * by Disco's implementation of DNC operations. I.e., in addition to its defining
@@ -35,40 +32,6 @@ import org.networkcalculus.num.Num;
  * token bucket functions.
  */
 public interface Curve_Affine extends Curve {
-
-    // // Specific affine curve shapes
-
-    /**
-     * Returns the maximum horizontal deviation between the given two curves.
-     *
-     * @param c1 the first curve.
-     * @param c2 the second curve.
-     * @return the value of the horizontal deviation.
-     */
-    static Num getMaxHorizontalDeviation(Curve_Affine c1, Curve_Affine c2) {
-        if (c1.getUltAffineRate().gt(c2.getUltAffineRate())) {
-            return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
-        }
-
-        Num result = Num.getFactory(Calculator.getInstance().getNumBackend()).createNegativeInfinity();
-        for (int i = 0; i < c1.getSegmentCount(); i++) {
-            Num ip_y = c1.getSegment(i).getY();
-
-            Num delay = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, delay);
-        }
-        for (int i = 0; i < c2.getSegmentCount(); i++) {
-            Num ip_y = c2.getSegment(i).getY();
-
-            Num delay = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c2.f_inv(ip_y, true), c1.f_inv(ip_y, false));
-            result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, delay);
-        }
-        return result;
-    }
-
-    // --------------------------------------------------------------------------------------------------------------
-    // Interface
-    // --------------------------------------------------------------------------------------------------------------
     @Override
     Curve_Affine copy();
 

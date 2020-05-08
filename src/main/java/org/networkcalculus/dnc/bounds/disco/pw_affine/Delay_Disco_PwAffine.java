@@ -69,21 +69,9 @@ public final class Delay_Disco_PwAffine {
         if (result != null) {
             return result;
         }
-
-        result = Num.getFactory(Calculator.getInstance().getNumBackend()).createNegativeInfinity();
-        for (int i = 0; i < arrival_curve.getSegmentCount(); i++) {
-            Num ip_y = arrival_curve.getSegment(i).getY();
-
-            Num delay = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-            result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, delay);
-        }
-        for (int i = 0; i < service_curve.getSegmentCount(); i++) {
-            Num ip_y = service_curve.getSegment(i).getY();
-
-            Num delay = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curve.f_inv(ip_y, true), arrival_curve.f_inv(ip_y, false));
-            result = Num.getUtils(Calculator.getInstance().getNumBackend()).max(result, delay);
-        }
-
-        return Num.getUtils(Calculator.getInstance().getNumBackend()).max(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), result);
+        
+        return Num.getUtils(Calculator.getInstance().getNumBackend()).max
+        			(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), 
+        			Curve.getUtils().getMaxHorizontalDeviation(arrival_curve, service_curve));
     }
 }

@@ -32,7 +32,7 @@ In order to get all submodules, use the command `git submodule update --init --r
 
 # Development with Eclipse
 
-This small guide assumes you have installed Eclipse 2019-03, a Java 12 JDK and a git command line client.
+This small guide assumes you have installed Eclipse 2020-03 (4.15.0), a Java 13 JDK (preferably OpenJDK) and a git command line client.
 
 ## Setting up the Project in Eclipse
 * Navigate to you Eclipse workspace directory, clone the DNC repository to it and pull the submodules.
