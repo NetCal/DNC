@@ -77,6 +77,15 @@ public interface CurveUtils {
     ArrayList<Num> computeInflectionPointsX(Curve c1, Curve c2);
 
     /**
+     * Returns the maximum horizontal deviation between the given two curves.
+     *
+     * @param c1 the first curve.
+     * @param c2 the second curve.
+     * @return the value of the horizontal deviation.
+     */
+    public Num getMaxHorizontalDeviation(Curve c1, Curve c2);
+
+    /**
      * Returns the maximum vertical deviation between the given two curves.
      *
      * @param c1 the first curve.
