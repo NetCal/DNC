@@ -1,3 +1,12 @@
+DNC v2.6.1 (2020-May-11)
+------------ -----------
+* New networkmodel submodules and converter by @matyesz
+* hashCode improvements by @davidalain
+* GetFlowsByPath in the server graph by @alexscheffler
+* Improved curve interfaces, factories, utilities structure by @sbondorf
+* Clarifications regarding contribution, copyright and licensing
+* Various minor cleanups. code deduplications, docs improvements, fixes etc.
+
 DNC v2.6.0 (2019-Jun-17)
 ------------------------
 * Added the Arrival Bounds Cache.
