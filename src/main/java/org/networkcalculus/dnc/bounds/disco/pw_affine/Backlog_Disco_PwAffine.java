@@ -36,8 +36,10 @@ import org.networkcalculus.num.Num;
 
 public final class Backlog_Disco_PwAffine {
 	public static Num derive(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
+		Num num_factory = Num.getFactory(Calculator.getInstance().getNumBackend());
+		
 		if (arrival_curve.equals(Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get())) {
-			return Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+			return num_factory.createZero();
 		}
 		if (service_curve.isDelayedInfiniteBurst()) {
 			return arrival_curve.f(service_curve.getLatency());
@@ -45,11 +47,11 @@ public final class Backlog_Disco_PwAffine {
 		// We know from above that the arrivals are not zero.
 		if (service_curve.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()) 
 				|| arrival_curve.getUltAffineRate().gt(service_curve.getUltAffineRate())) {
-			return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+			return num_factory.createPositiveInfinity();
 		}
 		
 		return Num.getUtils(Calculator.getInstance().getNumBackend()).max
-    				(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), 
+    				(num_factory.getZero(), 
     				Curve.getUtils().getMaxVerticalDeviation(arrival_curve, service_curve));
 	}
 }
