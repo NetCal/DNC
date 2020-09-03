@@ -50,6 +50,6 @@ public final class Backlog_Disco_PwAffine {
 		
 		return Num.getUtils(Calculator.getInstance().getNumBackend()).max
     				(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), 
-    				Curve.getUtils().getMaxVerticalDeviation(service_curve, arrival_curve));
+    				Curve.getUtils().getMaxVerticalDeviation(arrival_curve, service_curve));
 	}
 }
