@@ -1,5 +1,10 @@
+DNC v2.6.2 (2020-Sep-04)
+------------------------
+Fixing the backlog bound computation (order of input parameters got reversed in the last release, sorry about that).  
+That was not caught by the functional tests, leading to the suspicion that there might be a problem with them, too.
+
 DNC v2.6.1 (2020-May-11)
------------- -----------
+------------------------
 * New networkmodel submodules and converter by @matyesz
 * hashCode improvements by @davidalain
 * GetFlowsByPath in the server graph by @alexscheffler
