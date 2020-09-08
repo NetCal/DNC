@@ -174,8 +174,8 @@ public abstract class ArrivalBoundDispatch {
 			for (ArrivalCurve arrival_bound_turn : arrival_bounds_turn) {
 				Curve.getUtils().beautify(arrival_bound_turn);
 
-				for (ArrivalCurve arrival_bound_exiting : arrival_bounds) {
-					arrival_bounds_turn_permutations.add(Curve.getUtils().add(arrival_bound_turn, arrival_bound_exiting));
+				for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
+					arrival_bounds_turn_permutations.add(Curve.getUtils().add(arrival_bound_turn, arrival_bound_existing));
 				}
 			}
 
