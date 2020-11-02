@@ -104,11 +104,16 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
     	for (Server s : path.getServers()) {
     		sum_latencies = num_utils.add(sum_latencies, s.getServiceCurve().getLatency());
     	}
-
+    	
     	Num sum_bursts = num_factory.getZero();
     	
     	for (Flow f : cross_flow_substitutes) {
     		sum_bursts = num_utils.add(sum_bursts, f.getArrivalCurve().getBurst());
+    		
+//    		for( Server s : f.getServersOnPath()) {
+//    			sum_bursts = num_utils.add(sum_bursts, 
+//    					num_utils.mult(f.getArrivalCurve().getUltAffineRate(), s.getServiceCurve().getLatency()));
+//    		}
     	}
     	
     	for( Map.Entry<Server,Set<Flow>> entry : server_xfsubst_map.entrySet() ) {
@@ -118,35 +123,24 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
     		}
     		
     	}
-    	
+
     	Num lo_rate_tandem = num_factory.getPositiveInfinity();
     	Num lo_rate_current_server;
-    	Num sum_burst_increases = num_factory.getZero();
     	for (Server s : path.getServers()) {
     		lo_rate_current_server = num_factory.getZero();
-    		
-    		Num s_service_rate = s.getServiceCurve().getUltAffineRate();
-    		
     		for( Flow f : server_xfsubst_map.get(s)) {
     			// Abuse variable for sum of cross-traffic rates
     			lo_rate_current_server = num_utils.add(lo_rate_current_server, f.getArrivalCurve().getUltAffineRate());
-    			
-    			sum_burst_increases = num_factory.add(sum_burst_increases, num_factory.mult(s.getServiceCurve().getLatency(), s_service_rate));
     		}
-    		lo_rate_current_server = num_utils.sub(s_service_rate, lo_rate_current_server);
+    		lo_rate_current_server = num_utils.sub(s.getServiceCurve().getUltAffineRate(), lo_rate_current_server);
+    		lo_rate_current_server = num_utils.max(lo_rate_current_server, num_factory.createZero());
     		
-    		if(lo_rate_current_server.ltZero()) {
-    			return Curve.getFactory().createZeroService();
-    		}
-    		    		
     		lo_rate_tandem = num_utils.min(lo_rate_tandem, lo_rate_current_server);
     	}
     	
     	Num lo_latency_tandem =
     			num_utils.add(sum_latencies, 
-    					num_utils.div( num_utils.add(sum_bursts, sum_burst_increases),
-    							lo_rate_tandem)
-    					);
+    					num_utils.diff(sum_bursts, lo_rate_tandem));
     	
     	return Curve.getFactory().createRateLatency(lo_rate_tandem, lo_latency_tandem); 
     }
