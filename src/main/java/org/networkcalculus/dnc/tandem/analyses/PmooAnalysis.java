@@ -72,6 +72,74 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         super.configuration = configuration;
         super.result = new PmooResults();
     }
+    
+    public static ServiceCurve getServiceCurve(Path path, List<Flow> cross_flow_substitutes) {
+    	if( Calculator.getInstance().getDncBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
+    		return getServiceCurve_Affine(path, cross_flow_substitutes);
+    	} else {
+    		return getServiceCurve_ConPwAffine(path, cross_flow_substitutes);
+    	}
+    }
+
+    public static ServiceCurve getServiceCurve_Affine(Path path, List<Flow> cross_flow_substitutes) {
+    	
+    	Map<Server,Set<Flow>> server_xfsubst_map = new HashMap<Server,Set<Flow>>();
+    	Set<Flow> flows_at_current_server;
+    	for (Server s : path.getServers()) {
+    		flows_at_current_server = new HashSet<Flow>();
+    		
+    		for (Flow f : cross_flow_substitutes) {
+    			if( f.getPath().getServers().contains(s)) {
+    				flows_at_current_server.add(f);
+    			}
+    		}
+    		
+    		server_xfsubst_map.put(s, flows_at_current_server);
+    	}
+    	
+    	Num num_utils =  Num.getUtils(Calculator.getInstance().getNumBackend());
+    	Num num_factory = num_utils;
+    	
+    	Num sum_latencies = num_factory.getZero();
+    	for (Server s : path.getServers()) {
+    		sum_latencies = num_utils.add(sum_latencies, s.getServiceCurve().getLatency());
+    	}
+
+    	Num sum_bursts = num_factory.getZero();
+    	for (Flow f : cross_flow_substitutes) {
+    		sum_bursts = num_utils.add(sum_bursts, f.getArrivalCurve().getBurst());
+    	}
+    	
+    	Num lo_rate_tandem = num_factory.getPositiveInfinity();
+    	Num sum_burst_increases = num_factory.getZero();
+    	
+    	Num xf_s_arrival_rate, lo_rate_current_server;
+    	for (Server s : path.getServers()) {
+        	
+    		xf_s_arrival_rate = num_factory.getZero();
+        	lo_rate_current_server = num_factory.getZero();
+    		for( Flow f : server_xfsubst_map.get(s)) {
+    			xf_s_arrival_rate = num_utils.add(xf_s_arrival_rate, f.getArrivalCurve().getUltAffineRate());
+    		}
+    		lo_rate_current_server = num_utils.sub(s.getServiceCurve().getUltAffineRate(), xf_s_arrival_rate);
+    		
+    		if(lo_rate_current_server.ltZero()) {
+    			return Curve.getFactory().createZeroService();
+    		}
+
+			sum_burst_increases = num_factory.add(sum_burst_increases, 
+					num_factory.mult(s.getServiceCurve().getLatency(), xf_s_arrival_rate));
+    		lo_rate_tandem = num_utils.min(lo_rate_tandem, lo_rate_current_server);
+    	}
+    	
+    	Num lo_latency_tandem =
+    			num_utils.add(sum_latencies, 
+    					num_utils.div(num_utils.add(sum_bursts, sum_burst_increases),
+    							lo_rate_tandem)
+    			);
+    	
+    	return Curve.getFactory().createRateLatency(lo_rate_tandem, lo_latency_tandem); 
+    }
 
     /**
      * Concatenates the service curves along the given path <code>path</code>
