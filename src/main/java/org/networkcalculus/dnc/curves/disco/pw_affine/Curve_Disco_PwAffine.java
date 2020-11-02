@@ -266,10 +266,12 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 			}
 
 			this.has_rate_latency_meta_info = ((Curve_Disco_PwAffine) curve).has_rate_latency_meta_info;
-			this.rate_latencies = ((Curve_Disco_PwAffine) curve).rate_latencies;
-
+			this.rate_latencies.clear();
+			this.rate_latencies.addAll(((Curve_Disco_PwAffine) curve).rate_latencies);
+			
 			this.has_token_bucket_meta_info = ((Curve_Disco_PwAffine) curve).has_token_bucket_meta_info;
-			this.token_buckets = ((Curve_Disco_PwAffine) curve).token_buckets;
+			this.token_buckets.clear();
+			this.token_buckets.addAll(((Curve_Disco_PwAffine) curve).token_buckets);
 
 			this.is_delayed_infinite_burst = ((Curve_PwAffine) curve).isDelayedInfiniteBurst();
 			this.is_rate_latency = ((Curve_PwAffine) curve).isRateLatency();
