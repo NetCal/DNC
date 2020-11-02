@@ -38,7 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
-import org.networkcalculus.dnc.AlgDncBackend_DNC_Affine;
+
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
@@ -72,78 +72,6 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         super.configuration = configuration;
         super.result = new PmooResults();
     }
-    
-    public static ServiceCurve getServiceCurve(Path path, List<Flow> cross_flow_substitutes) {
-    	if( Calculator.getInstance().getDncBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
-    		return getServiceCurve_Affine(path, cross_flow_substitutes);
-    	} else {
-    		return getServiceCurve_ConPwAffine(path, cross_flow_substitutes);
-    	}
-    }
-
-    public static ServiceCurve getServiceCurve_Affine(Path path, List<Flow> cross_flow_substitutes) {
-    	
-    	Map<Server,Set<Flow>> server_xfsubst_map = new HashMap<Server,Set<Flow>>();
-    	Set<Flow> flows_at_current_server;
-    	for (Server s : path.getServers()) {
-    		flows_at_current_server = new HashSet<Flow>();
-    		
-    		for (Flow f : cross_flow_substitutes) {
-    			if( f.getPath().getServers().contains(s)) {
-    				flows_at_current_server.add(f);
-    			}
-    		}
-    		
-    		server_xfsubst_map.put(s, flows_at_current_server);
-    	}
-    	
-    	Num num_utils =  Num.getUtils(Calculator.getInstance().getNumBackend());
-    	Num num_factory = num_utils;
-    	
-    	Num sum_latencies = num_factory.getZero();
-    	for (Server s : path.getServers()) {
-    		sum_latencies = num_utils.add(sum_latencies, s.getServiceCurve().getLatency());
-    	}
-    	
-    	Num sum_bursts = num_factory.getZero();
-    	
-    	for (Flow f : cross_flow_substitutes) {
-    		sum_bursts = num_utils.add(sum_bursts, f.getArrivalCurve().getBurst());
-    		
-//    		for( Server s : f.getServersOnPath()) {
-//    			sum_bursts = num_utils.add(sum_bursts, 
-//    					num_utils.mult(f.getArrivalCurve().getUltAffineRate(), s.getServiceCurve().getLatency()));
-//    		}
-    	}
-    	
-    	for( Map.Entry<Server,Set<Flow>> entry : server_xfsubst_map.entrySet() ) {
-    		for( Flow f : entry.getValue()) {
-    			sum_bursts = num_utils.add(sum_bursts, 
-    					num_utils.mult(f.getArrivalCurve().getUltAffineRate(), entry.getKey().getServiceCurve().getLatency()));
-    		}
-    		
-    	}
-
-    	Num lo_rate_tandem = num_factory.getPositiveInfinity();
-    	Num lo_rate_current_server;
-    	for (Server s : path.getServers()) {
-    		lo_rate_current_server = num_factory.getZero();
-    		for( Flow f : server_xfsubst_map.get(s)) {
-    			// Abuse variable for sum of cross-traffic rates
-    			lo_rate_current_server = num_utils.add(lo_rate_current_server, f.getArrivalCurve().getUltAffineRate());
-    		}
-    		lo_rate_current_server = num_utils.sub(s.getServiceCurve().getUltAffineRate(), lo_rate_current_server);
-    		lo_rate_current_server = num_utils.max(lo_rate_current_server, num_factory.createZero());
-    		
-    		lo_rate_tandem = num_utils.min(lo_rate_tandem, lo_rate_current_server);
-    	}
-    	
-    	Num lo_latency_tandem =
-    			num_utils.add(sum_latencies, 
-    					num_utils.diff(sum_bursts, lo_rate_tandem));
-    	
-    	return Curve.getFactory().createRateLatency(lo_rate_tandem, lo_latency_tandem); 
-    }
 
     /**
      * Concatenates the service curves along the given path <code>path</code>
@@ -161,7 +89,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
      *                               the actual cross-flows.
      * @return The PMOO service curve
      */
-    public static ServiceCurve getServiceCurve_ConPwAffine(Path path, List<Flow> cross_flow_substitutes) {
+    public static ServiceCurve getServiceCurve(Path path, List<Flow> cross_flow_substitutes) {
         // Create a flow-->tb_iter map
         Map<Flow, Integer> flow_tb_iter_map = new HashMap<Flow, Integer>();
         for (Flow f : cross_flow_substitutes) {
