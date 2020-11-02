@@ -1,3 +1,7 @@
+Since DNC v2.6.2
+----------------
+* A PMOOA left-over service curve computation tailored to the affine curves. 
+
 DNC v2.6.2 (2020-Sep-04)
 ------------------------
 Fixing the backlog bound computation (order of input parameters got reversed in the last release, sorry about that).  
