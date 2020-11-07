@@ -38,7 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
-
+import org.networkcalculus.dnc.AlgDncBackend_DNC_Affine;
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
@@ -157,7 +157,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
      *                               the actual cross-flows.
      * @return The PMOO service curve
      */
-    public static ServiceCurve getServiceCurve(Path path, List<Flow> cross_flow_substitutes) {
+    public static ServiceCurve getServiceCurve_ConPwAffine(Path path, List<Flow> cross_flow_substitutes) {
         // Create a flow-->tb_iter map
         Map<Flow, Integer> flow_tb_iter_map = new HashMap<Flow, Integer>();
         for (Flow f : cross_flow_substitutes) {
