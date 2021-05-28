@@ -1424,7 +1424,7 @@ public class ServerGraph {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("/* \n");
-		sb.append(" * This file is compatible with the Deterministic Network Calculator (DNC) v2.5.\n");
+		sb.append(" * This file is compatible with the Deterministic Network Calculator (DNC) v2.6.\n");
 		sb.append(" *\n");
 		sb.append(" * The Deterministic Network Calculator (DNC) is free software;\n");
 		sb.append(" * you can redistribute it and/or modify it under the terms of the \n");
