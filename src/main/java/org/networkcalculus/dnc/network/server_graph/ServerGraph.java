@@ -43,6 +43,7 @@ import org.apache.commons.math3.util.Pair;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
+import org.networkcalculus.dnc.curves.CurveFactory_Affine;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.MaxServiceCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
@@ -1449,6 +1450,7 @@ public class ServerGraph {
 		sb.append("\n");
 		sb.append("import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;\n");
 		sb.append("import org.networkcalculus.dnc.curves.Curve;\n");
+		sb.append("import org.networkcalculus.dnc.curves.CurveFactory_Affine;\n");
 		sb.append("import org.networkcalculus.dnc.network.server_graph.Server;\n");
 		sb.append("import org.networkcalculus.dnc.network.server_graph.ServerGraph;\n");
 		sb.append("import org.networkcalculus.dnc.network.server_graph.ServerGraphFactory;\n");
@@ -1457,7 +1459,7 @@ public class ServerGraph {
 		sb.append("public class " + file_name + " implements ServerGraphFactory {");
 		sb.append("\n");
 		sb.append("\tprivate ServerGraph sg;\n");
-		sb.append("\tprivate static Curve factory = Curve.getFactory();\n");
+		sb.append("\tprivate static private static CurveFactory_Affine factory = Curve.getFactory();\n");
 		sb.append("\n");
 
 		// Server creation
