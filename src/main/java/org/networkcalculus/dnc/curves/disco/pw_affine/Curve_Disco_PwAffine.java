@@ -757,6 +757,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 		return f_inv(y, false);
 	}
 
+
 	/**
 	 * Returns the x value at which the function value is equal to <code>y</code>.
 	 * If <code>rightmost</code> is <code>true</code>, returns the rightmost
@@ -774,7 +775,20 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 		if (i < 0) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		}
+
+		// if there is a jump, i.e., y is smaller than the y-value of segment i then return the x-coordinate of segment
+		// i directly, don't have to distinguish between rightmost/leftmost then:
+		// if it is called with !rightmost then the arrival curve is considered and we return the x-val of the segment
+		// that actually has a starting y-value bigger than "y". However, this is not a problem since "just" before the
+		// point on the previous segment we have a value that is smaller than "y".
+		if(y.lt(segments[i].getY()))
+		{
+			return segments[i].getX();
+		}
+
+		// "shifts" i to the rightmost segment which contains value y
 		if (rightmost) {
+
 			while (i < segments.length && segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 				i++;
 			}
@@ -782,6 +796,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 				return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
 			}
 		}
+
 		if (!segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 			return Num.getUtils(Calculator.getInstance().getNumBackend()).add(segments[i].getX(),
 					Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y, segments[i].getY()), segments[i].getGrad()));
@@ -790,9 +805,13 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 		}
 	}
 
+
 	/**
 	 * Returns the first segment at which the function reaches the value
-	 * <code>y</code>. It returns -1 if the curve never reaches this value.
+	 * <code>y</code>. If there is a jump and <code>y</code> happens to
+	 * be between the "end" of the y-values of segment i and "start" of
+	 * segment i+1, then it returns i+1.
+	 * It returns -1 if the curve never reaches this value.
 	 *
 	 * @param y
 	 *            the y-coordinate
@@ -805,16 +824,46 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 		for (int i = 0; i < segments.length; i++) {
 			if (i < segments.length - 1) {
 				if (segments[i + 1].getY().geq(y)) {
-					return i;
+					// have to check for a jump
+					Num delta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(segments[i+1].getX(), segments[i].getX());
+					Num delta_times_slope = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(delta, segments[i].getGrad());
+					Num v = Num.getUtils(Calculator.getInstance().getNumBackend()).add(delta_times_slope, segments[i].getY());
+
+					if(v.lt(y))
+					{
+						return i+1;
+					}
+
+					else
+					{
+						return i;
+					}
 				}
 			} else {
-				if (segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
-					return i;
+				// i is the last segment
+				if(segments.length > 1)
+				{
+					if (segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+						return i;
+					}
+				}
+
+				else{
+					// this curve has only one segment
+					if(segments[i].getY().geq(y) ||  ( segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero()) ))
+					{
+						return i;
+					}
+
+					else{
+						return -1;
+					}
 				}
 			}
 		}
 		return -1;
 	}
+
 
 	/**
 	 * Returns the x-coordinate of the inflection point after which the function
