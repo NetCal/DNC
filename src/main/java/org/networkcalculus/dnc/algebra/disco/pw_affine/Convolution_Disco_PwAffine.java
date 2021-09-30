@@ -30,6 +30,7 @@ package org.networkcalculus.dnc.algebra.disco.pw_affine;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.algebra.disco.MinPlus_Disco_Configuration;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
@@ -47,6 +48,54 @@ public abstract class Convolution_Disco_PwAffine {
     // Service Curves
     // ------------------------------------------------------------
 
+
+    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2)
+    {
+        if(AnalysisConfig.enforceMultiplexingStatic() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+        {
+            return convolveFIFO(service_curve_1, service_curve_2);
+        }
+
+        else{
+            return convolveARB(service_curve_1, service_curve_2);
+        }
+    }
+
+    public static ServiceCurve convolveFIFO(ServiceCurve service_curve_0, ServiceCurve service_curve_1){
+
+        switch (CheckUtils.inputDelayedInfiniteBurstCheck(service_curve_0, service_curve_1)) {
+            case 1:
+                return service_curve_1.copy();
+            case 2:
+                return service_curve_0.copy();
+            case 3:
+                return service_curve_0.copy();
+            case 0:
+            default:
+        }
+
+        ServiceCurve[] service_curves = {service_curve_0.copy(), service_curve_1.copy()};
+        int[] i = {0, 0};
+
+        Num total_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(service_curve_0.getLatency(), service_curve_1.getLatency());
+
+        for (int service_index = 0; service_index < 2; service_index++){
+            Num latency = service_curves[service_index].getLatency();
+
+
+            for(int index = 0; index < service_curves[service_index].getSegmentCount(); index++){
+                // if(!service_curves[service_index].getSegment(index).getX().eqZero())
+                service_curves[service_index].getSegment(index).setX(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(service_curves[service_index].getSegment(index).getX(), latency));
+            }
+        }
+
+        ServiceCurve result  = ((ServiceCurve) Curve.getUtils().shiftRight(Curve.getUtils().min(service_curves[0], service_curves[1]), total_latency));
+
+        return result;
+    }
+
+
+
     /**
      * Returns the convolution of two curve, which must be convex
      *
@@ -54,7 +103,7 @@ public abstract class Convolution_Disco_PwAffine {
      * @param service_curve_2 The second curve to convolve with.
      * @return The convolved curve.
      */
-    public static ServiceCurve convolve(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
+    public static ServiceCurve convolveARB(ServiceCurve service_curve_1, ServiceCurve service_curve_2) {
         // null checks will be done by convolve_SC_SC_Generic( ... ).
         switch (CheckUtils.inputNullCheck(service_curve_1, service_curve_2)) {
             case 1:
