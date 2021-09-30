@@ -28,6 +28,7 @@ package org.networkcalculus.dnc.curves.disco.pw_affine;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
@@ -138,6 +139,98 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
     }
 
     public void beautify(Curve c) {
+     if(AnalysisConfig.enforceMultiplexingStatic() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+     {
+         beautifyFIFO(c);
+     }
+
+     else{
+         beautifyARB(c);
+     }
+    }
+
+    public void beautifyFIFO(Curve c) {
+        // Remove unreal discontinuity.
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
+            if (c.isUnrealDiscontinuity(i)) {
+                c.getSegment(i + 1).setLeftopen(c.getSegment(i).isLeftopen());
+                c.removeSegment(i); // isUnrealDiscontinuity is (also) checking if its the last/prelast segment
+                continue;
+            }
+            // i++;
+        }
+
+        // Join colinear segments.
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
+            if(i == c.getSegmentCount()-1)
+            {
+                // nothing to join since it's the last segment
+                break; // it could be that a few segments have been removed (see below) and the right-part of the condition in the loop (c.getSegmentCound()-1) is probably only
+                // computed at the start (I guess)
+            }
+
+            if(!(c.getSegment(i).getGrad().eq(c.getSegment(i + 1).getGrad()))) {
+                continue;
+            }
+
+            Num secondArg = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c.getSegment(i + 1).getX(), c.getSegment(i).getX());
+            secondArg = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(secondArg, c.getSegment(i).getGrad());
+            secondArg = Num.getUtils(Calculator.getInstance().getNumBackend()).add(c.getSegment(i).getY(), secondArg);
+            if(!(secondArg.eq(c.getSegment(i + 1).getY()))) {
+                continue; // there is a "jump", so can't join the segments
+            }
+
+            // Reaching this line means that there is no "jump", delete segment i+1 -- note that they have the same slope
+            c.removeSegment(i+1);
+        }
+
+        // segmentlist update for case: x-vals of segment i and i+1 same, different y-vals
+        for (int i = 0; i < c.getSegmentCount() - 1; i++) {
+            if(i == c.getSegmentCount()-1)
+            {
+                break;
+            }
+
+            if (c.getSegment(i).getX().equals(c.getSegment(i + 1).getX())) {
+                // the y-values differ here (otherwise segment i would have been removed by "remove unreal discont" (see above))
+
+                if(!c.getSegment(i).isLeftopen())
+                {
+                    if(!c.getSegment(i+1).isLeftopen())
+                    {
+                        // both segments are not leftopen and both start at "x" -> can remove segment i
+                        c.removeSegment(i);
+                        continue;
+                    }
+
+
+                    else
+                    {
+                        // segment i not leftopen but i+1 is and different y-vals -> "jump", should keep both segments
+                        // Found a spot and spot-segments have slope zero by definition
+                        c.getSegment(i).setGrad(Num.getUtils(Calculator.getInstance().getNumBackend()).createZero());
+                    }
+
+                }
+
+                else{
+                    // segment i is leftopen -> just remove it
+                    c.removeSegment(i);
+                    continue;
+                }
+            }
+        }
+
+        c.setTB_MetaInfo(false);
+        c.setTokenBucket(false);
+        c.setTB_Components(new LinkedList<>());
+
+        c.setRL_MetaInfo(false);
+        c.setRateLateny(false);
+        c.setRL_Components(new LinkedList<>());
+    }
+
+    public void beautifyARB(Curve c) {
         // Remove unreal discontinuity.
         for (int i = 0; i < c.getSegmentCount() - 1; i++) {
             if (c.isUnrealDiscontinuity(i)) {
