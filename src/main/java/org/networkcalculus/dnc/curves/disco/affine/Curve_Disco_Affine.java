@@ -988,32 +988,45 @@ public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 	 * @param y
 	 *            The y-coordinate.
 	 * @param rightmost
-	 *            Return the rightmost x coordinate instead of the leftmost one (default).
+	 *            Return the rightmost x coordinate instaed of the leftmost one
+	 *            (default).
 	 * @return The smallest x value.
-	 *
 	 */
 	public Num f_inv(Num y, boolean rightmost) {
 		int i = getSegmentFirstAtValue(y);
-
-		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
-		
 		if (i < 0) {
-			return num.createNaN();
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
 		}
+
+		// if there is a jump, i.e., y is smaller than the y-value of segment i then return the x-coordinate of segment
+		// i directly, don't have to distinguish between rightmost/leftmost then:
+		// if it is called with !rightmost then the arrival curve is considered and we return the x-val of the segment
+		// that actually has a starting y-value bigger than "y". However, this is not a problem since "just" before the
+		// point on the previous segment we have a value that is smaller than "y".
+		if(y.lt(segments[i].getY()))
+		{
+			return segments[i].getX();
+		}
+
+		// "shifts" i to the rightmost segment which contains value y
 		if (rightmost) {
-			while (i < segments.length && segments[i].getGrad().equals(num.getZero())) {
+
+			while (i < segments.length && segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 				i++;
 			}
 			if (i >= segments.length) {
-				return num.createPositiveInfinity();
+				return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
 			}
 		}
-		if (!segments[i].getGrad().equals(num.getZero())) {
-			return num.add(segments[i].getX(), num.div(num.sub(y, segments[i].getY()), segments[i].getGrad()));
+
+		if (!segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+			return Num.getUtils(Calculator.getInstance().getNumBackend()).add(segments[i].getX(),
+					Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y, segments[i].getY()), segments[i].getGrad()));
 		} else {
 			return segments[i].getX();
 		}
 	}
+
 
 	/**
 	 * Returns the first segment at which the function reaches the value
