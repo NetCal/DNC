@@ -127,7 +127,7 @@ public final class LeftOverService_Disco_PwAffine {
             return Curve.getFactory().createServiceCurve(Curve.getUtils().boundAtXAxis(Curve.getUtils().sub(service_curve, arrival_curve)));
     	}
     }
-
+    
     // The FIFO left-over service curve which we get for a specific shift of the arrival curve
     public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve, Num theta) {
 

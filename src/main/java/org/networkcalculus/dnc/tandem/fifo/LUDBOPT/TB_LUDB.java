@@ -1,5 +1,8 @@
 package org.networkcalculus.dnc.tandem.fifo.LUDBOPT;
 
+/**
+ * @author Alexander Scheffler
+ */
 public class TB_LUDB {
     private Expression_LUDB b;
     private Expression_LUDB r;

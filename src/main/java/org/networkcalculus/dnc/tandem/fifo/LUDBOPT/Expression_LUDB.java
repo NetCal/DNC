@@ -6,7 +6,9 @@ import org.networkcalculus.num.Num;
 
 import java.util.*;
 
-
+/**
+ * @author Alexander Scheffler
+ */
 public class Expression_LUDB {
     private Num n_const;
 

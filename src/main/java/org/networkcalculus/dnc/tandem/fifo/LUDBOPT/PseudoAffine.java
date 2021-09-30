@@ -6,7 +6,9 @@ import org.networkcalculus.num.Num;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * @author Alexander Scheffler
+ */
 public class PseudoAffine {
     private Expression_LUDB latency;
     private  List<TB_LUDB> stages;
