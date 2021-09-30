@@ -378,4 +378,27 @@ public abstract class Deconvolution_Disco_ConPwAffine {
 
         return Curve.getFactory().createArrivalCurve((Curve) sup_curve);
     }
+
+
+    /**
+     * Assumption: Arrival Curve (@curve_1) is a token bucket curve, Service Curve (@curve_2) is a curve (eventually with a jump) and the rates of the segments are decreasing
+     * @param curve_1
+     * @param curve_2
+     * @return
+     */
+    public static ArrivalCurve deconvolve_simple_fifo(Curve curve_1, Curve curve_2) {
+        // With the given assumptions:
+        // Output arrival curve is simply a token bucket one: output rate = curve_1.rate and output burst = curve_1.burst + curve_2.latency * curve_1.rate
+
+        Num ac_burst = curve_1.getBurst();
+        Num ac_rate = curve_1.getUltAffineRate();
+        Num output_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).mult( curve_2.getLatency(), ac_rate);
+        output_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).add(  output_burst, ac_burst);
+
+
+        ArrivalCurve output_ac = Curve.getFactory().createTokenBucket(ac_rate, output_burst);
+
+        return output_ac;
+
+    }
 }

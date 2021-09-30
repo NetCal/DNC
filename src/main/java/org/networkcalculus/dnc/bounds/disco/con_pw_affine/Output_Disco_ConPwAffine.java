@@ -33,6 +33,7 @@ import java.util.Set;
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.algebra.MinPlus;
+import org.networkcalculus.dnc.algebra.disco.con_pw_affine.Deconvolution_Disco_ConPwAffine;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Path;
@@ -131,4 +132,11 @@ public final class Output_Disco_ConPwAffine {
 
         return output_bound;
     }
+
+	public static ArrivalCurve computeFIFOOutputBound( ArrivalCurve arrival_curve,  ServiceCurve beta_lo ) throws Exception {
+
+		ArrivalCurve output_ac = Deconvolution_Disco_ConPwAffine.deconvolve_simple_fifo(arrival_curve,  beta_lo);
+
+		return output_ac;
+	}
 }
