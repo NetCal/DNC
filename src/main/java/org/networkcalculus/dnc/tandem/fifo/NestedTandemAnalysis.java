@@ -58,7 +58,6 @@ public class NestedTandemAnalysis {
     private Map<Integer, Double> curr_best_s_setting; //  curr_lb + s <=> theta (note that s >= 0!) [s from LUDB paper fifo l.o. theorem, theta is free parameter in the general fifo left over theorem]
     /////////////////// /////////////////// ///////
 
-
     public NestedTandemAnalysis(Path tandem, Flow flow_of_interest, List<Flow> flows) {
         this(tandem, flow_of_interest, flows, new AnalysisConfig());
     }
@@ -579,6 +578,13 @@ public class NestedTandemAnalysis {
     }
 
 
+
+    public TNode onlyComputeNestingTree() throws Exception {
+        computeNestingSets();
+        //  createNestingTree();
+        createNestingTreeOrdered();
+        return nestingTree;
+    }
 
     private void createNestingTreeOrdered() {
         nestingTree = new TNode(foi, null);
