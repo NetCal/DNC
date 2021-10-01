@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
+import org.networkcalculus.dnc.bounds.disco.pw_affine.LeftOverService_Disco_PwAffine;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
@@ -13,6 +14,7 @@ import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
+import org.networkcalculus.dnc.tandem.AbstractTandemAnalysis;
 import org.networkcalculus.dnc.tandem.fifo.NestedTandemAnalysis;
 import org.networkcalculus.dnc.tandem.fifo.NonNestedTandemAnalysis;
 import org.networkcalculus.dnc.tandem.fifo.TNode;
@@ -21,27 +23,25 @@ import org.networkcalculus.num.Num;
 
 /**
  *
- * @author Steffen Bondorf
  * @author Alexander Scheffler
+ * @author Steffen Bondorf
  *
  */
-public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
+public class FIFOTandemAnalysis extends AbstractTandemAnalysis {
     private final boolean checkStabilityConstraint = false;
 
-
-
-    public FIFOAnalysis(ServerGraph server_graph ) {
+    public FIFOTandemAnalysis(ServerGraph server_graph ) {
         super.server_graph = server_graph;
-        super.result = new FIFOAnalysisResults();
+        super.result = new FIFOTandemAnalysisResults();
         super.configuration = new AnalysisConfig();
-        configuration.setMultiplexing(AnalysisConfig.Multiplexing.FIFO);
+        configuration.enforceMultiplexing(AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO);
     }
 
-    public FIFOAnalysis(ServerGraph server_graph, AnalysisConfig configuration ) {
+    public FIFOTandemAnalysis(ServerGraph server_graph, AnalysisConfig configuration ) {
         super.server_graph = server_graph;
-        super.result = new FIFOAnalysisResults();
+        super.result = new FIFOTandemAnalysisResults();
         this.configuration = configuration;
-        this.configuration.setMultiplexing(AnalysisConfig.Multiplexing.FIFO);
+        configuration.enforceMultiplexing(AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO);
     }
 
     /**
@@ -56,7 +56,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
 
     public void performAnalysis( Flow flow_of_interest, Path path ) throws Exception
     {
-        //TODO check curve shape => not important given our plans
+        // Some analysis (especially LUDB-FF) might return wrong results if the stability constraint is not fulfilled or exits with an error
         if(checkStabilityConstraint)
         {
             for(Server server : server_graph.getServers())
@@ -78,19 +78,19 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
             }
         }
 
-        ((FIFOAnalysisResults) result).betas_e2e = Collections.singleton(getServiceCurve(  Collections.singleton( flow_of_interest ),flow_of_interest.getArrivalCurve(), path,  false));
+        ((FIFOTandemAnalysisResults) result).betas_e2e = Collections.singleton(getServiceCurve(  Collections.singleton( flow_of_interest ),flow_of_interest.getArrivalCurve(), path,  false));
 
         Num delay_bound__beta_e2e;
 
-        ((FIFOAnalysisResults) result).setDelayBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
-        ((FIFOAnalysisResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
+        ((FIFOTandemAnalysisResults) result).setDelayBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
+        ((FIFOTandemAnalysisResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
 
-        for( ServiceCurve beta_e2e : ((FIFOAnalysisResults) result).betas_e2e ) {
+        for( ServiceCurve beta_e2e : ((FIFOTandemAnalysisResults) result).betas_e2e ) {
 
-            delay_bound__beta_e2e = Bound.delayFIFO( flow_of_interest.getArrivalCurve(), beta_e2e );// Single flow of interest, i.e., fifo per micro flow holds (do not use TFA)
+            delay_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().delayFIFO( flow_of_interest.getArrivalCurve(), beta_e2e );// Single flow of interest, i.e., fifo per micro flow holds (do not use TFA)
 
             if( delay_bound__beta_e2e.leq( result.getDelayBound() ) ) {
-                ((FIFOAnalysisResults) result).setDelayBound( delay_bound__beta_e2e );
+                ((FIFOTandemAnalysisResults) result).setDelayBound( delay_bound__beta_e2e );
             }
         }
     }
@@ -104,7 +104,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
         if(crossflows.isEmpty())
         {
             // No crossflows on the path
-            //TODO this will make the LUDB runtime concerning time to solve lps/time to simplify for one flow networks zero (we could alternatively call the Nested Analysis)
+            // In case of LUDB-FF, the runtime concerning time to solve lps/time to simplify for one flow networks will be zero (we could alternatively call the Nested Analysis)
             return path.getServiceCurve();
         }
 
@@ -200,7 +200,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
                     Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
 
                     Num theta_curr_lb = curve.f_inv(burst);
-                    return LeftOverService.fifoMux(sc, ac, theta_curr_lb);
+                    return LeftOverService_Disco_PwAffine.fifoMux(sc, ac, theta_curr_lb);
                 }
                 else{
                     // Nested, at least one crossflow has path as subpath, solve for "best" delay bound
@@ -212,7 +212,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
 
                     ArrivalCurve ac_crossflow_substitutes_path_as_subpath = crossflow_substitutes.get(path).getArrivalCurve();
                     // Note that we do not suffer here from adding the segregated arrival curves (instead of computing the aggregated arrival curve explicitly) since we can assume (outputbound == false) that in this case the flows_of_interest start at path.source
-                    ArrivalCurve ac_foi_w_crossflow_agg = Curve.add(agg_ac_flows_of_interest_at_path_source, ac_crossflow_substitutes_path_as_subpath);
+                    ArrivalCurve ac_foi_w_crossflow_agg = Curve.getUtils().add(agg_ac_flows_of_interest_at_path_source, ac_crossflow_substitutes_path_as_subpath);
                     Flow flow_substitute_foi_w_crossflow = Flow.createDummyFlow(substitute_foi_w_crossflow_alias_agg, ac_foi_w_crossflow_agg, path);
 
                     Set<Flow> all_flow_substitutes = new HashSet<>();
@@ -225,7 +225,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
                     Num burst = flow_substitute_foi_w_crossflow.getArrivalCurve().getBurst();
                     Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc_lo_foi_w_crossflow;
                     Num theta = curve.f_inv(burst);
-                    return LeftOverService.fifoMux(sc_lo_foi_w_crossflow, ac_crossflow_substitutes_path_as_subpath, theta);
+                    return LeftOverService_Disco_PwAffine.fifoMux(sc_lo_foi_w_crossflow, ac_crossflow_substitutes_path_as_subpath, theta);
                 }
             }
 
@@ -271,7 +271,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
                             Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
 
                             Num theta_curr_lb = curve.f_inv(burst);
-                            ServiceCurve subtandem_foi_lo = LeftOverService.fifoMux(beta_lo_child, foi_child_flow.getArrivalCurve(), theta_curr_lb);
+                            ServiceCurve subtandem_foi_lo = LeftOverService_Disco_PwAffine.fifoMux(beta_lo_child, foi_child_flow.getArrivalCurve(), theta_curr_lb);
                             leftover = Calculator.getInstance().getMinPlus().convolve(leftover, subtandem_foi_lo);
                         }
                     }
@@ -304,7 +304,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
                     Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
 
                     Num theta_curr_lb = curve.f_inv(burst);
-                    return LeftOverService.fifoMux(sc, ac, theta_curr_lb);
+                    return LeftOverService_Disco_PwAffine.fifoMux(sc, ac, theta_curr_lb);
                 }
 
                 else{
@@ -318,7 +318,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
                     ArrivalCurve ac_crossflow_substitutes_path_as_subpath = crossflow_substitutes.get(path).getArrivalCurve();
                     // Note that we do not suffer here from adding the segregated arrival curves (instead of computing the aggregated arrival curve explicitly) since we can assume (outputbound == false) that in this case the flows_of_interest start at path.source
                     // Motivation: In this non-nested case we would cut the crossflow that has path as subpath if we would not aggregate it with the flows_of_interest
-                    ArrivalCurve ac_foi_w_crossflow_agg = Curve.add(agg_ac_flows_of_interest_at_path_source, ac_crossflow_substitutes_path_as_subpath);
+                    ArrivalCurve ac_foi_w_crossflow_agg = Curve.getUtils().add(agg_ac_flows_of_interest_at_path_source, ac_crossflow_substitutes_path_as_subpath);
                     Flow flow_substitute_foi_w_crossflow = Flow.createDummyFlow(substitute_foi_w_crossflow_alias_agg, ac_foi_w_crossflow_agg, path);
 
 
@@ -337,7 +337,7 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
                     Num burst = flow_substitute_foi_w_crossflow.getArrivalCurve().getBurst();
                     Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc_lo_foi_w_crossflow;
                     Num theta = curve.f_inv(burst);
-                    return LeftOverService.fifoMux(sc_lo_foi_w_crossflow, ac_crossflow_substitutes_path_as_subpath, theta);
+                    return LeftOverService_Disco_PwAffine.fifoMux(sc_lo_foi_w_crossflow, ac_crossflow_substitutes_path_as_subpath, theta);
                 }
             }
             else{
@@ -362,8 +362,6 @@ public class FIFOAnalysis extends AbstractAnalysis implements Analysis {
             }
         }
     }
-
-
 
     public String computeAlias(ArrayList<Flow> flows, String start)
     {
