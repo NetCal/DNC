@@ -8,7 +8,7 @@ import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.Curve_ConstantPool;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.*;
-import org.networkcalculus.dnc.tandem.analyses.FIFOAnalysis;
+import org.networkcalculus.dnc.tandem.analyses.FIFOTandemAnalysis;
 import org.networkcalculus.dnc.utils.SetUtils;
 
 import java.util.Set;
@@ -50,7 +50,7 @@ public class ArrivalBoundDispatchFIFO {
             {
                 Pair<Server, Path> splitting_server_and_path = server_graph.findSplittingServerAndPathFIFO(pred_current_turn, subset_from_ftb_through_current_turn);
                 ArrivalCurve ac_for_subset_from_ftb_on_splitting_server_to_pred_current_turn = ArrivalBoundDispatchFIFO.computeArrivalBound(server_graph, configuration, splitting_server_and_path.getFirst(), subset_from_ftb_through_current_turn);
-                FIFOAnalysis fifo_analysis = new FIFOAnalysis(server_graph, configuration);
+                FIFOTandemAnalysis fifo_analysis = new FIFOTandemAnalysis(server_graph, configuration);
                 ServiceCurve sc_for_subset_from_ftb_on_splitting_server_to_pred_current_turn = fifo_analysis.getServiceCurve(subset_from_ftb_through_current_turn, ac_for_subset_from_ftb_on_splitting_server_to_pred_current_turn, splitting_server_and_path.getSecond(),true);
                 ArrivalCurve output_ac_for_subset_from_ftb_at_server = Output_Disco_ConPwAffine.computeFIFOOutputBound( ac_for_subset_from_ftb_on_splitting_server_to_pred_current_turn, sc_for_subset_from_ftb_on_splitting_server_to_pred_current_turn);
                 ag_ac = Curve.getUtils().add(ag_ac, output_ac_for_subset_from_ftb_at_server);
