@@ -852,6 +852,16 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 		}
 	}
 
+	private int getSegmentFirstAtValue(Num y) {
+		if(AnalysisConfig.enforceMultiplexingStatic() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+		{
+			return getSegmentFirstAtValueFIFO(y);
+		}
+
+		else{
+			return getSegmentFirstAtValueARB(y);
+		}
+	}
 
 	/**
 	 * Returns the first segment at which the function reaches the value
@@ -864,7 +874,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 	 *            the y-coordinate
 	 * @return the segment number
 	 */
-	private int getSegmentFirstAtValue(Num y) {
+	private int getSegmentFirstAtValueFIFO(Num y) {
 		if (segments.length == 0 || segments[0].getY().gt(y)) {
 			return -1;
 		}
@@ -910,6 +920,34 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 		}
 		return -1;
 	}
+
+	/**
+	 * Returns the first segment at which the function reaches the value
+	 * <code>y</code>. It returns -1 if the curve never reaches this value.
+	 *
+	 * @param y
+	 *            the y-coordinate
+	 * @return the segment number
+	 */
+	private int getSegmentFirstAtValueARB(Num y) {
+		if (segments.length == 0 || segments[0].getY().gt(y)) {
+			return -1;
+		}
+		for (int i = 0; i < segments.length; i++) {
+			if (i < segments.length - 1) {
+				if (segments[i + 1].getY().geq(y)) {
+					return i;
+				}
+			} else {
+				if (segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+
+
 
 
 	/**
