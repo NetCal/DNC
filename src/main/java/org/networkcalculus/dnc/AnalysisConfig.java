@@ -108,6 +108,7 @@ public class AnalysisConfig {
 
     public void enforceMultiplexing(MultiplexingEnforcement enforcement) {
         multiplexing_enforcement = enforcement;
+        multiplexing_enforcement_static = enforcement;
     }
 
     public MaxScEnforcement enforceMaxSC() {
