@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.CurveFactory_Affine;
@@ -980,6 +981,17 @@ public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 		return f_inv(y, false);
 	}
 
+	public Num f_inv(Num y, boolean rightmost) {
+		if(AnalysisConfig.enforceMultiplexingStatic() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+		{
+			return f_invFIFO(y, rightmost);
+		}
+
+		else{
+			return f_invARB(y, rightmost);
+		}
+	}
+
 	/**
 	 * Returns the x value at which the function value is equal to <code>y</code>.
 	 * If <code>rightmost</code> is <code>true</code>, returns the rightmost
@@ -992,7 +1004,7 @@ public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 	 *            (default).
 	 * @return The smallest x value.
 	 */
-	public Num f_inv(Num y, boolean rightmost) {
+	public Num f_invFIFO(Num y, boolean rightmost) {
 		int i = getSegmentFirstAtValue(y);
 		if (i < 0) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
@@ -1029,6 +1041,53 @@ public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 
 
 	/**
+	 * Returns the x value at which the function value is equal to <code>y</code>.
+	 * If <code>rightmost</code> is <code>true</code>, returns the rightmost
+	 * x-coordinate, otherwise the leftmost coordinate.
+	 *
+	 * @param y
+	 *            The y-coordinate.
+	 * @param rightmost
+	 *            Return the rightmost x coordinate instead of the leftmost one (default).
+	 * @return The smallest x value.
+	 *
+	 */
+	public Num f_invARB(Num y, boolean rightmost) {
+		int i = getSegmentFirstAtValue(y);
+
+		Num num = Num.getFactory(Calculator.getInstance().getNumBackend());
+
+		if (i < 0) {
+			return num.createNaN();
+		}
+		if (rightmost) {
+			while (i < segments.length && segments[i].getGrad().equals(num.getZero())) {
+				i++;
+			}
+			if (i >= segments.length) {
+				return num.createPositiveInfinity();
+			}
+		}
+		if (!segments[i].getGrad().equals(num.getZero())) {
+			return num.add(segments[i].getX(), num.div(num.sub(y, segments[i].getY()), segments[i].getGrad()));
+		} else {
+			return segments[i].getX();
+		}
+	}
+
+
+	private int getSegmentFirstAtValue(Num y) {
+		if(AnalysisConfig.enforceMultiplexingStatic() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+		{
+			return getSegmentFirstAtValueFIFO(y);
+		}
+
+		else{
+			return getSegmentFirstAtValueARB(y);
+		}
+	}
+
+	/**
 	 * Returns the first segment at which the function reaches the value
 	 * <code>y</code>. If there is a jump and <code>y</code> happens to
 	 * be between the "end" of the y-values of segment i and "start" of
@@ -1039,7 +1098,7 @@ public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 	 *            the y-coordinate
 	 * @return the segment number
 	 */
-	private int getSegmentFirstAtValue(Num y) {
+	private int getSegmentFirstAtValueFIFO(Num y) {
 		if (segments.length == 0 || segments[0].getY().gt(y)) {
 			return -1;
 		}
@@ -1083,6 +1142,33 @@ public class Curve_Disco_Affine implements Curve_Affine, CurveFactory_Affine {
 
 				}
 
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Returns the first segment at which the function reaches the value
+	 * <code>y</code>. It returns -1 if the curve never reaches this value.
+	 *
+	 * @param y
+	 *            The y-coordinate
+	 * @return The segment number.
+	 *
+	 */
+	private int getSegmentFirstAtValueARB(Num y) {
+		if (segments.length == 0 || segments[0].getY().gt(y)) {
+			return -1;
+		}
+		for (int i = 0; i < segments.length; i++) {
+			if (i < segments.length - 1) {
+				if (segments[i + 1].getY().geq(y)) {
+					return i;
+				}
+			} else {
+				if (segments[i].getGrad().gt(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+					return i;
+				}
 			}
 		}
 		return -1;
