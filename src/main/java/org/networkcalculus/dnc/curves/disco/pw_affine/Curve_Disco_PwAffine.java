@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.CurveFactory_Affine;
@@ -758,6 +759,18 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 	}
 
 
+	public Num f_inv(Num y, boolean rightmost) {
+		if(AnalysisConfig.enforceMultiplexingStatic() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+		{
+			return f_invFIFO(y, rightmost);
+		}
+
+		else{
+			return f_invARB(y, rightmost);
+		}
+	}
+
+
 	/**
 	 * Returns the x value at which the function value is equal to <code>y</code>.
 	 * If <code>rightmost</code> is <code>true</code>, returns the rightmost
@@ -770,7 +783,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 	 *            (default).
 	 * @return The smallest x value.
 	 */
-	public Num f_inv(Num y, boolean rightmost) {
+	public Num f_invFIFO(Num y, boolean rightmost) {
 		int i = getSegmentFirstAtValue(y);
 		if (i < 0) {
 			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
@@ -797,6 +810,40 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 			}
 		}
 
+		if (!segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+			return Num.getUtils(Calculator.getInstance().getNumBackend()).add(segments[i].getX(),
+					Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y, segments[i].getY()), segments[i].getGrad()));
+		} else {
+			return segments[i].getX();
+		}
+	}
+
+
+	/**
+	 * Returns the x value at which the function value is equal to <code>y</code>.
+	 * If <code>rightmost</code> is <code>true</code>, returns the rightmost
+	 * x-coordinate, otherwise the leftmost coordinate.
+	 *
+	 * @param y
+	 *            The y-coordinate.
+	 * @param rightmost
+	 *            Return the rightmost x coordinate instaed of the leftmost one
+	 *            (default).
+	 * @return The smallest x value.
+	 */
+	public Num f_invARB(Num y, boolean rightmost) {
+		int i = getSegmentFirstAtValue(y);
+		if (i < 0) {
+			return Num.getFactory(Calculator.getInstance().getNumBackend()).createNaN();
+		}
+		if (rightmost) {
+			while (i < segments.length && segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
+				i++;
+			}
+			if (i >= segments.length) {
+				return Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+			}
+		}
 		if (!segments[i].getGrad().equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero())) {
 			return Num.getUtils(Calculator.getInstance().getNumBackend()).add(segments[i].getX(),
 					Num.getUtils(Calculator.getInstance().getNumBackend()).div(Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y, segments[i].getY()), segments[i].getGrad()));
