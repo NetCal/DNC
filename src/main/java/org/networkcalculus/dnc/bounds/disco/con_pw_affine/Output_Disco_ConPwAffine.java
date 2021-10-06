@@ -51,6 +51,11 @@ public final class Output_Disco_ConPwAffine {
 
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, Set<ArrivalCurve> arrival_curves,
                                             Server server, Set<ServiceCurve> betas_lo) throws Exception {
+		if (configuration.enforceMultiplexing() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+		{
+			throw new Exception("Not yet supported.");
+		}
+
         Set<ArrivalCurve> output_bound = new HashSet<ArrivalCurve>();
 
         MinPlus minplus_alg = Calculator.getInstance().getMinPlus();
@@ -93,6 +98,33 @@ public final class Output_Disco_ConPwAffine {
 
     public static Set<ArrivalCurve> compute(AnalysisConfig configuration, 
     										Set<ArrivalCurve> arrival_curves, Path path, Set<ServiceCurve> betas_lo) throws Exception {
+		if (configuration.enforceMultiplexing() == AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO)
+		{
+			Set<ArrivalCurve> output_bound = new HashSet<ArrivalCurve>();
+
+			// In our context just one arrival curve in the set (and one left over)
+			ArrivalCurve ac = null;
+			for(ArrivalCurve curve : arrival_curves)
+			{
+				ac = curve;
+			}
+
+			ServiceCurve sc = null;
+			for(ServiceCurve curve : betas_lo)
+			{
+				sc = curve;
+			}
+
+			ArrivalCurve output_ac = Deconvolution_Disco_ConPwAffine.deconvolve_simple_fifo(ac, sc);
+
+			output_bound.add(output_ac);
+
+			return output_bound;
+		}
+
+		else
+		{
+
     	Set<ArrivalCurve> output_bound = new HashSet<ArrivalCurve>();
 
     	MinPlus minplus_alg = Calculator.getInstance().getMinPlus();
@@ -130,7 +162,8 @@ public final class Output_Disco_ConPwAffine {
 				break;
 	    }
 
-        return output_bound;
+      	  return output_bound;
+		}
     }
 
 	public static ArrivalCurve computeFIFOOutputBound( ArrivalCurve arrival_curve,  ServiceCurve beta_lo ) throws Exception {
