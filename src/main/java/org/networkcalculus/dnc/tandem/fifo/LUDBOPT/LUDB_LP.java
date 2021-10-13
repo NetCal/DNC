@@ -1,6 +1,7 @@
 package org.networkcalculus.dnc.tandem.fifo.LUDBOPT;
 
 import org.apache.commons.math3.util.Pair;
+import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.num.Num;
 
@@ -13,21 +14,11 @@ import java.util.*;
  * @author Alexander Scheffler
  */
 public class LUDB_LP {
-    static String output_path = "";
-
     static boolean check_constant_constraints=true; //enables pre-filtering of infeasible constraints;
-
-
     static int fileId = 0;
-
-
     public static long cplex_time = 0;
     public static long terms_simplify_time = 0; // total time which our method takes to simplify the expressions (all expressions simplified so far)
-
-
     private static final boolean keepLPsOnDrive = false;
-
-
 
     public  static Pair<Double, Map<Integer, Double>> simplify_first_then_save_and_solve_lp_w_cplex(Expression_LUDB delay_term, List<Expression_LUDB> constraints, int number_vars) throws Exception {
 
@@ -41,7 +32,7 @@ public class LUDB_LP {
         Num minus_one = Num.getUtils(Calculator.getInstance().getNumBackend()).create(-1);
 
         fileId++;
-        File file_lp = new File(output_path + "/lp_" + fileId );
+        File file_lp = new File(AnalysisConfig.path_to_lp_dir + "lp_" + fileId );
         Writer w_lp = new OutputStreamWriter(new FileOutputStream(file_lp), StandardCharsets.UTF_8);
         PrintWriter pw_lp = new PrintWriter(w_lp);
         pw_lp.println("Minimize");
@@ -249,8 +240,8 @@ public class LUDB_LP {
         InputStream terminal_output_cplex;
         Process process_cplex;
 
-        ProcessBuilder pb_cplex = new ProcessBuilder("./cplex", "-c", "read", "lp_" + fileId , "lp", "optimize", "Display solution variables -", "quit");
-        pb_cplex.directory(new File(output_path));
+        ProcessBuilder pb_cplex = new ProcessBuilder("./cplex", "-c", "read", AnalysisConfig.path_to_lp_dir  + "lp_" + fileId , "lp", "optimize", "Display solution variables -", "quit");
+        pb_cplex.directory(new File(AnalysisConfig.path_to_cplex));
 
         process_cplex = pb_cplex.start();
 

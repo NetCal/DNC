@@ -76,6 +76,8 @@ public class AnalysisConfig {
 	private boolean arrival_bounds_caching = true;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
+    public static String path_to_cplex ="";
+    public static String path_to_lp_dir ="";
     
     public AnalysisConfig() {
     }
