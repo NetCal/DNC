@@ -47,7 +47,7 @@ public class NestedTandemAnalysis {
     private ServiceCurve e2e;
 
     public enum mode {
-         LUDB
+         LUDB_FF 
     }
 
     public static mode selected_mode;
@@ -113,7 +113,7 @@ public class NestedTandemAnalysis {
         createNestingTreeOrdered();
 
         switch (selected_mode) {
-            case LUDB:
+            case LUDB_FF :
                 computeLUDB();
                 break;
         }
