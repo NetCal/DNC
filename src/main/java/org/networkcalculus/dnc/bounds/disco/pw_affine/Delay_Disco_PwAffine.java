@@ -64,14 +64,8 @@ public final class Delay_Disco_PwAffine {
 
     // Single flow to be bound, i.e., fifo per micro flow holds
     public static Num deriveFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
-
-        Num result = deriveForSpecialCurves(arrival_curve, service_curve);
-        if (result != null) {
-            return result;
-        }
-        
-        return Num.getUtils(Calculator.getInstance().getNumBackend()).max
-        			(Num.getFactory(Calculator.getInstance().getNumBackend()).getZero(), 
-        			Curve.getUtils().getMaxHorizontalDeviation(arrival_curve, service_curve));
+        // Assuming token bucket arrival curve and pseudoaffine service curve
+        // The delay bound is simply at point in time where the service curve reaches the burst of the arrival curve
+        return service_curve.f_inv(arrival_curve.getBurst());
     }
 }

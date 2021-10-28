@@ -56,7 +56,10 @@ public class AnalysisConfig {
     }
     
     private MultiplexingEnforcement multiplexing_enforcement = MultiplexingEnforcement.SERVER_LOCAL;
-    
+
+    private static MultiplexingEnforcement multiplexing_enforcement_static = MultiplexingEnforcement.SERVER_LOCAL;
+
+
     /**
      * Whether to use maximum service curves in output bound computation.
      */
@@ -73,6 +76,8 @@ public class AnalysisConfig {
 	private boolean arrival_bounds_caching = true;
     private boolean flow_prolongation = false;
     private boolean server_backlog_arrival_bound = false;
+    public static String path_to_cplex ="";
+    public static String path_to_lp_dir ="";
     
     public AnalysisConfig() {
     }
@@ -84,6 +89,7 @@ public class AnalysisConfig {
                           boolean convolve_alternative_arrival_bounds, boolean arrival_bounds_caching, 
                           boolean server_backlog_arrival_bound) {
         this.multiplexing_enforcement = multiplexing_enforcement;
+        multiplexing_enforcement_static = multiplexing_enforcement;
         this.enforce_max_sc = enforce_max_sc;
         this.enforce_max_sc_output_rate = enforce_max_sc_output_rate;
         this.arrival_bound_methods.clear();
@@ -91,14 +97,20 @@ public class AnalysisConfig {
         this.convolve_alternative_arrival_bounds = convolve_alternative_arrival_bounds;
 		this.arrival_bounds_caching = arrival_bounds_caching;
         this.server_backlog_arrival_bound = server_backlog_arrival_bound;
+
     }
 
     public MultiplexingEnforcement enforceMultiplexing() {
         return multiplexing_enforcement;
     }
 
+    public static MultiplexingEnforcement enforceMultiplexingStatic() {
+        return multiplexing_enforcement_static;
+    }
+
     public void enforceMultiplexing(MultiplexingEnforcement enforcement) {
         multiplexing_enforcement = enforcement;
+        multiplexing_enforcement_static = enforcement;
     }
 
     public MaxScEnforcement enforceMaxSC() {

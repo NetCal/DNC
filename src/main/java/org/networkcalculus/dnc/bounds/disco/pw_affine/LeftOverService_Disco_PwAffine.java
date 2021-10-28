@@ -28,7 +28,6 @@
 package org.networkcalculus.dnc.bounds.disco.pw_affine;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
@@ -37,11 +36,9 @@ import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
 import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.disco.BoundingCurves_Disco_Configuration;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.Curve_ConstantPool;
-import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.curves.*;
+import org.networkcalculus.dnc.curves.disco.LinearSegment_Disco;
+import org.networkcalculus.dnc.curves.disco.pw_affine.Curve_Disco_PwAffine;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.num.Num;
 
@@ -66,74 +63,41 @@ public final class LeftOverService_Disco_PwAffine {
         }
     }
 
+    public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
+            // Local min latency for theta
+            ArrivalCurve ac = arrival_curve;
+            ServiceCurve sc = service_curve;
+            Num burst = ac.getBurst();
+
+            Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
+
+            Num theta_curr_lb = curve.f_inv(burst);
+            ServiceCurve leftover_sc = LeftOverService_Disco_PwAffine.fifoMux(sc, ac, theta_curr_lb);
+
+            return leftover_sc;
+    }
+
     public static Set<ServiceCurve> fifoMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
+
         Set<ServiceCurve> results = new HashSet<ServiceCurve>();
 
         for (ArrivalCurve alpha : arrival_curves) {
-            results.add(fifoMux(service_curve, alpha));
+            // Local min latency for theta
+            ArrivalCurve ac = alpha;
+            ServiceCurve sc = service_curve;
+            Num burst = ac.getBurst();
+
+            Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
+
+            Num theta_curr_lb = curve.f_inv(burst);
+            ServiceCurve leftover_sc = LeftOverService_Disco_PwAffine.fifoMux(sc, ac, theta_curr_lb);
+            results.add(leftover_sc );
         }
 
         return results;
     }
 
-    /**
-     * Computes the left-over FIFO service curve for a server with the service curve
-     * <code>beta</code> experiencing cross-traffic with arrival curve
-     * <code>alpha</code>.
-     * <p>
-     * It computes the left-over service curve with the smallest latency T in a
-     * worst-case FIFO multiplexing scenario. T is defined as the first time
-     * instance when the arrival curve's burst is worked off and its arrival rate is
-     * smaller than the service curve's service rate. At this time it can be safely
-     * assumed that the system has spare capacity that, in the FIFO multiplexing
-     * scheme, will be used to serve other flows' data that arrived in the meantime.
-     *
-     * @param arrival_curve The arrival curve of cross-traffic
-     * @param service_curve The server's service curve
-     * @return The FIFO service curve
-     */
-    public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve) {
-    	Pair<Boolean,ServiceCurve> special_cases = computeSpecialValues(service_curve, arrival_curve);
-    	
-    	if(special_cases.getFirst().booleanValue() == true) {
-    		return special_cases.getSecond(); 
-    	}
-    	
-        if (BoundingCurves_Disco_Configuration.getInstance().exec_fifo_mux_checks()) {
-            if (!arrival_curve.isConcave()) {
-                throw new IllegalArgumentException("Arrival curve must be concave.");
-            }
 
-            if (!service_curve.isConvex()) {
-                throw new IllegalArgumentException("Service curve must be convex.");
-            }
-        }
-
-        List<Num> ycoords = Curve.getUtils().computeInflectionPointsY(arrival_curve, service_curve);
-        for (int i = 0; i < ycoords.size(); i++) {
-            Num ip_y = (ycoords.get(i));
-            if (ip_y.lt(arrival_curve.getBurst())) {
-                continue;
-            }
-
-            Num x_alpha = arrival_curve.f_inv(ip_y, false);
-            Num x_beta = service_curve.f_inv(ip_y, true);
-
-            if (arrival_curve.getGradientLimitRight(x_alpha).leq(service_curve.getGradientLimitRight(x_beta))) {
-
-                Num theta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_beta, x_alpha);
-                ServiceCurve beta_fifo = Curve.getFactory()
-                        .createServiceCurve(Curve.getUtils().boundAtXAxis(Curve.getUtils().min(
-                        		Curve.getUtils().sub(service_curve,
-                                		Curve.getUtils().shiftRight(arrival_curve, theta)),
-                                Curve.getFactory().createDelayedInfiniteBurst(x_beta))));
-                return beta_fifo;
-            }
-        }
-
-        // Reaching this code means that there's no service left-over
-        return Curve.getFactory().createZeroService();
-    }
 
     public static Set<ServiceCurve> arbMux(ServiceCurve service_curve, Set<ArrivalCurve> arrival_curves) {
         Set<ServiceCurve> results = new HashSet<ServiceCurve>();
@@ -164,6 +128,108 @@ public final class LeftOverService_Disco_PwAffine {
     	}
     }
     
+    // The FIFO left-over service curve which we get for a specific shift of the arrival curve
+    public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve, Num theta) {
+
+        if(theta.ltZero())
+        {
+            System.err.println(theta);
+            throw new IllegalArgumentException("Theta must be >= 0!");
+        }
+
+        // Have to make sure that the curve isn't negative (for every segment) [using boundatX] and zero until theta!
+        try{
+
+            Curve arrival_curve_shifted =  Curve.getUtils().shiftRight(arrival_curve, theta);
+
+
+            ServiceCurve sc_transform = Curve.getFactory().createZeroService(); // zero until theta, after that "copy" of service_curve
+            int sc_transform_curr_seg = 1; // createZeroService creates one segment starting at ursprung with slope 0
+            boolean copy = false; // to distinguish if we have to copy or set sc_transform to zero
+            int nrsegs = service_curve.getSegmentCount();
+
+            // computation of sc_transform
+            if(theta.eqZero())
+            {
+                // no shift
+                sc_transform = service_curve.copy();
+            }
+
+            else
+            {
+                // shift
+                for(int i = 0; i < nrsegs; i++)
+                {
+                    LinearSegment seg =  service_curve.getSegment(i);
+
+                    if(!copy)
+                    {
+                        if(theta.eq(seg.getX()))
+                        {
+                            // theta is at the start of segment i
+                            // copy segment i but it has to be leftopen
+                            LinearSegment seg_transformed = seg.copy();
+                            seg_transformed.setLeftopen(true);
+                            sc_transform.addSegment(sc_transform_curr_seg++, seg_transformed);
+                            copy = true;
+                        }
+
+                        else{
+                            // theta is not at the start of segment i
+                            boolean theta_in_curr_seg = false;
+                            if(i!= nrsegs-1)
+                            {
+                                if(  theta.lt(  ( service_curve.getSegment(i+1)).getX())   )
+                                {
+                                    copy = true;
+                                    theta_in_curr_seg = true;
+                                }
+                            }
+                            else
+                            {
+                                // i is last segment
+                                theta_in_curr_seg = true;
+                                copy = true; // doesn't really matter since it's the last segment anyway
+                            }
+
+                            if(theta_in_curr_seg)
+                            {
+                                // compute v := curr_seg.getYAt(X=theta)
+                                Num delta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(theta, seg.getX());
+                                Num delta_times_slope = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(delta, seg.getGrad());
+                                Num v = Num.getUtils(Calculator.getInstance().getNumBackend()).add(delta_times_slope, seg.getY());
+                                // Num x, Num y, Num grad, boolean leftopen
+                                LinearSegment_Disco new_segment = new LinearSegment_Disco(theta, v, seg.getGrad(), true); // has to be leftopen
+                                sc_transform.addSegment(sc_transform_curr_seg++, new_segment);
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        sc_transform.addSegment(sc_transform_curr_seg++, seg.copy());
+                    }
+                }
+            }
+
+
+            Curve left_over_sc =  Curve.getUtils().boundAtXAxis ( Curve.getUtils().sub(sc_transform, arrival_curve_shifted));
+
+            // e.g. joins two "joinable" segments such as SC{(0.0,0.0),0.0;!(20.0,0.0),0.0;(25.333333333333332,0.0),15.0} to SC{(0.0,0.0),0.0;(25.333333333333332,0.0),15.0}
+            Curve.getUtils().beautify(left_over_sc);
+
+
+            ServiceCurve left_over = Curve.getFactory().createServiceCurve(left_over_sc.copy());
+
+            return left_over;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Curve.getFactory().createZeroService(); // shouldn't be reached
+    }
+
     /**
      * Try to compute the left-over service curve for special arrival or service curve values like zero or infinite.
      * In case we find infinite service and infinite arrivals, 

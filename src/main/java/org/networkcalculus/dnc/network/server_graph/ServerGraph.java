@@ -1333,6 +1333,34 @@ public class ServerGraph {
 		}
 	}
 
+	// code copied, see findSplittingServer. We do not care about the case server_common_dest == split (we do not throw an exception in that case and simply return server_common_dest). Also we
+	// return the path from split to server_common_dest we backtracked.
+	public Pair<Server, Path> findSplittingServerAndPathFIFO(Server server_common_dest, Set<Flow> flows_of_interest) throws Exception {
+		Flow f = flows_of_interest.iterator().next();
+
+		if (flows_of_interest.size() == 1) {
+			Server start_server = f.getSource();
+			return new Pair(start_server, flows_of_interest.iterator().next().getSubPath(start_server, server_common_dest) );
+		}
+
+		Path f_path = f.getPath();
+		int common_dest_index_f = f_path.getServers().indexOf(server_common_dest);
+
+		Server split = server_common_dest;
+		// Iterate in reverse order starting from server_common_dest, stop as soon as at
+		// least one of the flows of interest is missing
+		for (int i = common_dest_index_f - 1; i >= 0; i--) { // -1 excludes server_common_dest
+			Server split_candidate = f_path.getServers().get(i);
+
+			if (getFlows(split_candidate).containsAll(flows_of_interest)) {
+				split = split_candidate;
+			} else {
+				break;
+			}
+		}
+		return new Pair(split, f_path.getSubPath(split, server_common_dest));
+	}
+
 	// --------------------------------------------------------------------------------------------
 	// Other helper functions
 	// --------------------------------------------------------------------------------------------
