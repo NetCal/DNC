@@ -8,6 +8,9 @@ ___
 
 ### Additional Copyright Information
 
+Contributions by **Alexander Scheffler (alexander.scheffler@rub.de)** are subject to the following copyright:  
+**Copyright (C) 2020+ Ruhr-Universität Bochum, Alexander Scheffler**
+
 Contributions by **Steffen Bondorf (steffen.bondorf@rub.de)** are subject to the following copyright:  
 **Copyright (C) 2019+ Ruhr-Universität Bochum, Steffen Bondorf**
 
