@@ -4,7 +4,9 @@ Deterministic Network Calculus is a methodology for worst-case modeling and anal
 
 ### Academic Attribution
 
-The NetworkCalculus.org DNC (NCorg DNC) was derived from the the [Disco Deterministic Network Calculator (DiscoDNC)](disco.networkcalculus.org). If you use it for research, please include the following reference in any resulting publication:
+The NetworkCalculus.org DNC (NCorg DNC) was derived from the the [Disco Deterministic Network Calculator (DiscoDNC)](disco.networkcalculus.org). If you use it for research, please include one of the following references in any resulting publication.
+
+- Arbitrary multiplexing:
 
 ```plain
 @inproceedings{DiscoDNCv2,
@@ -18,6 +20,22 @@ The NetworkCalculus.org DNC (NCorg DNC) was derived from the the [Disco Determin
   url       = {https://dl.acm.org/citation.cfm?id=2747659}
 }
 ```
+
+- FIFO multiplexing:
+
+```plain
+@inproceedings{LUDBFF,
+  author    = {Alexander Scheffler and Steffen Bondorf},
+  title     = {Network Calculus for Bounding Delays in Feedforward Networks of {FIFO} Queueing Systems},
+  booktitle = {Proc. of the 18th International Conference on Quantitative Evaluation of Systems},
+  series    = {QEST '21},
+  pages     = {149--167},
+  month     = {August},
+  year      = 2021,
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-85172-9_8}
+}
+```
+
 
 # Submodule Structure
 
