@@ -1,8 +1,9 @@
-Since DNC v2.6.2
-----------------
+DNC v2.6.3 (2021-Nov-05)
+------------------------
 * A PMOOA left-over service curve computation tailored to the affine curves. 
-* New FIFO left over service curve method for flexible theta
-* Curve operation optimizations and fixes (f_inv, getSegmentFirstAtValue, beautify, convolution, deconvolution, delay and output bound methods)
+* New FIFO left over service curve method for flexible theta.
+* Fix SFA backtracking under FIFO assumption.
+* Curve operation optimizations and fixes (f_inv, getSegmentFirstAtValue, beautify, convolution, deconvolution, delay and output bound methods).
 
 DNC v2.6.2 (2020-Sep-04)
 ------------------------
