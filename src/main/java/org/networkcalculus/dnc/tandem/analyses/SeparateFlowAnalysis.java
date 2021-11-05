@@ -101,7 +101,7 @@ public class SeparateFlowAnalysis extends AbstractTandemAnalysis {
         ((SeparateFlowResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
 
         for (ServiceCurve beta_e2e : ((SeparateFlowResults) result).betas_e2e) {
-        	// single flow of interest, i.e., FIFO per micro flow holds.
+            // single flow of interest, i.e., FIFO per micro flow holds.
             delay_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e); 
             if (delay_bound__beta_e2e.leq(result.getDelayBound())) {
                 ((SeparateFlowResults) result).setDelayBound(delay_bound__beta_e2e);
@@ -116,7 +116,7 @@ public class SeparateFlowAnalysis extends AbstractTandemAnalysis {
     
     @Deprecated
     protected Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve) throws Exception {
-    	return tandemAnalysis(server_graph,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
+        return tandemAnalysis(server_graph,flow_of_interest, path, flows_to_serve, configuration).betas_e2e;
     }
 
     public static SeparateFlowResults tandemAnalysis(ServerGraph server_graph, Flow flow_of_interest, Path path, Set<Flow> flows_to_serve, AnalysisConfig configuration)
@@ -140,8 +140,8 @@ public class SeparateFlowAnalysis extends AbstractTandemAnalysis {
         for (Server server : path.getServers()) {
             // Find the set of flows that interfere, either already on or coming off the common_subpath.
             Set<Flow> f_xxfcaller_server = server_graph.getFlows(server);
-            f_xxfcaller_server.removeAll(flows_to_serve);	// We compute their beta l.o.
-            f_xxfcaller_server.remove(flow_of_interest);	// If present, it has lowest priority.
+            f_xxfcaller_server.removeAll(flows_to_serve);   // We compute their beta l.o.
+            f_xxfcaller_server.remove(flow_of_interest);    // If present, it has lowest priority.
 
             betas_lo_server = new HashSet<ServiceCurve>();
 
