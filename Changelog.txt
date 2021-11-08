@@ -1,3 +1,7 @@
+DNC v2.7.0 (2021-Nov-08)
+------------------------
+* Implementation of LUDB for feedforward networks
+
 DNC v2.6.3 (2021-Nov-05)
 ------------------------
 * A PMOOA left-over service curve computation tailored to the affine curves. 
