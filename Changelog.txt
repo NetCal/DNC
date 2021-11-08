@@ -1,6 +1,6 @@
 DNC v2.7.0 (2021-Nov-08)
 ------------------------
-* Implementation of LUDB for feedforward networks
+* Implementation of LUDB for feedforward network analysis
 
 DNC v2.6.3 (2021-Nov-05)
 ------------------------
