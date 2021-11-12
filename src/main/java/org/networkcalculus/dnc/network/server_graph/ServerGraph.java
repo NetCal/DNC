@@ -1487,7 +1487,7 @@ public class ServerGraph {
 		sb.append("public class " + file_name + " implements ServerGraphFactory {");
 		sb.append("\n");
 		sb.append("\tprivate ServerGraph sg;\n");
-		sb.append("\tprivate static private static CurveFactory_Affine factory = Curve.getFactory();\n");
+		sb.append("\tprivate static CurveFactory_Affine factory = Curve.getFactory();\n");
 		sb.append("\n");
 
 		// Server creation
