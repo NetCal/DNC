@@ -210,7 +210,7 @@
 									<goal>wget</goal>
 								</goals>
 								<configuration>
-									<url>http://www.mpa.ethz.ch/static/download.php?file=RTCToolbox_bin.zip</url>
+									<url>https://www.mpa.ethz.ch/downloads/RTCToolbox_bin.zip</url>
 									<unpack>true</unpack>
 									<outputDirectory>${project.basedir}/lib/</outputDirectory>
 								</configuration>
