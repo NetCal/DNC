@@ -291,7 +291,7 @@ public class Curve_Disco_PwAffine implements Curve_PwAffine, CurveFactory_Affine
 	 */
 	public LinearSegment_Disco getSegment(int pos) {
 		if (pos < 0 || pos > segments.length - 1) {
-			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ")!");
+			throw new IndexOutOfBoundsException("Index out of bounds (pos=" + pos + ", segments.length="+segments.length+")!");
 		}
 		return segments[pos];
 	}
