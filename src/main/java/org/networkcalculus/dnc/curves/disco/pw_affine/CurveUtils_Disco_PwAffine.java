@@ -408,7 +408,7 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
                     if (!curve1_last) {
                         if (!curve2_last) {
                             if (x_int_tmp.lt(curve1.getSegment(i + 1).getX())
-                                    && x_int_tmp.lt(curve1.getSegment(j + 1).getX()) && x_int_tmp.lt(x_int)) {
+                                    && x_int_tmp.lt(curve2.getSegment(j + 1).getX()) && x_int_tmp.lt(x_int)) {
 
                                 x_int = x_int_tmp;
                             }
@@ -420,7 +420,7 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
                         }
                     } else {
                         if (!curve2_last) {
-                            if (x_int_tmp.lt(curve1.getSegment(j + 1).getX()) && x_int_tmp.lt(x_int)) {
+                            if (x_int_tmp.lt(curve2.getSegment(j + 1).getX()) && x_int_tmp.lt(x_int)) {
 
                                 x_int = x_int_tmp;
                             }
