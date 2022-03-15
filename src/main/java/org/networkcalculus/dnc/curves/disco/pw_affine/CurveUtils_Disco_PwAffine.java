@@ -388,6 +388,15 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
         return result;
     }
 
+    /**
+     * Iterate over all segments from both <code>curve1</code> and <code>curve2</code> to find the smallest x-coordinate where an intersection occurs.
+     *
+	 * @param curve1
+	 * @param curve2
+	 * 
+	 * @return 	The smallest x-coordinate at which a curve <code>curve1</code> intersects a curve <code>curve2</code>,
+	 * 			or PositiveInfinity if both curves do not have an intersection.
+     */
     public Num getXIntersection(Curve curve1, Curve curve2) {
         Num x_int = Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity(); // No need to create an object as this value is
         // only set for initial comparison in the loop.
@@ -400,10 +409,19 @@ public class CurveUtils_Disco_PwAffine implements CurveUtils {
 
                 Num x_int_tmp = curve1.getSegment(i).getXIntersectionWith(curve2.getSegment(j));
 
+                /**
+                 * If any two segments s1 and s2 represent parallel lines, then the resulting x-coordinate of intersection does not exist.
+                 * Thus s1.getXIntersectionWith(s2) returns NaN when this occurs.
+                 */
                 if (x_int_tmp.equals(Num.getFactory(Calculator.getInstance().getNumBackend()).getNaN())) {
                     break;
                 }
 
+                /**
+                 * Notes:
+                 * 	The lt() "less than" method from Num class used in conditions below assures to get the smallest x-coordinate.
+                 * 	Absent of 'break' clause within conditions below assures all segments will be checked.
+                 */
                 if (x_int_tmp.gtZero()) {
                     if (!curve1_last) {
                         if (!curve2_last) {
