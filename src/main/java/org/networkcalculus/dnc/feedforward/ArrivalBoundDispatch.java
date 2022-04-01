@@ -26,12 +26,7 @@
 
 package org.networkcalculus.dnc.feedforward;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.networkcalculus.dnc.AnalysisConfig;
@@ -166,17 +161,29 @@ public abstract class ArrivalBoundDispatch {
 				continue;
 			}
 
+
 			arrival_bounds_turn = computeArrivalBounds(server_graph, configuration, in_l, f_xfcaller_in_l, flow_of_interest);
 
 			// Add the new bounds to the others:
 			// * Consider all the permutations of different bounds per in turn.
 			// * Care about the configuration.convolveAlternativeArrivalBounds()-flag later.
+			boolean haveEncounteredFiniteAB=false;
 			for (ArrivalCurve arrival_bound_turn : arrival_bounds_turn) {
 				Curve.getUtils().beautify(arrival_bound_turn);
 
 				for (ArrivalCurve arrival_bound_existing : arrival_bounds) {
-					arrival_bounds_turn_permutations.add(Curve.getUtils().add(arrival_bound_turn, arrival_bound_existing));
+
+					if(!arrival_bound_turn.isDelayedInfiniteBurst())
+					{
+						haveEncounteredFiniteAB=true;
+						arrival_bounds_turn_permutations.add(Curve.getUtils().add(arrival_bound_turn, arrival_bound_existing));
+					}
 				}
+			}
+
+			if(!haveEncounteredFiniteAB)
+			{
+				return new HashSet<ArrivalCurve>( Arrays.asList(Curve.getFactory().createArrivalCurve((Curve)Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get())));
 			}
 
 			arrival_bounds.clear();
@@ -194,7 +201,7 @@ public abstract class ArrivalBoundDispatch {
 			// As we checked for an existing cache entry at the beginning (and returned it of present), we do not hav to care about the potential overwriting of a cache entry here. 
 			getCache( configuration.arrivalBoundMethods() ).addArrivalBounds( configuration, server, flows_to_bound, flow_of_interest, arrival_bounds );
 		}
-		
+
 		return new HashSet<ArrivalCurve>( arrival_bounds );
 	}
 
@@ -305,7 +312,7 @@ public abstract class ArrivalBoundDispatch {
 		if( configuration.convolveAlternativeArrivalBounds() ) {
 			arrival_bounds_xfcaller = new HashSet<ArrivalCurve>( Collections.singleton( Calculator.getInstance().getMinPlus().convolve( arrival_bounds_xfcaller ) ) );
 		}
-		
+
 		if( configuration.useArrivalBoundsCache() 
 				&& configuration.enforceMultiplexing() != MultiplexingEnforcement.SERVER_LOCAL ) { // Do not cache in that case. Too many variables, the cache does not check all of them.
 			

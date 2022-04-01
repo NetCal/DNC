@@ -390,6 +390,11 @@ public abstract class Deconvolution_Disco_ConPwAffine {
         // With the given assumptions:
         // Output arrival curve is simply a token bucket one: output rate = curve_1.rate and output burst = curve_1.burst + curve_2.latency * curve_1.rate
 
+        if(curve_1.isDelayedInfiniteBurst() ||  curve_2.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()) )
+        {
+            return Curve.getFactory().createArrivalCurve((Curve)Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get());
+        }
+
         Num ac_burst = curve_1.getBurst();
         Num ac_rate = curve_1.getUltAffineRate();
         Num output_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).mult( curve_2.getLatency(), ac_rate);
@@ -399,6 +404,5 @@ public abstract class Deconvolution_Disco_ConPwAffine {
         ArrivalCurve output_ac = Curve.getFactory().createTokenBucket(ac_rate, output_burst);
 
         return output_ac;
-
     }
 }

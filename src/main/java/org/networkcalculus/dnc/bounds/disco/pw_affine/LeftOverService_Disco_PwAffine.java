@@ -131,6 +131,11 @@ public final class LeftOverService_Disco_PwAffine {
     // The FIFO left-over service curve which we get for a specific shift of the arrival curve
     public static ServiceCurve fifoMux(ServiceCurve service_curve, ArrivalCurve arrival_curve, Num theta) {
 
+        if(arrival_curve.isDelayedInfiniteBurst() || service_curve.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()))
+        {
+            return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
+        }
+
         if(theta.ltZero())
         {
             System.err.println(theta);
@@ -144,7 +149,7 @@ public final class LeftOverService_Disco_PwAffine {
 
 
             ServiceCurve sc_transform = Curve.getFactory().createZeroService(); // zero until theta, after that "copy" of service_curve
-            int sc_transform_curr_seg = 1; // createZeroService creates one segment starting at ursprung with slope 0
+            int sc_transform_curr_seg = 1; // createZeroService creates one segment starting at origin with slope 0
             boolean copy = false; // to distinguish if we have to copy or set sc_transform to zero
             int nrsegs = service_curve.getSegmentCount();
 
