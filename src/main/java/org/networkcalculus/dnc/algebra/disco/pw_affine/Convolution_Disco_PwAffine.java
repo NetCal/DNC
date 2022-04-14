@@ -74,6 +74,11 @@ public abstract class Convolution_Disco_PwAffine {
             default:
         }
 
+        if(service_curve_0.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())||service_curve_1.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get()))
+        {
+            return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
+        }
+
         ServiceCurve[] service_curves = {service_curve_0.copy(), service_curve_1.copy()};
         int[] i = {0, 0};
 

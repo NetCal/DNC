@@ -129,6 +129,10 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 			Set<ArrivalCurve> alphas_xxfcaller_s = new HashSet<ArrivalCurve>();
 			for (ArrivalCurve arrival_curve_path : alpha_xxfcaller_path) {
 				for (ArrivalCurve arrival_curve_offpath : alpha_xxfcaller_offpath) {
+					if(arrival_curve_offpath.isDelayedInfiniteBurst() || arrival_curve_path.isDelayedInfiniteBurst())
+					{
+						continue;
+					}
 					alphas_xxfcaller_s.add(Curve.getUtils().add(arrival_curve_path, arrival_curve_offpath));
 				}
 			}
@@ -143,7 +147,7 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 				System.out.println("No service left over during PBOO arrival bounding!");
 				alphas_xfcaller.clear();
 				alphas_xfcaller.add(Curve.getFactory()
-						.createArrivalCurve((Curve)Curve_ConstantPool.INFINITE_SERVICE_CURVE.get()));
+						.createArrivalCurve((Curve)Curve_ConstantPool.INFINITE_ARRIVAL_CURVE.get()));
 				return alphas_xfcaller;
 			}
 
@@ -189,7 +193,6 @@ public class AggregatePboo_Concatenation extends AbstractArrivalBound implements
 				System.out.println("INFO: Capping output burstiness was not executed as it currently only works for DISCO_AFFINE curves.");
 			}
 		}
-
 		return alphas_xfcaller;
 	}
 }
