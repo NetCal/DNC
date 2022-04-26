@@ -71,7 +71,7 @@ First, make sure you are connected to the Internet and that you have a ``lib`` f
   - Right-click on the project `DNC` and select `Run As > Maven build...`. In the new window, add `validate` to the (empty) Goals-field and then click `Run`.
   - Right-click on the project `DNC` and select `Maven > Update Project...`. In the new window, check that `DNC` is selected and click `OK`.
 
-* Manual install: Download the file from https://www.mpa.ethz.ch/downloads/RTCToolbox_bin.zip and unpack it in the `DNC` project's /lib folder. 
+* Manual install: Download the file from http://www.mpa.ethz.ch/downloads/RTCToolbox_bin.zip and unpack it in the `DNC` project's /lib folder. 
 
 ## Functional Tests
 
