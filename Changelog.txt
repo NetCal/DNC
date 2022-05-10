@@ -3,7 +3,7 @@ DNC v2.8.0 (2022-May-10)
 * Implementation of search-based FIFO analyses for feedforward networks. Details:
 	Alexander Scheffler, Jens Schmitt and Steffen Bondorf.
 	Searching for Upper Delay Bounds in FIFO Multiplexing Feedforward Networks.
-	In Proc. of the 30th Conference on Real-Time Systems (RTNS 2022), June 2022.
+	In Proc. of the 30th Conference on Real-Time Networks and Systems (RTNS 2022), June 2022.
 * Return Infinite Delay Bounds for overloaded servers in the SFA-FIFO analysis 
 * Fix saving a server graph
 * Fix rtc.jar download link
