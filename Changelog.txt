@@ -8,7 +8,7 @@ DNC v2.8.0 (2022-May-10)
 * Fix saving a server graph
 * Fix rtc.jar download link
 * Fix getXIntersection for curves more complex than TB, RL 
-* Various minor improvements, 
+* Various minor improvements
 
 DNC v2.7.0 (2021-Nov-08)
 ------------------------
