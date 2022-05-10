@@ -47,7 +47,7 @@ public class NestedTandemAnalysis {
     private ServiceCurve e2e;
 
     public enum mode {
-         LUDB_FF 
+         LUDB_FF, LB_FF, DS_FF
     }
 
     public static mode selected_mode;
@@ -57,6 +57,19 @@ public class NestedTandemAnalysis {
     private double curr_min_delay_ludb; // for the on the run version (i.e. the one that does not compute all decompositions a priori)
     private Map<Integer, Double> curr_best_s_setting; //  curr_lb + s <=> theta (note that s >= 0!) [s from LUDB paper fifo l.o. theorem, theta is free parameter in the general fifo left over theorem]
     /////////////////// /////////////////// ///////
+
+    private Map<Flow, Num> lb_thetas_global_min_so_far;
+    private Map<Flow, Num> ub_thetas_global_max_so_far;
+    private Map<Flow, Num> lb_thetas_safe; // "safe" but rather trivial lower bound on the thetas
+    private Map<Flow, Num> ub_thetas_safe; // "safe" but rather trivial upper bound on the thetas
+    private Map<Flow, Num> stepsize_thetas; // stepsize per theta
+    private Num curr_min_delay;
+
+
+    public static Num xi = Num.getUtils(Calculator.getInstance().getNumBackend()).create(0.5);
+    public static Num c = Num.getUtils(Calculator.getInstance().getNumBackend()).create(5);
+    public static Num e = Num.getUtils(Calculator.getInstance().getNumBackend()).create(0.0001); // 10^-4
+
 
     public NestedTandemAnalysis(Path tandem, Flow flow_of_interest, List<Flow> flows) {
         this(tandem, flow_of_interest, flows, new AnalysisConfig());
@@ -113,13 +126,530 @@ public class NestedTandemAnalysis {
         createNestingTreeOrdered();
 
         switch (selected_mode) {
-            case LUDB_FF :
+
+            case LB_FF:
+                computeServiceCurve_LB_FF();
+                break;
+
+            case DS_FF:
+                computeServiceCurve_DS_FF();
+                break;
+
+            case LUDB_FF:
                 computeLUDB();
                 break;
         }
-
         return e2e;
     }
+
+
+    public void computeServiceCurve_LB_FF() throws Exception {
+        lb_thetas_global_min_so_far = new HashMap<>();
+
+        e2e = computeLeftOverSC(nestingTree, true, null, true);
+
+        compute_flows_without_foi_ordered = false;
+    }
+
+    // post order traversal / computation
+    // If the leftovers (in the tree) are already set it just overrides them, e.g. if we call that method with different theta combinations
+    /**
+     * @param node
+     * @param computeLBs Creates the e2e-SC for foi using lower-bound thetas -- the method computes them as well, ignore the last param
+     *                   // * @param computeUBs Similar
+     * @param thetas     Given the thetas, it creates the e2e-SC for foi using those thetas
+     * @return e2e-SC for foi
+     * @throws Exception
+     */
+    private ServiceCurve computeLeftOverSC(TNode node, boolean computeLBs, Map<Flow, Num> thetas, boolean computeAll) throws Exception {
+
+        ArrayList<TNode> children = node.getChildren();
+
+        if (computeAll) {
+            for (TNode child : children) {
+                computeLeftOverSC(child, computeLBs, thetas, computeAll);
+            }
+        }
+
+        // compute fifo left over sc for current node
+        // (left over sc for descendants (children) is already computed)
+
+
+        // always neutral element at this point in time
+
+        ServiceCurve leftover = Curve.getFactory().createZeroDelayInfiniteBurst();
+
+        if (node.getInf() instanceof LinkedList) {
+            // node is a t-leaf, i.e. represents C_(h,k)
+            LinkedList<Server> servers = (LinkedList<Server>) node.getInf();
+            for (Server server : servers) {
+                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, server.getServiceCurve());
+            }
+            node.setLeftover(leftover);
+        } else {
+            // node is a t-node, i.e. represents a flow (h,k)
+
+            if (compute_flows_without_foi_ordered) {
+                Flow curr_flow = (Flow) node.getInf();
+                if (!curr_flow.equals(foi)) {
+                    flows_without_foi_ordered.add(curr_flow);
+                    flow_tnode_map.put(curr_flow, node);
+                }
+
+            }
+
+            for (TNode child : children) {
+                if (child.getInf() instanceof LinkedList) {
+                    // child represents C_(h,k), so we don't need to "subtract" some AC from that left over sc
+                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child.getLeftover());
+                } else {
+                    ServiceCurve child_fifo_leftover = null;
+                    Num flow_theta = null;
+
+                    // child represents a flow (h,k), so we need to "subtract" the AC of flow (h,k) from the left over sc  stored in that node
+
+                    if (computeLBs) {
+                        // use the theta that we get at the x-position where the service curve (child.getLeftover()) has a y-value that equals the burst of the arrival curve
+                        ArrivalCurve ac = ((Flow) child.getInf()).getArrivalCurve();
+                        ServiceCurve sc = child.getLeftover();
+                        Num burst = ac.getBurst();
+
+                        Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
+                        flow_theta = curve.f_inv(burst);
+
+
+                        lb_thetas_global_min_so_far.put(((Flow) child.getInf()), flow_theta);
+                    } else {
+                        // use a theta from the map "thetas"
+                        Flow flow = (Flow) child.getInf();
+                        flow_theta = thetas.get(flow);
+
+                    }
+
+
+                    child_fifo_leftover = LeftOverService_Disco_PwAffine.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
+
+                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child_fifo_leftover);
+
+                }
+            }
+            node.setLeftover(leftover);
+        }
+        return leftover;
+    }
+
+    public void computeServiceCurve_DS_FF() throws Exception {
+        // compute SAFE bounds first
+        computeSafeBoundsLb();
+
+        Map<Flow, Num> safe_lb_thetas = new HashMap<>();
+        safe_lb_thetas.putAll(lb_thetas_safe);
+
+
+        e2e = computeLeftOverSC(nestingTree, false, safe_lb_thetas, true);
+
+        compute_flows_without_foi_ordered = false;
+
+        Num delay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e);
+
+        curr_min_delay = delay;
+
+        computeSafeBoundsUb(curr_min_delay);
+
+        // compute initial current and lower bounds
+        lb_thetas_global_min_so_far = new HashMap<>();
+
+        e2e = computeLeftOverSC(nestingTree, true, null, true);
+
+        compute_flows_without_foi_ordered = false;
+
+        delay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e);
+
+        curr_min_delay = delay;
+
+        computeSafeBoundsUb(curr_min_delay); // update safe upper bounds bc delay smaller
+
+        ub_thetas_global_max_so_far = new HashMap<>();
+
+        // compute upper bounds
+        computeUpperBounds(nestingTree, delay);
+
+        Map<Flow, Num> curr_theta_comb = new HashMap<>();
+
+        curr_theta_comb.putAll(lb_thetas_global_min_so_far);
+
+
+        compute_stepsize_directed_search();
+
+        // check if we even have crossflows
+        if (flows_without_foi_ordered.size() > 0) {
+            Flow curr_flow = flows_without_foi_ordered.get(0);
+            directed_search_w_armijo_linesearch(curr_theta_comb);
+        }
+
+    }
+
+    private void computeSafeBoundsLb() {
+        lb_thetas_safe = new HashMap<Flow, Num>();
+        Num foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+        for (Server server : foi_path.getServers()) {
+            foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(foi_path_latency, server.getServiceCurve().getLatency());
+        }
+
+        for (Flow xflow : flows) {
+            if (!(xflow.equals(foi))) {
+                Num xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+                for (Server server : xflow.getServersOnPath()) {
+                    xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(xflow_path_latency, server.getServiceCurve().getLatency());
+                }
+                lb_thetas_safe.put(xflow, xflow_path_latency);
+            }
+        }
+    }
+
+    private void computeSafeBoundsUb(Num delay) {
+        ub_thetas_safe = new HashMap<Flow, Num>();
+
+        Num foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+        for (Server server : foi_path.getServers()) {
+            foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(foi_path_latency, server.getServiceCurve().getLatency());
+        }
+
+        for (Flow xflow : flows) {
+            if (!(xflow.equals(foi))) {
+                Num xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+                for (Server server : xflow.getServersOnPath()) {
+                    xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(xflow_path_latency, server.getServiceCurve().getLatency());
+                }
+                Num ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(delay, foi_path_latency);
+                ub = Num.getUtils(Calculator.getInstance().getNumBackend()).add(ub, xflow_path_latency);
+                ub_thetas_safe.put(xflow, ub);
+            }
+        }
+    }
+
+
+    private void computeUpperBounds(TNode node, Num delay) {
+        if (delay.eq(Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity())) {
+            throw new IllegalArgumentException("delay infinity! (all set to lb)");
+        }
+
+        if (lb_thetas_global_min_so_far == null) {
+            throw new IllegalArgumentException("lower bound thetas not computed yet");
+        }
+
+
+        ArrayList<TNode> children = node.getChildren();
+
+
+        if (!(node.getInf() instanceof LinkedList)) {
+            // node is a t-node, i.e. represents a flow (h,k)
+
+            // Construction of constraints for flows on the second (or higher) level of the tree
+            children = node.getChildren();
+
+            // compute sum of server-latencies wrt the servers that are "children" of the node that holds the foi
+            Num sum_server_latencies = Num.getUtils(Calculator.getInstance().getNumBackend()).getZero();
+            for (TNode child : children) {
+                if (child.getInf() instanceof LinkedList) {
+                    sum_server_latencies = Num.getUtils(Calculator.getInstance().getNumBackend()).add(sum_server_latencies, child.getLeftover().getLatency());
+                }
+            }
+
+            // sum of the lower bound thetas
+            Num sum_theta_lb = Num.getUtils(Calculator.getInstance().getNumBackend()).getZero();
+
+            for (TNode child : children) {
+                if (!(child.getInf() instanceof LinkedList)) {
+                    Flow flow_child = (Flow) child.getInf();
+                    sum_theta_lb = Num.getUtils(Calculator.getInstance().getNumBackend()).add(sum_theta_lb, lb_thetas_global_min_so_far.get(flow_child));
+                }
+            }
+
+            for (TNode child : children) {
+                if (!(child.getInf() instanceof LinkedList)) {
+                    // for every "flow" on this second level we have a constraint
+                    Flow flow_curr = (Flow) child.getInf();
+                    Num sum_theta_lb_without_curr = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(sum_theta_lb, lb_thetas_global_min_so_far.get(flow_curr));
+                    Num ub = null;
+                    // Have to differentiate between children of foi (2nd level of tree) and children that are on higher levels
+                    if (node.getInf().equals(foi)) {
+                        ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(delay, sum_server_latencies);
+                    } else {
+                        ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(ub_thetas_global_max_so_far.get(node.getInf()), sum_server_latencies);
+                    }
+                    ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(ub, sum_theta_lb_without_curr);
+
+                    ub_thetas_global_max_so_far.put(flow_curr, ub);
+                }
+            }
+
+        }
+
+        // recursive call to children
+        for (TNode child : children) {
+            computeUpperBounds(child, delay);
+        }
+    }
+
+    private void compute_stepsize_directed_search() {
+        stepsize_thetas = new HashMap<>();
+        for (Flow flow : flows) {
+            if (!(flow.equals(foi))) {
+                Num lb = lb_thetas_global_min_so_far.get(flow);
+                Num ub = ub_thetas_global_max_so_far.get(flow);
+                Num delta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(ub, lb);
+                Num gran_minus_1 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c, Num.getUtils(Calculator.getInstance().getNumBackend()).create(1));
+                Num stepsize = Num.getUtils(Calculator.getInstance().getNumBackend()).div(delta, gran_minus_1);
+
+                stepsize_thetas.put(flow, stepsize);
+            }
+        }
+    }
+
+
+    private void directed_search_w_armijo_linesearch(Map<Flow, Num> thetas) throws Exception {
+
+        // int nr_decrements = 0;
+
+        Num delay_old = curr_min_delay;
+
+        Map<Flow, Num> thetas_old = new HashMap<Flow, Num>();
+        thetas_old.putAll(thetas);
+
+        int success_moves = 0;
+        int max_success_moves = 0;
+
+        while (minStepsize().gt(e))
+        {
+            Map<Flow, Num> thetas_new = find_best_nearby(thetas_old);
+
+
+            boolean at_least_one_nearby_improved = false;
+            Num delay_new = curr_min_delay;
+
+            if (success_moves > max_success_moves) {
+                max_success_moves = success_moves;
+            }
+            success_moves = 0;
+
+
+            Map<Flow, Num> delta_armijo_search = new HashMap<>();
+            Map<Flow, Num> x_start_armijo_search = new HashMap<>();
+            int armijo_counter = -1;
+
+            while (delay_new.lt(delay_old)) {
+                // Pattern Move with Armijo Line Search
+
+                if (!at_least_one_nearby_improved) {
+                    for (Flow flow : flows) {
+                        if (!(flow.equals(foi))) {
+                            Num theta_old = thetas_old.get(flow);
+                            Num theta_new = thetas_new.get(flow);
+                            Num theta_dif = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(theta_new, theta_old);
+                            delta_armijo_search.put(flow, theta_dif);
+                            x_start_armijo_search.put(flow, theta_new);
+                        }
+                    }
+                }
+
+                armijo_counter++;
+                at_least_one_nearby_improved = true;
+                success_moves++;
+
+                computeSafeBoundsUb(curr_min_delay); // update safe upper bounds
+
+
+                Map<Flow, Num> thetas_pot = new HashMap<Flow, Num>();
+
+                boolean safe_bounds_violation = false;
+                for (Flow flow : flows) {
+                    if (!(flow.equals(foi))) {
+                        Num theta_start = x_start_armijo_search.get(flow);
+                        double theta__exp = Math.pow(2, armijo_counter);
+
+
+                        Num num_theta_dif_exp = Num.getUtils(Calculator.getInstance().getNumBackend()).create(theta__exp);
+                        Num delta = delta_armijo_search.get(flow);
+                        Num delta_times_num_theta_dif_exp = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(num_theta_dif_exp, delta);
+                        Num theta_pot = Num.getUtils(Calculator.getInstance().getNumBackend()).add(theta_start, delta_times_num_theta_dif_exp);
+
+                        if (theta_pot.lt(lb_thetas_safe.get(flow))) {
+                            // would violate safe lower bound
+                            safe_bounds_violation = true;
+                        }
+
+                        if (theta_pot.gt(ub_thetas_safe.get(flow))) {
+                            // would violate safe upper bound
+                            safe_bounds_violation = true;
+                        }
+                        thetas_pot.put(flow, theta_pot);
+                    }
+                }
+
+
+                delay_old = delay_new;
+                thetas_old = thetas_new;
+
+                if (safe_bounds_violation) {
+                    break;
+                }
+
+                ServiceCurve e2e_pot = computeLeftOverSC(nestingTree, false, thetas_pot, true); // costly, complete built up of the nesting tree
+                Num delay_pot = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_pot);
+
+
+                if (delay_pot.geq(delay_new)) {
+                    // Move not successful
+                    computeLeftOverSC(nestingTree, false, thetas_old, true); // costly, complete rebuilt of the old(!) nesting tree
+                    break;
+                }
+
+                // Move successful
+                e2e = e2e_pot;
+                delay_new = delay_pot;
+                thetas_new = thetas_pot;
+
+            }
+
+            if (!at_least_one_nearby_improved) {
+                reduce_stepsize_directed_search(xi);
+            }
+        }
+    }
+
+    /**
+     * DS-FF method that searches in the current environment for a "better" point. This phase is often called Exploratory Phase.
+     */
+    private Map<Flow, Num> find_best_nearby(Map<Flow, Num> thetas) throws Exception {
+        Map<Flow, Num> thetas_new = new HashMap<Flow, Num>();
+        thetas_new.putAll(thetas);
+
+        for (int i = 0; i < flows_without_foi_ordered.size(); i++) {
+            Flow flow = flows_without_foi_ordered.get(i);
+            Num delta = stepsize_thetas.get(flow);
+            Num theta = thetas_new.get(flow);
+
+            Num theta_low = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(theta, delta);
+            Num delay_low = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+            ServiceCurve e2e_low = null;
+            if (theta_low.gt(lb_thetas_safe.get(flow))) {
+                thetas_new.put(flow, theta_low);
+                e2e_low = computeFoiLeftOverSCUpwards(flow_tnode_map.get(flow).getParent(), thetas_new);
+                delay_low = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_low);
+            }
+
+
+            Num theta_high = Num.getUtils(Calculator.getInstance().getNumBackend()).add(theta, delta);
+            Num delay_high = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+            ServiceCurve e2e_high = null;
+            if (theta_high.lt(ub_thetas_safe.get(flow))) {
+                thetas_new.put(flow, theta_high);
+                e2e_high = computeFoiLeftOverSCUpwards(flow_tnode_map.get(flow).getParent(), thetas_new);
+                delay_high = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_high);
+            }
+
+            Num min_delay = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+
+            if (curr_min_delay.leq(delay_low)) {
+                if (curr_min_delay.leq(delay_high)) {
+                    // curr_min_delay stays the minimum, i.e. dont change theta for the current flow
+                    // however, we need to update the nesting tree again  // we could copy nesting trees for those cases
+                    thetas_new.put(flow, theta);
+                    computeFoiLeftOverSCUpwards(flow_tnode_map.get(flow).getParent(), thetas_new);
+                } else {
+                    // delay_high is current min
+                    // thetas_new and the nesting tree are up to date
+                    curr_min_delay = delay_high;
+                    e2e = e2e_high;
+                }
+            } else {
+                if (delay_low.leq(delay_high)) {
+                    // however, we need to update the nesting tree again  // we could copy nesting trees for those cases
+                    thetas_new.put(flow, theta_low);
+                    computeFoiLeftOverSCUpwards(flow_tnode_map.get(flow).getParent(), thetas_new);
+                    curr_min_delay = delay_low;
+                    e2e = e2e_low;
+
+                } else {
+                    // delay_high is current min
+                    // thetas_new and the nesting tree are up to date
+                    curr_min_delay = delay_high;
+                    e2e = e2e_high;
+                }
+            }
+        }
+
+        return thetas_new;
+    }
+
+    /**
+     * Assume that this method is called from a flow node and that the map (@thetas) contains a value for each crossflow.
+     *
+     * @param node
+     * @param thetas
+     * @return
+     * @throws Exception
+     */
+    private ServiceCurve computeFoiLeftOverSCUpwards(TNode node, Map<Flow, Num> thetas) throws Exception {
+        ArrayList<TNode> children = node.getChildren();
+        ServiceCurve leftover = Curve.getFactory().createZeroDelayInfiniteBurst();
+        // node is a t-node, i.e. represents a flow (h,k)
+        for (TNode child : children) {
+            if (child.getInf() instanceof LinkedList) {
+                // child represents C_(h,k), so we don't need to "subtract" some AC from that left over sc
+                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child.getLeftover());
+            } else {
+                ServiceCurve child_fifo_leftover = null;
+                Num flow_theta = null;
+
+                // child represents a flow (h,k), so we need to "subtract" the AC of flow (h,k) from the left over sc  stored in that node
+                // use a theta from the map "thetas"
+                Flow flow = (Flow) child.getInf();
+                flow_theta = thetas.get(flow);
+
+                child_fifo_leftover = LeftOverService_Disco_PwAffine.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
+
+                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child_fifo_leftover);
+            }
+        }
+        node.setLeftover(leftover);
+
+        Flow flow = (Flow) node.getInf();
+        if (flow.equals(foi)) {
+            // we are done since the Left-Over Service Curve for the foi is available
+            return leftover;
+        } else {
+            return computeFoiLeftOverSCUpwards(node.getParent(), thetas);
+        }
+    }
+
+    /**
+     * @param r 0 < r < 1
+     */
+    private void reduce_stepsize_directed_search(Num r) {
+        for (Flow flow : flows) {
+            if (!(flow.equals(foi))) {
+                Num curr_stepsize = stepsize_thetas.get(flow);
+                Num stepsize_new = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(curr_stepsize, r);
+                stepsize_thetas.put(flow, stepsize_new);
+            }
+        }
+    }
+
+    private Num minStepsize() {
+        Num min_sp = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+        for (Flow flow : flows) {
+            if (!(flow.equals(foi))) {
+                Num sp = stepsize_thetas.get(flow);
+                if (sp.lt(min_sp)) {
+                    min_sp = sp;
+                }
+            }
+        }
+        return min_sp;
+    }
+
 
 
     public void computeLUDB() throws Exception {
@@ -581,7 +1111,6 @@ public class NestedTandemAnalysis {
 
     public TNode onlyComputeNestingTree() throws Exception {
         computeNestingSets();
-        //  createNestingTree();
         createNestingTreeOrdered();
         return nestingTree;
     }

@@ -49,6 +49,11 @@ public class TNode<T> {
         return inf;
     }
 
+    public TNode<T> getParent()
+    {
+        return parent;
+    }
+
     public ArrayList<TNode<T>> getChildren()
     {
         return children;
@@ -57,7 +62,6 @@ public class TNode<T> {
     public ServiceCurve getLeftover() {return  leftover;}
 
     public void setLeftover(ServiceCurve curve) {  leftover = curve;}
-
 
     public void setCurrentPseudoAffineCurveAndConstraints(PseudoAffine curr_pseudo_affine_curve, List<Expression_LUDB> curr_constraints)
     {
