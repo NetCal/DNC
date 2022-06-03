@@ -73,7 +73,6 @@ You can run the functional tests to check if you installation succeeded. We use 
 The IntelliJ console will show outputs like this:
 
 > [INFO] Results:
-> [INFO] 
 > [INFO] Tests run: 2720, Failures: 0, Errors: 0, Skipped: 0
 
 # Development with Eclipse
