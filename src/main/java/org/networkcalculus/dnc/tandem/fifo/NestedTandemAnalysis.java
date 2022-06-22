@@ -1124,7 +1124,7 @@ public class NestedTandemAnalysis {
         try {
             ArrayList<Flow> nested_flows = flow_directly_nested_flows_map.get(flow);
             LinkedList<Server> nested_flows_servers = flow_nodes_map.get(flow);
-            if (nested_flows_servers != null) {
+            if (nested_flows_servers != null && !nested_flows_servers.isEmpty()) {
                 subTree.addChild(nested_flows_servers);
             }
 
