@@ -19,3 +19,9 @@ Contributions by **Steffen Bondorf (bondorf@cs.uni-kl.de)** are subject to the f
 
 Contributions by **Steffen Bondorf (steffen.bondorf@ntnu.no)** are subject to the following copyright:  
 **Copyright (C) 2018-2019 Norwegian University of Science and Technology, Steffen Bondorf**
+
+Contributions by **Ilias Benzammour (ilias.benzammour@ruhr-uni-bochum.de)** are subject to the following copyright:  
+**Copyright (C) 2022 Ruhr-Universität Bochum, Ilias Benzammour**
+
+Contributions by **Lukas Herll (lukas.herll@rub.de)** are subject to the following copyright:  
+**Copyright (C) 2022 Ruhr-Universität Bochum, Lukas Herll**
