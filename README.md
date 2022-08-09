@@ -46,7 +46,7 @@ The NCorg DNC consists of 4 parts, that are located in 4 different repositories:
 * the test files in `src/functional_tests` are in [DNC\_func\_tests](https://github.com/NetCal/DNC_func_tests) and 
 * the experiment in `src/experiments` are in [DNC\_experiments](https://github.com/NetCal/DNC_experiments). 
 
-In order to get all submodules, use the command `git submodule update --init --recursive`.
+In order to get all submodules, you can use the command `git submodule update --init --recursive`.
 
 # Development with Eclipse
 

@@ -1,3 +1,12 @@
+DNC v2.8.1 (2022-Aug-09)
+------------------------
+* Implementation of a grid search-based FIFO analysis called GS. Details:
+    Alexander Scheffler, Steffen Bondorf and Jens Schmitt.
+    Analyzing FIFO-Multiplexing Tandems with Network Calculus and a Tailored Grid Search (Short Paper).
+    In Proc. of the 34th International Teletraffic Congress (ITC), September 2022.
+* Instructions on how to use the DNC with the IntelliJ IDE
+* Nesting trees will no longer have empty nodes
+
 DNC v2.8.0 (2022-May-10)
 ------------------------
 * Implementation of search-based FIFO analyses for feedforward networks. Details:
