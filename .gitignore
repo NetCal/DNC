@@ -8,3 +8,4 @@
 /doc/
 /lib/*
 !/lib/info.txt
+.idea
