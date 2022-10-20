@@ -202,16 +202,12 @@ public class ArrivalBoundCache {
 
 	protected CacheEntryTurn getCacheEntry( AnalysisConfig configuration, Turn turn, Set<Flow> bounded_flows, Flow flow_of_interest ) {
 		// Most important feature is an efficient search
-		boolean return_null = false;
 		Set<CacheEntryTurn> entries_l = map__turn__entries.get( turn );
 		if ( entries_l == null ) {
 			map__turn__entries.put( turn, new HashSet<CacheEntryTurn>() );
-			return_null = true;
-		}
-
-		if ( return_null ) {
 			return null;
 		}
+
 
 		Set<CacheEntryTurn> candidates = new HashSet<CacheEntryTurn>( entries_l );
 
