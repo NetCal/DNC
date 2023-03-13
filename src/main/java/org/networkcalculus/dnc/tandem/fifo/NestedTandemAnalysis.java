@@ -33,7 +33,7 @@ public class NestedTandemAnalysis {
     private final HashMap<Flow, ArrayList<Flow>> flow_directly_nested_flows_map;
     // represents C_(h,k) (see paper)
     private final HashMap<Flow, LinkedList<Server>> flow_nodes_map;
-    // represents the nesting tree of the given non-nested tandem
+    // represents the nesting tree of the given nested tandem
     private TNode nestingTree;
 
     private static boolean compute_flows_without_foi_ordered = false; // don't change
