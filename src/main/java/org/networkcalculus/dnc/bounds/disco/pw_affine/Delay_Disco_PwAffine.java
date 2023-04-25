@@ -66,6 +66,12 @@ public final class Delay_Disco_PwAffine {
     public static Num deriveFIFO(ArrivalCurve arrival_curve, ServiceCurve service_curve) {
         // Assuming token bucket arrival curve and pseudoaffine service curve
         // The delay bound is simply at point in time where the service curve reaches the burst of the arrival curve
-        return service_curve.f_inv(arrival_curve.getBurst());
+        Num ac_burst = arrival_curve.getBurst();
+        if(ac_burst.eqZero()) {
+            return service_curve.getLatency();
+        } else {
+            // while this should work in all cases in theory, the f_inv implementation does not work with burstiness == 0
+            return service_curve.f_inv(ac_burst);
+        }
     }
 }
