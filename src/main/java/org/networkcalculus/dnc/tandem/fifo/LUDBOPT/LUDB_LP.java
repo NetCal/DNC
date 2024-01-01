@@ -295,7 +295,7 @@ public class LUDB_LP {
         if(opt_s_values.size() != number_vars && !result.equals(Double.NaN))
         {
             // have to set some vars specifically to zero (cplex outputs with "Display solution variables -" the vars with their optimal setting if
-            // that setting is != 0; it justs outputs that all the other vars are set to 0)
+            // that setting is != 0; it just outputs that all the other vars are set to 0)
             for(int i = 0; i < number_vars; i++)
             {
                 if(!opt_s_values.containsKey(i))
