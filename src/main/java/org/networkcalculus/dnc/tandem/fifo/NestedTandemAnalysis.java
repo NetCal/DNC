@@ -742,7 +742,7 @@ public class NestedTandemAnalysis {
         PseudoAffine result_curve = leafs_conv;
         List<Expression_LUDB> result_constraints = new ArrayList<>();
 
-        // Put only one foor loop from a case here instead of the test
+        // Put only one for loop from a case here instead of the test
 
         for (TNode child : children_flows) {
 
