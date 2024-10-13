@@ -23,15 +23,25 @@ import org.networkcalculus.num.Num;
  * @author Alexander Scheffler
  */
 public class NestedTandemAnalysis {
+    /* 
+    For construction of nesting tree and LUDB in general:
+    @techreport{bisti2010computation,
+    title={Computation and Tightness Assessment of End-to-end Delay Bounds in FIFO-multiplexing Tandems},
+    author={Bisti, Luca and Lenzini, Luciano and Mingozzi, Enzo and Stea, Giovanni},
+    year={2010},
+    institution={Technical Report}
+    }
+    */
+    
     // The path of a network to be analyzed, equals foi.getPath()
     private final Path foi_path;
     // The flows on the path including foi. They need to meet the requirements mentioned in computeNestingSets method.
     private final Set<Flow> flows;
     // Flow of interest for which the left over service curve needs to be computed
     private final Flow foi;
-    // represents S_(h,k) (see paper)
+    // represents S_(h,k) (see [bisti2010computation])
     private final HashMap<Flow, ArrayList<Flow>> flow_directly_nested_flows_map;
-    // represents C_(h,k) (see paper)
+    // represents C_(h,k) (see [bisti2010computation])
     private final HashMap<Flow, LinkedList<Server>> flow_nodes_map;
     // represents the nesting tree of the given nested tandem
     private TNode nestingTree;
@@ -55,7 +65,7 @@ public class NestedTandemAnalysis {
     /////////////////// /////////////////// /////// LUDB_FF
     private final ArrayList<Flow> crossflowList = new ArrayList(); // mapping of id to Flow for LP computation (LUDB) (index coincides with id)
     private double curr_min_delay_ludb; // for the on the run version (i.e. the one that does not compute all decompositions a priori)
-    private Map<Integer, Double> curr_best_s_setting; //  curr_lb + s <=> theta (note that s >= 0!) [s from LUDB paper fifo l.o. theorem, theta is free parameter in the general fifo left over theorem]
+    private Map<Integer, Double> curr_best_s_setting; //  curr_lb + s <=> theta (note that s >= 0!) [s from LUDB [bisti2010computation] fifo l.o. theorem, theta is free parameter in the general fifo left over theorem]
     /////////////////// /////////////////// ///////
 
     private Map<Flow, Num> lb_thetas_global_min_so_far;
@@ -1244,9 +1254,9 @@ public class NestedTandemAnalysis {
         HashMap<Flow, Integer> flow_level_map = new HashMap<Flow, Integer>();
 
 
-        // S_(h,k) computation (see paper)
+        // S_(h,k) computation (see [bisti2010computation])
         for (Flow flow : flows) {
-            // flows are nested within themselves (as in the paper, normalization)
+            // flows are nested within themselves (as in the [bisti2010computation], normalization)
             flow_level_map.put(flow, 1);
         }
 
@@ -1281,7 +1291,7 @@ public class NestedTandemAnalysis {
             flow_directly_nested_flows_map.put(flow, directly_nested_flows);
         }
 
-        // C_(h,k) computation (see paper)
+        // C_(h,k) computation (see [bisti2010computation])
         for (Flow flow : flows) {
             ArrayList<Flow> diretly_nested_flows = flow_directly_nested_flows_map.get(flow);
             // The servers that are traversed by at least one of the directly nested flows
