@@ -1205,19 +1205,26 @@ public class NestedTandemAnalysis {
         try {
             ArrayList<Flow> nested_flows = flow_directly_nested_flows_map.get(flow);
             LinkedList<Server> nested_flows_servers = flow_nodes_map.get(flow);
-            if (nested_flows_servers != null && !nested_flows_servers.isEmpty()) {
-                subTree.addChild(nested_flows_servers);
-            }
 
-            Server foi_path_node = foi.getSource();
+            Server current_server_along_foi_path = foi.getSource();
             Server foi_path_sink = foi.getSink();
             Path foi_path = foi.getPath();
 
             boolean checked_all_servers_on_path = false;
             while (!checked_all_servers_on_path) {
+                // Check if the first server in nested_flows_server matches current_server_along_foi_path, 
+                // then insert list of servers as child node to keep the ordering of nodes consistent along 
+                // foi's path          
+                if (nested_flows_servers != null && !nested_flows_servers.isEmpty()) {
+                    if (nested_flows_servers.getFirst().equals(current_server_along_foi_path))
+                    {
+                       subTree.addChild(nested_flows_servers);
+                    }
+                }
+                
                 // find the child crossflow that starts here (only one possible)
                 for (Flow flow2 : nested_flows) {
-                    if (flow2.getSource().equals(foi_path_node)) {
+                    if (flow2.getSource().equals(current_server_along_foi_path)) {
                         TNode<Flow> childNode;
                         childNode = subTree.addChild(flow2);
                         createNestingTreeLevelOrdered(flow2, childNode);
@@ -1225,8 +1232,8 @@ public class NestedTandemAnalysis {
                     }
                 }
 
-                if (!(foi_path_node.equals(foi_path_sink))) {
-                    foi_path_node = foi_path.getSucceedingServer(foi_path_node);
+                if (!(current_server_along_foi_path.equals(foi_path_sink))) {
+                    current_server_along_foi_path = foi_path.getSucceedingServer(current_server_along_foi_path);
                 } else {
                     checked_all_servers_on_path = true;
                 }
