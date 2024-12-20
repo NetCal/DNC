@@ -788,7 +788,6 @@ public class NestedTandemAnalysis {
         // if k == -1, we select the null term as max
         for (int k = -1; k < nr_stages; k++) {
             // Only put k to the map if it is feasible for curr_flow, i.e., we compute the LUDB for the curr_flow with k
-            // if (!use_cache) {
             List<Expression_LUDB> curr_flow_constraints = curr_flow_node.getCurrentConstraints();
             Num curr_flow_burst = curr_flow.getArrivalCurve().getBurst();
             Expression_LUDB curr_flow_burst_exp = new Expression_LUDB(curr_flow_burst);
