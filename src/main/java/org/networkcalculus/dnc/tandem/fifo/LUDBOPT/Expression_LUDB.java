@@ -72,13 +72,11 @@ public class Expression_LUDB {
             case NUMBER:
                 to_return = n_const.toString();
                 break;
-            // case ADD: to_return = "[" + left.toString() +  "] + ["  + right.toString() + "]";
             case ADD:
                 to_return = left.toString() + " + " + right.toString();
                 break;
-            // case SUB: to_return = "[" + left.toString() +  "] - ["  + right.toString() + "]";
             case SUB:
-                to_return = left.toString() + " - " + right.toString();
+                to_return = left.toString() + " - [" + right.toString()+ "]";
                 break;
             case MULT:
                 to_return = "[" + left.toString() + "] * [" + right.toString() + "]";
