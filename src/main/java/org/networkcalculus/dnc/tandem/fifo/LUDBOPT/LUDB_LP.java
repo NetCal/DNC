@@ -284,11 +284,11 @@ public class LUDB_LP {
                 }
             }
             if (line.startsWith("s_")) {
-                String[] splited = line.split("\\s+");
-                String var_name = splited[0];
+                String[] splitted = line.split("\\s+");
+                String var_name = splitted[0];
                 String[] var_name_splitted = var_name.split("s_");
                 int var_id = Integer.parseInt(var_name_splitted[1]);
-                Double var_value_opt = Double.parseDouble(splited[1]);
+                Double var_value_opt = Double.parseDouble(splitted[1]);
                 opt_s_values.put(var_id, var_value_opt);
             }
         }
