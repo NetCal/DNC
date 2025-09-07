@@ -23,16 +23,6 @@ import org.networkcalculus.num.Num;
  * @author Alexander Scheffler
  */
 public class NestedTandemAnalysis {
-    /* 
-    For construction of nesting tree and LUDB in general:
-    @techreport{bisti2010computation,
-    title={Computation and Tightness Assessment of End-to-end Delay Bounds in FIFO-multiplexing Tandems},
-    author={Bisti, Luca and Lenzini, Luciano and Mingozzi, Enzo and Stea, Giovanni},
-    year={2010},
-    institution={Technical Report}
-    }
-    */
-    
     // The path of a network to be analyzed, equals foi.getPath()
     private final Path foi_path;
     // The flows on the path including foi. They need to meet the requirements mentioned in computeNestingSets method.
@@ -56,8 +46,12 @@ public class NestedTandemAnalysis {
 
     private ServiceCurve e2e;
 
+
     public enum mode {
-         LUDB_FF, LB_FF, DS_FF, GS
+         LUDB_FF, // (see [scheffler21qest])
+         LB_FF,  //(see [scheffler22rtns])
+         DS_FF, //(see [scheffler22rtns])
+         GS, // (see [scheffler22itc])
     }
 
     public static mode selected_mode;
@@ -752,12 +746,10 @@ public class NestedTandemAnalysis {
         PseudoAffine result_curve = leafs_conv;
         List<Expression_LUDB> result_constraints = new ArrayList<>();
 
-        // Put only one for loop from a case here instead of the test
-
         for (TNode child : children_flows) {
 
             Flow child_flow = (Flow) child.getInf();
-            int id = crossflowList.indexOf(child_flow);
+            int id = crossflowList.indexOf(child_flow); //TODO replace by flows_without_foi_ordered?
             ArrivalCurve ac = child_flow.getArrivalCurve();
             // We assume token bucket arrivals (LUDB is constrained to those arrival curves)
             Expression_LUDB ac_burst = new Expression_LUDB(ac.getBurst());
@@ -771,8 +763,6 @@ public class NestedTandemAnalysis {
             result_curve = PseudoAffine.convolve(result_curve, child_left_over_decompositions_pair.getFirst());
             result_constraints.addAll(child_left_over_decompositions_pair.getSecond());
         }
-
-
         node.setCurrentPseudoAffineCurveAndConstraints(result_curve, result_constraints);
     }
 
@@ -858,7 +848,7 @@ public class NestedTandemAnalysis {
         }
     }
 
-    // Sets the current pseudoaffine curve and constraints for the leaf nodes (constraints will be empty and the curve is just the convolution of the full service curve of the respective servers). This won't change anymore ("stable").
+    // Sets the current pseudoaffine curve and constraints for the leaf nodes (constraints will be empty and the curve is just the convolution of the full service curve of the respective servers).
     private void setLeafDecompositions(TNode node) throws Exception {
         ArrayList<TNode> children = node.getChildren();
 
@@ -869,9 +859,6 @@ public class NestedTandemAnalysis {
             // node is a t-leaf, i.e. represents C_(h,k)
             LinkedList<Server> servers = (LinkedList<Server>) node.getInf();
 
-            // For some reason there we have additional leafs with empty serverlist (whenever the foi does not have isolated servers, i.e., we
-            // experience this whenever every server on the foi path has at least one crossflow crossing it => only in this case?! Check and adapt computation of nesting tree
-            // NOW: Use neutral element for convolution and empty list of constraints
             if (servers.isEmpty()) {
                 node.setCurrentPseudoAffineCurveAndConstraints(PseudoAffine.createZeroDelayInfiniteBurst(), new ArrayList<>());
             } else {
@@ -1010,7 +997,6 @@ public class NestedTandemAnalysis {
 
         if (curr_selection_max == -1) {
             // zero is the max
-            // Also we have to consider the case where zero is the max
             ArrayList<Expression_LUDB> constraints_zero_max = new ArrayList<>();
 
             Expression_LUDB delay_curr = d_latency;
@@ -1109,7 +1095,7 @@ public class NestedTandemAnalysis {
 
                     // use a theta from the map "thetas"
                     Flow flow = (Flow) child.getInf();
-                    int var_id = crossflowList.indexOf(flow);
+                    int var_id = crossflowList.indexOf(flow); //TODO replace by flows_without_foi_ordered?
 
                     double s_opt_double = var_id_to_opt_s_values_map.get(var_id);
 

@@ -64,7 +64,7 @@ public class LUDB_LP {
 
 
 
-        // costant term has to come last in the lp format...
+        // constant term has to come last in the lp format...
         if (constant_of_objective.geqZero()) {
             if (delay_str_buffer.length() == 0) {
                 delay_str_buffer.append(constant_of_objective);
