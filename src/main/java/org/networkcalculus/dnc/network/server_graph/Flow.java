@@ -10,8 +10,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -30,14 +30,16 @@ package org.networkcalculus.dnc.network.server_graph;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.Curve_ConstantPool;
+import org.networkcalculus.dnc.backend.CurveFactory;
+import org.networkcalculus.dnc.backend.number.Number;
+
+import org.networkcalculus.dnc.backend.Curve;
 
 /**
  * Class representing flows through the network.
  */
 public class Flow {
-    public static final Flow NULL_FLOW = createDummyFlow("null", Curve_ConstantPool.ZERO_ARRIVAL_CURVE.get(),
+    public static final Flow NULL_FLOW = createDummyFlow("null", CurveFactory.createPeakRate(Number.ZERO),
             Path.createEmptyPath());
 
     /**
@@ -47,7 +49,7 @@ public class Flow {
     /**
      * The flow's arrival curve
      */
-    private ArrivalCurve arrival_curve;
+    private Curve arrival_curve;
 
     private String alias;
     /**
@@ -61,7 +63,7 @@ public class Flow {
      * @param ac    The flow's arrival curve.
      * @param path  The turn path the flow traverses.
      */
-    protected Flow(int id, String alias, ArrivalCurve ac, Path path) {
+    protected Flow(int id, String alias, Curve ac, Path path) {
         this.id = id;
         this.alias = alias;
         this.arrival_curve = ac;
@@ -83,7 +85,7 @@ public class Flow {
      * @param path  The turn path the flow traverses.
      * @return a dummy flow
      */
-    public static Flow createDummyFlow(String alias, ArrivalCurve ac, Path path) {
+    public static Flow createDummyFlow(String alias, Curve ac, Path path) {
         Flow result = new Flow();
         result.alias = alias;
         result.arrival_curve = ac;
@@ -91,7 +93,7 @@ public class Flow {
         return result;
     }
 
-    public boolean setArrivalCurve(ArrivalCurve arrival_curve) {
+    public boolean setArrivalCurve(Curve arrival_curve) {
         this.arrival_curve = arrival_curve;
         return true;
     }
@@ -99,8 +101,8 @@ public class Flow {
     /**
      * @return A copy of the arrival curve
      */
-    public ArrivalCurve getArrivalCurve() {
-        return arrival_curve.copy();
+    public Curve getArrivalCurve() {
+        return arrival_curve;
     }
 
     public int getId() {
@@ -118,31 +120,31 @@ public class Flow {
     public Path getPath() {
         return path;
     }
-    
+
     // --------------------------------------------------------------------------------------------------------------
     // String Conversions
     // --------------------------------------------------------------------------------------------------------------
-    
-    private StringBuffer commonStringPrefix() {
-    	StringBuffer flow_str_prefix = new StringBuffer();
 
-     	flow_str_prefix.append("Flow(");
-     	flow_str_prefix.append(alias);
-     	flow_str_prefix.append(", ");
-     	flow_str_prefix.append(Integer.toString(id));
-     	flow_str_prefix.append(", ");
-     	flow_str_prefix.append(arrival_curve.toString());
-     	flow_str_prefix.append(", ");
-     	
-     	return flow_str_prefix;
+    private StringBuffer commonStringPrefix() {
+        StringBuffer flow_str_prefix = new StringBuffer();
+
+        flow_str_prefix.append("Flow(");
+        flow_str_prefix.append(alias);
+        flow_str_prefix.append(", ");
+        flow_str_prefix.append(Integer.toString(id));
+        flow_str_prefix.append(", ");
+        flow_str_prefix.append(arrival_curve.toString());
+        flow_str_prefix.append(", ");
+
+        return flow_str_prefix;
     }
 
     public String toShortString() {
-    	StringBuffer flow_str = commonStringPrefix();
+        StringBuffer flow_str = commonStringPrefix();
 
-    	flow_str.append(path.toShortString());
-    	flow_str.append(")");
-    	
+        flow_str.append(path.toShortString());
+        flow_str.append(")");
+
         return flow_str.toString();
     }
 
@@ -151,27 +153,27 @@ public class Flow {
      */
     @Override
     public String toString() {
-    	StringBuffer flow_str = commonStringPrefix();
-    	
-    	flow_str.append(path.toString());
-    	flow_str.append(")");
-    	
-    	return flow_str.toString();
+        StringBuffer flow_str = commonStringPrefix();
+
+        flow_str.append(path.toString());
+        flow_str.append(")");
+
+        return flow_str.toString();
     }
 
     public String toLongString() {
-    	StringBuffer flow_str = commonStringPrefix();
-    	
-    	flow_str.append(path.toExtendedString());
-    	flow_str.append(")");
-    	
-    	return flow_str.toString();
+        StringBuffer flow_str = commonStringPrefix();
+
+        flow_str.append(path.toExtendedString());
+        flow_str.append(")");
+
+        return flow_str.toString();
     }
 
     // --------------------------------------------------------------------------------------------------------------
     // Shortcuts to conveniently access the path's according methods
     // --------------------------------------------------------------------------------------------------------------
-    
+
     public Server getSource() {
         return path.getSource();
     }

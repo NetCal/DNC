@@ -11,8 +11,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -38,15 +38,17 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
-import org.networkcalculus.dnc.AlgDncBackend_DNC_Affine;
+//import org.networkcalculus.dnc.AlgDncBackend_DNC_Affine;
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.Calculator;
+//import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.AnalysisConfig.Multiplexing;
 import org.networkcalculus.dnc.AnalysisConfig.MultiplexingEnforcement;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.Curve_ConstantPool;
-import org.networkcalculus.dnc.curves.ServiceCurve;
+//import org.networkcalculus.dnc.curves.ArrivalCurve;
+//import org.networkcalculus.dnc.curves.Curve;
+//import org.networkcalculus.dnc.curves.Curve_ConstantPool;
+//import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.backend.CurveFactory;
+import org.networkcalculus.dnc.backend.CurveUtils;
 import org.networkcalculus.dnc.feedforward.ArrivalBoundDispatch;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Path;
@@ -54,7 +56,10 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
 import org.networkcalculus.dnc.tandem.AbstractTandemAnalysis;
-import org.networkcalculus.num.Num;
+//import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.Curve;
+import org.networkcalculus.dnc.backend.number.Number;
+import org.networkcalculus.dnc.utils.CurveFunctionsUtils;
 
 public class PmooAnalysis extends AbstractTandemAnalysis {
     @SuppressWarnings("unused")
@@ -72,74 +77,11 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         super.configuration = configuration;
         super.result = new PmooResults();
     }
-    
-    public static ServiceCurve getServiceCurve(Path path, List<Flow> cross_flow_substitutes) {
-    	if( Calculator.getInstance().getDncBackend() == AlgDncBackend_DNC_Affine.DISCO_AFFINE) {
-    		return getServiceCurve_Affine(path, cross_flow_substitutes);
-    	} else {
-    		return getServiceCurve_ConPwAffine(path, cross_flow_substitutes);
-    	}
+
+    public static Curve getServiceCurve(Path path, List<Flow> cross_flow_substitutes) {
+        return getServiceCurve_ConPwAffine(path, cross_flow_substitutes);
     }
 
-    public static ServiceCurve getServiceCurve_Affine(Path path, List<Flow> cross_flow_substitutes) {
-    	
-    	Map<Server,Set<Flow>> server_xfsubst_map = new HashMap<Server,Set<Flow>>();
-    	Set<Flow> flows_at_current_server;
-    	for (Server s : path.getServers()) {
-    		flows_at_current_server = new HashSet<Flow>();
-    		
-    		for (Flow f : cross_flow_substitutes) {
-    			if( f.getPath().getServers().contains(s)) {
-    				flows_at_current_server.add(f);
-    			}
-    		}
-    		
-    		server_xfsubst_map.put(s, flows_at_current_server);
-    	}
-    	
-    	Num num_utils =  Num.getUtils(Calculator.getInstance().getNumBackend());
-    	Num num_factory = num_utils;
-    	
-    	Num sum_latencies = num_factory.getZero();
-    	for (Server s : path.getServers()) {
-    		sum_latencies = num_utils.add(sum_latencies, s.getServiceCurve().getLatency());
-    	}
-
-    	Num sum_bursts = num_factory.getZero();
-    	for (Flow f : cross_flow_substitutes) {
-    		sum_bursts = num_utils.add(sum_bursts, f.getArrivalCurve().getBurst());
-    	}
-    	
-    	Num lo_rate_tandem = num_factory.getPositiveInfinity();
-    	Num sum_burst_increases = num_factory.getZero();
-    	
-    	Num xf_s_arrival_rate, lo_rate_current_server;
-    	for (Server s : path.getServers()) {
-        	
-    		xf_s_arrival_rate = num_factory.getZero();
-        	lo_rate_current_server = num_factory.getZero();
-    		for( Flow f : server_xfsubst_map.get(s)) {
-    			xf_s_arrival_rate = num_utils.add(xf_s_arrival_rate, f.getArrivalCurve().getUltAffineRate());
-    		}
-    		lo_rate_current_server = num_utils.sub(s.getServiceCurve().getUltAffineRate(), xf_s_arrival_rate);
-    		
-    		if(lo_rate_current_server.ltZero()) {
-    			return Curve.getFactory().createZeroService();
-    		}
-
-			sum_burst_increases = num_factory.add(sum_burst_increases, 
-					num_factory.mult(s.getServiceCurve().getLatency(), xf_s_arrival_rate));
-    		lo_rate_tandem = num_utils.min(lo_rate_tandem, lo_rate_current_server);
-    	}
-    	
-    	Num lo_latency_tandem =
-    			num_utils.add(sum_latencies, 
-    					num_utils.div(num_utils.add(sum_bursts, sum_burst_increases),
-    							lo_rate_tandem)
-    			);
-    	
-    	return Curve.getFactory().createRateLatency(lo_rate_tandem, lo_latency_tandem); 
-    }
 
     /**
      * Concatenates the service curves along the given path <code>path</code>
@@ -157,7 +99,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
      *                               the actual cross-flows.
      * @return The PMOO service curve
      */
-    public static ServiceCurve getServiceCurve_ConPwAffine(Path path, List<Flow> cross_flow_substitutes) {
+    public static Curve getServiceCurve_ConPwAffine(Path path, List<Flow> cross_flow_substitutes) {
         // Create a flow-->tb_iter map
         Map<Flow, Integer> flow_tb_iter_map = new HashMap<Flow, Integer>();
         for (Flow f : cross_flow_substitutes) {
@@ -165,39 +107,39 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         }
         // Create a list of rl_iters
         int number_servers = path.getServers().size();
-        ServiceCurve[] service_curves = new ServiceCurve[number_servers];
+        Curve[] service_curves = new Curve[number_servers];
         int[] server_rl_iters = new int[number_servers];
         int[] server_rl_counts = new int[number_servers];
         int i = 0;
         for (Server server : path.getServers()) {
-            ServiceCurve service_curve = server.getServiceCurve();
+            Curve service_curve = server.getServiceCurve();
             service_curves[i] = service_curve;
             server_rl_iters[i] = 0;
-            server_rl_counts[i] = service_curve.getRL_ComponentCount();
+            server_rl_counts[i] = CurveFunctionsUtils.getRLComponentCount(service_curve);
             i++;
         }
 
-        ServiceCurve beta_total = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
+        Curve beta_total = CurveFactory.createPeakRate(Number.ZERO);
 
         boolean more_combinations = true;
         while (more_combinations) {
             // Compute service curve for this combination
-            ServiceCurve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
+            Curve beta = computePartialPMOOServiceCurve(path, service_curves, cross_flow_substitutes,
                     flow_tb_iter_map, server_rl_iters);
-            if (!beta.equals(Curve_ConstantPool.ZERO_SERVICE_CURVE.get())) {
-                beta_total = Curve.getUtils().max(beta_total, beta);
+            if (!beta.equals(CurveFactory.createPeakRate(Number.ZERO))) {
+                beta_total = CurveUtils.maximum(beta_total, beta);
             }
 
             // First check whether there are more combinations of flow TBs
             more_combinations = false;
             Flow f;
-            ArrivalCurve f_bound;
+            Curve f_bound;
             for (Entry<Flow, Integer> entry : flow_tb_iter_map.entrySet()) {
                 f = entry.getKey();
                 f_bound = f.getArrivalCurve();
 
                 i = flow_tb_iter_map.get(f).intValue();
-                if (i + 1 < f_bound.getTB_ComponentCount()) {
+                if (i + 1 < CurveFunctionsUtils.getTBComponentCount(f_bound)) {
                     flow_tb_iter_map.put(f, Integer.valueOf(i + 1));
                     more_combinations = true;
                     break;
@@ -240,15 +182,14 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
      *                               to use.
      * @return A partial PMOO service curve.
      */
-    protected static ServiceCurve computePartialPMOOServiceCurve(Path path, ServiceCurve[] service_curves,
-                                                                 List<Flow> cross_flow_substitutes, Map<Flow, Integer> flow_tb_iter_map, int[] server_rl_iters) {
-        Num T = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-        Num R = Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
-        Num sum_bursts = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-        Num sum_latencyterms = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+    protected static Curve computePartialPMOOServiceCurve(Path path, Curve[] service_curves,
+                                                          List<Flow> cross_flow_substitutes, Map<Flow, Integer> flow_tb_iter_map, int[] server_rl_iters) {
+        Number T = Number.ZERO;
+        Number R = Number.POSITIVE_INFINITY;
+        Number sum_bursts = Number.ZERO;
+        Number sum_latencyterms = Number.ZERO;
 
-        Num compute = Num.getUtils(Calculator.getInstance().getNumBackend());
-        
+
         double sum_r_at_s;
 
         Set<Flow> present_flows = new HashSet<Flow>();
@@ -260,40 +201,39 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
                 if (f.getPath().getServers().contains(s)) { // The exact path of the substitute does not matter, only
                     // the shared servers with the flow of interest do
                     present_flows.add(f);
-                    sum_r_at_s += f.getArrivalCurve().getUltAffineRate().doubleValue();
+                    sum_r_at_s += CurveFunctionsUtils.getUltAffineRate(f.getArrivalCurve()).toDouble();
                 }
             }
 
             // Check for stability constraint violation
-            if (sum_r_at_s >= s.getServiceCurve().getUltAffineRate().doubleValue()) {
-                return Curve.getFactory().createZeroService();
+            if (sum_r_at_s >= CurveFunctionsUtils.getUltAffineRate(s.getServiceCurve()).toDouble()) {
+                return CurveFactory.createPeakRate(Number.ZERO);
             }
 
-            Curve tmpcurve = service_curves[i].getRL_Component(server_rl_iters[i]);
-            ServiceCurve current_rl = Calculator.getInstance().getCurveFactory().createServiceCurve(tmpcurve);
+            Curve tmpcurve = CurveFunctionsUtils.getRLComponent(service_curves[i], server_rl_iters[i]);
+            Curve current_rl = tmpcurve;
 
             // Sum up latencies
-            T = compute.add(T, current_rl.getLatency());
+            T = T.add(CurveFunctionsUtils.getLatency(current_rl));
 
             // Compute and store sum of rates of all passing flows
-            Num sum_r = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+            Number sum_r = Number.ZERO;
             for (Flow f : present_flows) {
-                ArrivalCurve bound = f.getArrivalCurve();
-                Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-                ArrivalCurve current_tb = Calculator.getInstance().getCurveFactory().createArrivalCurve(ac);
-                sum_r = compute.add(sum_r, current_tb.getUltAffineRate());
+                Curve bound = f.getArrivalCurve();
+                Curve ac = CurveFunctionsUtils.getTBComponent(bound, ((Integer) flow_tb_iter_map.get(f)).intValue());
+                Curve current_tb = ac;
+                sum_r = sum_r.add(CurveFunctionsUtils.getUltAffineRate(current_tb));
             }
 
             // Update latency terms (increments)
-            sum_latencyterms = compute.add(sum_latencyterms,
-                    compute.mult(sum_r, current_rl.getLatency()));
+            sum_latencyterms = sum_latencyterms.add(sum_r.mul(CurveFunctionsUtils.getLatency(current_rl)));
 
             // Compute left-over rate; update min
-            Num Ri = compute.sub(current_rl.getUltAffineRate(), sum_r);
-            if (Ri.leqZero()) {
-                return Curve.getFactory().createZeroService();
+            Number Ri = CurveFunctionsUtils.getUltAffineRate(current_rl).sub(sum_r);
+            if (Ri.leq(Number.ZERO)) {
+                return CurveFactory.createPeakRate(Number.ZERO);
             }
-            R = compute.min(R, Ri);
+            R = R.min(Ri);
 
             // Remove all outgoing flows from the set of present flows
             Set<Flow> leaving_flows = new HashSet<Flow>();
@@ -307,22 +247,22 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
 
         // Compute sum of bursts
         for (Flow f : cross_flow_substitutes) {
-            ArrivalCurve bound = f.getArrivalCurve();
-            Curve ac = bound.getTB_Component(((Integer) flow_tb_iter_map.get(f)).intValue());
-            ArrivalCurve current_tb = Calculator.getInstance().getCurveFactory().createArrivalCurve(ac);
-            sum_bursts = compute.add(sum_bursts, current_tb.getBurst());
+            Curve bound = f.getArrivalCurve();
+            Curve ac = CurveFunctionsUtils.getTBComponent(bound, ((Integer) flow_tb_iter_map.get(f)).intValue());
+            Curve current_tb = ac;
+            sum_bursts = sum_bursts.add(CurveFunctionsUtils.getBurst(current_tb));
         }
 
-        T = compute.add(T, compute.div(compute.add(sum_bursts, sum_latencyterms), R));
+        T = T.add(sum_bursts.add(sum_latencyterms).div(R));
 
-		if (T == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
-            return Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
+        if (T == Number.POSITIVE_INFINITY) {
+            return CurveFactory.createPeakRate(Number.ZERO);
         }
-		if (R == Num.getFactory(Calculator.getInstance().getNumBackend()).getPositiveInfinity()) {
-            return Curve.getFactory().createDelayedInfiniteBurst(T);
+        if (R == Number.POSITIVE_INFINITY) {
+            return CurveFactory.createDelayedInfiniteBurst(T);
         }
 
-        return Curve.getFactory().createRateLatency(R, T);
+        return CurveFactory.createRateLatency(R, T);
     }
 
     /**
@@ -343,27 +283,27 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         ((PmooResults) result).betas_e2e = getServiceCurves(flow_of_interest, path,
                 Collections.singleton(flow_of_interest));
 
-        Num delay_bound__beta_e2e;
-        Num backlog_bound__beta_e2e;
+        Number delay_bound__beta_e2e;
+        Number backlog_bound__beta_e2e;
 
-        ((PmooResults) result).setDelayBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
-        ((PmooResults) result).setBacklogBound(Num.getFactory(Calculator.getInstance().getNumBackend()).createPositiveInfinity());
+        ((PmooResults) result).setDelayBound(Number.POSITIVE_INFINITY);
+        ((PmooResults) result).setBacklogBound(Number.POSITIVE_INFINITY);
 
-        for (ServiceCurve beta_e2e : ((PmooResults) result).betas_e2e) {
+        for (Curve beta_e2e : ((PmooResults) result).betas_e2e) {
             // Single flow of interest, i.e., fifo per micro flow holds
-            delay_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e);
+            delay_bound__beta_e2e = CurveUtils.delayFIFO(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (delay_bound__beta_e2e.leq(result.getDelayBound())) {
                 ((PmooResults) result).setDelayBound(delay_bound__beta_e2e);
             }
 
-            backlog_bound__beta_e2e = Calculator.getInstance().getDncBackend().getBounds().backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
+            backlog_bound__beta_e2e = CurveUtils.backlog(flow_of_interest.getArrivalCurve(), beta_e2e);
             if (backlog_bound__beta_e2e.leq(result.getBacklogBound())) {
                 ((PmooResults) result).setBacklogBound(backlog_bound__beta_e2e);
             }
         }
     }
 
-    public Set<ServiceCurve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
+    public Set<Curve> getServiceCurves(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
             throws Exception {
         if (configuration.enforceMultiplexing() == MultiplexingEnforcement.SERVER_LOCAL) {
             for (Server s : path.getServers()) {
@@ -380,7 +320,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         }
     }
 
-    private Set<ServiceCurve> getServiceCurvesFP(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
+    private Set<Curve> getServiceCurvesFP(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
             throws Exception {
         // Get cross-flows grouped as needed for the PMOO left-over service curve
         Set<Flow> flows_of_lower_priority = new HashSet<Flow>(flows_to_serve);
@@ -437,7 +377,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
                 Set<Map<Path, Set<Flow>>> xtx_subpath_grouped_incl_prolongation_tmp = new HashSet<Map<Path, Set<Flow>>>();
 
                 // At the beginning, only the original interference pattern is in here.
-                for (Map<Path, Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation) { 
+                for (Map<Path, Set<Flow>> interference_pattern : xtx_subpath_grouped_incl_prolongation) {
                     // Prevent the original from getting lost because its sink is not part of
                     // xf_prolongations's Server list.
                     xtx_subpath_grouped_incl_prolongation_tmp.add(interference_pattern);
@@ -474,15 +414,15 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
                             Turn inturn_xfs = xfs.iterator().next().getPrecedingTurn(subpaths_src);
                             Turn inturn_subpath_flows;
                             for (Flow f : value_flows) {
-                            	try {
+                                try {
                                     inturn_subpath_flows = f.getPrecedingTurn(subpaths_src);
                                     if (inturn_subpath_flows.equals(inturn_xfs)) {
                                         aggr_potential = true;
                                         continue;
                                     }
-                                // There's an exception thrown by getPrecedingTurn if f is originating in subpaths_src
+                                    // There's an exception thrown by getPrecedingTurn if f is originating in subpaths_src
                                 } catch (Exception e) {
-                                } 
+                                }
                             }
 
                             if (!aggr_potential) {
@@ -506,7 +446,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         }
 
         // Next, get the left-over betas for every prolongation variant.
-        Set<ServiceCurve> betas_e2e = Collections.synchronizedSet(new HashSet<ServiceCurve>());
+        Set<Curve> betas_e2e = Collections.synchronizedSet(new HashSet<Curve>());
 
         xtx_subpath_grouped_incl_prolongation.parallelStream().forEach(xtx_subpath_grouped -> {
             try {
@@ -518,7 +458,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         });
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
+            betas_e2e.add(CurveFactory.createPeakRate(Number.ZERO));
         }
         return betas_e2e;
     }
@@ -620,7 +560,7 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         return return_value;
     }
 
-    private Set<ServiceCurve> getServiceCurvesStandard(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
+    private Set<Curve> getServiceCurvesStandard(Flow flow_of_interest, Path path, Set<Flow> flows_to_serve)
             throws Exception {
         // Get cross-flows grouped as needed for the PMOO left-over service curve
         Set<Flow> flows_of_lower_priority = new HashSet<Flow>(flows_to_serve);
@@ -631,15 +571,15 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         Map<Path, Set<Flow>> xtx_subpath_grouped = server_graph.groupFlowsPerSubPath(path, cross_flows);
 
         if (xtx_subpath_grouped.isEmpty()) {
-            return new HashSet<ServiceCurve>(Collections.singleton(path.getServiceCurve()));
+            return new HashSet<Curve>(Collections.singleton(path.getServiceCurve()));
         }
 
         return xtxSubpathBetas(flow_of_interest, path, xtx_subpath_grouped);
     }
 
-    private Set<ServiceCurve> xtxSubpathBetas(Flow flow_of_interest, Path path,
-                                              Map<Path, Set<Flow>> xtx_subpath_grouped) throws Exception {
-        Set<ServiceCurve> betas_e2e = new HashSet<ServiceCurve>();
+    private Set<Curve> xtxSubpathBetas(Flow flow_of_interest, Path path,
+                                       Map<Path, Set<Flow>> xtx_subpath_grouped) throws Exception {
+        Set<Curve> betas_e2e = new HashSet<Curve>();
 
         // Derive the cross-flow substitutes with their arrival bound
         Set<List<Flow>> cross_flow_substitutes_set = new HashSet<List<Flow>>();
@@ -653,12 +593,12 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
             for (Flow f : entry.getValue()) {
                 substitute_flow_alias = substitute_flow_alias.concat(f.getAlias() + ",");
             }
-            						// Remove trailing comma.
-            substitute_flow_alias = substitute_flow_alias.substring(0, substitute_flow_alias.length() - 1); 
+            // Remove trailing comma.
+            substitute_flow_alias = substitute_flow_alias.substring(0, substitute_flow_alias.length() - 1);
             substitute_flow_alias = substitute_flow_alias.concat("}");
 
             // Derive the substitute flow's arrival bound
-            Set<ArrivalCurve> alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
+            Set<Curve> alphas_xf_group = ArrivalBoundDispatch.computeArrivalBounds(server_graph, configuration,
                     entry.getKey().getSource(), entry.getValue(), Flow.NULL_FLOW);
             // entry.getKey().getSource() because entry.getKey() is the common subpath of
             // path (above variable), i.e., start of interference on path.
@@ -675,8 +615,8 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
 
             arrival_bounds_turn_permutations.clear();
             List<Flow> flow_list_tmp = new LinkedList<Flow>();
-            for (ArrivalCurve alpha : alphas_xf_group) {
-            	Curve.getUtils().beautify(alpha);
+            for (Curve alpha : alphas_xf_group) {
+                CurveUtils.beautify(alpha);
 
                 for (List<Flow> f_subst_list : cross_flow_substitutes_set) {
                     // The new list of cross-flow substitutes = old list plus a new one with one of
@@ -704,9 +644,9 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         }
 
         // Derive the left-over service curves
-        ServiceCurve null_service = Curve_ConstantPool.ZERO_SERVICE_CURVE.get();
+        Curve null_service = CurveFactory.createPeakRate(Number.ZERO);
         for (List<Flow> xtx_substitutes : cross_flow_substitutes_set) {
-            ServiceCurve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
+            Curve beta_e2e = PmooAnalysis.getServiceCurve(path, xtx_substitutes);
 
             if (!beta_e2e.equals(null_service)) {
                 betas_e2e.add(beta_e2e); // Adding to the set, not adding up the curves
@@ -714,12 +654,12 @@ public class PmooAnalysis extends AbstractTandemAnalysis {
         }
 
         if (betas_e2e.isEmpty()) {
-            betas_e2e.add(Curve_ConstantPool.ZERO_SERVICE_CURVE.get());
+            betas_e2e.add(CurveFactory.createPeakRate(Number.ZERO));
         }
         return betas_e2e;
     }
 
-    public Set<ServiceCurve> getLeftOverServiceCurves() {
+    public Set<Curve> getLeftOverServiceCurves() {
         return ((PmooResults) result).betas_e2e;
     }
 }

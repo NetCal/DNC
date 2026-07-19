@@ -10,8 +10,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -31,10 +31,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
+import org.networkcalculus.dnc.backend.Curve;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
-import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.number.Number;
+
 
 public abstract class AbstractTandemAnalysis implements TandemAnalysis {
     protected ServerGraph server_graph;
@@ -59,7 +60,7 @@ public abstract class AbstractTandemAnalysis implements TandemAnalysis {
      *
      * @return the delay bound
      */
-    public Num getDelayBound() {
+    public Number getDelayBound() {
         return result.getDelayBound();
     }
 
@@ -68,7 +69,7 @@ public abstract class AbstractTandemAnalysis implements TandemAnalysis {
      *
      * @return the backlog bound
      */
-    public Num getBacklogBound() {
+    public Number getBacklogBound() {
         return result.getBacklogBound();
     }
 
@@ -81,7 +82,7 @@ public abstract class AbstractTandemAnalysis implements TandemAnalysis {
      *
      * @return Mapping from the server to the server's arrival bound
      */
-    public Map<Server, Set<ArrivalCurve>> getServerAlphasMap() {
+    public Map<Server, Set<Curve>> getServerAlphasMap() {
         return result.map__server__alphas;
     }
 

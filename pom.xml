@@ -1,282 +1,334 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<name>DNC - The Deterministic Network Calculator</name>
-	<description>Deterministic Network Calculus is a methodology for worst-case modeling and analysis of
+    <name>DNC - The Deterministic Network Calculator</name>
+    <description>Deterministic Network Calculus is a methodology for worst-case modeling and analysis of
         communication networks. It enables to derive deterministic bounds on a server’s backlog as well as a flow’s
         end-to-end delay. Given a directed graph of servers (server graph) and the flows crossing these servers, the
         Deterministic Network Calculator (DNC) automates the derivation of bounds.
-	</description>
-	<url>networkcalculus.org</url>
+    </description>
+    <url>networkcalculus.org</url>
 
-	<groupId>org.networkcalculus.dnc</groupId>
-	<artifactId>NetCal-DNC</artifactId>
-	<version>2.8.1</version>
+    <groupId>org.networkcalculus.dnc</groupId>
+    <artifactId>NetCal-DNC</artifactId>
+    <version>2.8.1</version>
 
-	<licenses>
-		<license>
-			<name>GNU General Lesser Public License (LGPL) version 2.1</name>
-			<url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>GNU General Lesser Public License (LGPL) version 2.1</name>
+            <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<name>Steffen Bondorf</name>
-			<email>steffen.bondorf@rub.de</email>
-			<organization>Distributed and Networked Systems, Ruhr University Bochum, Germany</organization>
-			<organizationUrl>dnet.rub.de</organizationUrl>
-		</developer>
-		<developer>
-			<name>Zoltan Matyas</name>
-			<email>matyesz79@gmail.com</email>
-			<organization></organization>
-			<organizationUrl></organizationUrl>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>Steffen Bondorf</name>
+            <email>steffen.bondorf@rub.de</email>
+            <organization>Distributed and Networked Systems, Ruhr University Bochum, Germany</organization>
+            <organizationUrl>dnet.rub.de</organizationUrl>
+        </developer>
+        <developer>
+            <name>Zoltan Matyas</name>
+            <email>matyesz79@gmail.com</email>
+            <organization></organization>
+            <organizationUrl></organizationUrl>
+        </developer>
+    </developers>
 
-	<scm>
-		<connection>scm:git:git://github.com/NetCal/DNC.git</connection>
-		<developerConnection>scm:git:ssh://github.com/NetCal/DNC.git</developerConnection>
-		<url>https://github.com/NetCal/DNC/</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git://github.com/NetCal/DNC.git</connection>
+        <developerConnection>scm:git:ssh://github.com/NetCal/DNC.git</developerConnection>
+        <url>https://github.com/NetCal/DNC/</url>
+    </scm>
 
-	<properties>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<junit.platform.version>1.7.2</junit.platform.version>
-		<junit.jupiter.version>5.7.2</junit.jupiter.version>
-		<apache.commons.version.from>3.0</apache.commons.version.from>
-		<apache.commons.version.to>3.6.1</apache.commons.version.to>
-		<numbackend.version>1.1.1</numbackend.version>
-		<networkmodel.version>1.0.0</networkmodel.version>
-		<maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
-		<maven.plugin.versions.version>2.8.1</maven.plugin.versions.version>
-		<maven.build-helper.plugin.version>3.2.0</maven.build-helper.plugin.version>
-		<maven.download.plugin.version>1.6.3</maven.download.plugin.version>
-	</properties>
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <junit.platform.version>1.7.2</junit.platform.version>
+        <junit.jupiter.version>5.7.2</junit.jupiter.version>
+        <apache.commons.version.from>3.0</apache.commons.version.from>
+        <apache.commons.version.to>3.6.1</apache.commons.version.to>
+        <numbackend.version>1.1.1</numbackend.version>
+        <networkmodel.version>1.0.0</networkmodel.version>
+        <maven.plugin.surefire.version>2.22.2</maven.plugin.surefire.version>
+        <maven.plugin.versions.version>2.8.1</maven.plugin.versions.version>
+        <maven.build-helper.plugin.version>3.2.0</maven.build-helper.plugin.version>
+        <maven.download.plugin.version>1.6.3</maven.download.plugin.version>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>[${apache.commons.version.from},${apache.commons.version.to}]</version>
-		</dependency>
-		<dependency>
-			<groupId>org.networkcalculus.num</groupId>
-    		<artifactId>NetCal-NumBackend</artifactId>
-			<version>${numbackend.version}</version>
-        	</dependency>
-        	<dependency>
-            		<groupId>org.networkcalculus.model</groupId>
-            		<artifactId>NetCal-NetworkModel</artifactId>
-            		<version>${networkmodel.version}</version>
-        	</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>[${apache.commons.version.from},${apache.commons.version.to}]</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.networkcalculus.num</groupId>
+            <artifactId>NetCal-NumBackend</artifactId>
+            <version>${numbackend.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchart</groupId>
+            <artifactId>xchart</artifactId>
+            <version>3.8.4</version>
+        </dependency>
 
-	<build>
-		<plugins>
-			<!-- run the unit tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven.plugin.surefire.version}</version>
-				<configuration>
-					<testClassesDirectory>${project.build.outputDirectory}</testClassesDirectory>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>ch.ethz.rtc.kernel</groupId>
-						<artifactId>rtc</artifactId>
-						<scope>system</scope>
-						<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
-						<version>1.2.beta.100</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>${junit.jupiter.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-api</artifactId>
-						<version>${junit.jupiter.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-params</artifactId>
-						<version>${junit.jupiter.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-			    <!-- Remove Milestone and RC versions from dependencies -->
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>${maven.plugin.versions.version}</version>
-				<configuration>
-					<rulesUri>file://${basedir}/version-number-rules.xml</rulesUri>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.12.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- AssertJ (fluent assertions) -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.7</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<profiles>
-		<profile>
-			<!-- To build tests jar that includes all sources classes and sources 
-				of the tests (no experiments) (we should decide whether to use the core and 
-				extentsion as dep. from the maven repo or add it as classes to the jar) -->
-			<id>tests</id>
-			<build>
-				<finalName>NetCal-DNC_func_tests-${project.version}</finalName>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<version>${maven.build-helper.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>add-source</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>add-source</goal>
-								</goals>
-								<configuration>
-									<sources>
-										<source>src/functional_tests/java</source>
-										<source>src/mpa_ext/java</source>
-									</sources>
-								</configuration>
-							</execution>
-							<execution>
-								<id>add-test-source</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>add-test-source</goal>
-								</goals>
-								<configuration>
-									<sources>
-										<source>src/functional_tests/java</source>
-									</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<dependency>
-					<groupId>ch.ethz.rtc.kernel</groupId>
-					<artifactId>rtc</artifactId>
-					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
-				</dependency>
-				<dependency>
-					<groupId>org.junit.jupiter</groupId>
-					<artifactId>junit-jupiter-params</artifactId>
-				</dependency>
-			</dependencies>
-		</profile>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <!-- run the unit tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.plugin.surefire.version}</version>
 
-		<profile>
-			<!-- Classes and sources of the extension functionality (no tests, no 
-				experiments) (we should decide whether to use the core as dep. from the maven 
-				repo or add it as classes to the jar) -->
-			<id>mpa</id>
-			<build>
-				<finalName>NetCal-DNC-${project.version}</finalName>
-				<plugins>
-					<!-- get the RTC MPA jar -->
-					<plugin>
-						<groupId>com.googlecode.maven-download-plugin</groupId>
-						<artifactId>download-maven-plugin</artifactId>
-						<version>${maven.download.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>get-mpa-rtc</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>wget</goal>
-								</goals>
-								<configuration>
-									<url>http://www.mpa.ethz.ch/downloads/RTCToolbox_bin.zip</url>
-									<unpack>true</unpack>
-									<outputDirectory>${project.basedir}/lib/</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<version>${maven.build-helper.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>add-source</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>add-source</goal>
-								</goals>
-								<configuration>
-									<sources>
-										<source>src/mpa_ext</source>
-									</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<dependency>
-					<groupId>ch.ethz.rtc.kernel</groupId>
-					<artifactId>rtc</artifactId>
-					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
-				</dependency>
-			</dependencies>
-		</profile>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-api</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-params</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <!-- Remove Milestone and RC versions from dependencies -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${maven.plugin.versions.version}</version>
+                <configuration>
+                    <rulesUri>file://${basedir}/version-number-rules.xml</rulesUri>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-		<profile>
-			<!-- classes and sources of the experiments functionality (no experiments) 
-				(we should decide whether to use the core and extension as dep. from the 
-				maven repo or add it as classes to the jar) -->
-			<id>exp</id>
-			<build>
-				<finalName>NetCal-DNC_experiments-${project.version}</finalName>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<version>${maven.build-helper.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>add-source</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>add-source</goal>
-								</goals>
-								<configuration>
-									<sources>
-										<source>src/experiments</source>
-									</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-        
+    <profiles>
+
+        <profile>
+            <id>longrational</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.4.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/number-longrational</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>biginteger</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.4.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/number-biginteger</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- To build tests jar that includes all sources classes and sources
+                of the tests (no experiments) (we should decide whether to use the core and
+                extentsion as dep. from the maven repo or add it as classes to the jar) -->
+            <id>tests</id>
+            <build>
+                <finalName>NetCal-DNC_func_tests-${project.version}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${maven.build-helper.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/functional_tests/java</source>
+                                        <source>src/mpa_ext/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/functional_tests/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+
+                <dependency>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-params</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- Classes and sources of the extension functionality (no tests, no
+                experiments) (we should decide whether to use the core as dep. from the maven
+                repo or add it as classes to the jar) -->
+            <id>mpa</id>
+            <build>
+                <finalName>NetCal-DNC-${project.version}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${maven.build-helper.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/mpa_ext</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- classes and sources of the experiments functionality (no experiments)
+                (we should decide whether to use the core and extension as dep. from the
+                maven repo or add it as classes to the jar) -->
+            <id>exp</id>
+            <build>
+                <finalName>NetCal-DNC_experiments-${project.version}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${maven.build-helper.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/experiments</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <!-- classes and sources for network model converter
                 (we should decide whether to use the core as dep. from the maven 
-                repo or add it as classes to the jar)--> 
+                repo or add it as classes to the jar)-->
             <id>model_converter</id>
             <build>
                 <finalName>NetCal-DNC_networkmodel_converter-${project.version}</finalName>
@@ -310,92 +362,83 @@
                 </dependency>
             </dependencies>
         </profile>
-		<profile>
-			<!-- Eclipse users need to activate this profile manually. Go to your 
-				project's properties, Maven and add eclipse (all lower case) to your Active 
-				Maven Profiles. -->
-			<id>eclipse</id>
-			<!-- Source directories -->
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<version>${maven.build-helper.plugin.version}</version>
-						<executions>
-							<execution>
-								<id>add-source</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>add-source</goal>
-								</goals>
-								<configuration>
-									<sources>
-										<source>src/experiments/java</source>
-										<source>src/functional_tests/java</source>
-										<source>src/mpa_ext/java</source>
-										<!-- source>src/networkmodel_converter/java</source-->
-									</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<dependency>
-					<groupId>ch.ethz.rtc.kernel</groupId>
-					<artifactId>rtc</artifactId>
-					<scope>system</scope>
-					<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
-				</dependency>
-				<dependency>
-					<groupId>org.junit.jupiter</groupId>
-					<artifactId>junit-jupiter-engine</artifactId>
-					<scope>test</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.junit.platform</groupId>
-					<artifactId>junit-platform-launcher</artifactId>
-					<scope>test</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.junit.jupiter</groupId>
-					<artifactId>junit-jupiter-params</artifactId>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
+        <profile>
+            <!-- Eclipse users need to activate this profile manually. Go to your
+                project's properties, Maven and add eclipse (all lower case) to your Active
+                Maven Profiles. -->
+            <id>eclipse</id>
+            <!-- Source directories -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${maven.build-helper.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/experiments/java</source>
+                                        <source>src/functional_tests/java</source>
+                                        <source>src/mpa_ext/java</source>
+                                        <!-- source>src/networkmodel_converter/java</source-->
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-engine</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-params</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
-	<!-- Define common dependency versions in one place -->
-	<dependencyManagement>
-		<dependencies>
- 			<!-- External RTC -->
-			<dependency>
-				<groupId>ch.ethz.rtc.kernel</groupId>
-				<artifactId>rtc</artifactId>
-				<scope>system</scope>
-				<systemPath>${project.basedir}/lib/RTCToolbox/rtc/rtc.jar</systemPath>
-				<version>1.2.beta.100</version>
-			</dependency>
-			<!-- JUnit -->
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-engine</artifactId>
-				<version>${junit.jupiter.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.junit.platform</groupId>
-				<artifactId>junit-platform-launcher</artifactId>
-				<version>${junit.platform.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-params</artifactId>
-				<version>${junit.jupiter.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <!-- Define common dependency versions in one place -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- JUnit -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-launcher</artifactId>
+                <version>${junit.platform.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.jupiter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.knowm.xchart</groupId>
+                <artifactId>xchart</artifactId>
+                <version>3.8.4</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

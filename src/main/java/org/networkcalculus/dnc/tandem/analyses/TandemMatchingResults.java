@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -29,34 +29,37 @@ package org.networkcalculus.dnc.tandem.analyses;
 import java.util.Map;
 import java.util.Set;
 
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.ServiceCurve;
+//import org.networkcalculus.dnc.curves.ArrivalCurve;
+//import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.tandem.TandemAnalysisResults;
-import org.networkcalculus.num.Num;
+//import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.Curve;
+import org.networkcalculus.dnc.backend.number.Number;
 
 public class TandemMatchingResults extends TandemAnalysisResults {
-	protected Set<ServiceCurve> betas_e2e;
+    protected Set<Curve> betas_e2e;
 
-	protected TandemMatchingResults(){}
-			
-	protected TandemMatchingResults( Num delay_bound,
-						  Num backlog_bound,
-						  Set<ServiceCurve> betas_e2e,
-						  Map<Server,Set<ArrivalCurve>> map__server__alphas ) {
+    protected TandemMatchingResults() {
+    }
+
+    protected TandemMatchingResults(Number delay_bound,
+                                    Number backlog_bound,
+                                    Set<Curve> betas_e2e,
+                                    Map<Server, Set<Curve>> map__server__alphas) {
 
         super(delay_bound, backlog_bound, map__server__alphas);
-		
-		this.betas_e2e = betas_e2e;
-	}
+
+        this.betas_e2e = betas_e2e;
+    }
 
     @Override
-    protected void setDelayBound(Num delay_bound) {
+    protected void setDelayBound(Number delay_bound) {
         super.setDelayBound(delay_bound);
     }
 
     @Override
-    protected void setBacklogBound(Num backlog_bound) {
+    protected void setBacklogBound(Number backlog_bound) {
         super.setBacklogBound(backlog_bound);
     }
 }

@@ -4,12 +4,16 @@ import java.util.*;
 
 import org.apache.commons.math3.util.Pair;
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.bounds.disco.pw_affine.LeftOverService_Disco_PwAffine;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.curves.disco.pw_affine.Curve_Disco_PwAffine;
+//import org.networkcalculus.dnc.Calculator;
+//import org.networkcalculus.dnc.bounds.disco.pw_affine.LeftOverService_Disco_PwAffine;
+//import org.networkcalculus.dnc.curves.ArrivalCurve;
+//import org.networkcalculus.dnc.curves.Curve;
+//import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.backend.Curve;
+ 
+//import org.networkcalculus.dnc.curves.disco.pw_affine.Curve_Disco_PwAffine;
+import org.networkcalculus.dnc.backend.CurveFactory;
+import org.networkcalculus.dnc.backend.CurveUtils;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
@@ -17,7 +21,11 @@ import org.networkcalculus.dnc.tandem.fifo.LUDBOPT.Expression_LUDB;
 import org.networkcalculus.dnc.tandem.fifo.LUDBOPT.LUDB_LP;
 import org.networkcalculus.dnc.tandem.fifo.LUDBOPT.PseudoAffine;
 import org.networkcalculus.dnc.tandem.fifo.LUDBOPT.TB_LUDB;
-import org.networkcalculus.num.Num;
+//import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.number.Number;
+import org.networkcalculus.dnc.utils.CurveBoundsUtils;
+import org.networkcalculus.dnc.utils.CurveFunctionsUtils;
+import org.networkcalculus.dnc.utils.MinPlusUtils;
 
 /**
  * @author Alexander Scheffler
@@ -44,37 +52,36 @@ public class NestedTandemAnalysis {
 
     private List<Flow> flows_without_foi_ordered = new ArrayList(); // used for the recursive theta_combinations algorithm
 
-    private ServiceCurve e2e;
+    private Curve e2e;
 
     public enum mode {
-         LUDB_FF, LB_FF, DS_FF, GS
+        LUDB_FF, LB_FF, DS_FF, GS
     }
 
     public static mode selected_mode;
 
-    /////////////////// /////////////////// /////// LUDB_FF
+    /// //////////////// /////////////////// /////// LUDB_FF
     private final ArrayList<Flow> crossflowList = new ArrayList(); // mapping of id to Flow for LP computation (LUDB) (index coincides with id)
     private double curr_min_delay_ludb; // for the on the run version (i.e. the one that does not compute all decompositions a priori)
     private Map<Integer, Double> curr_best_s_setting; //  curr_lb + s <=> theta (note that s >= 0!) [s from LUDB paper fifo l.o. theorem, theta is free parameter in the general fifo left over theorem]
-    /////////////////// /////////////////// ///////
+    /// //////////////// /////////////////// ///////
 
-    private Map<Flow, Num> lb_thetas_global_min_so_far;
-    private Map<Flow, Num> ub_thetas_global_max_so_far;
-    private Map<Flow, Num> lb_thetas_safe; // "safe" but rather trivial lower bound on the thetas
-    private Map<Flow, Num> ub_thetas_safe; // "safe" but rather trivial upper bound on the thetas
-    private Map<Flow, Num> stepsize_thetas; // stepsize per theta
-    private Num curr_min_delay;
+    private Map<Flow, Number> lb_thetas_global_min_so_far;
+    private Map<Flow, Number> ub_thetas_global_max_so_far;
+    private Map<Flow, Number> lb_thetas_safe; // "safe" but rather trivial lower bound on the thetas
+    private Map<Flow, Number> ub_thetas_safe; // "safe" but rather trivial upper bound on the thetas
+    private Map<Flow, Number> stepsize_thetas; // stepsize per theta
+    private Number curr_min_delay;
 
-    /////////////////// /////////////////// /////// LB_FF
+    /// //////////////// /////////////////// /////// LB_FF
 
-    public static Num xi = Num.getUtils(Calculator.getInstance().getNumBackend()).create(0.5);
-    public static Num c = Num.getUtils(Calculator.getInstance().getNumBackend()).create(5);
-    public static Num e = Num.getUtils(Calculator.getInstance().getNumBackend()).create(0.0001); // 10^-4
+    public static Number xi = new Number(0.5);
+    public static Number c = new Number(5);
+    public static Number e = new Number(0.0001); // 10^-4
 
 
-    /////////////////// /////////////////// /////// GS
-    public static Num granularity = Num.getUtils(Calculator.getInstance().getNumBackend()).create(3); // "how" many theta-values get considered per theta
-
+    /// //////////////// /////////////////// /////// GS
+    public static Number granularity = new Number(3); // "how" many theta-values get considered per theta
 
 
     public NestedTandemAnalysis(Path tandem, Flow flow_of_interest, List<Flow> flows) {
@@ -121,12 +128,12 @@ public class NestedTandemAnalysis {
         }
     }
 
-    public Num performAnalysis() throws Exception {
-        ServiceCurve foi_leftover_sc = getServiceCurve();
-        return Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), foi_leftover_sc);
+    public Number performAnalysis() throws Exception {
+        Curve foi_leftover_sc = getServiceCurve();
+        return CurveUtils.delayFIFO(foi.getArrivalCurve(), foi_leftover_sc);
     }
 
-    public ServiceCurve getServiceCurve() throws Exception {
+    public Curve getServiceCurve() throws Exception {
 
         computeNestingSets();
         createNestingTreeOrdered();
@@ -164,6 +171,7 @@ public class NestedTandemAnalysis {
 
     // post order traversal / computation
     // If the leftovers (in the tree) are already set it just overrides them, e.g. if we call that method with different theta combinations
+
     /**
      * @param node
      * @param computeLBs Creates the e2e-SC for foi using lower-bound thetas -- the method computes them as well, ignore the last param
@@ -172,7 +180,7 @@ public class NestedTandemAnalysis {
      * @return e2e-SC for foi
      * @throws Exception
      */
-    private ServiceCurve computeLeftOverSC(TNode node, boolean computeLBs, Map<Flow, Num> thetas, boolean computeAll) throws Exception {
+    private Curve computeLeftOverSC(TNode node, boolean computeLBs, Map<Flow, Number> thetas, boolean computeAll) throws Exception {
 
         ArrayList<TNode> children = node.getChildren();
 
@@ -188,13 +196,13 @@ public class NestedTandemAnalysis {
 
         // always neutral element at this point in time
 
-        ServiceCurve leftover = Curve.getFactory().createZeroDelayInfiniteBurst();
+        Curve leftover = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
 
         if (node.getInf() instanceof LinkedList) {
             // node is a t-leaf, i.e. represents C_(h,k)
             LinkedList<Server> servers = (LinkedList<Server>) node.getInf();
             for (Server server : servers) {
-                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, server.getServiceCurve());
+                leftover = MinPlusUtils.convolve(leftover, server.getServiceCurve());
             }
             node.setLeftover(leftover);
         } else {
@@ -212,21 +220,21 @@ public class NestedTandemAnalysis {
             for (TNode child : children) {
                 if (child.getInf() instanceof LinkedList) {
                     // child represents C_(h,k), so we don't need to "subtract" some AC from that left over sc
-                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child.getLeftover());
+                    leftover = MinPlusUtils.convolve(leftover, child.getLeftover());
                 } else {
-                    ServiceCurve child_fifo_leftover = null;
-                    Num flow_theta = null;
+                    Curve child_fifo_leftover = null;
+                    Number flow_theta = null;
 
                     // child represents a flow (h,k), so we need to "subtract" the AC of flow (h,k) from the left over sc  stored in that node
 
                     if (computeLBs) {
                         // use the theta that we get at the x-position where the service curve (child.getLeftover()) has a y-value that equals the burst of the arrival curve
-                        ArrivalCurve ac = ((Flow) child.getInf()).getArrivalCurve();
-                        ServiceCurve sc = child.getLeftover();
-                        Num burst = ac.getBurst();
+                        Curve ac = ((Flow) child.getInf()).getArrivalCurve();
+                        Curve sc = child.getLeftover();
+                        Number burst = CurveFunctionsUtils.getBurst(ac);
 
-                        Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
-                        flow_theta = curve.f_inv(burst);
+                        Curve curve = (Curve) sc;
+                        flow_theta = CurveUtils.f_inv(curve, burst);
 
 
                         lb_thetas_global_min_so_far.put(((Flow) child.getInf()), flow_theta);
@@ -238,9 +246,9 @@ public class NestedTandemAnalysis {
                     }
 
 
-                    child_fifo_leftover = LeftOverService_Disco_PwAffine.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
+                    child_fifo_leftover = CurveBoundsUtils.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
 
-                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child_fifo_leftover);
+                    leftover = MinPlusUtils.convolve(leftover, child_fifo_leftover);
 
                 }
             }
@@ -253,7 +261,7 @@ public class NestedTandemAnalysis {
         // compute SAFE bounds first
         computeSafeBoundsLb();
 
-        Map<Flow, Num> safe_lb_thetas = new HashMap<>();
+        Map<Flow, Number> safe_lb_thetas = new HashMap<>();
         safe_lb_thetas.putAll(lb_thetas_safe);
 
 
@@ -261,7 +269,7 @@ public class NestedTandemAnalysis {
 
         compute_flows_without_foi_ordered = false;
 
-        Num delay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e);
+        Number delay = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e);
 
         curr_min_delay = delay;
 
@@ -274,7 +282,7 @@ public class NestedTandemAnalysis {
 
         compute_flows_without_foi_ordered = false;
 
-        delay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e);
+        delay = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e);
 
         curr_min_delay = delay;
 
@@ -285,7 +293,7 @@ public class NestedTandemAnalysis {
         // compute upper bounds
         computeUpperBounds(nestingTree, delay);
 
-        Map<Flow, Num> curr_theta_comb = new HashMap<>();
+        Map<Flow, Number> curr_theta_comb = new HashMap<>();
 
         curr_theta_comb.putAll(lb_thetas_global_min_so_far);
 
@@ -301,47 +309,47 @@ public class NestedTandemAnalysis {
     }
 
     private void computeSafeBoundsLb() {
-        lb_thetas_safe = new HashMap<Flow, Num>();
-        Num foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+        lb_thetas_safe = new HashMap<Flow, Number>();
+        Number foi_path_latency = Number.ZERO;
         for (Server server : foi_path.getServers()) {
-            foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(foi_path_latency, server.getServiceCurve().getLatency());
+            foi_path_latency = foi_path_latency.add(CurveFunctionsUtils.getLatency(server.getServiceCurve()));
         }
 
         for (Flow xflow : flows) {
             if (!(xflow.equals(foi))) {
-                Num xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+                Number xflow_path_latency = Number.ZERO;
                 for (Server server : xflow.getServersOnPath()) {
-                    xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(xflow_path_latency, server.getServiceCurve().getLatency());
+                    xflow_path_latency = xflow_path_latency.add(CurveFunctionsUtils.getLatency(server.getServiceCurve()));
                 }
                 lb_thetas_safe.put(xflow, xflow_path_latency);
             }
         }
     }
 
-    private void computeSafeBoundsUb(Num delay) {
-        ub_thetas_safe = new HashMap<Flow, Num>();
+    private void computeSafeBoundsUb(Number delay) {
+        ub_thetas_safe = new HashMap<Flow, Number>();
 
-        Num foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+        Number foi_path_latency = Number.ZERO;
         for (Server server : foi_path.getServers()) {
-            foi_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(foi_path_latency, server.getServiceCurve().getLatency());
+            foi_path_latency = foi_path_latency.add(CurveFunctionsUtils.getLatency(server.getServiceCurve()));
         }
 
         for (Flow xflow : flows) {
             if (!(xflow.equals(foi))) {
-                Num xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
+                Number xflow_path_latency = Number.ZERO;
                 for (Server server : xflow.getServersOnPath()) {
-                    xflow_path_latency = Num.getUtils(Calculator.getInstance().getNumBackend()).add(xflow_path_latency, server.getServiceCurve().getLatency());
+                    xflow_path_latency = xflow_path_latency.add(CurveFunctionsUtils.getLatency(server.getServiceCurve()));
                 }
-                Num ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(delay, foi_path_latency);
-                ub = Num.getUtils(Calculator.getInstance().getNumBackend()).add(ub, xflow_path_latency);
+                Number ub = delay.sub(foi_path_latency);
+                ub = ub.add(xflow_path_latency);
                 ub_thetas_safe.put(xflow, ub);
             }
         }
     }
 
 
-    private void computeUpperBounds(TNode node, Num delay) {
-        if (delay.eq(Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity())) {
+    private void computeUpperBounds(TNode node, Number delay) {
+        if (delay.eq(Number.POSITIVE_INFINITY)) {
             throw new IllegalArgumentException("delay infinity! (all set to lb)");
         }
 
@@ -360,20 +368,20 @@ public class NestedTandemAnalysis {
             children = node.getChildren();
 
             // compute sum of server-latencies wrt the servers that are "children" of the node that holds the foi
-            Num sum_server_latencies = Num.getUtils(Calculator.getInstance().getNumBackend()).getZero();
+            Number sum_server_latencies = Number.ZERO;
             for (TNode child : children) {
                 if (child.getInf() instanceof LinkedList) {
-                    sum_server_latencies = Num.getUtils(Calculator.getInstance().getNumBackend()).add(sum_server_latencies, child.getLeftover().getLatency());
+                    sum_server_latencies = sum_server_latencies.add(CurveFunctionsUtils.getLatency(child.getLeftover()));
                 }
             }
 
             // sum of the lower bound thetas
-            Num sum_theta_lb = Num.getUtils(Calculator.getInstance().getNumBackend()).getZero();
+            Number sum_theta_lb = Number.ZERO;
 
             for (TNode child : children) {
                 if (!(child.getInf() instanceof LinkedList)) {
                     Flow flow_child = (Flow) child.getInf();
-                    sum_theta_lb = Num.getUtils(Calculator.getInstance().getNumBackend()).add(sum_theta_lb, lb_thetas_global_min_so_far.get(flow_child));
+                    sum_theta_lb = sum_theta_lb.add(lb_thetas_global_min_so_far.get(flow_child));
                 }
             }
 
@@ -381,15 +389,15 @@ public class NestedTandemAnalysis {
                 if (!(child.getInf() instanceof LinkedList)) {
                     // for every "flow" on this second level we have a constraint
                     Flow flow_curr = (Flow) child.getInf();
-                    Num sum_theta_lb_without_curr = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(sum_theta_lb, lb_thetas_global_min_so_far.get(flow_curr));
-                    Num ub = null;
+                    Number sum_theta_lb_without_curr = sum_theta_lb.sub(lb_thetas_global_min_so_far.get(flow_curr));
+                    Number ub = null;
                     // Have to differentiate between children of foi (2nd level of tree) and children that are on higher levels
                     if (node.getInf().equals(foi)) {
-                        ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(delay, sum_server_latencies);
+                        ub = delay.sub(sum_server_latencies);
                     } else {
-                        ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(ub_thetas_global_max_so_far.get(node.getInf()), sum_server_latencies);
+                        ub = ub_thetas_global_max_so_far.get(node.getInf()).sub(sum_server_latencies);
                     }
-                    ub = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(ub, sum_theta_lb_without_curr);
+                    ub = ub.sub(sum_theta_lb_without_curr);
 
                     ub_thetas_global_max_so_far.put(flow_curr, ub);
                 }
@@ -407,11 +415,11 @@ public class NestedTandemAnalysis {
         stepsize_thetas = new HashMap<>();
         for (Flow flow : flows) {
             if (!(flow.equals(foi))) {
-                Num lb = lb_thetas_global_min_so_far.get(flow);
-                Num ub = ub_thetas_global_max_so_far.get(flow);
-                Num delta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(ub, lb);
-                Num gran_minus_1 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(c, Num.getUtils(Calculator.getInstance().getNumBackend()).create(1));
-                Num stepsize = Num.getUtils(Calculator.getInstance().getNumBackend()).div(delta, gran_minus_1);
+                Number lb = lb_thetas_global_min_so_far.get(flow);
+                Number ub = ub_thetas_global_max_so_far.get(flow);
+                Number delta = ub.sub(lb);
+                Number gran_minus_1 = c.sub(new Number(1));
+                Number stepsize = delta.div(gran_minus_1);
 
                 stepsize_thetas.put(flow, stepsize);
             }
@@ -419,25 +427,24 @@ public class NestedTandemAnalysis {
     }
 
 
-    private void directed_search_w_armijo_linesearch(Map<Flow, Num> thetas) throws Exception {
+    private void directed_search_w_armijo_linesearch(Map<Flow, Number> thetas) throws Exception {
 
         // int nr_decrements = 0;
 
-        Num delay_old = curr_min_delay;
+        Number delay_old = curr_min_delay;
 
-        Map<Flow, Num> thetas_old = new HashMap<Flow, Num>();
+        Map<Flow, Number> thetas_old = new HashMap<Flow, Number>();
         thetas_old.putAll(thetas);
 
         int success_moves = 0;
         int max_success_moves = 0;
 
-        while (minStepsize().gt(e))
-        {
-            Map<Flow, Num> thetas_new = find_best_nearby(thetas_old);
+        while (minStepsize().gt(e)) {
+            Map<Flow, Number> thetas_new = find_best_nearby(thetas_old);
 
 
             boolean at_least_one_nearby_improved = false;
-            Num delay_new = curr_min_delay;
+            Number delay_new = curr_min_delay;
 
             if (success_moves > max_success_moves) {
                 max_success_moves = success_moves;
@@ -445,8 +452,8 @@ public class NestedTandemAnalysis {
             success_moves = 0;
 
 
-            Map<Flow, Num> delta_armijo_search = new HashMap<>();
-            Map<Flow, Num> x_start_armijo_search = new HashMap<>();
+            Map<Flow, Number> delta_armijo_search = new HashMap<>();
+            Map<Flow, Number> x_start_armijo_search = new HashMap<>();
             int armijo_counter = -1;
 
             while (delay_new.lt(delay_old)) {
@@ -455,9 +462,9 @@ public class NestedTandemAnalysis {
                 if (!at_least_one_nearby_improved) {
                     for (Flow flow : flows) {
                         if (!(flow.equals(foi))) {
-                            Num theta_old = thetas_old.get(flow);
-                            Num theta_new = thetas_new.get(flow);
-                            Num theta_dif = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(theta_new, theta_old);
+                            Number theta_old = thetas_old.get(flow);
+                            Number theta_new = thetas_new.get(flow);
+                            Number theta_dif = theta_new.sub(theta_old);
                             delta_armijo_search.put(flow, theta_dif);
                             x_start_armijo_search.put(flow, theta_new);
                         }
@@ -471,19 +478,19 @@ public class NestedTandemAnalysis {
                 computeSafeBoundsUb(curr_min_delay); // update safe upper bounds
 
 
-                Map<Flow, Num> thetas_pot = new HashMap<Flow, Num>();
+                Map<Flow, Number> thetas_pot = new HashMap<Flow, Number>();
 
                 boolean safe_bounds_violation = false;
                 for (Flow flow : flows) {
                     if (!(flow.equals(foi))) {
-                        Num theta_start = x_start_armijo_search.get(flow);
+                        Number theta_start = x_start_armijo_search.get(flow);
                         double theta__exp = Math.pow(2, armijo_counter);
 
 
-                        Num num_theta_dif_exp = Num.getUtils(Calculator.getInstance().getNumBackend()).create(theta__exp);
-                        Num delta = delta_armijo_search.get(flow);
-                        Num delta_times_num_theta_dif_exp = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(num_theta_dif_exp, delta);
-                        Num theta_pot = Num.getUtils(Calculator.getInstance().getNumBackend()).add(theta_start, delta_times_num_theta_dif_exp);
+                        Number num_theta_dif_exp = new Number(theta__exp);
+                        Number delta = delta_armijo_search.get(flow);
+                        Number delta_times_num_theta_dif_exp = num_theta_dif_exp.mul(delta);
+                        Number theta_pot = theta_start.add(delta_times_num_theta_dif_exp);
 
                         if (theta_pot.lt(lb_thetas_safe.get(flow))) {
                             // would violate safe lower bound
@@ -506,8 +513,8 @@ public class NestedTandemAnalysis {
                     break;
                 }
 
-                ServiceCurve e2e_pot = computeLeftOverSC(nestingTree, false, thetas_pot, true); // costly, complete built up of the nesting tree
-                Num delay_pot = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_pot);
+                Curve e2e_pot = computeLeftOverSC(nestingTree, false, thetas_pot, true); // costly, complete built up of the nesting tree
+                Number delay_pot = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e_pot);
 
 
                 if (delay_pot.geq(delay_new)) {
@@ -532,35 +539,35 @@ public class NestedTandemAnalysis {
     /**
      * DS-FF method that searches in the current environment for a "better" point. This phase is often called Exploratory Phase.
      */
-    private Map<Flow, Num> find_best_nearby(Map<Flow, Num> thetas) throws Exception {
-        Map<Flow, Num> thetas_new = new HashMap<Flow, Num>();
+    private Map<Flow, Number> find_best_nearby(Map<Flow, Number> thetas) throws Exception {
+        Map<Flow, Number> thetas_new = new HashMap<Flow, Number>();
         thetas_new.putAll(thetas);
 
         for (int i = 0; i < flows_without_foi_ordered.size(); i++) {
             Flow flow = flows_without_foi_ordered.get(i);
-            Num delta = stepsize_thetas.get(flow);
-            Num theta = thetas_new.get(flow);
+            Number delta = stepsize_thetas.get(flow);
+            Number theta = thetas_new.get(flow);
 
-            Num theta_low = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(theta, delta);
-            Num delay_low = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
-            ServiceCurve e2e_low = null;
+            Number theta_low = theta.sub(delta);
+            Number delay_low = Number.POSITIVE_INFINITY;
+            Curve e2e_low = null;
             if (theta_low.gt(lb_thetas_safe.get(flow))) {
                 thetas_new.put(flow, theta_low);
                 e2e_low = computeFoiLeftOverSCUpwards(flow_tnode_map.get(flow).getParent(), thetas_new);
-                delay_low = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_low);
+                delay_low = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e_low);
             }
 
 
-            Num theta_high = Num.getUtils(Calculator.getInstance().getNumBackend()).add(theta, delta);
-            Num delay_high = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
-            ServiceCurve e2e_high = null;
+            Number theta_high = theta.add(delta);
+            Number delay_high = Number.POSITIVE_INFINITY;
+            Curve e2e_high = null;
             if (theta_high.lt(ub_thetas_safe.get(flow))) {
                 thetas_new.put(flow, theta_high);
                 e2e_high = computeFoiLeftOverSCUpwards(flow_tnode_map.get(flow).getParent(), thetas_new);
-                delay_high = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_high);
+                delay_high = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e_high);
             }
 
-            Num min_delay = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+            Number min_delay = Number.POSITIVE_INFINITY;
 
             if (curr_min_delay.leq(delay_low)) {
                 if (curr_min_delay.leq(delay_high)) {
@@ -602,26 +609,26 @@ public class NestedTandemAnalysis {
      * @return
      * @throws Exception
      */
-    private ServiceCurve computeFoiLeftOverSCUpwards(TNode node, Map<Flow, Num> thetas) throws Exception {
+    private Curve computeFoiLeftOverSCUpwards(TNode node, Map<Flow, Number> thetas) throws Exception {
         ArrayList<TNode> children = node.getChildren();
-        ServiceCurve leftover = Curve.getFactory().createZeroDelayInfiniteBurst();
+        Curve leftover = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
         // node is a t-node, i.e. represents a flow (h,k)
         for (TNode child : children) {
             if (child.getInf() instanceof LinkedList) {
                 // child represents C_(h,k), so we don't need to "subtract" some AC from that left over sc
-                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child.getLeftover());
+                leftover = MinPlusUtils.convolve(leftover, child.getLeftover());
             } else {
-                ServiceCurve child_fifo_leftover = null;
-                Num flow_theta = null;
+                Curve child_fifo_leftover = null;
+                Number flow_theta = null;
 
                 // child represents a flow (h,k), so we need to "subtract" the AC of flow (h,k) from the left over sc  stored in that node
                 // use a theta from the map "thetas"
                 Flow flow = (Flow) child.getInf();
                 flow_theta = thetas.get(flow);
 
-                child_fifo_leftover = LeftOverService_Disco_PwAffine.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
+                child_fifo_leftover = CurveBoundsUtils.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
 
-                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child_fifo_leftover);
+                leftover = MinPlusUtils.convolve(leftover, child_fifo_leftover);
             }
         }
         node.setLeftover(leftover);
@@ -638,21 +645,21 @@ public class NestedTandemAnalysis {
     /**
      * @param r 0 < r < 1
      */
-    private void reduce_stepsize_directed_search(Num r) {
+    private void reduce_stepsize_directed_search(Number r) {
         for (Flow flow : flows) {
             if (!(flow.equals(foi))) {
-                Num curr_stepsize = stepsize_thetas.get(flow);
-                Num stepsize_new = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(curr_stepsize, r);
+                Number curr_stepsize = stepsize_thetas.get(flow);
+                Number stepsize_new = curr_stepsize.mul(r);
                 stepsize_thetas.put(flow, stepsize_new);
             }
         }
     }
 
-    private Num minStepsize() {
-        Num min_sp = Num.getUtils(Calculator.getInstance().getNumBackend()).createPositiveInfinity();
+    private Number minStepsize() {
+        Number min_sp = Number.POSITIVE_INFINITY;
         for (Flow flow : flows) {
             if (!(flow.equals(foi))) {
-                Num sp = stepsize_thetas.get(flow);
+                Number sp = stepsize_thetas.get(flow);
                 if (sp.lt(min_sp)) {
                     min_sp = sp;
                 }
@@ -660,7 +667,6 @@ public class NestedTandemAnalysis {
         }
         return min_sp;
     }
-
 
 
     public void computeLUDB() throws Exception {
@@ -694,7 +700,7 @@ public class NestedTandemAnalysis {
             List<TB_LUDB> foi_curve_stages = foi_curve.getStages();
             List<Expression_LUDB> foi_constraints = nestingTree.getCurrentConstraints();
             int foi_nr_stages = foi_curve_stages.size();
-            Num foi_burst = foi.getArrivalCurve().getBurst();
+            Number foi_burst = CurveFunctionsUtils.getBurst(foi.getArrivalCurve());
             Expression_LUDB foi_burst_exp = new Expression_LUDB(foi_burst);
 
             for (int j = -1; j < foi_nr_stages; j++) {
@@ -709,7 +715,6 @@ public class NestedTandemAnalysis {
             e2e = computeLeftOverSCFromLUDB_s_setting(nestingTree, new HashMap<>());
         }
     }
-
 
 
     // Updates the current left-over curve and constraints of the node
@@ -748,10 +753,10 @@ public class NestedTandemAnalysis {
 
             Flow child_flow = (Flow) child.getInf();
             int id = crossflowList.indexOf(child_flow);
-            ArrivalCurve ac = child_flow.getArrivalCurve();
+            Curve ac = child_flow.getArrivalCurve();
             // We assume token bucket arrivals (LUDB is constrained to those arrival curves)
-            Expression_LUDB ac_burst = new Expression_LUDB(ac.getBurst());
-            Expression_LUDB ac_rate = new Expression_LUDB(ac.getUltAffineRate());
+            Expression_LUDB ac_burst = new Expression_LUDB(CurveFunctionsUtils.getBurst(ac));
+            Expression_LUDB ac_rate = new Expression_LUDB(CurveFunctionsUtils.getUltAffineRate(ac));
             PseudoAffine curr_child_curve = child.getCurrentPseudoAffineCurve();
             List<Expression_LUDB> curr_child_constraints = child.getCurrentConstraints();
             int curr_child_which_max = curr_selection_max.get(child_flow);
@@ -780,7 +785,7 @@ public class NestedTandemAnalysis {
             // Only put k to the map if it is feasible for curr_flow, i.e., we compute the LUDB for the curr_flow with k
             // if (!use_cache) {
             List<Expression_LUDB> curr_flow_constraints = curr_flow_node.getCurrentConstraints();
-            Num curr_flow_burst = curr_flow.getArrivalCurve().getBurst();
+            Number curr_flow_burst = CurveFunctionsUtils.getBurst(curr_flow.getArrivalCurve());
             Expression_LUDB curr_flow_burst_exp = new Expression_LUDB(curr_flow_burst);
             Pair<Expression_LUDB, List<Expression_LUDB>> curr_flow_delay_composition_k = getDelayLPDecomposition(curr_flow_curve, curr_flow_constraints, curr_flow_burst_exp, k);
             Pair<Double, Map<Integer, Double>> result_curr_flow_cplex_pair = LUDB_LP.simplify_first_then_save_and_solve_lp_w_cplex(curr_flow_delay_composition_k.getFirst(), curr_flow_delay_composition_k.getSecond(), crossflowList.size());
@@ -813,7 +818,7 @@ public class NestedTandemAnalysis {
                 List<TB_LUDB> foi_curve_stages = foi_curve.getStages();
                 List<Expression_LUDB> foi_constraints = nestingTree.getCurrentConstraints();
                 int foi_nr_stages = foi_curve_stages.size();
-                Num foi_burst = foi.getArrivalCurve().getBurst();
+                Number foi_burst = CurveFunctionsUtils.getBurst(foi.getArrivalCurve());
                 Expression_LUDB foi_burst_exp = new Expression_LUDB(foi_burst);
 
 
@@ -866,15 +871,15 @@ public class NestedTandemAnalysis {
             if (servers.isEmpty()) {
                 node.setCurrentPseudoAffineCurveAndConstraints(PseudoAffine.createZeroDelayInfiniteBurst(), new ArrayList<>());
             } else {
-                ServiceCurve leftover = Curve.getFactory().createZeroDelayInfiniteBurst();
+                Curve leftover = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
 
                 for (Server server : servers) {
-                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, server.getServiceCurve());
+                    leftover = MinPlusUtils.convolve(leftover, server.getServiceCurve());
                 }
                 // We assume rate latency service curve (convolution is closed w.r.t. rate latency curves)
                 // No constraints for this case
-                Num latency = leftover.getLatency();
-                Num rate = leftover.getUltAffineRate();
+                Number latency = CurveFunctionsUtils.getLatency(leftover);
+                Number rate = CurveFunctionsUtils.getUltAffineRate(leftover);
                 Expression_LUDB latency_exp = new Expression_LUDB(latency);
                 Expression_LUDB rate_exp = new Expression_LUDB(rate);
                 Expression_LUDB j2_exp = Expression_LUDB.createZeroNumExpression();
@@ -1064,19 +1069,19 @@ public class NestedTandemAnalysis {
 
     // post order traversal / computation
     // note: copy of computeLeftOverSC with a few modifications
-    private ServiceCurve computeLeftOverSCFromLUDB_s_setting(TNode node, Map<Integer, Double> var_id_to_opt_s_values_map) throws Exception {
+    private Curve computeLeftOverSCFromLUDB_s_setting(TNode node, Map<Integer, Double> var_id_to_opt_s_values_map) throws Exception {
         ArrayList<TNode> children = node.getChildren();
 
         for (TNode child : children) {
             computeLeftOverSCFromLUDB_s_setting(child, var_id_to_opt_s_values_map);
         }
-        ServiceCurve leftover = Curve.getFactory().createZeroDelayInfiniteBurst();
+        Curve leftover = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
 
         if (node.getInf() instanceof LinkedList) {
             // node is a t-leaf, i.e. represents C_(h,k)
             LinkedList<Server> servers = (LinkedList<Server>) node.getInf();
             for (Server server : servers) {
-                leftover = Calculator.getInstance().getMinPlus().convolve(leftover, server.getServiceCurve());
+                leftover = MinPlusUtils.convolve(leftover, server.getServiceCurve());
             }
             node.setLeftover(leftover);
         } else {
@@ -1084,19 +1089,19 @@ public class NestedTandemAnalysis {
             for (TNode child : children) {
                 if (child.getInf() instanceof LinkedList) {
                     // child represents C_(h,k), so we don't need to "subtract" some AC from that left over sc
-                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child.getLeftover());
+                    leftover = MinPlusUtils.convolve(leftover, child.getLeftover());
                 } else {
-                    ServiceCurve child_fifo_leftover = null;
-                    Num flow_theta = null;
+                    Curve child_fifo_leftover = null;
+                    Number flow_theta = null;
 
                     // child represents a flow (h,k), so we need to "subtract" the AC of flow (h,k) from the left over sc  stored in that node
                     // curr_lb: The x-position where the service curve (child.getLeftover()) has a y-value that is at least as high as the burst of the arrival curve --- take the lowest x-position possible
-                    ArrivalCurve ac = ((Flow) child.getInf()).getArrivalCurve();
-                    ServiceCurve sc = child.getLeftover();
-                    Num burst = ac.getBurst(); // We assume that all rates of the ac are smaller than all the rates of the sc (ignoring the null-rates of course)
+                    Curve ac = ((Flow) child.getInf()).getArrivalCurve();
+                    Curve sc = child.getLeftover();
+                    Number burst = CurveFunctionsUtils.getBurst(ac); // We assume that all rates of the ac are smaller than all the rates of the sc (ignoring the null-rates of course)
 
-                    Curve_Disco_PwAffine curve = (Curve_Disco_PwAffine) sc;
-                    Num curr_lb = curve.f_inv(burst);
+                    Curve curve = (Curve) sc;
+                    Number curr_lb = CurveUtils.f_inv(curve, burst);
 
                     // use a theta from the map "thetas"
                     Flow flow = (Flow) child.getInf();
@@ -1104,13 +1109,13 @@ public class NestedTandemAnalysis {
 
                     double s_opt_double = var_id_to_opt_s_values_map.get(var_id);
 
-                    Num s_opt = Num.getUtils(Calculator.getInstance().getNumBackend()).create(s_opt_double);
-                    flow_theta = Num.getUtils(Calculator.getInstance().getNumBackend()).add(curr_lb, s_opt);
+                    Number s_opt = new Number(s_opt_double);
+                    flow_theta = curr_lb.add(s_opt);
 
 
-                    child_fifo_leftover = LeftOverService_Disco_PwAffine.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
+                    child_fifo_leftover = CurveBoundsUtils.fifoMux(child.getLeftover(), ((Flow) child.getInf()).getArrivalCurve(), flow_theta);
 
-                    leftover = Calculator.getInstance().getMinPlus().convolve(leftover, child_fifo_leftover);
+                    leftover = MinPlusUtils.convolve(leftover, child_fifo_leftover);
                 }
             }
             node.setLeftover(leftover);
@@ -1119,46 +1124,42 @@ public class NestedTandemAnalysis {
     }
 
 
-
-    public void computeGS() throws Exception{
-        Num zero = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero();
-        Map<Flow, Num> thetas_set_to_zero = new HashMap<>();
+    public void computeGS() throws Exception {
+        Number zero = Number.ZERO;
+        Map<Flow, Number> thetas_set_to_zero = new HashMap<>();
         ArrayList<Flow> crossflows = new ArrayList<>();
         crossflows.addAll(flows);
         crossflows.remove(foi);
-        for(Flow f : crossflows )
-        {
+        for (Flow f : crossflows) {
             thetas_set_to_zero.put(f, zero);
         }
 
         e2e = computeLeftOverSC(nestingTree, false, thetas_set_to_zero, true);
 
-        curr_min_delay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e);
+        curr_min_delay = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e);
         // since they are computed now with above call
         compute_flows_without_foi_ordered = false;
 
-        Num delta = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(curr_min_delay, zero);
-        Num gran_minus_1 = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(granularity, Num.getUtils(Calculator.getInstance().getNumBackend()).create(1));
-        Num stepsize = Num.getUtils(Calculator.getInstance().getNumBackend()).div(delta, gran_minus_1);
+        Number delta = curr_min_delay.sub(zero);
+        Number gran_minus_1 = granularity.sub(new Number(1));
+        Number stepsize = delta.div(gran_minus_1);
 
 
         stepsize_thetas = new HashMap<>();
-        for(Flow f : crossflows )
-        {
+        for (Flow f : crossflows) {
             stepsize_thetas.put(f, stepsize);
         }
 
 
         if (flows_without_foi_ordered.size() > 0) {
-            Map<Flow, Num> curr_theta_comb = new HashMap<>();
+            Map<Flow, Number> curr_theta_comb = new HashMap<>();
             Flow curr_flow = flows_without_foi_ordered.get(0);
             computethetaCombinationsGS(curr_flow, 0, curr_theta_comb);
         }
     }
 
-    public void computethetaCombinationsGS(Flow curr_flow, int index, Map<Flow, Num> curr_theta_comb) throws Exception {
-        for(Num k = Num.getUtils(Calculator.getInstance().getNumBackend()).createZero(); k.leq(curr_min_delay);  k = Num.getUtils(Calculator.getInstance().getNumBackend()).add(k, stepsize_thetas.get(curr_flow)))
-        {
+    public void computethetaCombinationsGS(Flow curr_flow, int index, Map<Flow, Number> curr_theta_comb) throws Exception {
+        for (Number k = Number.ZERO; k.leq(curr_min_delay); k = k.add(stepsize_thetas.get(curr_flow))) {
             curr_theta_comb.put(curr_flow, k);
 
             if (index < flows_without_foi_ordered.size() - 1) {
@@ -1166,8 +1167,8 @@ public class NestedTandemAnalysis {
                 computethetaCombinationsGS(next_flow, index + 1, curr_theta_comb);
             } else {
                 // "last" (wrt the list) crossflow reached
-                ServiceCurve e2e_lb_tmp = computeLeftOverSC(nestingTree, false, curr_theta_comb, true);
-                Num delay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(foi.getArrivalCurve(), e2e_lb_tmp);
+                Curve e2e_lb_tmp = computeLeftOverSC(nestingTree, false, curr_theta_comb, true);
+                Number delay = CurveUtils.delayFIFO(foi.getArrivalCurve(), e2e_lb_tmp);
 
                 if (delay.lt(curr_min_delay)) {
                     curr_min_delay = delay;
@@ -1176,8 +1177,6 @@ public class NestedTandemAnalysis {
             }
         }
     }
-
-
 
 
     public TNode onlyComputeNestingTree() throws Exception {

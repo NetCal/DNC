@@ -10,8 +10,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
+//import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Path;
 import org.networkcalculus.dnc.network.server_graph.Server;
@@ -39,13 +39,15 @@ import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.tandem.analyses.PmooAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.SeparateFlowAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
-import org.networkcalculus.num.Num;
+//import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.Curve;
+import org.networkcalculus.dnc.backend.number.Number;
 
 public interface TandemAnalysis {
     enum Analyses {
         TFA, SFA, PMOO, TMA
     }
-    
+
     // ----------------------------------------------------------------------------------------------------
     // Convenience methods to start tandem analyses.
     // ----------------------------------------------------------------------------------------------------
@@ -98,13 +100,13 @@ public interface TandemAnalysis {
     // ----------------------------------------------------------------------------------------------------
     // Convenience methods to access results and the server graph.
     // ----------------------------------------------------------------------------------------------------
-    Num getDelayBound();
+    Number getDelayBound();
 
-    Num getBacklogBound();
-    
-    Map<Server, Set<ArrivalCurve>> getServerAlphasMap();
-    
+    Number getBacklogBound();
+
+    Map<Server, Set<Curve>> getServerAlphasMap();
+
     String getServerAlphasMapString();
-    
+
     ServerGraph getServerGraph();
 }

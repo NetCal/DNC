@@ -2,8 +2,9 @@ package org.networkcalculus.dnc.tandem.fifo.LUDBOPT;
 
 import org.apache.commons.math3.util.Pair;
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.num.Num;
+//import org.networkcalculus.dnc.Calculator;
+//import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.number.Number;
 
 
 import java.io.*;
@@ -14,58 +15,54 @@ import java.util.*;
  * @author Alexander Scheffler
  */
 public class LUDB_LP {
-    static boolean check_constant_constraints=true; //enables pre-filtering of infeasible constraints;
+    static boolean check_constant_constraints = true; //enables pre-filtering of infeasible constraints;
     static int fileId = 0;
     public static long cplex_time = 0;
     public static long terms_simplify_time = 0; // total time which our method takes to simplify the expressions (all expressions simplified so far)
     private static final boolean keepLPsOnDrive = false;
 
-    public  static Pair<Double, Map<Integer, Double>> simplify_first_then_save_and_solve_lp_w_cplex(Expression_LUDB delay_term, List<Expression_LUDB> constraints, int number_vars) throws Exception {
+    public static Pair<Double, Map<Integer, Double>> simplify_first_then_save_and_solve_lp_w_cplex(Expression_LUDB delay_term, List<Expression_LUDB> constraints, int number_vars) throws Exception {
 
 
         long start = System.nanoTime();
-        Pair<Num, Map<Integer, Num>> pair_delay = delay_term.simplifyExpression();
+        Pair<Number, Map<Integer, Number>> pair_delay = delay_term.simplifyExpression();
         long end = System.nanoTime();
-        long duration = end- start;
+        long duration = end - start;
         terms_simplify_time = terms_simplify_time + duration;
 
-        Num minus_one = Num.getUtils(Calculator.getInstance().getNumBackend()).create(-1);
+        Number minus_one = new Number(-1);
 
         fileId++;
-        File file_lp = new File(AnalysisConfig.path_to_lp_dir + "lp_" + fileId );
+        File file_lp = new File(AnalysisConfig.path_to_lp_dir + "lp_" + fileId);
         Writer w_lp = new OutputStreamWriter(new FileOutputStream(file_lp), StandardCharsets.UTF_8);
         PrintWriter pw_lp = new PrintWriter(w_lp);
         pw_lp.println("Minimize");
 
         StringBuffer delay_str_buffer = new StringBuffer();
 
-        Num constant_of_objective = pair_delay.getFirst();
-        Map<Integer, Num> var_coeffs_map = pair_delay.getSecond();
+        Number constant_of_objective = pair_delay.getFirst();
+        Map<Integer, Number> var_coeffs_map = pair_delay.getSecond();
 
-        for(int var_id : var_coeffs_map.keySet())
-        {
-            Num var_coeff = var_coeffs_map.get(var_id);
-            if(var_coeff.geqZero())
-            {
+        for (int var_id : var_coeffs_map.keySet()) {
+            Number var_coeff = var_coeffs_map.get(var_id);
+            if (var_coeff.geq(Number.ZERO)) {
                 if (delay_str_buffer.length() == 0) {
                     delay_str_buffer.append(var_coeff + " s_" + var_id);
                 } else {
                     delay_str_buffer.append(" + " + var_coeff + " s_" + var_id);
                 }
-            }
-            else{
+            } else {
                 if (delay_str_buffer.length() == 0) {
-                    delay_str_buffer.append("- " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, var_coeff)) + " s_" + var_id);
+                    delay_str_buffer.append("- " + (minus_one.mul(var_coeff)) + " s_" + var_id);
                 } else {
-                    delay_str_buffer.append(" - " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, var_coeff)) + " s_" + var_id);
+                    delay_str_buffer.append(" - " + (minus_one.mul(var_coeff)) + " s_" + var_id);
                 }
             }
         }
 
 
-
         // costant term has to come last in the lp format...
-        if (constant_of_objective.geqZero()) {
+        if (constant_of_objective.geq(Number.ZERO)) {
             if (delay_str_buffer.length() == 0) {
                 delay_str_buffer.append(constant_of_objective);
             } else {
@@ -73,9 +70,9 @@ public class LUDB_LP {
             }
         } else {
             if (delay_str_buffer.length() == 0) {
-                delay_str_buffer.append("- " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, constant_of_objective)));
+                delay_str_buffer.append("- " + (minus_one.mul(constant_of_objective)));
             } else {
-                delay_str_buffer.append(" - " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, constant_of_objective)));
+                delay_str_buffer.append(" - " + (minus_one.mul(constant_of_objective)));
             }
         }
 
@@ -93,35 +90,33 @@ public class LUDB_LP {
             start = System.nanoTime();
             Pair pair_constraint = constraint.simplifyConstraint();
             end = System.nanoTime();
-            duration = end- start;
+            duration = end - start;
             terms_simplify_time = terms_simplify_time + duration;
 
-            Pair<Num, Map<Integer, Num>> constraint_left_side = (Pair<Num, Map<Integer, Num>>) pair_constraint.getFirst();
-            Pair<Num, Map<Integer, Num>> constraint_right_side = (Pair<Num, Map<Integer, Num>>) pair_constraint.getSecond();
+            Pair<Number, Map<Integer, Number>> constraint_left_side = (Pair<Number, Map<Integer, Number>>) pair_constraint.getFirst();
+            Pair<Number, Map<Integer, Number>> constraint_right_side = (Pair<Number, Map<Integer, Number>>) pair_constraint.getSecond();
 
 
-            Num constant_left = constraint_left_side.getFirst();
-            Num constant_right = constraint_right_side.getFirst();
+            Number constant_left = constraint_left_side.getFirst();
+            Number constant_right = constraint_right_side.getFirst();
 
-            Map<Integer, Num> var_coeffs_left_map = constraint_left_side.getSecond();
-            Map<Integer, Num> var_coeffs_right_map = constraint_right_side.getSecond();
+            Map<Integer, Number> var_coeffs_left_map = constraint_left_side.getSecond();
+            Map<Integer, Number> var_coeffs_right_map = constraint_right_side.getSecond();
 
 
-            Num constant_new = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(constant_right, constant_left);
+            Number constant_new = constant_right.sub(constant_left);
 
             List<Integer> common_var_ids = new ArrayList<>();
-            for (int i : var_coeffs_left_map.keySet())
-            {
-                if(var_coeffs_right_map.containsKey(i))
-                {
+            for (int i : var_coeffs_left_map.keySet()) {
+                if (var_coeffs_right_map.containsKey(i)) {
                     common_var_ids.add(i);
                 }
             }
 
             for (Integer id_common : common_var_ids) {
-                Num var_coeff_common_left = var_coeffs_left_map.get(id_common);
-                Num var_coeff_common_right = var_coeffs_right_map.get(id_common);
-                Num var_coeff_common_left_new = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(var_coeff_common_left, var_coeff_common_right);
+                Number var_coeff_common_left = var_coeffs_left_map.get(id_common);
+                Number var_coeff_common_right = var_coeffs_right_map.get(id_common);
+                Number var_coeff_common_left_new = var_coeff_common_left.sub(var_coeff_common_right);
                 var_coeffs_left_map.put(id_common, var_coeff_common_left_new);
             }
 
@@ -129,22 +124,17 @@ public class LUDB_LP {
             // Test for special case (both sides only hold constants)
             boolean constant_case = true;
 
-            for(int i : var_coeffs_left_map.keySet())
-            {
-                if(!var_coeffs_left_map.get(i).eqZero())
-                {
+            for (int i : var_coeffs_left_map.keySet()) {
+                if (!var_coeffs_left_map.get(i).eq(Number.ZERO)) {
                     constant_case = false;
                     break;
                 }
             }
 
-            if(constant_case)
-            {
-                for(int i : var_coeffs_right_map.keySet())
-                {
-                    if(!common_var_ids.contains(i)) {
-                        if (!var_coeffs_right_map.get(i).eqZero())
-                        {
+            if (constant_case) {
+                for (int i : var_coeffs_right_map.keySet()) {
+                    if (!common_var_ids.contains(i)) {
+                        if (!var_coeffs_right_map.get(i).eq(Number.ZERO)) {
                             constant_case = false;
                             break;
                         }
@@ -152,7 +142,6 @@ public class LUDB_LP {
                     // else: already in the updated left expression
                 }
             }
-
 
 
             StringBuffer constraint_str_buffer = new StringBuffer();
@@ -164,9 +153,8 @@ public class LUDB_LP {
                     if (constant > 0) {
                         // The constraint is violated. Hence, we can safely return the current LP as infeasible.
                         Double result = Double.NaN;
-                        Map<Integer, Double>opt_s_values = new HashMap<>();
-                        if(!keepLPsOnDrive)
-                        {
+                        Map<Integer, Double> opt_s_values = new HashMap<>();
+                        if (!keepLPsOnDrive) {
                             file_lp.delete();
                         }
                         return new Pair<>(result, opt_s_values);
@@ -176,10 +164,10 @@ public class LUDB_LP {
                 // We have at least one variable with a non-zero coefficient
 
                 for (int var_id : var_coeffs_left_map.keySet()) {
-                    Num coeff_left_new = var_coeffs_left_map.get(var_id);
-                    if (!coeff_left_new.eqZero()) {
+                    Number coeff_left_new = var_coeffs_left_map.get(var_id);
+                    if (!coeff_left_new.eq(Number.ZERO)) {
 
-                        if (coeff_left_new.geqZero()) {
+                        if (coeff_left_new.geq(Number.ZERO)) {
                             if (constraint_str_buffer.length() == 0) {
                                 constraint_str_buffer.append(coeff_left_new + " s_" + var_id);
                             } else {
@@ -187,9 +175,9 @@ public class LUDB_LP {
                             }
                         } else {
                             if (constraint_str_buffer.length() == 0) {
-                                constraint_str_buffer.append("- " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, coeff_left_new)) + " s_" + var_id);
+                                constraint_str_buffer.append("- " + (minus_one.mul(coeff_left_new)) + " s_" + var_id);
                             } else {
-                                constraint_str_buffer.append(" - " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, coeff_left_new)) + " s_" + var_id);
+                                constraint_str_buffer.append(" - " + (minus_one.mul(coeff_left_new)) + " s_" + var_id);
                             }
 
                         }
@@ -198,14 +186,14 @@ public class LUDB_LP {
 
 
                 for (int var_id : var_coeffs_right_map.keySet()) {
-                    Num coeff_right = var_coeffs_right_map.get(var_id);
-                    if (!coeff_right.eqZero()) {
+                    Number coeff_right = var_coeffs_right_map.get(var_id);
+                    if (!coeff_right.eq(Number.ZERO)) {
 
-                        coeff_right = Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, coeff_right); // swap algebraic sign bc we will put coeff_right * var_right to the left side
+                        coeff_right = minus_one.mul(coeff_right); // swap algebraic sign bc we will put coeff_right * var_right to the left side
 
 
                         if (!common_var_ids.contains(var_id)) {
-                            if (coeff_right.geqZero()) {
+                            if (coeff_right.geq(Number.ZERO)) {
                                 if (constraint_str_buffer.length() == 0) {
                                     constraint_str_buffer.append(coeff_right + " s_" + var_id);
                                 } else {
@@ -213,9 +201,9 @@ public class LUDB_LP {
                                 }
                             } else {
                                 if (constraint_str_buffer.length() == 0) {
-                                    constraint_str_buffer.append("- " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, coeff_right)) + " s_" + var_id);
+                                    constraint_str_buffer.append("- " + (minus_one.mul(coeff_right)) + " s_" + var_id);
                                 } else {
-                                    constraint_str_buffer.append(" - " + (Num.getUtils(Calculator.getInstance().getNumBackend()).mult(minus_one, coeff_right)) + " s_" + var_id);
+                                    constraint_str_buffer.append(" - " + (minus_one.mul(coeff_right)) + " s_" + var_id);
                                 }
 
                             }
@@ -240,7 +228,7 @@ public class LUDB_LP {
         InputStream terminal_output_cplex;
         Process process_cplex;
 
-        ProcessBuilder pb_cplex = new ProcessBuilder("./cplex", "-c", "read", AnalysisConfig.path_to_lp_dir  + "lp_" + fileId , "lp", "optimize", "Display solution variables -", "quit");
+        ProcessBuilder pb_cplex = new ProcessBuilder("./cplex", "-c", "read", AnalysisConfig.path_to_lp_dir + "lp_" + fileId, "lp", "optimize", "Display solution variables -", "quit");
         pb_cplex.directory(new File(AnalysisConfig.path_to_cplex));
 
         process_cplex = pb_cplex.start();
@@ -255,8 +243,7 @@ public class LUDB_LP {
         long duration_cplex_time_current_interval = end_cplex_time - start_cplex_time;
         cplex_time = cplex_time + duration_cplex_time_current_interval;
 
-        if(!keepLPsOnDrive)
-        {
+        if (!keepLPsOnDrive) {
             file_lp.delete();
         }
         return result_cplex_pair;
@@ -267,7 +254,7 @@ public class LUDB_LP {
 
         Double result = Double.NaN;
 
-        Map<Integer, Double>opt_s_values = new HashMap<>();
+        Map<Integer, Double> opt_s_values = new HashMap<>();
         br = new BufferedReader(new InputStreamReader(inputStream));
         String line = null;
         while ((line = br.readLine()) != null) {
@@ -292,14 +279,11 @@ public class LUDB_LP {
                 opt_s_values.put(var_id, var_value_opt);
             }
         }
-        if(opt_s_values.size() != number_vars && !result.equals(Double.NaN))
-        {
+        if (opt_s_values.size() != number_vars && !result.equals(Double.NaN)) {
             // have to set some vars specifically to zero (cplex outputs with "Display solution variables -" the vars with their optimal setting if
             // that setting is != 0; it justs outputs that all the other vars are set to 0)
-            for(int i = 0; i < number_vars; i++)
-            {
-                if(!opt_s_values.containsKey(i))
-                {
+            for (int i = 0; i < number_vars; i++) {
+                if (!opt_s_values.containsKey(i)) {
                     // have to explicitly list s_i* = 0
                     opt_s_values.put(i, 0.0);
                 }

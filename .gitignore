@@ -9,3 +9,5 @@
 /lib/*
 !/lib/info.txt
 .idea
+src/main/java/org/networkcalculus/dnc/demos/Sandbox.java
+.vscode

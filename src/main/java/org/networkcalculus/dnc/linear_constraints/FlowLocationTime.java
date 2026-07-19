@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -32,60 +32,60 @@ import org.networkcalculus.dnc.network.server_graph.Server;
 
 //Id a flow's 'shape' by its location and time instant 
 public class FlowLocationTime {
-	Flow flow;
-	Server server;
-	Path path; // will be used to determine the time instant t{path}
-	
-	public FlowLocationTime( Flow flow, Server server, Path path ) {
-		this.flow = flow;
-		this.server = server;
-		this.path = path;
-	}
-	
-	public Flow getFlow() {
-		return flow;
-	}
-	
-	public Server getServer() {
-		return server;
-	}
-	
-	public Path getPath() {
-		return path;
-	}
+    Flow flow;
+    Server server;
+    Path path; // will be used to determine the time instant t{path}
 
-	@Override
-	public String toString() {
-		StringBuffer result_str = new StringBuffer();
-		
-		result_str.append( flow.getAlias() );
-		result_str.append( "_" );
-		result_str.append( server.getAlias() );
-		result_str.append( "_" );
-		result_str.append( "t" );
-		result_str.append( "{" );
-		for( Server server : path.getServers() ) {
-			result_str.append( server.getAlias() );
-		}
-		result_str.append( "}" );
-		
-		return result_str.toString();
-	}
-	
-	@Override
-	public boolean equals( Object obj ) {
-		if ( obj == null || !( obj instanceof FlowLocationTime ) ) {
-			return false;
-		}
+    public FlowLocationTime(Flow flow, Server server, Path path) {
+        this.flow = flow;
+        this.server = server;
+        this.path = path;
+    }
 
-		FlowLocationTime flt = (FlowLocationTime) obj;
-		return flow.equals( flt.flow )
-				&& server.equals( flt.server )
-				&& path.equals( flt.path );
-	}
-	
-	@Override
-	public int hashCode() {
-		return (int) flow.hashCode() * server.hashCode() * path.hashCode();
-	}
+    public Flow getFlow() {
+        return flow;
+    }
+
+    public Server getServer() {
+        return server;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer result_str = new StringBuffer();
+
+        result_str.append(flow.getAlias());
+        result_str.append("_");
+        result_str.append(server.getAlias());
+        result_str.append("_");
+        result_str.append("t");
+        result_str.append("{");
+        for (Server server : path.getServers()) {
+            result_str.append(server.getAlias());
+        }
+        result_str.append("}");
+
+        return result_str.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof FlowLocationTime)) {
+            return false;
+        }
+
+        FlowLocationTime flt = (FlowLocationTime) obj;
+        return flow.equals(flt.flow)
+                && server.equals(flt.server)
+                && path.equals(flt.path);
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) flow.hashCode() * server.hashCode() * path.hashCode();
+    }
 }
