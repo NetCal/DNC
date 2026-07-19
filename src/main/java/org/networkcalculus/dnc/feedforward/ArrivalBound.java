@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -29,7 +29,8 @@ package org.networkcalculus.dnc.feedforward;
 import java.util.Set;
 
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
+//import org.networkcalculus.dnc.curves.ArrivalCurve;
+import org.networkcalculus.dnc.backend.Curve;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
 import org.networkcalculus.dnc.network.server_graph.Turn;
@@ -46,5 +47,5 @@ public interface ArrivalBound {
 
     public void setConfiguration(AnalysisConfig configuration);
 
-    Set<ArrivalCurve> computeArrivalBound(Turn turn, Flow flow_of_interest) throws Exception;
+    Set<Curve> computeArrivalBound(Turn turn, Flow flow_of_interest) throws Exception;
 }

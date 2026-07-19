@@ -1,3 +1,11 @@
+DNC v3.0.0 (2026-Jun-19)
+------------------------
+* new curve class, implementing the UPP representation 
+* new implementations for (min,plus)-operations and bound derivations
+* new number backend, defaulting to big integer based rationals instead of double precision reals
+* new unit test
+* new network modeling: start with a device graph of a full duplex network, transform to server graph, including turn prohibition for prevention of cyclic dependencies between flows
+
 DNC v2.8.1 (2022-Aug-09)
 ------------------------
 * Implementation of a grid search-based FIFO analysis called GS. Details:

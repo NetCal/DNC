@@ -1,0 +1,416 @@
+Flow of interest: Flow(f7, 0, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t1, 3, Server(s13, 2), Server(s4, 6)),Turn(t8, 0, Server(s4, 6), Server(s1, 7))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 10.569778429257788
+     per server : {Server(s4, 6)={17677528369378790769853249737/3692731244250975624832138648}, Server(s13, 2)={24126426575199/9955885911350}, Server(s1, 7)={119262234197919509097143498145938553139475176/35501784754739188289872010688487094393393739}}
+backlog bound   : 4.268029433099179
+     per server : {Server(s4, 6)={47102397633957/13020085147408}, Server(s13, 2)={3}, Server(s1, 7)={158889214049721714281319592868/37227769053679229340861539133}}
+alpha per server: {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 47102397633957/13020085147408, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s1, 7)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 158889214049721714281319592868/37227769053679229340861539133, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 1050451515397415538414699564451476813432882814247738555191/413029298858912114378871611886283920170608428386445487080, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 1050451515397415538414699564451476813432882814247738555191/413029298858912114378871611886283920170608428386445487080, endTime: 60804951619766072162183252885644235927571917/22948586172513066762520157808700958392568760, rightLimitAtStartTime: 0, slope: 17998028103083/8042142191733),
+(startTime: 60804951619766072162183252885644235927571917/22948586172513066762520157808700958392568760, endTime: 3, rightLimitAtStartTime: 1913743719617/8042142191733, slope: 1704237119418065/750599937895082)], pseudoPeriodStart: 2, pseudoPeriodLength: 1, pseudoPeriodHeight: 1317836050784269/750599937895082)]
+     per server : {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1317836050784269/750599937895082)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 16084284383466/17998028103083, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 16084284383466/17998028103083, endTime: 1, rightLimitAtStartTime: 0, slope: 17998028103083/8042142191733)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 17998028103083/8042142191733)}, Server(s1, 7)={(baseSequence: [(startTime: 0, endTime: 14907779274739938637142937268242319142434397/22948586172513066762520157808700958392568760, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 14907779274739938637142937268242319142434397/22948586172513066762520157808700958392568760, endTime: 1, rightLimitAtStartTime: 0, slope: 1704237119418065/750599937895082)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1704237119418065/750599937895082)}}
+xtx per server  : {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 60122482781365/26040170294816, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s1, 7)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 39722303512430428570329898217/26931212694568199984080772208, slope: 1)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1)}}
+delay bound     : 2.7875754028396065
+backlog bound   : 3.5432857143537473
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f9, 1, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t9, 1, Server(s0, 8), Server(s2, 3))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 54.24876846215763
+     per server : {Server(s0, 8)={56294995342131/1225348201888}, Server(s2, 3)={9007199254740992/1084325630799587}}
+backlog bound   : 4.0
+     per server : {Server(s0, 8)={4}, Server(s2, 3)={4}}
+alpha per server: {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 2, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)]
+     per server : {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)}, Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3336125444484835/2251799813685248)}}
+xtx per server  : {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+delay bound     : 2.9129337736371776
+backlog bound   : 3.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f11, 2, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Server(s10, 10)})
+
+--- Total Flow Analysis ARB---
+delay bound     : 6.950520549600468
+     per server : {Server(s10, 10)={1534036483089808703919930161874311051970755096783802377732748040325824512/220708142957434820488254798280498822278530129896592712627928239804104933}}
+backlog bound   : 7.900008580855056
+     per server : {Server(s10, 10)={2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333}}
+alpha per server: {Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)]
+     per server : {Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)}}
+xtx per server  : {Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2380060345615768125921242593847385961428235844257948805018/344935853010320231678061839805232004808104380097372182333, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+delay bound     : 0.8633932488252025
+backlog bound   : 2.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f4, 3, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t8, 0, Server(s4, 6), Server(s1, 7))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 8.146445459190888
+     per server : {Server(s4, 6)={17677528369378790769853249737/3692731244250975624832138648}, Server(s1, 7)={119262234197919509097143498145938553139475176/35501784754739188289872010688487094393393739}}
+backlog bound   : 4.268029433099179
+     per server : {Server(s4, 6)={47102397633957/13020085147408}, Server(s1, 7)={158889214049721714281319592868/37227769053679229340861539133}}
+alpha per server: {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 47102397633957/13020085147408, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s1, 7)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 158889214049721714281319592868/37227769053679229340861539133, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 2, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 1317836050784269/750599937895082)]
+     per server : {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1317836050784269/750599937895082)}, Server(s1, 7)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1704237119418065/750599937895082)}}
+xtx per server  : {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 34082312486549/13020085147408, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s1, 7)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 96079263360318027767959801717/37227769053679229340861539133, slope: 1)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1)}}
+delay bound     : 2.244289688485859
+backlog bound   : 3.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f5, 4, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t10, 10, Server(s0, 8), Server(s3, 11)),Turn(t7, 12, Server(s3, 11), Server(s6, 9)),Turn(t11, 11, Server(s6, 9), Server(s10, 10)),Turn(t2, 2, Server(s10, 10), Server(s9, 12))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 66.1954329112797
+     per server : {Server(s9, 12)={18014398509481984/2864946979613805}, Server(s0, 8)={56294995342131/1225348201888}, Server(s6, 9)={577851062731042998240658529274904790233935709463019257856/104238280940645130923066161569461867678375552829955594045}, Server(s3, 11)={413116877817612075073723558130006217829108/280755063869615806557445642561288415366465}, Server(s10, 10)={1534036483089808703919930161874311051970755096783802377732748040325824512/220708142957434820488254798280498822278530129896592712627928239804104933}}
+backlog bound   : 8.0
+     per server : {Server(s9, 12)={8}, Server(s0, 8)={4}, Server(s6, 9)={1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683}, Server(s3, 11)={18346074784575211733078432729/3127812130186370749799552435}, Server(s10, 10)={2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333}}
+alpha per server: {Server(s9, 12)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 8, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 18346074784575211733078432729/3127812130186370749799552435, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 52261155312974469943864768359711431633304/10642034290593199647544111349850966521245, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 52261155312974469943864768359711431633304/10642034290593199647544111349850966521245, endTime: 5, rightLimitAtStartTime: 0, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 4, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)]
+     per server : {Server(s9, 12)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 5116746793299053/2251799813685248)}, Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)}, Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1294335836074927/562949953421312)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 9693018150601671353688322960307565548324/10642034290593199647544111349850966521245, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 9693018150601671353688322960307565548324/10642034290593199647544111349850966521245, endTime: 1, rightLimitAtStartTime: 0, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 112278844435791/22517998136852)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)}}
+xtx per server  : {Server(s9, 12)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 1)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1)}, Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1828140271765696645649695453796179489032857/421619199309535370180465706528875375035705, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 14205063746158240660757990421/3127812130186370749799552435, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4899231446020012000218647945384976002267357900274296863127/1020417856069216342269627581590923427216343896407496158455, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+delay bound     : 5.823757577237361
+backlog bound   : 5.910823803600183
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f10, 5, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t5, 7, Server(s5, 5), Server(s2, 3))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 8.894876250635114
+     per server : {Server(s5, 5)={1125899906842624/1914316640828535}, Server(s2, 3)={9007199254740992/1084325630799587}}
+backlog bound   : 4.0
+     per server : {Server(s5, 5)={1}, Server(s2, 3)={4}}
+alpha per server: {Server(s5, 5)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624)}, Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 1, endTime: 1432951745228381/765726656331414, rightLimitAtStartTime: 0, slope: 1914316640828535/1125899906842624)], pseudoPeriodStart: 667225088896967/765726656331414, pseudoPeriodLength: 1, pseudoPeriodHeight: 3336125444484835/2251799813685248)]
+     per server : {Server(s5, 5)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 1914316640828535/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1914316640828535/1125899906842624)}, Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3336125444484835/2251799813685248)}}
+xtx per server  : {Server(s5, 5)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 0)}, Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+delay bound     : 1.5881471658499104
+backlog bound   : 2.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f8, 6, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t11, 11, Server(s6, 9), Server(s10, 10)),Turn(t2, 2, Server(s10, 10), Server(s9, 12))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 18.781944107052166
+     per server : {Server(s9, 12)={18014398509481984/2864946979613805}, Server(s6, 9)={577851062731042998240658529274904790233935709463019257856/104238280940645130923066161569461867678375552829955594045}, Server(s10, 10)={1534036483089808703919930161874311051970755096783802377732748040325824512/220708142957434820488254798280498822278530129896592712627928239804104933}}
+backlog bound   : 8.0
+     per server : {Server(s9, 12)={8}, Server(s6, 9)={1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683}, Server(s10, 10)={2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333}}
+alpha per server: {Server(s9, 12)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 8, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 3, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 2, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)]
+     per server : {Server(s9, 12)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 5116746793299053/2251799813685248)}, Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1294335836074927/562949953421312)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)}}
+xtx per server  : {Server(s9, 12)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 5, slope: 1)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1)}, Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 883948094645990715633239122906739402180230/142521592791000688267286306064682184745683, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2299827821592543092336244034435462582384992901835476608922/344935853010320231678061839805232004808104380097372182333, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+delay bound     : 2.8633932488252025
+backlog bound   : 4.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f1, 7, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t10, 10, Server(s0, 8), Server(s3, 11))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 47.413488804227526
+     per server : {Server(s0, 8)={56294995342131/1225348201888}, Server(s3, 11)={413116877817612075073723558130006217829108/280755063869615806557445642561288415366465}}
+backlog bound   : 5.865465706049954
+     per server : {Server(s0, 8)={4}, Server(s3, 11)={18346074784575211733078432729/3127812130186370749799552435}}
+alpha per server: {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 18346074784575211733078432729/3127812130186370749799552435, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 20335052441194871001232434310158532069569/10642034290593199647544111349850966521245, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 20335052441194871001232434310158532069569/10642034290593199647544111349850966521245, endTime: 2, rightLimitAtStartTime: 0, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)]
+     per server : {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 9693018150601671353688322960307565548324/10642034290593199647544111349850966521245, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 9693018150601671353688322960307565548324/10642034290593199647544111349850966521245, endTime: 1, rightLimitAtStartTime: 0, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 112278844435791/22517998136852)}}
+xtx per server  : {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 14205063746158240660757990421/3127812130186370749799552435, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+delay bound     : 2.8237575772373606
+backlog bound   : 2.910823803600183
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f12, 8, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t13, 5, Server(s7, 0), Server(s8, 4))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 21.4978968049534
+     per server : {Server(s7, 0)={4503599627370496/1219481318306475}, Server(s8, 4)={14260246509858576736117701214208/800919144127029302013047684885}}
+backlog bound   : 3.6486941645067015
+     per server : {Server(s7, 0)={2}, Server(s8, 4)={12665643209660417/3471281131991723}}
+alpha per server: {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 12665643209660417/3471281131991723, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 5723080945676971/3471281131991723, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 5723080945676971/3471281131991723, endTime: 2, rightLimitAtStartTime: 0, slope: 3471281131991723/2251799813685248)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 1356627155277119/1125899906842624)]
+     per server : {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 2251799813685248/3471281131991723, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 2251799813685248/3471281131991723, endTime: 1, rightLimitAtStartTime: 0, slope: 3471281131991723/2251799813685248)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3471281131991723/2251799813685248)}, Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1356627155277119/1125899906842624)}}
+xtx per server  : {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624)}, Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+delay bound     : 2.4437672016103935
+backlog bound   : 2.6486941645067015
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f2, 9, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t4, 4, Server(s12, 13), Server(s0, 8)),Turn(t10, 10, Server(s0, 8), Server(s3, 11))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 48.299651821764876
+     per server : {Server(s0, 8)={56294995342131/1225348201888}, Server(s3, 11)={413116877817612075073723558130006217829108/280755063869615806557445642561288415366465}, Server(s12, 13)={4503599627370496/5082134481177079}}
+backlog bound   : 5.865465706049954
+     per server : {Server(s0, 8)={4}, Server(s3, 11)={18346074784575211733078432729/3127812130186370749799552435}, Server(s12, 13)={1}}
+alpha per server: {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 18346074784575211733078432729/3127812130186370749799552435, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s12, 13)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 20335052441194871001232434310158532069569/10642034290593199647544111349850966521245, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 20335052441194871001232434310158532069569/10642034290593199647544111349850966521245, endTime: 1250117195181615584421025392839121598097514383528664329824108355452963/434953224153453087422109250264501380468608156115344343363684769084215, rightLimitAtStartTime: 0, slope: 5082134481177079/4503599627370496)], pseudoPeriodStart: 815163971028162496998916142574620217628906227413319986460423586368748/434953224153453087422109250264501380468608156115344343363684769084215, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)]
+     per server : {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 61196388149683/56294995342131)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 9693018150601671353688322960307565548324/10642034290593199647544111349850966521245, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 9693018150601671353688322960307565548324/10642034290593199647544111349850966521245, endTime: 1, rightLimitAtStartTime: 0, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 112278844435791/22517998136852)}, Server(s12, 13)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 5082134481177079/4503599627370496)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 5082134481177079/4503599627370496)}}
+xtx per server  : {Server(s0, 8)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 14205063746158240660757990421/3127812130186370749799552435, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s12, 13)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 0)}}
+delay bound     : 2.8237575772373606
+backlog bound   : 2.910823803600183
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f16, 10, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Server(s6, 9)})
+
+--- Total Flow Analysis ARB---
+delay bound     : 5.543559021853787
+     per server : {Server(s6, 9)={577851062731042998240658529274904790233935709463019257856/104238280940645130923066161569461867678375552829955594045}}
+backlog bound   : 7.2022047139358545
+     per server : {Server(s6, 9)={1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683}}
+alpha per server: {Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1294335836074927/562949953421312)]
+     per server : {Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1294335836074927/562949953421312)}}
+xtx per server  : {Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 883948094645990715633239122906739402180230/142521592791000688267286306064682184745683, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+delay bound     : 0.700797685107462
+backlog bound   : 2.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f3, 11, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Server(s2, 3)})
+
+--- Total Flow Analysis ARB---
+delay bound     : 8.306729084785204
+     per server : {Server(s2, 3)={9007199254740992/1084325630799587}}
+backlog bound   : 4.0
+     per server : {Server(s2, 3)={4}}
+alpha per server: {Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 4, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3336125444484835/2251799813685248)]
+     per server : {Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3336125444484835/2251799813685248)}}
+xtx per server  : {Server(s2, 3)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+delay bound     : 1.5184626873980407
+backlog bound   : 2.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f6, 12, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t3, 13, Server(s8, 4), Server(s11, 1))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 26.52919419962666
+     per server : {Server(s8, 4)={14260246509858576736117701214208/800919144127029302013047684885}, Server(s11, 1)={67829460027054888046833639613889185382429360128/7774735953084779682292488740566743536363942073}}
+backlog bound   : 3.6486941645067015
+     per server : {Server(s8, 4)={12665643209660417/3471281131991723}, Server(s11, 1)={30122331307971212076261497798186/8617549350395107924095910887189}}
+alpha per server: {Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 12665643209660417/3471281131991723, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s11, 1)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 30122331307971212076261497798186/8617549350395107924095910887189, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 2, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 1356627155277119/1125899906842624)]
+     per server : {Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1356627155277119/1125899906842624)}, Server(s11, 1)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3153997832746005/2251799813685248)}}
+xtx per server  : {Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 9194362077668694/3471281131991723, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s11, 1)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 15061165653985606038130748899093/8617549350395107924095910887189, slope: 1)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1)}}
+delay bound     : 2.795073037103692
+backlog bound   : 3.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f0, 13, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t1, 3, Server(s13, 2), Server(s4, 6))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 7.210447764001614
+     per server : {Server(s4, 6)={17677528369378790769853249737/3692731244250975624832138648}, Server(s13, 2)={24126426575199/9955885911350}}
+backlog bound   : 3.617672012178354
+     per server : {Server(s4, 6)={47102397633957/13020085147408}, Server(s13, 2)={3}}
+alpha per server: {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 47102397633957/13020085147408, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 34082312486549/17998028103083, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 34082312486549/17998028103083, endTime: 2, rightLimitAtStartTime: 0, slope: 17998028103083/8042142191733)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 1317836050784269/750599937895082)]
+     per server : {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1317836050784269/750599937895082)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 16084284383466/17998028103083, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 16084284383466/17998028103083, endTime: 1, rightLimitAtStartTime: 0, slope: 17998028103083/8042142191733)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 17998028103083/8042142191733)}}
+xtx per server  : {Server(s4, 6)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 60122482781365/26040170294816, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+delay bound     : 2.1379589444367832
+backlog bound   : 2.8936692559509236
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f13, 14, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t0, 6, Server(s13, 2), Server(s3, 11)),Turn(t7, 12, Server(s3, 11), Server(s6, 9)),Turn(t11, 11, Server(s6, 9), Server(s10, 10))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 16.38886196837625
+     per server : {Server(s6, 9)={577851062731042998240658529274904790233935709463019257856/104238280940645130923066161569461867678375552829955594045}, Server(s3, 11)={413116877817612075073723558130006217829108/280755063869615806557445642561288415366465}, Server(s13, 2)={24126426575199/9955885911350}, Server(s10, 10)={1534036483089808703919930161874311051970755096783802377732748040325824512/220708142957434820488254798280498822278530129896592712627928239804104933}}
+backlog bound   : 7.900008580855056
+     per server : {Server(s6, 9)={1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683}, Server(s3, 11)={18346074784575211733078432729/3127812130186370749799552435}, Server(s13, 2)={3}, Server(s10, 10)={2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333}}
+alpha per server: {Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1026469687436991403900525428971421586925913/142521592791000688267286306064682184745683, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 18346074784575211733078432729/3127812130186370749799552435, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 3, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2724996198626088357599304433652617966236340224355320987351/344935853010320231678061839805232004808104380097372182333, slope: 4)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 4)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 431987080769872366730677252970976878423696/117062377196525196122985224848360631733695, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 431987080769872366730677252970976878423696/117062377196525196122985224848360631733695, endTime: 24693505749177179612596078247/6504177931385317459334575165, rightLimitAtStartTime: 0, slope: 17998028103083/8042142191733),
+(startTime: 24693505749177179612596078247/6504177931385317459334575165, endTime: 4, rightLimitAtStartTime: 1913743719617/8042142191733, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 3, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)]
+     per server : {Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1294335836074927/562949953421312)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 5180971955021227234592352752/6504177931385317459334575165, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 5180971955021227234592352752/6504177931385317459334575165, endTime: 1, rightLimitAtStartTime: 0, slope: 112278844435791/22517998136852)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 112278844435791/22517998136852)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 16084284383466/17998028103083, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 16084284383466/17998028103083, endTime: 1, rightLimitAtStartTime: 0, slope: 17998028103083/8042142191733)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 17998028103083/8042142191733)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1202802671053513/562949953421312)}}
+xtx per server  : {Server(s6, 9)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 36855907003397383971174041556/7918733762094039184145422201, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s3, 11)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 690244122528228/173786378833945, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s13, 2)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s10, 10)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 98115685072320858641347961356496772898444780/19165202489667960480760418283992324427949751, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}}
+delay bound     : 3.553623116997529
+backlog bound   : 4.6902298681723265
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f14, 15, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Server(s7, 0)})
+
+--- Total Flow Analysis ARB---
+delay bound     : 3.693045198613424
+     per server : {Server(s7, 0)={4503599627370496/1219481318306475}}
+backlog bound   : 2.0
+     per server : {Server(s7, 0)={2}}
+alpha per server: {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+
+--- Total Flow Analysis FIFO---
+delay bound     : 0.7869187366242598
+     per server : {Server(s7, 0)={4503599627370496/5723080945676971}}
+backlog bound   : 2.0
+     per server : {Server(s7, 0)={2}}
+alpha per server: {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 2, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 2251799813685248/3471281131991723, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 2251799813685248/3471281131991723, endTime: 1, rightLimitAtStartTime: 0, slope: 3471281131991723/2251799813685248)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3471281131991723/2251799813685248)]
+     per server : {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 2251799813685248/3471281131991723, rightLimitAtStartTime: 0, slope: 0),
+(startTime: 2251799813685248/3471281131991723, endTime: 1, rightLimitAtStartTime: 0, slope: 3471281131991723/2251799813685248)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3471281131991723/2251799813685248)}}
+xtx per server  : {Server(s7, 0)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624)}}
+delay bound     : 1.1071356694330663
+backlog bound   : 1.6486941645067015
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+
+Flow of interest: Flow(f15, 16, (baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 1125899906842624/1125899906842624, slope: 1125899906842624/1125899906842624)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1125899906842624/1125899906842624), {Turn(t3, 13, Server(s8, 4), Server(s11, 1))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 26.52919419962666
+     per server : {Server(s8, 4)={14260246509858576736117701214208/800919144127029302013047684885}, Server(s11, 1)={67829460027054888046833639613889185382429360128/7774735953084779682292488740566743536363942073}}
+backlog bound   : 3.6486941645067015
+     per server : {Server(s8, 4)={12665643209660417/3471281131991723}, Server(s11, 1)={30122331307971212076261497798186/8617549350395107924095910887189}}
+alpha per server: {Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 12665643209660417/3471281131991723, slope: 3)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3)}, Server(s11, 1)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 30122331307971212076261497798186/8617549350395107924095910887189, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}}
+
+--- Total Flow Analysis FIFO---
+TFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [(baseSequence: [(startTime: 0, endTime: 2, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 1, pseudoPeriodLength: 1, pseudoPeriodHeight: 1356627155277119/1125899906842624)]
+     per server : {Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1356627155277119/1125899906842624)}, Server(s11, 1)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 0, slope: 0)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 3153997832746005/2251799813685248)}}
+xtx per server  : {Server(s8, 4)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 9194362077668694/3471281131991723, slope: 2)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 2)}, Server(s11, 1)={(baseSequence: [(startTime: 0, endTime: 1, rightLimitAtStartTime: 15061165653985606038130748899093/8617549350395107924095910887189, slope: 1)], pseudoPeriodStart: 0, pseudoPeriodLength: 1, pseudoPeriodHeight: 1)}}
+delay bound     : 2.795073037103692
+backlog bound   : 3.0
+
+--- Separated Flow Analysis FIFO ---
+SFA analysis failed with: FIFO leftover service is not supported in the new backend.
+
+

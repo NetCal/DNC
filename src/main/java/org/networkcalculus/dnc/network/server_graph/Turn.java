@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -27,6 +27,9 @@
 package org.networkcalculus.dnc.network.server_graph;
 
 import java.util.Objects;
+
+import org.networkcalculus.dnc.backend.number.Number;
+
 
 public class Turn {
     private int id;
@@ -68,60 +71,60 @@ public class Turn {
         }
 
         Turn l = (Turn) obj;
-		return Objects.equals(this.src, l.src) && 
-				Objects.equals(this.dest, l.dest);
+        return Objects.equals(this.src, l.src) &&
+                Objects.equals(this.dest, l.dest);
     }
 
     @Override
     public int hashCode() {
-		return Objects.hash(src, dest);
+        return Objects.hash(src, dest);
     }
-    
+
     // --------------------------------------------------------------------------------------------------------------
     // String Conversions
     // --------------------------------------------------------------------------------------------------------------
 
     private StringBuffer commonStringPrefix() {
-    	StringBuffer turn_str_prefix = new StringBuffer();
+        StringBuffer turn_str_prefix = new StringBuffer();
 
-     	turn_str_prefix.append("Turn(");
-     	turn_str_prefix.append(alias);
-     	turn_str_prefix.append(", ");
-     	turn_str_prefix.append(Integer.toString(id));
-     	
-     	return turn_str_prefix;
+        turn_str_prefix.append("Turn(");
+        turn_str_prefix.append(alias);
+        turn_str_prefix.append(", ");
+        turn_str_prefix.append(Integer.toString(id));
+
+        return turn_str_prefix;
     }
-    
+
     public String toShortString() {
-    	StringBuffer turn_str = commonStringPrefix();
-    	
-    	turn_str.append(")");
-    	
+        StringBuffer turn_str = commonStringPrefix();
+
+        turn_str.append(")");
+
         return turn_str.toString();
     }
 
     @Override
     public String toString() {
-    	StringBuffer turn_str = commonStringPrefix();
+        StringBuffer turn_str = commonStringPrefix();
 
-    	turn_str.append(", ");
-     	turn_str.append(src.toShortString());
-     	turn_str.append(", ");
-     	turn_str.append(dest.toShortString());
-     	turn_str.append(")");
-     	
-     	return turn_str.toString();
+        turn_str.append(", ");
+        turn_str.append(src.toShortString());
+        turn_str.append(", ");
+        turn_str.append(dest.toShortString());
+        turn_str.append(")");
+
+        return turn_str.toString();
     }
 
     public String toExtendedString() {
-    	StringBuffer turn_str = commonStringPrefix();
+        StringBuffer turn_str = commonStringPrefix();
 
-    	turn_str.append(", ");
-     	turn_str.append(src.toExtendedString());
-     	turn_str.append(", ");
-     	turn_str.append(dest.toExtendedString());
-     	turn_str.append(")");
-     	
-     	return turn_str.toString();
+        turn_str.append(", ");
+        turn_str.append(src.toExtendedString());
+        turn_str.append(", ");
+        turn_str.append(dest.toExtendedString());
+        turn_str.append(")");
+
+        return turn_str.toString();
     }
 }

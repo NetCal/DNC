@@ -1,0 +1,124 @@
+Flow of interest: Flow(f0, 0, AC{(0.0,0.0),0.0;!(0.0,1.0),1.0}, {Turn(t1, 1, Server(s1, 1), Server(s4, 2))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 13.714039994908045
+     per server : {Server(s1, 1)={1.7537650910685096}, Server(s4, 2)={11.960274903839535}}
+backlog bound   : 3.5389956072374567
+     per server : {Server(s1, 1)={3.0}, Server(s4, 2)={3.5389956072374567}}
+alpha per server: {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,3.0),3.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,3.5389956072374567),3.0}}}
+
+--- Total Flow Analysis FIFO---
+delay bound     : 1.67590271952945
+     per server : {Server(s1, 1)={0.6368608189408116}, Server(s4, 2)={1.0390419005886384}}
+backlog bound   : 3.4245738792938742
+     per server : {Server(s1, 1)={3.0}, Server(s4, 2)={3.4245738792938742}}
+alpha per server: {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,3.0),3.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,3.4245738792938742),3.0}}}
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;!(2.489139018297692,0.0),1.2958958414995423}]
+     per server : {Server(s1, 1)={SC{(0.0,0.0),0.0;(0.7378425553099065,0.0),2.7106053799783423}}, Server(s4, 2)={SC{(0.0,0.0),0.0;(1.7512964629877854,0.0),1.2958958414995423}}}
+xtx per server  : {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,2.0),2.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,2.2694978036187283),2.0}}}
+delay bound     : 3.260805974835536
+backlog bound   : 3.489139018297692
+
+--- Separated Flow Analysis FIFO ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(1.1602081334973569,0.0),1.2958958414995423}]
+     per server : {Server(s1, 1)={SC{(0.0,0.0),0.0;!(0.4245738792938744,0.0),2.7106053799783423}}, Server(s4, 2)={SC{(0.0,0.0),0.0;!(0.7356342542034824,0.0),1.2958958414995423}}}
+xtx per server  : {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,2.0),2.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,2.4245738792938747),2.0}}}
+delay bound     : 1.9318750900352009
+backlog bound   : 2.160208133497357
+
+
+Flow of interest: Flow(f1, 1, AC{(0.0,0.0),0.0;!(0.0,1.0),1.0}, {Server(s4, 2)})
+
+--- Total Flow Analysis ARB---
+delay bound     : 11.960274903839535
+     per server : {Server(s4, 2)={11.960274903839535}}
+backlog bound   : 3.5389956072374567
+     per server : {Server(s4, 2)={3.5389956072374567}}
+alpha per server: {Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,3.5389956072374567),3.0}}}
+
+--- Total Flow Analysis FIFO---
+delay bound     : 1.0390419005886384
+     per server : {Server(s4, 2)={1.0390419005886384}}
+backlog bound   : 3.4245738792938742
+     per server : {Server(s4, 2)={3.4245738792938742}}
+alpha per server: {Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,3.4245738792938742),3.0}}}
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(1.9592590128998832,0.0),1.2958958414995423}]
+     per server : {Server(s4, 2)={SC{(0.0,0.0),0.0;(1.9592590128998832,0.0),1.2958958414995423}}}
+xtx per server  : {Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,2.5389956072374567),2.0}}}
+delay bound     : 2.730925969437727
+backlog bound   : 2.9592590128998832
+
+--- Separated Flow Analysis FIFO ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;!(0.7356342542034823,0.0),1.2958958414995423}]
+     per server : {Server(s4, 2)={SC{(0.0,0.0),0.0;!(0.7356342542034823,0.0),1.2958958414995423}}}
+xtx per server  : {Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,2.4245738792938742),2.0}}}
+delay bound     : 1.5073012107413262
+backlog bound   : 1.7356342542034824
+
+
+Flow of interest: Flow(f3, 2, AC{(0.0,0.0),0.0;!(0.0,1.0),1.0}, {Server(s1, 1)})
+
+--- Total Flow Analysis ARB---
+delay bound     : 1.7537650910685096
+     per server : {Server(s1, 1)={1.7537650910685096}}
+backlog bound   : 3.0
+     per server : {Server(s1, 1)={3.0}}
+alpha per server: {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,3.0),3.0}}}
+
+--- Total Flow Analysis FIFO---
+delay bound     : 0.6368608189408116
+     per server : {Server(s1, 1)={0.6368608189408116}}
+backlog bound   : 3.0
+     per server : {Server(s1, 1)={3.0}}
+alpha per server: {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,3.0),3.0}}}
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(0.7378425553099065,0.0),2.7106053799783423}]
+     per server : {Server(s1, 1)={SC{(0.0,0.0),0.0;(0.7378425553099065,0.0),2.7106053799783423}}}
+xtx per server  : {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,2.0),2.0}}}
+delay bound     : 1.1067638329648597
+backlog bound   : 1.7378425553099066
+
+--- Separated Flow Analysis FIFO ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;!(0.4245738792938744,0.0),2.7106053799783423}]
+     per server : {Server(s1, 1)={SC{(0.0,0.0),0.0;!(0.4245738792938744,0.0),2.7106053799783423}}}
+xtx per server  : {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,2.0),2.0}}}
+delay bound     : 0.7934951569488277
+backlog bound   : 1.4245738792938745
+
+
+Flow of interest: Flow(f2, 3, AC{(0.0,0.0),0.0;!(0.0,1.0),1.0}, {Turn(t3, 2, Server(s0, 0), Server(s1, 1)),Turn(t1, 1, Server(s1, 1), Server(s4, 2))})
+
+--- Total Flow Analysis ARB---
+delay bound     : 14.699696578676916
+     per server : {Server(s1, 1)={1.7537650910685096}, Server(s0, 0)={0.9856565837688711}, Server(s4, 2)={11.960274903839535}}
+backlog bound   : 3.5389956072374567
+     per server : {Server(s1, 1)={3.0}, Server(s0, 0)={1.0}, Server(s4, 2)={3.5389956072374567}}
+alpha per server: {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,3.0),3.0}}, Server(s0, 0)={AC{(0.0,0.0),0.0;!(0.0,1.0),1.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,3.5389956072374567),3.0}}}
+
+--- Total Flow Analysis FIFO---
+delay bound     : 2.661559303298321
+     per server : {Server(s1, 1)={0.6368608189408116}, Server(s0, 0)={0.9856565837688711}, Server(s4, 2)={1.0390419005886384}}
+backlog bound   : 3.4245738792938742
+     per server : {Server(s1, 1)={3.0}, Server(s0, 0)={1.0}, Server(s4, 2)={3.4245738792938742}}
+alpha per server: {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,3.0),3.0}}, Server(s0, 0)={AC{(0.0,0.0),0.0;!(0.0,1.0),1.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,3.4245738792938742),3.0}}}
+
+--- Separated Flow Analysis ARB ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;!(2.489139018297692,0.0),1.0145521436850589}]
+     per server : {Server(s1, 1)={SC{(0.0,0.0),0.0;(0.7378425553099065,0.0),2.7106053799783423}}, Server(s0, 0)={SC{(0.0,0.0),1.0145521436850589}}, Server(s4, 2)={SC{(0.0,0.0),0.0;(1.7512964629877854,0.0),1.2958958414995423}}}
+xtx per server  : {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,2.0),2.0}}, Server(s0, 0)={AC{(0.0,0.0),0.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,2.2694978036187283),2.0}}}
+delay bound     : 3.474795602066563
+backlog bound   : 3.489139018297692
+
+--- Separated Flow Analysis FIFO ---
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(1.1602081334973569,0.0),1.0145521436850589}]
+     per server : {Server(s1, 1)={SC{(0.0,0.0),0.0;(0.4245738792938744,0.0),2.7106053799783423}}, Server(s0, 0)={SC{(0.0,0.0),1.0145521436850589}}, Server(s4, 2)={SC{(0.0,0.0),0.0;!(0.7356342542034824,0.0),1.2958958414995423}}}
+xtx per server  : {Server(s1, 1)={AC{(0.0,0.0),0.0;!(0.0,2.0),2.0}}, Server(s0, 0)={AC{(0.0,0.0),0.0}}, Server(s4, 2)={AC{(0.0,0.0),0.0;!(0.0,2.4245738792938747),2.0}}}
+delay bound     : 2.145864717266228
+backlog bound   : 2.160208133497357
+
+

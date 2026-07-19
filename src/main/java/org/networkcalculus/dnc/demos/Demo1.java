@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -27,16 +27,13 @@
 package org.networkcalculus.dnc.demos;
 
 import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.MaxServiceCurve;
-import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.backend.Curve;
+import org.networkcalculus.dnc.backend.CurveFactory;
+import org.networkcalculus.dnc.backend.number.Number;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
-import org.networkcalculus.dnc.tandem.analyses.PmooAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.SeparateFlowAnalysis;
-import org.networkcalculus.dnc.tandem.analyses.TandemMatchingAnalysis;
 import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
 
 public class Demo1 {
@@ -55,13 +52,14 @@ public class Demo1 {
     }
 
     public void run() throws Exception {
-        ArrivalCurve arrival_curve = Curve.getFactory().createTokenBucket(0.1e6, 0.1 * 0.1e6);
+        Curve arrival_curve = CurveFactory.createTokenBucket(new Number(0.1e6), new Number(0.1 * 0.1e6));
 
-        ServiceCurve service_curve = Curve.getFactory().createRateLatency(10.0e6, 0.01);
-        MaxServiceCurve max_service_curve = Curve.getFactory().createRateLatencyMSC(100.0e6, 0.001);
+        Curve service_curve = CurveFactory.createRateLatency(new Number(10.0e6), new Number(0.01));
+        Curve max_service_curve = CurveFactory.createRateLatency(new Number(100.0e6), new Number(0.001));
 
         ServerGraph sg = new ServerGraph();
-        AnalysisConfig configuration = new AnalysisConfig();
+        AnalysisConfig configuration_arb = new AnalysisConfig();
+        AnalysisConfig configuration_fifo = new AnalysisConfig();
 
         Server s0 = sg.addServer(service_curve, max_service_curve);
         // Creating a server with a maximum service curve automatically triggers the
@@ -70,8 +68,12 @@ public class Demo1 {
         // s0.useMaxScRate( true );
         // , however, disabling the use of a maximum service curve in a configuration
         // overrides it.
-        configuration.enforceMaxSC(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
-        configuration.enforceMaxScOutputRate(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
+        configuration_arb.enforceMaxSC(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
+        configuration_arb.enforceMaxScOutputRate(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
+        configuration_fifo.enforceMaxSC(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
+        configuration_fifo.enforceMaxScOutputRate(AnalysisConfig.MaxScEnforcement.GLOBALLY_ON);
+        configuration_arb.enforceMultiplexing(AnalysisConfig.MultiplexingEnforcement.GLOBAL_ARBITRARY);
+        configuration_fifo.enforceMultiplexing(AnalysisConfig.MultiplexingEnforcement.GLOBAL_FIFO);
 
         Flow flow_of_interest = sg.addFlow(arrival_curve, s0);
 
@@ -79,15 +81,15 @@ public class Demo1 {
         System.out.println();
 
         // Analyze the network
-        // TFA
-        System.out.println("--- Total Flow Analysis ---");
-        TotalFlowAnalysis tfa = new TotalFlowAnalysis(sg, configuration);
+        // TFA ARB
+        System.out.println("--- Total Flow Analysis ARB ---");
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(sg, configuration_arb);
 
         try {
             tfa.performAnalysis(flow_of_interest);
-            System.out.println("delay bound     : " + tfa.getDelayBound());
+            System.out.println("delay bound     : " + tfa.getDelayBound().toDouble());
             System.out.println("     per server : " + tfa.getServerDelayBoundMapString());
-            System.out.println("backlog bound   : " + tfa.getBacklogBound());
+            System.out.println("backlog bound   : " + tfa.getBacklogBound().toDouble());
             System.out.println("     per server : " + tfa.getServerBacklogBoundMapString());
             System.out.println("alpha per server: " + tfa.getServerAlphasMapString());
         } catch (Exception e) {
@@ -97,57 +99,56 @@ public class Demo1 {
 
         System.out.println();
 
-        // SFA
-        System.out.println("--- Separated Flow Analysis ---");
-        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(sg, configuration);
+        // TFA FIFO
+        System.out.println("--- Total Flow Analysis FIFO ---");
+        TotalFlowAnalysis tfa_fifo = new TotalFlowAnalysis(sg, configuration_fifo);
+
+        try {
+            tfa_fifo.performAnalysis(flow_of_interest);
+            System.out.println("delay bound     : " + tfa_fifo.getDelayBound().toDouble());
+            System.out.println("     per server : " + tfa_fifo.getServerDelayBoundMapString());
+            System.out.println("backlog bound   : " + tfa_fifo.getBacklogBound().toDouble());
+            System.out.println("     per server : " + tfa_fifo.getServerBacklogBoundMapString());
+            System.out.println("alpha per server: " + tfa_fifo.getServerAlphasMapString());
+        } catch (Exception e) {
+            System.out.println("TFA analysis failed");
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        // SFA ARB
+        System.out.println("--- Separated Flow Analysis ARB ---");
+        SeparateFlowAnalysis sfa = new SeparateFlowAnalysis(sg, configuration_arb);
 
         try {
             sfa.performAnalysis(flow_of_interest);
             System.out.println("e2e SFA SCs     : " + sfa.getLeftOverServiceCurves());
             System.out.println("     per server : " + sfa.getServerLeftOverBetasMapString());
             System.out.println("xtx per server  : " + sfa.getServerAlphasMapString());
-            System.out.println("delay bound     : " + sfa.getDelayBound());
-            System.out.println("backlog bound   : " + sfa.getBacklogBound());
+            System.out.println("delay bound     : " + sfa.getDelayBound().toDouble());
+            System.out.println("backlog bound   : " + sfa.getBacklogBound().toDouble());
         } catch (Exception e) {
             System.out.println("SFA analysis failed");
             e.printStackTrace();
         }
-
         System.out.println();
 
-        // PMOO
-        System.out.println("--- PMOO Analysis ---");
-        PmooAnalysis pmoo = new PmooAnalysis(sg, configuration);
+        // SFA FIFO
+        System.out.println("--- Separated Flow Analysis FIFO ---");
+        SeparateFlowAnalysis sfa_fifo = new SeparateFlowAnalysis(sg, configuration_fifo);
 
         try {
-            pmoo.performAnalysis(flow_of_interest);
-            System.out.println("e2e PMOO SCs    : " + pmoo.getLeftOverServiceCurves());
-            System.out.println("xtx per server  : " + pmoo.getServerAlphasMapString());
-            System.out.println("delay bound     : " + pmoo.getDelayBound());
-            System.out.println("backlog bound   : " + pmoo.getBacklogBound());
+            sfa_fifo.performAnalysis(flow_of_interest);
+            System.out.println("e2e SFA SCs     : " + sfa_fifo.getLeftOverServiceCurves());
+            System.out.println("     per server : " + sfa_fifo.getServerLeftOverBetasMapString());
+            System.out.println("xtx per server  : " + sfa_fifo.getServerAlphasMapString());
+            System.out.println("delay bound     : " + sfa_fifo.getDelayBound().toDouble());
+            System.out.println("backlog bound   : " + sfa_fifo.getBacklogBound().toDouble());
         } catch (Exception e) {
-            System.out.println("PMOO analysis failed");
+            System.out.println("SFA analysis failed" + e.getMessage());
             e.printStackTrace();
         }
-        
-        System.out.println();
-        
-        // TMA
-        System.out.println("--- Tandem Matching Analysis ---");
-        TandemMatchingAnalysis tma = new TandemMatchingAnalysis(sg, configuration);
-
-        try {
-         tma.performAnalysis(flow_of_interest);
-            System.out.println("e2e TMA SCs     : " + tma.getLeftOverServiceCurves());
-            System.out.println("xtx per server  : " + tma.getServerAlphasMapString());
-            System.out.println("delay bound     : " + tma.getDelayBound());
-            System.out.println("backlog bound   : " + tma.getBacklogBound());
-        } catch (Exception e) {
-            System.out.println("TMA analysis failed");
-            e.printStackTrace();
-        }
-
-        System.out.println();
         System.out.println();
     }
 }

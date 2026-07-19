@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -32,10 +32,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.networkcalculus.dnc.Calculator;
-import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.MaxServiceCurve;
-import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.backend.Curve;
+import org.networkcalculus.dnc.backend.CurveFactory;
+import org.networkcalculus.dnc.utils.MinPlusUtils;
+import org.networkcalculus.dnc.backend.number.Number;
+
 
 /**
  * A flows path is a sequence of crossed buffers -- either represented by the
@@ -71,7 +72,7 @@ public class Path {
     public Path(Server single_hop) {
         path_servers = new LinkedList<Server>();
         path_servers.add(single_hop);
-        
+
         path_turns = new LinkedList<Turn>();
     }
 
@@ -82,9 +83,9 @@ public class Path {
     public Server getSource() {
         return path_servers.get(0);
     }
-    
+
     public boolean isSource(Server s) {
-    	return path_servers.indexOf(s) == 0;
+        return path_servers.indexOf(s) == 0;
     }
 
     public Server getSink() {
@@ -166,7 +167,7 @@ public class Path {
         }
         throw new Exception("No succeeding turn on the path found");
     }
-    
+
     public Server getPrecedingServer(Server s) throws Exception {
         try {
             return getPrecedingTurn(s).getSource();
@@ -189,15 +190,15 @@ public class Path {
      * @return The convolved curve
      * @throws Exception
      */
-    public ServiceCurve getServiceCurve() throws Exception {
+    public Curve getServiceCurve() throws Exception {
         Collection<Server> servers = getServers();
         return getServiceCurve(servers);
     }
 
-    private ServiceCurve getServiceCurve(Collection<Server> servers) throws Exception {
-        ServiceCurve service_curve_total = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+    private Curve getServiceCurve(Collection<Server> servers) throws Exception {
+        Curve service_curve_total = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
         for (Server s : servers) {
-            service_curve_total = Calculator.getInstance().getMinPlus().convolve(service_curve_total, s.getServiceCurve());
+            service_curve_total = MinPlusUtils.convolve(service_curve_total, s.getServiceCurve());
         }
 
         return service_curve_total;
@@ -213,29 +214,29 @@ public class Path {
      * @return The convolved curve
      * @throws Exception
      */
-    public MaxServiceCurve getMaxServiceCurve() throws Exception {
+    public Curve getMaxServiceCurve() throws Exception {
         Collection<Server> servers = getServers();
         return getMaxServiceCurve(servers);
     }
 
-    private MaxServiceCurve getMaxServiceCurve(Collection<Server> servers) throws Exception {
-        MaxServiceCurve max_sc_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+    private Curve getMaxServiceCurve(Collection<Server> servers) throws Exception {
+        Curve max_sc_path = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
         for (Server s : servers) {
-            max_sc_path = Calculator.getInstance().getMinPlus().convolve(max_sc_path, s.getMaxServiceCurve());
+            max_sc_path = MinPlusUtils.convolve(max_sc_path, s.getMaxServiceCurve());
         }
 
         return max_sc_path;
     }
 
-    public MaxServiceCurve getStoredMaxSC() throws Exception {
+    public Curve getStoredMaxSC() throws Exception {
         Collection<Server> servers = getServers();
         return getStoredMaxSC(servers);
     }
 
-    private MaxServiceCurve getStoredMaxSC(Collection<Server> servers) throws Exception {
-        MaxServiceCurve max_sc_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+    private Curve getStoredMaxSC(Collection<Server> servers) throws Exception {
+        Curve max_sc_path = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
         for (Server s : servers) {
-            max_sc_path = Calculator.getInstance().getMinPlus().convolve(max_sc_path, s.getStoredMaxSC());
+            max_sc_path = MinPlusUtils.convolve(max_sc_path, s.getStoredMaxSC());
         }
 
         return max_sc_path;
@@ -251,36 +252,36 @@ public class Path {
      * @return The convolved curve
      * @throws Exception
      */
-    public MaxServiceCurve getMaxScRate() throws Exception {
+    public Curve getMaxScRate() throws Exception {
         Collection<Server> servers = getServers();
         return getMaxScRate(servers);
     }
 
-    private MaxServiceCurve getMaxScRate(Collection<Server> servers) throws Exception {
-        MaxServiceCurve max_sc_rate_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+    private Curve getMaxScRate(Collection<Server> servers) throws Exception {
+        Curve max_sc_rate_path = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
         for (Server s : servers) {
-            max_sc_rate_path = Calculator.getInstance().getMinPlus().convolve(max_sc_rate_path, s.getMaxScRate());
+            max_sc_rate_path = MinPlusUtils.convolve(max_sc_rate_path, s.getMaxScRate());
         }
         // max_sc_rate_path.removeLatency(); // Already done by s.getMaxScRate()
 
         return max_sc_rate_path;
     }
-    
-    public MaxServiceCurve getStoredMaxScRate() throws Exception {
+
+    public Curve getStoredMaxScRate() throws Exception {
         Collection<Server> servers = getServers();
         return getStoredMaxScRate(servers);
     }
 
-    private MaxServiceCurve getStoredMaxScRate(Collection<Server> servers) throws Exception {
-        MaxServiceCurve max_sc_rate_path = Curve.getFactory().createZeroDelayInfiniteBurstMSC();
+    private Curve getStoredMaxScRate(Collection<Server> servers) throws Exception {
+        Curve max_sc_rate_path = CurveFactory.createDelayedInfiniteBurst(Number.ZERO);
         for (Server s : servers) {
-            max_sc_rate_path = Calculator.getInstance().getMinPlus().convolve(max_sc_rate_path, s.getStoredMaxScRate());
+            max_sc_rate_path = MinPlusUtils.convolve(max_sc_rate_path, s.getStoredMaxScRate());
         }
         // max_sc_rate_path.removeLatency(); // Already done by s.getStoredMaxScRate()
 
         return max_sc_rate_path;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof Path)) {
@@ -293,84 +294,84 @@ public class Path {
 
     @Override
     public int hashCode() {
-    	return Objects.hash(path_servers, path_turns);
+        return Objects.hash(path_servers, path_turns);
     }
-    
+
     // --------------------------------------------------------------------------------------------------------------
     // String Conversions
     // --------------------------------------------------------------------------------------------------------------
 
     /**
      * Print path as series of servers (short representation).
-     * 
+     *
      * @return String representation of the path.
      */
     public String toShortString() {
         if (path_servers.isEmpty()) {
             return "{}";
         }
-        
-    	StringBuffer path_str = new StringBuffer();
 
-    	path_str.append("{");
-    	for (Server s : path_servers) {
-    		path_str.append(s.toShortString());
-        	path_str.append(",");
+        StringBuffer path_str = new StringBuffer();
+
+        path_str.append("{");
+        for (Server s : path_servers) {
+            path_str.append(s.toShortString());
+            path_str.append(",");
         }
-    	
-    	path_str.deleteCharAt(path_str.length()-1); // Remove the trailing comma.
-    	path_str.append("}");
-         
-    	return path_str.toString();
+
+        path_str.deleteCharAt(path_str.length() - 1); // Remove the trailing comma.
+        path_str.append("}");
+
+        return path_str.toString();
     }
 
     /**
      * Print path as series of turns (short representation).
-     *  
+     *
      * @return String representation of the path.
      */
     @Override
     public String toString() {
         if (path_turns.isEmpty()) {
-        	return toShortString();
+            return toShortString();
         }
-        
+
         StringBuffer path_str = new StringBuffer();
 
-    	path_str.append("{");
+        path_str.append("{");
         for (Turn l : path_turns) {
-        	path_str.append(l.toString());
-        	path_str.append(",");
+            path_str.append(l.toString());
+            path_str.append(",");
         }
-        
-    	path_str.deleteCharAt(path_str.length()-1); // Remove the trailing comma.
-    	path_str.append("}");
-         
-    	return path_str.toString();
+
+        path_str.deleteCharAt(path_str.length() - 1); // Remove the trailing comma.
+        path_str.append("}");
+
+        return path_str.toString();
     }
 
-    
+
     /**
      * Print path as series of turns (extended representation).
-     * 
+     *
      * @return String representation of the path.
      */
     public String toExtendedString() {
         if (path_turns.isEmpty()) {
-        	return toShortString();
+            return toShortString();
         }
-        
+
         StringBuffer path_str = new StringBuffer();
 
-    	path_str.append("{");
+        path_str.append("{");
         for (Turn l : path_turns) {
-        	path_str.append(l.toExtendedString());
-        	path_str.append(",");
+            path_str.append(l.toExtendedString());
+            path_str.append(",");
         }
-        
-    	path_str.deleteCharAt(path_str.length()-1); // Remove the trailing comma.
-    	path_str.append("}");
-         
-    	return path_str.toString();
+
+        path_str.deleteCharAt(path_str.length() - 1); // Remove the trailing comma.
+        path_str.append("}");
+
+        return path_str.toString();
     }
 }

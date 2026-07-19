@@ -11,8 +11,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -33,23 +33,25 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.networkcalculus.dnc.curves.ArrivalCurve;
+//import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.tandem.TandemAnalysisResults;
-import org.networkcalculus.num.Num;
+//import org.networkcalculus.num.Num;
+import org.networkcalculus.dnc.backend.Curve;
+import org.networkcalculus.dnc.backend.number.Number;
 
 public class TotalFlowResults extends TandemAnalysisResults {
-    protected Map<Server, Set<Num>> map__server__D_server;
-    protected Map<Server, Set<Num>> map__server__B_server;
+    protected Map<Server, Set<Number>> map__server__D_server;
+    protected Map<Server, Set<Number>> map__server__B_server;
 
     protected TotalFlowResults() {
         super();
-        map__server__D_server = new HashMap<Server, Set<Num>>();
-        map__server__B_server = new HashMap<Server, Set<Num>>();
+        map__server__D_server = new HashMap<Server, Set<Number>>();
+        map__server__B_server = new HashMap<Server, Set<Number>>();
     }
 
-    protected TotalFlowResults(Num delay_bound, Map<Server, Set<Num>> map__server__D_server, Num backlog_bound,
-                               Map<Server, Set<Num>> map__server__B_server, Map<Server, Set<ArrivalCurve>> map__server__alphas) {
+    protected TotalFlowResults(Number delay_bound, Map<Server, Set<Number>> map__server__D_server, Number backlog_bound,
+                               Map<Server, Set<Number>> map__server__B_server, Map<Server, Set<Curve>> map__server__alphas) {
 
         super(delay_bound, backlog_bound, map__server__alphas);
 
@@ -63,10 +65,10 @@ public class TotalFlowResults extends TandemAnalysisResults {
         }
 
         StringBuffer result_str = new StringBuffer("{");
-        for (Entry<Server, Set<Num>> entry : map__server__D_server.entrySet()) {
+        for (Entry<Server, Set<Number>> entry : map__server__D_server.entrySet()) {
             result_str.append(entry.getKey().toShortString());
             result_str.append("={");
-            for (Num delay_bound : entry.getValue()) {
+            for (Number delay_bound : entry.getValue()) {
                 result_str.append(delay_bound.toString());
                 result_str.append(",");
             }
@@ -81,12 +83,12 @@ public class TotalFlowResults extends TandemAnalysisResults {
     }
 
     @Override
-    protected void setDelayBound(Num delay_bound) {
+    protected void setDelayBound(Number delay_bound) {
         super.setDelayBound(delay_bound);
     }
 
     @Override
-    protected void setBacklogBound(Num backlog_bound) {
+    protected void setBacklogBound(Number backlog_bound) {
         super.setBacklogBound(backlog_bound);
     }
 
@@ -96,10 +98,10 @@ public class TotalFlowResults extends TandemAnalysisResults {
         }
 
         StringBuffer result_str = new StringBuffer("{");
-        for (Entry<Server, Set<Num>> entry : map__server__B_server.entrySet()) {
+        for (Entry<Server, Set<Number>> entry : map__server__B_server.entrySet()) {
             result_str.append(entry.getKey().toShortString());
             result_str.append("={");
-            for (Num delay_bound : entry.getValue()) {
+            for (Number delay_bound : entry.getValue()) {
                 result_str.append(delay_bound.toString());
                 result_str.append(",");
             }
