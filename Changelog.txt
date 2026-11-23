@@ -1,4 +1,4 @@
-DNC v2.8.3 (2026-11-24)
+DNC v2.8.3 (2026-Nov-23)
 -----------------------
 * Fix unsound (min,+)-deconvolution of piecewise linear curves in Deconvolution_Disco_ConPwAffine
   (present since DiscoDNC v2.2.5): alpha's breakpoint candidates with alpha(tau) < beta(tau) are no
