@@ -182,12 +182,23 @@ public abstract class Deconvolution_Disco_ConPwAffine {
         }
 
         Num latency;
+        Num latency_reduction;
         for (ServiceCurve sc : service_curves) {
             for (Curve pwa_c : curves) {
                 latency = pwa_c.getLatency();
-                results.add(Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftRight(
-                        deconvolve_con_pw_affine(Curve.getUtils().shiftLeftClipping(pwa_c, latency), sc),
-                        latency)));
+                if (latency.eqZero() || latency.isInfinite()) {
+                    results.add(Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftRight(
+                            deconvolve_con_pw_affine(Curve.getUtils().shiftLeftClipping(pwa_c, latency), sc),
+                            latency)));
+                } else {
+                    // (delta_L (x) sigma_0) (/) beta = sigma_0 (/) (beta (/) delta_L) if beta = 0 on [0,L], i.e., L <= T.
+                    // Shifting the result of sigma_0 (/) beta right by L instead is 0 on (0,L], i.e., too low.
+                    // For L > T, shifting beta by T only gives sigma_0 (/) (beta (/) delta_T), a valid upper bound.
+                    latency_reduction = Num.getUtils(Calculator.getInstance().getNumBackend()).min(latency, sc.getLatency());
+                    results.add(deconvolve(
+                            Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftLeftClipping(pwa_c, latency)),
+                            Curve.getFactory().createServiceCurve(Curve.getUtils().shiftLeftClipping(sc, latency_reduction))));
+                }
             }
         }
 
@@ -261,105 +272,92 @@ public abstract class Deconvolution_Disco_ConPwAffine {
             result_candidates.add(candidate_tmp);
         }
 
-        // Candidates resulting from the arrival curve's inflection points (curve_1)
-        // Take the vertical deviation at the alpha inflection point as burstiness,
-        // then go over the beta inflection points smaller than the alpha inflection
-        // point in reverse order
-        // and add a linear segment that resembeles the beta's one
-        // (The first one might be cut off by the alpha inflection point).
-        Num x_inflect_alpha, results_cand_burst;
+        // Candidates resulting from the arrival curve's inflection points (curve_1):
+        // For an inflection point a > 0 of the arrival curve, the candidate is
+        //   D_a(t) = alpha(a) - beta(a - t) for t in [0,a] and D_a(t) = alpha(a) for t > a,
+        // i.e., it starts with "burstiness" alpha(a) - beta(a) and then follows beta's segments
+        // left of a in reverse order (the first one might be cut off by a).
+        //
+        // Note: D_a must also be considered if alpha(a) < beta(a).
+        // Versions 2.2.5 to 2.8.x skipped these candidates. That is unsound, i.e., it can result in too optimistic curves.
+        // E.g., alpha = min(2t+1, t/2+16), beta = max(t, 10t-45): (alpha deconv beta)(25/3) = alpha(10) - beta(5/3) = 58/3,
+        // whereas skipping D_10 resulted in 53/3.
+        // Candidate values below 0 do not harm as the arrival curve candidate is >= 0.
+        //
+        // If beta contains a delayed infinite burst delta_T (last segment with infinite y-coordinate) and T < a,
+        // then only u = a - t <= T is feasible. D_a is -infinity on [0, a-T).
+        // There, we replace it by the zero curve (alpha(t) >= 0 is a candidate, too).
+        Num zero = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        Num x_inflect_alpha, results_cand_burst, t_start, u_start;
+        LinearSegment current_candidate_segment, current_beta_segment;
 
         for (int i = curve_1.getSegmentCount() - 1; i >= 0; i--) {
             x_inflect_alpha = curve_1.getSegment(i).getX();
+            if (x_inflect_alpha.eqZero()) { // The inflection point is in the origin and thus the candidate is a zero curve.
+                continue;
+            }
             y_alpha = curve_1.f(x_inflect_alpha);
-            y_beta = curve_2.f(x_inflect_alpha);
-            results_cand_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha, y_beta);
 
-            if (x_inflect_alpha.eqZero() // The inflection point is in the origin and thus the candidate is a zero
-                    // curve.
-                    || results_cand_burst.ltZero()) { // At the inflection point, the service curve is larger than the
-                // arrival curve.
+            // Find beta's segment j that defines beta left of alpha's inflection point, i.e., largest j with x_j <= a.
+            // Segment 0 starts in the origin.
+            int j = curve_2.getSegmentCount() - 1;
+            while (j > 0 && curve_2.getSegment(j).getX().gt(x_inflect_alpha)) {
+                j--;
+            }
+
+            u_start = x_inflect_alpha;
+            t_start = zero;
+            if (curve_2.getSegment(j).getY().isInfinite()) { // Delayed infinite burst, see above.
+                u_start = curve_2.getSegment(j).getX();
+                t_start = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_inflect_alpha, u_start);
+                j--;
+            }
+            if (j < 0) {
                 continue;
             }
 
-            // Found a valid inflection point of the arrival curve.
-            // => Start constructing the candidate based on the service curve's first
-            // inflection points.
-            for (int j = curve_2.getSegmentCount() - 1; j >= 0; j--) {
-                x_inflect_beta = curve_2.getSegment(j).getX();
-                if (x_inflect_beta.gt(x_inflect_alpha)) {
-                    continue;
-                }
+            // The resulting curve's segments:
+            // The origin, j+1 segments (we start counting j at 0), and a horizontal line at the end.
+            int segment_count = j + 3; // At least 3 (the origin, the segment starting with the burst, the horizontal line)
+            candidate_tmp = Curve.getFactory().createArrivalCurve(segment_count); // Consists of zero segments (x,y),r = (0,0),0 only.
+            // The origin (first segment, id 0) stays as is, the remainder needs to be constructed.
 
-                // Found the first inflection point of beta to work with,
-                // i.e., we now know the resulting curve's amount of segments:
-                // The origin, j+1 segments (we start counting j at 0), and a horizontal line at
-                // the end.
+            // Second segment: it starts in t_start with value alpha(a) - beta(u_start).
+            current_beta_segment = curve_2.getSegment(j);
+            results_cand_burst = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha,
+                    current_beta_segment.f(u_start));
 
-                int segment_count = j + 3; // At least 2 (the origin and and a burst followed by rate 0)
-                candidate_tmp = Curve.getFactory().createArrivalCurve(segment_count); // Consists of zero
-                // segments (x,y),r =
-                // (0,0),0 only.
-                // The origin (first segment, id 0) stays as is, the remainder needs to be
-                // constructed.
-                // Compute the second segment
-                Num next_x_coord = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-                Num next_y_coord = results_cand_burst;
-
-                LinearSegment current_candidate_segment = candidate_tmp.getSegment(1);
-                LinearSegment current_beta_segment = curve_2.getSegment(j);
-
-                current_candidate_segment.setX(next_x_coord);
-                current_candidate_segment.setY(next_y_coord);
-                current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
-
-                // The length of this segment is defined by the following one's y-coordinate:
-                next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_inflect_alpha, x_inflect_beta);
-                next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(results_cand_burst,
-                        Num.getUtils(Calculator.getInstance().getNumBackend()).mult(next_x_coord, current_beta_segment.getGrad()));
-
-                LinearSegment prev_beta_segment;
-                Num current_segment_length;
-
-                // The remaining service curve segments in reverse order
-                int j_new = j; // Alpha's inflection point is above beta's segment j. Now we need to continue
-                // decreasing j (renamed to j_new although there is no concurrent modification
-                // with primitive int).
-                for (int k = 2; k < segment_count - 1; k++) { // < segment_count-1 because the count is max{index}+1 and
-                    // the last segment will be a horizontal line (added
-                    // after this loop).
-                    j_new--;
-
-                    current_candidate_segment = candidate_tmp.getSegment(k);
-                    prev_beta_segment = current_beta_segment;
-                    current_beta_segment = curve_2.getSegment(j_new);
-
-                    current_candidate_segment.setX(next_x_coord);
-                    current_candidate_segment.setY(next_y_coord);
-                    current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
-
-                    current_segment_length = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(prev_beta_segment.getX(),
-                            current_beta_segment.getX());
-                    next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(next_x_coord, current_segment_length); // Prev > current
-                    // because we
-                    // iterate j in
-                    // decreasing
-                    // order.
-                    next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).add(current_candidate_segment.getY(),
-                            Num.getUtils(Calculator.getInstance().getNumBackend()).mult(current_segment_length, current_beta_segment.getGrad()));
-                }
-
-                // Add a horizontal line at the end.
-                current_candidate_segment = candidate_tmp.getSegment(segment_count - 1);
-                current_candidate_segment.setX(next_x_coord);
-                current_candidate_segment.setY(next_y_coord);
-                // Gradient (rate) will remain zero.
-
-                // Done with this alpha inflection, beta combination. Store the curve and go to
-                // next alpha inflection point.
-                result_candidates.add(candidate_tmp);
-                break;
+            current_candidate_segment = candidate_tmp.getSegment(1);
+            current_candidate_segment.setX(t_start);
+            current_candidate_segment.setY(results_cand_burst);
+            current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
+            if (t_start.gtZero()) { // D_a(a-T) = alpha(a) - beta(T) is finite.
+                current_candidate_segment.setLeftopen(false);
             }
+
+            // The remaining service curve segments in reverse order:
+            // Candidate segment k starts at t = a - x_{j_new+1} where u = a - t enters beta's segment j_new.
+            int j_new = j;
+            Num next_x_coord;
+            for (int k = 2; k < segment_count; k++) {
+                next_x_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(x_inflect_alpha,
+                        curve_2.getSegment(j_new).getX());
+                // alpha(a) - beta(x_{j_new}), evaluated on beta's segment j_new.
+                Num next_y_coord = Num.getUtils(Calculator.getInstance().getNumBackend()).sub(y_alpha,
+                        current_beta_segment.getY());
+                j_new--;
+
+                current_candidate_segment = candidate_tmp.getSegment(k);
+                current_candidate_segment.setX(next_x_coord);
+                current_candidate_segment.setY(next_y_coord);
+                if (j_new >= 0) {
+                    current_beta_segment = curve_2.getSegment(j_new);
+                    current_candidate_segment.setGrad(current_beta_segment.getGrad().copy());
+                } // else: horizontal line at the end, gradient (rate) remains zero.
+            }
+
+            // Done with this alpha inflection point. Store the curve and go to next alpha inflection point.
+            result_candidates.add(candidate_tmp);
         }
 
         Iterator<Curve> candidates_iter = result_candidates.iterator();

@@ -1,3 +1,18 @@
+DNC v2.8.3 (2026-11-24)
+-----------------------
+* Fix unsound (min,+)-deconvolution of piecewise linear curves in Deconvolution_Disco_ConPwAffine
+  (present since DiscoDNC v2.2.5): alpha's breakpoint candidates with alpha(tau) < beta(tau) are no
+  longer skipped, and a service curve beta ending with a burst delay delta_T is handled correctly.
+* Fix too low output bounds for arrival curves with a latency L > 0 (e.g., after a maximum service curve
+  with latency L; present since DiscoDNC v2.2.5): the bound was 0 on (0,L]. Both the ConPwAffine and the
+  Affine deconvolution now removes the latency from the service curve instead of shifting the result.
+
+DNC v2.8.2 (2023-Jun-11)
+------------------------
+* Fix the FIFO delay bound for arrival curves with burst 0
+* Fix the FIFO delay bound for overloaded servers
+* ArrivalBoundCache code cleanup
+
 DNC v2.8.1 (2022-Aug-09)
 ------------------------
 * Implementation of a grid search-based FIFO analysis called GS. Details:

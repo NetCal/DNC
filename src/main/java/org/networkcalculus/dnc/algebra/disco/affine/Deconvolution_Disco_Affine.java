@@ -159,13 +159,24 @@ public abstract class Deconvolution_Disco_Affine {
         }
 
         Num latency;
+        Num latency_reduction;
         for (ServiceCurve sc : service_curves) {
             for (Curve pwa_c : curves) {
                 latency = pwa_c.getLatency();
-                results.add(Curve.getFactory().createArrivalCurve(
-                		Curve.getUtils().shiftRight(deconvolveTB_RL(
-                					Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftLeftClipping(pwa_c, latency)), sc),
-                        latency)));
+                if (latency.eqZero() || latency.isInfinite()) {
+                    results.add(Curve.getFactory().createArrivalCurve(
+                    		Curve.getUtils().shiftRight(deconvolveTB_RL(
+                    					Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftLeftClipping(pwa_c, latency)), sc),
+                            latency)));
+                } else {
+                    // (delta_L (x) sigma_0) (/) beta = sigma_0 (/) (beta (/) delta_L) if beta = 0 on [0,L], i.e., L <= T.
+                    // Shifting the result of sigma_0 (/) beta right by L instead is 0 on (0,L], i.e., too low.
+                    // For L > T, shifting beta by T only gives sigma_0 (/) (beta (/) delta_T), a valid upper bound.
+                    latency_reduction = Num.getUtils(Calculator.getInstance().getNumBackend()).min(latency, sc.getLatency());
+                    results.add(deconvolve(
+                            Curve.getFactory().createArrivalCurve(Curve.getUtils().shiftLeftClipping(pwa_c, latency)),
+                            Curve.getFactory().createServiceCurve(Curve.getUtils().shiftLeftClipping(sc, latency_reduction))));
+                }
             }
         }
 
