@@ -5,7 +5,7 @@ DNC v2.8.3 (2026-Nov-23)
   longer skipped, and a service curve beta ending with a burst delay delta_T is handled correctly.
 * Fix too low output bounds for arrival curves with a latency L > 0 (e.g., after a maximum service curve
   with latency L; present since DiscoDNC v2.2.5): the bound was 0 on (0,L]. Both the ConPwAffine and the
-  Affine deconvolution now removes the latency from the service curve instead of shifting the result.
+  Affine deconvolution now remove the latency from the service curve instead of shifting the result.
 
 DNC v2.8.2 (2023-Jun-11)
 ------------------------
